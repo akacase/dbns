@@ -1,0 +1,17 @@
+DB: NORTH STAR - v1.0
+----------
+- Introduce Rust into the build process (still undecided about this)
+- IMC is removed, starting another implementation of an IMP ((I)nter (M)ud (P)rotocol system).
+    - GOALS:
+    - share pfiles seamlessly and securely across networks, it'll allow seamless communication between two seperate muds (with the same codebase)
+    - more to come.
+- new make targets, see Makefile.
+- seperated the process from the data directories to aid in privelege seperation.
+- use of gmake has been replaced with bsdmake.
+- arc4random(3) replaces rand(3) and the Knuth algorithms for generating entropy; we use the OS for that now.
+- opendir(3) now checks for NULL, adding stability and safety, particularly in new setups.
+- restructuring of code from old (crazy?) style guide to OpenBSD style(9) - in progress.
+- added init folder with rc.d service, should work on all BSDs.
+- bye windows, you suck.
+- removing as much dead code as possible.
+- custom file formats to something else? WIP

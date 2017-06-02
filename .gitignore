@@ -1,0 +1,9 @@
+system/*
+src/dbnsd
+src/*~
+src/#*#*
+src/.#*#*
+src/*.o
+src/*.core
+corpses/*
+player/*
