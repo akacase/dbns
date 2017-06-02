@@ -70,6 +70,7 @@ carryingvnum_visit(CHAR_DATA * ch, OBJ_DATA * obj, int vnum)
 #define FOUNDENDIF   7
 #define IFIGNORED    8
 #define ORIGNORED    9
+#define BERR         10				
 
 int 
 mprog_do_command(char *cmnd, CHAR_DATA * mob, CHAR_DATA * actor,
@@ -308,7 +309,7 @@ mprog_do_ifcheck(char *ifcheck, CHAR_DATA * mob, CHAR_DATA * actor,
 
 	if (!*ifcheck) {
 		progbug("Null ifcheck", mob);
-		return true;
+		return BERR;
 	}
 	/*
          * New parsing by Thoric to allow for multiple arguments inside the
@@ -326,7 +327,7 @@ mprog_do_ifcheck(char *ifcheck, CHAR_DATA * mob, CHAR_DATA * actor,
 		*p++ = '\0';
 	if (*p != '(') {
 		progbug("Ifcheck Syntax error (missing left bracket)", mob);
-		return true;
+		return BERR;
 	}
 	*p++ = '\0';
 	/* Need to check for spaces or if name( $n ) isn't legal --Shaddai */
@@ -412,7 +413,7 @@ doneargs:
 		default:
 			sprintf(rval, "Bad argument '%c' to '%s'", cvar[0], chck);
 			progbug(rval, mob);
-			return true;
+			return BERR;
 		}
 		if (!chkchar && !chkobj)
 			return true;
@@ -435,7 +436,7 @@ doneargs:
 			room = get_room_index(idx);
 		if (!room) {
 			progbug("Bad room vnum passed to 'economy'", mob);
-			return true;
+			return BERR;
 		}
 		return mprog_veval(room->area->economy, opr, atoi(rval), mob);
 	}
@@ -449,7 +450,7 @@ doneargs:
 
 		if (vnum < 1 || vnum > MAX_VNUMS) {
 			progbug("Bad vnum to 'mobinarea'", mob);
-			return true;
+			return BERR;
 		}
 		m_index = get_mob_index(vnum);
 
@@ -487,7 +488,7 @@ doneargs:
 
 		if (vnum < 1 || vnum > MAX_VNUMS) {
 			progbug("Bad vnum to 'mobinroom'", mob);
-			return true;
+			return BERR;
 		}
 		lhsvl = 0;
 		for (oMob = mob->in_room->first_person; oMob;
@@ -509,7 +510,7 @@ doneargs:
 
 		if (vnum < 1 || vnum > MAX_VNUMS) {
 			progbug("Bad vnum to 'mobinworld'", mob);
-			return true;
+			return BERR;
 		}
 		m_index = get_mob_index(vnum);
 
@@ -535,7 +536,7 @@ doneargs:
 			pMob = chkchar->pIndexData;
 		else if (!(pMob = get_mob_index(atoi(cvar)))) {
 			progbug("TimesKilled ifcheck: bad vnum", mob);
-			return true;
+			return BERR;
 		}
 		return mprog_veval(pMob->killed, opr, atoi(rval), mob);
 	}
@@ -545,7 +546,7 @@ doneargs:
 
 		if (vnum < 1 || vnum > MAX_VNUMS) {
 			progbug("OvnumHere: bad vnum", mob);
-			return true;
+			return BERR;
 		}
 		lhsvl = 0;
 
@@ -573,7 +574,7 @@ doneargs:
 			type = get_otype(cvar);
 		if (type < 0 || type > MAX_ITEM_TYPE) {
 			progbug("OtypeHere: bad type", mob);
-			return true;
+			return BERR;
 		}
 		lhsvl = 0;
 
@@ -598,7 +599,7 @@ doneargs:
 
 		if (vnum < 1 || vnum > MAX_VNUMS) {
 			progbug("OvnumRoom: bad vnum", mob);
-			return true;
+			return BERR;
 		}
 		lhsvl = 0;
 		for (pObj = mob->in_room->first_content; pObj;
@@ -626,7 +627,7 @@ doneargs:
 			type = get_otype(cvar);
 		if (type < 0 || type > MAX_ITEM_TYPE) {
 			progbug("OtypeRoom: bad type", mob);
-			return true;
+			return BERR;
 		}
 		lhsvl = 0;
 
@@ -648,7 +649,7 @@ doneargs:
 
 		if (vnum < 1 || vnum > MAX_VNUMS) {
 			progbug("OvnumCarry: bad vnum", mob);
-			return true;
+			return BERR;
 		}
 		lhsvl = 0;
 
@@ -673,7 +674,7 @@ doneargs:
 			type = get_otype(cvar);
 		if (type < 0 || type > MAX_ITEM_TYPE) {
 			progbug("OtypeCarry: bad type", mob);
-			return true;
+			return BERR;
 		}
 		lhsvl = 0;
 		for (pObj = mob->first_carrying; pObj; pObj = pObj->next_content)
@@ -693,7 +694,7 @@ doneargs:
 
 		if (vnum < 1 || vnum > MAX_VNUMS) {
 			progbug("OvnumWear: bad vnum", mob);
-			return true;
+			return BERR;
 		}
 		lhsvl = 0;
 		for (pObj = mob->first_carrying; pObj; pObj = pObj->next_content)
@@ -718,7 +719,7 @@ doneargs:
 			type = get_otype(cvar);
 		if (type < 0 || type > MAX_ITEM_TYPE) {
 			progbug("OtypeWear: bad type", mob);
-			return true;
+			return BERR;
 		}
 		lhsvl = 0;
 		for (pObj = mob->first_carrying; pObj; pObj = pObj->next_content)
@@ -739,7 +740,7 @@ doneargs:
 
 		if (vnum < 1 || vnum > MAX_VNUMS) {
 			progbug("OvnumInv: bad vnum", mob);
-			return true;
+			return BERR;
 		}
 		lhsvl = 0;
 
@@ -765,7 +766,7 @@ doneargs:
 			type = get_otype(cvar);
 		if (type < 0 || type > MAX_ITEM_TYPE) {
 			progbug("OtypeInv: bad type", mob);
-			return true;
+			return BERR;
 		}
 		lhsvl = 0;
 		for (pObj = mob->first_carrying; pObj; pObj = pObj->next_content)
@@ -884,7 +885,7 @@ doneargs:
 
 			if (value < 0 || value > MAX_BITS) {
 				progbug("Unknown affect being checked", mob);
-				return true;
+				return BERR;
 			}
 			return IS_AFFECTED(chkchar, value) ? true : false;
 		}
@@ -1305,7 +1306,7 @@ doneargs:
          * odd happened.  So report the bug and abort the MUDprogram (return error)
          */
 	progbug("Unknown ifcheck", mob);
-	return true;
+	return BERR;
 }
 
 #undef isoperator
@@ -1939,6 +1940,10 @@ mprog_driver(char *com_list, CHAR_DATA * mob, CHAR_DATA * actor,
 				--prog_nest;
 				return;
 			}
+			break;
+		case BERR:
+			--prog_nest;
+			return;
 			break;
 		}
 	}
