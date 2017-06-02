@@ -1,0 +1,529 @@
+
+[*****] BUG: Fread_sysdata: no match: IMCMailVnum
+[*****] BUG: Fread_sysdata: no match: 0
+[*****] BUG: Fread_sysdata: no match: IMCMailVnum
+[*****] BUG: Fread_sysdata: no match: 0
+[*****] BUG: Fread_sysdata: no match: IMCMailVnum
+[*****] BUG: Fread_sysdata: no match: 0
+[*****] BUG: Fread_sysdata: no match: IMCMailVnum
+[*****] BUG: Fread_sysdata: no match: 0
+[*****] BUG: Fread_sysdata: no match: IMCMailVnum
+[*****] BUG: Fread_sysdata: no match: 0
+[*****] BUG: Fread_sysdata: no match: IMCMailVnum
+[*****] BUG: Fread_sysdata: no match: 0
+[*****] BUG: load_area: error loading file (can't open)
+[*****] BUG: help.are
+[*****] BUG: load_area: error loading file (can't open)
+[*****] BUG: limbo.are
+[*****] BUG: load_area: error loading file (can't open)
+[*****] BUG: ims.are
+[*****] BUG: load_area: error loading file (can't open)
+[*****] BUG: cou3.are
+[*****] BUG: load_area: error loading file (can't open)
+[*****] BUG: gods.are
+[*****] BUG: load_area: error loading file (can't open)
+[*****] BUG: intro.are
+[*****] BUG: load_area: error loading file (can't open)
+[*****] BUG: spaceships.are
+[*****] BUG: load_area: error loading file (can't open)
+[*****] BUG: afterlife.are
+[*****] BUG: load_area: error loading file (can't open)
+[*****] BUG: FShip.are
+[*****] BUG: load_area: error loading file (can't open)
+[*****] BUG: kames_lookout.are
+[*****] BUG: load_area: error loading file (can't open)
+[*****] BUG: roshis_island.are
+[*****] BUG: load_area: error loading file (can't open)
+[*****] BUG: basement.are
+[*****] BUG: load_area: error loading file (can't open)
+[*****] BUG: geros_lab.are
+[*****] BUG: load_area: error loading file (can't open)
+[*****] BUG: south_city.are
+[*****] BUG: load_area: error loading file (can't open)
+[*****] BUG: bunny_forest.are
+[*****] BUG: load_area: error loading file (can't open)
+[*****] BUG: rabbit_gang.are
+[*****] BUG: load_area: error loading file (can't open)
+[*****] BUG: test.are
+[*****] BUG: load_area: error loading file (can't open)
+[*****] BUG: namek.are
+[*****] BUG: load_area: error loading file (can't open)
+[*****] BUG: sewers.are
+[*****] BUG: load_area: error loading file (can't open)
+[*****] BUG: big_gete.are
+[*****] BUG: load_area: error loading file (can't open)
+[*****] BUG: north_42_sector.are
+[*****] BUG: load_area: error loading file (can't open)
+[*****] BUG: satancity.are
+[*****] BUG: load_area: error loading file (can't open)
+[*****] BUG: soltari_city.are
+[*****] BUG: load_area: error loading file (can't open)
+[*****] BUG: fake_namek.are
+[*****] BUG: load_area: error loading file (can't open)
+[*****] BUG: nativlon_island.are
+[*****] BUG: load_area: error loading file (can't open)
+[*****] BUG: western_desert.are
+[*****] BUG: load_area: error loading file (can't open)
+[*****] BUG: capsule_corp.are
+[*****] BUG: load_area: error loading file (can't open)
+[*****] BUG: mount_areukk.are
+[*****] BUG: load_area: error loading file (can't open)
+[*****] BUG: snake_way.are
+[*****] BUG: load_area: error loading file (can't open)
+[*****] BUG: megaplex.are
+[*****] BUG: load_area: error loading file (can't open)
+[*****] BUG: sanitarium.are
+[*****] BUG: Get_mob_index: bad vnum 3.
+[*****] BUG: Create_mobile: NULL pMobIndex.
+[*****] BUG: Fread_sysdata: no match: IMCMailVnum
+[*****] BUG: Fread_sysdata: no match: 0
+[*****] BUG: load_area: error loading file (can't open)
+[*****] BUG: help.are
+[*****] BUG: load_area: error loading file (can't open)
+[*****] BUG: limbo.are
+[*****] BUG: load_area: error loading file (can't open)
+[*****] BUG: ims.are
+[*****] BUG: load_area: error loading file (can't open)
+[*****] BUG: cou3.are
+[*****] BUG: load_area: error loading file (can't open)
+[*****] BUG: gods.are
+[*****] BUG: load_area: error loading file (can't open)
+[*****] BUG: intro.are
+[*****] BUG: load_area: error loading file (can't open)
+[*****] BUG: spaceships.are
+[*****] BUG: load_area: error loading file (can't open)
+[*****] BUG: afterlife.are
+[*****] BUG: load_area: error loading file (can't open)
+[*****] BUG: FShip.are
+[*****] BUG: load_area: error loading file (can't open)
+[*****] BUG: kames_lookout.are
+[*****] BUG: load_area: error loading file (can't open)
+[*****] BUG: roshis_island.are
+[*****] BUG: load_area: error loading file (can't open)
+[*****] BUG: basement.are
+[*****] BUG: load_area: error loading file (can't open)
+[*****] BUG: geros_lab.are
+[*****] BUG: load_area: error loading file (can't open)
+[*****] BUG: south_city.are
+[*****] BUG: load_area: error loading file (can't open)
+[*****] BUG: bunny_forest.are
+[*****] BUG: load_area: error loading file (can't open)
+[*****] BUG: rabbit_gang.are
+[*****] BUG: load_area: error loading file (can't open)
+[*****] BUG: test.are
+[*****] BUG: load_area: error loading file (can't open)
+[*****] BUG: namek.are
+[*****] BUG: load_area: error loading file (can't open)
+[*****] BUG: sewers.are
+[*****] BUG: load_area: error loading file (can't open)
+[*****] BUG: big_gete.are
+[*****] BUG: load_area: error loading file (can't open)
+[*****] BUG: north_42_sector.are
+[*****] BUG: load_area: error loading file (can't open)
+[*****] BUG: satancity.are
+[*****] BUG: load_area: error loading file (can't open)
+[*****] BUG: soltari_city.are
+[*****] BUG: load_area: error loading file (can't open)
+[*****] BUG: fake_namek.are
+[*****] BUG: load_area: error loading file (can't open)
+[*****] BUG: nativlon_island.are
+[*****] BUG: load_area: error loading file (can't open)
+[*****] BUG: western_desert.are
+[*****] BUG: load_area: error loading file (can't open)
+[*****] BUG: capsule_corp.are
+[*****] BUG: load_area: error loading file (can't open)
+[*****] BUG: mount_areukk.are
+[*****] BUG: load_area: error loading file (can't open)
+[*****] BUG: snake_way.are
+[*****] BUG: load_area: error loading file (can't open)
+[*****] BUG: megaplex.are
+[*****] BUG: load_area: error loading file (can't open)
+[*****] BUG: sanitarium.are
+[*****] BUG: Get_mob_index: bad vnum 3.
+[*****] BUG: Create_mobile: NULL pMobIndex.
+[*****] BUG: Fread_sysdata: no match: IMCMailVnum
+[*****] BUG: Fread_sysdata: no match: 0
+[*****] BUG: Fread_sysdata: no match: IMCMailVnum
+[*****] BUG: Fread_sysdata: no match: 0
+[*****] BUG: Fread_sysdata: no match: IMCMailVnum
+[*****] BUG: Fread_sysdata: no match: 0
+[*****] BUG: Fread_sysdata: no match: IMCMailVnum
+[*****] BUG: Fread_sysdata: no match: 0
+[*****] BUG: Fread_sysdata: no match: IMCMailVnum
+[*****] BUG: Fread_sysdata: no match: 0
+[*****] BUG: load_area: error loading file (can't open)
+[*****] BUG: ../area/$
+[*****] BUG: fread_word: EOF encountered on read.
+
+[*****] BUG: Fread_sysdata: no match: IMCMailVnum
+[*****] BUG: Fread_sysdata: no match: 0
+[*****] BUG: Cannot open alliance list for reading
+[*****] BUG: Fread_sysdata: no match: IMCMailVnum
+[*****] BUG: Fread_sysdata: no match: 0
+[*****] BUG: Cannot open alliance list for reading
+[*****] BUG: Fread_sysdata: no match: IMCMailVnum
+[*****] BUG: Fread_sysdata: no match: 0
+[*****] BUG: Cannot open alliance list for reading
+[*****] BUG: Fread_sysdata: no match: IMCMailVnum
+[*****] BUG: Fread_sysdata: no match: 0
+[*****] BUG: Cannot open alliance list for reading
+[*****] BUG: Fread_sysdata: no match: IMCMailVnum
+[*****] BUG: Fread_sysdata: no match: 0
+[*****] BUG: Cannot open alliance list for reading
+[*****] BUG: Fread_sysdata: no match: IMCMailVnum
+[*****] BUG: Fread_sysdata: no match: 0
+[*****] BUG: Cannot open alliance list for reading
+[*****] BUG: Fread_sysdata: no match: IMCMailVnum
+[*****] BUG: Fread_sysdata: no match: 0
+[*****] BUG: Cannot open alliance list for reading
+[*****] BUG: Fread_sysdata: no match: IMCMailVnum
+[*****] BUG: Fread_sysdata: no match: 0
+[*****] BUG: Cannot open alliance list for reading
+[*****] BUG: Fread_sysdata: no match: IMCMailVnum
+[*****] BUG: Fread_sysdata: no match: 0
+[*****] BUG: Cannot open alliance list for reading
+[*****] BUG: Fread_sysdata: no match: IMCMailVnum
+[*****] BUG: Fread_sysdata: no match: 0
+[*****] BUG: Cannot open alliance list for reading
+[*****] BUG: Fread_sysdata: no match: IMCMailVnum
+[*****] BUG: Fread_sysdata: no match: 0
+[*****] BUG: Cannot open alliance list for reading
+[*****] BUG: Fread_sysdata: no match: IMCMailVnum
+[*****] BUG: Fread_sysdata: no match: 0
+[*****] BUG: Cannot open alliance list for reading
+[*****] BUG: Fread_sysdata: no match: IMCMailVnum
+[*****] BUG: Fread_sysdata: no match: 0
+[*****] BUG: Cannot open alliance list for reading
+[*****] BUG: Fread_sysdata: no match: IMCMailVnum
+[*****] BUG: Fread_sysdata: no match: 0
+[*****] BUG: Cannot open alliance list for reading
+[*****] BUG: Load_corpses: can't open CORPSE_DIR
+[*****] BUG: Fread_accessories: Accessory doesn't exist
+[*****] BUG: Fread_accessories: Accessory doesn't exist
+[*****] BUG: Fread_accessories: Accessory doesn't exist
+[*****] BUG: Fread_sysdata: no match: IMCMailVnum
+[*****] BUG: Fread_sysdata: no match: 0
+[*****] BUG: Cannot open alliance list for reading
+[*****] BUG: Fread_accessories: Accessory doesn't exist
+[*****] BUG: Fread_accessories: Accessory doesn't exist
+[*****] BUG: Fread_accessories: Accessory doesn't exist
+[*****] BUG: NULL ROOM: echo_to_room() The turbocar doors close and it speeds out of the station.
+[*****] BUG: room_is_dark: NULL pRoomIndex
+[*****] BUG: room_is_dark: NULL pRoomIndex
+[*****] BUG: Fread_sysdata: no match: IMCMailVnum
+[*****] BUG: Fread_sysdata: no match: 0
+[*****] BUG: Cannot open alliance list for reading
+[*****] BUG: Fread_accessories: Accessory doesn't exist
+[*****] BUG: Fread_accessories: Accessory doesn't exist
+[*****] BUG: Fread_accessories: Accessory doesn't exist
+[*****] BUG: Fread_sysdata: no match: IMCMailVnum
+[*****] BUG: Fread_sysdata: no match: 0
+[*****] BUG: Cannot open alliance list for reading
+[*****] BUG: Fread_accessories: Accessory doesn't exist
+[*****] BUG: Fread_accessories: Accessory doesn't exist
+[*****] BUG: Fread_accessories: Accessory doesn't exist
+[*****] BUG: Fread_sysdata: no match: IMCMailVnum
+[*****] BUG: Fread_sysdata: no match: 0
+[*****] BUG: Cannot open alliance list for reading
+[*****] BUG: Fread_accessories: Accessory doesn't exist
+[*****] BUG: Fread_accessories: Accessory doesn't exist
+[*****] BUG: Fread_accessories: Accessory doesn't exist
+[*****] BUG: Fread_sysdata: no match: IMCMailVnum
+[*****] BUG: Fread_sysdata: no match: 0
+[*****] BUG: Cannot open alliance list for reading
+[*****] BUG: Fread_accessories: Accessory doesn't exist
+[*****] BUG: Fread_accessories: Accessory doesn't exist
+[*****] BUG: Fread_accessories: Accessory doesn't exist
+[*****] BUG: Fread_sysdata: no match: IMCMailVnum
+[*****] BUG: Fread_sysdata: no match: 0
+[*****] BUG: Cannot open alliance list for reading
+[*****] BUG: Fread_accessories: Accessory doesn't exist
+[*****] BUG: Fread_accessories: Accessory doesn't exist
+[*****] BUG: Fread_accessories: Accessory doesn't exist
+[*****] BUG: Fread_sysdata: no match: IMCMailVnum
+[*****] BUG: Fread_sysdata: no match: 0
+[*****] BUG: Cannot open alliance list for reading
+[*****] BUG: Fread_accessories: Accessory doesn't exist
+[*****] BUG: Fread_accessories: Accessory doesn't exist
+[*****] BUG: Fread_accessories: Accessory doesn't exist
+[*****] BUG: NULL ROOM: echo_to_room() The turbocar doors close and it speeds out of the station.
+[*****] BUG: Fread_sysdata: no match: IMCMailVnum
+[*****] BUG: Fread_sysdata: no match: 0
+[*****] BUG: Cannot open alliance list for reading
+[*****] BUG: Fread_accessories: Accessory doesn't exist
+[*****] BUG: Fread_accessories: Accessory doesn't exist
+[*****] BUG: Fread_accessories: Accessory doesn't exist
+[*****] BUG: Fread_sysdata: no match: IMCMailVnum
+[*****] BUG: Fread_sysdata: no match: 0
+[*****] BUG: Cannot open alliance list for reading
+[*****] BUG: Fread_accessories: Accessory doesn't exist
+[*****] BUG: Fread_accessories: Accessory doesn't exist
+[*****] BUG: Fread_accessories: Accessory doesn't exist
+[*****] BUG: NULL ROOM: echo_to_room() The turbocar doors close and it speeds out of the station.
+[*****] BUG: Fread_char: no match: ICEListen
+[*****] BUG: Fread_char: no match: ~
+[*****] BUG: Fread_char: no match: Announce
+[*****] BUG: Fread_char: no match: 0
+[*****] BUG: Fread_char: no match: General
+[*****] BUG: Fread_char: no match: 0
+[*****] BUG: Fread_char: no match: ICEListen
+[*****] BUG: Fread_char: no match: ~
+[*****] BUG: Fread_char: no match: Announce
+[*****] BUG: Fread_char: no match: 0
+[*****] BUG: Fread_char: no match: General
+[*****] BUG: Fread_char: no match: 0
+[*****] BUG: Fread_sysdata: no match: IMCMailVnum
+[*****] BUG: Fread_sysdata: no match: 0
+[*****] BUG: Cannot open alliance list for reading
+[*****] BUG: Fread_accessories: Accessory doesn't exist
+[*****] BUG: Fread_accessories: Accessory doesn't exist
+[*****] BUG: Fread_accessories: Accessory doesn't exist
+[*****] BUG: NULL ROOM: echo_to_room() The turbocar doors close and it speeds out of the station.
+[*****] BUG: Fread_sysdata: no match: IMCMailVnum
+[*****] BUG: Fread_sysdata: no match: 0
+[*****] BUG: Cannot open alliance list for reading
+[*****] BUG: Fread_accessories: Accessory doesn't exist
+[*****] BUG: Fread_accessories: Accessory doesn't exist
+[*****] BUG: Fread_accessories: Accessory doesn't exist
+[*****] BUG: NULL ROOM: echo_to_room() The turbocar doors close and it speeds out of the station.
+[*****] BUG: room_is_dark: NULL pRoomIndex
+[*****] BUG: Fread_sysdata: no match: IMCMailVnum
+[*****] BUG: Fread_sysdata: no match: 0
+[*****] BUG: Cannot open alliance list for reading
+[*****] BUG: Fread_accessories: Accessory doesn't exist
+[*****] BUG: Fread_accessories: Accessory doesn't exist
+[*****] BUG: Fread_accessories: Accessory doesn't exist
+[*****] BUG: NULL ROOM: echo_to_room() The turbocar doors close and it speeds out of the station.
+[*****] BUG: Fread_sysdata: no match: IMCMailVnum
+[*****] BUG: Fread_sysdata: no match: 0
+[*****] BUG: Cannot open alliance list for reading
+[*****] BUG: Fread_accessories: Accessory doesn't exist
+[*****] BUG: Fread_accessories: Accessory doesn't exist
+[*****] BUG: Fread_accessories: Accessory doesn't exist
+[*****] BUG: NULL ROOM: echo_to_room() The turbocar doors close and it speeds out of the station.
+[*****] BUG: Fread_sysdata: no match: IMCMailVnum
+[*****] BUG: Fread_sysdata: no match: 0
+[*****] BUG: Cannot open alliance list for reading
+[*****] BUG: Fread_accessories: Accessory doesn't exist
+[*****] BUG: Fread_accessories: Accessory doesn't exist
+[*****] BUG: Fread_accessories: Accessory doesn't exist
+[*****] BUG: NULL ROOM: echo_to_room() The turbocar doors close and it speeds out of the station.
+[*****] BUG: Fread_sysdata: no match: IMCMailVnum
+[*****] BUG: Fread_sysdata: no match: 0
+[*****] BUG: Cannot open alliance list for reading
+[*****] BUG: Fread_accessories: Accessory doesn't exist
+[*****] BUG: Fread_accessories: Accessory doesn't exist
+[*****] BUG: Fread_accessories: Accessory doesn't exist
+[*****] BUG: NULL ROOM: echo_to_room() The turbocar doors close and it speeds out of the station.
+[*****] BUG: Fread_sysdata: no match: IMCMailVnum
+[*****] BUG: Fread_sysdata: no match: 0
+[*****] BUG: load_class_file: Skill sgod unknown
+[*****] BUG: Cannot open alliance list for reading
+[*****] BUG: Fread_accessories: Accessory doesn't exist
+[*****] BUG: Fread_accessories: Accessory doesn't exist
+[*****] BUG: Fread_accessories: Accessory doesn't exist
+[*****] BUG: NULL ROOM: echo_to_room() The turbocar doors close and it speeds out of the station.
+[*****] BUG: Fread_char: unknown ability.
+[*****] BUG: Fread_sysdata: no match: IMCMailVnum
+[*****] BUG: Fread_sysdata: no match: 0
+[*****] BUG: load_class_file: Skill sgod unknown
+[*****] BUG: Cannot open alliance list for reading
+[*****] BUG: Fread_accessories: Accessory doesn't exist
+[*****] BUG: Fread_accessories: Accessory doesn't exist
+[*****] BUG: Fread_accessories: Accessory doesn't exist
+[*****] BUG: NULL ROOM: echo_to_room() The turbocar doors close and it speeds out of the station.
+[*****] BUG: Fread_sysdata: no match: IMCMailVnum
+[*****] BUG: Fread_sysdata: no match: 0
+[*****] BUG: load_class_file: Skill sgod unknown
+[*****] BUG: Cannot open alliance list for reading
+[*****] BUG: Fread_accessories: Accessory doesn't exist
+[*****] BUG: Fread_accessories: Accessory doesn't exist
+[*****] BUG: Fread_accessories: Accessory doesn't exist
+[*****] BUG: NULL ROOM: echo_to_room() The turbocar doors close and it speeds out of the station.
+[*****] BUG: Fread_sysdata: no match: IMCMailVnum
+[*****] BUG: Fread_sysdata: no match: 0
+[*****] BUG: load_class_file: Skill sgod unknown
+[*****] BUG: load_class_file: Skill sgod unknown
+[*****] BUG: load_class_file: Skill sgod unknown
+[*****] BUG: load_class_file: Skill sgod unknown
+[*****] BUG: load_class_file: Skill sgod unknown
+[*****] BUG: Cannot open alliance list for reading
+[*****] BUG: Fread_accessories: Accessory doesn't exist
+[*****] BUG: Fread_accessories: Accessory doesn't exist
+[*****] BUG: Fread_accessories: Accessory doesn't exist
+[*****] BUG: NULL ROOM: echo_to_room() The turbocar doors close and it speeds out of the station.
+[*****] BUG: Fread_sysdata: no match: IMCMailVnum
+[*****] BUG: Fread_sysdata: no match: 0
+[*****] BUG: load_class_file: Skill sgod unknown
+[*****] BUG: load_class_file: Skill sgod unknown
+[*****] BUG: load_class_file: Skill sgod unknown
+[*****] BUG: load_class_file: Skill sgod unknown
+[*****] BUG: load_class_file: Skill sgod unknown
+[*****] BUG: Cannot open alliance list for reading
+[*****] BUG: Fread_accessories: Accessory doesn't exist
+[*****] BUG: Fread_accessories: Accessory doesn't exist
+[*****] BUG: Fread_accessories: Accessory doesn't exist
+[*****] BUG: NULL ROOM: echo_to_room() The turbocar doors close and it speeds out of the station.
+[*****] BUG: Fread_sysdata: no match: IMCMailVnum
+[*****] BUG: Fread_sysdata: no match: 0
+[*****] BUG: load_class_file: Skill sgod unknown
+[*****] BUG: load_class_file: Skill sgod unknown
+[*****] BUG: load_class_file: Skill sgod unknown
+[*****] BUG: load_class_file: Skill sgod unknown
+[*****] BUG: load_class_file: Skill sgod unknown
+[*****] BUG: Cannot open alliance list for reading
+[*****] BUG: Fread_accessories: Accessory doesn't exist
+[*****] BUG: Fread_accessories: Accessory doesn't exist
+[*****] BUG: Fread_accessories: Accessory doesn't exist
+[*****] BUG: NULL ROOM: echo_to_room() The turbocar doors close and it speeds out of the station.
+[*****] BUG: Fread_char: unknown ability.
+[*****] BUG: Fread_sysdata: no match: IMCMailVnum
+[*****] BUG: Fread_sysdata: no match: 0
+[*****] BUG: load_class_file: Skill sgod unknown
+[*****] BUG: load_class_file: Skill sgod unknown
+[*****] BUG: load_class_file: Skill sgod unknown
+[*****] BUG: load_class_file: Skill sgod unknown
+[*****] BUG: load_class_file: Skill sgod unknown
+[*****] BUG: Cannot open alliance list for reading
+[*****] BUG: Fread_accessories: Accessory doesn't exist
+[*****] BUG: Fread_accessories: Accessory doesn't exist
+[*****] BUG: Fread_accessories: Accessory doesn't exist
+[*****] BUG: Fread_char: unknown skill.
+[*****] BUG: Fread_char: unknown ability.
+[*****] BUG: NULL ROOM: echo_to_room() The turbocar doors close and it speeds out of the station.
+[*****] BUG: Fread_sysdata: no match: IMCMailVnum
+[*****] BUG: Fread_sysdata: no match: 0
+[*****] BUG: load_class_file: Skill sgod unknown
+[*****] BUG: load_class_file: Skill sgod unknown
+[*****] BUG: load_class_file: Skill sgod unknown
+[*****] BUG: load_class_file: Skill sgod unknown
+[*****] BUG: load_class_file: Skill sgod unknown
+[*****] BUG: Cannot open alliance list for reading
+[*****] BUG: Fread_accessories: Accessory doesn't exist
+[*****] BUG: Fread_accessories: Accessory doesn't exist
+[*****] BUG: Fread_accessories: Accessory doesn't exist
+[*****] BUG: NULL ROOM: echo_to_room() The turbocar doors close and it speeds out of the station.
+[*****] BUG: Fread_char: unknown ability.
+[*****] BUG: Fread_sysdata: no match: IMCMailVnum
+[*****] BUG: Fread_sysdata: no match: 0
+[*****] BUG: load_class_file: Skill sgod unknown
+[*****] BUG: load_class_file: Skill sgod unknown
+[*****] BUG: load_class_file: Skill sgod unknown
+[*****] BUG: load_class_file: Skill sgod unknown
+[*****] BUG: load_class_file: Skill sgod unknown
+[*****] BUG: Cannot open alliance list for reading
+[*****] BUG: Fread_accessories: Accessory doesn't exist
+[*****] BUG: Fread_accessories: Accessory doesn't exist
+[*****] BUG: Fread_accessories: Accessory doesn't exist
+[*****] BUG: NULL ROOM: echo_to_room() The turbocar doors close and it speeds out of the station.
+[*****] BUG: Fread_sysdata: no match: IMCMailVnum
+[*****] BUG: Fread_sysdata: no match: 0
+[*****] BUG: load_class_file: Skill sgod unknown
+[*****] BUG: load_class_file: Skill sgod unknown
+[*****] BUG: load_class_file: Skill sgod unknown
+[*****] BUG: load_class_file: Skill sgod unknown
+[*****] BUG: load_class_file: Skill sgod unknown
+[*****] BUG: Cannot open alliance list for reading
+[*****] BUG: Fread_accessories: Accessory doesn't exist
+[*****] BUG: Fread_accessories: Accessory doesn't exist
+[*****] BUG: Fread_accessories: Accessory doesn't exist
+[*****] BUG: NULL ROOM: echo_to_room() The turbocar doors close and it speeds out of the station.
+[*****] BUG: Fread_sysdata: no match: IMCMailVnum
+[*****] BUG: Fread_sysdata: no match: 0
+[*****] BUG: load_class_file: Skill sgod unknown
+[*****] BUG: load_class_file: Skill sgod unknown
+[*****] BUG: load_class_file: Skill sgod unknown
+[*****] BUG: load_class_file: Skill sgod unknown
+[*****] BUG: load_class_file: Skill sgod unknown
+[*****] BUG: Cannot open alliance list for reading
+[*****] BUG: Fread_accessories: Accessory doesn't exist
+[*****] BUG: Fread_accessories: Accessory doesn't exist
+[*****] BUG: Fread_accessories: Accessory doesn't exist
+[*****] BUG: NULL ROOM: echo_to_room() The turbocar doors close and it speeds out of the station.
+[*****] BUG: Fread_char: unknown ability.
+[*****] BUG: Fread_sysdata: no match: IMCMailVnum
+[*****] BUG: Fread_sysdata: no match: 0
+[*****] BUG: load_class_file: Skill sgod unknown
+[*****] BUG: load_class_file: Skill sgod unknown
+[*****] BUG: load_class_file: Skill sgod unknown
+[*****] BUG: load_class_file: Skill sgod unknown
+[*****] BUG: load_class_file: Skill sgod unknown
+[*****] BUG: Cannot open alliance list for reading
+[*****] BUG: Fread_accessories: Accessory doesn't exist
+[*****] BUG: Fread_accessories: Accessory doesn't exist
+[*****] BUG: Fread_accessories: Accessory doesn't exist
+[*****] BUG: NULL ROOM: echo_to_room() The turbocar doors close and it speeds out of the station.
+[*****] BUG: Fread_char: unknown ability.
+[*****] BUG: Fread_sysdata: no match: IMCMailVnum
+[*****] BUG: Fread_sysdata: no match: 0
+[*****] BUG: Cannot open alliance list for reading
+[*****] BUG: Fread_accessories: Accessory doesn't exist
+[*****] BUG: Fread_accessories: Accessory doesn't exist
+[*****] BUG: Fread_accessories: Accessory doesn't exist
+[*****] BUG: NULL ROOM: echo_to_room() The turbocar doors close and it speeds out of the station.
+[*****] BUG: Fread_sysdata: no match: IMCMailVnum
+[*****] BUG: Fread_sysdata: no match: 0
+[*****] BUG: Cannot open alliance list for reading
+[*****] BUG: Fread_accessories: Accessory doesn't exist
+[*****] BUG: Fread_accessories: Accessory doesn't exist
+[*****] BUG: Fread_accessories: Accessory doesn't exist
+[*****] BUG: NULL ROOM: echo_to_room() The turbocar doors close and it speeds out of the station.
+[*****] BUG: Fread_sysdata: no match: IMCMailVnum
+[*****] BUG: Fread_sysdata: no match: 0
+[*****] BUG: Cannot open alliance list for reading
+[*****] BUG: Fread_accessories: Accessory doesn't exist
+[*****] BUG: Fread_accessories: Accessory doesn't exist
+[*****] BUG: Fread_accessories: Accessory doesn't exist
+[*****] BUG: NULL ROOM: echo_to_room() The turbocar doors close and it speeds out of the station.
+[*****] BUG: Fread_sysdata: no match: IMCMailVnum
+[*****] BUG: Fread_sysdata: no match: 0
+[*****] BUG: Cannot open alliance list for reading
+[*****] BUG: Fread_accessories: Accessory doesn't exist
+[*****] BUG: Fread_accessories: Accessory doesn't exist
+[*****] BUG: Fread_accessories: Accessory doesn't exist
+[*****] BUG: NULL ROOM: echo_to_room() The turbocar doors close and it speeds out of the station.
+[*****] BUG: Fread_sysdata: no match: IMCMailVnum
+[*****] BUG: Fread_sysdata: no match: 0
+[*****] BUG: Cannot open alliance list for reading
+[*****] BUG: Fread_accessories: Accessory doesn't exist
+[*****] BUG: Fread_accessories: Accessory doesn't exist
+[*****] BUG: Fread_accessories: Accessory doesn't exist
+[*****] BUG: NULL ROOM: echo_to_room() The turbocar doors close and it speeds out of the station.
+[*****] BUG: Fread_sysdata: no match: IMCMailVnum
+[*****] BUG: Fread_sysdata: no match: 0
+[*****] BUG: Cannot open alliance list for reading
+[*****] BUG: Fread_accessories: Accessory doesn't exist
+[*****] BUG: Fread_accessories: Accessory doesn't exist
+[*****] BUG: Fread_accessories: Accessory doesn't exist
+[*****] BUG: NULL ROOM: echo_to_room() The turbocar doors close and it speeds out of the station.
+[*****] BUG: Fread_sysdata: no match: IMCMailVnum
+[*****] BUG: Fread_sysdata: no match: 0
+[*****] BUG: Cannot open alliance list for reading
+[*****] BUG: Fread_accessories: Accessory doesn't exist
+[*****] BUG: Fread_accessories: Accessory doesn't exist
+[*****] BUG: Fread_accessories: Accessory doesn't exist
+[*****] BUG: Fread_sysdata: no match: IMCMailVnum
+[*****] BUG: Fread_sysdata: no match: 0
+[*****] BUG: Cannot open alliance list for reading
+[*****] BUG: Fread_accessories: Accessory doesn't exist
+[*****] BUG: Fread_accessories: Accessory doesn't exist
+[*****] BUG: Fread_accessories: Accessory doesn't exist
+[*****] BUG: Fread_sysdata: no match: IMCMailVnum
+[*****] BUG: Fread_sysdata: no match: 0
+[*****] BUG: Cannot open alliance list for reading
+[*****] BUG: Fread_accessories: Accessory doesn't exist
+[*****] BUG: Fread_accessories: Accessory doesn't exist
+[*****] BUG: Fread_accessories: Accessory doesn't exist
+[*****] BUG: Fread_sysdata: no match: IMCMailVnum
+[*****] BUG: Fread_sysdata: no match: 0
+[*****] BUG: Cannot open alliance list for reading
+[*****] BUG: Fread_accessories: Accessory doesn't exist
+[*****] BUG: Fread_accessories: Accessory doesn't exist
+[*****] BUG: Fread_accessories: Accessory doesn't exist
+[*****] BUG: NULL ROOM: echo_to_room() The turbocar doors close and it speeds out of the station.
+[*****] BUG: Fread_sysdata: no match: IMCMailVnum
+[*****] BUG: Fread_sysdata: no match: 0
+[*****] BUG: Cannot open alliance list for reading
+[*****] BUG: Fread_accessories: Accessory doesn't exist
+[*****] BUG: Fread_accessories: Accessory doesn't exist
+[*****] BUG: Fread_accessories: Accessory doesn't exist
