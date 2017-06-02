@@ -710,10 +710,13 @@ game_loop()
 							  POS_FIGHTING) {
 								stop_fighting(d->character, true);
 							}
+							do_quit(d->character, "");
+							continue;
 						}
 
+						/* if no character assigned to descriptor, clear */
 						d->outtop = 0;
-						do_quit(d->character, "");
+						close_socket(d, false);
 						continue;
 					}
 				}
