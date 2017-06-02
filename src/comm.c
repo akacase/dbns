@@ -600,7 +600,6 @@ accept_new(int ctrl)
 		if (d == last_descriptor)
 			break;
 	}
-
 	if (select(maxdesc + 1, &in_set, &out_set, &exc_set, &null_time) < 0) {
 		perror("accept_new: select: poll");
 		exit(1);
@@ -648,12 +647,10 @@ game_loop()
 				d->next = NULL;
 			}
 			d_next = d->next;
-
-			d->idle++;	/* make it so a descriptor can idle
-					 * out */
+			/* make it so a descriptor can idle out */
+			d->idle++;	
 			if (d->idle > 2)
 				d->prev_idle = d->idle;
-
 			if (FD_ISSET(d->descriptor, &exc_set)) {
 				FD_CLR(d->descriptor, &in_set);
 				FD_CLR(d->descriptor, &out_set);
@@ -666,15 +663,14 @@ game_loop()
 				continue;
 			} else if ((!d->character && d->idle > 480)	/* 2 mins */
 				    ||(d->connected != CON_PLAYING && d->idle > 1200)	/* 5 mins */
-			    ||d->idle > 28800) {	/* 2 hrs  */
+			            ||d->idle > 28800) {	/* 2 hrs  */
 				write_to_descriptor(d->descriptor,
-				    "Idle timeout... disconnecting.\n\r", 0);
+				    "Idle timeout... auto-quit.\n\r", 0);
 				d->outtop = 0;
-				close_socket(d, true);
+				fquit(d->character);
 				continue;
 			} else {
 				d->fcommand = false;
-
 				if (FD_ISSET(d->descriptor, &in_set)) {
 					if (d->character) {
 						d->character->timer = 0;
@@ -686,7 +682,6 @@ game_loop()
 									d->character->pcdata->iIdle = 0;
 
 								d->character->pcdata->pIdle[d->character->pcdata->iIdle] = (d->idle / 4);
-								d->character->pcdata->bot_warn[0]++;
 								d->character->pcdata->iIdle++;
 							}
 						}
@@ -706,11 +701,7 @@ game_loop()
 						    && (d->connected == CON_PLAYING
 						      || d->connected == CON_EDITING)) {
 							save_char_obj(d->character);
-							if (d->character->position ==
-							  POS_FIGHTING) {
-								stop_fighting(d->character, true);
-							}
-							do_quit(d->character, "");
+							fquit(d->character);
 							continue;
 						}
 
@@ -773,7 +764,6 @@ game_loop()
 		 */
 		for (d = first_descriptor; d; d = d_next) {
 			d_next = d->next;
-
 			if ((d->fcommand || d->outtop > 0)
 			    && FD_ISSET(d->descriptor, &out_set)) {
 				if (d->pagepoint) {
@@ -989,7 +979,7 @@ close_socket(DESCRIPTOR_DATA * dclose, bool force)
 {
 	CHAR_DATA *ch;
 	DESCRIPTOR_DATA *d;
-	bool 	DoNotUnlink = false;
+	bool do_not_unlink = false;
 	OBJ_DATA *o;
 
 	if (dclose->ipid != -1) {
@@ -1000,22 +990,18 @@ close_socket(DESCRIPTOR_DATA * dclose, bool force)
 	}
 	if (dclose->ifd != -1)
 		close(dclose->ifd);
-
 	/* flush outbuf */
 	if (!force && dclose->outtop > 0)
 		flush_buffer(dclose, false);
-
 	/* say bye to whoever's snooping this descriptor */
 	if (dclose->snoop_by)
 		write_to_buffer(dclose->snoop_by,
 		    "Your victim has left the game.\n\r", 0);
-
 	/* stop snooping everyone else */
 	for (d = first_descriptor; d; d = d->next)
 		if (d->snoop_by == dclose)
 			d->snoop_by = NULL;
-
-	/* Check for switched people who go link-dead. -- Altrag */
+	/* check for switched people who go link-dead */
 	if (dclose->original) {
 		if ((ch = dclose->character) != NULL)
 			do_return(ch, "");
@@ -1027,7 +1013,6 @@ close_socket(DESCRIPTOR_DATA * dclose, bool force)
 		}
 	}
 	ch = dclose->character;
-
 	/* sanity check :( */
 	if (!dclose->prev && dclose != first_descriptor) {
 		DESCRIPTOR_DATA *dp, *dn;
@@ -1048,7 +1033,7 @@ close_socket(DESCRIPTOR_DATA * dclose, bool force)
 		if (!dclose->prev) {
 			bug("Close_socket: %s desc:%p could not be found!.",
 			    ch ? ch->name : dclose->host, dclose);
-			DoNotUnlink = true;
+			do_not_unlink = true;
 		}
 	}
 	if (!dclose->next && dclose != last_descriptor) {
@@ -1070,7 +1055,7 @@ close_socket(DESCRIPTOR_DATA * dclose, bool force)
 		if (!dclose->next) {
 			bug("Close_socket: %s desc:%p could not be found!.",
 			    ch ? ch->name : dclose->host, dclose);
-			DoNotUnlink = true;
+			do_not_unlink = true;
 		}
 	}
 	if (dclose->character) {
@@ -1094,18 +1079,13 @@ close_socket(DESCRIPTOR_DATA * dclose, bool force)
 				do_info(ch, ldbuf);
 			else
 				do_ainfo(ch, ldbuf);
-
 			ch->desc = NULL;
 		} else {
-			/*
-			 * clear descriptor pointer to get rid of bug
-			 * message in log
-			 */
 			dclose->character->desc = NULL;
 			free_char(dclose->character);
 		}
 	}
-	if (!DoNotUnlink) {
+	if (!do_not_unlink) {
 		/* make sure loop doesn't get messed up */
 		if (d_next == dclose)
 			d_next = d_next->next;
@@ -1114,11 +1094,8 @@ close_socket(DESCRIPTOR_DATA * dclose, bool force)
 #ifdef MCCP
 	compressEnd(dclose);
 #endif
-
-
 	if (dclose->descriptor == maxdesc)
 		--maxdesc;
-
 	free_desc(dclose);
 	--num_descriptors;
 }

@@ -1512,9 +1512,6 @@ void char_update(void)
 				ch->timer++;
 			if (ch->timer >= 12) {
 				if (!IS_IDLE(ch)) {
-					/*
-					   ch->was_in_room = ch->in_room;
-					 */
 					if (ch->fighting)
 						stop_fighting(ch, true);
 					act(AT_ACTION,
@@ -1531,37 +1528,6 @@ void char_update(void)
 						     get_room_index
 						     (ROOM_VNUM_LIMBO));
 				}
-			}
-
-			if (ch->pcdata->bot_warn[0] >= 5) {
-				ch->pcdata->bot_warn[1] = 0;
-				ch->pcdata->bot_warn[0] = 0;
-
-				tIdle =
-				    ch->pcdata->pIdle[0] +
-				    ch->pcdata->pIdle[1] +
-				    ch->pcdata->pIdle[2] +
-				    ch->pcdata->pIdle[3] + ch->pcdata->pIdle[4];
-				tIdle = tIdle / 5;
-
-				if (ch->pcdata->pIdle[0] <= (tIdle + 5)
-				    && ch->pcdata->pIdle[0] >= (tIdle - 5))
-					ch->pcdata->bot_warn[1]++;
-				if (ch->pcdata->pIdle[1] <= (tIdle + 5)
-				    && ch->pcdata->pIdle[1] >= (tIdle - 5))
-					ch->pcdata->bot_warn[1]++;
-				if (ch->pcdata->pIdle[2] <= (tIdle + 5)
-				    && ch->pcdata->pIdle[2] >= (tIdle - 5))
-					ch->pcdata->bot_warn[1]++;
-				if (ch->pcdata->pIdle[3] <= (tIdle + 5)
-				    && ch->pcdata->pIdle[3] >= (tIdle - 5))
-					ch->pcdata->bot_warn[1]++;
-				if (ch->pcdata->pIdle[4] <= (tIdle + 5)
-				    && ch->pcdata->pIdle[4] >= (tIdle - 5))
-					ch->pcdata->bot_warn[1]++;
-
-				if (ch->pcdata->bot_warn[1] >= 5)
-					ch->pcdata->bot_warn[2]++;
 			}
 
 			if (ch->pcdata->condition[COND_DRUNK] > 8)

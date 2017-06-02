@@ -129,7 +129,6 @@ typedef void DO_FUN args ((CHAR_DATA * ch, char *argument));
 typedef bool SPEC_FUN args ((CHAR_DATA * ch));
 typedef ch_ret SPELL_FUN args ((int sn, int level, CHAR_DATA * ch, void *vo));
 
-#define BERR 		255
 #define DUR_CONV	23.333333333333333333333333
 #define HIDDEN_TILDE	'*'
 
@@ -2992,7 +2991,6 @@ struct pc_data
 
      int iIdle;
      int pIdle[5];
-     int bot_warn[3];
 
      time_t creation_date;
 
@@ -5380,6 +5378,7 @@ void load_hiscores args ((void));
 
 
 /* act_comm.c */
+void fquit(CHAR_DATA * ch);
 bool circle_follow args ((CHAR_DATA * ch, CHAR_DATA * victim));
 void add_follower args ((CHAR_DATA * ch, CHAR_DATA * master));
 void stop_follower args ((CHAR_DATA * ch));

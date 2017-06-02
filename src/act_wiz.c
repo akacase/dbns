@@ -11704,57 +11704,6 @@ do_reimburse(CHAR_DATA * ch, char *argument)
 }
 
 void
-do_botwatch(CHAR_DATA * ch, char *argument)
-{
-	DESCRIPTOR_DATA *d;
-	sh_int 	cswitch = 1;
-	CHAR_DATA *vch;
-	int 	lvl = 0;
-
-	lvl = atoi(argument);
-
-	send_to_pager_color
-	    ("\n\r&B=----------------------------------------------------------------------------=\n\r",
-	    ch);
-
-	for (d = first_descriptor; d; d = d->next) {
-		vch = d->character;
-
-		if (!vch) {
-			continue;
-		}
-		if (vch->pcdata) {
-			if (vch->pcdata->bot_warn[1] >= lvl) {
-				if (cswitch == 1) {
-					pager_printf_color(ch,
-					    "&B|&W[%10s][HOURS][%4d] WARNING LEVEL[&C%d/&%c%d]\n\r",
-					    vch->name, ((get_age(vch) - 4) * 2),
-					    vch->pcdata->bot_warn[1],
-					    vch->pcdata->bot_warn[2] >
-					    10 ? 'R' : vch->pcdata->bot_warn[2] >
-					    6 ? 'Y' : vch->pcdata->bot_warn[2] >
-					    3 ? 'W' : 'w', vch->pcdata->bot_warn[2]);
-					cswitch = 2;
-				} else {
-					pager_printf_color(ch,
-					    "&B|&Y[%10s][HOURS][%4d] WARNING LEVEL[&C%d/&%c%d]\n\r",
-					    vch->name, ((get_age(vch) - 4) * 2),
-					    vch->pcdata->bot_warn[1],
-					    vch->pcdata->bot_warn[2] >
-					    10 ? 'R' : vch->pcdata->bot_warn[2] >
-					    6 ? 'Y' : vch->pcdata->bot_warn[2] >
-					    3 ? 'W' : 'w', vch->pcdata->bot_warn[2]);
-					cswitch = 1;
-				}
-			}
-		}
-	}
-	send_to_pager_color
-	    ("&B=----------------------------------------------------------------------------=\n\r",
-	    ch);
-}
-
-void
 do_page(CHAR_DATA * ch, char *argument)
 {
 	char 	arg[MAX_INPUT_LENGTH];

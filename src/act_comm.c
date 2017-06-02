@@ -2448,25 +2448,14 @@ do_quit(CHAR_DATA * ch, char *argument)
 		obj_to_room(o, ch->in_room);
 		ch_printf(ch, "&wYou drop %s&w.\n\r", o->short_descr);
 	}
-
-	if (IS_PKILL(ch) && ch->wimpy > (int)ch->max_hit / 2.25) {
-		send_to_char("Your wimpy has been adjusted to the maximum level for deadlies.\n\r", ch);
-		do_wimpy(ch, "max");
-	}
-	/*
-	 * Purge all doubles no mater what, we don't want leftovers for
-	 * dinner :) -Goku
-	 */
 	if (is_splitformed(ch)) {
 		CHAR_DATA *och;
 		CHAR_DATA *och_next;
 
 		for (och = first_char; och; och = och_next) {
 			och_next = och->next;
-
 			if (!IS_NPC(och))
 				continue;
-
 			if ((xIS_SET(och->affected_by, AFF_SPLIT_FORM)
 			    || xIS_SET(och->affected_by, AFF_TRI_FORM)
 			    || xIS_SET(och->affected_by, AFF_MULTI_FORM)
@@ -2480,7 +2469,6 @@ do_quit(CHAR_DATA * ch, char *argument)
 		xREMOVE_BIT((ch)->affected_by, AFF_SPLIT_FORM);
 		xREMOVE_BIT((ch)->affected_by, AFF_BIOJR);
 	}
-	/* Get 'em dismounted until we finish mount saving -- Blodkai, 4/97 */
 	if (ch->position == POS_MOUNTED)
 		do_dismount(ch, "");
 
@@ -2515,20 +2503,12 @@ do_quit(CHAR_DATA * ch, char *argument)
 	}
 	if (ch->pcdata->in_progress)
 		free_global_note(ch->pcdata->in_progress);
-
-
-	/*
-	 * Synch clandata up only when clan member quits now. --Shaddai
-	 */
 	if (ch->pcdata->clan)
 		save_clan(ch->pcdata->clan);
 
 	saving_char = NULL;
 
 	level = get_trust(ch);
-	/*
-	 * After extract_char the ch is no longer valid!
-	 */
 	for (obj = ch->first_carrying; obj; obj = obj->next_content) {
 		if (IS_OBJ_STAT(obj, ITEM_RARE) || IS_OBJ_STAT(obj, ITEM_UNIQUE))
 			obj->pIndexData->count += obj->count;
@@ -2542,6 +2522,100 @@ do_quit(CHAR_DATA * ch, char *argument)
 	return;
 }
 
+/* TODO: test against auction code */
+void 
+fquit(CHAR_DATA * ch)
+{
+	OBJ_DATA *obj;
+	OBJ_DATA *o;
+	int x, y;
+	int level;
+	char buf[MAX_STRING_LENGTH];
+
+	/* just incase */
+	if (IS_NPC(ch))
+		return;
+	while ((o = carrying_noquit(ch)) != NULL) {
+		obj_from_char(o);
+		obj_to_room(o, ch->in_room);
+		ch_printf(ch, "&wYou drop %s&w.\n\r", o->short_descr);
+	}
+	if (ch->position == POS_FIGHTING) {
+		stop_fighting(ch, true);
+	}
+	if (is_splitformed(ch)) {
+		CHAR_DATA *och;
+		CHAR_DATA *och_next;
+
+		for (och = first_char; och; och = och_next) {
+			och_next = och->next;
+			if (!IS_NPC(och))
+				continue;
+			if ((xIS_SET(och->affected_by, AFF_SPLIT_FORM)
+			    || xIS_SET(och->affected_by, AFF_TRI_FORM)
+			    || xIS_SET(och->affected_by, AFF_MULTI_FORM)
+			    || xIS_SET(och->affected_by, AFF_BIOJR))
+			    && och->master == ch) {
+				extract_char(och, true);
+			}
+		}
+		xREMOVE_BIT((ch)->affected_by, AFF_MULTI_FORM);
+		xREMOVE_BIT((ch)->affected_by, AFF_TRI_FORM);
+		xREMOVE_BIT((ch)->affected_by, AFF_SPLIT_FORM);
+		xREMOVE_BIT((ch)->affected_by, AFF_BIOJR);
+	}
+	if (ch->position == POS_MOUNTED)
+		do_dismount(ch, "");
+
+	set_char_color(AT_WHITE, ch);
+	send_to_char("Your surroundings begin to fade as a mystical swirling vortex of colors\n\renvelops your body... When you come to, things are not as they were.\n\r\n\r", ch);
+	act(AT_SAY, "A strange voice says, 'We await your return, $n...'", ch, NULL, NULL, TO_CHAR);
+	act(AT_BYE, "$n has left the game.", ch, NULL, NULL, TO_CANSEE);
+
+	adjust_hiscore("played", ch, ((get_age(ch) - 4) * 2));
+	adjust_hiscore("zeni", ch, ch->gold);
+
+	sprintf(buf, "%s has left the game", ch->name);
+	if (!IS_IMMORTAL(ch))
+		do_info(ch, buf);
+	else
+		do_ainfo(ch, buf);
+
+	if (xIS_SET(ch->affected_by, AFF_TAG))
+		xREMOVE_BIT(ch->affected_by, AFF_TAG);
+
+	set_char_color(AT_GREY, ch);
+
+	sprintf(log_buf, "%s has quit (Room %d).", ch->name,
+	    (ch->in_room ? ch->in_room->vnum : -1));
+	quitting_char = ch;
+	save_char_obj(ch);
+
+	if (sysdata.save_pets && ch->pcdata->pet) {
+		act(AT_BYE, "$N follows $S master into the Void.", ch, NULL,
+		    ch->pcdata->pet, TO_ROOM);
+		extract_char(ch->pcdata->pet, true);
+	}
+	if (ch->pcdata->in_progress)
+		free_global_note(ch->pcdata->in_progress);
+	if (ch->pcdata->clan)
+		save_clan(ch->pcdata->clan);
+
+	saving_char = NULL;
+
+	level = get_trust(ch);
+	for (obj = ch->first_carrying; obj; obj = obj->next_content) {
+		if (IS_OBJ_STAT(obj, ITEM_RARE) || IS_OBJ_STAT(obj, ITEM_UNIQUE))
+			obj->pIndexData->count += obj->count;
+	}
+	extract_char(ch, true);
+	for (x = 0; x < MAX_WEAR; x++)
+		for (y = 0; y < MAX_LAYERS; y++)
+			save_equipment[x][y] = NULL;
+
+	log_string_plus(log_buf, LOG_COMM, level);
+	return;
+}
 
 void 
 send_rip_screen(CHAR_DATA * ch)

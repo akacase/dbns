@@ -134,7 +134,6 @@ DO_FUN *skill_function( char *name )
       if ( !str_cmp( name, "do_boards"                    ))    return do_boards;
       if ( !str_cmp( name, "do_bodybag"                   ))    return do_bodybag;
       if ( !str_cmp( name, "do_bolt"                      ))    return do_bolt;
-      if ( !str_cmp( name, "do_botwatch"                  ))    return do_botwatch;
       if ( !str_cmp( name, "do_bounty"                    ))    return do_bounty;
       if ( !str_cmp( name, "do_brandish"                  ))    return do_brandish;
       if ( !str_cmp( name, "do_brew"                      ))    return do_brew;
@@ -427,7 +426,7 @@ DO_FUN *skill_function( char *name )
       if ( !str_cmp( name, "do_mmenu"                     ))    return do_mmenu;
       if ( !str_cmp( name, "do_mortalize"                 ))    return do_mortalize;
       if ( !str_cmp( name, "do_mount"                     ))    return do_mount;
-      if ( !str_cmp( name, "do_mpshowbot"          ))    return do_mpshowbot;
+      if ( !str_cmp( name, "do_mpshowbot"                 ))    return do_mpshowbot;
       if ( !str_cmp( name, "do_mp_close_passage"          ))    return do_mp_close_passage;
       if ( !str_cmp( name, "do_mp_damage"                 ))    return do_mp_damage;
       if ( !str_cmp( name, "do_mp_drain"		  ))	return do_mp_drain;
@@ -930,7 +929,6 @@ char *skill_name( DO_FUN *skill )
       if ( skill == do_boards                      )    return "do_boards";
       if ( skill == do_bodybag                     )    return "do_bodybag";
       if ( skill == do_bolt                        )    return "do_bolt";
-      if ( skill == do_botwatch                    )    return "do_botwatch";
       if ( skill == do_bounty                      )    return "do_bounty";
       if ( skill == do_brandish                    )    return "do_brandish";
       if ( skill == do_brew                        )    return "do_brew";

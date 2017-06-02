@@ -963,9 +963,6 @@ load_char_obj (DESCRIPTOR_DATA * d, char *name, bool preload)
      ch->pcdata->pIdle[3] = 0;
      ch->pcdata->pIdle[4] = 0;
      ch->pcdata->iIdle = 0;
-     ch->pcdata->bot_warn[0] = 0;
-     ch->pcdata->bot_warn[1] = 0;
-     ch->pcdata->bot_warn[2] = 0;
 
      ch->pcdata->tStr = 0;
      ch->pcdata->tInt = 0;
@@ -1132,9 +1129,6 @@ load_char_obj (DESCRIPTOR_DATA * d, char *name, bool preload)
 	  ch->pcdata->pIdle[3] = 0;
 	  ch->pcdata->pIdle[4] = 0;
 	  ch->pcdata->iIdle = 0;
-	  ch->pcdata->bot_warn[0] = 0;
-	  ch->pcdata->bot_warn[1] = 0;
-	  ch->pcdata->bot_warn[2] = 0;
 	  ch->pcdata->auraColorPowerUp = -1;
 	  ch->pcdata->interestLastMonth = 0;
 	  ch->pcdata->interestLastYear = 0;
