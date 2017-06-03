@@ -647,10 +647,6 @@ game_loop()
 				d->next = NULL;
 			}
 			d_next = d->next;
-			/* make it so a descriptor can idle out */
-			d->idle++;	
-			if (d->idle > 2)
-				d->prev_idle = d->idle;
 			if (FD_ISSET(d->descriptor, &exc_set)) {
 				FD_CLR(d->descriptor, &in_set);
 				FD_CLR(d->descriptor, &out_set);
@@ -661,40 +657,9 @@ game_loop()
 				d->outtop = 0;
 				close_socket(d, true);
 				continue;
-			} else if ((!d->character && d->idle > 480)	/* 2 mins */
-				    ||(d->connected != CON_PLAYING && d->idle > 1200)	/* 5 mins */
-			            ||d->idle > 28800) {	/* 2 hrs  */
-				write_to_descriptor(d->descriptor,
-				    "Idle timeout... auto-quit.\n\r", 0);
-				d->outtop = 0;
-				fquit(d->character);
-				continue;
 			} else {
 				d->fcommand = false;
 				if (FD_ISSET(d->descriptor, &in_set)) {
-					if (d->character) {
-						d->character->timer = 0;
-						if (d->character->pcdata && d->character->level < 51) {
-							if (d->idle >= 180) {
-								if (d->character->pcdata->iIdle < 0)
-									d->character->pcdata->iIdle = 0;
-								if (d->character->pcdata->iIdle > 4)
-									d->character->pcdata->iIdle = 0;
-
-								d->character->pcdata->pIdle[d->character->pcdata->iIdle] = (d->idle / 4);
-								d->character->pcdata->iIdle++;
-							}
-						}
-					}
-					if (d->prev_idle < 2)
-						d->psuppress_cmdspam = true;
-					else
-						d->psuppress_cmdspam = false;
-
-					d->psuppress_channel = 0;
-					d->prev_idle = d->idle;
-					d->idle = 0;
-
 					if (!read_from_descriptor(d)) {
 						FD_CLR(d->descriptor, &out_set);
 						if (d->character
@@ -704,17 +669,11 @@ game_loop()
 							fquit(d->character);
 							continue;
 						}
-
-						/* if no character assigned to descriptor, clear */
-						d->outtop = 0;
-						close_socket(d, false);
-						continue;
 					}
 				}
 				/* check for input from the dns */
 				if ((d->connected == CON_PLAYING || d->character != NULL) && d->ifd != -1 && FD_ISSET(d->ifd, &in_set))
 					process_dns(d);
-
 				if (d->character && d->character->wait > 0) {
 					--d->character->wait;
 					continue;
@@ -749,19 +708,13 @@ game_loop()
 			if (d == last_descriptor)
 				break;
 		}
-		/*
-		 * Autonomous game motion.
-		 */
+		/* autonomous game motion */
 		update_handler();
 
-		/*
-		 * Check REQUESTS pipe
-		 */
+		/* check REQUESTS pipe */
 		check_requests();
 
-		/*
-		 * Output.
-		 */
+		/* output */
 		for (d = first_descriptor; d; d = d_next) {
 			d_next = d->next;
 			if ((d->fcommand || d->outtop > 0)
@@ -790,37 +743,34 @@ game_loop()
 
 		/*
 		 * Synchronize to a clock.
-		 * Sleep( last_time + 1/PULSE_PER_SECOND - now ).
-		 * Careful here of signed versus unsigned arithmetic.
+		 * sleep(last_time + 1/PULSE_PER_SECOND - now).
 		 */
-		{
-			struct timeval now_time;
-			long 	secDelta;
-			long 	usecDelta;
+		struct timeval now_time;
+		long 	sec_delta;
+		long 	usec_delta;
 
-			gettimeofday(&now_time, NULL);
-			usecDelta = ((int) last_time.tv_usec) - ((int) now_time.tv_usec)
-			    + 1000000 / PULSE_PER_SECOND;
-			secDelta = ((int) last_time.tv_sec) - ((int) now_time.tv_sec);
-			while (usecDelta < 0) {
-				usecDelta += 1000000;
-				secDelta -= 1;
-			}
+		gettimeofday(&now_time, NULL);
+		usec_delta = ((int) last_time.tv_usec) - ((int) now_time.tv_usec)
+		    + 1000000 / PULSE_PER_SECOND;
+		sec_delta = ((int) last_time.tv_sec) - ((int) now_time.tv_sec);
+		while (usec_delta < 0) {
+			usec_delta += 1000000;
+			sec_delta -= 1;
+		}
 
-			while (usecDelta >= 1000000) {
-				usecDelta -= 1000000;
-				secDelta += 1;
-			}
+		while (usec_delta >= 1000000) {
+			usec_delta -= 1000000;
+			sec_delta += 1;
+		}
 
-			if (secDelta > 0 || (secDelta == 0 && usecDelta > 0)) {
-				struct timeval stall_time;
+		if (sec_delta > 0 || (sec_delta == 0 && usec_delta > 0)) {
+			struct timeval stall_time;
 
-				stall_time.tv_usec = usecDelta;
-				stall_time.tv_sec = secDelta;
-				if (select(0, NULL, NULL, NULL, &stall_time) < 0 && errno != EINTR) {
-					perror("game_loop: select: stall");
-					exit(1);
-				}
+			stall_time.tv_usec = usec_delta;
+			stall_time.tv_sec = sec_delta;
+			if (select(0, NULL, NULL, NULL, &stall_time) < 0 && errno != EINTR) {
+				perror("game_loop: select: stall");
+				exit(1);
 			}
 		}
 
@@ -828,7 +778,8 @@ game_loop()
 		current_time = (time_t) last_time.tv_sec;
 	}
 
-	fflush(stderr);			/* make sure strerr is flushed */
+	/* make sure strerr is flushed */
+	fflush(stderr);			
 }
 
 
@@ -1121,22 +1072,22 @@ read_from_descriptor(DESCRIPTOR_DATA * d)
 		return (false);
 	}
 	for (;;) {
-		int 	nRead;
+		int 	n_read;
 
-		nRead = recv(d->descriptor, d->inbuf + iStart,
+		n_read = recv(d->descriptor, d->inbuf + iStart,
 		    sizeof(d->inbuf) - 10 - iStart, 0);
 		iErr = errno;
-		if (nRead > 0) {
-			iStart += nRead;
+		if (n_read > 0) {
+			iStart += n_read;
 			if (d->inbuf[iStart - 1] == '\n' || d->inbuf[iStart - 1] == '\r')
 				break;
-		} else if (nRead == 0) {
+		} else if (n_read == 0) {
 			log_string_plus("EOF encountered on read.", LOG_COMM, sysdata.log_level);
 			return (false);
 		} else if (iErr == EWOULDBLOCK)
 			break;
 		else {
-			perror("Read_from_descriptor");
+			perror("read_from_descriptor");
 			return (false);
 		}
 	}
@@ -1599,6 +1550,7 @@ nanny(DESCRIPTOR_DATA * d, char *argument)
 	int 	b = 0;
 	int 	iClass;
 	bool 	fOld;
+	bool 	blocked = false;
 	NOTE_DATA *catchup_notes;
 	int 	i = 0;
 
@@ -1627,16 +1579,9 @@ nanny(DESCRIPTOR_DATA * d, char *argument)
 			send_to_desc_color("&wIllegal name, try another.\n\rName: &D", d);
 			return;
 		}
-		bool 	blocked = false;
-
 		if (!str_cmp(argument, "New") && !blocked) {
 			if (d->newstate == 0) {
-				/* 
-				 * new player
-				 * ---------
-				 * Don't allow new players if
-				 * DENY_NEW_PLAYERS is true
-				 */
+				/* new player */
 				if (sysdata.DENY_NEW_PLAYERS == true) {
 					sprintf(buf, "The mud is currently preparing for a reboot.\n\r");
 					send_to_desc_color(buf, d);
@@ -1677,7 +1622,8 @@ nanny(DESCRIPTOR_DATA * d, char *argument)
 			return;
 		}
 		if (check_playing(d, argument, false) == true) {
-			write_to_buffer(d, "Name: ", 0);
+			write_to_buffer(d, "Already playing, disconnecting.\n\r", 0);
+			close_socket(d, false);
 			return;
 		}
 		fOld = load_char_obj(d, argument, true);
@@ -1694,23 +1640,11 @@ nanny(DESCRIPTOR_DATA * d, char *argument)
 			close_socket(d, false);
 			return;
 		}
-		if (fOld) {
-			if (check_bans(ch, BAN_CLASS)) {
-				send_to_desc_color("Your class has been banned from this Mud.\n\r", d);
-				close_socket(d, false);
-				return;
-			}
-			if (check_bans(ch, BAN_RACE)) {
-				send_to_desc_color("Your race has been banned from this Mud.\n\r", d);
-				close_socket(d, false);
-				return;
-			}
-		}
 		if (xIS_SET(ch->act, PLR_DENY)) {
 			sprintf(log_buf, "Denying access to %s@%s.", argument, d->host);
 			log_string_plus(log_buf, LOG_COMM, sysdata.log_level);
 			if (d->newstate != 0) {
-				send_to_desc_color("That name is already taken.  Please choose another: ", d);
+				send_to_desc_color("That name is already taken. Please choose another: ", d);
 				d->connected = CON_GET_NAME;
 				d->character->desc = NULL;
 				free_char(d->character);	
@@ -1721,50 +1655,33 @@ nanny(DESCRIPTOR_DATA * d, char *argument)
 			close_socket(d, false);
 			return;
 		}
-		/*
-	         *  Make sure the immortal host is from the correct place.
-	         *  Shaddai
-	         */
-		if (IS_IMMORTAL(ch) && sysdata.check_imm_host
-		    && !check_immortal_domain(ch, d->host)) {
-			sprintf(log_buf, "%s's char being hacked from %s.", argument, d->host);
-			log_string_plus(log_buf, LOG_COMM, sysdata.log_level);
-			sprintf(log_buf, "&R%s's char being hacked from %s.", argument, d->host);
-			ch->level = 51;
-			do_ainfo(ch, log_buf);
-			send_to_desc_color("This hacking attempt has been logged.\n\r", d);
-			close_socket(d, false);
-			return;
-		}
 		if (wizlock && ch->level < locklev) {
-			send_to_desc_color("The game is wizlocked.  Only immortals can connect now.\n\r", d);
+			send_to_desc_color("The game is wizlocked. Only immortals can connect now.\n\r", d);
 			send_to_desc_color("Please try back later.\n\r", d);
 			close_socket(d, false);
 			return;
 		}
 		if (fOld) {
 			if (d->newstate != 0) {
-				send_to_desc_color("&wThat name is already taken.  Please choose another: &D", d);
+				send_to_desc_color("&wThat name is already taken. Please choose another: &D", d);
 				d->connected = CON_GET_NAME;
 				d->character->desc = NULL;
-				free_char(d->character);	/* Big Memory Leak
-								 * before --Shaddai */
+				free_char(d->character);
 				d->character = NULL;
 				return;
 			}
-			/* Old player */
+			/* old player */
 			send_to_desc_color("&wPassword: &D", d);
 			write_to_buffer(d, echo_off_str, 0);
 			d->connected = CON_GET_OLD_PASSWORD;
 			return;
 		} else {
 			if (d->newstate == 0) {
-				/* No such player */
+				/* no such player */
 				send_to_desc_color("\n\r&wNo such player exists.\n\rPlease check your spelling, or type new to start a new player.\n\r\n\rName: &D", d);
 				d->connected = CON_GET_NAME;
 				d->character->desc = NULL;
-				free_char(d->character);	/* Big Memory Leak
-								 * before --Shaddai */
+				free_char(d->character);
 				d->character = NULL;
 				return;
 			}
@@ -1774,7 +1691,6 @@ nanny(DESCRIPTOR_DATA * d, char *argument)
 			return;
 		}
 		break;
-
 	case CON_GET_OLD_PASSWORD:
 		write_to_buffer(d, "\n\r", 2);
 		if (str_cmp(sha256_crypt(argument), ch->pcdata->pwd)) {
