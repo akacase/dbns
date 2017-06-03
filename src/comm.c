@@ -655,6 +655,7 @@ game_loop()
 					|| d->connected == CON_EDITING))
 					save_char_obj(d->character);
 				d->outtop = 0;
+				log_string("preparing to close socket at comm.c:658\n");
 				close_socket(d, true);
 				continue;
 			} else {
@@ -666,6 +667,7 @@ game_loop()
 						    && (d->connected == CON_PLAYING
 						      || d->connected == CON_EDITING)) {
 							save_char_obj(d->character);
+							log_string("preparing to fquit comm.c:670\n");
 							fquit(d->character);
 							continue;
 						}
@@ -726,6 +728,7 @@ game_loop()
 							|| d->connected == CON_EDITING))
 							save_char_obj(d->character);
 						d->outtop = 0;
+						log_string("preparing to close socket at comm.c:731\n");
 						close_socket(d, false);
 					}
 				} else if (!flush_buffer(d, true)) {
@@ -734,6 +737,7 @@ game_loop()
 						|| d->connected == CON_EDITING))
 						save_char_obj(d->character);
 					d->outtop = 0;
+					log_string("preparing to close socket at comm.c:740\n");
 					close_socket(d, false);
 				}
 			}
@@ -1055,16 +1059,16 @@ close_socket(DESCRIPTOR_DATA * dclose, bool force)
 bool
 read_from_descriptor(DESCRIPTOR_DATA * d)
 {
-	unsigned int iStart;
-	int iErr;
+	unsigned int i_start;
+	int i_err;
 
-	/* Hold horses if pending command already. */
+	/* hold horses if pending command already. */
 	if (d->incomm[0] != '\0')
 		return (true);
 
-	/* Check for overflow. */
-	iStart = strlen(d->inbuf);
-	if (iStart >= sizeof(d->inbuf) - 10) {
+	/* check for overflow. */
+	i_start = strlen(d->inbuf);
+	if (i_start >= sizeof(d->inbuf) - 10) {
 		sprintf(log_buf, "%s input overflow!", d->host);
 		log_string(log_buf);
 		write_to_descriptor(d->descriptor,
@@ -1072,27 +1076,27 @@ read_from_descriptor(DESCRIPTOR_DATA * d)
 		return (false);
 	}
 	for (;;) {
-		int 	n_read;
+		int n_read;
 
-		n_read = recv(d->descriptor, d->inbuf + iStart,
-		    sizeof(d->inbuf) - 10 - iStart, 0);
-		iErr = errno;
+		n_read = recv(d->descriptor, d->inbuf + i_start,
+		    sizeof(d->inbuf) - 10 - i_start, 0);
+		i_err = errno;
 		if (n_read > 0) {
-			iStart += n_read;
-			if (d->inbuf[iStart - 1] == '\n' || d->inbuf[iStart - 1] == '\r')
+			i_start += n_read;
+			if (d->inbuf[i_start - 1] == '\n' || d->inbuf[i_start - 1] == '\r')
 				break;
 		} else if (n_read == 0) {
 			log_string_plus("EOF encountered on read.", LOG_COMM, sysdata.log_level);
 			return (false);
-		} else if (iErr == EWOULDBLOCK)
+		} else if (i_err == EWOULDBLOCK) {
 			break;
-		else {
+		} else {
 			perror("read_from_descriptor");
 			return (false);
 		}
 	}
 
-	d->inbuf[iStart] = '\0';
+	d->inbuf[i_start] = '\0';
 	return (true);
 }
 
@@ -1709,6 +1713,7 @@ nanny(DESCRIPTOR_DATA * d, char *argument)
 		if (ch->position > POS_SITTING && ch->position < POS_STANDING)
 			ch->position = POS_STANDING;
 		sprintf(log_buf, "%s@%s(%s) has connected.", ch->pcdata->filename, d->host, d->user);
+
 		log_string_plus(log_buf, LOG_COMM, sysdata.log_level);
 		if (ch->level == 2) {
 			xSET_BIT(ch->deaf, CHANNEL_FOS);
@@ -1745,10 +1750,6 @@ nanny(DESCRIPTOR_DATA * d, char *argument)
 		adjust_hiscore("bounty", ch, ch->pcdata->bkills);
 		update_member(ch);
 
-		if (ch->level < LEVEL_DEMI) {
-			log_string_plus(log_buf, LOG_COMM, sysdata.log_level);
-		} else
-			log_string_plus(log_buf, LOG_COMM, ch->level);
 		show_title(d);
 		break;
 	case CON_CONFIRM_NEW_NAME:
@@ -1771,7 +1772,6 @@ nanny(DESCRIPTOR_DATA * d, char *argument)
 			d->character = NULL;
 			d->connected = CON_GET_NAME;
 			break;
-
 		default:
 			send_to_desc_color("&wPlease type &WY&wes or &WN&wo. &D", d);
 			break;
@@ -1809,7 +1809,6 @@ nanny(DESCRIPTOR_DATA * d, char *argument)
 		send_to_desc_color("\n\r&wWhat do you want your last name to be? [press enter for none] &D\n\r", d);
 		d->connected = CON_GET_LAST_NAME;
 		break;
-
 	case CON_GET_LAST_NAME:
 		if (argument[0] == '\0') {
 			write_to_buffer(d, echo_on_str, 0);
@@ -2817,11 +2816,8 @@ check_playing(DESCRIPTOR_DATA * d, char *name, bool kick)
 				return (true);
 			write_to_buffer(d, "Already playing... Kicking off old connection.\n\r", 0);
 			write_to_buffer(dold, "Kicking off old connection... bye!\n\r", 0);
+			log_string("preparing to close socket at comm.c:2824\n");
 			close_socket(dold, false);
-			/*
-			 * clear descriptor pointer to get rid of bug
-			 * message in log
-			 */
 			d->character->desc = NULL;
 			free_char(d->character);
 			d->character = ch;

@@ -2250,16 +2250,12 @@ void char_update(void)
 						     ch);
 					break;
 				}
-			if (ch->timer > 24)
-				do_quit(ch, "");
-			else if (ch == ch_save
-				 && IS_SET(sysdata.save_flags, SV_AUTO)
-				 && ++save_count < 10)	/* save max of 10 per tick */
+			if (ch == ch_save
+			       && IS_SET(sysdata.save_flags, SV_AUTO)
+			       && ++save_count < 10)	/* save max of 10 per tick */
 				save_char_obj(ch);
 		}
 	}
-
-	return;
 }
 
 /*

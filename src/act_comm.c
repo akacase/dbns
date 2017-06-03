@@ -2546,7 +2546,6 @@ fquit(CHAR_DATA * ch)
 	if (is_splitformed(ch)) {
 		CHAR_DATA *och;
 		CHAR_DATA *och_next;
-
 		for (och = first_char; och; och = och_next) {
 			och_next = och->next;
 			if (!IS_NPC(och))
@@ -2614,7 +2613,6 @@ fquit(CHAR_DATA * ch)
 			save_equipment[x][y] = NULL;
 
 	log_string_plus(log_buf, LOG_COMM, level);
-	return;
 }
 
 void 
