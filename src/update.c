@@ -1372,7 +1372,6 @@ void char_update(void)
 	CHAR_DATA *ch;
 	CHAR_DATA *ch_save;
 	sh_int save_count = 0;
-	sh_int tIdle = 0;
 	ch_save = NULL;
 
 	for (ch = last_char; ch; ch = gch_prev) {
@@ -1507,34 +1506,12 @@ void char_update(void)
 					extract_obj(obj);
 				}
 			}
-
 			if (ch->tmystic == 0)
 				ch->timer++;
-			if (ch->timer >= 12) {
-				if (!IS_IDLE(ch)) {
-					if (ch->fighting)
-						stop_fighting(ch, true);
-					act(AT_ACTION,
-					    "$n disappears into the void.", ch,
-					    NULL, NULL, TO_ROOM);
-					send_to_char
-					    ("You disappear into the void.\n\r",
-					     ch);
-					if (IS_SET(sysdata.save_flags, SV_IDLE))
-						save_char_obj(ch);
-					SET_BIT(ch->pcdata->flags, PCFLAG_IDLE);
-					char_from_room(ch);
-					char_to_room(ch,
-						     get_room_index
-						     (ROOM_VNUM_LIMBO));
-				}
-			}
-
 			if (ch->pcdata->condition[COND_DRUNK] > 8)
 				worsen_mental_state(ch,
 						    ch->pcdata->
 						    condition[COND_DRUNK] / 8);
-
 			if (ch->pcdata->condition[COND_FULL] > 1) {
 				switch (ch->position) {
 				case POS_SLEEPING:
@@ -1699,9 +1676,6 @@ void char_update(void)
 				ch->pcdata->tail++;
 			else if (ch->pcdata->tail == 0
 				 && (is_saiyan(ch) || is_hb(ch))) {
-				/* Added to make halfie tail regen less
-				   likely. -Karma
-				 */
 				bool skip = false;
 				if (is_hb(ch)) {
 					if (number_range(1, 2) == 2)
@@ -1718,7 +1692,6 @@ void char_update(void)
 				}
 			}
 		}
-
 		if (!IS_NPC(ch)
 		    && ch->pcdata->nextHBTCDate > 0
 		    && ch->pcdata->nextHBTCDate <= current_time) {
@@ -1728,7 +1701,6 @@ void char_update(void)
 			    ("You can enter the Hyperbolic Time Chamber once again.\n\r",
 			     ch);
 		}
-
 		if (!IS_NPC(ch)
 		    && ch->pcdata->nextspartime > 0
 		    && ch->pcdata->nextspartime <= current_time) {
@@ -1738,7 +1710,6 @@ void char_update(void)
 			    ("You have fully recovered from sparring yesterday.\n\r",
 			     ch);
 		}
-
 		if (!IS_NPC(ch)
 		    && ch->pcdata->HBTCTimeLeft == 1
 		    && xIS_SET(ch->in_room->room_flags, ROOM_TIME_CHAMBER)
@@ -1747,7 +1718,6 @@ void char_update(void)
 			    "Your time in the Hyperbolic Time Chamber is almost up!",
 			    ch, NULL, NULL, TO_CHAR);
 		}
-
 		if (!IS_NPC(ch)
 		    && ch->pcdata->HBTCTimeLeft <= 0
 		    && xIS_SET(ch->in_room->room_flags, ROOM_TIME_CHAMBER)
@@ -1771,14 +1741,12 @@ void char_update(void)
 			do_look(ch, "auto");
 			save_char_obj(ch);
 		}
-
 		if (!IS_NPC(ch) && ch->pcdata->gnote_date > 0
 		    && ch->pcdata->gnote_date <= current_time) {
 			ch->pcdata->gnote_date = 0;
 			xREMOVE_BIT(ch->act, PLR_NOGBOARD);
 			send_to_char("You can use gnotes again.\n\r", ch);
 		}
-
 		if (!IS_NPC(ch) && !IS_IMMORTAL(ch)
 		    && ch->pcdata->release_date > 0
 		    && ch->pcdata->release_date <= current_time) {
@@ -1799,10 +1767,8 @@ void char_update(void)
 			ch->pcdata->release_date = 0;
 			save_char_obj(ch);
 		}
-
 		if (!IS_NPC(ch))
 			mccp_interest(ch);
-
 		if (!IS_NPC(ch) && !IS_IMMORTAL(ch)
 		    && (ch->in_room->vnum == 6 || ch->in_room->vnum == 8)
 		    && ch->pcdata->release_date == 0) {
@@ -1816,14 +1782,11 @@ void char_update(void)
 			do_look(ch, "auto");
 			return;
 		}
-
 		if (!IS_NPC(ch) && ch->pcdata->admintalk > 0)
 			ch->pcdata->admintalk -= 1;
-
 		if (!IS_NPC(ch) && ch->pcdata->HBTCTimeLeft > 0
 		    && xIS_SET(ch->in_room->room_flags, ROOM_TIME_CHAMBER))
 			ch->pcdata->HBTCTimeLeft -= 1;
-
 		if (number_percent() < 25 && !IS_IMMORTAL(ch)) {
 			if (IS_AFFECTED(ch, AFF_SSJ)
 			    && !IS_AFFECTED(ch, AFF_SSJ2)
@@ -2024,7 +1987,6 @@ void char_update(void)
 			}
 			if (char_died(ch))
 				continue;
-
 			/* oozaru! */
 			if (!IS_NPC(ch)) {
 				if (ch->pcdata->tail > 0
@@ -2355,9 +2317,7 @@ void obj_update(void)
 			} else
 				REMOVE_BIT(obj->value[3], PIPE_HOT);
 		}
-
-/* Corpse decay (npc corpses decay at 8 times the rate of pc corpses) - Narn */
-
+		/* corpse decay (npc corpses decay at 8 times the rate of pc corpses) - Narn */
 		if (obj->item_type == ITEM_CORPSE_PC
 		    || obj->item_type == ITEM_CORPSE_NPC) {
 			sh_int timerfrac = UMAX(1, obj->timer - 1);
@@ -2501,7 +2461,6 @@ void char_check(void)
 		if (IS_NPC(ch)) {
 			if ((cnt & 1))
 				continue;
-
 			/* running mobs     -Thoric */
 			if (xIS_SET(ch->act, ACT_RUNNING)) {
 				if (!xIS_SET(ch->act, ACT_SENTINEL)
@@ -2624,40 +2583,8 @@ void char_check(void)
 					     obj = obj->next_content)
 						if (obj->item_type == ITEM_BOAT)
 							break;
-
-/*
-		    if ( !obj )
-		    {
-			if ( ch->level < LEVEL_IMMORTAL )
-			{
-			    int mov;
-			    int dam;
-
-			    if ( ch->move > 0 )
-			    {
-				mov = number_range( ch->max_move / 20, ch->max_move / 5 );
-				mov = UMAX( 1, mov );
-
-				if ( ch->move - mov < 0 )
-				    ch->move = 0;
-				else
-				    ch->move -= mov;
-			    }
-			    else
-			    {
-				dam = number_range( ch->max_hit / 20, ch->max_hit / 5 );
-				dam = UMAX( 1, dam );
-
-				if ( number_bits(3) == 0 )
-				   send_to_char( "Struggling with exhaustion, you choke on a mouthful of water.\n\r", ch );
-				damage( ch, ch, dam, TYPE_UNDEFINED );
-			    }
-			}
-		    }
-*/
 				}
 			}
-
 			/* beat up on link dead players */
 			if (!ch->desc) {
 				CHAR_DATA *wch, *wch_next;

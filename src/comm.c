@@ -1561,12 +1561,10 @@ nanny(DESCRIPTOR_DATA * d, char *argument)
 	ch = d->character;
 
 	switch (d->connected) {
-
 	default:
 		bug("Nanny: bad d->connected %d.", d->connected);
 		close_socket(d, true);
 		return;
-
 	case CON_GET_NAME:
 		if (argument[0] == '\0') {
 			close_socket(d, false);
@@ -1710,10 +1708,8 @@ nanny(DESCRIPTOR_DATA * d, char *argument)
 		ch = d->character;
 		if (ch->position > POS_SITTING && ch->position < POS_STANDING)
 			ch->position = POS_STANDING;
-
 		sprintf(log_buf, "%s@%s(%s) has connected.", ch->pcdata->filename, d->host, d->user);
 		log_string_plus(log_buf, LOG_COMM, sysdata.log_level);
-
 		if (ch->level == 2) {
 			xSET_BIT(ch->deaf, CHANNEL_FOS);
 			ch->level = 1;
@@ -1738,7 +1734,6 @@ nanny(DESCRIPTOR_DATA * d, char *argument)
 			pager_printf(ch, "Updated player data successfully.\n\r");
 		else
 			pager_printf(ch, "No updates to make.\n\r");
-
 		adjust_hiscore("pkill", ch, ch->pcdata->pkills);	/* cronel hiscore */
 		adjust_hiscore("sparwins", ch, ch->pcdata->spar_wins);
 		adjust_hiscore("sparloss", ch, ch->pcdata->spar_loss);
@@ -1756,7 +1751,6 @@ nanny(DESCRIPTOR_DATA * d, char *argument)
 			log_string_plus(log_buf, LOG_COMM, ch->level);
 		show_title(d);
 		break;
-
 	case CON_CONFIRM_NEW_NAME:
 		switch (*argument) {
 		case 'y':
@@ -1772,10 +1766,6 @@ nanny(DESCRIPTOR_DATA * d, char *argument)
 		case 'n':
 		case 'N':
 			send_to_desc_color("&wOk, what IS it, then? &D", d);
-			/*
-			 * clear descriptor pointer to get rid of bug
-			 * message in log
-			 */
 			d->character->desc = NULL;
 			free_char(d->character);
 			d->character = NULL;
@@ -1787,7 +1777,6 @@ nanny(DESCRIPTOR_DATA * d, char *argument)
 			break;
 		}
 		break;
-
 	case CON_GET_NEW_PASSWORD:
 		send_to_desc_color("\n\r", d);
 
@@ -1808,7 +1797,6 @@ nanny(DESCRIPTOR_DATA * d, char *argument)
 		send_to_desc_color("\n\r&wPlease retype the password to confirm: &D", d);
 		d->connected = CON_CONFIRM_NEW_PASSWORD;
 		break;
-
 	case CON_CONFIRM_NEW_PASSWORD:
 		send_to_desc_color("\n\r", d);
 
@@ -1831,7 +1819,6 @@ nanny(DESCRIPTOR_DATA * d, char *argument)
 		}
 		argument[0] = UPPER(argument[0]);
 		*argument = capitalizeString(argument);
-		/* Old players can keep their characters. -- Alty */
 		if (!check_parse_name(argument, true)) {
 			send_to_desc_color("&wIllegal name, try another.\n\rLast name: &D", d);
 			return;
@@ -1846,7 +1833,6 @@ nanny(DESCRIPTOR_DATA * d, char *argument)
 		d->connected = CON_CONFIRM_LAST_NAME;
 		return;
 		break;
-
 	case CON_CONFIRM_LAST_NAME:
 		switch (*argument) {
 		case 'y':
@@ -1867,8 +1853,6 @@ nanny(DESCRIPTOR_DATA * d, char *argument)
 			break;
 		}
 		break;
-
-
 	case CON_GET_HC:
 		if (!str_cmp(argument, "help")) {
 			HELP_DATA *pHelp;
@@ -1908,7 +1892,6 @@ nanny(DESCRIPTOR_DATA * d, char *argument)
 		send_to_desc_color("\n\r&wWhat is your sex (&CM&w/&PF&w/&WN&w)? &D", d);
 		d->connected = CON_GET_NEW_SEX;
 		break;
-
 	case CON_GET_NEW_SEX:
 		switch (argument[0]) {
 		case 'm':
@@ -1932,9 +1915,7 @@ nanny(DESCRIPTOR_DATA * d, char *argument)
 		send_to_desc_color("&c==============================================================================&D", d);
 		buf[0] = '\0';
 
-		/*
-	         * Take this out SHADDAI
-	         */
+		/* Take this out SHADDAI */
 		i = 0;
 		send_to_desc_color("\n\r", d);
 		for (iClass = 0; iClass < 31; iClass++) {
@@ -1958,7 +1939,6 @@ nanny(DESCRIPTOR_DATA * d, char *argument)
 		send_to_desc_color(buf, d);
 		d->connected = CON_GET_NEW_CLASS;
 		break;
-
 	case CON_GET_NEW_CLASS:
 		argument = one_argument(argument, arg);
 		if (is_number(arg)) {
@@ -2421,7 +2401,6 @@ nanny(DESCRIPTOR_DATA * d, char *argument)
 		adjust_hiscore("zeni", ch, ch->gold);
 		return;
 		break;
-
 	case CON_PRESS_ENTER:
 		if (chk_watch(get_trust(ch), ch->name, d->host))	/* --Gorog */
 			SET_BIT(ch->pcdata->flags, PCFLAG_WATCH);
@@ -2449,7 +2428,6 @@ nanny(DESCRIPTOR_DATA * d, char *argument)
 		send_to_pager("\n\rPress [ENTER] ", ch);
 		d->connected = CON_READ_MOTD;
 		break;
-
 	case CON_READ_MOTD:
 		{
 			char 	motdbuf[MAX_STRING_LENGTH];
@@ -2459,7 +2437,6 @@ nanny(DESCRIPTOR_DATA * d, char *argument)
 		}
 		add_char(ch);
 		d->connected = CON_PLAYING;
-		/* hopefully clear up some ansi changing issues	  -Nopey */
 		set_char_color(AT_DGREEN, ch);
 		if (!xIS_SET(ch->act, PLR_ANSI) && d->ansi == true)
 			d->ansi = false;
@@ -2603,22 +2580,7 @@ nanny(DESCRIPTOR_DATA * d, char *argument)
 				}
 			}
 
-			/*
-			 * Added by Brittany, Nov 24/96.  The object is the
-			 * adventurer's guide to the realms of despair, part
-			 * of Academy.are.
-			 */
-			{
-				OBJ_INDEX_DATA *obj_ind = get_obj_index(10333);
-
-				if (obj_ind != NULL) {
-					obj = create_object(obj_ind, 0);
-					obj_to_char(obj, ch);
-					equip_char(ch, obj, WEAR_HOLD);
-				}
-			}
 			char_to_room(ch, get_room_index(ROOM_VNUM_SCHOOL));
-			/* Display_prompt interprets blank as default */
 			ch->pcdata->prompt = STRALLOC("");
 		} else if (!IS_IMMORTAL(ch) && ch->pcdata->release_date > 0 &&
 		    ch->pcdata->release_date > current_time) {
@@ -2672,8 +2634,7 @@ nanny(DESCRIPTOR_DATA * d, char *argument)
 		ch->ki_deflect = false;
 
 		do_look(ch, "auto");
-		tax_player(ch);		/* Here we go, let's tax players to
-					 * lower the gold pool -- TRI */
+		tax_player(ch);		
 		mccp_interest(ch);
 		mail_count(ch);
 		check_loginmsg(ch);
@@ -2686,26 +2647,21 @@ nanny(DESCRIPTOR_DATA * d, char *argument)
 			ch->was_in_room = ch->in_room;
 
 		break;
-
 	case CON_NOTE_TO:
 		handle_con_note_to(d, argument);
 		break;
-
 	case CON_NOTE_SUBJECT:
 		handle_con_note_subject(d, argument);
 		break;			/* subject */
-
 	case CON_NOTE_EXPIRE:
 		handle_con_note_expire(d, argument);
 		break;
-
 	case CON_NOTE_TEXT:
 		handle_con_note_text(d, argument);
 		break;
 	case CON_NOTE_FINISH:
 		handle_con_note_finish(d, argument);
 		break;
-
 	}
 
 	return;
