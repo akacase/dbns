@@ -363,14 +363,14 @@ void do_finger( CHAR_DATA *ch, char *argument )
       /*save_char_obj( victim );*/
 
 	if( sysdata.save_pets && victim->pcdata->pet )
-	   extract_char( victim->pcdata->pet, true );
+	  extract_char( victim->pcdata->pet, true, false);
 
       saving_char = NULL;
 
       /*
        * After extract_char the ch is no longer valid!
        */
-      extract_char( victim, true );
+      extract_char( victim, true, false );
       for ( x = 0; x < MAX_WEAR; x++ )
 	  for ( y = 0; y < MAX_LAYERS; y++ )
 	    save_equipment[x][y] = NULL;
@@ -680,14 +680,14 @@ void do_backfinger( CHAR_DATA *ch, char *argument )
       /*save_char_obj( victim );*/
 
 	if( sysdata.save_pets && victim->pcdata->pet )
-	   extract_char( victim->pcdata->pet, true );
+	  extract_char( victim->pcdata->pet, true, false );
 
       saving_char = NULL;
 
       /*
        * After extract_char the ch is no longer valid!
        */
-      extract_char( victim, true );
+      extract_char( victim, true, false );
       for ( x = 0; x < MAX_WEAR; x++ )
 	  for ( y = 0; y < MAX_LAYERS; y++ )
 	    save_equipment[x][y] = NULL;

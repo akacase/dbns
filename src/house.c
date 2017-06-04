@@ -1799,7 +1799,7 @@ remove_house (CHAR_DATA * ch)
       mob_next = mob->next;
 
       if (IS_NPC (mob))
-	extract_char (mob, true);
+	extract_char (mob, true, false);
 
     }
 
@@ -3265,14 +3265,14 @@ logoff (CHAR_DATA * ch)
   save_char_obj (ch);
 
   if (sysdata.save_pets && ch->pcdata && ch->pcdata->pet)
-    extract_char (ch->pcdata->pet, true);
+    extract_char (ch->pcdata->pet, true, false);
 
   if (ch->pcdata && ch->pcdata->clan)
     save_clan (ch->pcdata->clan);
 
   saving_char = NULL;
 
-  extract_char (ch, true);
+  extract_char (ch, true, false);
 
   for (x = 0; x < MAX_WEAR; x++)
     for (y = 0; y < MAX_LAYERS; y++)

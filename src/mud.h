@@ -5474,7 +5474,7 @@ void save_deity args ((DEITY_DATA * deity));
 /* comm.c */
 /* logging */
 void logmsg(int, const char *, ...);
-void close_socket args ((DESCRIPTOR_DATA * dclose, bool force));
+void close_socket(DESCRIPTOR_DATA * dclose, bool force, bool clear);
 void write_to_buffer args ((DESCRIPTOR_DATA * d, const char *txt,
     int length));
 void write_to_pager args ((DESCRIPTOR_DATA * d, const char *txt, int length));
@@ -5964,8 +5964,7 @@ void clean_obj args ((OBJ_INDEX_DATA * obj));
 void clean_mob args ((MOB_INDEX_DATA * mob));
 void clean_resets args ((AREA_DATA * tarea));
 
-#define extract_char(ch, fPull) new_extract_char(ch, fPull, false)
-void new_extract_char args ((CHAR_DATA * ch, bool fPull, bool death));
+void extract_char(CHAR_DATA * ch, bool fPull, bool death);
 
 CD *get_char_room args ((CHAR_DATA * ch, char *argument));
 CD *get_pc_world args ((CHAR_DATA * ch, char *argument));

@@ -1845,11 +1845,9 @@ extract_obj(OBJ_DATA * obj)
 
 
 
-/*
- * Extract a char from the world.
- */
+/* extract a char from the world. */
 void 
-new_extract_char(CHAR_DATA * ch, bool fPull, bool death)
+extract_char(CHAR_DATA * ch, bool fPull, bool death)
 {
 	CHAR_DATA *wch;
 	OBJ_DATA *obj;
@@ -1948,9 +1946,6 @@ new_extract_char(CHAR_DATA * ch, bool fPull, bool death)
 			location = in_room;
 
 		char_to_room(ch, location);
-		/*
-		 * Make things a little fancier				-Thoric
-		 */
 		if ((wch = get_char_room(ch, "healer")) != NULL) {
 			act(AT_MAGIC, "$n mutters a few incantations, waves $s hands and points $s finger.",
 			    wch, NULL, NULL, TO_ROOM);
@@ -1967,12 +1962,6 @@ new_extract_char(CHAR_DATA * ch, bool fPull, bool death)
 		--ch->pIndexData->count;
 		--nummobsloaded;
 	}
-	/* Not sure this should stay or not Shaddai */
-/*
-    if ( ch->morph )
-        do_unmorph( ch );
-*/
-
 	if (ch->desc && ch->desc->original)
 		do_return(ch, "");
 
@@ -1989,12 +1978,10 @@ new_extract_char(CHAR_DATA * ch, bool fPull, bool death)
 		if (ch->desc->character != ch)
 			bug("Extract_char: char's descriptor points to another char", 0);
 		else {
-			ch->desc->character = NULL;
-			close_socket(ch->desc, false);
-			ch->desc = NULL;
+			log_string("preparing to close socket at handler.c:1983\n");
+			close_socket(ch->desc, false, false);
 		}
 	}
-	return;
 }
 
 

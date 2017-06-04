@@ -986,7 +986,7 @@ void do_mppurge( CHAR_DATA *ch, char *argument )
 	{
 	    vnext = victim->next_in_room;
 	    if ( IS_NPC( victim ) && victim != ch )
-	      extract_char( victim, true );
+	      extract_char( victim, true, false );
 	}
 	while ( ch->in_room->first_content )
 	{
@@ -1029,7 +1029,7 @@ void do_mppurge( CHAR_DATA *ch, char *argument )
 	return;
     }
 
-    extract_char( victim, true );
+    extract_char( victim, true, false );
     return;
 }
 

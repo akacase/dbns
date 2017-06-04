@@ -1098,7 +1098,7 @@ move_char(CHAR_DATA * ch, EXIT_DATA * pexit, int fall)
 		    ch->name, ch->in_room->vnum);
 		log_string(buf);
 		to_channel(buf, CHANNEL_MONITOR, "Monitor", LEVEL_IMMORTAL);
-		extract_char(ch, false);
+		extract_char(ch, false, false);
 		return (rCHAR_DIED);
 	}
 	/*
@@ -2074,7 +2074,7 @@ teleportch(CHAR_DATA * ch, ROOM_INDEX_DATA * room, bool show)
 		    ch->name, ch->in_room->vnum);
 		log_string(buf);
 		to_channel(buf, CHANNEL_MONITOR, "Monitor", LEVEL_IMMORTAL);
-		extract_char(ch, false);
+		extract_char(ch, false, false);
 	}
 }
 

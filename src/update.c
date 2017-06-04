@@ -861,7 +861,7 @@ void mobile_update(void)
 
 	retcode = rNONE;
 
-	/* Examine all mobs. */
+	/* examine all mobs. */
 	for (ch = last_char; ch; ch = gch_prev) {
 		set_cur_char(ch);
 		if (ch == first_char && ch->prev) {
@@ -893,16 +893,15 @@ void mobile_update(void)
 		    || IS_AFFECTED(ch, AFF_PARALYSIS))
 			continue;
 
-/* Clean up 'animated corpses' that are not charmed' - Scryn */
-
+		/* clean up 'animated corpses' that are not charmed' */
 		if (ch->pIndexData->vnum == 5 && !IS_AFFECTED(ch, AFF_CHARM)) {
 			if (ch->in_room->first_person)
 				act(AT_MAGIC,
 				    "$n returns to the dust from whence $e came.",
 				    ch, NULL, NULL, TO_ROOM);
 
-			if (IS_NPC(ch))	/* Guard against purging switched? */
-				extract_char(ch, true);
+			if (IS_NPC(ch))	
+			extract_char(ch, true, false);
 			continue;
 		}
 
@@ -1217,7 +1216,7 @@ void summon_update(void)
 			extract_obj(obj7);
 		}
 		xREMOVE_BIT(summon_room->room_flags, ROOM_SAFE);
-		extract_char(dragon, true);
+		extract_char(dragon, true, false);
 		summon_state = SUMMON_NONE;
 		summon_area = NULL;
 		summon_room = NULL;
@@ -1418,7 +1417,7 @@ void char_update(void)
 			ch_save = NULL;
 
 		if (IS_NPC(ch) && is_splitformed(ch) && !ch->master) {
-			extract_char(ch, true);
+			extract_char(ch, true, false);
 			continue;
 		}
 
@@ -1456,10 +1455,6 @@ void char_update(void)
 
 		if (ch->position != POS_DEAD)
 			update_pos(ch);
-
-		/* To make people with a nuisance's flags life difficult
-		 * --Shaddai
-		 */
 
 		if (!IS_NPC(ch) && ch->pcdata->nuisance) {
 			long int temp;

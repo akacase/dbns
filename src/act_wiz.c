@@ -851,7 +851,8 @@ do_disconnect(CHAR_DATA * ch, char *argument)
 	}
 	for (d = first_descriptor; d; d = d->next) {
 		if (d == victim->desc) {
-			close_socket(d, false);
+			log_string("preparing to close socket at act_wiz.c:854\n");
+			close_socket(d, false, true);
 			send_to_char("Ok.\n\r", ch);
 			return;
 		}
@@ -912,7 +913,8 @@ do_forceclose(CHAR_DATA * ch, char *argument)
 				send_to_char("They might not like that...\n\r", ch);
 				return;
 			}
-			close_socket(d, false);
+			log_string("preparing to close socket at act_wiz.c:916\n");
+			close_socket(d, false, true);
 			send_to_char("Ok.\n\r", ch);
 			return;
 		}
@@ -2963,7 +2965,7 @@ do_purge(CHAR_DATA * ch, char *argument)
 		for (victim = ch->in_room->first_person; victim; victim = vnext) {
 			vnext = victim->next_in_room;
 			if (IS_NPC(victim) && victim != ch)
-				extract_char(victim, true);
+			    extract_char(victim, true, false);
 		}
 
 		for (obj = ch->in_room->first_content; obj; obj = obj_next) {
@@ -3015,7 +3017,7 @@ do_purge(CHAR_DATA * ch, char *argument)
 	act(AT_IMMORT, "$n purges $N.", ch, NULL, victim, TO_NOTVICT);
 	act(AT_IMMORT, "You make $N disappear in a puff of smoke!", ch, NULL,
 	    victim, TO_CHAR);
-	extract_char(victim, true);
+	extract_char(victim, true, false);
 }
 
 void
@@ -3058,7 +3060,7 @@ do_low_purge(CHAR_DATA * ch, char *argument)
 	act(AT_IMMORT, "$n purges $N.", ch, NULL, victim, TO_NOTVICT);
 	act(AT_IMMORT, "You make $N disappear in a puff of smoke!", ch, NULL,
 	    victim, TO_CHAR);
-	extract_char(victim, true);
+	extract_char(victim, true, false);
 }
 
 void
@@ -5288,7 +5290,7 @@ close_area(AREA_DATA * pArea)
 			if (URANGE(pArea->low_m_vnum, ech->pIndexData->vnum,
 				pArea->hi_m_vnum) == ech->pIndexData->vnum ||
 			    (ech->in_room && ech->in_room->area == pArea))
-				extract_char(ech, true);
+			    extract_char(ech, true, false);
 			continue;
 		}
 		if (ech->in_room && ech->in_room->area == pArea)
@@ -5335,7 +5337,7 @@ close_area(AREA_DATA * pArea)
 					if (ech->fighting)
 						stop_fighting(ech, true);
 					if (IS_NPC(ech))
-						extract_char(ech, true);
+						extract_char(ech, true, false);
 					else
 						do_recall(ech, "");
 				}
@@ -5515,7 +5517,8 @@ do_destroy(CHAR_DATA * ch, char *argument)
 			    !str_cmp(victim->name, arg))
 				break;
 		if (d)
-			close_socket(d, true);
+			log_string("preparing to close socket at comm.c:5520\n");
+			close_socket(d, true, true);
 	} else {
 		int 	x , y;
 
@@ -5559,7 +5562,7 @@ do_destroy(CHAR_DATA * ch, char *argument)
 			remove_member(victim);
 		save_char_obj(victim);
 		saving_char = NULL;
-		extract_char(victim, true);
+		extract_char(victim, true, false);
 		for (x = 0; x < MAX_WEAR; x++)
 			for (y = 0; y < MAX_LAYERS; y++)
 				save_equipment[x][y] = NULL;

@@ -1950,9 +1950,6 @@ ris_damage(CHAR_DATA * ch, int dam, int ris)
 	return (dam * modifier) / 10;
 }
 
-/*
- * Inflict damage from a hit.   This is one damn big function.
- */
 ch_ret
 damage(CHAR_DATA * ch, CHAR_DATA * victim, int dam, int dt)
 {
@@ -1969,7 +1966,7 @@ damage(CHAR_DATA * ch, CHAR_DATA * victim, int dam, int dt)
 	long double xp_gain_post = 0;
 	ch_ret retcode;
 	sh_int dampmod;
-	CHAR_DATA *gch /* , *lch */ ;
+	CHAR_DATA *gch;
 	int init_gold, new_gold, gold_diff;
 	sh_int anopc = 0;		/* # of (non-pkill) pc in a (ch) */
 	sh_int bnopc = 0;		/* # of (non-pkill) pc in b (victim) */
@@ -2009,9 +2006,7 @@ damage(CHAR_DATA * ch, CHAR_DATA * victim, int dam, int dt)
 
 	npcvict = IS_NPC(victim);
 
-	/*
-	 * Check damage types for RIS                               -Thoric
-	 */
+	/* check damage types for RIS */
 	if (dam && dt != TYPE_UNDEFINED) {
 		if (IS_FIRE(dt))
 			dam = ris_damage(victim, dam, RIS_FIRE);
@@ -2074,10 +2069,7 @@ damage(CHAR_DATA * ch, CHAR_DATA * victim, int dam, int dt)
 			dam = 0;
 		}
 	}
-	/*
-	 * Precautionary step mainly to prevent people in Hell from finding
-	 * a way out. --Shaddai
-	 */
+	/* hell has no way out. */
 	if (xIS_SET(victim->in_room->room_flags, ROOM_SAFE))
 		dam = 0;
 
@@ -2098,7 +2090,7 @@ damage(CHAR_DATA * ch, CHAR_DATA * victim, int dam, int dt)
 				victim->hating->name = QUICKLINK(ch->name);
 				victim->hating->who = ch;
 			}
-		} else if (!xIS_SET(victim->act, ACT_PACIFIST))	/* Gorog */
+		} else if (!xIS_SET(victim->act, ACT_PACIFIST))	
 			start_hating(victim, ch);
 	}
 	if (victim != ch) {
@@ -2139,9 +2131,7 @@ damage(CHAR_DATA * ch, CHAR_DATA * victim, int dam, int dt)
 			if (!ch->fighting && victim->in_room == ch->in_room)
 				set_fighting(ch, victim);
 
-			/*
-			 * If victim is charmed, ch might attack victim's master.
-			 */
+			/* if victim is charmed, ch might attack victim's master. */
 			if (IS_NPC(ch)
 			    && npcvict && IS_AFFECTED(victim, AFF_CHARM)
 			    && victim->master
@@ -2192,13 +2182,9 @@ damage(CHAR_DATA * ch, CHAR_DATA * victim, int dam, int dt)
 		if ((bnopc > 0 && anopc > 0)
 		    || (bnopc > 0 && !IS_NPC(ch)) || (anopc > 0
 		    && !IS_NPC(victim))) {
-			/*
-			 *  Disband from same group first
-			 */
+			/* disband from same group first */
 			if (is_same_group(ch, victim)) {
-				/*
-				 *  Messages to char and master handled in stop_follower
-				 */
+				/* messages to char and master handled in stop_follower */
 				act(AT_ACTION, "$n disbands from $N's group.",
 				    (ch->leader == victim) ? victim : ch, NULL,
 				    (ch->leader ==
@@ -2209,9 +2195,7 @@ damage(CHAR_DATA * ch, CHAR_DATA * victim, int dam, int dt)
 				else
 					stop_follower(ch);
 			}
-			/*
-			 *  if leader isnt pkill, leave the group and disband ch
-			 */
+			/* if leader isnt pkill, leave the group and disband ch */
 			if (ch->leader != NULL && !IS_NPC(ch->leader) &&
 			    !IS_PKILL(ch->leader)) {
 				act(AT_ACTION, "$n disbands from $N's group.",
@@ -2230,9 +2214,7 @@ damage(CHAR_DATA * ch, CHAR_DATA * victim, int dam, int dt)
 						stop_follower(gch);
 					}
 			}
-			/*
-			 *  if leader isnt pkill, leave the group and disband victim
-			 */
+			/* if leader isnt pkill, leave the group and disband victim */
 			if (victim->leader != NULL && !IS_NPC(victim->leader) &&
 			    !IS_PKILL(victim->leader)) {
 				act(AT_ACTION, "$n disbands from $N's group.",
@@ -2252,9 +2234,7 @@ damage(CHAR_DATA * ch, CHAR_DATA * victim, int dam, int dt)
 					}
 			}
 		}
-		/*
-		 * Inviso attacks ... not.
-		 */
+		/* inviso attacks ... not. */
 		if (IS_AFFECTED(ch, AFF_INVISIBLE)) {
 			affect_strip(ch, gsn_invis);
 			affect_strip(ch, gsn_mass_invis);
@@ -2262,24 +2242,17 @@ damage(CHAR_DATA * ch, CHAR_DATA * victim, int dam, int dt)
 			act(AT_MAGIC, "$n fades into existence.", ch, NULL,
 			    NULL, TO_ROOM);
 		}
-		/* Take away Hide */
+		/* take away hide */
 		if (IS_AFFECTED(ch, AFF_HIDE))
 			xREMOVE_BIT(ch->affected_by, AFF_HIDE);
-		/*
-		 * Damage modifiers.
-		 */
+		/* damage modifiers. */
 		if (IS_AFFECTED(victim, AFF_SANCTUARY))
 			dam /= 2;
-
 		if (IS_AFFECTED(victim, AFF_PROTECT) && IS_EVIL(ch))
 			dam -= (int)(dam / 4);
-
 		if (dam < 0)
 			dam = 0;
-
-		/*
-		 * Check for disarm, trip, parry, dodge and tumble.
-		 */
+		/* check for disarm, trip, parry, dodge and tumble. */
 		if (dt >= TYPE_HIT && ch->in_room == victim->in_room) {
 			if (IS_NPC(ch) && xIS_SET(ch->defenses, DFND_DISARM) && ch->level > 9 && number_percent() < ch->level / 3)
 				disarm(ch, victim);
@@ -2293,9 +2266,7 @@ damage(CHAR_DATA * ch, CHAR_DATA * victim, int dam, int dt)
 				return rNONE;
 
 		}
-		/*
-		 * Check control panel settings and modify damage
-		 */
+		/* check control panel settings and modify damage */
 		if (IS_NPC(ch)) {
 			if (npcvict)
 				dampmod = sysdata.dam_mob_vs_mob;
@@ -2310,23 +2281,7 @@ damage(CHAR_DATA * ch, CHAR_DATA * victim, int dam, int dt)
 		if (dampmod > 0 && dampmod != 100)
 			dam = (dam * dampmod) / 100;
 
-		/*
-		 * Code to handle equipment getting damaged, and also support  -Thoric
-		 * bonuses/penalties for having or not having equipment where hit
-		 * Redone by Goku :)
-		 */
-
-		/*
-		 * Further redone to handle dodging/blocking of melee hits.
-		 * -Karma
-		 */
-
 		dam = dam_armor_recalc(victim, dam);
-
-		/*
-		 * placeholder The actual dodge check is handled here; the
-		 * message is done in dam_message.- Karma
-		 */
 
 		if (!IS_NPC(victim) && ch->melee) {
 			int spd = 0;
@@ -2344,7 +2299,7 @@ damage(CHAR_DATA * ch, CHAR_DATA * victim, int dam, int dt)
 			if (revatt < 0)
 				revatt = 0;
 
-			/* Checks to see if the ch is faster */
+			/* checks to see if the ch is faster */
 			if (get_curr_dex(ch) > get_curr_dex(victim)) {
 				if (((float)get_curr_dex(ch) /
 				    (float)get_curr_dex(victim)) >= 1.25)
@@ -2415,15 +2370,8 @@ damage(CHAR_DATA * ch, CHAR_DATA * victim, int dam, int dt)
 		}
 		dam_message(ch, victim, dam, dt);
 	}
-	/*
-	 * Hurt the victim.
-	 * Inform the victim of his new state.
-	 */
-	//placeholder
-	    if (dam < 0)
+	if (dam < 0)
 		dam = 0;
-	if (dam > victim->max_hit)
-		victim->hit -= (victim->max_hit + 100);
 	else
 		victim->hit -= dam;
 
@@ -2538,7 +2486,6 @@ damage(CHAR_DATA * ch, CHAR_DATA * victim, int dam, int dt)
 		if (IS_NPC(victim))
 			xp_gain =
 			    (long double)dam / 75 * pow(victim->exp, xp_mod);
-
 		/* Sparing and deadly combat pl gain's */
 		if (!IS_NPC(ch) && !IS_NPC(victim)
 		    && !xIS_SET(ch->act, PLR_SPAR)
@@ -2600,7 +2547,7 @@ damage(CHAR_DATA * ch, CHAR_DATA * victim, int dam, int dt)
 			else
 				xp_gain = 0;
 		}
-		/* PL Gains cut if player is weaker than opontant */
+		/* pl gains cut if player is weaker than opontant */
 		if (ch->exp != ch->pl && ch->exp < ch->pl) {
 			int pl_exp = 0;
 
@@ -2608,12 +2555,11 @@ damage(CHAR_DATA * ch, CHAR_DATA * victim, int dam, int dt)
 			xp_gain =
 			    xp_gain - ((long double)pl_exp * 0.025 * xp_gain);
 		}
-		/* A little help to get newbies started */
+		/* a little help to get newbies started */
 		if (ch->pl < 2500)
 			xp_gain += 1;
 		if (ch->pl < 5000)
 			xp_gain += 1;
-
 		if (xp_gain < 0)
 			xp_gain = 0;
 
@@ -2918,10 +2864,6 @@ damage(CHAR_DATA * ch, CHAR_DATA * victim, int dam, int dt)
 			break;
 
 		default:
-			/*
-			 * Victim mentalstate affected, not attacker -- oops ;)
-			 * Thanks to gfinello@mail.karmanet.it for finding this bug
-			 */
 			if (dam > victim->max_hit / 4) {
 				act(AT_HURT, "That really did HURT!", victim, 0,
 				    0, TO_CHAR);
@@ -2943,9 +2885,7 @@ damage(CHAR_DATA * ch, CHAR_DATA * victim, int dam, int dt)
 			break;
 		}
 
-	/*
-	 * Sleep spells and extremely wounded folks.
-	 */
+	/* sleep spells and extremely wounded folks. */
 	if ((ch)->position == POS_SLEEPING
 	    && !IS_AFFECTED(victim, AFF_PARALYSIS)) {
 		if (victim->fighting && victim->fighting->who->hunting
@@ -2962,15 +2902,10 @@ damage(CHAR_DATA * ch, CHAR_DATA * victim, int dam, int dt)
 		else
 			stop_fighting(victim, false);
 	}
-	/*
-	 * Payoff for killing things.
-	 */
+	/* payoff for killing things. */
 	if (victim->position == POS_DEAD) {
 		group_gain(ch, victim);
-
-		/*
-		 * Stuff for handling loss of kai and demon ranks. -Karma
-		 */
+		/* stuff for handling loss of kai and demon ranks. */
 		if (!IS_NPC(ch) && !IS_NPC(victim)) {
 			if (is_kaio(ch) && kairanked(victim)) {
 				if (ch->kairank < victim->kairank) {
@@ -3312,8 +3247,6 @@ damage(CHAR_DATA * ch, CHAR_DATA * victim, int dam, int dt)
 				else
 					append_to_file(filename, log_buf);
 			}
-/* newer death penality 10.5% pl loss   - Warren */
-
 			if (!IS_IMMORTAL(ch) && !IS_IMMORTAL(victim)) {
 				if (can_use_skill
 				    (victim, number_percent(),
@@ -3533,24 +3466,16 @@ damage(CHAR_DATA * ch, CHAR_DATA * victim, int dam, int dt)
 			victim = NULL;
 		}
 		if (!IS_NPC(ch) && loot) {
-			/* Autogold by Scryn 8/12 */
 			if (xIS_SET(ch->act, PLR_AUTOGOLD)) {
 				init_gold = ch->gold;
 				do_get(ch, "zeni corpse");
 				new_gold = ch->gold;
 				gold_diff = (new_gold - init_gold);
-				/*
-				 * if (gold_diff > 0) {
-				 * sprintf(buf1,"%d",gold_diff); do_split( ch, buf1
-				 * ); }
-				 */
 			}
-			if (xIS_SET(ch->act, PLR_AUTOLOOT) && victim != ch)	/* prevent nasty obj
-										 * problems -- Blodkai */
+			if (xIS_SET(ch->act, PLR_AUTOLOOT) && victim != ch)	
 				do_get(ch, "all corpse");
 			else
 				do_look(ch, "in corpse");
-
 			if (xIS_SET(ch->act, PLR_AUTOSAC))
 				do_sacrifice(ch, "corpse");
 		}
@@ -3575,9 +3500,7 @@ damage(CHAR_DATA * ch, CHAR_DATA * victim, int dam, int dt)
 	if (victim == ch)
 		return rNONE;
 
-	/*
-         * Wimp out?
-         */
+	/* wimp out? */
 	if (npcvict && dam > 0) {
 		if ((xIS_SET(victim->act, ACT_WIMPY) && number_bits(1) == 0
 		    && victim->hit < victim->max_hit / 2)
@@ -3594,7 +3517,6 @@ damage(CHAR_DATA * ch, CHAR_DATA * victim, int dam, int dt)
 		do_flee(victim, "");
 	else if (!npcvict && xIS_SET(victim->act, PLR_FLEE))
 		do_flee(victim, "");
-
 	tail_chain();
 	return rNONE;
 }
@@ -4493,7 +4415,7 @@ raw_kill(CHAR_DATA * ch, CHAR_DATA * victim)
 
 	if (IS_NPC(victim)) {
 		victim->pIndexData->killed++;
-		extract_char(victim, true);
+		extract_char(victim, true, false);
 		victim = NULL;
 		return;
 	}
@@ -4512,7 +4434,7 @@ raw_kill(CHAR_DATA * ch, CHAR_DATA * victim)
 			    || xIS_SET(och->affected_by, AFF_MULTI_FORM)
 			    || xIS_SET(och->affected_by, AFF_BIOJR))
 			    && och->master == victim) {
-				extract_char(och, true);
+				extract_char(och, true, false);
 			}
 		}
 		xREMOVE_BIT((victim)->affected_by, AFF_MULTI_FORM);
@@ -4530,7 +4452,7 @@ raw_kill(CHAR_DATA * ch, CHAR_DATA * victim)
 	if (victim->race == 6)
 		evolveCheck(victim, ch, true);
 
-	new_extract_char(victim, false, true);
+	extract_char(victim, false, true);
 	if (!victim) {
 		bug("oops! raw_kill: extract_char destroyed pc char", 0);
 		return;

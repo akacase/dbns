@@ -2522,7 +2522,7 @@ do_delete(CHAR_DATA * ch, char *argument)
 	quitting_char = ch;
 	save_char_obj(ch);
 	saving_char = NULL;
-	extract_char(ch, true);
+	extract_char(ch, true, false);
 	for (x = 0; x < MAX_WEAR; x++)
 		for (y = 0; y < MAX_LAYERS; y++)
 			save_equipment[x][y] = NULL;

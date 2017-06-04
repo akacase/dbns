@@ -75,7 +75,7 @@ reuniteSplitForms(CHAR_DATA * ch)
 				    ch);
 				return;
 			}
-			extract_char(och, true);
+			extract_char(och, true, false);
 			xREMOVE_BIT((ch)->affected_by, AFF_SPLIT_FORM);
 			act(AT_SKILL,
 			    "You and your double merge back into one being.",
@@ -88,7 +88,7 @@ reuniteSplitForms(CHAR_DATA * ch)
 		if (xIS_SET(och->affected_by, AFF_BIOJR) && och->master == ch) {
 			act(AT_BLUE, "$n explodes in a cloud of blue smoke.",
 			    och, NULL, NULL, TO_NOTVICT);
-			extract_char(och, true);
+			extract_char(och, true, false);
 		}
 		if ((xIS_SET(och->affected_by, AFF_TRI_FORM)
 			|| xIS_SET(och->affected_by, AFF_MULTI_FORM))
@@ -110,8 +110,8 @@ reuniteSplitForms(CHAR_DATA * ch)
 			    ch);
 			return;
 		} else {
-			extract_char(purgeQue[0], true);
-			extract_char(purgeQue[1], true);
+			extract_char(purgeQue[0], true, false);
+			extract_char(purgeQue[1], true, false);
 			xREMOVE_BIT((ch)->affected_by, AFF_TRI_FORM);
 
 			if (is_demon(ch)) {
@@ -141,9 +141,9 @@ reuniteSplitForms(CHAR_DATA * ch)
 			    ch);
 			return;
 		} else {
-			extract_char(purgeQue[0], true);
-			extract_char(purgeQue[1], true);
-			extract_char(purgeQue[2], true);
+			extract_char(purgeQue[0], true, false);
+			extract_char(purgeQue[1], true, false);
+			extract_char(purgeQue[2], true, false);
 			xREMOVE_BIT((ch)->affected_by, AFF_MULTI_FORM);
 			act(AT_WHITE,
 			    "You and your doubles merge back into one being.",
@@ -171,7 +171,7 @@ reuniteSplitForms(CHAR_DATA * ch)
 			|| xIS_SET(och->affected_by, AFF_MULTI_FORM)
 			|| xIS_SET(och->affected_by, AFF_BIOJR))
 		    && och->master == ch) {
-			extract_char(och, true);
+			extract_char(och, true, false);
 		}
 	}
 	xREMOVE_BIT((ch)->affected_by, AFF_BIOJR);
@@ -7596,21 +7596,21 @@ do_clone(CHAR_DATA * ch, char *argument)
 
 		learn_from_success(ch, gsn_clone);
 	} else {
-		extract_char(victim, true);
-		extract_char(victim2, true);
-		extract_char(victim3, true);
-		extract_char(victim4, true);
-		extract_char(victim5, true);
+		extract_char(victim, true, false);
+		extract_char(victim2, true, false);
+		extract_char(victim3, true, false);
+		extract_char(victim4, true, false);
+		extract_char(victim5, true, false);
 		if (count > 5)
-			extract_char(victim6, true);
+			extract_char(victim6, true, false);
 		if (count > 6)
-			extract_char(victim7, true);
+			extract_char(victim7, true, false);
 		if (count > 7)
-			extract_char(victim8, true);
+			extract_char(victim8, true, false);
 		if (count > 8)
-			extract_char(victim9, true);
+			extract_char(victim9, true, false);
 		if (count > 9)
-			extract_char(victim10, true);
+			extract_char(victim10, true, false);
 		act(AT_DGREEN,
 		    "You try to gather energy to create clones of yourself, but something goes wrong and you fail.",
 		    ch, NULL, NULL, TO_CHAR);

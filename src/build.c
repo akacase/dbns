@@ -5494,7 +5494,7 @@ fold_area(AREA_DATA * tarea, char *filename, bool install)
 			for (victim = room->first_person; victim; victim = vnext) {
 				vnext = victim->next_in_room;
 				if (IS_NPC(victim))
-					extract_char(victim, true);
+					extract_char(victim, true, false);
 			}
 			/* purge room of (prototyped) objects */
 			for (obj = room->first_content; obj; obj = obj_next) {

@@ -2747,7 +2747,7 @@ fread_mobile (FILE * fp)
 	       if (!strcmp (word, "EndMobile"))
 		    break;
 	  }
-	  extract_char (mob, true);
+	  extract_char (mob, true, false);
 	  bug ("Fread_mobile: Vnum not found", 0);
 	  return NULL;
      }

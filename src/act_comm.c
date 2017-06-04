@@ -14,29 +14,13 @@
 * ------------------------------------------------------------------------ *
 *			   Player communication module                     *
 ****************************************************************************/
-
-
 #include <sys/types.h>
 #include <stdbool.h>
 #include <ctype.h>
 #include <stdio.h>
 #include <string.h>
 #include <time.h>
-#ifdef REGEX
-#include <regex.h>
-#endif
-
-#ifdef FREEBSD
-#include <unistd.h>
-#include <regex.h>
-#endif
 #include "mud.h"
-
-
-#ifdef REGEX
-extern int re_exec _RE_ARGS((const char *));
-
-#endif
 
 /*
  *  Externals
@@ -2461,7 +2445,7 @@ do_quit(CHAR_DATA * ch, char *argument)
 			    || xIS_SET(och->affected_by, AFF_MULTI_FORM)
 			    || xIS_SET(och->affected_by, AFF_BIOJR))
 			    && och->master == ch) {
-				extract_char(och, true);
+				extract_char(och, true, false);
 			}
 		}
 		xREMOVE_BIT((ch)->affected_by, AFF_MULTI_FORM);
@@ -2499,7 +2483,7 @@ do_quit(CHAR_DATA * ch, char *argument)
 	if (sysdata.save_pets && ch->pcdata->pet) {
 		act(AT_BYE, "$N follows $S master into the Void.", ch, NULL,
 		    ch->pcdata->pet, TO_ROOM);
-		extract_char(ch->pcdata->pet, true);
+		    extract_char(ch->pcdata->pet, true, false);
 	}
 	if (ch->pcdata->in_progress)
 		free_global_note(ch->pcdata->in_progress);
@@ -2513,7 +2497,7 @@ do_quit(CHAR_DATA * ch, char *argument)
 		if (IS_OBJ_STAT(obj, ITEM_RARE) || IS_OBJ_STAT(obj, ITEM_UNIQUE))
 			obj->pIndexData->count += obj->count;
 	}
-	extract_char(ch, true);
+	extract_char(ch, true, false);
 	for (x = 0; x < MAX_WEAR; x++)
 		for (y = 0; y < MAX_LAYERS; y++)
 			save_equipment[x][y] = NULL;
@@ -2522,7 +2506,11 @@ do_quit(CHAR_DATA * ch, char *argument)
 	return;
 }
 
-/* TODO: test against auction code */
+/* fquit is like quit, but called when we get a broken pipe or someone EOFs on their
+ * descriptor. fquit slots someone on the extract_char queue, so their character will
+ * be free'd once the update has been ran. close_socket (in extract_char) is passed a false
+ * value to clear, because the "runtime" will free the character 
+ */
 void 
 fquit(CHAR_DATA * ch)
 {
@@ -2556,7 +2544,7 @@ fquit(CHAR_DATA * ch)
 			    || xIS_SET(och->affected_by, AFF_MULTI_FORM)
 			    || xIS_SET(och->affected_by, AFF_BIOJR))
 			    && och->master == ch) {
-				extract_char(och, true);
+				extract_char(och, true, false);
 			}
 		}
 		xREMOVE_BIT((ch)->affected_by, AFF_MULTI_FORM);
@@ -2594,7 +2582,7 @@ fquit(CHAR_DATA * ch)
 	if (sysdata.save_pets && ch->pcdata->pet) {
 		act(AT_BYE, "$N follows $S master into the Void.", ch, NULL,
 		    ch->pcdata->pet, TO_ROOM);
-		extract_char(ch->pcdata->pet, true);
+		    extract_char(ch->pcdata->pet, true, false);
 	}
 	if (ch->pcdata->in_progress)
 		free_global_note(ch->pcdata->in_progress);
@@ -2608,7 +2596,7 @@ fquit(CHAR_DATA * ch)
 		if (IS_OBJ_STAT(obj, ITEM_RARE) || IS_OBJ_STAT(obj, ITEM_UNIQUE))
 			obj->pIndexData->count += obj->count;
 	}
-	extract_char(ch, true);
+	extract_char(ch, true, false);
 	for (x = 0; x < MAX_WEAR; x++)
 		for (y = 0; y < MAX_LAYERS; y++)
 			save_equipment[x][y] = NULL;

@@ -33,9 +33,7 @@
 #include "mud.h"
 #include "sha256.h"
 
-/*
- * Socket and TCP/IP stuff.
- */
+/* socket and TCP/IP stuff */
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <netinet/ip.h>
@@ -49,14 +47,10 @@ const char echo_off_str[] = {IAC, WILL, TELOPT_ECHO, '\0'};
 const char echo_on_str[] = {IAC, WONT, TELOPT_ECHO, '\0'};
 const char go_ahead_str[] = {IAC, GA, '\0'};
 
-/*
- * External Functions
- */
+/* external Functions */
 void shutdown_mud(char *reason);
 
-/*
- * Global variables.
- */
+/* global variables */
 IMMORTAL_HOST *immortal_host_start;	/* Start of Immortal legal
 					    * domains */
 IMMORTAL_HOST *immortal_host_end;	/* End of Immortal legal
@@ -86,27 +80,19 @@ fd_set 	exc_set;		/* Set of desc's with errors	 */
 int 	maxdesc;
 char   *alarm_section = "(unknown)";
 
-
-/*
- * OS-dependent local functions.
- */
+/* protos */
 void game_loop();
 int init_socket(int port);
 void new_descriptor(int new_desc);
 bool read_from_descriptor (DESCRIPTOR_DATA * d);
 bool write_to_descriptor (int desc, char *txt, int length);
-
-
-/*
- * Other local functions (OS-independent).
- */
 bool check_parse_name(char *name, bool newchar);
 bool check_reconnect(DESCRIPTOR_DATA * d, char *name, bool fConn);
 bool check_playing(DESCRIPTOR_DATA * d, char *name);
 bool reconnect(DESCRIPTOR_DATA * d, char *name);
 int main (int argc, char **argv);
 void nanny (DESCRIPTOR_DATA * d, char *argument);
-bool flush_buffer (DESCRIPTOR_DATA * d, bool fPrompt);
+bool flush_buffer (DESCRIPTOR_DATA * d, bool f_prompt);
 void read_from_buffer(DESCRIPTOR_DATA * d);
 void free_desc(DESCRIPTOR_DATA * d);
 void display_prompt(DESCRIPTOR_DATA * d);
@@ -119,6 +105,7 @@ void mccp_interest(CHAR_DATA * ch);
 bool check_total_ip(DESCRIPTOR_DATA * dnew);
 void usage(void);
 
+/* locals */
 bool debug = false;
 bool log_debug; 
 unsigned int port;
@@ -145,7 +132,7 @@ logmsg(int pri, const char *message, ...)
 }
 
 char
-capitalizeString(char *text)
+capitalize_string(char *text)
 {
 	int 	i;
 
@@ -634,7 +621,6 @@ game_loop()
 			if (FD_ISSET(d->descriptor, &exc_set)) {
 				FD_CLR(d->descriptor, &in_set);
 				FD_CLR(d->descriptor, &out_set);
-				/* got descriptor, fquit */
 				if (d->character) {
 					log_string("preparing to fquit comm.c:652\n");
 					fquit(d->character);
@@ -642,7 +628,7 @@ game_loop()
 				}
 				d->outtop = 0;
 				log_string("preparing to close socket at comm.c:657\n");
-				close_socket(d, true);
+				close_socket(d, true, false);
 				continue;
 			} else {
 				d->fcommand = false;
@@ -714,7 +700,7 @@ game_loop()
 							save_char_obj(d->character);
 						d->outtop = 0;
 						log_string("preparing to close socket at comm.c:731\n");
-						close_socket(d, false);
+						close_socket(d, false, true);
 					}
 				} else if (!flush_buffer(d, true)) {
 					if (d->character
@@ -723,7 +709,7 @@ game_loop()
 						save_char_obj(d->character);
 					d->outtop = 0;
 					log_string("preparing to close socket at comm.c:740\n");
-					close_socket(d, false);
+					close_socket(d, false, true);
 				}
 			}
 			if (d == last_descriptor)
@@ -894,12 +880,16 @@ free_desc(DESCRIPTOR_DATA * d)
 }
 
 void
-close_socket(DESCRIPTOR_DATA * dclose, bool force)
+close_socket(DESCRIPTOR_DATA * dclose, bool force, bool clear)
 {
 	CHAR_DATA *ch;
 	DESCRIPTOR_DATA *d;
 	bool do_not_unlink = false;
 
+	log_string("in close_socket func");
+	if (!dclose) {
+	     return;
+	}
 	if (dclose->ipid != -1) {
 		int 	status;
 
@@ -975,6 +965,19 @@ close_socket(DESCRIPTOR_DATA * dclose, bool force)
 			    ch ? ch->name : dclose->host, dclose);
 			do_not_unlink = true;
 		}
+	}
+	if (clear) {
+		/* sanity check */
+		if (ch) {
+			log_string("character is non-null: freeing up character");
+			dclose->character->desc = NULL;
+			free_char(dclose->character);
+		} else {
+			log_string("bug: calling func thought char descriptor was free");
+		}
+	} else {
+		/* don't clear, extract_char will take care of it for us, NULL out the descriptor */
+		dclose->character->desc = NULL;
 	}
 	if (!do_not_unlink) {
 		/* make sure loop doesn't get messed up */
@@ -1102,7 +1105,7 @@ read_from_buffer(DESCRIPTOR_DATA * d)
 }
 
 bool
-flush_buffer(DESCRIPTOR_DATA * d, bool fPrompt)
+flush_buffer(DESCRIPTOR_DATA * d, bool f_prompt)
 {
 	char 	buf[MAX_INPUT_LENGTH];
 	char 	promptbuf[MAX_STRING_LENGTH];
@@ -1134,7 +1137,7 @@ flush_buffer(DESCRIPTOR_DATA * d, bool fPrompt)
 		return (true);
 	}
 	/* bust a prompt. */
-	if (fPrompt && !mud_down && d->connected == CON_PLAYING) {
+	if (f_prompt && !mud_down && d->connected == CON_PLAYING) {
 		CHAR_DATA *ch;
 
 		ch = d->original ? d->original : d->character;
@@ -1213,9 +1216,7 @@ flush_buffer(DESCRIPTOR_DATA * d, bool fPrompt)
 
 
 
-/*
- * Append onto an output buffer.
- */
+/* append onto an output buffer. */
 void
 write_to_buffer(DESCRIPTOR_DATA * d, const char *txt, int length)
 {
@@ -1223,44 +1224,35 @@ write_to_buffer(DESCRIPTOR_DATA * d, const char *txt, int length)
 		bug("write_to_buffer: NULL descriptor");
 		return;
 	}
-	/*
-         * Normally a bug... but can happen if loadup is used.
-         */
+	/* normally a bug... but can happen if loadup is used. */
 	if (!d->outbuf)
 		return;
 
-	/*
-         * Find length in case caller didn't.
-         */
+	/* find length in case caller didn't. */
 	if (length <= 0)
 		length = strlen(txt);
 
-	/*
-         * Initial \n\r if needed.
-         */
+	/* initial \n\r if needed. */
 	if (d->outtop == 0 && !d->fcommand) {
 		d->outbuf[0] = '\n';
 		d->outbuf[1] = '\r';
 		d->outtop = 2;
 	}
-	/*
-         * Expand the buffer as needed.
-         */
+	/* expand the buffer as needed. */
 	while (d->outtop + length >= (int)d->outsize) {
 		if (d->outsize > 32000) {
 			/* empty buffer */
 			d->outtop = 0;
 			bug("Buffer overflow. Closing (%s).", d->character ? d->character->name : "???");
-			close_socket(d, true);
+			log_string("preparing to close socket at comm.c:1248\n");
+			close_socket(d, true, true);
 			return;
 		}
 		d->outsize *= 2;
 		RECREATE(d->outbuf, char, d->outsize);
 	}
 
-	/*
-         * Copy.
-         */
+	/* copy */
 	strncpy(d->outbuf + d->outtop, txt, length);
 	d->outtop += length;
 	d->outbuf[d->outtop] = '\0';
@@ -1317,9 +1309,6 @@ show_title(DESCRIPTOR_DATA * d)
 	d->connected = CON_PRESS_ENTER;
 }
 
-/*
- * Deal with sockets that haven't logged in yet.
- */
 void
 nanny(DESCRIPTOR_DATA * d, char *argument)
 {
@@ -1347,14 +1336,15 @@ nanny(DESCRIPTOR_DATA * d, char *argument)
 	switch (d->connected) {
 	default:
 		bug("Nanny: bad d->connected %d.", d->connected);
-		close_socket(d, true);
+		log_string("preparing to close socket at comm.c:1340\n");
+		close_socket(d, true, true);
 		return;
 	case CON_GET_NAME:
 		if (argument[0] == '\0') {
-			close_socket(d, false);
+			close_socket(d, false, false);
 			return;
 		}
-		*argument = capitalizeString(argument);
+		*argument = capitalize_string(argument);
 
 		/* Old players can keep their characters. -- Alty */
 		if (!check_parse_name(argument, (d->newstate != 0))) {
@@ -1371,7 +1361,7 @@ nanny(DESCRIPTOR_DATA * d, char *argument)
 					send_to_desc_color(buf, d);
 					sprintf(buf, "Please try again in a few minutes.\n\r");
 					send_to_desc_color(buf, d);
-					close_socket(d, false);
+					close_socket(d, false, false);
 				}
 				sprintf(buf, "\n\r&gChoosing a name is one of the most important parts of this game...\n\r"
 				    "Make sure to pick a name appropriate to the character you are going\n\r"
@@ -1417,13 +1407,13 @@ nanny(DESCRIPTOR_DATA * d, char *argument)
 			sprintf(log_buf, "Bad player file %s@%s.", argument, d->host);
 			log_string(log_buf);
 			send_to_desc_color("Your playerfile is corrupt... please notify case@capsulecorp.org\n\r", d);
-			close_socket(d, false);
+			close_socket(d, false, false);
 			return;
 		}
 		ch = d->character;
 		if (check_bans(ch, BAN_SITE)) {
 			send_to_desc_color("Your site has been banned from this Mud.\n\r", d);
-			close_socket(d, false);
+			close_socket(d, false, true);
 			return;
 		}
 		if (xIS_SET(ch->act, PLR_DENY)) {
@@ -1438,13 +1428,13 @@ nanny(DESCRIPTOR_DATA * d, char *argument)
 				return;
 			}
 			send_to_desc_color("You are denied access.\n\r", d);
-			close_socket(d, false);
+			close_socket(d, false, true);
 			return;
 		}
 		if (wizlock && ch->level < locklev) {
 			send_to_desc_color("The game is wizlocked. Only immortals can connect now.\n\r", d);
 			send_to_desc_color("Please try back later.\n\r", d);
-			close_socket(d, false);
+			close_socket(d, false, true);
 			return;
 		}
 		if (f_old) {
@@ -1481,16 +1471,14 @@ nanny(DESCRIPTOR_DATA * d, char *argument)
 		write_to_buffer(d, "\n\r", 2);
 		if (str_cmp(sha256_crypt(argument), ch->pcdata->pwd)) {
 			write_to_buffer(d, "Wrong password, disconnecting.\n\r", 0);
-			d->character->desc = NULL;
-			close_socket(d, false);
+			close_socket(d, false, true);
 			return;
 		}
 		write_to_buffer(d, echo_on_str, 0);
 		if (check_playing(d, ch->pcdata->filename)) {
 		     if (!(reconnect(d, ch->pcdata->filename))) {
 			  write_to_buffer(d, "error, disconnecting.\n\r", 0);
-			  d->character->desc = NULL;
-			  close_socket(d, false);
+			  close_socket(d, false, true);
 			  return;
 		     }
 		     break;
@@ -1608,7 +1596,7 @@ nanny(DESCRIPTOR_DATA * d, char *argument)
 			return;
 		}
 		argument[0] = UPPER(argument[0]);
-		*argument = capitalizeString(argument);
+		*argument = capitalize_string(argument);
 		if (!check_parse_name(argument, true)) {
 			send_to_desc_color("&wIllegal name, try another.\n\rLast name: &D", d);
 			return;
@@ -2555,7 +2543,7 @@ reconnect(DESCRIPTOR_DATA * d, char *name) {
 			write_to_buffer(d, "Already playing... Kicking off old connection.\n\r", 0);
 			write_to_buffer(d_old, "Kicking off old connection... bye!\n\r", 0);
 			log_string("preparing to close socket at comm.c:2824\n");
-			close_socket(d_old, false);
+			close_socket(d_old, false, false);
 			d->character = ch;
 			ch->desc = d;
 			ch->timer = 0;

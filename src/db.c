@@ -5539,7 +5539,7 @@ delete_room(ROOM_INDEX_DATA * room)
 			char_from_room(ch);
 			char_to_room(ch, limbo);
 		} else
-			extract_char(ch, true);
+			extract_char(ch, true, false);
 	}
 	while ((o = room->first_content) != NULL)
 		extract_obj(o);
@@ -5670,7 +5670,7 @@ delete_mob(MOB_INDEX_DATA * mob)
 	for (ch = first_char; ch; ch = ch_next) {
 		ch_next = ch->next;
 		if (ch->pIndexData == mob)
-			extract_char(ch, true);
+			extract_char(ch, true, false);
 	}
 	while ((mp = mob->mudprogs) != NULL) {
 		mob->mudprogs = mp->next;
