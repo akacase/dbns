@@ -2504,27 +2504,11 @@ damage(CHAR_DATA * ch, CHAR_DATA * victim, int dam, int dt)
 			}
 		}
 	}
-	/*
-	 * Get experience based on % of damage done                 -Thoric
-	 *
-	 * nah, fuck that. we're basing it on power level   -Goku
-	 */
 	if (dam && ch != victim
 	    && !IS_NPC(ch) && ch->fighting && ch->fighting->xp &&
 	    !IS_IMMORTAL(ch) && !IS_IMMORTAL(victim) && !is_split(victim)) {
-
-		/*
-		 * muhahaha, i make pl go lower!  me am the greetist! -Goku
-		 * 09.28.04
-		 */
-		/* prevents a lot of overflow pl gains - Goku 09.28 .04 */
-		if (dam > victim->hit + 11)
-			dam = victim->hit + 11;
 		if (dam < 1)
 			dam = 1;
-
-		/* lowered all mods by 0.005 it isn 't much but it adds up */
-		/* over time - Goku 09.28 .04 */
 		if (ch->race != 6) {
 			if (is_saiyan(ch))	/* Saiyan */
 				xp_mod = 0.655;
@@ -2548,7 +2532,6 @@ damage(CHAR_DATA * ch, CHAR_DATA * victim, int dam, int dt)
 			else		/* Everyone Else */
 				xp_mod = 0.665;
 		}
-
 		if (!IS_NPC(victim))
 			xp_gain =
 			    (long double)dam / 75 * pow(victim->pl, xp_mod);
