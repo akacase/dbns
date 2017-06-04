@@ -26,11 +26,6 @@
 #include "mud.h"
 #include "sha256.h"
 
-#ifdef MCCP
-#define TELOPT_COMPRESS 85
-#define TELOPT_COMPRESS2 86
-#endif
-
 /* Had to add unknowns because someone added new positions and didn't
  * update them.  Just a band-aid till I have time to fix it right.
  * This was found thanks to mud@mini.axcomp.com pointing it out :)

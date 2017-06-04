@@ -382,7 +382,6 @@ void advance_level(CHAR_DATA * ch)
 	if (ch->level < LEVEL_IMMORTAL) {
 		sprintf(buf,
 			"Your gain is: 0/0 hp, %d/%d mana, %d/%d move, %d/%d prac.\n\r",
-//        add_hp,       ch->max_hit,
 			add_mana, ch->max_mana,
 			add_move, ch->max_move, add_prac, ch->practice);
 		set_char_color(AT_WHITE, ch);
@@ -417,7 +416,6 @@ void do_plset(CHAR_DATA * ch, char *argument)
 void gain_exp(CHAR_DATA * ch, long double gain)
 {
 	char buf[MAX_STRING_LENGTH];
-/*    int modgain;*/
 	long double modgain;
 	int energygain;
 	float pl_mult = 1;

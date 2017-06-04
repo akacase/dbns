@@ -23,9 +23,6 @@
 #include <limits.h>
 #include <stdbool.h>
 #include <string.h>
-#ifdef MCCP
-#include <zlib.h>
-#endif
 
 /* force the who command to require an argument (should use cset) */
 #include <unistd.h>
@@ -731,7 +728,6 @@ struct project_data
 typedef enum
 {
      CON_GET_NAME = -99,
-
      CON_GET_OLD_PASSWORD,
      CON_CONFIRM_NEW_NAME, CON_GET_NEW_PASSWORD, CON_CONFIRM_NEW_PASSWORD,
      CON_GET_NEW_SEX, CON_GET_NEW_CLASS, CON_READ_MOTD,
@@ -742,7 +738,6 @@ typedef enum
      CON_GET_NEW_EYE, CON_GET_NEW_BUILD, CON_GET_NEW_COMPLEXION,
      CON_GET_NEW_SECONDARYCOLOR, CON_COPYOVER_RECOVER,
      CON_GET_HC, CON_GET_LAST_NAME, CON_CONFIRM_LAST_NAME,
-
      CON_PLAYING = 0, CON_NOTE_TO, CON_NOTE_SUBJECT,
      CON_NOTE_EXPIRE, CON_NOTE_TEXT, CON_NOTE_FINISH,
      CON_EDITING,
@@ -799,10 +794,6 @@ struct descriptor_data
      int newstate;
      unsigned char prevcolor;
      unsigned char compressing;
-#ifdef MCCP
-     z_stream *out_compress;
-     unsigned char *out_compress_buf;
-#endif
      char *host;
      char *host2;
      bool ansi;
@@ -2127,14 +2118,10 @@ typedef enum
      ITEM_HIDDEN, ITEM_POISONED, ITEM_COVERING, ITEM_DEATHROT, ITEM_BURIED,
      ITEM_PROTOTYPE, ITEM_NOLOCATE, ITEM_GROUNDROT, ITEM_LOOTABLE,
      ITEM_RARE, ITEM_UNIQUE, ITEM_ANTI_DEMON, ITEM_ANTI_KAIO,
-     ITEM_NOAUCTION, ITEM_NOGIVE, ITEM_NOQUIT, ITEM_NOSAC, ITEM_ANDROID_CHIP,	// oops, not really needed anymore but i'll leave it anyways -Goku 09.30.04
-     /* why doesn't someone make ITEM_ONLY_<race> flags? -Goku 09.30.04 */
-     /* eh, fuckit.  i'm already in the code -Goku 09.30.04 */
+     ITEM_NOAUCTION, ITEM_NOGIVE, ITEM_NOQUIT, ITEM_NOSAC, ITEM_ANDROID_CHIP,
      ITEM_ONLY_SAIYAN, ITEM_ONLY_HUMAN, ITEM_ONLY_HALFBREED, ITEM_ONLY_NAMEK,
      ITEM_ONLY_ANDROID, ITEM_ONLY_ICER, ITEM_ONLY_BIO_ANDROID, ITEM_ONLY_WIZARD,
-     ITEM_ONLY_DEMON, ITEM_ONLY_KAIO,
-
-     MAX_ITEM_FLAG
+     ITEM_ONLY_DEMON, ITEM_ONLY_KAIO, MAX_ITEM_FLAG
 } item_extra_flags;
 
 /* Magic flags - extra extra_flags for objects that are used in spells */
@@ -2988,12 +2975,7 @@ struct pc_data
      char *bounty_by;
 
      char *spouse;
-
-     int iIdle;
-     int pIdle[5];
-
      time_t creation_date;
-
      long double auction_pl;
 
      char *last_name;
@@ -4678,9 +4660,6 @@ DECLARE_DO_FUN (do_combat);
 DECLARE_DO_FUN (do_commands);
 DECLARE_DO_FUN (do_comment);
 DECLARE_DO_FUN (do_compare);
-#ifdef MCCP
-DECLARE_DO_FUN (do_compress);
-#endif
 DECLARE_DO_FUN (do_config);
 DECLARE_DO_FUN (do_consider);
 DECLARE_DO_FUN (do_cook);

@@ -2820,7 +2820,6 @@ do_kick(CHAR_DATA * ch, char *argument)
 
 	if (!is_android_h(ch))
 		ch->mana -= skill_table[gsn_kick]->min_mana;
-	return;
 }
 
 void

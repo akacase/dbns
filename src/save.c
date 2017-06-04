@@ -957,13 +957,6 @@ load_char_obj (DESCRIPTOR_DATA * d, char *name, bool preload)
      ch->pcdata->absorb_sn = 0;
      ch->pcdata->absorb_learn = 0;
 
-     ch->pcdata->pIdle[0] = 0;
-     ch->pcdata->pIdle[1] = 0;
-     ch->pcdata->pIdle[2] = 0;
-     ch->pcdata->pIdle[3] = 0;
-     ch->pcdata->pIdle[4] = 0;
-     ch->pcdata->iIdle = 0;
-
      ch->pcdata->tStr = 0;
      ch->pcdata->tInt = 0;
      ch->pcdata->tSpd = 0;
@@ -1123,16 +1116,9 @@ load_char_obj (DESCRIPTOR_DATA * d, char *name, bool preload)
 	  ch->pcdata->eKTimer = 0;
 	  ch->pcdata->pk_timer = 0;
 	  ch->pcdata->auction_pl = 0;
-	  ch->pcdata->pIdle[0] = 0;
-	  ch->pcdata->pIdle[1] = 0;
-	  ch->pcdata->pIdle[2] = 0;
-	  ch->pcdata->pIdle[3] = 0;
-	  ch->pcdata->pIdle[4] = 0;
-	  ch->pcdata->iIdle = 0;
 	  ch->pcdata->auraColorPowerUp = -1;
 	  ch->pcdata->interestLastMonth = 0;
 	  ch->pcdata->interestLastYear = 0;
-
      }
      else {
 	  if (!ch->name)

@@ -1252,12 +1252,10 @@ one_hit(CHAR_DATA * ch, CHAR_DATA * victim, int dt)
 
 	if (wield)
 		prof_bonus = 0;
-	/* Aparently this was screwing things way up - Karma */
-	/* prof_bonus = weapon_prof_bonus_check( ch, wield, &prof_gsn ); */
 	else
 		prof_bonus = 0;
 
-	if (ch->fighting		/* make sure fight is already started */
+	if (ch->fighting	
 	    && dt == TYPE_UNDEFINED && IS_NPC(ch) && !xIS_EMPTY(ch->attacks)) {
 		cnt = 0;
 		for (;;) {

@@ -7,11 +7,8 @@ MATH_LINK = -lm
 DATA_FOLDERS = ../area ../clans ../classes ../councils ../deity ../doc ../gods \
 	../houses ../planets ../races ../space ../system
 
-# uncomment if you wish to enable the Mud Client Compression Protocol
-OPT_FLAG = -DMCCP
-
-C_FLAGS = ${OPT_FLAG} -O2 -g3 -Wall -std=c99 ${DBUGFLG} ${TIME} ${REG}
-L_FLAGS = ${OPT_FLAG} ${MATH_LINK} -lz
+C_FLAGS = -O2 -g3 -Wall -std=c99 ${DBUGFLG} ${TIME} ${REG}
+L_FLAGS = ${MATH_LINK} -lz
 
 O_FILES = act_comm.o act_info.o act_move.o act_obj.o act_wiz.o ban.o \
           board.o boards.o bounty.o build.o clans.o colorize.o comm.o \
