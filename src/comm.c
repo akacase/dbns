@@ -707,10 +707,11 @@ game_loop()
 			  if (d->pagepoint)  {
 			       /* ignore ret value, runtime will clear out EPIPE or EOF */
 			       pager_output(d);
-				  
+			       d->outtop = 0;
 			  } else {
 			       /* ignore ret value, runtime will clear out EPIPE or EOF */
 			       flush_buffer(d, true);
+			       d->outtop = 0;
 			  }
 		     }
 		     if (d == last_descriptor)
