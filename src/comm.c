@@ -592,7 +592,6 @@ game_loop()
 {
 	struct timeval last_time;
 	char 	cmdline[MAX_INPUT_LENGTH];
-	bool    write_fail = false;
 	DESCRIPTOR_DATA *d;
 
 	signal(SIGSEGV, seg_vio);
@@ -705,15 +704,11 @@ game_loop()
 		       && FD_ISSET(d->descriptor, &out_set)) {
 			  if (d->pagepoint)  {
 			       /* ignore ret value, runtime will clear out EPIPE or EOF */
-			       write_fail = pager_output(d);
-			       if (write_fail)
-				    log_string("output failed, handler should take care of connection");
+			       pager_output(d);
 				  
 			  } else {
 			       /* ignore ret value, runtime will clear out EPIPE or EOF */
-			       write_fail = flush_buffer(d, true);
-			       if (write_fail)
-				    log_string("output failed, handler should take care of connection");
+			       flush_buffer(d, true);
 			  }
 		     }
 		     if (d == last_descriptor)
