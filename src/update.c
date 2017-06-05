@@ -23,18 +23,18 @@
 #include <math.h>
 #include "mud.h"
 
-char *kaioshin[6];
-char *greaterdemon[6];
-char *demonwarlord[3];
-char *demonking;
-int kaioshinlast[6];
-int greaterdemonlast[6];
-int demonwarlordlast[3];
-int demonkinglast;
+char   *kaioshin[6];
+char   *greaterdemon[6];
+char   *demonwarlord[3];
+char   *demonking;
+int 	kaioshinlast[6];
+int 	greaterdemonlast[6];
+int 	demonwarlordlast[3];
+int 	demonkinglast;
 
 void mccp_interest args((CHAR_DATA * ch));
 
-void shop_inventory_update(void);
+void 	shop_inventory_update(void);
 
 /*
  * Local functions.
@@ -45,7 +45,7 @@ int mana_gain args((CHAR_DATA * ch));
 int move_gain args((CHAR_DATA * ch));
 void mobile_update args((void));
 void weather_update args((void));
-void time_update args((void));	/* FB */
+void time_update args((void));		/* FB */
 void char_update args((void));
 void mystic_check args((void));
 void dball_check args((void));
@@ -71,7 +71,7 @@ void ladderTableClear args((int mon));
 void adjust_vectors args((WEATHER_DATA * weather));
 void get_weather_echo args((WEATHER_DATA * weather));
 void get_time_echo args((WEATHER_DATA * weather));
-char *get_moon_echo args((WEATHER_DATA * weather));
+char   *get_moon_echo args((WEATHER_DATA * weather));
 
 /*
  * Global Variables
@@ -81,7 +81,7 @@ OBJ_DATA *gobj_prev;
 
 CHAR_DATA *timechar;
 
-char *corpse_descs[] = {
+char   *corpse_descs[] = {
 	"The corpse of %s is in the last stages of decay.",
 	"The corpse of %s is crawling with vermin.",
 	"The corpse of %s fills the air with a foul stench.",
@@ -91,10 +91,11 @@ char *corpse_descs[] = {
 
 extern int top_exit;
 
-void save_economy(void)
+void 
+save_economy(void)
 {
-	char buf[MAX_STRING_LENGTH];
-	FILE *fpout;
+	char 	buf[MAX_STRING_LENGTH];
+	FILE   *fpout;
 	AREA_DATA *area;
 
 	for (area = first_area; area; area = area->next) {
@@ -105,7 +106,6 @@ void save_economy(void)
 			perror(buf);
 			return;
 		}
-
 		fprintf(fpout, "%.0f\n", area->economy);
 		fclose(fpout);
 	}
@@ -115,14 +115,15 @@ void save_economy(void)
 /*
  *  The actual oozaru morph
  */
-void transform_oozaru(CHAR_DATA * ch)
+void 
+transform_oozaru(CHAR_DATA * ch)
 {
 
 	if (xIS_SET((ch)->affected_by, AFF_KAIOKEN)) {
-		transStatRemove(ch);	// Bug found thanks to Tirion. -Karma
-		xREMOVE_BIT(ch->affected_by, AFF_KAIOKEN);
+		transStatRemove(ch);
+		//Bug found thanks to Tirion.- Karma
+		    xREMOVE_BIT(ch->affected_by, AFF_KAIOKEN);
 	}
-
 	act(AT_WHITE,
 	    "You gaze up at the full moon and you feel your self changing.", ch,
 	    NULL, NULL, TO_CHAR);
@@ -141,7 +142,8 @@ void transform_oozaru(CHAR_DATA * ch)
 	return;
 }
 
-void untransform_oozaru(CHAR_DATA * ch)
+void 
+untransform_oozaru(CHAR_DATA * ch)
 {
 
 	act(AT_WHITE,
@@ -161,7 +163,8 @@ void untransform_oozaru(CHAR_DATA * ch)
 	return;
 }
 
-void transform_makeo(CHAR_DATA * ch)
+void 
+transform_makeo(CHAR_DATA * ch)
 {
 
 	if (xIS_SET(ch->affected_by, AFF_MAKEOSTAR))
@@ -190,7 +193,8 @@ void transform_makeo(CHAR_DATA * ch)
 	return;
 }
 
-void untransform_makeo(CHAR_DATA * ch)
+void 
+untransform_makeo(CHAR_DATA * ch)
 {
 	xREMOVE_BIT(ch->affected_by, AFF_MAKEOSTAR);
 
@@ -212,14 +216,14 @@ void untransform_makeo(CHAR_DATA * ch)
 /*
  *  Golden Oozaru. -Karma
  */
-void transform_golden_oozaru(CHAR_DATA * ch)
+void 
+transform_golden_oozaru(CHAR_DATA * ch)
 {
 
 	if (xIS_SET((ch)->affected_by, AFF_KAIOKEN)) {
 		transStatRemove(ch);
 		xREMOVE_BIT(ch->affected_by, AFF_KAIOKEN);
 	}
-
 	act(AT_WHITE,
 	    "You gaze up at the full moon and you feel your self changing.", ch,
 	    NULL, NULL, TO_CHAR);
@@ -238,7 +242,8 @@ void transform_golden_oozaru(CHAR_DATA * ch)
 	return;
 }
 
-void untransform_golden_oozaru(CHAR_DATA * ch)
+void 
+untransform_golden_oozaru(CHAR_DATA * ch)
 {
 
 	act(AT_WHITE,
@@ -266,25 +271,27 @@ void untransform_golden_oozaru(CHAR_DATA * ch)
  * or weather_update, like once a day, so hair doesn't grow super fast. *
  ************************************************************************/
 
-void hair_growth(CHAR_DATA * ch)
+void 
+hair_growth(CHAR_DATA * ch)
 {
 	if (IS_NPC(ch)) {
 		send_to_char("This will only affect players.\n\r", ch);
 		return;
 	}
-
 	ch->pcdata->hairlen += 1;
 
 	switch (ch->pcdata->hairstyle) {
 	case STYLE_NONE:
-		ch->pcdata->hairlen -= 1;	/* As STYLE_NONE won't grow, but simular to bald in a sense */
+		ch->pcdata->hairlen -= 1;	/* As STYLE_NONE won't grow,
+						 * but simular to bald in a
+						 * sense */
 		break;
 	case STYLE_BALD:
 		if (ch->pcdata->hairlen >= 3) {
 			ch->pcdata->hairstyle = STYLE_CREW;
 			send_to_char
 			    ("Your hair has grown enough that it is now a crew-cut.\n\r",
-			     ch);
+			    ch);
 		}
 		break;
 	case STYLE_CREW:
@@ -292,14 +299,14 @@ void hair_growth(CHAR_DATA * ch)
 			ch->pcdata->hairstyle = STYLE_SHORT_BANGS;
 			send_to_char
 			    ("Your hair has grown enough that it is now short bangs.\n\r",
-			     ch);
+			    ch);
 		}
 		break;
 	case STYLE_SHORT_BANGS:
 		if (ch->pcdata->hairlen >= 13) {
 			send_to_char
 			    ("Your hair has grown enough that it is now medium length bangs instead of short bangs..\n\r",
-			     ch);
+			    ch);
 			ch->pcdata->hairstyle = STYLE_MEDIUM_BANGS;
 		}
 		break;
@@ -307,7 +314,7 @@ void hair_growth(CHAR_DATA * ch)
 		if (ch->pcdata->hairlen >= 20) {
 			send_to_char
 			    ("Your hair has grown enough that it is now long length bangs instead of medium bangs..\n\r",
-			     ch);
+			    ch);
 			ch->pcdata->hairstyle = STYLE_LONG_BANGS;
 		}
 		break;
@@ -321,43 +328,28 @@ void hair_growth(CHAR_DATA * ch)
 	}
 }
 
-void advance_level(CHAR_DATA * ch)
+void 
+advance_level(CHAR_DATA * ch)
 {
-	char buf[MAX_STRING_LENGTH];
-	char buf2[MAX_STRING_LENGTH];
-//    int add_hp;
-	int add_mana = 0;
-	int add_move;
-	int add_prac = 0;
+	char 	buf[MAX_STRING_LENGTH];
+	char 	buf2[MAX_STRING_LENGTH];
+	int 	add_mana = 0;
+	int 	add_move;
+	int 	add_prac = 0;
 
-/*	save_char_obj( ch );*/
 	sprintf(buf, "the %s",
-		title_table[ch->class][ch->level][ch->sex ==
-						  SEX_FEMALE ? 1 : 0]);
+	    title_table[ch->class][ch->level][ch->sex ==
+		SEX_FEMALE ? 1 : 0]);
 	set_title(ch, buf);
-
-//    add_hp    = con_app[get_curr_con(ch)].hitp + number_range(
-//                  _table[ch->class]->hp_min,
-//                  class_table[ch->class]->hp_max );
-/*    add_mana	= class_table[ch->class]->fMana
-		    ? number_range(2, (2*get_curr_int(ch)+get_curr_wis(ch))/8)
-		    : 0;
-*/
 	add_move = number_range(5, (get_curr_con(ch) + get_curr_dex(ch)) / 4);
-//    add_prac  = wis_app[get_curr_wis(ch)].practice;
-
-//    add_hp    = UMAX(  1, add_hp   );
 	add_mana = UMAX(0, add_mana);
 	add_move = UMAX(10, add_move);
 
-	/* bonus for deadlies */
 	if (IS_PKILL(ch)) {
 		add_mana = add_mana + add_mana * .3;
 		add_move = add_move + add_move * .3;
-//        add_hp +=1; /* bitch at blod if you don't like this :) */
 		sprintf(buf, "Gravoc's Pandect steels your sinews.\n\r");
 	}
-
 	ch->max_hit = 100;
 	ch->max_mana += add_mana;
 	ch->max_move += add_move;
@@ -381,28 +373,28 @@ void advance_level(CHAR_DATA * ch)
 	}
 	if (ch->level < LEVEL_IMMORTAL) {
 		sprintf(buf,
-			"Your gain is: 0/0 hp, %d/%d mana, %d/%d move, %d/%d prac.\n\r",
-			add_mana, ch->max_mana,
-			add_move, ch->max_move, add_prac, ch->practice);
+		    "Your gain is: 0/0 hp, %d/%d mana, %d/%d move, %d/%d prac.\n\r",
+		    add_mana, ch->max_mana,
+		    add_move, ch->max_move, add_prac, ch->practice);
 		set_char_color(AT_WHITE, ch);
 		send_to_char(buf, ch);
 		if (!IS_NPC(ch)) {
 			sprintf(buf2,
-				"&G%-13s  ->&w%-2d  &G-&w  %-5d&G   Rvnum: %-5d   %s %s",
-				ch->name, ch->level, get_age(ch),
-				ch->in_room == NULL ? 0 : ch->in_room->vnum,
-				capitalize(race_table[ch->race]->race_name),
-				class_table[ch->class]->who_name);
+			    "&G%-13s  ->&w%-2d  &G-&w  %-5d&G   Rvnum: %-5d   %s %s",
+			    ch->name, ch->level, get_age(ch),
+			    ch->in_room == NULL ? 0 : ch->in_room->vnum,
+			    capitalize(race_table[ch->race]->race_name),
+			    class_table[ch->class]->who_name);
 			append_to_file(PLEVEL_FILE, buf2);
 		}
 	}
-	return;
 }
 
-void do_plset(CHAR_DATA * ch, char *argument)
+void 
+do_plset(CHAR_DATA * ch, char *argument)
 {
 	CHAR_DATA *v;
-	char arg[MAX_INPUT_LENGTH];
+	char 	arg[MAX_INPUT_LENGTH];
 
 	argument = one_argument(argument, arg);
 
@@ -413,14 +405,15 @@ void do_plset(CHAR_DATA * ch, char *argument)
 	gain_exp(v, atoi(argument));
 }
 
-void gain_exp(CHAR_DATA * ch, long double gain)
+void 
+gain_exp(CHAR_DATA * ch, long double gain)
 {
-	char buf[MAX_STRING_LENGTH];
+	char 	buf[MAX_STRING_LENGTH];
 	long double modgain;
-	int energygain;
-	float pl_mult = 1;
-	int rank = 0, newRank = 0;
-	int trueRank = 0;
+	int 	energygain;
+	float 	pl_mult = 1;
+	int 	rank = 0, newRank = 0;
+	int 	trueRank = 0;
 
 	if (IS_NPC(ch))
 		return;
@@ -433,13 +426,13 @@ void gain_exp(CHAR_DATA * ch, long double gain)
 	rank = get_rank_number(ch);
 	trueRank = get_true_rank(ch);
 	/* per-race experience multipliers */
-	modgain *= (long double)(race_table[ch->race]->exp_multiplier / 100.0);
+	modgain *= (long double) (race_table[ch->race]->exp_multiplier / 100.0);
 	if (ch->exp != ch->pl) {
 		if (xIS_SET((ch)->affected_by, AFF_HEART)) {
-			pl_mult = (float)ch->heart_pl / ch->pl;
+			pl_mult = (float) ch->heart_pl / ch->pl;
 			ch->heart_pl += modgain * pl_mult;
 		}
-		pl_mult = (float)ch->pl / ch->exp;
+		pl_mult = (float) ch->pl / ch->exp;
 		ch->pl += modgain * pl_mult;
 	} else {
 		ch->pl += modgain;
@@ -461,10 +454,9 @@ void gain_exp(CHAR_DATA * ch, long double gain)
 
 	if (rank != get_rank_number(ch)) {
 		sprintf(buf, "%s's rank has changed to %s", ch->name,
-			get_rank_color(ch));
+		    get_rank_color(ch));
 		do_info(ch, buf);
 	}
-
 	if (trueRank != (newRank = get_true_rank(ch))) {
 		ch->level = newRank;
 
@@ -477,19 +469,15 @@ void gain_exp(CHAR_DATA * ch, long double gain)
 			xSET_BIT(ch->act, PLR_SKAI);
 			do_help(ch, "ascendant");
 		}
-
 		if (ch->level == 11) {
 			do_help(ch, "transcendent");
 		}
-
 		if (ch->level == 12) {
 			do_help(ch, "champion");
 		}
-
 		if (ch->level == 13) {
 			do_help(ch, "north kais");
 		}
-
 		if (ch->level == 16) {
 			if (!IS_SET(ch->pcdata->flags, PCFLAG_IMMORTALITY))
 				SET_BIT(ch->pcdata->flags, PCFLAG_IMMORTALITY);
@@ -497,9 +485,7 @@ void gain_exp(CHAR_DATA * ch, long double gain)
 			xSET_BIT(ch->act, PLR_DG);
 			do_help(ch, "demigod");
 		}
-
 	}
-
 /*  PL high enough to gain a train point */
 
 	if ((ch->exp >= (pow(ch->max_train, 3.07) * 10000))
@@ -507,14 +493,13 @@ void gain_exp(CHAR_DATA * ch, long double gain)
 		set_char_color(AT_LBLUE + AT_BLINK, ch);
 		if (is_android(ch))
 			ch_printf(ch,
-				  "You gained 5 additional hardware upgrade points!\n\r");
+			    "You gained 5 additional hardware upgrade points!\n\r");
 		else
 			ch_printf(ch,
-				  "You gained 5 additional training points!\n\r");
+			    "You gained 5 additional training points!\n\r");
 		ch->train += 5;
 		ch->max_train += 1;
 	}
-
 /*  PL high enough to gain a practice point */
 
 /*  Disabled for DBS v2.0
@@ -541,24 +526,25 @@ void gain_exp(CHAR_DATA * ch, long double gain)
 		ch_printf(ch, "You gained some more energy!\n\r");
 
 		energygain =
-		    (double)((double)get_curr_con(ch) / 100 +
-			     1) * get_curr_con(ch) + number_range(5, 15);
+		    (double) ((double) get_curr_con(ch) / 100 +
+		    1) * get_curr_con(ch) + number_range(5, 15);
 		ch->mana += energygain;
 		ch->max_mana += energygain;
 		ch->max_mana = URANGE(100, ch->max_mana, 99999);
 		ch->mana = UMIN(ch->mana, ch->max_mana);
 		ch->max_energy += 1;
 	}
-
 	return;
 }
 
 /*
  * Regeneration stuff.
  */
-int hit_gain(CHAR_DATA * ch)
+int 
+hit_gain(CHAR_DATA * ch)
 {
-	int gain;
+	int 	gain;
+
 	if (IS_NPC(ch)) {
 		gain = number_range(6, 8);
 	} else {
@@ -602,9 +588,10 @@ int hit_gain(CHAR_DATA * ch)
 	return UMIN(gain, ch->max_hit - ch->hit);
 }
 
-int mana_gain(CHAR_DATA * ch)
+int 
+mana_gain(CHAR_DATA * ch)
 {
-	int gain;
+	int 	gain;
 
 	if (IS_NPC(ch)) {
 		gain = number_range(6, 8);
@@ -646,7 +633,7 @@ int mana_gain(CHAR_DATA * ch)
 	else
 		gain += get_curr_con(ch) / 15;
 
-	gain = (double)gain / 200 * ch->max_mana;
+	gain = (double) gain / 200 * ch->max_mana;
 
 	return UMIN(gain, ch->max_mana - ch->mana);
 }
@@ -688,10 +675,11 @@ int move_gain( CHAR_DATA *ch )
 }
 */
 
-void gain_condition(CHAR_DATA * ch, int iCond, int value)
+void 
+gain_condition(CHAR_DATA * ch, int iCond, int value)
 {
-	int condition;
-	ch_ret retcode = rNONE;
+	int 	condition;
+	ch_ret 	retcode = rNONE;
 
 	if (value == 0 || IS_NPC(ch) || ch->level >= LEVEL_IMMORTAL)
 		return;
@@ -717,7 +705,7 @@ void gain_condition(CHAR_DATA * ch, int iCond, int value)
 			if (ch->level < LEVEL_AVATAR) {
 				set_char_color(AT_THIRSTY, ch);
 				send_to_char("You are DYING of THIRST!\n\r",
-					     ch);
+				    ch);
 				act(AT_THIRSTY, "$n is dying of thirst!", ch,
 				    NULL, NULL, TO_ROOM);
 				worsen_mental_state(ch, IS_PKILL(ch) ? 1 : 2);
@@ -738,7 +726,6 @@ void gain_condition(CHAR_DATA * ch, int iCond, int value)
 			break;
 		}
 	}
-
 	if (retcode != rNONE)
 		return;
 
@@ -771,12 +758,11 @@ void gain_condition(CHAR_DATA * ch, int iCond, int value)
 				set_char_color(AT_SOBER, ch);
 				send_to_char
 				    ("You are feeling a little less light headed.\n\r",
-				     ch);
+				    ch);
 			}
 			break;
 		}
 	}
-
 	if (ch->pcdata->condition[iCond] == 2) {
 		switch (iCond) {
 		case COND_FULL:
@@ -796,7 +782,6 @@ void gain_condition(CHAR_DATA * ch, int iCond, int value)
 
 		}
 	}
-
 	if (ch->pcdata->condition[iCond] == 3) {
 		switch (iCond) {
 		case COND_FULL:
@@ -811,13 +796,12 @@ void gain_condition(CHAR_DATA * ch, int iCond, int value)
 				set_char_color(AT_THIRSTY, ch);
 				send_to_char
 				    ("You could use a sip of something refreshing.\n\r",
-				     ch);
+				    ch);
 			}
 			break;
 
 		}
 	}
-
 	return;
 }
 
@@ -826,7 +810,8 @@ void gain_condition(CHAR_DATA * ch, int iCond, int value)
  * This was added after a suggestion from Cronel	--Shaddai
  */
 
-void check_alignment(CHAR_DATA * ch)
+void 
+check_alignment(CHAR_DATA * ch)
 {
 	/*
 	 *  Race alignment restrictions, h
@@ -835,29 +820,28 @@ void check_alignment(CHAR_DATA * ch)
 		set_char_color(AT_BLOOD, ch);
 		send_to_char
 		    ("Your actions have been incompatible with the ideals of your race.  This troubles you.",
-		     ch);
+		    ch);
 	}
-
 	if (ch->alignment > race_table[ch->race]->maxalign) {
 		set_char_color(AT_BLOOD, ch);
 		send_to_char
 		    ("Your actions have been incompatible with the ideals of your race.  This troubles you.",
-		     ch);
+		    ch);
 	}
-
 }
 
 /*
  * Mob autonomous action.
  * This function takes 25% to 35% of ALL Mud cpu time.
  */
-void mobile_update(void)
+void 
+mobile_update(void)
 {
-	char buf[MAX_STRING_LENGTH];
+	char 	buf[MAX_STRING_LENGTH];
 	CHAR_DATA *ch;
 	EXIT_DATA *pexit;
-	int door;
-	ch_ret retcode;
+	int 	door;
+	ch_ret 	retcode;
 
 	retcode = rNONE;
 
@@ -869,26 +853,23 @@ void mobile_update(void)
 			    0);
 			ch->prev = NULL;
 		}
-
 		gch_prev = ch->prev;
 
 		if (gch_prev && gch_prev->next != ch) {
 			sprintf(buf,
-				"FATAL: Mobile_update: %s->prev->next doesn't point to ch.",
-				ch->name);
+			    "FATAL: Mobile_update: %s->prev->next doesn't point to ch.",
+			    ch->name);
 			bug(buf, 0);
 			bug("Short-cutting here", 0);
 			gch_prev = NULL;
 			ch->prev = NULL;
 			do_shout(ch, "Goku says, 'Prepare for the worst!'");
 		}
-
 		if (!IS_NPC(ch)) {
 			drunk_randoms(ch);
 			hallucinations(ch);
 			continue;
 		}
-
 		if (!ch->in_room || IS_AFFECTED(ch, AFF_CHARM)
 		    || IS_AFFECTED(ch, AFF_PARALYSIS))
 			continue;
@@ -900,18 +881,16 @@ void mobile_update(void)
 				    "$n returns to the dust from whence $e came.",
 				    ch, NULL, NULL, TO_ROOM);
 
-			if (IS_NPC(ch))	
-			extract_char(ch, true, false);
+			if (IS_NPC(ch))
+				extract_char(ch, true, false);
 			continue;
 		}
-
 		if (!xIS_SET(ch->act, ACT_RUNNING)
 		    && !xIS_SET(ch->act, ACT_SENTINEL)
 		    && !ch->fighting && ch->hunting) {
 			WAIT_STATE(ch, 2 * PULSE_VIOLENCE);
 			continue;
 		}
-
 		/* Examine call for special procedure */
 		if (!xIS_SET(ch->act, ACT_RUNNING)
 		    && ch->spec_fun) {
@@ -920,18 +899,15 @@ void mobile_update(void)
 			if (char_died(ch))
 				continue;
 		}
-
 		/* Check for mudprogram script on mob */
 		if (HAS_PROG(ch->pIndexData, SCRIPT_PROG)) {
 			mprog_script_trigger(ch);
 			continue;
 		}
-
 		if (ch != cur_char) {
 			bug("Mobile_update: ch != cur_char after spec_fun", 0);
 			continue;
 		}
-
 		/* That's all for sleeping / busy monster */
 		if (ch->position != POS_STANDING)
 			continue;
@@ -942,7 +918,6 @@ void mobile_update(void)
 				do_emote(ch, "snarls and growls.");
 			continue;
 		}
-
 		if (xIS_SET(ch->in_room->room_flags, ROOM_SAFE)
 		    && (xIS_SET(ch->act, ACT_AGGRESSIVE)
 			|| xIS_SET(ch->act, ACT_META_AGGR)))
@@ -956,7 +931,6 @@ void mobile_update(void)
 			if (ch->position < POS_STANDING)
 				continue;
 		}
-
 		/* MOBprogram hour trigger: do something for an hour */
 		mprog_hour_trigger(ch);
 
@@ -975,12 +949,12 @@ void mobile_update(void)
 		    && ch->in_room->first_content && number_bits(2) == 0) {
 			OBJ_DATA *obj;
 			OBJ_DATA *obj_best;
-			int max;
+			int 	max;
 
 			max = 1;
 			obj_best = NULL;
 			for (obj = ch->in_room->first_content; obj;
-			     obj = obj->next_content) {
+			    obj = obj->next_content) {
 				if (CAN_WEAR(obj, ITEM_TAKE) && obj->cost > max
 				    && !IS_OBJ_STAT(obj, ITEM_BURIED)) {
 					obj_best = obj;
@@ -995,7 +969,6 @@ void mobile_update(void)
 				    NULL, TO_ROOM);
 			}
 		}
-
 		/* Wander */
 		if (!xIS_SET(ch->act, ACT_RUNNING)
 		    && !xIS_SET(ch->act, ACT_SENTINEL)
@@ -1008,17 +981,16 @@ void mobile_update(void)
 		    && (!xIS_SET(ch->act, ACT_STAY_AREA)
 			|| pexit->to_room->area == ch->in_room->area)) {
 			retcode = move_char(ch, pexit, 0);
-			/* If ch changes position due
-			   to it's or someother mob's
-			   movement via MOBProgs,
-			   continue - Kahn */
+			/*
+			 * If ch changes position due to it's or someother
+			 * mob's movement via MOBProgs, continue - Kahn
+			 */
 			if (char_died(ch))
 				continue;
 			if (retcode != rNONE || xIS_SET(ch->act, ACT_SENTINEL)
 			    || ch->position < POS_STANDING)
 				continue;
 		}
-
 		/* Flee */
 		if (ch->hit < ch->max_hit / 2
 		    && (door = number_bits(4)) <= 9
@@ -1026,31 +998,31 @@ void mobile_update(void)
 		    && pexit->to_room && !IS_SET(pexit->exit_info, EX_CLOSED)
 		    && !xIS_SET(pexit->to_room->room_flags, ROOM_NO_MOB)) {
 			CHAR_DATA *rch;
-			bool found;
+			bool 	found;
 
 			found = false;
 			for (rch = ch->in_room->first_person;
-			     rch; rch = rch->next_in_room) {
+			    rch; rch = rch->next_in_room) {
 				if (is_fearing(ch, rch)) {
 					switch (number_bits(2)) {
 					case 0:
 						sprintf(buf,
-							"Get away from me, %s!",
-							rch->name);
+						    "Get away from me, %s!",
+						    rch->name);
 						break;
 					case 1:
 						sprintf(buf, "Leave me be, %s!",
-							rch->name);
+						    rch->name);
 						break;
 					case 2:
 						sprintf(buf,
-							"%s is trying to kill me!  Help!",
-							rch->name);
+						    "%s is trying to kill me!  Help!",
+						    rch->name);
 						break;
 					case 3:
 						sprintf(buf,
-							"Someone save me from %s!",
-							rch->name);
+						    "Someone save me from %s!",
+						    rch->name);
 						break;
 					}
 					do_yell(ch, buf);
@@ -1069,7 +1041,8 @@ void mobile_update(void)
 /* For the message if all seven dragonballs are in the same
    room. - Karma */
 
-void dball_check(void)
+void 
+dball_check(void)
 {
 	CHAR_DATA *ch;
 
@@ -1087,13 +1060,14 @@ void dball_check(void)
 		if (seven_dballs_here(ch, "earth") ||
 		    seven_dballs_here(ch, "namek"))
 			ch_printf(ch,
-				  "&YThe Seven Dragonballs pulse with light in unison.\n\r");
+			    "&YThe Seven Dragonballs pulse with light in unison.\n\r");
 		else
 			continue;
 	}
 }
 
-void summon_update(void)
+void 
+summon_update(void)
 {
 	CHAR_DATA *ch;
 	CHAR_DATA *dragon;
@@ -1105,35 +1079,35 @@ void summon_update(void)
 	OBJ_DATA *obj5;
 	OBJ_DATA *obj6;
 	OBJ_DATA *obj7;
-	char buf[MAX_STRING_LENGTH];
+	char 	buf[MAX_STRING_LENGTH];
 
 	if (summon_state == SUMMON_NONE)
 		return;
 
 	if (summon_state == SUMMON_SKY1) {
 		sprintf(buf,
-			"&zBlack clouds suddenly begin to fill the sky all around.");
+		    "&zBlack clouds suddenly begin to fill the sky all around.");
 		echo_to_area(summon_area, buf);
 		summon_state = SUMMON_SKY2;
 		return;
 	}
 	if (summon_state == SUMMON_SKY2) {
 		sprintf(buf,
-			"&zClaps of thunder rumble through the blackened skies.");
+		    "&zClaps of thunder rumble through the blackened skies.");
 		echo_to_area(summon_area, buf);
 		summon_state = SUMMON_RISE1;
 		return;
 	}
 	if (summon_state == SUMMON_RISE1) {
 		sprintf(buf,
-			"&YA column of bright, golden energy suddenly explodes upward into the sky from the seven dragonballs.");
+		    "&YA column of bright, golden energy suddenly explodes upward into the sky from the seven dragonballs.");
 		echo_to_room(AT_YELLOW, summon_room, buf);
 		summon_state = SUMMON_RISE2;
 		return;
 	}
 	if (summon_state == SUMMON_RISE2) {
 		sprintf(buf,
-			"&YThe column of bright, golden energy grows larger, twisting and weaving through the sky as it takes shape.");
+		    "&YThe column of bright, golden energy grows larger, twisting and weaving through the sky as it takes shape.");
 		echo_to_room(AT_YELLOW, summon_room, buf);
 		summon_state = SUMMON_FINISHED1;
 		return;
@@ -1144,17 +1118,17 @@ void summon_update(void)
 		char_to_room(dragon, summon_room);
 
 		sprintf(buf,
-			"&gThe light subsides, revealing a collossal, green serpent dragon floating ominously in the sky above; looking down at you.");
+		    "&gThe light subsides, revealing a collossal, green serpent dragon floating ominously in the sky above; looking down at you.");
 		echo_to_room(AT_DGREEN, summon_room, buf);
 		sprintf(buf,
-			"&cA deep, slow, rumbling growl seethes from the dragon's mouth as it breathes.");
+		    "&cA deep, slow, rumbling growl seethes from the dragon's mouth as it breathes.");
 		echo_to_room(AT_CYAN, summon_room, buf);
 		summon_state = SUMMON_FINISHED2;
 		return;
 	}
 	if (summon_state == SUMMON_FINISHED2) {
 		sprintf(buf,
-			"&CThe Eternal Dragon 'Shenron' says in a commanding voice 'I am the Eternal Dragon. I will grant you one wish, and one wish only. Now, tell me what it is you wish me to grant you.'");
+		    "&CThe Eternal Dragon 'Shenron' says in a commanding voice 'I am the Eternal Dragon. I will grant you one wish, and one wish only. Now, tell me what it is you wish me to grant you.'");
 		echo_to_room(AT_LBLUE, summon_room, buf);
 		sprintf(buf, "&RShenron's eyes turn bright red.");
 		echo_to_room(AT_RED, summon_room, buf);
@@ -1163,17 +1137,17 @@ void summon_update(void)
 	}
 	if (summon_state == SUMMON_LEAVE1) {
 		sprintf(buf,
-			"&CThe Eternal Dragon 'Shenron' says in a commanding voice 'Your wish has been granted. And now, I bid you farewell.");
+		    "&CThe Eternal Dragon 'Shenron' says in a commanding voice 'Your wish has been granted. And now, I bid you farewell.");
 		echo_to_room(AT_LBLUE, summon_room, buf);
 		sprintf(buf,
-			"&YShenron turns bright gold and vanishes, the dragonballs suddenly blazing with incredible golden energy.");
+		    "&YShenron turns bright gold and vanishes, the dragonballs suddenly blazing with incredible golden energy.");
 		echo_to_room(AT_YELLOW, summon_room, buf);
 		summon_state = SUMMON_LEAVE2;
 		return;
 	}
 	if (summon_state == SUMMON_LEAVE2) {
 		sprintf(buf,
-			"&YThe dragonballs suddenly shoot straight up into the sky and stop. The dragonballs flash once, then rocket off in random directions; disappearing into the far distance.");
+		    "&YThe dragonballs suddenly shoot straight up into the sky and stop. The dragonballs flash once, then rocket off in random directions; disappearing into the far distance.");
 		echo_to_area(summon_area, buf);
 		ch = summon_room->first_person;
 		if (!ch) {
@@ -1227,7 +1201,8 @@ void summon_update(void)
 
 /* For handling mystic training - Karma */
 
-void mystic_check(void)
+void 
+mystic_check(void)
 {
 	CHAR_DATA *ch, *ch_next;
 
@@ -1252,9 +1227,9 @@ void mystic_check(void)
 			    "$n finishes dancing infront of $N, and sits down on the ground. $n then throws $s hands out infront of $N and says \"BLUAGH\" as $e starts into the second half of the mystic training.",
 			    ch->teaching, NULL, ch, TO_NOTVICT);
 			ch_printf(ch,
-				  "&RYou still may not type anything. You still have 15 minutes left to go.\n\r");
+			    "&RYou still may not type anything. You still have 15 minutes left to go.\n\r");
 			ch_printf(ch->teaching,
-				  "&RYou still may not type anything. You still have 15 minutes left to go.\n\r");
+			    "&RYou still may not type anything. You still have 15 minutes left to go.\n\r");
 			ch->tmystic = 3;
 			continue;
 		} else if (ch->mysticlearn > 15) {
@@ -1309,11 +1284,13 @@ void mystic_check(void)
  * added/needed. -Karma
  */
 
-void rank_update(void)
+void 
+rank_update(void)
 {
 	CHAR_DATA *ch;
-	int a = 0;
-	bool found = false;
+	int 	a = 0;
+	bool 	found = false;
+
 	for (ch = first_char; ch; ch = ch->next) {
 		if (IS_NPC(ch))
 			continue;
@@ -1364,11 +1341,13 @@ void rank_update(void)
  * Update all chars, including mobs.
  * This function is performance sensitive.
  */
-void char_update(void)
+void 
+char_update(void)
 {
 	CHAR_DATA *ch;
 	CHAR_DATA *ch_save;
-	sh_int save_count = 0;
+	sh_int 	save_count = 0;
+
 	ch_save = NULL;
 
 	for (ch = last_char; ch; ch = gch_prev) {
@@ -1383,7 +1362,6 @@ void char_update(void)
 			bug("char_update: ch->prev->next != ch", 0);
 			return;
 		}
-
 		/*
 		 *  Do a room_prog rand check right off the bat
 		 *   if ch disappears (rprog might wax npc's), continue
@@ -1420,7 +1398,6 @@ void char_update(void)
 			extract_char(ch, true, false);
 			continue;
 		}
-
 		/*
 		 * If ch is link-dead stop running stuff to prevent people
 		 * from going link-dead to avoid pk timers or healing while
@@ -1438,11 +1415,10 @@ void char_update(void)
 
 			if (!IS_NPC(ch))
 				ch->pcdata->natural_ac =
-				    (float)(ch->hit / 100) *
+				    (float) (ch->hit / 100) *
 				    ch->pcdata->natural_ac_max;
 
 		}
-
 		if (ch->hit > ch->max_hit)
 			ch->hit = ch->max_hit;
 
@@ -1452,7 +1428,6 @@ void char_update(void)
 			ch->focus -= URANGE(0, 20, get_curr_int(ch));
 			ch->focus = URANGE(0, ch->focus, get_curr_int(ch));
 		}
-
 		if (ch->position != POS_DEAD)
 			update_pos(ch);
 
@@ -1470,7 +1445,6 @@ void char_update(void)
 					ch->pcdata->nuisance->flags++;
 			}
 		}
-
 		if (!IS_NPC(ch)) {
 			if (ch->pcdata->condition[COND_FULL] < 12)
 				ch->pcdata->condition[COND_FULL] = 12;
@@ -1479,7 +1453,6 @@ void char_update(void)
 			if (ch->mental_state < 0)
 				ch->mental_state = 0;
 		}
-
 		if (!IS_NPC(ch) && ch->level < LEVEL_IMMORTAL) {
 			OBJ_DATA *obj;
 
@@ -1503,8 +1476,8 @@ void char_update(void)
 				ch->timer++;
 			if (ch->pcdata->condition[COND_DRUNK] > 8)
 				worsen_mental_state(ch,
-						    ch->pcdata->
-						    condition[COND_DRUNK] / 8);
+				    ch->pcdata->
+				    condition[COND_DRUNK] / 8);
 			if (ch->pcdata->condition[COND_FULL] > 1) {
 				switch (ch->position) {
 				case POS_SLEEPING:
@@ -1555,7 +1528,6 @@ void char_update(void)
 					break;
 				}
 			}
-
 			gain_condition(ch, COND_DRUNK, -1);
 			if (ch->mental_state != 0) {
 				switch (ch->position) {
@@ -1582,63 +1554,59 @@ void char_update(void)
 					break;
 				}
 			}
-
 			gain_condition(ch, COND_FULL,
-				       -1 + race_table[ch->race]->hunger_mod);
+			    -1 + race_table[ch->race]->hunger_mod);
 			if (!IS_NPC(ch) && ch->pcdata->nuisance) {
-				int value;
+				int 	value;
 
 				value =
 				    ((0 -
-				      ch->pcdata->nuisance->flags) *
-				     ch->pcdata->nuisance->power);
+					ch->pcdata->nuisance->flags) *
+				    ch->pcdata->nuisance->power);
 				gain_condition(ch, COND_THIRST, value);
 				gain_condition(ch, COND_FULL, --value);
 			}
-
 			if (ch->in_room)
 				switch (ch->in_room->sector_type) {
 				default:
 					gain_condition(ch, COND_THIRST,
-						       -1 +
-						       race_table[ch->race]->
-						       thirst_mod);
+					    -1 +
+					    race_table[ch->race]->
+					    thirst_mod);
 					break;
 				case SECT_DESERT:
 					gain_condition(ch, COND_THIRST,
-						       -3 +
-						       race_table[ch->race]->
-						       thirst_mod);
+					    -3 +
+					    race_table[ch->race]->
+					    thirst_mod);
 					break;
 				case SECT_UNDERWATER:
 				case SECT_OCEANFLOOR:
 					if (number_bits(1) == 0)
 						gain_condition(ch, COND_THIRST,
-							       -1 +
-							       race_table[ch->
-									  race]->
-							       thirst_mod);
+						    -1 +
+						    race_table[ch->
+							race]->
+						    thirst_mod);
 					break;
 				}
 
 		}
-
 		if (!IS_NPC(ch)) {
 			if (ch->pcdata->pk_timer > 0 && ch->desc) {
 				ch->pcdata->pk_timer--;
 			} else if (xIS_SET(ch->act, PLR_PK1)
-				   || xIS_SET(ch->act, PLR_PK2)
-				   || xIS_SET(ch->act, PLR_WAR2)) {
+				    || xIS_SET(ch->act, PLR_PK2)
+			    || xIS_SET(ch->act, PLR_WAR2)) {
 				if (ch->pcdata->pk_timer != 0)
 					ch->pcdata->pk_timer++;
 				else {
 					ch->pcdata->pk_timer = -15;
 					send_to_pager_color
 					    ("&wYou can now turn off your PK flags.",
-					     ch);
+					    ch);
 				}
 			}
-
 			if (ch->pcdata->gohometimer != 0)
 				ch->pcdata->gohometimer--;
 
@@ -1654,12 +1622,11 @@ void char_update(void)
 					set_char_color(AT_IMMORT, ch);
 					send_to_pager_color
 					    ("&wYou may now use public channels again.\n\r",
-					     ch);
+					    ch);
 					ch->pcdata->silence = 0;
 					STRFREE(ch->pcdata->silencedby);
 				}
 			}
-
 			if (ch->pcdata->b_timeleft > 0)
 				ch->pcdata->b_timeleft--;
 			if (ch->pcdata->b_timeleft < 0)
@@ -1668,8 +1635,9 @@ void char_update(void)
 			if (ch->pcdata->tail < 0)
 				ch->pcdata->tail++;
 			else if (ch->pcdata->tail == 0
-				 && (is_saiyan(ch) || is_hb(ch))) {
-				bool skip = false;
+			    && (is_saiyan(ch) || is_hb(ch))) {
+				bool 	skip = false;
+
 				if (is_hb(ch)) {
 					if (number_range(1, 2) == 2)
 						skip = true;
@@ -1692,7 +1660,7 @@ void char_update(void)
 			ch->pcdata->HBTCTimeLeft = 0;
 			send_to_char
 			    ("You can enter the Hyperbolic Time Chamber once again.\n\r",
-			     ch);
+			    ch);
 		}
 		if (!IS_NPC(ch)
 		    && ch->pcdata->nextspartime > 0
@@ -1701,7 +1669,7 @@ void char_update(void)
 			ch->pcdata->sparcount = 0;
 			send_to_char
 			    ("You have fully recovered from sparring yesterday.\n\r",
-			     ch);
+			    ch);
 		}
 		if (!IS_NPC(ch)
 		    && ch->pcdata->HBTCTimeLeft == 1
@@ -1723,7 +1691,7 @@ void char_update(void)
 
 			send_to_char
 			    ("Your time in the Hyperbolic Time Chamber has ended.\n\r",
-			     ch);
+			    ch);
 			act(AT_GREEN,
 			    "$n's time in the Hyperbolic Time Chamber has ended.",
 			    ch, NULL, NULL, TO_ROOM);
@@ -1753,7 +1721,7 @@ void char_update(void)
 			char_to_room(ch, location);
 			send_to_char
 			    ("The gods have released you from hell as your sentance is up!\n\r",
-			     ch);
+			    ch);
 			do_look(ch, "auto");
 			STRFREE(ch->pcdata->helled_by);
 			ch->pcdata->helled_by = NULL;
@@ -1766,6 +1734,7 @@ void char_update(void)
 		    && (ch->in_room->vnum == 6 || ch->in_room->vnum == 8)
 		    && ch->pcdata->release_date == 0) {
 			ROOM_INDEX_DATA *location;
+
 			location = get_room_index(ROOM_VNUM_TEMPLE);
 			if (!location)
 				location = ch->in_room;
@@ -1958,7 +1927,6 @@ void char_update(void)
 				    "closer to $s form.", ch, NULL, NULL,
 				    TO_NOTVICT);
 			}
-
 		}
 		if (!char_died(ch)) {
 			/*
@@ -1973,9 +1941,9 @@ void char_update(void)
 				    NULL, NULL, TO_CHAR);
 				ch->mental_state =
 				    URANGE(20,
-					   ch->mental_state +
-					   (IS_NPC(ch) ? 2 : IS_PKILL(ch) ? 3 :
-					    4), 100);
+				    ch->mental_state +
+				    (IS_NPC(ch) ? 2 : IS_PKILL(ch) ? 3 :
+					4), 100);
 				damage(ch, ch, 6, gsn_poison);
 			}
 			if (char_died(ch))
@@ -1988,17 +1956,16 @@ void char_update(void)
 				    && !xIS_SET((ch)->affected_by, AFF_SSJ2)
 				    && !xIS_SET((ch)->affected_by, AFF_SSJ3)
 				    && !xIS_SET((ch)->affected_by, AFF_SSJ4)
-				    && !xIS_SET((ch)->affected_by, AFF_MYSTIC))
-				{
+				    && !xIS_SET((ch)->affected_by, AFF_MYSTIC)) {
 					if ((is_saiyan(ch) || is_hb(ch))
 					    &&
 					    ((time_info.hour >= 20
-					      && time_info.day == 29)
-					     || (time_info.hour <= 5
-						 && time_info.day == 0))) {
+						    && time_info.day == 29)
+						|| (time_info.hour <= 5
+						    && time_info.day == 0))) {
 						if (!xIS_SET
 						    (ch->affected_by,
-						     AFF_GOLDEN_OOZARU)
+							AFF_GOLDEN_OOZARU)
 						    && ch->pcdata->
 						    learned[gsn_ssj3] == 100
 						    && is_saiyan(ch))
@@ -2007,27 +1974,26 @@ void char_update(void)
 
 						if (!xIS_SET
 						    (ch->affected_by,
-						     AFF_OOZARU)
+							AFF_OOZARU)
 						    && !wearing_chip(ch)
 						    && !xIS_SET(ch->affected_by,
-								AFF_GOLDEN_OOZARU))
+							AFF_GOLDEN_OOZARU))
 							transform_oozaru(ch);
 					}
-
 					if ((is_saiyan(ch) || is_hb(ch))
 					    &&
 					    ((time_info.hour > 5
-					      && time_info.day != 29)
-					     || (time_info.hour < 20
-						 && time_info.day != 0))) {
+						    && time_info.day != 29)
+						|| (time_info.hour < 20
+						    && time_info.day != 0))) {
 						if (xIS_SET
 						    (ch->affected_by,
-						     AFF_GOLDEN_OOZARU))
+							AFF_GOLDEN_OOZARU))
 							untransform_golden_oozaru
 							    (ch);
 						if (xIS_SET
 						    (ch->affected_by,
-						     AFF_OOZARU))
+							AFF_OOZARU))
 							untransform_oozaru(ch);
 					}
 				}
@@ -2037,28 +2003,26 @@ void char_update(void)
 					if (is_demon(ch)
 					    &&
 					    ((time_info.hour >= 20
-					      && time_info.day == 14)
-					     || (time_info.hour <= 5
-						 && time_info.day == 15))) {
+						    && time_info.day == 14)
+						|| (time_info.hour <= 5
+						    && time_info.day == 15))) {
 						if (!xIS_SET
 						    (ch->affected_by,
-						     AFF_MAKEOSTAR)
+							AFF_MAKEOSTAR)
 						    && !wearing_chip(ch))
 							transform_makeo(ch);
 					}
-
 					if (is_demon(ch)
 					    &&
 					    ((time_info.hour > 5
-					      && time_info.day != 14)
-					     || (time_info.hour < 20
-						 && time_info.day != 15))) {
+						    && time_info.day != 14)
+						|| (time_info.hour < 20
+						    && time_info.day != 15))) {
 						if (xIS_SET
 						    (ch->affected_by,
-						     AFF_MAKEOSTAR))
+							AFF_MAKEOSTAR))
 							untransform_makeo(ch);
 					}
-
 				}
 			}
 			/*
@@ -2067,10 +2031,10 @@ void char_update(void)
 			if (IS_AFFECTED(ch, AFF_RECURRINGSPELL)) {
 				AFFECT_DATA *paf, *paf_next;
 				SKILLTYPE *skill;
-				bool found = false, died = false;
+				bool 	found = false, died = false;
 
 				for (paf = ch->first_affect; paf;
-				     paf = paf_next) {
+				    paf = paf_next) {
 					paf_next = paf->next;
 					if (paf->location ==
 					    APPLY_RECURRINGSPELL) {
@@ -2078,17 +2042,17 @@ void char_update(void)
 						if (IS_VALID_SN(paf->modifier)
 						    && (skill =
 							skill_table[paf->
-								    modifier])
+							    modifier])
 						    != NULL
 						    && skill->type ==
 						    SKILL_SPELL) {
 							if ((*skill->
-							     spell_fun) (paf->
-									 modifier,
-									 ch->
-									 level,
-									 ch,
-									 ch) ==
+								spell_fun) (paf->
+								modifier,
+								ch->
+								level,
+								ch,
+								ch) ==
 							    rCHAR_DIED
 							    || char_died(ch)) {
 								died = true;
@@ -2101,14 +2065,13 @@ void char_update(void)
 					continue;
 				if (!found)
 					xREMOVE_BIT(ch->affected_by,
-						    AFF_RECURRINGSPELL);
+					    AFF_RECURRINGSPELL);
 			}
-
 			if (ch->mental_state >= 30)
 				switch ((ch->mental_state + 5) / 10) {
 				case 3:
 					send_to_char("&gYou feel feverish.\n\r",
-						     ch);
+					    ch);
 					act(AT_ACTION,
 					    "$n looks kind of out of it.", ch,
 					    NULL, NULL, TO_ROOM);
@@ -2116,14 +2079,14 @@ void char_update(void)
 				case 4:
 					send_to_char
 					    ("&gYou do not feel well at all.\n\r",
-					     ch);
+					    ch);
 					act(AT_ACTION,
 					    "$n doesn't look too good.", ch,
 					    NULL, NULL, TO_ROOM);
 					break;
 				case 5:
 					send_to_char("&gYou need help!\n\r",
-						     ch);
+					    ch);
 					act(AT_ACTION,
 					    "$n looks like $e could use your help.",
 					    ch, NULL, NULL, TO_ROOM);
@@ -2131,7 +2094,7 @@ void char_update(void)
 				case 6:
 					send_to_char
 					    ("&RSeekest thou a cleric.\n\r",
-					     ch);
+					    ch);
 					act(AT_ACTION,
 					    "Someone should fetch a healer for $n.",
 					    ch, NULL, NULL, TO_ROOM);
@@ -2139,7 +2102,7 @@ void char_update(void)
 				case 7:
 					send_to_char
 					    ("&zYou feel reality slipping away...\n\r",
-					     ch);
+					    ch);
 					act(AT_ACTION,
 					    "$n doesn't appear to be aware of what's going on.",
 					    ch, NULL, NULL, TO_ROOM);
@@ -2147,7 +2110,7 @@ void char_update(void)
 				case 8:
 					send_to_char
 					    ("&gYou begin to understand... everything.\n\r",
-					     ch);
+					    ch);
 					act(AT_ACTION,
 					    "$n starts ranting like a madman!",
 					    ch, NULL, NULL, TO_ROOM);
@@ -2155,7 +2118,7 @@ void char_update(void)
 				case 9:
 					send_to_char
 					    ("&gYou are ONE with the universe.\n\r",
-					     ch);
+					    ch);
 					act(AT_ACTION,
 					    "$n is ranting on about 'the answer', 'ONE' and other mumbo-jumbo...",
 					    ch, NULL, NULL, TO_ROOM);
@@ -2163,7 +2126,7 @@ void char_update(void)
 				case 10:
 					send_to_char
 					    ("&rYou feel the end is near.\n\r",
-					     ch);
+					    ch);
 					act(AT_ACTION,
 					    "$n is muttering and ranting in tongues...",
 					    ch, NULL, NULL, TO_ROOM);
@@ -2174,31 +2137,31 @@ void char_update(void)
 				case 10:
 					if (ch->position > POS_SLEEPING) {
 						if ((ch->position ==
-						     POS_STANDING
-						     || ch->position <
-						     POS_FIGHTING)
+							POS_STANDING
+							|| ch->position <
+							POS_FIGHTING)
 						    && number_percent() + 10 <
 						    abs(ch->mental_state))
 							do_sleep(ch, "");
 						else
 							send_to_char
 							    ("You're barely conscious.\n\r",
-							     ch);
+							    ch);
 					}
 					break;
 				case 9:
 					if (ch->position > POS_SLEEPING) {
 						if ((ch->position ==
-						     POS_STANDING
-						     || ch->position <
-						     POS_FIGHTING)
+							POS_STANDING
+							|| ch->position <
+							POS_FIGHTING)
 						    && (number_percent() + 20) <
 						    abs(ch->mental_state))
 							do_sleep(ch, "");
 						else
 							send_to_char
 							    ("You can barely keep your eyes open.\n\r",
-							     ch);
+							    ch);
 					}
 					break;
 				case 8:
@@ -2210,26 +2173,26 @@ void char_update(void)
 						else
 							send_to_char
 							    ("You're extremely drowsy.\n\r",
-							     ch);
+							    ch);
 					}
 					break;
 				case 7:
 					if (ch->position > POS_RESTING)
 						send_to_char
 						    ("You feel very unmotivated.\n\r",
-						     ch);
+						    ch);
 					break;
 				case 6:
 					if (ch->position > POS_RESTING)
 						send_to_char
 						    ("You feel sedated.\n\r",
-						     ch);
+						    ch);
 					break;
 				case 5:
 					if (ch->position > POS_RESTING)
 						send_to_char
 						    ("You feel sleepy.\n\r",
-						     ch);
+						    ch);
 					break;
 				case 4:
 					if (ch->position > POS_RESTING)
@@ -2240,12 +2203,13 @@ void char_update(void)
 					if (ch->position > POS_RESTING)
 						send_to_char
 						    ("You could use a rest.\n\r",
-						     ch);
+						    ch);
 					break;
 				}
 			if (ch == ch_save
-			       && IS_SET(sysdata.save_flags, SV_AUTO)
-			       && ++save_count < 10)	/* save max of 10 per tick */
+			    && IS_SET(sysdata.save_flags, SV_AUTO)
+			    && ++save_count < 10)	/* save max of 10 per
+							 * tick */
 				save_char_obj(ch);
 		}
 	}
@@ -2255,14 +2219,15 @@ void char_update(void)
  * Update all objs.
  * This function is performance sensitive.
  */
-void obj_update(void)
+void 
+obj_update(void)
 {
 	OBJ_DATA *obj;
-	sh_int AT_TEMP;
+	sh_int 	AT_TEMP;
 
 	for (obj = last_object; obj; obj = gobj_prev) {
 		CHAR_DATA *rch;
-		char *message;
+		char   *message;
 
 		if (obj == first_object && obj->prev) {
 			bug("obj_update: first_object->prev != NULL... fixed",
@@ -2294,29 +2259,34 @@ void obj_update(void)
 					if (IS_SET
 					    (obj->value[3], PIPE_GOINGOUT)) {
 						REMOVE_BIT(obj->value[3],
-							   PIPE_LIT);
+						    PIPE_LIT);
 						REMOVE_BIT(obj->value[3],
-							   PIPE_GOINGOUT);
+						    PIPE_GOINGOUT);
 					} else
 						SET_BIT(obj->value[3],
-							PIPE_GOINGOUT);
+						    PIPE_GOINGOUT);
 				}
 				if (!IS_SET(obj->value[3], PIPE_LIT))
 					SET_BIT(obj->value[3], PIPE_FULLOFASH);
 			} else
 				REMOVE_BIT(obj->value[3], PIPE_HOT);
 		}
-		/* corpse decay (npc corpses decay at 8 times the rate of pc corpses) - Narn */
+		/*
+		 * corpse decay (npc corpses decay at 8 times the rate of pc
+		 * corpses) - Narn
+		 */
 		if (obj->item_type == ITEM_CORPSE_PC
 		    || obj->item_type == ITEM_CORPSE_NPC) {
-			sh_int timerfrac = UMAX(1, obj->timer - 1);
+			sh_int 	timerfrac = UMAX(1, obj->timer - 1);
+
 			if (obj->item_type == ITEM_CORPSE_PC)
-				timerfrac = (int)(obj->timer / 2 + 1);
+				timerfrac = (int) (obj->timer / 2 + 1);
 
 			if (obj->timer > 0 && obj->value[2] > timerfrac) {
-				char buf[MAX_STRING_LENGTH];
-				char name[MAX_STRING_LENGTH];
-				char *bufptr;
+				char 	buf[MAX_STRING_LENGTH];
+				char 	name[MAX_STRING_LENGTH];
+				char   *bufptr;
+
 				bufptr = one_argument(obj->short_descr, name);
 				bufptr = one_argument(bufptr, name);
 				bufptr = one_argument(bufptr, name);
@@ -2324,14 +2294,13 @@ void obj_update(void)
 				separate_obj(obj);
 				obj->value[2] = timerfrac;
 				sprintf(buf,
-					corpse_descs[UMIN(timerfrac - 1, 4)],
-					bufptr);
+				    corpse_descs[UMIN(timerfrac - 1, 4)],
+				    bufptr);
 
 				STRFREE(obj->description);
 				obj->description = STRALLOC(buf);
 			}
 		}
-
 		/* don't let inventory decay */
 		if (IS_OBJ_STAT(obj, ITEM_INVENTORY))
 			continue;
@@ -2393,15 +2362,13 @@ void obj_update(void)
 			AT_TEMP = AT_OBJECT;
 			break;
 		case ITEM_FIRE:
-			/* This is removed because it is done in obj_from_room
-			 * Thanks to gfinello@mail.karmanet.it for pointing this out.
-			 * --Shaddai
-			 if (obj->in_room)
-			 {
-			 --obj->in_room->light;
-			 if ( obj->in_room->light < 0 )
-			 obj->in_room->light = 0;
-			 }
+			/*
+			 * This is removed because it is done in
+			 * obj_from_room Thanks to gfinello@mail.karmanet.it
+			 * for pointing this out. --Shaddai if
+			 * (obj->in_room) { --obj->in_room->light; if (
+			 * obj->in_room->light < 0 ) obj->in_room->light =
+			 * 0; }
 			 */
 			message = "$p burns out.";
 			AT_TEMP = AT_FIRE;
@@ -2411,12 +2378,11 @@ void obj_update(void)
 			act(AT_TEMP, message, obj->carried_by, obj, NULL,
 			    TO_CHAR);
 		} else if (obj->in_room
-			   && (rch = obj->in_room->first_person) != NULL
-			   && !IS_OBJ_STAT(obj, ITEM_BURIED)) {
+			    && (rch = obj->in_room->first_person) != NULL
+		    && !IS_OBJ_STAT(obj, ITEM_BURIED)) {
 			act(AT_TEMP, message, rch, obj, NULL, TO_ROOM);
 			act(AT_TEMP, message, rch, obj, NULL, TO_CHAR);
 		}
-
 		if (obj->serial == cur_obj)
 			global_objcode = rOBJ_EXPIRED;
 		extract_obj(obj);
@@ -2428,13 +2394,14 @@ void obj_update(void)
  * Function to check important stuff happening to a player
  * This function should take about 5% of mud cpu time
  */
-void char_check(void)
+void 
+char_check(void)
 {
 	CHAR_DATA *ch, *ch_next;
 	OBJ_DATA *obj;
 	EXIT_DATA *pexit = NULL;
 	static int cnt = 0;
-	int door, retcode;
+	int 	door, retcode;
 
 	/* This little counter can be used to handle periodic events */
 	cnt = (cnt + 1) % SECONDS_PER_TICK;
@@ -2457,14 +2424,12 @@ void char_check(void)
 					WAIT_STATE(ch, 2 * PULSE_VIOLENCE);
 					continue;
 				}
-
 				if (ch->spec_fun) {
 					if ((*ch->spec_fun) (ch))
 						continue;
 					if (char_died(ch))
 						continue;
 				}
-
 				if (!xIS_SET(ch->act, ACT_SENTINEL)
 				    && !xIS_SET(ch->act, ACT_PROTOTYPE)
 				    && (door = number_bits(4)) <= 9
@@ -2473,9 +2438,9 @@ void char_check(void)
 				    && pexit->to_room
 				    && !IS_SET(pexit->exit_info, EX_CLOSED)
 				    && !xIS_SET(pexit->to_room->room_flags,
-						ROOM_NO_MOB)
+					ROOM_NO_MOB)
 				    && !xIS_SET(pexit->to_room->room_flags,
-						ROOM_DEATH)
+					ROOM_DEATH)
 				    && (!xIS_SET(ch->act, ACT_STAY_AREA)
 					|| pexit->to_room->area ==
 					ch->in_room->area)) {
@@ -2496,11 +2461,10 @@ void char_check(void)
 				ch->position = POS_STANDING;
 				send_to_char
 				    ("No longer upon your mount, you fall to the ground...\n\rOUCH!\n\r",
-				     ch);
+				    ch);
 			}
-
 			if ((ch->in_room
-			     && ch->in_room->sector_type == SECT_UNDERWATER)
+				&& ch->in_room->sector_type == SECT_UNDERWATER)
 			    || (ch->in_room
 				&& ch->in_room->sector_type ==
 				SECT_OCEANFLOOR)) {
@@ -2511,52 +2475,54 @@ void char_check(void)
 					    && !is_superandroid(ch)
 					    && !wearing_sentient_chip(ch)
 					    && !is_bio(ch)) {
-						int dam;
+						int 	dam;
 
-						/* Changed level of damage at Brittany's request. -- Narn */
+						/*
+						 * Changed level of damage
+						 * at Brittany's request. --
+						 * Narn
+						 */
 						dam =
 						    number_range(ch->max_hit /
-								 100,
-								 ch->max_hit /
-								 50);
+						    100,
+						    ch->max_hit /
+						    50);
 						dam = UMAX(1, dam);
 						if (number_bits(3) == 0)
 							send_to_char
 							    ("You cough and choke as you try to breathe water!\n\r",
-							     ch);
+							    ch);
 						damage(ch, ch, dam,
-						       TYPE_UNDEFINED);
+						    TYPE_UNDEFINED);
 					}
 				}
 			}
-
 			if ((ch->in_room
-			     && ch->in_room->sector_type == SECT_SPACE)) {
+				&& ch->in_room->sector_type == SECT_SPACE)) {
 				if (!is_icer(ch)
 				    && !is_android(ch)
 				    && !is_bio(ch)
 				    && !is_superandroid(ch)
 				    && !wearing_sentient_chip(ch)) {
 					if (get_trust(ch) < LEVEL_IMMORTAL) {
-						int dam;
+						int 	dam;
 
 						dam =
 						    number_range(ch->max_hit /
-								 100,
-								 ch->max_hit /
-								 50);
+						    100,
+						    ch->max_hit /
+						    50);
 						dam = UMAX(1, dam);
 						if (number_bits(3) == 0) {
 							send_to_char
 							    ("You gasp for air but find none!\n\r",
-							     ch);
+							    ch);
 						}
 						damage(ch, ch, dam,
-						       TYPE_UNDEFINED);
+						    TYPE_UNDEFINED);
 					}
 				}
 			}
-
 			if (char_died(ch))
 				continue;
 
@@ -2569,7 +2535,7 @@ void char_check(void)
 				    && !IS_AFFECTED(ch, AFF_AQUA_BREATH)
 				    && !ch->mount) {
 					for (obj = ch->first_carrying; obj;
-					     obj = obj->next_content)
+					    obj = obj->next_content)
 						if (obj->item_type == ITEM_BOAT)
 							break;
 				}
@@ -2579,7 +2545,7 @@ void char_check(void)
 				CHAR_DATA *wch, *wch_next;
 
 				for (wch = ch->in_room->first_person; wch;
-				     wch = wch_next) {
+				    wch = wch_next) {
 					wch_next = wch->next_in_room;
 
 					if (!IS_NPC(wch)
@@ -2594,13 +2560,12 @@ void char_check(void)
 					if (is_hating(wch, ch)) {
 						continue;
 					}
-
 					if ((!xIS_SET(wch->act, ACT_AGGRESSIVE)
-					     && !xIS_SET(wch->act,
-							 ACT_META_AGGR))
+						&& !xIS_SET(wch->act,
+						    ACT_META_AGGR))
 					    || xIS_SET(wch->act, ACT_MOUNTED)
 					    || xIS_SET(wch->in_room->room_flags,
-						       ROOM_SAFE))
+						ROOM_SAFE))
 						continue;
 					ch->fight_start = ch->exp;
 					global_retcode =
@@ -2624,7 +2589,8 @@ void char_check(void)
  *   who leads the party into the room.
  *
  */
-void aggr_update(void)
+void 
+aggr_update(void)
 {
 	DESCRIPTOR_DATA *d, *dnext;
 	CHAR_DATA *wch;
@@ -2642,10 +2608,11 @@ void aggr_update(void)
 	 */
 	if (IS_NPC(wch) && wch->mpactnum > 0 && wch->in_room->area->nplayer > 0) {
 		MPROG_ACT_LIST *tmp_act, *tmp2_act;
+
 		for (tmp_act = wch->mpact; tmp_act; tmp_act = tmp_act->next) {
 			oprog_wordlist_check(tmp_act->buf, wch, tmp_act->ch,
-					     tmp_act->obj, tmp_act->vo,
-					     ACT_PROG);
+			    tmp_act->obj, tmp_act->vo,
+			    ACT_PROG);
 			DISPOSE(tmp_act->buf);
 		}
 		for (tmp_act = wch->mpact; tmp_act; tmp_act = tmp2_act) {
@@ -2668,10 +2635,10 @@ void aggr_update(void)
 					tmp_act->obj = NULL;
 				if (tmp_act->ch && !char_died(tmp_act->ch))
 					mprog_wordlist_check(tmp_act->buf, wch,
-							     tmp_act->ch,
-							     tmp_act->obj,
-							     tmp_act->vo,
-							     ACT_PROG);
+					    tmp_act->ch,
+					    tmp_act->obj,
+					    tmp_act->vo,
+					    ACT_PROG);
 				wch->mpact = tmp_act->next;
 				DISPOSE(tmp_act->buf);
 				DISPOSE(tmp_act);
@@ -2698,7 +2665,7 @@ void aggr_update(void)
 			continue;
 
 		for (ch = wch->in_room->first_person; ch; ch = ch_next) {
-			int count;
+			int 	count;
 
 			ch_next = ch->next_in_room;
 
@@ -2712,9 +2679,8 @@ void aggr_update(void)
 			if (is_hating(ch, wch)) {
 				continue;
 			}
-
 			if ((!xIS_SET(ch->act, ACT_AGGRESSIVE)
-			     && !xIS_SET(ch->act, ACT_META_AGGR))
+				&& !xIS_SET(ch->act, ACT_META_AGGR))
 			    || xIS_SET(ch->act, ACT_MOUNTED)
 			    || xIS_SET(ch->in_room->room_flags, ROOM_SAFE))
 				continue;
@@ -2729,12 +2695,12 @@ void aggr_update(void)
 			count = 0;
 			victim = NULL;
 			for (vch = wch->in_room->first_person; vch;
-			     vch = vch_next) {
+			    vch = vch_next) {
 				vch_next = vch->next_in_room;
 
 				if ((!IS_NPC(vch)
-				     || xIS_SET(ch->act, ACT_META_AGGR)
-				     || xIS_SET(vch->act, ACT_ANNOYING))
+					|| xIS_SET(ch->act, ACT_META_AGGR)
+					|| xIS_SET(vch->act, ACT_ANNOYING))
 				    && vch->level < LEVEL_IMMORTAL
 				    && (!xIS_SET(ch->act, ACT_WIMPY)
 					|| !IS_AWAKE(vch))
@@ -2749,7 +2715,6 @@ void aggr_update(void)
 				bug("Aggr_update: null victim.", count);
 				continue;
 			}
-
 			if (get_timer(victim, TIMER_PKILLED) > 0)
 				continue;
 
@@ -2766,22 +2731,22 @@ void aggr_update(void)
 				    && victim->hit >= victim->max_hit) {
 					check_attacker(ch, victim);
 					WAIT_STATE(ch,
-						   skill_table[gsn_backstab]->
-						   beats);
+					    skill_table[gsn_backstab]->
+					    beats);
 					if (!IS_AWAKE(victim)
 					    || number_percent() + 5 < ch->level) {
 						victim->fight_start =
 						    victim->exp;
 						global_retcode =
 						    multi_hit(ch, victim,
-							      gsn_backstab);
+						    gsn_backstab);
 						continue;
 					} else {
 						victim->fight_start =
 						    victim->exp;
 						global_retcode =
 						    damage(ch, victim, 0,
-							   gsn_backstab);
+						    gsn_backstab);
 						continue;
 					}
 				}
@@ -2801,12 +2766,13 @@ bool check_social args((CHAR_DATA * ch, char *command, char *argument));
  * drunk randoms	- Tricops
  * (Made part of mobile_update	-Thoric)
  */
-void drunk_randoms(CHAR_DATA * ch)
+void 
+drunk_randoms(CHAR_DATA * ch)
 {
 	CHAR_DATA *rvch = NULL;
 	CHAR_DATA *vch;
-	sh_int drunk;
-	sh_int position;
+	sh_int 	drunk;
+	sh_int 	position;
 
 	if (IS_NPC(ch) || ch->pcdata->condition[COND_DRUNK] <= 0)
 		return;
@@ -2827,14 +2793,13 @@ void drunk_randoms(CHAR_DATA * ch)
 	else if (number_percent() < (2 * drunk / 20))
 		check_social(ch, "fart", "");
 	else if (drunk > (10 + (get_curr_con(ch) / 5))
-		 && number_percent() < (2 * drunk / 18)) {
+	    && number_percent() < (2 * drunk / 18)) {
 		for (vch = ch->in_room->first_person; vch;
-		     vch = vch->next_in_room)
+		    vch = vch->next_in_room)
 			if (number_percent() < 10)
 				rvch = vch;
 		check_social(ch, "puke", (rvch ? rvch->name : ""));
 	}
-
 	ch->position = position;
 	return;
 }
@@ -2843,12 +2808,13 @@ void drunk_randoms(CHAR_DATA * ch)
  * Random hallucinations for those suffering from an overly high mentalstate
  * (Hats off to Albert Hoffman's "problem child")	-Thoric
  */
-void hallucinations(CHAR_DATA * ch)
+void 
+hallucinations(CHAR_DATA * ch)
 {
 	if (ch->mental_state >= 30
 	    && number_bits(5 - (ch->mental_state >= 50) -
-			   (ch->mental_state >= 75)) == 0) {
-		char *t;
+		(ch->mental_state >= 75)) == 0) {
+		char   *t;
 
 		switch (number_range(1, UMIN(21, (ch->mental_state + 5) / 5))) {
 		default:
@@ -2858,7 +2824,9 @@ void hallucinations(CHAR_DATA * ch)
 		case 2:
 			t = "&gYou're tingling all over.\n\r";
 			break;
-			//case  3: t = "Your skin is crawling.\n\r";break;
+		//case 3:
+			t = "Your skin is crawling.\n\r";
+			break;
 		case 3:
 			t = "&rYou're running around CoU while pkred at 1 pl trying to escape Sigma.\n\r";
 			break;
@@ -2883,7 +2851,9 @@ void hallucinations(CHAR_DATA * ch)
 		case 10:
 			t = "&gYour head is pulsating... you can't think straight.\n\r";
 			break;
-			//case 11: t = "The ground... seems to be squirming...\n\r";break;
+		//case 11:
+			t = "The ground... seems to be squirming...\n\r";
+			break;
 		case 11:
 			t = "&rSigma walks up to you and takes all your items and zeni.\n\r";
 			break;
@@ -2919,12 +2889,13 @@ void hallucinations(CHAR_DATA * ch)
 			break;
 		}
 		ch_printf(ch, "&r%s", t);
-		//send_to_char( t, ch );
+		//send_to_char(t, ch);
 	}
 	return;
 }
 
-void tele_update(void)
+void 
+tele_update(void)
 {
 	TELEPORT_DATA *tele, *tele_next;
 
@@ -2938,12 +2909,12 @@ void tele_update(void)
 				if (xIS_SET
 				    (tele->room->room_flags, ROOM_TELESHOWDESC))
 					teleport(tele->room->first_person,
-						 tele->room->tele_vnum,
-						 TELE_SHOWDESC | TELE_TRANSALL);
+					    tele->room->tele_vnum,
+					    TELE_SHOWDESC | TELE_TRANSALL);
 				else
 					teleport(tele->room->first_person,
-						 tele->room->tele_vnum,
-						 TELE_TRANSALL);
+					    tele->room->tele_vnum,
+					    TELE_TRANSALL);
 			}
 			UNLINK(tele, first_teleport, last_teleport, next, prev);
 			DISPOSE(tele);
@@ -2951,7 +2922,8 @@ void tele_update(void)
 	}
 }
 
-bool admin_online(void)
+bool 
+admin_online(void)
 {
 	DESCRIPTOR_DATA *d;
 	CHAR_DATA *vch;
@@ -2967,15 +2939,15 @@ bool admin_online(void)
 	return false;
 }
 
-void save_bandwidthLog()
+void 
+save_bandwidthLog()
 {
-	FILE *fp;
+	FILE   *fp;
 
 	if ((fp = fopen(BANDWIDTH_LOG_FILE, "a")) == NULL) {
 		bug("Could not open %s file", BANDWIDTH_LOG_FILE);
 		return;
 	}
-
 	fprintf(fp, "%d,", sysdata.outBytesOther);
 	fprintf(fp, "%d,", sysdata.outBytesChannel);
 	fprintf(fp, "%d,", sysdata.outBytesCombat);
@@ -2999,12 +2971,13 @@ void save_bandwidthLog()
 
 extern char *const clan_alliance_type[];
 
-void update_alliances(void)
+void 
+update_alliances(void)
 {
 	ALLIANCE_DATA *alliance;
 	ALLIANCE_DATA *valliance;
-	char buf[MAX_STRING_LENGTH];
-	bool changed = false;
+	char 	buf[MAX_STRING_LENGTH];
+	bool 	changed = false;
 
 	for (alliance = first_alliance; alliance; alliance = alliance->next) {
 		if (alliance->changeTimer <= 0)
@@ -3021,29 +2994,29 @@ void update_alliances(void)
 			alliance->changeTimer = 0;
 			alliance->newStatus = 0;
 			sprintf(buf,
-				"%s has changed their alliance with your clan to %s",
-				alliance->clan->name,
-				clan_alliance_type[alliance->status]);
+			    "%s has changed their alliance with your clan to %s",
+			    alliance->clan->name,
+			    clan_alliance_type[alliance->status]);
 			echo_to_clan(alliance->vclan, buf);
 			sprintf(buf,
-				"Your clan has changed their alliance with %s to %s.",
-				alliance->vclan->name,
-				clan_alliance_type[alliance->status]);
+			    "Your clan has changed their alliance with %s to %s.",
+			    alliance->vclan->name,
+			    clan_alliance_type[alliance->status]);
 			echo_to_clan(alliance->clan, buf);
 			if (allianceStatus(alliance->clan, alliance->vclan) ==
 			    ALLIANCE_ALLIED) {
 				sprintf(buf, "&C%s and %s are now allies.\n\r",
-					alliance->clan->name,
-					alliance->vclan->name);
+				    alliance->clan->name,
+				    alliance->vclan->name);
 				echo_to_clan(alliance->clan, buf);
 				echo_to_clan(alliance->vclan, buf);
 			}
 			if (allianceStatus(alliance->clan, alliance->vclan) ==
 			    ALLIANCE_ATWAR) {
 				sprintf(buf,
-					"%s and %s have begun a massive clan war!\n\r",
-					alliance->clan->name,
-					alliance->vclan->name);
+				    "%s and %s have begun a massive clan war!\n\r",
+				    alliance->clan->name,
+				    alliance->vclan->name);
 				echo_to_all(AT_RED, buf, ECHOTAR_ALL);
 			}
 		}
@@ -3058,7 +3031,8 @@ void update_alliances(void)
  * Called once per pulse from game loop.
  * Random times to defeat tick-timing clients and players.
  */
-void update_handler(void)
+void 
+update_handler(void)
 {
 	static int pulse_area;
 	static int pulse_mobile;
@@ -3080,54 +3054,44 @@ void update_handler(void)
 		send_to_char("Starting update timer.\n\r", timechar);
 		gettimeofday(&stime, NULL);
 	}
-
 	if (--pulse_saveBandwidthLog <= 0) {
 		pulse_saveBandwidthLog = 5 * PULSE_MINUTE;
 		save_bandwidthLog();
 	}
-
 	if (--pulse_houseauc <= 0) {
 		pulse_houseauc = 1800 * PULSE_PER_SECOND;
 		homebuy_update();
 	}
-
 	if (--pulse_area <= 0) {
 		pulse_area = number_range(PULSE_AREA / 2, 3 * PULSE_AREA / 2);
 		area_update();
 	}
-
 	if (--pulse_mobile <= 0) {
 		pulse_mobile = PULSE_MOBILE;
 		mobile_update();
 	}
-
 	if (--pulse_summon <= 0) {
 		pulse_summon = PULSE_SUMMON;
 		summon_update();
 	}
-
 	if (--pulse_space <= 0) {
 		pulse_space = PULSE_SPACE;
 		update_space();
 		update_bus();
 		update_traffic();
 	}
-
 	if (--pulse_recharge <= 0) {
 		pulse_recharge = PULSE_SPACE / 3;
 		recharge_ships();
 	}
-
 	if (--pulse_ship <= 0) {
 		pulse_ship = PULSE_SPACE / 10;
 		move_ships();
 	}
-
 	if (--pulse_violence <= 0) {
 		pulse_violence = PULSE_VIOLENCE;
 		violence_update();
 	}
-
 	if (--pulse_point <= 0) {
 		pulse_point = number_range(PULSE_TICK * 0.71, PULSE_TICK);
 		time_update();
@@ -3137,7 +3101,6 @@ void update_handler(void)
 		clear_vrooms();
 		update_alliances();
 	}
-
 	if (--pulse_minute <= 0) {
 		pulse_minute = PULSE_MINUTE;
 		if (sysdata.kaiRestoreTimer > 0)
@@ -3145,70 +3108,64 @@ void update_handler(void)
 		mystic_check();
 		save_economy();
 	}
-
 	if (--pulse_second <= 0) {
 		pulse_second = PULSE_PER_SECOND;
 		char_check();
 		check_dns();
 		check_pfiles(0);
 	}
-
 	if (--auction->pulse <= 0) {
 		auction->pulse = PULSE_AUCTION;
 		auction_update();
 		dball_check();
 	}
-
-	mpsleep_update();	
+	mpsleep_update();
 
 	tele_update();
 	aggr_update();
 	obj_act_update();
 	room_act_update();
-	clean_obj_queue();	/* dispose of extracted objects */
-	clean_char_queue();	/* dispose of dead mobs/quitting chars */
+	clean_obj_queue();		/* dispose of extracted objects */
+	clean_char_queue();		/* dispose of dead mobs/quitting chars */
 	if (timechar) {
 		gettimeofday(&etime, NULL);
 		set_char_color(AT_PLAIN, timechar);
 		send_to_char("Update timing complete.\n\r", timechar);
 		subtract_times(&etime, &stime);
 		ch_printf(timechar, "Timing took %d.%06d seconds.\n\r",
-			  etime.tv_sec, etime.tv_usec);
+		    etime.tv_sec, etime.tv_usec);
 		timechar = NULL;
 	}
 	tail_chain();
 }
 
-void remove_portal(OBJ_DATA * portal)
+void 
+remove_portal(OBJ_DATA * portal)
 {
 	ROOM_INDEX_DATA *fromRoom, *toRoom;
 	EXIT_DATA *pexit;
-	bool found;
+	bool 	found;
 
 	if (!portal) {
 		bug("remove_portal: portal is NULL", 0);
 		return;
 	}
-
 	fromRoom = portal->in_room;
 	found = false;
 	if (!fromRoom) {
 		bug("remove_portal: portal->in_room is NULL", 0);
 		return;
 	}
-
 	for (pexit = fromRoom->first_exit; pexit; pexit = pexit->next)
 		if (IS_SET(pexit->exit_info, EX_PORTAL)) {
 			found = true;
 			break;
 		}
-
 	if (!found) {
 		bug("remove_portal: portal not found in room %d!",
 		    fromRoom->vnum);
 		return;
 	}
-
 	if (pexit->vdir != DIR_PORTAL)
 		bug("remove_portal: exit in dir %d != DIR_PORTAL", pexit->vdir);
 
@@ -3220,9 +3177,10 @@ void remove_portal(OBJ_DATA * portal)
 	return;
 }
 
-void bump_que()
+void 
+bump_que()
 {
-	int i = 0;
+	int 	i = 0;
 
 	if (auction->queued_obj[0] == NULL) {
 		auction->freeQueSlot = -1;
@@ -3240,7 +3198,6 @@ void bump_que()
 		auction->queued_starting_bid[3] = 0;
 		return;
 	}
-
 	for (i = 0; i < AUCTION_QUE; i++) {
 		auction->queued_obj[i] = auction->queued_obj[i + 1];
 		auction->queued_char[i] = auction->queued_char[i + 1];
@@ -3259,7 +3216,6 @@ void bump_que()
 			auction->freeQueSlot = -1;
 			continue;
 		}
-
 		if (auction->queued_obj[i] == NULL) {
 			auction->freeQueSlot = i;
 			continue;
@@ -3271,15 +3227,16 @@ void bump_que()
 
 /* the auction update*/
 
-void auction_update(void)
+void 
+auction_update(void)
 {
-	int tax, pay;
-	char buf[MAX_STRING_LENGTH];
+	int 	tax, pay;
+	char 	buf[MAX_STRING_LENGTH];
 
 	if (!auction->item) {
 		if (AUCTION_MEM > 0 && auction->history[0] &&
 		    ++auction->hist_timer == 6 * AUCTION_MEM) {
-			int i;
+			int 	i;
 
 			for (i = AUCTION_MEM - 1; i >= 0; i--) {
 				if (auction->history[i]) {
@@ -3291,37 +3248,36 @@ void auction_update(void)
 		}
 		return;
 	}
-
 	sysdata.outBytesFlag = LOGBOUTCHANNEL;
 
 	switch (++auction->going) {	/* increase the going state */
-	case 1:		/* going once */
-	case 2:		/* going twice */
+	case 1:			/* going once */
+	case 2:			/* going twice */
 		if (auction->bet > auction->starting)
 			sprintf(buf, "&C%s&c: going &C%s &cfor &C%s&C.",
-				auction->item->short_descr,
-				((auction->going == 1) ? "once" : "twice"),
-				num_punct(auction->bet));
+			    auction->item->short_descr,
+			    ((auction->going == 1) ? "once" : "twice"),
+			    num_punct(auction->bet));
 		else
 			sprintf(buf,
-				"&C%s&c: going &C%s&c (bid not received yet).",
-				auction->item->short_descr,
-				((auction->going == 1) ? "once" : "twice"));
+			    "&C%s&c: going &C%s&c (bid not received yet).",
+			    auction->item->short_descr,
+			    ((auction->going == 1) ? "once" : "twice"));
 
 		talk_auction(buf);
 		break;
 
-	case 3:		/* SOLD! */
+	case 3:			/* SOLD! */
 		if (!auction->buyer && auction->bet) {
 			bug("Auction code reached SOLD, with NULL buyer, but %d zeni bid", auction->bet);
 			auction->bet = 0;
 		}
 		if (auction->bet > 0 && auction->buyer != auction->seller) {
 			sprintf(buf, "&C%s &csold to &C%s &cfor &C%s&c.",
-				auction->item->short_descr,
-				IS_NPC(auction->buyer) ? auction->buyer->
-				short_descr : auction->buyer->name,
-				num_punct(auction->bet));
+			    auction->item->short_descr,
+			    IS_NPC(auction->buyer) ? auction->buyer->
+			    short_descr : auction->buyer->name,
+			    num_punct(auction->bet));
 			talk_auction(buf);
 
 			act(AT_ACTION,
@@ -3332,7 +3288,7 @@ void auction_update(void)
 			    auction->buyer, auction->item, NULL, TO_ROOM);
 
 			if ((auction->buyer->carry_weight
-			     + get_obj_weight(auction->item))
+				+ get_obj_weight(auction->item))
 			    > can_carry_w(auction->buyer)) {
 				act(AT_PLAIN,
 				    "$p is too heavy for you to carry with your current inventory.",
@@ -3343,27 +3299,28 @@ void auction_update(void)
 				    auction->buyer, auction->item, NULL,
 				    TO_ROOM);
 				obj_to_room(auction->item,
-					    auction->buyer->in_room);
+				    auction->buyer->in_room);
 			} else
 				obj_to_char(auction->item, auction->buyer);
-			pay = (int)auction->bet * 0.9;
-			tax = (int)auction->bet * 0.1;
+			pay = (int) auction->bet * 0.9;
+			tax = (int) auction->bet * 0.1;
 			boost_economy(auction->seller->in_room->area, tax);
-			auction->seller->gold += pay;	/* give him the money, tax 10 % */
+			auction->seller->gold += pay;	/* give him the money,
+							 * tax 10 % */
 			ch_printf(auction->seller,
-				  "The auctioneer pays you %s zeni, charging an auction fee of ",
-				  num_punct(pay));
+			    "The auctioneer pays you %s zeni, charging an auction fee of ",
+			    num_punct(pay));
 			ch_printf(auction->seller, "%s.\n\r", num_punct(tax));
 			auction->item = NULL;	/* reset item */
 			if (IS_SET(sysdata.save_flags, SV_AUCTION)) {
 				save_char_obj(auction->buyer);
 				save_char_obj(auction->seller);
 			}
-		} else {	/* not sold */
+		} else {		/* not sold */
 
 			sprintf(buf,
-				"&cNo bids received for &C%s&c - removed from auction.",
-				auction->item->short_descr);
+			    "&cNo bids received for &C%s&c - removed from auction.",
+			    auction->item->short_descr);
 			talk_auction(buf);
 			act(AT_ACTION,
 			    "The auctioneer appears before you to return $p to you.",
@@ -3372,7 +3329,7 @@ void auction_update(void)
 			    "The auctioneer appears before $n to return $p to $m.",
 			    auction->seller, auction->item, NULL, TO_ROOM);
 			if ((auction->seller->carry_weight +
-			     get_obj_weight(auction->item))
+				get_obj_weight(auction->item))
 			    > can_carry_w(auction->seller)) {
 				act(AT_PLAIN,
 				    "You drop $p as it is just too much to carry"
@@ -3385,14 +3342,14 @@ void auction_update(void)
 				    auction->seller, auction->item, NULL,
 				    TO_ROOM);
 				obj_to_room(auction->item,
-					    auction->seller->in_room);
+				    auction->seller->in_room);
 			} else
 				obj_to_char(auction->item, auction->seller);
-			tax = (int)auction->starting * 0.05;
+			tax = (int) auction->starting * 0.05;
 			boost_economy(auction->seller->in_room->area, tax);
 			sprintf(buf,
-				"The auctioneer charges you an auction fee of %s.\n\r",
-				num_punct(tax));
+			    "The auctioneer charges you an auction fee of %s.\n\r",
+			    num_punct(tax));
 			send_to_char(buf, auction->seller);
 			if ((auction->seller->gold - tax) < 0)
 				auction->seller->gold = 0;
@@ -3400,15 +3357,16 @@ void auction_update(void)
 				auction->seller->gold -= tax;
 			if (IS_SET(sysdata.save_flags, SV_AUCTION))
 				save_char_obj(auction->seller);
-		}		/* else */
+		}			/* else */
 
 		auction->item = NULL;	/* clear auction */
-	}			/* switch */
+	}				/* switch */
 
 	sysdata.outBytesFlag = LOGBOUTNORM;
-}				/* func */
+}					/* func */
 
-void subtract_times(struct timeval *etime, struct timeval *stime)
+void 
+subtract_times(struct timeval * etime, struct timeval * stime)
 {
 	etime->tv_sec -= stime->tv_sec;
 	etime->tv_usec -= stime->tv_usec;
@@ -3425,16 +3383,16 @@ void subtract_times(struct timeval *etime, struct timeval *stime)
  * Last modified: July 18, 1997
  * - Fireblade
  */
-void adjust_vectors(WEATHER_DATA * weather)
+void 
+adjust_vectors(WEATHER_DATA * weather)
 {
 	NEIGHBOR_DATA *neigh;
-	double dT, dP, dW;
+	double 	dT, dP, dW;
 
 	if (!weather) {
 		bug("adjust_vectors: NULL weather data.", 0);
 		return;
 	}
-
 	dT = 0;
 	dP = 0;
 	dW = 0;
@@ -3447,13 +3405,13 @@ void adjust_vectors(WEATHER_DATA * weather)
 	/* Add in climate effects */
 	dT += climate_factor *
 	    (((weather->climate_temp - 2) * weath_unit) -
-	     (weather->temp)) / weath_unit;
+	    (weather->temp)) / weath_unit;
 	dP += climate_factor *
 	    (((weather->climate_precip - 2) * weath_unit) -
-	     (weather->precip)) / weath_unit;
+	    (weather->precip)) / weath_unit;
 	dW += climate_factor *
 	    (((weather->climate_wind - 2) * weath_unit) -
-	     (weather->wind)) / weath_unit;
+	    (weather->wind)) / weath_unit;
 
 	/* Add in effects from neighboring areas */
 	for (neigh = weather->first_neighbor; neigh; neigh = neigh->next) {
@@ -3465,38 +3423,38 @@ void adjust_vectors(WEATHER_DATA * weather)
 			/* if couldn't find area ditch the neigh */
 			if (!neigh->address) {
 				NEIGHBOR_DATA *temp;
+
 				bug("adjust_weather: " "invalid area name.", 0);
 				temp = neigh->prev;
 				UNLINK(neigh,
-				       weather->first_neighbor,
-				       weather->last_neighbor, next, prev);
+				    weather->first_neighbor,
+				    weather->last_neighbor, next, prev);
 				STRFREE(neigh->name);
 				DISPOSE(neigh);
 				neigh = temp;
 				continue;
 			}
 		}
-
 		dT += (neigh->address->weather->temp -
-		       weather->temp) / neigh_factor;
+		    weather->temp) / neigh_factor;
 		dP += (neigh->address->weather->precip -
-		       weather->precip) / neigh_factor;
+		    weather->precip) / neigh_factor;
 		dW += (neigh->address->weather->wind -
-		       weather->wind) / neigh_factor;
+		    weather->wind) / neigh_factor;
 	}
 
 	/* now apply the effects to the vectors */
-	weather->temp_vector += (int)dT;
-	weather->precip_vector += (int)dP;
-	weather->wind_vector += (int)dW;
+	weather->temp_vector += (int) dT;
+	weather->precip_vector += (int) dP;
+	weather->wind_vector += (int) dW;
 
 	/* Make sure they are within the right range */
 	weather->temp_vector = URANGE(-max_vector,
-				      weather->temp_vector, max_vector);
+	    weather->temp_vector, max_vector);
 	weather->precip_vector = URANGE(-max_vector,
-					weather->precip_vector, max_vector);
+	    weather->precip_vector, max_vector);
 	weather->wind_vector = URANGE(-max_vector,
-				      weather->wind_vector, max_vector);
+	    weather->wind_vector, max_vector);
 
 	return;
 }
@@ -3506,16 +3464,17 @@ void adjust_vectors(WEATHER_DATA * weather)
  * Last Modified: July 31, 1997
  * Fireblade
  */
-void weather_update()
+void 
+weather_update()
 {
 	AREA_DATA *pArea;
 	DESCRIPTOR_DATA *d;
-	int limit;
+	int 	limit;
 
 	limit = 3 * weath_unit;
 
 	for (pArea = first_area; pArea;
-	     pArea = (pArea == last_area) ? first_build : pArea->next) {
+	    pArea = (pArea == last_area) ? first_build : pArea->next) {
 		/* Apply vectors to fields */
 		pArea->weather->temp += pArea->weather->temp_vector;
 		pArea->weather->precip += pArea->weather->precip_vector;
@@ -3523,18 +3482,18 @@ void weather_update()
 
 		/* Make sure they are within the proper range */
 		pArea->weather->temp = URANGE(-limit,
-					      pArea->weather->temp, limit);
+		    pArea->weather->temp, limit);
 		pArea->weather->precip = URANGE(-limit,
-						pArea->weather->precip, limit);
+		    pArea->weather->precip, limit);
 		pArea->weather->wind = URANGE(-limit,
-					      pArea->weather->wind, limit);
+		    pArea->weather->wind, limit);
 
 		/* get an appropriate echo for the area */
 		get_weather_echo(pArea->weather);
 	}
 
 	for (pArea = first_area; pArea;
-	     pArea = (pArea == last_area) ? first_build : pArea->next) {
+	    pArea = (pArea == last_area) ? first_build : pArea->next) {
 		adjust_vectors(pArea->weather);
 	}
 
@@ -3564,12 +3523,13 @@ void weather_update()
  * Last Modified: August 10, 1997
  * Fireblade
  */
-void get_weather_echo(WEATHER_DATA * weath)
+void 
+get_weather_echo(WEATHER_DATA * weath)
 {
-	int n;
-	int temp, precip, wind;
-	int dT, dP, dW;
-	int tindex, pindex, windex;
+	int 	n;
+	int 	temp, precip, wind;
+	int 	dT, dP, dW;
+	int 	tindex, pindex, windex;
 
 	/* set echo to be nothing */
 	weath->echo = NULL;
@@ -3595,11 +3555,11 @@ void get_weather_echo(WEATHER_DATA * weath)
 	switch (pindex) {
 	case 0:
 		if (precip - dP > -2 * weath_unit) {
-			char *echo_strings[4] = {
+			char   *echo_strings[4] = {
 				"The clouds disappear.\n\r",
 				"The clouds disappear.\n\r",
 				"The sky begins to break through "
-				    "the clouds.\n\r",
+				"the clouds.\n\r",
 				"The clouds are slowly " "evaporating.\n\r"
 			};
 
@@ -3610,13 +3570,14 @@ void get_weather_echo(WEATHER_DATA * weath)
 
 	case 1:
 		if (precip - dP <= -2 * weath_unit) {
-			char *echo_strings[4] = {
+			char   *echo_strings[4] = {
 				"The sky is getting cloudy.\n\r",
 				"The sky is getting cloudy.\n\r",
 				"Light clouds cast a haze over " "the sky.\n\r",
 				"Billows of clouds spread through "
-				    "the sky.\n\r"
+				"the sky.\n\r"
 			};
+
 			weath->echo = echo_strings[n];
 			weath->echo_color = AT_GREY;
 		}
@@ -3625,22 +3586,24 @@ void get_weather_echo(WEATHER_DATA * weath)
 	case 2:
 		if (precip - dP > 0) {
 			if (tindex > 1) {
-				char *echo_strings[4] = {
+				char   *echo_strings[4] = {
 					"The rain stops.\n\r",
 					"The rain stops.\n\r",
 					"The rainstorm tapers " "off.\n\r",
 					"The rain's intensity " "breaks.\n\r"
 				};
+
 				weath->echo = echo_strings[n];
 				weath->echo_color = AT_CYAN;
 			} else {
-				char *echo_strings[4] = {
+				char   *echo_strings[4] = {
 					"The snow stops.\n\r",
 					"The snow stops.\n\r",
 					"The snow showers taper " "off.\n\r",
 					"The snow flakes disappear "
-					    "from the sky.\n\r"
+					"from the sky.\n\r"
 				};
+
 				weath->echo = echo_strings[n];
 				weath->echo_color = AT_WHITE;
 			}
@@ -3650,48 +3613,52 @@ void get_weather_echo(WEATHER_DATA * weath)
 	case 3:
 		if (precip - dP <= 0) {
 			if (tindex > 1) {
-				char *echo_strings[4] = {
+				char   *echo_strings[4] = {
 					"It starts to rain.\n\r",
 					"It starts to rain.\n\r",
 					"A droplet of rain falls "
-					    "upon you.\n\r",
+					"upon you.\n\r",
 					"The rain begins to " "patter.\n\r"
 				};
+
 				weath->echo = echo_strings[n];
 				weath->echo_color = AT_CYAN;
 			} else {
-				char *echo_strings[4] = {
+				char   *echo_strings[4] = {
 					"It starts to snow.\n\r",
 					"It starts to snow.\n\r",
 					"Crystal flakes begin to "
-					    "fall from the " "sky.\n\r",
+					"fall from the " "sky.\n\r",
 					"Snow flakes drift down "
-					    "from the clouds.\n\r"
+					"from the clouds.\n\r"
 				};
+
 				weath->echo = echo_strings[n];
 				weath->echo_color = AT_WHITE;
 			}
 		} else if (tindex < 2 && temp - dT > -weath_unit) {
-			char *echo_strings[4] = {
+			char   *echo_strings[4] = {
 				"The temperature drops and the rain "
-				    "becomes a light snow.\n\r",
+				"becomes a light snow.\n\r",
 				"The temperature drops and the rain "
-				    "becomes a light snow.\n\r",
+				"becomes a light snow.\n\r",
 				"Flurries form as the rain freezes.\n\r",
 				"Large snow flakes begin to fall "
-				    "with the rain.\n\r"
+				"with the rain.\n\r"
 			};
+
 			weath->echo = echo_strings[n];
 			weath->echo_color = AT_WHITE;
 		} else if (tindex > 1 && temp - dT <= -weath_unit) {
-			char *echo_strings[4] = {
+			char   *echo_strings[4] = {
 				"The snow flurries are gradually "
-				    "replaced by pockets of rain.\n\r",
+				"replaced by pockets of rain.\n\r",
 				"The snow flurries are gradually "
-				    "replaced by pockets of rain.\n\r",
+				"replaced by pockets of rain.\n\r",
 				"The falling snow turns to a cold drizzle.\n\r",
 				"The snow turns to rain as the air warms.\n\r"
 			};
+
 			weath->echo = echo_strings[n];
 			weath->echo_color = AT_CYAN;
 		}
@@ -3700,36 +3667,39 @@ void get_weather_echo(WEATHER_DATA * weath)
 	case 4:
 		if (precip - dP > 2 * weath_unit) {
 			if (tindex > 1) {
-				char *echo_strings[4] = {
+				char   *echo_strings[4] = {
 					"The lightning has stopped.\n\r",
 					"The lightning has stopped.\n\r",
 					"The sky settles, and the "
-					    "thunder surrenders.\n\r",
+					"thunder surrenders.\n\r",
 					"The lightning bursts fade as "
-					    "the storm weakens.\n\r"
+					"the storm weakens.\n\r"
 				};
+
 				weath->echo = echo_strings[n];
 				weath->echo_color = AT_GREY;
 			}
 		} else if (tindex < 2 && temp - dT > -weath_unit) {
-			char *echo_strings[4] = {
+			char   *echo_strings[4] = {
 				"The cold rain turns to snow.\n\r",
 				"The cold rain turns to snow.\n\r",
 				"Snow flakes begin to fall "
-				    "amidst the rain.\n\r",
+				"amidst the rain.\n\r",
 				"The driving rain begins to freeze.\n\r"
 			};
+
 			weath->echo = echo_strings[n];
 			weath->echo_color = AT_WHITE;
 		} else if (tindex > 1 && temp - dT <= -weath_unit) {
-			char *echo_strings[4] = {
+			char   *echo_strings[4] = {
 				"The snow becomes a freezing rain.\n\r",
 				"The snow becomes a freezing rain.\n\r",
 				"A cold rain beats down on you "
-				    "as the snow begins to melt.\n\r",
+				"as the snow begins to melt.\n\r",
 				"The snow is slowly replaced by a heavy "
-				    "rain.\n\r"
+				"rain.\n\r"
 			};
+
 			weath->echo = echo_strings[n];
 			weath->echo_color = AT_CYAN;
 		}
@@ -3738,42 +3708,45 @@ void get_weather_echo(WEATHER_DATA * weath)
 	case 5:
 		if (precip - dP <= 2 * weath_unit) {
 			if (tindex > 1) {
-				char *echo_strings[4] = {
+				char   *echo_strings[4] = {
 					"Lightning flashes in the " "sky.\n\r",
 					"Lightning flashes in the " "sky.\n\r",
 					"A flash of lightning splits "
-					    "the sky.\n\r",
+					"the sky.\n\r",
 					"The sky flashes, and the "
-					    "ground trembles with "
-					    "thunder.\n\r"
+					"ground trembles with "
+					"thunder.\n\r"
 				};
+
 				weath->echo = echo_strings[n];
 				weath->echo_color = AT_YELLOW;
 			}
 		} else if (tindex > 1 && temp - dT <= -weath_unit) {
-			char *echo_strings[4] = {
+			char   *echo_strings[4] = {
 				"The sky rumbles with thunder as "
-				    "the snow changes to rain.\n\r",
+				"the snow changes to rain.\n\r",
 				"The sky rumbles with thunder as "
-				    "the snow changes to rain.\n\r",
+				"the snow changes to rain.\n\r",
 				"The falling turns to freezing rain "
-				    "amidst flashes of " "lightning.\n\r",
+				"amidst flashes of " "lightning.\n\r",
 				"The falling snow begins to melt as "
-				    "thunder crashes overhead.\n\r"
+				"thunder crashes overhead.\n\r"
 			};
+
 			weath->echo = echo_strings[n];
 			weath->echo_color = AT_WHITE;
 		} else if (tindex < 2 && temp - dT > -weath_unit) {
-			char *echo_strings[4] = {
+			char   *echo_strings[4] = {
 				"The lightning stops as the rainstorm "
-				    "becomes a blinding " "blizzard.\n\r",
+				"becomes a blinding " "blizzard.\n\r",
 				"The lightning stops as the rainstorm "
-				    "becomes a blinding " "blizzard.\n\r",
+				"becomes a blinding " "blizzard.\n\r",
 				"The thunder dies off as the "
-				    "pounding rain turns to " "heavy snow.\n\r",
+				"pounding rain turns to " "heavy snow.\n\r",
 				"The cold rain turns to snow and "
-				    "the lightning stops.\n\r"
+				"the lightning stops.\n\r"
 			};
+
 			weath->echo = echo_strings[n];
 			weath->echo_color = AT_CYAN;
 		}
@@ -3795,10 +3768,11 @@ void get_weather_echo(WEATHER_DATA * weath)
  * Last Modified: August 10, 1997
  * Fireblade
  */
-void get_time_echo(WEATHER_DATA * weath)
+void 
+get_time_echo(WEATHER_DATA * weath)
 {
-	int n;
-	int pindex;
+	int 	n;
+	int 	pindex;
 
 	n = number_bits(2);
 	pindex = (weath->precip + 3 * weath_unit - 1) / weath_unit;
@@ -3808,12 +3782,13 @@ void get_time_echo(WEATHER_DATA * weath)
 	switch (time_info.hour) {
 	case 5:
 		{
-			char *echo_strings[4] = {
+			char   *echo_strings[4] = {
 				"The day has begun.\n\r",
 				"The day has begun.\n\r",
 				"The sky slowly begins to glow.\n\r",
 				"The sun slowly embarks upon a new day.\n\r"
 			};
+
 			time_info.sunlight = SUN_RISE;
 			weath->echo = echo_strings[n];
 			weath->echo_color = AT_YELLOW;
@@ -3821,12 +3796,13 @@ void get_time_echo(WEATHER_DATA * weath)
 		}
 	case 6:
 		{
-			char *echo_strings[4] = {
+			char   *echo_strings[4] = {
 				"The sun rises in the east.\n\r",
 				"The sun rises in the east.\n\r",
 				"The hazy sun rises over the horizon.\n\r",
 				"Day breaks as the sun lifts into the sky.\n\r"
 			};
+
 			time_info.sunlight = SUN_LIGHT;
 			weath->echo = echo_strings[n];
 			weath->echo_color = AT_ORANGE;
@@ -3837,12 +3813,13 @@ void get_time_echo(WEATHER_DATA * weath)
 			if (pindex > 0) {
 				weath->echo = "It's noon.\n\r";
 			} else {
-				char *echo_strings[2] = {
+				char   *echo_strings[2] = {
 					"The intensity of the sun "
-					    "heralds the noon hour.\n\r",
+					"heralds the noon hour.\n\r",
 					"The sun's bright rays beat down "
-					    "upon your shoulders.\n\r"
+					"upon your shoulders.\n\r"
 				};
+
 				weath->echo = echo_strings[n % 2];
 			}
 			time_info.sunlight = SUN_LIGHT;
@@ -3851,14 +3828,15 @@ void get_time_echo(WEATHER_DATA * weath)
 		}
 	case 19:
 		{
-			char *echo_strings[4] = {
+			char   *echo_strings[4] = {
 				"The sun slowly disappears in the west.\n\r",
 				"The reddish sun sets past the horizon.\n\r",
 				"The sky turns a reddish orange as the sun "
-				    "ends its journey.\n\r",
+				"ends its journey.\n\r",
 				"The sun's radiance dims as it sinks in the "
-				    "sky.\n\r"
+				"sky.\n\r"
 			};
+
 			time_info.sunlight = SUN_SET;
 			weath->echo = echo_strings[n];
 			weath->echo_color = AT_RED;
@@ -3867,18 +3845,20 @@ void get_time_echo(WEATHER_DATA * weath)
 	case 20:
 		{
 			if (pindex > 0) {
-				char *echo_strings[2] = {
+				char   *echo_strings[2] = {
 					"The night begins.\n\r",
 					"Twilight descends around you.\n\r"
 				};
+
 				weath->echo = echo_strings[n % 2];
 			} else {
-				char *echo_strings[2] = {
+				char   *echo_strings[2] = {
 					"The moon's gentle glow diffuses "
-					    "through the night sky.\n\r",
+					"through the night sky.\n\r",
 					"The night sky gleams with "
-					    "glittering starlight.\n\r"
+					"glittering starlight.\n\r"
 				};
+
 				weath->echo = echo_strings[n % 2];
 			}
 			time_info.sunlight = SUN_DARK;
@@ -3893,10 +3873,11 @@ void get_time_echo(WEATHER_DATA * weath)
 /*
  * To change the phases of the moon
  */
-char *get_moon_echo(WEATHER_DATA * weath)
+char   *
+get_moon_echo(WEATHER_DATA * weath)
 {
 	switch (time_info.day) {
-	case 6:
+		case 6:
 		{
 			return ("&WA quarter of the moon is visable.\n\r");
 		}
@@ -3926,12 +3907,13 @@ char *get_moon_echo(WEATHER_DATA * weath)
 /*
  * update the time
  */
-void time_update()
+void
+time_update()
 {
 	AREA_DATA *pArea;
 	DESCRIPTOR_DATA *d;
 	WEATHER_DATA *weath;
-	char *buf[MAX_STRING_LENGTH];
+	char   *buf[MAX_STRING_LENGTH];
 	struct tm *time;
 
 	time = localtime(&current_time);
@@ -3946,7 +3928,7 @@ void time_update()
 	case 19:
 	case 20:
 		for (pArea = first_area; pArea;
-		     pArea = (pArea == last_area) ? first_build : pArea->next) {
+		    pArea = (pArea == last_area) ? first_build : pArea->next) {
 			get_time_echo(pArea->weather);
 		}
 
@@ -3973,7 +3955,7 @@ void time_update()
 	    && (time_info.day == 6 || time_info.day == 13
 		|| time_info.day == 21 || time_info.day == 29)) {
 		for (pArea = first_area; pArea;
-		     pArea = (pArea == last_area) ? first_build : pArea->next) {
+		    pArea = (pArea == last_area) ? first_build : pArea->next) {
 			*buf = get_moon_echo(pArea->weather);
 		}
 
@@ -3981,22 +3963,19 @@ void time_update()
 			if (d->connected == CON_PLAYING &&
 			    IS_OUTSIDE(d->character) &&
 			    IS_AWAKE(d->character)) {
-					continue;
+				continue;
 			}
 		}
 	}
-
 	if (time_info.day >= 30) {
 		time_info.day = 0;
 		time_info.month++;
 
 	}
-
 	if (time_info.month >= 17) {
 		time_info.month = 0;
 		time_info.year++;
 	}
-
 	if (time_info.lastRealMonth != time->tm_mon) {
 		ladderTableClear(time->tm_mon);
 
@@ -4004,6 +3983,6 @@ void time_update()
 		save_timedata();
 		save_hiscores();
 		echo_to_all(AT_YELLOW, "The new ladder race has begun!",
-			    ECHOTAR_ALL);
+		    ECHOTAR_ALL);
 	}
 }

@@ -29,7 +29,6 @@
 #include <sys/cdefs.h>
 #include <sys/time.h>
 #include <dlfcn.h>		/*this might not be necessary for your UNIX machine. */
-#include "chat/chatlink.h"
 
 typedef int ch_ret;
 typedef int obj_ret;

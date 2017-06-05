@@ -642,6 +642,16 @@ game_loop()
 					       fquit(d->character);
 					       continue;
 					  }
+					  /* new creation EOF catch */
+					  if (d->character) {
+						close_socket(d, true, true);
+						continue;
+					  /* odd state, no character but descriptor remains */
+					  } else {
+						close_socket(d, true, false);
+						continue;
+					  }
+					  log_string("made it to the end without clearing EOF");
 				     }
 				}
 				/* check for input from the dns */
@@ -806,8 +816,8 @@ new_descriptor(int new_desc)
 	dnew->user = STRALLOC("(unknown)");
 	dnew->newstate = 0;
 	dnew->prevcolor = 0x07;
-	dnew->ifd = -1;			/* Descriptor pipes, used for DNS
-					 * resolution and such */
+	/* descriptor pipes */
+	dnew->ifd = -1;		
 	dnew->ipid = -1;
 
 	CREATE(dnew->outbuf, char, dnew->outsize);
@@ -969,15 +979,18 @@ close_socket(DESCRIPTOR_DATA * dclose, bool force, bool clear)
 	if (clear) {
 		/* sanity check */
 		if (ch) {
-			log_string("character is non-null: freeing up character");
 			dclose->character->desc = NULL;
 			free_char(dclose->character);
 		} else {
 			log_string("bug: calling func thought char descriptor was free");
 		}
 	} else {
-		/* don't clear, extract_char will take care of it for us, NULL out the descriptor */
-		dclose->character->desc = NULL;
+	     /* don't clear, extract_char will take care of it for us, NULL out the descriptor */
+	     if (dclose->character) {
+		  if (dclose->character->desc) {
+		       dclose->character->desc = NULL;
+		  }
+	     }
 	}
 	if (!do_not_unlink) {
 		/* make sure loop doesn't get messed up */
