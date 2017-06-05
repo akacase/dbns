@@ -793,6 +793,22 @@ The bartender, Bernie, stands here behind the bar with a polished set of glasses
 0 0 0 0 0 0 0 0
 > greet_prog 100~
 say Before you ask, no. We don't serve sports drinks here bub.
+mpsleep 5
+mpecho &cBernie looks around uncomfortably.&d
+mpsleep 5
+say But listen, $n... If you're looking for something &Rinteresting&d&C, just let me know.&d
+mpsleep 5
+grin
+mpsleep 5
+say We've got some good loot tucked under the bar.
+~
+> speech_prog interesting~
+nod
+say Watch yourself, $n.
+mpechoat $n &YBernie flips a switch under the bar and leads you into a dark, dank room underneath.&d
+mpechoaround $n &YBernie flips a switch under the bar and leads $n into a secret passage.&d
+mptransfer $n 305001
+mpat 305001 mpforce $n look
 ~
 |
 #303935
@@ -873,6 +889,36 @@ A huge, flashing upgrade chamber sits here toward the rear of the room.
 0 0 0 0 0
 4 4 0 0 1 1 0
 0 0 0 0 0 0 0 0
+#305000
+shop len~
+Len~
+Len, the purveyor of ill-gotten goods, stands against the baby grand piano with folded arms.
+~
+~
+67108867 0 0 C
+1 0 100 1d20+0 2d5+0
+-1 1
+112 112 2
+100 10 10 10 10
+0 0 0 0 0
+0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0
+> greet_prog 100~
+peer $n
+mpsleep 5
+say Don't get too comfortable. Buy want you need and get the hell out.
+smirk
+mpsleep 5
+say Let me know when you're &Rdone&d.
+~
+> speech_prog done~
+mpecho &YLen opens the trapdoor and shoves you unceremoniously through.&d
+mpsleep 5
+say Later, nerd!
+mptransfer $n 304376
+mpat 304376 mpforce $n look
+~
+|
 #308900
 last mob~
 a newly created last mob~
@@ -1083,6 +1129,142 @@ A
 4 1
 A
 3 1
+#305000
+masterful gi~
+&WA Masterful Gi&d~
+A training gi of incredible quality was discarded here.~
+~
+9 0 9
+0 0 0 150 2500 2500
+1 100000 10000
+ 100000000
+A
+1 5
+A
+3 5
+A
+4 5
+A
+2 5
+#305001
+masterful headwrap~
+&WA Masterful Headwrap&d~
+An exquisite headwrap was discarded here.~
+~
+9 0 17
+0 0 0 150 500 500
+1 100000 10000
+ 100000000
+A
+3 3
+A
+1 3
+A
+4 3
+A
+2 3
+#305002
+masterful gloves~
+&WA pair of Masterful Gloves&d~
+A pair of comfortable gloves were discarded here.~
+~
+9 0 129
+0 0 0 150 500 500
+1 100000 10000
+ 100000000
+A
+1 3
+A
+2 3
+A
+3 3
+A
+4 3
+#305003
+masterful leggings~
+&WA pair of Masterful Leggings&d~
+A pair of comfortable leggings were discarded here.~
+~
+9 0 33
+0 0 0 150 2000 2000
+1 100000 10000
+ 100000000
+A
+1 5
+A
+2 5
+A
+3 5
+A
+4 5
+#305004
+masterful tabi~
+&WA pair of Masterful Ninja Tabi&d~
+Some tabi are just laying around here.~
+~
+9 0 65
+0 0 0 150 1500 1500
+1 100000 10000
+ 100000000
+A
+1 3
+A
+2 3
+A
+3 3
+A
+4 3
+#305005
+masterful armguards~
+&WA pair of Masterful Armguards&d~
+A pair of armguards are here collecting dust.~
+~
+9 0 257
+0 0 0 150 1500 1500
+1 100000 10000
+ 100000000
+A
+1 3
+A
+2 3
+A
+3 3
+A
+4 3
+#305006
+masterful belt~
+&WA Masterful Belt&d~
+A belt woven of fine fabric lies here.~
+~
+9 0 2049
+0 0 0 150 1000 1000
+1 100000 10000
+ 100000000
+A
+1 3
+A
+2 3
+A
+3 3
+A
+4 3
+#305007
+masterful shield~
+&WA Masterful Shield of Energy&d~
+A glimmering shield of energy is burning a hole through the floor.~
+~
+9 0 513
+0 0 0 150 2000 2000
+1 100000 10000
+ 100000000
+A
+1 5
+A
+2 5
+A
+3 5
+A
+4 5
 #308900
 last obj~
 a newly created last obj~
@@ -19168,14 +19350,29 @@ Floating in a void~
 0 4 1
 S
 #305000
-Floating in a void~
+Bernie's Secret Bunker~
+The room behind the bar opens into a massive space full of all manner of
+weapons and armour, dotting the walls and dangling from the ceiling.  A
+baby grand piano sits in the center, but upon closer inspection, it's
+actually full of nothing but guns and ammunition. 
 ~
 0 4 1
+D2
+~
+~
+0 -1 305001
 S
 #305001
-Floating in a void~
+A Dank Passage~
+The cramped passage leads further down a flight stairs into the dark
+unknown.  The entryway behind you has sealed, making your only option to
+continue forward. 
 ~
 0 4 1
+D0
+~
+~
+0 -1 305000
 S
 #305002
 Floating in a void~
@@ -39280,6 +39477,15 @@ M 1 303926 1 304575
 M 1 303926 1 304566
 M 1 303926 1 304565
 M 1 303926 1 304556
+M 1 305000 1 305000
+G 1 305006 1
+G 1 305000 1
+G 1 305001 1
+G 1 305007 1
+G 1 305005 1
+G 1 305002 1
+G 1 305003 1
+G 1 305004 1
 S
 
 
@@ -39287,6 +39493,7 @@ S
  303934    0  0  0  0  0   100  90         0 23    ; Bernie
  303936    0  0  0  0  0   100  90         0 23    ; An ESF Nurse
  303937    0  0  0  0  0   100  90         0 23    ; The Armorer
+ 305000    0  0  0  0  0   100   0         0 23    ; Len
 0
 
 
