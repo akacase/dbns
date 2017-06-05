@@ -644,10 +644,12 @@ game_loop()
 					  }
 					  /* new creation EOF catch */
 					  if (d->character) {
+						log_string("preparing to close socket at comm.c:647\n");
 						close_socket(d, true, true);
 						continue;
 					  /* odd state, no character but descriptor remains */
 					  } else {
+						log_string("preparing to close socket at comm.c:652\n");
 						close_socket(d, true, false);
 						continue;
 					  }
