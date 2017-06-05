@@ -707,11 +707,9 @@ game_loop()
 			  if (d->pagepoint)  {
 			       /* ignore ret value, runtime will clear out EPIPE or EOF */
 			       pager_output(d);
-			       d->outtop = 0;
 			  } else {
 			       /* ignore ret value, runtime will clear out EPIPE or EOF */
 			       flush_buffer(d, true);
-			       d->outtop = 0;
 			  }
 		     }
 		     if (d == last_descriptor)
@@ -4042,7 +4040,6 @@ pager_output(DESCRIPTOR_DATA * d)
 		return (false);
 	if (xIS_SET(ch->act, PLR_ANSI)) {
 		char 	buf[32];
-
 		sprintf(buf, "%s", color_str(d->pagecolor, ch));
 	}
 	return (ret);
@@ -4082,32 +4079,17 @@ check_total_ip(DESCRIPTOR_DATA * dnew)
 					return (false);
 			}
 		}
-#ifdef DNS_SLAVE
 		if (ch && !str_cmp(d->host, dnew->host)
 		    && vch->level >= sysdata.level_noplimit)
 			is_nolimit = true;
 
 		if (!linkdead && !str_cmp(d->host, dnew->host))
 			ip_total++;
-
-#else
-		if (ch && !str_cmp(d->host, dnew->host)
-		    && vch->level >= sysdata.level_noplimit)
-			is_nolimit = true;
-
-		if (!linkdead && !str_cmp(d->host, dnew->host))
-			ip_total++;
-
-#endif
-
 	}
-
 	if (is_nolimit)
 		return (false);
-
 	if (ip_total >= sysdata.plimit)
 		return (true);
-
 	return (false);
 }
 
