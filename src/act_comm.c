@@ -654,8 +654,6 @@ talk_channel(CHAR_DATA * ch, char *argument, int channel, const char *verb)
 		position = ch->position;
 		ch->position = POS_STANDING;
 		send_to_pager_color(buf, ch);
-		//pager_printf_color(ch, buf);
-		//act(AT_IMMORT, buf, ch, argument, NULL, TO_CHAR);
 		ch->position = position;
 		break;
 	case CHANNEL_ROLEPLAY:

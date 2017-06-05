@@ -2643,7 +2643,7 @@ send_to_char_color(const char *txt, CHAR_DATA * ch)
 void
 write_to_pager(DESCRIPTOR_DATA * d, const char *txt, int length)
 {
-	int 	pageroffset;		/* Pager fix by thoric */
+	int 	pageroffset;
 
 	if (length <= 0)
 		length = strlen(txt);
@@ -2663,8 +2663,8 @@ write_to_pager(DESCRIPTOR_DATA * d, const char *txt, int length)
 		d->pagebuf[1] = '\r';
 		d->pagetop = 2;
 	}
-	pageroffset = d->pagepoint - d->pagebuf;	/* pager fix (goofup
-							 * fixed 08/21/97) */
+	pageroffset = d->pagepoint - d->pagebuf;	
+
 	while (d->pagetop + length >= (int)d->pagesize) {
 		if (d->pagesize > 32000) {
 			bug("Pager overflow.  Ignoring.\n\r");
@@ -2677,9 +2677,7 @@ write_to_pager(DESCRIPTOR_DATA * d, const char *txt, int length)
 		d->pagesize *= 2;
 		RECREATE(d->pagebuf, char, d->pagesize);
 	}
-	d->pagepoint = d->pagebuf + pageroffset;	/* pager fix (goofup
-							 * fixed 08/21/97) */
-
+	d->pagepoint = d->pagebuf + pageroffset;	
 	strncpy(d->pagebuf + d->pagetop, txt, length);
 	d->pagetop += length;
 	d->pagebuf[d->pagetop] = '\0';
@@ -2748,7 +2746,7 @@ send_to_pager_color(const char *txt, CHAR_DATA * ch)
 		break;
 	}
 
-	/* Clear out old color stuff */
+	/* clear out old color stuff */
 	while ((colstr = strpbrk(prevstr, "&^}")) != NULL) {
 		if (colstr > prevstr)
 			write_to_pager(d, prevstr, (colstr - prevstr));
