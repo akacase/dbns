@@ -592,6 +592,7 @@ game_loop()
 {
 	struct timeval last_time;
 	char 	cmdline[MAX_INPUT_LENGTH];
+	bool    write_fail;
 	DESCRIPTOR_DATA *d;
 
 	signal(SIGSEGV, seg_vio);
@@ -699,31 +700,24 @@ game_loop()
 
 		/* output */
 		for (d = first_descriptor; d; d = d_next) {
-			d_next = d->next;
-			if ((d->fcommand || d->outtop > 0)
-			    && FD_ISSET(d->descriptor, &out_set)) {
-				if (d->pagepoint) {
-					if (!pager_output(d)) {
-						if (d->character
-						    && (d->connected == CON_PLAYING
-							|| d->connected == CON_EDITING))
-							save_char_obj(d->character);
-						d->outtop = 0;
-						log_string("preparing to close socket at comm.c:731\n");
-						close_socket(d, false, true);
-					}
-				} else if (!flush_buffer(d, true)) {
-					if (d->character
-					    && (d->connected == CON_PLAYING
-						|| d->connected == CON_EDITING))
-						save_char_obj(d->character);
-					d->outtop = 0;
-					log_string("preparing to close socket at comm.c:740\n");
-					close_socket(d, false, true);
-				}
-			}
-			if (d == last_descriptor)
-				break;
+		     d_next = d->next;
+		     if ((d->fcommand || d->outtop > 0)
+		       && FD_ISSET(d->descriptor, &out_set)) {
+			  if (d->pagepoint)  {
+			       /* ignore ret value, runtime will clear out EPIPE or EOF */
+			       write_fail = pager_output(d);
+			       if (write_fail)
+				    log_string("output failed, handler should take care of connection");
+				  
+			  } else {
+			       /* ignore ret value, runtime will clear out EPIPE or EOF */
+			       flush_buffer(d, true);
+			       if (write_fail)
+				    log_string("output failed, handler should take care of connection");
+			  }
+		     }
+		     if (d == last_descriptor)
+			  break;
 		}
 
 		/*
@@ -896,7 +890,6 @@ close_socket(DESCRIPTOR_DATA * dclose, bool force, bool clear)
 	DESCRIPTOR_DATA *d;
 	bool do_not_unlink = false;
 
-	log_string("in close_socket func");
 	if (!dclose) {
 	     return;
 	}
@@ -3490,13 +3483,7 @@ display_prompt(DESCRIPTOR_DATA * d)
 		d->prevcolor = 0x07;
 		pbuf += 7;
 	}
-	/* Clear out old color stuff */
-/*  make_color_sequence(NULL, NULL, NULL);*/
 	for (; *prompt; prompt++) {
-		/*
-	         * '%' = prompt commands
-	         * Note: foreground changes will revert background to 0 (black)
-	         */
 		if (*prompt != '%') {
 			*(pbuf++) = *prompt;
 			continue;
@@ -3750,8 +3737,6 @@ display_prompt(DESCRIPTOR_DATA * d)
 				stat = ch->focus;
 				break;
 			}
-
-
 			if (stat != 0x80000000) {
 				if (stat >= 1000)
 					sprintf(pbuf, "%s", num_punct(stat));
