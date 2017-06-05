@@ -592,7 +592,7 @@ game_loop()
 {
 	struct timeval last_time;
 	char 	cmdline[MAX_INPUT_LENGTH];
-	bool    write_fail;
+	bool    write_fail = false;
 	DESCRIPTOR_DATA *d;
 
 	signal(SIGSEGV, seg_vio);
@@ -711,7 +711,7 @@ game_loop()
 				  
 			  } else {
 			       /* ignore ret value, runtime will clear out EPIPE or EOF */
-			       flush_buffer(d, true);
+			       write_fail = flush_buffer(d, true);
 			       if (write_fail)
 				    log_string("output failed, handler should take care of connection");
 			  }
