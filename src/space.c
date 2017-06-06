@@ -1134,7 +1134,6 @@ fread_ship(SHIP_DATA * ship, FILE *fp)
 bool 
 load_ship_file(char *shipfile)
 {
-	char 	filename[256];
 	SHIP_DATA *ship;
 	FILE   *fp;
 	bool 	found;
@@ -1143,10 +1142,7 @@ load_ship_file(char *shipfile)
 	CREATE(ship, SHIP_DATA, 1);
 
 	found = false;
-	sprintf(filename, "%s%s", SHIP_DIR, shipfile);
-
-	if ((fp = fopen(filename, "r")) != NULL) {
-
+	if ((fp = fopen(shipfile, "r")) != NULL) {
 		found = true;
 		for (;;) {
 			char 	letter;
@@ -1182,7 +1178,6 @@ load_ship_file(char *shipfile)
 	else {
 		LINK(ship, first_ship, last_ship, next, prev);
 		if (!str_cmp("Public", ship->owner) || ship->type == MOB_SHIP) {
-
 			if (ship->class != SHIP_PLATFORM && ship->type != MOB_SHIP && ship->class != CAPITAL_SHIP) {
 				extract_ship(ship);
 				ship_to_room(ship, ship->shipyard);
@@ -1216,8 +1211,6 @@ load_ship_file(char *shipfile)
 			ship->autorecharge = false;
 			ship->autotrack = false;
 			ship->autospeed = false;
-
-
 		} else if (ship->cockpit == ROOM_SHUTTLE_BUS ||
 			    ship->cockpit == ROOM_SHUTTLE_BUS_2 ||
 			    ship->cockpit == ROOM_SENATE_SHUTTLE ||
@@ -1261,7 +1254,8 @@ void
 load_ships()
 {
 	FILE   *fpList;
-	char   *filename;
+	char    filename[MAX_STRING_LENGTH];
+	char    ship[MAX_STRING_LENGTH];
 	char 	shiplist[256];
 	char 	buf[MAX_STRING_LENGTH];
 
@@ -1280,18 +1274,18 @@ load_ships()
 	}
 	for (;;) {
 
-		filename = feof(fpList) ? "$" : fread_word(fpList);
-
-		if (filename[0] == '$')
+		snprintf(ship, sizeof(ship), "%s", fread_word(fpList));
+		snprintf(filename, sizeof(filename), "%s%s", SPACE_DIR, ship);
+		if (ship[0] == '$')
 			break;
-
+		printf("%s\n", filename);
 		if (!load_ship_file(filename)) {
 			sprintf(buf, "Cannot load ship file: %s", filename);
 			bug(buf, 0);
 		}
 	}
 	fclose(fpList);
-	log_string(" Done ships ");
+	log_string("Done ships");
 	return;
 }
 
@@ -3856,11 +3850,7 @@ do_ships(CHAR_DATA * ch, char *argument)
 			else
 				set_char_color(AT_BLUE, ch);
 
-			if (ship->in_room)
-				pager_printf_color(ch, "%s (%s) - %s\n\r", ship->name, ship->in_room->name);
-			else
-				pager_printf_color(ch, "%s (%s)\n\r", ship->name);
-
+			pager_printf_color(ch, "%s (%s)\n\r", ship->name);
 			count++;
 		}
 
@@ -3875,7 +3865,6 @@ do_ships(CHAR_DATA * ch, char *argument)
 	for (ship = first_ship; ship; ship = ship->next) {
 		if (ship->location != ch->in_room->vnum || ship->class > SHIP_PLATFORM)
 			continue;
-
 		if (ship->type == MOB_SHIP)
 			continue;
 		else if (ship->type == SHIP_REPUBLIC)
@@ -3896,10 +3885,8 @@ do_ships(CHAR_DATA * ch, char *argument)
 			pager_printf_color(ch, "%s", "\n\r");
 		else
 			pager_printf_color(ch, "%s to buy.\n\r", num_punct(get_ship_value(ship)));
-
 		count++;
 	}
-
 	if (!count) {
 		send_to_pager_color("There are no ships docked here.\n\r", ch);
 	}

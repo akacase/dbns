@@ -1282,7 +1282,6 @@ write_to_descriptor(int desc, char *txt, int length)
 		i_err = errno;
 		/* broken pipe (linkdead) */
 		if (i_err == EPIPE) {
-			logmsg(LOG_INFO, "broken pipe");
 			return (false);
 
 		} else if (n_write < 0) {
