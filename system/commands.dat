@@ -3228,14 +3228,6 @@ Log         0
 End
 
 #COMMAND
-Name        pager~
-Code        do_pager
-Position    100
-Level       1
-Log         0
-End
-
-#COMMAND
 Name        pagelength~
 Code        do_pagelen
 Position    100
