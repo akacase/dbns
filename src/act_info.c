@@ -6950,37 +6950,6 @@ do_whois(CHAR_DATA * ch, char *argument)
 	}
 }
 
-void
-do_pager(CHAR_DATA * ch, char *argument)
-{
-	char arg[MAX_INPUT_LENGTH];
-
-	if (IS_NPC(ch))
-		return;
-	set_char_color(AT_NOTE, ch);
-	argument = one_argument(argument, arg);
-	if (!*arg) {
-		if (IS_SET(ch->pcdata->flags, PCFLAG_PAGERON)) {
-			send_to_char("Pager disabled.\n\r", ch);
-			do_config(ch, "-pager");
-		} else {
-			ch_printf(ch, "Pager is now enabled at %d lines.\n\r",
-			    ch->pcdata->pagerlen);
-			do_config(ch, "+pager");
-		}
-		return;
-	}
-	if (!is_number(arg)) {
-		send_to_char("Set page pausing to how many lines?\n\r", ch);
-		return;
-	}
-	ch->pcdata->pagerlen = atoi(arg);
-	if (ch->pcdata->pagerlen < 5)
-		ch->pcdata->pagerlen = 5;
-	ch_printf(ch, "Page pausing set to %d lines.\n\r",
-	    ch->pcdata->pagerlen);
-}
-
 /*
  * The ignore command allows players to ignore up to MAX_IGN
  * other players. Players may ignore other characters whether

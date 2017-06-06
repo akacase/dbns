@@ -2521,7 +2521,6 @@ fquit(CHAR_DATA * ch)
 	/* just incase */
 	if (IS_NPC(ch))
 		return;
-	save_char_obj(ch);
 	while ((o = carrying_noquit(ch)) != NULL) {
 		obj_from_char(o);
 		obj_to_room(o, ch->in_room);

@@ -97,8 +97,6 @@ void read_from_buffer(DESCRIPTOR_DATA * d);
 void free_desc(DESCRIPTOR_DATA * d);
 void display_prompt(DESCRIPTOR_DATA * d);
 int make_color_sequence(const char *col, char *buf, DESCRIPTOR_DATA * d);
-void set_pager_input(DESCRIPTOR_DATA * d, char *argument);
-bool pager_output(DESCRIPTOR_DATA * d);
 void mail_count(CHAR_DATA * ch);
 void tax_player(CHAR_DATA * ch);
 void mccp_interest(CHAR_DATA * ch);
@@ -291,6 +289,7 @@ init_socket(int port)
 {
 	char 	hostname[64];
 	struct sockaddr_in sa;
+	struct	linger	ld;
 	int 	x = 1;
 	int 	fd;
 
@@ -300,19 +299,22 @@ init_socket(int port)
 		perror("init_socket: socket");
 		exit(1);
 	}
-	/* reuse addr for reconnect */
 	if (setsockopt(fd, SOL_SOCKET, SO_REUSEADDR,
 		(void *) &x, sizeof(x)) < 0) {
 		perror("init_socket: SO_REUSEADDR");
 		closesocket(fd);
 		exit(1);
 	}
-	if((fcntl(fd, F_SETFL, O_NONBLOCK) < 0)) {
-		perror("init_socket: O_NONBLOCK");
-		closesocket(fd);
-		exit(1);
-	}
 
+	ld.l_onoff  = 1;
+	ld.l_linger = 1000;
+
+	if (setsockopt(fd, SOL_SOCKET, SO_LINGER,
+	    (void *) &ld, sizeof(ld) ) < 0) {
+	     perror("init_socket: SO_DONTLINGER");
+	     closesocket(fd);
+	     exit(1);
+	}
 	memset(&sa, '\0', sizeof(sa));
 	sa.sin_family = AF_INET;
 	sa.sin_port = htons(port);
@@ -666,8 +668,6 @@ game_loop()
 
 					if (d->character)
 						set_cur_char(d->character);
-					if (d->pagepoint)
-						set_pager_input(d, cmdline);
 					else
 						switch (d->connected) {
 						default:
@@ -696,12 +696,10 @@ game_loop()
 		     d_next = d->next;
 		     if ((d->fcommand || d->outtop > 0)
 		       && FD_ISSET(d->descriptor, &out_set)) {
-			  if (d->pagepoint)  {
 			       /* ignore ret value, runtime will clear out EPIPE or EOF */
-			       pager_output(d);
-			  } else {
-			       /* ignore ret value, runtime will clear out EPIPE or EOF */
-			       flush_buffer(d, true);
+			       if(!flush_buffer(d, true)) {
+				    d->outtop = 0;
+			       }
 			  }
 		     }
 		     if (d == last_descriptor)
@@ -782,6 +780,11 @@ new_descriptor(int new_desc)
 
 	set_alarm(20);
 	alarm_section = "new_descriptor: after accept";
+	if (fcntl(desc, F_SETFL, O_NONBLOCK) == -1) {
+	     perror("new_descriptor: fcntl: O_NONBLOCK");
+	     set_alarm(0);
+	     return;
+	}
 	if (check_bad_desc(new_desc))
 		return;
 
@@ -2416,7 +2419,6 @@ nanny(DESCRIPTOR_DATA * d, char *argument)
 			ch->was_in_room = get_room_index(ROOM_VNUM_TEMPLE);
 		else if (!ch->was_in_room)
 			ch->was_in_room = ch->in_room;
-
 		break;
 	case CON_NOTE_TO:
 		handle_con_note_to(d, argument);
@@ -2629,51 +2631,6 @@ send_to_char_color(const char *txt, CHAR_DATA * ch)
 	}
 	if (*prevstr)
 		write_to_buffer(d, prevstr, 0);
-	return;
-}
-
-void
-write_to_pager(DESCRIPTOR_DATA * d, const char *txt, int length)
-{
-	int 	pageroffset;
-
-	if (length <= 0)
-		length = strlen(txt);
-	if (length == 0)
-		return;
-	if (!d->pagebuf) {
-		d->pagesize = MAX_STRING_LENGTH;
-		CREATE(d->pagebuf, char, d->pagesize);
-	}
-	if (!d->pagepoint) {
-		d->pagepoint = d->pagebuf;
-		d->pagetop = 0;
-		d->pagecmd = '\0';
-	}
-	if (d->pagetop == 0 && !d->fcommand) {
-		d->pagebuf[0] = '\n';
-		d->pagebuf[1] = '\r';
-		d->pagetop = 2;
-	}
-	pageroffset = d->pagepoint - d->pagebuf;	
-
-	while (d->pagetop + length >= (int)d->pagesize) {
-		if (d->pagesize > 32000) {
-			bug("Pager overflow.  Ignoring.\n\r");
-			d->pagetop = 0;
-			d->pagepoint = NULL;
-			DISPOSE(d->pagebuf);
-			d->pagesize = MAX_STRING_LENGTH;
-			return;
-		}
-		d->pagesize *= 2;
-		RECREATE(d->pagebuf, char, d->pagesize);
-	}
-	d->pagepoint = d->pagebuf + pageroffset;	
-	strncpy(d->pagebuf + d->pagetop, txt, length);
-	d->pagetop += length;
-	d->pagebuf[d->pagetop] = '\0';
-	return;
 }
 
 void
@@ -2691,10 +2648,6 @@ void
 send_to_pager_color(const char *txt, CHAR_DATA * ch)
 {
 	DESCRIPTOR_DATA *d;
-	char   *colstr;
-	const char *prevstr = txt;
-	char 	colbuf[20];
-	int 	ln;
 
 	if (!ch) {
 		bug("Send_to_pager_color: NULL *ch");
@@ -2704,55 +2657,7 @@ send_to_pager_color(const char *txt, CHAR_DATA * ch)
 		return;
 	d = ch->desc;
 	ch = d->original ? d->original : d->character;
-	if (IS_NPC(ch) || !IS_SET(ch->pcdata->flags, PCFLAG_PAGERON)) {
-		send_to_char_color(txt, d->character);
-		return;
-	}
-	switch (sysdata.outBytesFlag) {
-	default:
-		sysdata.outBytesOther += strlen(txt);
-		break;
-
-	case LOGBOUTCHANNEL:
-		sysdata.outBytesChannel += strlen(txt);
-		break;
-
-	case LOGBOUTCOMBAT:
-		sysdata.outBytesCombat += strlen(txt);
-		break;
-
-	case LOGBOUTMOVEMENT:
-		sysdata.outBytesMovement += strlen(txt);
-		break;
-
-	case LOGBOUTINFORMATION:
-		sysdata.outBytesInformation += strlen(txt);
-		break;
-
-	case LOGBOUTPROMPT:
-		sysdata.outBytesPrompt += strlen(txt);
-		break;
-
-	case LOGBOUTINFOCHANNEL:
-		sysdata.outBytesInfoChannel += strlen(txt);
-		break;
-	}
-
-	/* clear out old color stuff */
-	while ((colstr = strpbrk(prevstr, "&^}")) != NULL) {
-		if (colstr > prevstr)
-			write_to_pager(d, prevstr, (colstr - prevstr));
-		ln = make_color_sequence(colstr, colbuf, d);
-		if (ln < 0) {
-			prevstr = colstr + 1;
-			break;
-		} else if (ln > 0)
-			write_to_pager(d, colbuf, ln);
-		prevstr = colstr + 2;
-	}
-	if (*prevstr)
-		write_to_pager(d, prevstr, 0);
-	return;
+	send_to_char_color(txt, d->character);
 }
 
 sh_int
@@ -2792,7 +2697,6 @@ set_char_color(sh_int AType, CHAR_DATA * ch)
 			    (AType > 15 ? "5;" : ""), (AType & 7) + 30);
 		write_to_buffer(ch->desc, buf, strlen(buf));
 	}
-	return;
 }
 
 void
@@ -2815,15 +2719,12 @@ set_pager_color(sh_int AType, CHAR_DATA * ch)
 		send_to_pager(buf, ch);
 		ch->desc->pagecolor = AType;
 	}
-	return;
 }
 
-
-/* source: EOD, by John Booth <???> */
 void
 ch_printf(CHAR_DATA * ch, char *fmt,...)
 {
-	char 	buf[MAX_STRING_LENGTH * 2];	/* better safe than sorry */
+	char 	buf[MAX_STRING_LENGTH * 2];	
 	va_list args;
 
 	va_start(args, fmt);
@@ -2882,9 +2783,7 @@ obj_short(OBJ_DATA * obj)
 	return (obj->short_descr);
 }
 
-/*
- * The primary output interface for formatted output.
- */
+/* the primary output interface for formatted output. */
 void
 ch_printf_color(CHAR_DATA * ch, char *fmt,...)
 {
@@ -3947,93 +3846,6 @@ make_color_sequence(const char *col, char *code, DESCRIPTOR_DATA * d)
 	return (ln);
 }
 
-void
-set_pager_input(DESCRIPTOR_DATA * d, char *argument)
-{
-	while (isspace(*argument))
-		argument++;
-	d->pagecmd = *argument;
-	return;
-}
-
-bool
-pager_output(DESCRIPTOR_DATA * d)
-{
-	register char *last;
-	CHAR_DATA *ch;
-	int 	pclines;
-	register int lines;
-	bool 	ret;
-
-	if (!d || !d->pagepoint || d->pagecmd == -1)
-		return (true);
-	ch = d->original ? d->original : d->character;
-	pclines = UMAX(ch->pcdata->pagerlen, 5) - 1;
-	switch (LOWER(d->pagecmd)) {
-	default:
-		lines = 0;
-		break;
-	case 'b':
-		lines = -1 - (pclines * 2);
-		break;
-	case 'r':
-		lines = -1 - pclines;
-		break;
-	case 'n':
-		lines = 0;
-		pclines = 0x7FFFFFFF;	/* As many lines as possible */
-		break;
-	case 'q':
-		d->pagetop = 0;
-		d->pagepoint = NULL;
-		flush_buffer(d, true);
-		DISPOSE(d->pagebuf);
-		d->pagesize = MAX_STRING_LENGTH;
-		return (true);
-	}
-	while (lines < 0 && d->pagepoint >= d->pagebuf)
-		if (*(--d->pagepoint) == '\n')
-			++lines;
-	if (*d->pagepoint == '\n' && *(++d->pagepoint) == '\r')
-		++d->pagepoint;
-	if (d->pagepoint < d->pagebuf)
-		d->pagepoint = d->pagebuf;
-	for (lines = 0, last = d->pagepoint; lines < pclines; ++last)
-		if (!*last)
-			break;
-		else if (*last == '\n')
-			++lines;
-	if (*last == '\r')
-		++last;
-	if (last != d->pagepoint) {
-		if (!write_to_descriptor(d->descriptor, d->pagepoint,
-			(last - d->pagepoint)))
-			return (false);
-		d->pagepoint = last;
-	}
-	while (isspace(*last))
-		++last;
-	if (!*last) {
-		d->pagetop = 0;
-		d->pagepoint = NULL;
-		flush_buffer(d, true);
-		DISPOSE(d->pagebuf);
-		d->pagesize = MAX_STRING_LENGTH;
-		return (true);
-	}
-	d->pagecmd = -1;
-	if (xIS_SET(ch->act, PLR_ANSI))
-		if (write_to_descriptor(d->descriptor, ANSI_LBLUE, 0) == false)
-			return (false);
-	if ((ret = write_to_descriptor(d->descriptor,
-		    "(C)ontinue, (N)on-stop, (R)efresh, (B)ack, (Q)uit: [C] ", 0)) == false)
-		return (false);
-	if (xIS_SET(ch->act, PLR_ANSI)) {
-		char 	buf[32];
-		sprintf(buf, "%s", color_str(d->pagecolor, ch));
-	}
-	return (ret);
-}
 
 bool
 check_total_ip(DESCRIPTOR_DATA * dnew)

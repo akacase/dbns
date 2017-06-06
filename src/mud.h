@@ -4899,7 +4899,6 @@ DECLARE_DO_FUN (do_ot);
 DECLARE_DO_FUN (do_outcast);
 DECLARE_DO_FUN (do_owhere);
 DECLARE_DO_FUN (do_page);
-DECLARE_DO_FUN (do_pager);
 DECLARE_DO_FUN (do_pardon);
 DECLARE_DO_FUN (do_partner);
 DECLARE_DO_FUN (do_password);
@@ -5476,7 +5475,6 @@ void logmsg(int, const char *, ...);
 void close_socket(DESCRIPTOR_DATA * dclose, bool force, bool clear);
 void write_to_buffer args ((DESCRIPTOR_DATA * d, const char *txt,
     int length));
-void write_to_pager args ((DESCRIPTOR_DATA * d, const char *txt, int length));
 void send_to_char args ((const char *txt, CHAR_DATA * ch));
 void send_to_char_color args ((const char *txt, CHAR_DATA * ch));
 void send_to_pager args ((const char *txt, CHAR_DATA * ch));

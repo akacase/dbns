@@ -543,7 +543,6 @@ DO_FUN *skill_function( char *name )
       if ( !str_cmp( name, "do_pcquesting"                      ))    return do_pcquesting;
       if ( !str_cmp( name, "do_page"                      ))    return do_page;
       if ( !str_cmp( name, "do_pagelen"                   ))    return do_pagelen;
-      if ( !str_cmp( name, "do_pager"                     ))    return do_pager;
       if ( !str_cmp( name, "do_pardon"                    ))    return do_pardon;
       if ( !str_cmp( name, "do_partner"                   ))    return do_partner;
       if ( !str_cmp( name, "do_password"                  ))    return do_password;
@@ -1296,7 +1295,6 @@ char *skill_name( DO_FUN *skill )
       if ( skill == do_pcquesting                        )    return "do_pcquesting";
       if ( skill == do_page                        )    return "do_page";
       if ( skill == do_pagelen                     )    return "do_pagelen";
-      if ( skill == do_pager                       )    return "do_pager";
       if ( skill == do_pardon                      )    return "do_pardon";
       if ( skill == do_partner                     )    return "do_partner";
       if ( skill == do_password                    )    return "do_password";

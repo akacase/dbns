@@ -193,7 +193,6 @@ init_pfile_scan_time(void)
      new_pfile_time = &new_pfile_struct;
      /* Bug fix submitted by Gabe Yoder */
      new_pfile_time_t = mktime(new_pfile_time);
-     /* check_pfiles(mktime(new_pfile_time)); */
 
 #ifndef SOLANCODE
      if(!load_timedata())  {
