@@ -48,20 +48,18 @@ const char echo_on_str[] = {IAC, WONT, TELOPT_ECHO, '\0'};
 const char go_ahead_str[] = {IAC, GA, '\0'};
 
 /* external Functions */
-void shutdown_mud(char *reason);
+void 	shutdown_mud(char *reason);
 
 /* global variables */
-IMMORTAL_HOST *immortal_host_start;	/* Start of Immortal legal
-					    * domains */
-IMMORTAL_HOST *immortal_host_end;	/* End of Immortal legal
-					    * domains */
+IMMORTAL_HOST *immortal_host_start;	/* Start of Immortal legal domains */
+IMMORTAL_HOST *immortal_host_end;	/* End of Immortal legal domains */
 DESCRIPTOR_DATA *first_descriptor;	/* First descriptor		 */
 DESCRIPTOR_DATA *last_descriptor;	/* Last descriptor		 */
-DESCRIPTOR_DATA *d_next;	/* Next descriptor in loop	 */
+DESCRIPTOR_DATA *d_next;		/* Next descriptor in loop	 */
 int 	num_descriptors;
-bool 	mud_down;		/* Shutdown			 */
-bool 	service_shut_down;	/* Shutdown by operator closing down
-				    * service */
+bool 	mud_down;			/* Shutdown			 */
+bool 	service_shut_down;		/* Shutdown by operator closing down
+					 * service */
 bool 	wizlock;
 int 	locklev;
 time_t 	boot_time;
@@ -71,41 +69,41 @@ struct tm *new_boot_time;
 struct tm new_boot_struct;
 char 	str_boot_time[MAX_INPUT_LENGTH];
 char 	lastplayercmd[MAX_INPUT_LENGTH * 2];
-time_t 	current_time;		/* Time of this pulse		 */
-int 	control;		/* Controlling descriptor	 */
-int 	newdesc;		/* New descriptor		 */
-fd_set 	in_set;			/* Set of desc's for reading	 */
-fd_set 	out_set;		/* Set of desc's for writing	 */
-fd_set 	exc_set;		/* Set of desc's with errors	 */
+time_t 	current_time;			/* Time of this pulse		 */
+int 	control;			/* Controlling descriptor	 */
+int 	newdesc;			/* New descriptor		 */
+fd_set 	in_set;				/* Set of desc's for reading	 */
+fd_set 	out_set;			/* Set of desc's for writing	 */
+fd_set 	exc_set;			/* Set of desc's with errors	 */
 int 	maxdesc;
 char   *alarm_section = "(unknown)";
 
 /* protos */
-void game_loop();
-int init_socket(int port);
-void new_descriptor(int new_desc);
-bool read_from_descriptor (DESCRIPTOR_DATA * d);
-bool write_to_descriptor (int desc, char *txt, int length);
-bool check_parse_name(char *name, bool newchar);
-bool check_reconnect(DESCRIPTOR_DATA * d, char *name, bool fConn);
-bool check_playing(DESCRIPTOR_DATA * d, char *name);
-bool reconnect(DESCRIPTOR_DATA * d, char *name);
-int main (int argc, char **argv);
-void nanny (DESCRIPTOR_DATA * d, char *argument);
-bool flush_buffer (DESCRIPTOR_DATA * d, bool f_prompt);
-void read_from_buffer(DESCRIPTOR_DATA * d);
-void free_desc(DESCRIPTOR_DATA * d);
-void display_prompt(DESCRIPTOR_DATA * d);
-int make_color_sequence(const char *col, char *buf, DESCRIPTOR_DATA * d);
-void mail_count(CHAR_DATA * ch);
-void tax_player(CHAR_DATA * ch);
-void mccp_interest(CHAR_DATA * ch);
-bool check_total_ip(DESCRIPTOR_DATA * dnew);
-void usage(void);
+void 	game_loop();
+int 	init_socket(int port);
+void 	new_descriptor(int new_desc);
+bool 	read_from_descriptor(DESCRIPTOR_DATA * d);
+bool 	write_to_descriptor(int desc, char *txt, int length);
+bool 	check_parse_name(char *name, bool newchar);
+bool 	check_reconnect(DESCRIPTOR_DATA * d, char *name, bool fConn);
+bool 	check_playing(DESCRIPTOR_DATA * d, char *name);
+bool 	reconnect(DESCRIPTOR_DATA * d, char *name);
+int 	main(int argc, char **argv);
+void 	nanny(DESCRIPTOR_DATA * d, char *argument);
+bool 	flush_buffer(DESCRIPTOR_DATA * d, bool f_prompt);
+void 	read_from_buffer(DESCRIPTOR_DATA * d);
+void 	free_desc(DESCRIPTOR_DATA * d);
+void 	display_prompt(DESCRIPTOR_DATA * d);
+int 	make_color_sequence(const char *col, char *buf, DESCRIPTOR_DATA * d);
+void 	mail_count(CHAR_DATA * ch);
+void 	tax_player(CHAR_DATA * ch);
+void 	mccp_interest(CHAR_DATA * ch);
+bool 	check_total_ip(DESCRIPTOR_DATA * dnew);
+void 	usage(void);
 
 /* locals */
-bool debug = false;
-bool log_debug; 
+bool 	debug = false;
+bool 	log_debug;
 unsigned int port;
 
 __dead void
@@ -116,9 +114,10 @@ usage(void)
 }
 
 void
-logmsg(int pri, const char *message, ...)
+logmsg(int pri, const char *message,...)
 {
 	va_list ap;
+
 	va_start(ap, message);
 
 	if (log_debug) {
@@ -184,7 +183,7 @@ main(int argc, char **argv)
 	char 	hostn[128];
 	const char *locale = NULL;
 	const char *errstr = NULL;
-	int ch;
+	int 	ch;
 
 	while ((ch = getopt(argc, argv, "Dp:")) != -1) {
 		switch (ch) {
@@ -192,7 +191,10 @@ main(int argc, char **argv)
 			debug = true;
 			break;
 		case 'p':
-			/* minval and maxval correspond to unpriveledged ports */
+			/*
+			 * minval and maxval correspond to unpriveledged
+			 * ports
+			 */
 			port = strtonum(optarg, 1024, 65535, &errstr);
 			if (errstr)
 				usage();
@@ -203,7 +205,7 @@ main(int argc, char **argv)
 
 	}
 
-	locale = setlocale(LC_ALL, "en_US.UTF-8");	
+	locale = setlocale(LC_ALL, "en_US.UTF-8");
 	DONT_UPPER = false;
 	num_descriptors = 0;
 	first_descriptor = NULL;
@@ -211,13 +213,12 @@ main(int argc, char **argv)
 	sysdata.NO_NAME_RESOLVING = true;
 
 	if (port == 0) {
-          logmsg(LOG_ERR, "port must be set via -p flag");
-	  exit(1);
+		logmsg(LOG_ERR, "port must be set via -p flag");
+		exit(1);
 	} else if (port <= 1024) {
-          logmsg(LOG_ERR, "please select a port greater than 1024");
-	  exit(1);
+		logmsg(LOG_ERR, "please select a port greater than 1024");
+		exit(1);
 	}
-
 	if (!debug) {
 		openlog("dbns", LOG_PID | LOG_CONS, LOG_DAEMON);
 		if (daemon(0, 1)) {
@@ -225,7 +226,6 @@ main(int argc, char **argv)
 			    strerror(errno));
 		}
 	}
-
 	/* init time. */
 	gettimeofday(&now_time, NULL);
 	current_time = (time_t) now_time.tv_sec;
@@ -254,14 +254,13 @@ main(int argc, char **argv)
 	new_boot_struct = *new_boot_time;
 	new_boot_time = &new_boot_struct;
 	new_boot_time_t = mktime(new_boot_time);
-	init_pfile_scan_time();		
+	init_pfile_scan_time();
 
 	if ((fpLOG = fopen(NULL_FILE, "r")) == NULL) {
 		perror(NULL_FILE);
 		exit(1);
 	}
-
-        /* run the game. */
+	/* run the game. */
 	log_string("Booting Database");
 	boot_db();
 	log_string("Initializing socket");
@@ -289,7 +288,7 @@ init_socket(int port)
 {
 	char 	hostname[64];
 	struct sockaddr_in sa;
-	struct	linger	ld;
+	struct linger ld;
 	int 	x = 1;
 	int 	fd;
 
@@ -305,15 +304,14 @@ init_socket(int port)
 		closesocket(fd);
 		exit(1);
 	}
-
-	ld.l_onoff  = 1;
+	ld.l_onoff = 1;
 	ld.l_linger = 1000;
 
 	if (setsockopt(fd, SOL_SOCKET, SO_LINGER,
-	    (void *) &ld, sizeof(ld) ) < 0) {
-	     perror("init_socket: SO_DONTLINGER");
-	     closesocket(fd);
-	     exit(1);
+		(void *) &ld, sizeof(ld)) < 0) {
+		perror("init_socket: SO_DONTLINGER");
+		closesocket(fd);
+		exit(1);
 	}
 	memset(&sa, '\0', sizeof(sa));
 	sa.sin_family = AF_INET;
@@ -341,11 +339,11 @@ sig_quit()
 	for (ch = first_char; ch; ch = ch->next) {
 		if (!IS_NPC(ch))
 			save_char_obj(ch);
-			if (ch->desc) {
-				write_to_descriptor(ch->desc->descriptor, buf, 0);
-				write_to_descriptor(ch->desc->descriptor, "BRB -- going down for a minute or two.\n\r", 0);
-				write_to_descriptor(ch->desc->descriptor, "You have been saved to disk.\n\r", 0);
-			}
+		if (ch->desc) {
+			write_to_descriptor(ch->desc->descriptor, buf, 0);
+			write_to_descriptor(ch->desc->descriptor, "BRB -- going down for a minute or two.\n\r", 0);
+			write_to_descriptor(ch->desc->descriptor, "You have been saved to disk.\n\r", 0);
+		}
 	}
 	logmsg(LOG_ERR, "caught sigquit, hanging up");
 	exit(0);
@@ -360,11 +358,11 @@ sig_hup()
 	for (ch = first_char; ch; ch = ch->next) {
 		if (!IS_NPC(ch))
 			save_char_obj(ch);
-			if (ch->desc) {
-				write_to_descriptor(ch->desc->descriptor, buf, 0);
-				write_to_descriptor(ch->desc->descriptor, "BRB -- going down for a minute or two.\n\r", 0);
-				write_to_descriptor(ch->desc->descriptor, "You have been saved to disk.\n\r", 0);
-			}
+		if (ch->desc) {
+			write_to_descriptor(ch->desc->descriptor, buf, 0);
+			write_to_descriptor(ch->desc->descriptor, "BRB -- going down for a minute or two.\n\r", 0);
+			write_to_descriptor(ch->desc->descriptor, "You have been saved to disk.\n\r", 0);
+		}
 	}
 	logmsg(LOG_ERR, "caught sighup, hanging up");
 	exit(0);
@@ -379,11 +377,11 @@ sig_int()
 	for (ch = first_char; ch; ch = ch->next) {
 		if (!IS_NPC(ch))
 			save_char_obj(ch);
-			if (ch->desc) {
-				write_to_descriptor(ch->desc->descriptor, buf, 0);
-				write_to_descriptor(ch->desc->descriptor, "BRB -- going down for a minute or two.\n\r", 0);
-				write_to_descriptor(ch->desc->descriptor, "You have been saved to disk.\n\r", 0);
-			}
+		if (ch->desc) {
+			write_to_descriptor(ch->desc->descriptor, buf, 0);
+			write_to_descriptor(ch->desc->descriptor, "BRB -- going down for a minute or two.\n\r", 0);
+			write_to_descriptor(ch->desc->descriptor, "You have been saved to disk.\n\r", 0);
+		}
 	}
 	logmsg(LOG_ERR, "caught sigint, hanging up");
 	exit(0);
@@ -398,11 +396,11 @@ seg_vio()
 	for (ch = first_char; ch; ch = ch->next) {
 		if (!IS_NPC(ch))
 			save_char_obj(ch);
-			if (ch->desc) {
-				write_to_descriptor(ch->desc->descriptor, buf, 0);
-				write_to_descriptor(ch->desc->descriptor, "BRB -- going down for a minute or two.\n\r", 0);
-				write_to_descriptor(ch->desc->descriptor, "You have been saved to disk.\n\r", 0);
-			}
+		if (ch->desc) {
+			write_to_descriptor(ch->desc->descriptor, buf, 0);
+			write_to_descriptor(ch->desc->descriptor, "BRB -- going down for a minute or two.\n\r", 0);
+			write_to_descriptor(ch->desc->descriptor, "You have been saved to disk.\n\r", 0);
+		}
 	}
 	logmsg(LOG_ERR, "caught segvio, dumping");
 	exit(1);
@@ -590,22 +588,22 @@ game_loop()
 
 	signal(SIGSEGV, seg_vio);
 	signal(SIGKILL, sig_kill);
-	signal(SIGTERM, sig_term);	
-	signal(SIGINT, sig_int);	
-	signal(SIGHUP, sig_hup);	
-	signal(SIGQUIT, sig_quit);	
-	signal(SIGPIPE, SIG_IGN);	
+	signal(SIGTERM, sig_term);
+	signal(SIGINT, sig_int);
+	signal(SIGHUP, sig_hup);
+	signal(SIGQUIT, sig_quit);
+	signal(SIGPIPE, SIG_IGN);
 
 	gettimeofday(&last_time, NULL);
 	current_time = (time_t) last_time.tv_sec;
 
-	/* Main loop */
+	/* main loop */
 	while (!mud_down) {
 		accept_new(control);
 		/*
-		 * Kick out descriptors with raised exceptions
-		 * or have been idle, then check for input.
-		 */
+	         * Kick out descriptors with raised exceptions
+	         * or have been idle, then check for input.
+	         */
 		for (d = first_descriptor; d; d = d_next) {
 			if (d == d->next) {
 				bug("descriptor_loop: loop found & fixed");
@@ -627,32 +625,37 @@ game_loop()
 			} else {
 				d->fcommand = false;
 				if (FD_ISSET(d->descriptor, &in_set)) {
-				     if (!read_from_descriptor(d)) {
-					  FD_CLR(d->descriptor, &out_set);
-					  if (d->character
-					    && (d->connected == CON_PLAYING
-					      || d->connected == CON_EDITING)) {
-					       log_string("preparing to fquit comm.c:668\n");
-					       fquit(d->character);
-					       continue;
-					  }
-					  /* new creation EOF catch */
-					  if (d->character) {
-						log_string("preparing to close socket at comm.c:647\n");
-						close_socket(d, true, true);
-						continue;
-					  /* odd state, no character but descriptor remains */
-					  } else {
-						log_string("preparing to close socket at comm.c:652\n");
-						close_socket(d, true, false);
-						continue;
-					  }
-					  log_string("made it to the end without clearing EOF");
-				     }
+					if (!read_from_descriptor(d)) {
+						FD_CLR(d->descriptor, &out_set);
+						if (d->character
+						    && (d->connected == CON_PLAYING
+							|| d->connected == CON_EDITING)) {
+							log_string("preparing to fquit comm.c:668\n");
+							fquit(d->character);
+							continue;
+						}
+						/* new creation EOF catch */
+						if (d->character) {
+							log_string("preparing to close socket at comm.c:647\n");
+							close_socket(d, true, true);
+							continue;
+							/*
+							 * odd state, no
+							 * character but
+							 * descriptor
+							 * remains
+							 */
+						} else {
+							log_string("preparing to close socket at comm.c:652\n");
+							close_socket(d, true, false);
+							continue;
+						}
+						log_string("made it to the end without clearing EOF");
+					}
 				}
 				/* check for input from the dns */
 				if ((d->connected == CON_PLAYING
-				    || d->character != NULL)
+					|| d->character != NULL)
 				    && d->ifd != -1
 				    && FD_ISSET(d->ifd, &in_set))
 					process_dns(d);
@@ -668,18 +671,17 @@ game_loop()
 
 					if (d->character)
 						set_cur_char(d->character);
-					else
-						switch (d->connected) {
-						default:
-							nanny(d, cmdline);
-							break;
-						case CON_PLAYING:
-							interpret(d->character, cmdline);
-							break;
-						case CON_EDITING:
-							edit_buffer(d->character, cmdline);
-							break;
-						}
+					switch (d->connected) {
+					default:
+						nanny(d, cmdline);
+						break;
+					case CON_PLAYING:
+						interpret(d->character, cmdline);
+						break;
+					case CON_EDITING:
+						edit_buffer(d->character, cmdline);
+						break;
+					}
 				}
 			}
 			if (d == last_descriptor)
@@ -693,23 +695,25 @@ game_loop()
 
 		/* output */
 		for (d = first_descriptor; d; d = d_next) {
-		     d_next = d->next;
-		     if ((d->fcommand || d->outtop > 0)
-		       && FD_ISSET(d->descriptor, &out_set)) {
-			       /* ignore ret value, runtime will clear out EPIPE or EOF */
-			       if(!flush_buffer(d, true)) {
-				    d->outtop = 0;
-			       }
-			  }
-		     }
-		     if (d == last_descriptor)
-			  break;
+			d_next = d->next;
+			if ((d->fcommand || d->outtop > 0)
+			    && FD_ISSET(d->descriptor, &out_set)) {
+				/*
+				 * ignore ret value, runtime will clear out
+				 * EPIPE or EOF
+				 */
+				if (!flush_buffer(d, true)) {
+					d->outtop = 0;
+				}
+			}
+			if (d == last_descriptor)
+				break;
 		}
 
 		/*
-		 * Synchronize to a clock.
-		 * sleep(last_time + 1/PULSE_PER_SECOND - now).
-		 */
+	         * Synchronize to a clock.
+	         * sleep(last_time + 1/PULSE_PER_SECOND - now).
+	         */
 		struct timeval now_time;
 		long 	sec_delta;
 		long 	usec_delta;
@@ -738,13 +742,12 @@ game_loop()
 				exit(1);
 			}
 		}
-
 		gettimeofday(&last_time, NULL);
 		current_time = (time_t) last_time.tv_sec;
 	}
 
 	/* make sure strerr is flushed */
-	fflush(stderr);			
+	fflush(stderr);
 }
 
 
@@ -766,7 +769,7 @@ new_descriptor(int new_desc)
 	}
 	set_alarm(20);
 	alarm_section = "new_descriptor::accept";
-	if ((desc = accept(new_desc, (struct sockaddr *) &sock, &size)) < 0) {
+	if ((desc = accept(new_desc, (struct sockaddr *) & sock, &size)) < 0) {
 		perror("New_descriptor: accept");
 		sprintf(bugbuf, "[*****] BUG: New_descriptor: accept");
 		log_string_plus(bugbuf, LOG_COMM, sysdata.log_level);
@@ -777,13 +780,12 @@ new_descriptor(int new_desc)
 		set_alarm(0);
 		return;
 	}
-
 	set_alarm(20);
 	alarm_section = "new_descriptor: after accept";
 	if (fcntl(desc, F_SETFL, O_NONBLOCK) == -1) {
-	     perror("new_descriptor: fcntl: O_NONBLOCK");
-	     set_alarm(0);
-	     return;
+		perror("new_descriptor: fcntl: O_NONBLOCK");
+		set_alarm(0);
+		return;
 	}
 	if (check_bad_desc(new_desc))
 		return;
@@ -802,7 +804,7 @@ new_descriptor(int new_desc)
 	dnew->newstate = 0;
 	dnew->prevcolor = 0x07;
 	/* descriptor pipes */
-	dnew->ifd = -1;		
+	dnew->ifd = -1;
 	dnew->ipid = -1;
 
 	CREATE(dnew->outbuf, char, dnew->outsize);
@@ -879,10 +881,10 @@ close_socket(DESCRIPTOR_DATA * dclose, bool force, bool clear)
 {
 	CHAR_DATA *ch;
 	DESCRIPTOR_DATA *d;
-	bool do_not_unlink = false;
+	bool 	do_not_unlink = false;
 
 	if (!dclose) {
-	     return;
+		return;
 	}
 	if (dclose->ipid != -1) {
 		int 	status;
@@ -969,12 +971,15 @@ close_socket(DESCRIPTOR_DATA * dclose, bool force, bool clear)
 			log_string("bug: calling func thought char descriptor was free");
 		}
 	} else {
-	     /* don't clear, extract_char will take care of it for us, NULL out the descriptor */
-	     if (dclose->character) {
-		  if (dclose->character->desc) {
-		       dclose->character->desc = NULL;
-		  }
-	     }
+		/*
+		 * don't clear, extract_char will take care of it for us,
+		 * NULL out the descriptor
+		 */
+		if (dclose->character) {
+			if (dclose->character->desc) {
+				dclose->character->desc = NULL;
+			}
+		}
 	}
 	if (!do_not_unlink) {
 		/* make sure loop doesn't get messed up */
@@ -993,7 +998,7 @@ bool
 read_from_descriptor(DESCRIPTOR_DATA * d)
 {
 	unsigned int i_start;
-	int i_err;
+	int 	i_err;
 
 	/* hold horses if pending command already. */
 	if (d->incomm[0] != '\0')
@@ -1009,7 +1014,7 @@ read_from_descriptor(DESCRIPTOR_DATA * d)
 		return (false);
 	}
 	for (;;) {
-		int n_read;
+		int 	n_read;
 
 		n_read = recv(d->descriptor, d->inbuf + i_start,
 		    sizeof(d->inbuf) - 10 - i_start, 0);
@@ -1040,11 +1045,12 @@ void
 read_from_buffer(DESCRIPTOR_DATA * d)
 {
 	int 	i , j, k;
+
 	/* hold horses if pending command already. */
 	if (d->incomm[0] != '\0')
 		return;
 
-        /* look for at least one new line. */
+	/* look for at least one new line. */
 	for (i = 0; d->inbuf[i] != '\n' && d->inbuf[i] != '\r' && i < MAX_INBUF_SIZE;
 	    i++) {
 		if (d->inbuf[i] == '\0')
@@ -1108,7 +1114,10 @@ flush_buffer(DESCRIPTOR_DATA * d, bool f_prompt)
 	char 	promptbuf[MAX_STRING_LENGTH];
 	extern bool mud_down;
 
-	/* if buffer has more than 4K inside, spit out .5K at a time   -Thoric */
+	/*
+	 * if buffer has more than 4K inside, spit out .5K at a time
+	 * -Thoric
+	 */
 	if (!mud_down && d->outtop > 4096) {
 		memcpy(buf, d->outbuf, 512);
 		d->outtop -= 512;
@@ -1236,7 +1245,7 @@ write_to_buffer(DESCRIPTOR_DATA * d, const char *txt, int length)
 		d->outtop = 2;
 	}
 	/* expand the buffer as needed. */
-	while (d->outtop + length >= (int)d->outsize) {
+	while (d->outtop + length >= (int) d->outsize) {
 		if (d->outsize > 32000) {
 			/* empty buffer */
 			d->outtop = 0;
@@ -1262,7 +1271,7 @@ write_to_descriptor(int desc, char *txt, int length)
 	int 	i_start;
 	int 	n_write;
 	int 	n_block;
-	int	i_err;
+	int 	i_err;
 
 	if (length <= 0)
 		length = strlen(txt);
@@ -1273,10 +1282,10 @@ write_to_descriptor(int desc, char *txt, int length)
 		i_err = errno;
 		/* broken pipe (linkdead) */
 		if (i_err == EPIPE) {
-		     logmsg(LOG_INFO, "broken pipe");
-		     return (false);
+			logmsg(LOG_INFO, "broken pipe");
+			return (false);
 
-		} else if (n_write  < 0) {
+		} else if (n_write < 0) {
 			logmsg(LOG_ERR, "write_to_descriptor");
 			perror("write_to_descriptor");
 			return (false);
@@ -1393,12 +1402,12 @@ nanny(DESCRIPTOR_DATA * d, char *argument)
 		/* brittle as fuck */
 		f_old = load_char_obj(d, argument, true);
 		if (f_old) {
-		     if (check_playing(d, argument)) {
-			  send_to_desc_color("&wPassword: &D", d);
-			  write_to_buffer(d, echo_off_str, 0);
-			  d->connected = CON_GET_OLD_PASSWORD;
-			  return;
-		     }
+			if (check_playing(d, argument)) {
+				send_to_desc_color("&wPassword: &D", d);
+				write_to_buffer(d, echo_off_str, 0);
+				d->connected = CON_GET_OLD_PASSWORD;
+				return;
+			}
 		}
 		if (!d->character) {
 			sprintf(log_buf, "Bad player file %s@%s.", argument, d->host);
@@ -1420,7 +1429,7 @@ nanny(DESCRIPTOR_DATA * d, char *argument)
 				send_to_desc_color("That name is already taken. Please choose another: ", d);
 				d->connected = CON_GET_NAME;
 				d->character->desc = NULL;
-				free_char(d->character);	
+				free_char(d->character);
 				d->character = NULL;
 				return;
 			}
@@ -1473,12 +1482,12 @@ nanny(DESCRIPTOR_DATA * d, char *argument)
 		}
 		write_to_buffer(d, echo_on_str, 0);
 		if (check_playing(d, ch->pcdata->filename)) {
-		     if (!(reconnect(d, ch->pcdata->filename))) {
-			  write_to_buffer(d, "error, disconnecting.\n\r", 0);
-			  close_socket(d, false, true);
-			  return;
-		     }
-		     break;
+			if (!(reconnect(d, ch->pcdata->filename))) {
+				write_to_buffer(d, "error, disconnecting.\n\r", 0);
+				close_socket(d, false, true);
+				return;
+			}
+			break;
 		}
 		strncpy(buf, ch->pcdata->filename, MAX_STRING_LENGTH);
 		d->character->desc = NULL;
@@ -2408,7 +2417,7 @@ nanny(DESCRIPTOR_DATA * d, char *argument)
 		ch->ki_deflect = false;
 
 		do_look(ch, "auto");
-		tax_player(ch);		
+		tax_player(ch);
 		mccp_interest(ch);
 		mail_count(ch);
 		check_loginmsg(ch);
@@ -2523,7 +2532,8 @@ check_playing(DESCRIPTOR_DATA * d, char *name)
 }
 
 bool
-reconnect(DESCRIPTOR_DATA * d, char *name) {
+reconnect(DESCRIPTOR_DATA * d, char *name)
+{
 	CHAR_DATA *ch;
 	DESCRIPTOR_DATA *d_old;
 	int 	conn_state;
@@ -2560,7 +2570,7 @@ reconnect(DESCRIPTOR_DATA * d, char *name) {
 
 	return (false);
 }
-  
+
 void
 send_to_char(const char *txt, CHAR_DATA * ch)
 {
@@ -2724,7 +2734,7 @@ set_pager_color(sh_int AType, CHAR_DATA * ch)
 void
 ch_printf(CHAR_DATA * ch, char *fmt,...)
 {
-	char 	buf[MAX_STRING_LENGTH * 2];	
+	char 	buf[MAX_STRING_LENGTH * 2];
 	va_list args;
 
 	va_start(args, fmt);
