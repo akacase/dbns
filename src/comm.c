@@ -345,8 +345,6 @@ sig_quit()
 				write_to_descriptor(ch->desc->descriptor, "You have been saved to disk.\n\r", 0);
 			}
 	}
-	if (fork() == 0)
-		abort();
 	logmsg(LOG_ERR, "caught sigquit, hanging up");
 	exit(0);
 }
@@ -366,8 +364,6 @@ sig_hup()
 				write_to_descriptor(ch->desc->descriptor, "You have been saved to disk.\n\r", 0);
 			}
 	}
-	if (fork() == 0)
-		abort();
 	logmsg(LOG_ERR, "caught sighup, hanging up");
 	exit(0);
 }
@@ -387,8 +383,6 @@ sig_int()
 				write_to_descriptor(ch->desc->descriptor, "You have been saved to disk.\n\r", 0);
 			}
 	}
-	if (fork() == 0)
-		abort();
 	logmsg(LOG_ERR, "caught sigint, hanging up");
 	exit(0);
 }
@@ -408,8 +402,6 @@ seg_vio()
 				write_to_descriptor(ch->desc->descriptor, "You have been saved to disk.\n\r", 0);
 			}
 	}
-	if (fork() == 0)
-		abort();
 	logmsg(LOG_ERR, "caught segvio, dumping");
 	exit(1);
 }
