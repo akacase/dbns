@@ -1268,7 +1268,7 @@ End
 Name        fire~
 Code        do_fire
 Position    100
-Level       51
+Level       1
 Log         0
 End
 
@@ -1934,7 +1934,7 @@ End
 Name        launch~
 Code        do_launch
 Position    100
-Level       63
+Level       1
 Log         0
 End
 
