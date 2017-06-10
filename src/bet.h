@@ -147,10 +147,7 @@ int parsebet (const int currentbet, char *s)
 				else
 					return( ( currentbet * ( 100 + atoi( s + 1 ) ) ) / 100 );
 			}
-/*			if ( s[1] == '\0' )
-				return (currentbet * 125) / 100;
-			return (currentbet * (100 + atoi(s + 1))) / 100;
-*/		}
+		}
 		if ( s[0] == '*' || s[0] == 'x' ) /* multiply (default is by 2) */
 		{
 			if (s[1] == '\0')

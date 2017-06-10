@@ -99,6 +99,8 @@ void 	mail_count(CHAR_DATA * ch);
 void 	tax_player(CHAR_DATA * ch);
 void 	mccp_interest(CHAR_DATA * ch);
 bool 	check_total_ip(DESCRIPTOR_DATA * dnew);
+bool	char_exists(char *fp);
+bool 	check_pfile(DESCRIPTOR_DATA * d);
 void 	usage(void);
 
 /* locals */
@@ -613,6 +615,7 @@ game_loop()
 			if (FD_ISSET(d->descriptor, &exc_set)) {
 				FD_CLR(d->descriptor, &in_set);
 				FD_CLR(d->descriptor, &out_set);
+				/* exceptional state, fquit */
 				if (d->character) {
 					log_string("preparing to fquit comm.c:652\n");
 					fquit(d->character);
@@ -672,14 +675,14 @@ game_loop()
 					if (d->character)
 						set_cur_char(d->character);
 					switch (d->connected) {
-					default:
-						nanny(d, cmdline);
-						break;
 					case CON_PLAYING:
 						interpret(d->character, cmdline);
 						break;
 					case CON_EDITING:
 						edit_buffer(d->character, cmdline);
+						break;
+					default:
+						nanny(d, cmdline);
 						break;
 					}
 				}
@@ -800,7 +803,7 @@ new_descriptor(int new_desc)
 	dnew->lines = 0;
 	dnew->scrlen = 24;
 	dnew->port = ntohs(sock.sin_port);
-	dnew->user = STRALLOC("(unknown)");
+	dnew->user = 0; 
 	dnew->newstate = 0;
 	dnew->prevcolor = 0x07;
 	/* descriptor pipes */
@@ -1326,8 +1329,9 @@ nanny(DESCRIPTOR_DATA * d, char *argument)
 	char   *pwdnew;
 	char   *p;
 	int 	b = 0;
-	int 	iClass;
+	int 	i_class;
 	bool 	f_old;
+	bool    p_exists;
 	bool 	blocked = false;
 	NOTE_DATA *catchup_notes;
 	int 	i = 0;
@@ -1351,7 +1355,6 @@ nanny(DESCRIPTOR_DATA * d, char *argument)
 		}
 		*argument = capitalize_string(argument);
 
-		/* Old players can keep their characters. -- Alty */
 		if (!check_parse_name(argument, (d->newstate != 0))) {
 			send_to_desc_color("&wIllegal name, try another.\n\rName: &D", d);
 			return;
@@ -1359,15 +1362,6 @@ nanny(DESCRIPTOR_DATA * d, char *argument)
 		if (!str_cmp(argument, "New") && !blocked) {
 			if (d->newstate == 0) {
 				/* new player */
-				if (sysdata.DENY_NEW_PLAYERS == true) {
-					sprintf(buf, "The mud is currently preparing for a reboot.\n\r");
-					send_to_desc_color(buf, d);
-					sprintf(buf, "New players are not accepted during this time.\n\r");
-					send_to_desc_color(buf, d);
-					sprintf(buf, "Please try again in a few minutes.\n\r");
-					send_to_desc_color(buf, d);
-					close_socket(d, false, false);
-				}
 				sprintf(buf, "\n\r&gChoosing a name is one of the most important parts of this game...\n\r"
 				    "Make sure to pick a name appropriate to the character you are going\n\r"
 				    "to role play, and be sure that it fits into the DragonBall Z world.\n\r"
@@ -1383,81 +1377,36 @@ nanny(DESCRIPTOR_DATA * d, char *argument)
 			}
 		}
 		if (!str_cmp(argument, "help")) {
-			HELP_DATA *pHelp;
+			HELP_DATA *p_help;
 
-			for (pHelp = first_help; pHelp; pHelp = pHelp->next) {
-				if (!str_cmp(pHelp->keyword, "dbznames"))
+			for (p_help = first_help; p_help; p_help = p_help->next) {
+				if (!str_cmp(p_help->keyword, "dbznames"))
 					break;
 			}
-			if (!pHelp) {
+			if (!p_help) {
 				send_to_desc_color("No help on that word.\n\rName: ", d);
 				return;
 			}
 			send_to_desc_color("\n\r", d);
-			send_to_desc_color(pHelp->text, d);
+			send_to_desc_color(p_help->text, d);
 			send_to_desc_color("\n\r\n\r&wName: ", d);
 			return;
 		}
-		/* brittle as fuck */
-		f_old = load_char_obj(d, argument, true);
-		if (f_old) {
-			if (check_playing(d, argument)) {
-				send_to_desc_color("&wPassword: &D", d);
-				write_to_buffer(d, echo_off_str, 0);
-				d->connected = CON_GET_OLD_PASSWORD;
-				return;
-			}
-		}
-		if (!d->character) {
-			sprintf(log_buf, "Bad player file %s@%s.", argument, d->host);
-			log_string(log_buf);
-			send_to_desc_color("Your playerfile is corrupt... please notify case@capsulecorp.org\n\r", d);
-			close_socket(d, false, false);
-			return;
-		}
-		ch = d->character;
-		if (check_bans(ch, BAN_SITE)) {
-			send_to_desc_color("Your site has been banned from this Mud.\n\r", d);
-			close_socket(d, false, true);
-			return;
-		}
-		if (xIS_SET(ch->act, PLR_DENY)) {
-			sprintf(log_buf, "Denying access to %s@%s.", argument, d->host);
-			log_string_plus(log_buf, LOG_COMM, sysdata.log_level);
-			if (d->newstate != 0) {
-				send_to_desc_color("That name is already taken. Please choose another: ", d);
-				d->connected = CON_GET_NAME;
-				d->character->desc = NULL;
-				free_char(d->character);
-				d->character = NULL;
-				return;
-			}
-			send_to_desc_color("You are denied access.\n\r", d);
-			close_socket(d, false, true);
-			return;
-		}
-		if (wizlock && ch->level < locklev) {
-			send_to_desc_color("The game is wizlocked. Only immortals can connect now.\n\r", d);
-			send_to_desc_color("Please try back later.\n\r", d);
-			close_socket(d, false, true);
-			return;
-		}
-		if (f_old) {
-			if (d->newstate != 0) {
+		p_exists  = char_exists(argument);
+		if (p_exists) {
+			    send_to_desc_color("&wPassword: &D", d);
+			    write_to_buffer(d, echo_off_str, 0);
+			    d->user = *argument;
+			    d->connected = CON_GET_OLD_PASSWORD;
+			    return;
+		} else if (p_exists && d->newstate != 0) {
 				send_to_desc_color("&wThat name is already taken. Please choose another: &D", d);
 				d->connected = CON_GET_NAME;
 				d->character->desc = NULL;
 				free_char(d->character);
 				d->character = NULL;
 				return;
-			}
-			/* old player */
-			send_to_desc_color("&wPassword: &D", d);
-			write_to_buffer(d, echo_off_str, 0);
-			d->connected = CON_GET_OLD_PASSWORD;
-			return;
-		} else {
-			if (d->newstate == 0) {
+		} else if (d->newstate == 0) {
 				/* no such player */
 				send_to_desc_color("\n\r&wNo such player exists.\n\rPlease check your spelling, or type new to start a new player.\n\r\n\rName: &D", d);
 				d->connected = CON_GET_NAME;
@@ -1465,7 +1414,7 @@ nanny(DESCRIPTOR_DATA * d, char *argument)
 				free_char(d->character);
 				d->character = NULL;
 				return;
-			}
+		} else {
 			sprintf(buf, "&wDid I get that right, %s (&WY&w/&WN&w)? &D", argument);
 			send_to_desc_color(buf, d);
 			d->connected = CON_CONFIRM_NEW_NAME;
@@ -1473,6 +1422,11 @@ nanny(DESCRIPTOR_DATA * d, char *argument)
 		}
 		break;
 	case CON_GET_OLD_PASSWORD:
+		/* player exists, load in character */
+		f_old = load_char_obj(d, buf, false);
+		if (!check_pfile(d)) {
+			return;
+		}
 		write_to_buffer(d, "\n\r", 2);
 		if (str_cmp(sha256_crypt(argument), ch->pcdata->pwd)) {
 			write_to_buffer(d, "Wrong password, disconnecting.\n\r", 0);
@@ -1490,9 +1444,7 @@ nanny(DESCRIPTOR_DATA * d, char *argument)
 		}
 		strncpy(buf, ch->pcdata->filename, MAX_STRING_LENGTH);
 		d->character->desc = NULL;
-		free_char(d->character);
 		d->character = NULL;
-		f_old = load_char_obj(d, buf, false);
 		ch = d->character;
 		if (ch->position > POS_SITTING && ch->position < POS_STANDING)
 			ch->position = POS_STANDING;
@@ -1523,7 +1475,7 @@ nanny(DESCRIPTOR_DATA * d, char *argument)
 			pager_printf(ch, "Updated player data successfully.\n\r");
 		else
 			pager_printf(ch, "No updates to make.\n\r");
-		adjust_hiscore("pkill", ch, ch->pcdata->pkills);	/* cronel hiscore */
+		adjust_hiscore("pkill", ch, ch->pcdata->pkills);
 		adjust_hiscore("sparwins", ch, ch->pcdata->spar_wins);
 		adjust_hiscore("sparloss", ch, ch->pcdata->spar_loss);
 		adjust_hiscore("mkills", ch, ch->pcdata->mkills);
@@ -1533,7 +1485,6 @@ nanny(DESCRIPTOR_DATA * d, char *argument)
 		adjust_hiscore("zeni", ch, ch->gold);
 		adjust_hiscore("bounty", ch, ch->pcdata->bkills);
 		update_member(ch);
-
 		show_title(d);
 		break;
 	case CON_CONFIRM_NEW_NAME:
@@ -1568,14 +1519,13 @@ nanny(DESCRIPTOR_DATA * d, char *argument)
 			send_to_desc_color("&wPassword must be at least five characters long.\n\rPassword: &D", d);
 			return;
 		}
-		pwdnew = sha256_crypt(argument);	/* SHA256 Encryption */
+		pwdnew = sha256_crypt(argument);
 		for (p = pwdnew; *p != '\0'; p++) {
 			if (*p == '~') {
 				send_to_desc_color("&wNew password not acceptable, try again.\n\rPassword: &D", d);
 				return;
 			}
 		}
-
 		DISPOSE(ch->pcdata->pwd);
 		ch->pcdata->pwd = str_dup(pwdnew);
 		send_to_desc_color("\n\r&wPlease retype the password to confirm: &D", d);
@@ -1638,18 +1588,18 @@ nanny(DESCRIPTOR_DATA * d, char *argument)
 		break;
 	case CON_GET_HC:
 		if (!str_cmp(argument, "help")) {
-			HELP_DATA *pHelp;
+			HELP_DATA *p_help;
 
-			for (pHelp = first_help; pHelp; pHelp = pHelp->next) {
-				if (!str_cmp(pHelp->keyword, "HC HARDCORE UNKNOWN"))
+			for (p_help = first_help; p_help; p_help = p_help->next) {
+				if (!str_cmp(p_help->keyword, "HC HARDCORE UNKNOWN"))
 					break;
 			}
-			if (!pHelp) {
+			if (!p_help) {
 				send_to_desc_color("No help on that word.\n\rDo you wish to be a &RHARDCORE&w character? (&WY&w/&WN&w): ", d);
 				return;
 			}
 			send_to_desc_color("\n\r", d);
-			send_to_desc_color(pHelp->text, d);
+			send_to_desc_color(p_help->text, d);
 			send_to_desc_color("&wDo you wish to be a &RHARDCORE&w character? (&WY&w/&WN&w): ", d);
 			return;
 		}
@@ -1701,18 +1651,18 @@ nanny(DESCRIPTOR_DATA * d, char *argument)
 		/* Take this out SHADDAI */
 		i = 0;
 		send_to_desc_color("\n\r", d);
-		for (iClass = 0; iClass < 31; iClass++) {
-			if (iClass == 4) {
+		for (i_class = 0; i_class < 31; i_class++) {
+			if (i_class == 4) {
 				continue;
 			}
-			if (iClass > 8 && iClass < 28)
+			if (i_class > 8 && i_class < 28)
 				continue;
 			char 	letters[14] = "abcdefghijklmn";
 
-			if (class_table[iClass]->who_name &&
-			    class_table[iClass]->who_name[0] != '\0') {
+			if (class_table[i_class]->who_name &&
+			    class_table[i_class]->who_name[0] != '\0') {
 				sprintf(buf, "&w   (&W%2d&w)  &c%-12s&w  ('&R%c&w' for help)&D\n\r",
-				    i, class_table[iClass]->who_name, letters[i]);
+				    i, class_table[i_class]->who_name, letters[i]);
 				send_to_desc_color(buf, d);
 				i++;
 			}
@@ -1723,60 +1673,52 @@ nanny(DESCRIPTOR_DATA * d, char *argument)
 		d->connected = CON_GET_NEW_CLASS;
 		break;
 	case CON_GET_NEW_CLASS:
-		argument = one_argument(argument, arg);
-		if (is_number(arg)) {
-			i = atoi(arg);
-			int 	c = 0;
+	     /* 1 - saiyan, 2 - human, 3 - halfie, 4 - namek, 5 - icer, 
+	      * 6 - bio, 7 - kaio, 8 - demon, 9 - android-h, 
+	      * 10 - android-e, 11 - android-fm
+	      */
+	     argument = one_argument(argument, arg);
+	     if (is_number(arg)) {
+		  i = atoi(arg);
+		  int 	c = 0;
 
-			if (i == 0)
-				c = 0;
-			//saian
-			    if (i == 1)
-				c = 1;
-			//human
-			    if (i == 2)
-				c = 2;
-			//halfbreed
-			    if (i == 3)
-				c = 3;
-			//namek
-			    if (i == 4)
-				c = 5;
-			//icer
-			    if (i == 5)
-				c = 6;
-			//bio
-			    if (i == 6)
-				c = 7;
-			//kaio
-			    if (i == 7)
-				c = 8;
-			//demon
-			    if (i == 8)
-				c = 28;
-			//android - h
-			    if (i == 9)
-				c = 29;
-			//android - e
-			    if (i == 10)
-				c = 30;
-			//android - fm
-			    for (iClass = 0; iClass < 31; iClass++) {
-				if (iClass > 8 && iClass < 28)
-					continue;
-				if (class_table[iClass]->who_name &&
-				    class_table[iClass]->who_name[0] != '\0') {
-					if (c == iClass) {
-						ch->class = iClass;
-						ch->race = iClass;
-						break;
-					}
-				}
-			}
-		} else {
-			char 	letters[14] = "abcdefghijklmn";
-
-			for (i = 0; i < 14; i++) {
+		  if (i == 0)
+		       c = 0;
+		  if (i == 1)
+		       c = 1;
+		  if (i == 2)
+		       c = 2;
+		  if (i == 3)
+		       c = 3;
+		  if (i == 4)
+		       c = 5;
+		  if (i == 5)
+		       c = 6;
+		  if (i == 6)
+		       c = 7;
+		  if (i == 7)
+		       c = 8;
+		  if (i == 8)
+		       c = 28;
+		  if (i == 9)
+		       c = 29;
+		  if (i == 10)
+		       c = 30;
+		  for (i_class = 0; i_class < 31; i_class++) {
+		       if (i_class > 8 && i_class < 28)
+			    continue;
+		       if (class_table[i_class]->who_name &&
+			 class_table[i_class]->who_name[0] != '\0') {
+			    if (c == i_class) {
+				 ch->class = i_class;
+				 ch->race = i_class;
+				 break;
+			    }
+		       }
+		  }
+	     } else {
+		  char 	letters[14] = "abcdefghijklmn";
+		  for (i = 0; i < 14; i++) {
 				if (arg[0] == letters[i]) {
 					int 	c = i;
 
@@ -1827,19 +1769,19 @@ nanny(DESCRIPTOR_DATA * d, char *argument)
 			}
 			i = 0;
 			send_to_desc_color("\n\r&c==============================================================================&D", d);
-			for (iClass = 0; iClass < 31; iClass++) {
-				if (iClass == 4) {
+			for (i_class = 0; i_class < 31; i_class++) {
+				if (i_class == 4) {
 					continue;
 				}
-				if (iClass > 8 && iClass < 28)
+				if (i_class > 8 && i_class < 28)
 					continue;
 				char 	letters[14] = "abcdefghijklmn";
 
-				if (class_table[iClass]->who_name &&
-				    class_table[iClass]->who_name[0] != '\0') {
+				if (class_table[i_class]->who_name &&
+				    class_table[i_class]->who_name[0] != '\0') {
 					sprintf(buf, "\n\r&w   (&W%2d&w)  &c%-12s&w  ('&R%c&w' for help)&D",
 					    i,
-					    class_table[iClass]->who_name, letters[i]);
+					    class_table[i_class]->who_name, letters[i]);
 					send_to_desc_color(buf, d);
 					i++;
 				}
@@ -1850,19 +1792,14 @@ nanny(DESCRIPTOR_DATA * d, char *argument)
 			return;
 		}
 
-		if (iClass != 28 && iClass != 29 && iClass != 30)
-			if (iClass > 8
-			    || !class_table[iClass]->who_name
-			    || class_table[iClass]->who_name[0] == '\0'
-			    || !str_cmp(class_table[iClass]->who_name, "unused")) {
+		if (i_class != 28 && i_class != 29 && i_class != 30)
+			if (i_class > 8
+			    || !class_table[i_class]->who_name
+			    || class_table[i_class]->who_name[0] == '\0'
+			    || !str_cmp(class_table[i_class]->who_name, "unused")) {
 				send_to_desc_color("&wThat's not a race.\n\rWhat IS your race? &D", d);
 				return;
 			}
-		if (check_bans(ch, BAN_CLASS)) {
-			send_to_desc_color(
-			    "&wThat race is not currently avaiable.\n\rWhat IS your race? &D", d);
-			return;
-		}
 		if (ch->race == 3 || ch->race == 5 || ch->race == 6) {
 			ch->pcdata->haircolor = 24;
 			ch->pcdata->orignalhaircolor = 24;
@@ -1870,8 +1807,8 @@ nanny(DESCRIPTOR_DATA * d, char *argument)
 			send_to_desc_color("\n\r&wPlease choose a hair color from the following list:&D\n\r", d);
 			buf[0] = '\0';
 
-			for (iClass = 0; iClass < (MAX_HAIR - 2); iClass++) {
-				sprintf(buf2, "&w[&W%2d&w] &g%-18.18s  ", iClass, hair_color[iClass]);
+			for (i_class = 0; i_class < (MAX_HAIR - 2); i_class++) {
+				sprintf(buf2, "&w[&W%2d&w] &g%-18.18s  ", i_class, hair_color[i_class]);
 				b++;
 				strcat(buf, buf2);
 				if ((b % 3) == 0)
@@ -1891,20 +1828,20 @@ nanny(DESCRIPTOR_DATA * d, char *argument)
 				send_to_desc_color("&wPlease choose a hair color: &D", d);
 				return;
 			}
-			for (iClass = 0; iClass < (MAX_HAIR - 2); iClass++) {
-				if (toupper(arg[0]) == toupper(hair_color[iClass][0])
-				    && !str_prefix(arg, hair_color[iClass])) {
-					ch->pcdata->haircolor = iClass;
-					ch->pcdata->orignalhaircolor = iClass;
+			for (i_class = 0; i_class < (MAX_HAIR - 2); i_class++) {
+				if (toupper(arg[0]) == toupper(hair_color[i_class][0])
+				    && !str_prefix(arg, hair_color[i_class])) {
+					ch->pcdata->haircolor = i_class;
+					ch->pcdata->orignalhaircolor = i_class;
 					break;
 				}
-				if (is_number(arg) && atoi(arg) == iClass) {
-					ch->pcdata->haircolor = iClass;
-					ch->pcdata->orignalhaircolor = iClass;
+				if (is_number(arg) && atoi(arg) == i_class) {
+					ch->pcdata->haircolor = i_class;
+					ch->pcdata->orignalhaircolor = i_class;
 					break;
 				}
 			}
-			if (iClass == (MAX_HAIR - 2) || !hair_color[iClass] || hair_color[iClass][0] == '\0') {
+			if (i_class == (MAX_HAIR - 2) || !hair_color[i_class] || hair_color[i_class][0] == '\0') {
 				send_to_desc_color("&wThat's not a hair color.\n\rWhat IS it going to be? &D", d);
 				return;
 			}
@@ -1914,8 +1851,8 @@ nanny(DESCRIPTOR_DATA * d, char *argument)
 			buf[0] = '\0';
 			buf2[0] = '\0';
 			b = 0;
-			for (iClass = (MAX_COMPLEXION - 17); iClass < (MAX_COMPLEXION - 14); iClass++) {
-				sprintf(buf2, "&w[&W%2d&W] &g%-15s&D", iClass, complexion[iClass]);
+			for (i_class = (MAX_COMPLEXION - 17); i_class < (MAX_COMPLEXION - 14); i_class++) {
+				sprintf(buf2, "&w[&W%2d&W] &g%-15s&D", i_class, complexion[i_class]);
 				b++;
 				strcat(buf, buf2);
 				if ((b % 4) == 0)
@@ -1931,8 +1868,8 @@ nanny(DESCRIPTOR_DATA * d, char *argument)
 			buf[0] = '\0';
 			buf2[0] = '\0';
 			b = 0;
-			for (iClass = (MAX_COMPLEXION - 14); iClass < (MAX_COMPLEXION); iClass++) {
-				sprintf(buf2, "&w[&W%2d&w] &g%-15s&D", iClass, complexion[iClass]);
+			for (i_class = (MAX_COMPLEXION - 14); i_class < (MAX_COMPLEXION); i_class++) {
+				sprintf(buf2, "&w[&W%2d&w] &g%-15s&D", i_class, complexion[i_class]);
 				b++;
 				strcat(buf, buf2);
 				if ((b % 4) == 0)
@@ -1948,8 +1885,8 @@ nanny(DESCRIPTOR_DATA * d, char *argument)
 			buf[0] = '\0';
 			buf2[0] = '\0';
 			b = 0;
-			for (iClass = 0; iClass < (MAX_COMPLEXION - 17); iClass++) {
-				sprintf(buf2, "&w[&W%2d&w] &g%-15s&D", iClass, complexion[iClass]);
+			for (i_class = 0; i_class < (MAX_COMPLEXION - 17); i_class++) {
+				sprintf(buf2, "&w[&W%2d&w] &g%-15s&D", i_class, complexion[i_class]);
 				b++;
 				strcat(buf, buf2);
 				if ((b % 4) == 0)
@@ -1969,18 +1906,18 @@ nanny(DESCRIPTOR_DATA * d, char *argument)
 				send_to_desc_color("&wPlease choose a main body color: &D", d);
 				return;
 			}
-			for (iClass = (MAX_COMPLEXION - 14); iClass < (MAX_COMPLEXION); iClass++) {
-				if (toupper(arg[0]) == toupper(complexion[iClass][0])
-				    && !str_prefix(arg, complexion[iClass])) {
-					ch->pcdata->complexion = iClass;
+			for (i_class = (MAX_COMPLEXION - 14); i_class < (MAX_COMPLEXION); i_class++) {
+				if (toupper(arg[0]) == toupper(complexion[i_class][0])
+				    && !str_prefix(arg, complexion[i_class])) {
+					ch->pcdata->complexion = i_class;
 					break;
 				}
-				if (is_number(arg) && atoi(arg) == iClass) {
-					ch->pcdata->complexion = iClass;
+				if (is_number(arg) && atoi(arg) == i_class) {
+					ch->pcdata->complexion = i_class;
 					break;
 				}
 			}
-			if (iClass == (MAX_COMPLEXION) || !complexion[iClass] || complexion[iClass][0] == '\0') {
+			if (i_class == (MAX_COMPLEXION) || !complexion[i_class] || complexion[i_class][0] == '\0') {
 				send_to_desc_color("&wThat's not a choice.\n\rWhat IS it going to be? &D", d);
 				return;
 			}
@@ -1990,18 +1927,18 @@ nanny(DESCRIPTOR_DATA * d, char *argument)
 				send_to_desc_color("&wPlease choose a main body color: &D", d);
 				return;
 			}
-			for (iClass = (MAX_COMPLEXION - 17); iClass < (MAX_COMPLEXION - 13); iClass++) {
-				if (toupper(arg[0]) == toupper(complexion[iClass][0])
-				    && !str_prefix(arg, complexion[iClass])) {
-					ch->pcdata->complexion = iClass;
+			for (i_class = (MAX_COMPLEXION - 17); i_class < (MAX_COMPLEXION - 13); i_class++) {
+				if (toupper(arg[0]) == toupper(complexion[i_class][0])
+				    && !str_prefix(arg, complexion[i_class])) {
+					ch->pcdata->complexion = i_class;
 					break;
 				}
-				if (is_number(arg) && atoi(arg) == iClass) {
-					ch->pcdata->complexion = iClass;
+				if (is_number(arg) && atoi(arg) == i_class) {
+					ch->pcdata->complexion = i_class;
 					break;
 				}
 			}
-			if (iClass == (MAX_COMPLEXION - 14) || !complexion[iClass] || complexion[iClass][0] == '\0') {
+			if (i_class == (MAX_COMPLEXION - 14) || !complexion[i_class] || complexion[i_class][0] == '\0') {
 				send_to_desc_color("&wThat's not a choice.\n\rWhat IS it going to be? &D", d);
 				return;
 			}
@@ -2011,18 +1948,18 @@ nanny(DESCRIPTOR_DATA * d, char *argument)
 				send_to_desc_color("&wPlease choose complexion: &D", d);
 				return;
 			}
-			for (iClass = 0; iClass < (MAX_COMPLEXION - 17); iClass++) {
-				if (toupper(arg[0]) == toupper(complexion[iClass][0])
-				    && !str_prefix(arg, complexion[iClass])) {
-					ch->pcdata->complexion = iClass;
+			for (i_class = 0; i_class < (MAX_COMPLEXION - 17); i_class++) {
+				if (toupper(arg[0]) == toupper(complexion[i_class][0])
+				    && !str_prefix(arg, complexion[i_class])) {
+					ch->pcdata->complexion = i_class;
 					break;
 				}
-				if (is_number(arg) && atoi(arg) == iClass) {
-					ch->pcdata->complexion = iClass;
+				if (is_number(arg) && atoi(arg) == i_class) {
+					ch->pcdata->complexion = i_class;
 					break;
 				}
 			}
-			if (iClass == (MAX_COMPLEXION - 17) || !complexion[iClass] || complexion[iClass][0] == '\0') {
+			if (i_class == (MAX_COMPLEXION - 17) || !complexion[i_class] || complexion[i_class][0] == '\0') {
 				send_to_desc_color("&wThat's not a complexion.\n\rWhat IS it going to be? &D", d);
 				return;
 			}
@@ -2032,8 +1969,8 @@ nanny(DESCRIPTOR_DATA * d, char *argument)
 			buf[0] = '\0';
 			buf2[0] = '\0';
 			b = 0;
-			for (iClass = 0; iClass < (MAX_SECONDARYCOLOR - 1); iClass++) {
-				sprintf(buf2, "&w[&W%2d&w] &g%-15s&D", iClass, secondary_color[iClass]);
+			for (i_class = 0; i_class < (MAX_SECONDARYCOLOR - 1); i_class++) {
+				sprintf(buf2, "&w[&W%2d&w] &g%-15s&D", i_class, secondary_color[i_class]);
 				b++;
 				strcat(buf, buf2);
 				if ((b % 4) == 0)
@@ -2057,18 +1994,18 @@ nanny(DESCRIPTOR_DATA * d, char *argument)
 				send_to_desc_color("&wPlease choose a secondary body color: &D", d);
 				return;
 			}
-			for (iClass = 0; iClass < (MAX_SECONDARYCOLOR - 1); iClass++) {
-				if (toupper(arg[0]) == toupper(secondary_color[iClass][0])
-				    && !str_prefix(arg, secondary_color[iClass])) {
-					ch->pcdata->secondarycolor = iClass;
+			for (i_class = 0; i_class < (MAX_SECONDARYCOLOR - 1); i_class++) {
+				if (toupper(arg[0]) == toupper(secondary_color[i_class][0])
+				    && !str_prefix(arg, secondary_color[i_class])) {
+					ch->pcdata->secondarycolor = i_class;
 					break;
 				}
-				if (is_number(arg) && atoi(arg) == iClass) {
-					ch->pcdata->secondarycolor = iClass;
+				if (is_number(arg) && atoi(arg) == i_class) {
+					ch->pcdata->secondarycolor = i_class;
 					break;
 				}
 			}
-			if (iClass == (MAX_SECONDARYCOLOR - 1) || !secondary_color[iClass] || secondary_color[iClass][0] == '\0') {
+			if (i_class == (MAX_SECONDARYCOLOR - 1) || !secondary_color[i_class] || secondary_color[i_class][0] == '\0') {
 				send_to_desc_color("&wThat's not a choice.\n\rWhat IS it going to be? &D", d);
 				return;
 			}
@@ -2078,8 +2015,8 @@ nanny(DESCRIPTOR_DATA * d, char *argument)
 		buf2[0] = '\0';
 		b = 0;
 
-		for (iClass = 0; iClass < (MAX_EYE - 3); iClass++) {
-			sprintf(buf2, "&w[&W%2d&w] &g%-15s&D", iClass, eye_color[iClass]);
+		for (i_class = 0; i_class < (MAX_EYE - 3); i_class++) {
+			sprintf(buf2, "&w[&W%2d&w] &g%-15s&D", i_class, eye_color[i_class]);
 			b++;
 			strcat(buf, buf2);
 			if ((b % 4) == 0)
@@ -2102,20 +2039,20 @@ nanny(DESCRIPTOR_DATA * d, char *argument)
 			send_to_desc_color("&wPlease choose a hair color: &D", d);
 			return;
 		}
-		for (iClass = 0; iClass < (MAX_EYE - 3); iClass++) {
-			if (toupper(arg[0]) == toupper(eye_color[iClass][0])
-			    && !str_prefix(arg, eye_color[iClass])) {
-				ch->pcdata->eyes = iClass;
-				ch->pcdata->orignaleyes = iClass;
+		for (i_class = 0; i_class < (MAX_EYE - 3); i_class++) {
+			if (toupper(arg[0]) == toupper(eye_color[i_class][0])
+			    && !str_prefix(arg, eye_color[i_class])) {
+				ch->pcdata->eyes = i_class;
+				ch->pcdata->orignaleyes = i_class;
 				break;
 			}
-			if (is_number(arg) && atoi(arg) == iClass) {
-				ch->pcdata->eyes = iClass;
-				ch->pcdata->orignaleyes = iClass;
+			if (is_number(arg) && atoi(arg) == i_class) {
+				ch->pcdata->eyes = i_class;
+				ch->pcdata->orignaleyes = i_class;
 				break;
 			}
 		}
-		if (iClass == (MAX_EYE - 3) || !eye_color[iClass] || eye_color[iClass][0] == '\0') {
+		if (i_class == (MAX_EYE - 3) || !eye_color[i_class] || eye_color[i_class][0] == '\0') {
 			send_to_desc_color("&wThat's not a eye color.\n\rWhat IS it going to be? &D", d);
 			return;
 		}
@@ -2124,8 +2061,8 @@ nanny(DESCRIPTOR_DATA * d, char *argument)
 		buf2[0] = '\0';
 		b = 0;
 
-		for (iClass = 0; iClass < (MAX_BUILD); iClass++) {
-			sprintf(buf2, "&w[&W%2d&w] &g%-15s&D", iClass, build_type[iClass]);
+		for (i_class = 0; i_class < (MAX_BUILD); i_class++) {
+			sprintf(buf2, "&w[&W%2d&w] &g%-15s&D", i_class, build_type[i_class]);
 			b++;
 			strcat(buf, buf2);
 			if ((b % 4) == 0)
@@ -2138,28 +2075,24 @@ nanny(DESCRIPTOR_DATA * d, char *argument)
 
 		break;
 	case CON_GET_NEW_BUILD:
-		/*
-		 * Black, Brown, Red, Blonde, Strawberry Blonde, Argent,
-		 * Golden Blonde, Platinum Blonde, Light Brown
-		 */
 		argument = one_argument(argument, arg);
 		if (!str_cmp(arg, "help")) {
 			do_help(ch, argument);
 			send_to_desc_color("&wPlease choose a build type: &D", d);
 			return;
 		}
-		for (iClass = 0; iClass < (MAX_BUILD); iClass++) {
-			if (toupper(arg[0]) == toupper(build_type[iClass][0])
-			    && !str_prefix(arg, build_type[iClass])) {
-				ch->pcdata->build = iClass;
+		for (i_class = 0; i_class < (MAX_BUILD); i_class++) {
+			if (toupper(arg[0]) == toupper(build_type[i_class][0])
+			    && !str_prefix(arg, build_type[i_class])) {
+				ch->pcdata->build = i_class;
 				break;
 			}
-			if (is_number(arg) && atoi(arg) == iClass) {
-				ch->pcdata->build = iClass;
+			if (is_number(arg) && atoi(arg) == i_class) {
+				ch->pcdata->build = i_class;
 				break;
 			}
 		}
-		if (iClass == (MAX_BUILD) || !build_type[iClass] || build_type[iClass][0] == '\0') {
+		if (i_class == (MAX_BUILD) || !build_type[i_class] || build_type[i_class][0] == '\0') {
 			send_to_desc_color("&wThat's not a build type.\n\rWhat IS it going to be? &D", d);
 			return;
 		}
@@ -2185,14 +2118,12 @@ nanny(DESCRIPTOR_DATA * d, char *argument)
 		return;
 		break;
 	case CON_PRESS_ENTER:
-		if (chk_watch(get_trust(ch), ch->name, d->host))	/* --Gorog */
+		if (chk_watch(get_trust(ch), ch->name, d->host))
 			SET_BIT(ch->pcdata->flags, PCFLAG_WATCH);
 		else
 			REMOVE_BIT(ch->pcdata->flags, PCFLAG_WATCH);
-
 		if (ch->position == POS_MOUNTED)
 			ch->position = POS_STANDING;
-
 		set_pager_color(AT_PLAIN, ch);
 		if (xIS_SET(ch->act, PLR_RIP))
 			send_rip_screen(ch);
@@ -2214,7 +2145,6 @@ nanny(DESCRIPTOR_DATA * d, char *argument)
 	case CON_READ_MOTD:
 		{
 			char 	motdbuf[MAX_STRING_LENGTH];
-
 			sprintf(motdbuf, "\n\rWelcome to %s...\n\r", sysdata.mud_name);
 			send_to_desc_color(motdbuf, d);
 		}
@@ -2225,7 +2155,6 @@ nanny(DESCRIPTOR_DATA * d, char *argument)
 			d->ansi = false;
 		else if (xIS_SET(ch->act, PLR_ANSI) && d->ansi == false)
 			d->ansi = true;
-
 		if (ch->level == 0) {
 			int 	i_lang;
 
@@ -2322,11 +2251,6 @@ nanny(DESCRIPTOR_DATA * d, char *argument)
 				ch->pcdata->natural_ac_max = 500;
 			if (is_bio(ch))
 				ch->pcdata->absorb_pl_mod = 6;
-
-			/*
-			 * To make it so that saiyans and halfies start out
-			 * with the Oozaru mouth cannon. -Karma
-			 */
 			if (is_saiyan(ch) || is_hb(ch))
 				ch->pcdata->learned[gsn_monkey_gun] = 95;
 
@@ -2336,11 +2260,6 @@ nanny(DESCRIPTOR_DATA * d, char *argument)
 			set_title(ch, buf);
 			ch->pcdata->creation_date = current_time;
 
-			/*
-			 * Added by Narn.  Start new characters with
-			 * autoexit and autgold already turned on.  Very few
-			 * people don't use those.
-			 */
 			xSET_BIT(ch->act, PLR_AUTOGOLD);
 			xSET_BIT(ch->act, PLR_AUTOEXIT);
 			xSET_BIT(ch->act, PLR_AUTO_COMPASS);
@@ -2348,11 +2267,6 @@ nanny(DESCRIPTOR_DATA * d, char *argument)
 			SET_BIT(ch->pcdata->flags, PCFLAG_DEADLY);
 			xSET_BIT(ch->deaf, CHANNEL_FOS);
 
-
-			/*
-			 * Don't display old notes as 'unread' except for
-			 * the announcment board
-			 */
 			for (i = 1; i < MAX_BOARD; i++) {
 				for (catchup_notes = ch->pcdata->board->note_first; catchup_notes && catchup_notes->next; catchup_notes = catchup_notes->next);
 
@@ -2408,7 +2322,6 @@ nanny(DESCRIPTOR_DATA * d, char *argument)
 		ch->logon_start = ch->exp;
 		do_global_boards(ch, "");
 
-
 		ch->dodge = false;
 		ch->block = false;
 		ch->ki_dodge = false;
@@ -2433,7 +2346,7 @@ nanny(DESCRIPTOR_DATA * d, char *argument)
 		break;
 	case CON_NOTE_SUBJECT:
 		handle_con_note_subject(d, argument);
-		break;			/* subject */
+		break;			
 	case CON_NOTE_EXPIRE:
 		handle_con_note_expire(d, argument);
 		break;
@@ -2502,12 +2415,6 @@ check_parse_name(char *name, bool newchar)
 		if (fIll)
 			return (false);
 	}
-
-	/*
-         * Code that followed here used to prevent players from naming
-         * themselves after mobs... this caused much havoc when new areas
-         * would go in...
-         */
 
 	return (true);
 }
@@ -4249,13 +4156,35 @@ act2(sh_int AType, const char *format, CHAR_DATA * ch, const void *arg1, const v
 			}
 		}
 		if (MOBtrigger) {
-			/*
-			 * Note: use original string, not string with ANSI.
-			 * -- Alty
-			 */
 			mprog_act_trigger(txt, to, ch, (OBJ_DATA *) arg1, (void *) arg2);
 		}
 	}
 	MOBtrigger = true;
 	return;
+}
+
+bool
+char_exists(char *fp) {
+     char pl[MAX_STRING_LENGTH];
+ 
+     sprintf(pl, "%s%c/%s", PLAYER_DIR, tolower(fp[0]), capitalize(fp));
+
+     if(access(pl, F_OK) != -1 ) {
+	  return (true);
+     } else {
+	  return (false);
+     }
+}
+
+bool
+check_pfile(DESCRIPTOR_DATA * d) {
+     if (!d->character) {
+	  sprintf(log_buf, "Bad player file %s", d->user);
+	  log_string(log_buf);
+	  send_to_desc_color("Your playerfile is corrupt... please notify case@capsulecorp.org\n\r", d);
+	  close_socket(d, false, false);
+	  return (false);
+     } else {
+	  return(true);
+     }
 }

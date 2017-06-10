@@ -85,20 +85,20 @@ char   *const bus_stop2[MAX_BUS_STOP2 + 1] =
 };
 
 /* local routines */
-void fread_ship args((SHIP_DATA * ship, FILE *fp));
-bool load_ship_file args((char *shipfile));
-void write_ship_list args((void));
-void fread_starsystem args((SPACE_DATA * starsystem, FILE *fp));
-bool load_starsystem args((char *starsystemfile));
-void write_starsystem_list args((void));
-void landship args((SHIP_DATA * ship, char *arg));
-void launchship args((SHIP_DATA * ship));
-void echo_to_room_dnr args((int ecolor, ROOM_INDEX_DATA * room, char *argument));
-bool 	autofly(SHIP_DATA * ship);
-bool 	is_facing(SHIP_DATA * ship, SHIP_DATA * target);
-void resetship args((SHIP_DATA * ship));
-bool land_bus args((SHIP_DATA * ship, int destination));
-void launch_bus args((SHIP_DATA * ship));
+void fread_ship(SHIP_DATA * ship, FILE *fp);
+bool load_ship_file(char *shipfile);
+void write_ship_list(void);
+void fread_starsystem(SPACE_DATA * starsystem, FILE *fp);
+bool load_starsystem(char *starsystemfile);
+void write_starsystem_list (void);
+void landship (SHIP_DATA * ship, char *arg);
+void launchship (SHIP_DATA * ship);
+void echo_to_room_dnr (int ecolor, ROOM_INDEX_DATA * room, char *argument);
+bool autofly(SHIP_DATA * ship);
+bool is_facing(SHIP_DATA * ship, SHIP_DATA * target);
+void resetship (SHIP_DATA * ship);
+bool land_bus (SHIP_DATA * ship, int destination);
+void launch_bus (SHIP_DATA * ship);
 ch_ret 	drive_ship(CHAR_DATA * ch, SHIP_DATA * ship, EXIT_DATA * exit, int fall);
 
 bool 

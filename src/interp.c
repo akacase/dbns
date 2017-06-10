@@ -371,24 +371,7 @@ void interpret( CHAR_DATA *ch, char *argument )
             }
 	}
 
-	/*
-	 * Grab the command word.
-	 * Special parsing so ' can be a command,
-	 *   also no spaces needed after punctuation.
-	 */
-	strcpy( logline, argument );
-/*
-	if ( !isalpha(argument[0]) && !isdigit(argument[0])
-		&& !str_cmp( argument[0], "'" ) )
-	{
-	    command[0] = argument[0];
-	    command[1] = '\0';
-	    argument++;
-	    while ( isspace(*argument) )
-		argument++;
-	}
-	else
-*/
+
     argument = one_argument( argument, command );
 
 	/*
@@ -416,9 +399,6 @@ void interpret( CHAR_DATA *ch, char *argument )
 	if ( !IS_NPC( ch ) && xIS_SET ( ch->act, PLR_AFK)  && (str_cmp(command, "AFK")))
 	{
 	    xREMOVE_BIT( ch->act, PLR_AFK );
-/*
-     	    act( AT_GREY, "$n is no longer afk.", ch, NULL, NULL, TO_ROOM );
-*/
      	    act( AT_GREY, "$n is no longer afk.", ch, NULL, NULL, TO_CANSEE );
 	}
     }
@@ -466,12 +446,6 @@ void interpret( CHAR_DATA *ch, char *argument )
 	if ( fLogAll && loglvl == LOG_NORMAL
 	&&  (IS_NPC(ch) || !xIS_SET(ch->act, PLR_LOG)) )
 	  loglvl = LOG_ALL;
-
-	/* This is handled in get_trust already */
-/*	if ( ch->desc && ch->desc->original )
-	  log_string_plus( log_buf, loglvl,
-		ch->desc->original->level );
-	else*/
 	  log_string_plus( log_buf, loglvl, get_trust(ch) );
     }
 
@@ -774,23 +748,6 @@ void interpret( CHAR_DATA *ch, char *argument )
 	    if ( !check_pos( ch, cmd->position ) )
 		return;
     
-    /* Berserk check for flee.. maybe add drunk to this?.. but too much
-       hardcoding is annoying.. -- Altrag
-       This wasn't catching wimpy --- Blod
-    if ( !str_cmp(cmd->name, "flee") &&
-          IS_AFFECTED(ch, AFF_BERSERK) )
-    {
-	send_to_char( "You aren't thinking very clearly..\n\r", ch);
-	return;
-    } */
-
-    /*  So we can check commands for things like Posses and Polymorph
-     *  But still keep the online editing ability.  -- Shaddai
-     *  Send back the message to print out, so we have the option
-     *  this function might be usefull elsewhere.  Also using the
-     *  send_to_char_color so we can colorize the strings if need be. --Shaddai
-     */
-
     buf = check_cmd_flags ( ch, cmd );
 
     if ( buf[0] != '\0'  ) {
@@ -834,8 +791,6 @@ void interpret( CHAR_DATA *ch, char *argument )
 	log_string_plus(log_buf, LOG_NORMAL, get_trust(ch));
 	cmd->lag_count++;	/* count the lag flags */
     }
-
-    tail_chain( );
 }
 
 CMDTYPE *find_command( char *command )
@@ -930,13 +885,6 @@ bool check_social( CHAR_DATA *ch, char *command, char *argument )
     			LINK(victim, remfirst, remlast, next_in_room,
     				prev_in_room);
     		}
-/*    		else
- *    		{
- *    			set_char_color(AT_IGNORE, victim);
- *    			ch_printf(victim, "You attempt to ignore %s,"
- *    				" but are unable to do so.\n\r", ch->name);
- *    		}
- */
     	}
     }
 
@@ -1124,7 +1072,6 @@ char *one_argument( char *argument, char *arg_first )
 	    argument++;
 	    break;
 	}
-	//*arg_first = LOWER(*argument);
 	*arg_first = *argument;
 	arg_first++;
 	argument++;
