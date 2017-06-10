@@ -484,9 +484,6 @@ int get_true_rank( CHAR_DATA *ch )
                 return 15;
 	else
 		return 16;
-	/*else if (ch->exp >= 100000000000000ULL)
-                return 16;*/
-
 	return 0;
 }
 
@@ -530,10 +527,6 @@ int get_rank_number( CHAR_DATA *ch )
                 return 15;
 	else
 		return 16;
-
-        /*else if (ch->exp >= 100000000000000ULL)
-                return 16;*/
-
 	return -1;
 }
 
@@ -934,138 +927,6 @@ int dam_armor_recalc( CHAR_DATA *ch, int dam )
 	return (int)dam_to_lf;
 }
 
-CENSOR_DATA *first_censor;
-CENSOR_DATA *last_censor;
-void save_censor(void)
-{
-  CENSOR_DATA *cens;
-  FILE *fp;
-
-  if (!(fp = fopen(SYSTEM_DIR CENSOR_LIST, "w")))
-  {
-    bug( "Save_censor: cannot open " CENSOR_LIST, 0 );
-    perror(CENSOR_LIST);
-    return;
-  }
-  for (cens = first_censor; cens; cens = cens->next)
-    fprintf(fp, "%s~\n", cens->word);
-  fprintf(fp, "$~\n");
-  fclose(fp);
-  return;
-}
-
-void do_censor(CHAR_DATA *ch, char *argument)
-{
-  char arg[MAX_INPUT_LENGTH];
-  CENSOR_DATA *cens;
-
-  set_char_color( AT_PLAIN, ch );
-
-  argument = one_argument(argument, arg);
-  if (!*arg)
-  {
-    int wid = 0;
-
-    send_to_char("-- Censored Words --\n\r", ch);
-    for (cens = first_censor; cens; cens = cens->next)
-    {
-      ch_printf(ch, "%-17s ", cens->word);
-      if (++wid % 4 == 0)
-        send_to_char("\n\r", ch);
-    }
-    if (wid % 4 != 0)
-      send_to_char("\n\r", ch);
-    return;
-  }
-  for (cens = first_censor; cens; cens = cens->next)
-    if (!str_cmp(arg, cens->word))
-    {
-      UNLINK(cens, first_censor, last_censor, next, prev);
-      DISPOSE(cens->word);
-      DISPOSE(cens);
-      save_censor();
-      send_to_char("Word no longer censored.\n\r", ch);
-      return;
-    }
-  CREATE(cens, CENSOR_DATA, 1);
-  cens->word = str_dup(arg);
-  sort_censor(cens);
-  save_censor();
-  send_to_char("Word censored.\n\r", ch);
-  return;
-}
-
-void load_censor( void )
-{
-  CENSOR_DATA *cens;
-  FILE *fp;
-
-  if ( !(fp = fopen( SYSTEM_DIR CENSOR_LIST, "r" )) )
-    return;
-
-  for ( ; ; )
-  {
-    if ( feof( fp ) )
-    {
-      bug( "Load_censor: no $ found." );
-      fclose(fp);
-      return;
-    }
-    CREATE(cens, CENSOR_DATA, 1);
-    cens->word = fread_string_nohash(fp);
-    if (*cens->word == '$')
-      break;
-    sort_censor(cens);
-  }
-  DISPOSE(cens->word);
-  DISPOSE(cens);
-  fclose(fp);
-  return;
-}
-
-void sort_censor( CENSOR_DATA *pRes )
-{
-    CENSOR_DATA *cens = NULL;
-
-    if ( !pRes )
-    {
-        bug( "Sort_censor: NULL pRes" );
-        return;
-    }
-
-    pRes->next = NULL;
-    pRes->prev = NULL;
-
-    for ( cens = first_censor; cens; cens = cens->next )
-    {
-        if ( strcasecmp(pRes->word, cens->word) > 0 )
-        {
-            INSERT(pRes, cens, first_censor, next, prev);
-            break;
-        }
-    }
-
-    if ( !cens )
-    {
-	LINK(pRes, first_censor, last_censor,
-		next, prev);
-    }
-
-    return;
-}
-
-bool is_swear( char *word )
-{
-  CENSOR_DATA *cens;
-
-  for (cens = first_censor; cens; cens = cens->next)
-    if ((!str_infix(cens->word, word)) ||
-        !str_cmp(cens->word, word))
-//		if (str_ssh(word, cens->word))
-      return true;
-  return false;
-}
-
 void do_info( CHAR_DATA *ch, char *argument )
 {
 	char buf[MAX_INPUT_LENGTH];
@@ -1297,7 +1158,6 @@ void bio_absorb(CHAR_DATA *ch, CHAR_DATA *victim)
 	act( AT_HIT, "$n stabs $N in the chest with $s tail and sucks out $S life force.", ch, NULL, victim, TO_ROOM );
 
 	if (number_range(1, 100) < 75 && ch->pcdata->absorb_learn > 0
-//        && ( vPL >= cPL ))
         && ( canAbsorb ) && !IS_NPC( victim) )
 	{
 	pager_printf(ch, "You surge with new found power as you learn %s\n\r", skill_table[ch->pcdata->absorb_sn]->name);

@@ -412,9 +412,7 @@ void load_climate args((AREA_DATA * tarea, FILE *fp));	/* FB */
 void load_neighbor args((AREA_DATA * tarea, FILE *fp));
 void load_buildlist args((void));
 bool load_systemdata args((SYSTEM_DATA * sys));
-void load_banlist args((void));
 void load_version args((AREA_DATA * tarea, FILE *fp));
-void load_watchlist args((void));
 void load_reserved args((void));
 void initialize_economy args((void));
 void fix_exits args((void));
@@ -929,13 +927,9 @@ boot_db()
 		load_councils();
 		log_string("Loading watches");
 		load_watchlist();
-		log_string("Loading bans");
-		load_banlist();
 		log_string("Loading reserved names");
 		load_reserved();
 		log_string("Loading auth namelist");
-		log_string("Loading censored words");
-		load_censor();
 		scan_equipment();
 		log_string("Loading corpses");
 		load_corpses();
@@ -945,8 +939,6 @@ boot_db()
 		load_ships();
 		log_string("Loading governments");
 		load_planets();
-		log_string("Loading Immortal Hosts");
-		load_imm_host();
 		log_string("Loading Projects");
 		load_projects();
 		log_string("Loading Colors");
@@ -6866,54 +6858,7 @@ load_systemdata(SYSTEM_DATA * sys)
 	return found;
 }
 
-void
-load_watchlist(void)
-{
-	WATCH_DATA *pwatch;
-	FILE   *fp;
-	int 	number;
-	CMDTYPE *cmd;
-
-	if (!(fp = fopen(SYSTEM_DIR WATCH_LIST, "r")))
-		return;
-
-	for (;;) {
-		if (feof(fp)) {
-			bug("Load_watchlist: no -1 found.");
-			fclose(fp);
-			return;
-		}
-		number = fread_number(fp);
-		if (number == -1) {
-			fclose(fp);
-			return;
-		}
-		CREATE(pwatch, WATCH_DATA, 1);
-		pwatch->imm_level = number;
-		pwatch->imm_name = fread_string_nohash(fp);
-		pwatch->target_name = fread_string_nohash(fp);
-		if (strlen(pwatch->target_name) < 2)
-			DISPOSE(pwatch->target_name);
-		pwatch->player_site = fread_string_nohash(fp);
-		if (strlen(pwatch->player_site) < 2)
-			DISPOSE(pwatch->player_site);
-
-		/* Check for command watches */
-		if (pwatch->target_name)
-			for (cmd = command_hash[(int) pwatch->target_name[0]]; cmd; cmd = cmd->next) {
-				if (!str_cmp(pwatch->target_name, cmd->name)) {
-					SET_BIT(cmd->flags, CMD_WATCH);
-					break;
-				}
-			}
-
-		LINK(pwatch, first_watch, last_watch, next, prev);
-	}
-}
-
-
 /* Check to make sure range of vnums is free - Scryn 2/27/96 */
-
 void
 do_check_vnums(CHAR_DATA * ch, char *argument)
 {
