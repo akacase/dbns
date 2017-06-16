@@ -102,7 +102,7 @@ bool 	check_total_ip(DESCRIPTOR_DATA * dnew);
 bool	char_exists(char *fp);
 bool 	check_pfile(DESCRIPTOR_DATA * d);
 void    p_to_fp(char *p, char *fp);
-void    load_from_fp(DESCRIPTOR_DATA * d);
+void    load_from_fp(DESCRIPTOR_DATA * d, bool np);
 void 	usage(void);
 
 /* locals */
@@ -779,7 +779,7 @@ new_descriptor(int new_desc)
 	dnew->lines = 0;
 	dnew->scrlen = 24;
 	dnew->port = ntohs(sock.sin_port);
-	dnew->user = 0; 
+	dnew->user = 0;
 	dnew->newstate = 0;
 	dnew->prevcolor = 0x07;
 	/* descriptor pipes */
@@ -1330,11 +1330,7 @@ nanny(DESCRIPTOR_DATA * d, char *argument)
 		if (!str_cmp(argument, "New") && !blocked) {
 			if (d->newstate == 0) {
 				/* new player */
-				sprintf(buf, "\n\r&gChoosing a name is one of the most important parts of this game...\n\r"
-				    "Make sure to pick a name appropriate to the character you are going\n\r"
-				    "to role play, and be sure that it fits into the DragonBall Z world.\n\r"
-				    "Please type '&WHELP&g' to read what restirictions we have for naming your\n\r"
-				    "character.\n\r\n\r&wPlease choose a name for your character: &D");
+				sprintf(buf, "\n\r&wPlease choose a name for your character: &D");
 				send_to_desc_color(buf, d);
 				d->newstate++;
 				d->connected = CON_GET_NAME;
@@ -1361,9 +1357,8 @@ nanny(DESCRIPTOR_DATA * d, char *argument)
 			return;
 		}
 		p_exists  = char_exists(argument);
-		if (p_exists) {	/*  */
+		if (p_exists && d->newstate == 0) {
 			d->user = STRALLOC(argument);
-			printf("ARG: %s\n", argument);
 			send_to_desc_color("&wPassword: &D", d);
 			write_to_buffer(d, echo_off_str, 0);
 			d->connected = CON_GET_OLD_PASSWORD;
@@ -1371,9 +1366,6 @@ nanny(DESCRIPTOR_DATA * d, char *argument)
 		} else if (p_exists && d->newstate != 0) {
 			send_to_desc_color("&wThat name is already taken. Please choose another: &D", d);
 			d->connected = CON_GET_NAME;
-			d->character->desc = NULL;
-			free_char(d->character);
-			d->character = NULL;
 			return;
 		} else if (d->newstate == 0) {
 			/* no such player */
@@ -1381,6 +1373,7 @@ nanny(DESCRIPTOR_DATA * d, char *argument)
 			d->connected = CON_GET_NAME;
 			return;
 		} else {
+			d->user = STRALLOC(argument);
 			sprintf(buf, "&wDid I get that right, %s (&WY&w/&WN&w)? &D", argument);
 			send_to_desc_color(buf, d);
 			d->connected = CON_CONFIRM_NEW_NAME;
@@ -1389,14 +1382,12 @@ nanny(DESCRIPTOR_DATA * d, char *argument)
 		break;
 	case CON_GET_OLD_PASSWORD:
 		/* player exists, load in character */
-		load_from_fp(d);
+		load_from_fp(d, false);
+		ch = d->character;
 		if (!check_pfile(d)) {
 			return;
 		}
-		ch = d->character;
 		write_to_buffer(d, "\n\r", 2);
-		printf("%s\n", ch->pcdata->pwd);
-		printf("%s\n", sha256_crypt(argument));
 		if (str_cmp(sha256_crypt(argument), ch->pcdata->pwd)) {
 			write_to_buffer(d, "Wrong password, disconnecting.\n\r", 0);
 			close_socket(d, false, true);
@@ -1457,6 +1448,8 @@ nanny(DESCRIPTOR_DATA * d, char *argument)
 		switch (*argument) {
 		case 'y':
 		case 'Y':
+			load_from_fp(d, true);
+			ch = d->character;
 			sprintf(buf, "\n\r&wMake sure to use a password that won't be easily guessed by someone else."
 			    "\n\rPick a good password for %s: %s&D",
 			    ch->name, echo_off_str);
@@ -1464,13 +1457,9 @@ nanny(DESCRIPTOR_DATA * d, char *argument)
 			xSET_BIT(ch->act, PLR_ANSI);
 			d->connected = CON_GET_NEW_PASSWORD;
 			break;
-
 		case 'n':
 		case 'N':
 			send_to_desc_color("&wOk, what IS it, then? &D", d);
-			d->character->desc = NULL;
-			free_char(d->character);
-			d->character = NULL;
 			d->connected = CON_GET_NAME;
 			break;
 		default:
@@ -1480,7 +1469,6 @@ nanny(DESCRIPTOR_DATA * d, char *argument)
 		break;
 	case CON_GET_NEW_PASSWORD:
 		send_to_desc_color("\n\r", d);
-
 		if (strlen(argument) < 5) {
 			send_to_desc_color("&wPassword must be at least five characters long.\n\rPassword: &D", d);
 			return;
@@ -1499,7 +1487,6 @@ nanny(DESCRIPTOR_DATA * d, char *argument)
 		break;
 	case CON_CONFIRM_NEW_PASSWORD:
 		send_to_desc_color("\n\r", d);
-
 		if (str_cmp(sha256_crypt(argument), ch->pcdata->pwd)) {
 			write_to_buffer(d, "Passwords don't match.\n\rRetype password: ", 0);
 			d->connected = CON_GET_NEW_PASSWORD;
@@ -4158,6 +4145,9 @@ p_to_fp(char *p, char *fp) {
 }
 
 void
-load_from_fp(DESCRIPTOR_DATA * d) {
-	load_char_obj(d, d->user, false);
+load_from_fp(DESCRIPTOR_DATA * d, bool np) {
+	if (np)
+	    load_char_obj(d, d->user, true);
+	else
+	    load_char_obj(d, d->user, false);
 }
