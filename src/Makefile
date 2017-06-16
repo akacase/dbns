@@ -32,7 +32,7 @@ C_FILES = act_comm.c act_info.c act_move.c act_obj.c act_wiz.c \
           space.c special.c stat_obj.c tables.c update.c dns.c skills_genie.c \
           sha256.c
 
-H_FILES = mud.h bet.h board.h finger.h house.h pfiles.h rare.h 
+H_FILES = mud.h bet.h board.h finger.h house.h pfiles.h rare.h utf8.h
 
 all:
 	@make dbns
