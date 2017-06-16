@@ -101,6 +101,8 @@ void 	mccp_interest(CHAR_DATA * ch);
 bool 	check_total_ip(DESCRIPTOR_DATA * dnew);
 bool	char_exists(char *fp);
 bool 	check_pfile(DESCRIPTOR_DATA * d);
+void    p_to_fp(char *p, char *fp);
+void    load_from_fp(DESCRIPTOR_DATA * d);
 void 	usage(void);
 
 /* locals */
@@ -301,7 +303,7 @@ init_socket(int port)
 		exit(1);
 	}
 	if (setsockopt(fd, SOL_SOCKET, SO_REUSEADDR,
-		(void *) &x, sizeof(x)) < 0) {
+	    (void *) &x, sizeof(x)) < 0) {
 		perror("init_socket: SO_REUSEADDR");
 		closesocket(fd);
 		exit(1);
@@ -310,7 +312,7 @@ init_socket(int port)
 	ld.l_linger = 1000;
 
 	if (setsockopt(fd, SOL_SOCKET, SO_LINGER,
-		(void *) &ld, sizeof(ld)) < 0) {
+	    (void *) &ld, sizeof(ld)) < 0) {
 		perror("init_socket: SO_DONTLINGER");
 		closesocket(fd);
 		exit(1);
@@ -511,32 +513,6 @@ check_bad_desc(int desc)
 	return (false);
 }
 
-/*
- * Determine whether this player is to be watched  --Gorog
- */
-bool
-chk_watch(sh_int player_level, char *player_name, char *player_site)
-{
-	WATCH_DATA *pw;
-
-	if (!first_watch)
-		return (false);
-
-	for (pw = first_watch; pw; pw = pw->next) {
-		if (pw->target_name) {
-			if (!str_cmp(pw->target_name, player_name)
-			    && player_level < pw->imm_level)
-				return (true);
-		} else if (pw->player_site) {
-			if (!str_prefix(pw->player_site, player_site)
-			    && player_level < pw->imm_level)
-				return (true);
-		}
-	}
-	return (false);
-}
-
-
 void
 accept_new(int ctrl)
 {
@@ -603,9 +579,9 @@ game_loop()
 	while (!mud_down) {
 		accept_new(control);
 		/*
-	         * Kick out descriptors with raised exceptions
-	         * or have been idle, then check for input.
-	         */
+		 * Kick out descriptors with raised exceptions
+		 * or have been idle, then check for input.
+		 */
 		for (d = first_descriptor; d; d = d_next) {
 			if (d == d->next) {
 				bug("descriptor_loop: loop found & fixed");
@@ -632,7 +608,7 @@ game_loop()
 						FD_CLR(d->descriptor, &out_set);
 						if (d->character
 						    && (d->connected == CON_PLAYING
-							|| d->connected == CON_EDITING)) {
+						    || d->connected == CON_EDITING)) {
 							log_string("preparing to fquit comm.c:668\n");
 							fquit(d->character);
 							continue;
@@ -658,7 +634,7 @@ game_loop()
 				}
 				/* check for input from the dns */
 				if ((d->connected == CON_PLAYING
-					|| d->character != NULL)
+				    || d->character != NULL)
 				    && d->ifd != -1
 				    && FD_ISSET(d->ifd, &in_set))
 					process_dns(d);
@@ -714,9 +690,9 @@ game_loop()
 		}
 
 		/*
-	         * Synchronize to a clock.
-	         * sleep(last_time + 1/PULSE_PER_SECOND - now).
-	         */
+		 * Synchronize to a clock.
+		 * sleep(last_time + 1/PULSE_PER_SECOND - now).
+		 */
 		struct timeval now_time;
 		long 	sec_delta;
 		long 	usec_delta;
@@ -817,16 +793,9 @@ new_descriptor(int new_desc)
 	from = gethostbyaddr((char *) &sock.sin_addr,
 	    sizeof(sock.sin_addr), AF_INET);
 	dnew->host2 = STRALLOC((char *) (from ? from->h_name : buf));
-	if (check_total_bans(dnew)) {
-		write_to_descriptor(desc,
-		    "Your site has been banned from this Mud.\n\r", 0);
-		free_desc(dnew);
-		set_alarm(0);
-		return;
-	}
 	/*
-         * Init descriptor data.
-         */
+	 * Init descriptor data.
+	 */
 	if (!last_descriptor && first_descriptor) {
 		DESCRIPTOR_DATA *d;
 
@@ -837,8 +806,8 @@ new_descriptor(int new_desc)
 	}
 	LINK(dnew, first_descriptor, last_descriptor, next, prev);
 	/*
-         * Send the greeting.
-         */
+	 * Send the greeting.
+	 */
 	{
 		extern char *help_greeting;
 
@@ -1055,7 +1024,7 @@ read_from_buffer(DESCRIPTOR_DATA * d)
 
 	/* look for at least one new line. */
 	for (i = 0; d->inbuf[i] != '\n' && d->inbuf[i] != '\r' && i < MAX_INBUF_SIZE;
-	    i++) {
+	     i++) {
 		if (d->inbuf[i] == '\0')
 			return;
 	}
@@ -1330,8 +1299,7 @@ nanny(DESCRIPTOR_DATA * d, char *argument)
 	char   *p;
 	int 	b = 0;
 	int 	i_class;
-	bool 	f_old;
-	bool    p_exists;
+	bool    p_exists = false;
 	bool 	blocked = false;
 	NOTE_DATA *catchup_notes;
 	int 	i = 0;
@@ -1393,27 +1361,25 @@ nanny(DESCRIPTOR_DATA * d, char *argument)
 			return;
 		}
 		p_exists  = char_exists(argument);
-		if (p_exists) {
-			    send_to_desc_color("&wPassword: &D", d);
-			    write_to_buffer(d, echo_off_str, 0);
-			    d->user = *argument;
-			    d->connected = CON_GET_OLD_PASSWORD;
-			    return;
+		if (p_exists) {	/*  */
+			d->user = STRALLOC(argument);
+			printf("ARG: %s\n", argument);
+			send_to_desc_color("&wPassword: &D", d);
+			write_to_buffer(d, echo_off_str, 0);
+			d->connected = CON_GET_OLD_PASSWORD;
+			return;
 		} else if (p_exists && d->newstate != 0) {
-				send_to_desc_color("&wThat name is already taken. Please choose another: &D", d);
-				d->connected = CON_GET_NAME;
-				d->character->desc = NULL;
-				free_char(d->character);
-				d->character = NULL;
-				return;
+			send_to_desc_color("&wThat name is already taken. Please choose another: &D", d);
+			d->connected = CON_GET_NAME;
+			d->character->desc = NULL;
+			free_char(d->character);
+			d->character = NULL;
+			return;
 		} else if (d->newstate == 0) {
-				/* no such player */
-				send_to_desc_color("\n\r&wNo such player exists.\n\rPlease check your spelling, or type new to start a new player.\n\r\n\rName: &D", d);
-				d->connected = CON_GET_NAME;
-				d->character->desc = NULL;
-				free_char(d->character);
-				d->character = NULL;
-				return;
+			/* no such player */
+			send_to_desc_color("\n\r&wNo such player exists.\n\rPlease check your spelling, or type new to start a new player.\n\r\n\rName: &D", d);
+			d->connected = CON_GET_NAME;
+			return;
 		} else {
 			sprintf(buf, "&wDid I get that right, %s (&WY&w/&WN&w)? &D", argument);
 			send_to_desc_color(buf, d);
@@ -1423,11 +1389,14 @@ nanny(DESCRIPTOR_DATA * d, char *argument)
 		break;
 	case CON_GET_OLD_PASSWORD:
 		/* player exists, load in character */
-		f_old = load_char_obj(d, buf, false);
+		load_from_fp(d);
 		if (!check_pfile(d)) {
 			return;
 		}
+		ch = d->character;
 		write_to_buffer(d, "\n\r", 2);
+		printf("%s\n", ch->pcdata->pwd);
+		printf("%s\n", sha256_crypt(argument));
 		if (str_cmp(sha256_crypt(argument), ch->pcdata->pwd)) {
 			write_to_buffer(d, "Wrong password, disconnecting.\n\r", 0);
 			close_socket(d, false, true);
@@ -1443,9 +1412,6 @@ nanny(DESCRIPTOR_DATA * d, char *argument)
 			break;
 		}
 		strncpy(buf, ch->pcdata->filename, MAX_STRING_LENGTH);
-		d->character->desc = NULL;
-		d->character = NULL;
-		ch = d->character;
 		if (ch->position > POS_SITTING && ch->position < POS_STANDING)
 			ch->position = POS_STANDING;
 		sprintf(log_buf, "%s@%s(%s) has connected.", ch->pcdata->filename, d->host, d->user);
@@ -1673,89 +1639,89 @@ nanny(DESCRIPTOR_DATA * d, char *argument)
 		d->connected = CON_GET_NEW_CLASS;
 		break;
 	case CON_GET_NEW_CLASS:
-	     /* 1 - saiyan, 2 - human, 3 - halfie, 4 - namek, 5 - icer, 
-	      * 6 - bio, 7 - kaio, 8 - demon, 9 - android-h, 
-	      * 10 - android-e, 11 - android-fm
-	      */
-	     argument = one_argument(argument, arg);
-	     if (is_number(arg)) {
-		  i = atoi(arg);
-		  int 	c = 0;
+		/* 1 - saiyan, 2 - human, 3 - halfie, 4 - namek, 5 - icer, 
+		 * 6 - bio, 7 - kaio, 8 - demon, 9 - android-h, 
+		 * 10 - android-e, 11 - android-fm
+		 */
+		argument = one_argument(argument, arg);
+		if (is_number(arg)) {
+			i = atoi(arg);
+			int 	c = 0;
 
-		  if (i == 0)
-		       c = 0;
-		  if (i == 1)
-		       c = 1;
-		  if (i == 2)
-		       c = 2;
-		  if (i == 3)
-		       c = 3;
-		  if (i == 4)
-		       c = 5;
-		  if (i == 5)
-		       c = 6;
-		  if (i == 6)
-		       c = 7;
-		  if (i == 7)
-		       c = 8;
-		  if (i == 8)
-		       c = 28;
-		  if (i == 9)
-		       c = 29;
-		  if (i == 10)
-		       c = 30;
-		  for (i_class = 0; i_class < 31; i_class++) {
-		       if (i_class > 8 && i_class < 28)
-			    continue;
-		       if (class_table[i_class]->who_name &&
-			 class_table[i_class]->who_name[0] != '\0') {
-			    if (c == i_class) {
-				 ch->class = i_class;
-				 ch->race = i_class;
-				 break;
-			    }
-		       }
-		  }
-	     } else {
-		  char 	letters[14] = "abcdefghijklmn";
-		  for (i = 0; i < 14; i++) {
+			if (i == 0)
+				c = 0;
+			if (i == 1)
+				c = 1;
+			if (i == 2)
+				c = 2;
+			if (i == 3)
+				c = 3;
+			if (i == 4)
+				c = 5;
+			if (i == 5)
+				c = 6;
+			if (i == 6)
+				c = 7;
+			if (i == 7)
+				c = 8;
+			if (i == 8)
+				c = 28;
+			if (i == 9)
+				c = 29;
+			if (i == 10)
+				c = 30;
+			for (i_class = 0; i_class < 31; i_class++) {
+				if (i_class > 8 && i_class < 28)
+					continue;
+				if (class_table[i_class]->who_name &&
+				    class_table[i_class]->who_name[0] != '\0') {
+					if (c == i_class) {
+						ch->class = i_class;
+						ch->race = i_class;
+						break;
+					}
+				}
+			}
+		} else {
+			char 	letters[14] = "abcdefghijklmn";
+			for (i = 0; i < 14; i++) {
 				if (arg[0] == letters[i]) {
 					int 	c = i;
 
 					if (i == 0)
 						c = 0;
 					//saian
-					    if (i == 1)
+					if (i == 1)
 						c = 1;
 					//human
-					    if (i == 2)
+					if (i == 2)
 						c = 2;
 					//halfbreed
-					    if (i == 3)
+					if (i == 3)
 						c = 3;
 					//namek
-					    if (i == 4)
+					if (i == 4)
 						c = 5;
 					//icer
-					    if (i == 5)
+					if (i == 5)
 						c = 6;
 					//bio
-					    if (i == 6)
+					if (i == 6)
 						c = 7;
 					//kaio
-					    if (i == 7)
+					if (i == 7)
 						c = 8;
 					//demon
-					    if (i == 8)
+					if (i == 8)
 						c = 28;
 					//android - h
-					    if (i == 9)
+					if (i == 9)
 						c = 29;
 					//android - e
-					    if (i == 10)
+					if (i == 10)
 						c = 30;
 					//android - fm
-					    if (!str_cmp(class_table[c]->who_name, "android-h"))
+					if (!str_cmp(class_table[c]->who_name, "android-h"))
 						sprintf(buf, "androidh");
 					else if (!str_cmp(class_table[c]->who_name, "android-e"))
 						sprintf(buf, "androide");
@@ -1982,7 +1948,7 @@ nanny(DESCRIPTOR_DATA * d, char *argument)
 			d->connected = CON_GET_NEW_SECONDARYCOLOR;
 			break;
 
-	case CON_GET_NEW_SECONDARYCOLOR:
+		case CON_GET_NEW_SECONDARYCOLOR:
 			/*
 			 * Black, Brown, Red, Blonde, Strawberry Blonde,
 			 * Argent, Golden Blonde, Platinum Blonde, Light
@@ -2118,10 +2084,8 @@ nanny(DESCRIPTOR_DATA * d, char *argument)
 		return;
 		break;
 	case CON_PRESS_ENTER:
-		if (chk_watch(get_trust(ch), ch->name, d->host))
-			SET_BIT(ch->pcdata->flags, PCFLAG_WATCH);
-		else
-			REMOVE_BIT(ch->pcdata->flags, PCFLAG_WATCH);
+		/* todo: remove this */
+		REMOVE_BIT(ch->pcdata->flags, PCFLAG_WATCH);
 		if (ch->position == POS_MOUNTED)
 			ch->position = POS_STANDING;
 		set_pager_color(AT_PLAIN, ch);
@@ -2291,7 +2255,7 @@ nanny(DESCRIPTOR_DATA * d, char *argument)
 			act(AT_GREEN, "A Strange Force rips you from the Hyperbolic Time Chamber.", ch, NULL, NULL, TO_CHAR);
 			char_to_room(ch, get_room_index(2059));
 		} else if (ch->in_room && (IS_IMMORTAL(ch)
-			|| !xIS_SET(ch->in_room->room_flags, ROOM_PROTOTYPE))) {
+		    || !xIS_SET(ch->in_room->room_flags, ROOM_PROTOTYPE))) {
 			char_to_room(ch, ch->in_room);
 		} else if (IS_IMMORTAL(ch)) {
 			char_to_room(ch, get_room_index(ROOM_VNUM_CHAT));
@@ -2381,13 +2345,13 @@ bool
 check_parse_name(char *name, bool newchar)
 {
 	/*
-         * Names checking should really only be done on new characters, otherwise
-         * we could end up with people who can't access their characters.  Would
-         * have also provided for that new area havoc mentioned below, while still
-         * disallowing current area mobnames.  I personally think that if we can
-         * have more than one mob with the same keyword, then may as well have
-         * players too though, so I don't mind that removal.  -- Alty
-         */
+	 * Names checking should really only be done on new characters, otherwise
+	 * we could end up with people who can't access their characters.  Would
+	 * have also provided for that new area havoc mentioned below, while still
+	 * disallowing current area mobnames.  I personally think that if we can
+	 * have more than one mob with the same keyword, then may as well have
+	 * players too though, so I don't mind that removal.  -- Alty
+	 */
 
 	if (is_reserved_name(name) && newchar)
 		return (false);
@@ -2397,9 +2361,9 @@ check_parse_name(char *name, bool newchar)
 		return (false);
 
 	/*
-         * Alphanumerics only.
-         * Lock out IllIll twits.
-         */
+	 * Alphanumerics only.
+	 * Lock out IllIll twits.
+	 */
 	{
 		char   *pc;
 		bool 	fIll;
@@ -2428,8 +2392,8 @@ check_playing(DESCRIPTOR_DATA * d, char *name)
 		if (d_old != d
 		    && (d_old->character || d_old->original)
 		    && !str_cmp(name, d_old->original
-			? d_old->original->pcdata->filename :
-			d_old->character->pcdata->filename)) {
+		    ? d_old->original->pcdata->filename :
+		    d_old->character->pcdata->filename)) {
 			return (true);
 		}
 	}
@@ -2448,8 +2412,8 @@ reconnect(DESCRIPTOR_DATA * d, char *name)
 		if (d_old != d
 		    && (d_old->character || d_old->original)
 		    && !str_cmp(name, d_old->original
-			? d_old->original->pcdata->filename :
-			d_old->character->pcdata->filename)) {
+		    ? d_old->original->pcdata->filename :
+		    d_old->character->pcdata->filename)) {
 			conn_state = d_old->connected;
 			ch = d_old->original ? d_old->original : d_old->character;
 			write_to_buffer(d, "Already playing... Kicking off old connection.\n\r", 0);
@@ -2727,8 +2691,8 @@ pager_printf_color(CHAR_DATA * ch, char *fmt,...)
 }
 
 #define MORPHNAME(ch)   ((ch->morph&&ch->morph->morph)? \
-                         ch->morph->morph->short_desc: \
-                         IS_NPC(ch) ? ch->short_descr : ch->name)
+    ch->morph->morph->short_desc:			\
+    IS_NPC(ch) ? ch->short_descr : ch->name)
 #define NAME(ch)        (IS_NPC(ch) ? ch->short_descr : ch->name)
 
 char   *
@@ -2813,7 +2777,7 @@ act_string(const char *format, CHAR_DATA * to, CHAR_DATA * ch,
 					i = "it";
 				} else
 					i = capitalize ? che_she[URANGE(0, ch->sex, 2)] : he_she[URANGE(0, ch->sex, 2)];
-				break;
+					    break;
 			case 'E':
 				if (vch->sex > 2 || vch->sex < 0) {
 					bug("act_string: player %s has sex set at %d!", vch->name,
@@ -2821,7 +2785,7 @@ act_string(const char *format, CHAR_DATA * to, CHAR_DATA * ch,
 					i = "it";
 				} else
 					i = capitalize ? che_she[URANGE(0, vch->sex, 2)] : he_she[URANGE(0, vch->sex, 2)];
-				break;
+					    break;
 			case 'm':
 				if (ch->sex > 2 || ch->sex < 0) {
 					bug("act_string: player %s has sex set at %d!", ch->name,
@@ -2829,7 +2793,7 @@ act_string(const char *format, CHAR_DATA * to, CHAR_DATA * ch,
 					i = "it";
 				} else
 					i = capitalize ? chim_her[URANGE(0, ch->sex, 2)] : him_her[URANGE(0, ch->sex, 2)];
-				break;
+					    break;
 			case 'M':
 				if (vch->sex > 2 || vch->sex < 0) {
 					bug("act_string: player %s has sex set at %d!", vch->name,
@@ -2837,7 +2801,7 @@ act_string(const char *format, CHAR_DATA * to, CHAR_DATA * ch,
 					i = "it";
 				} else
 					i = capitalize ? chim_her[URANGE(0, vch->sex, 2)] : him_her[URANGE(0, vch->sex, 2)];
-				break;
+					    break;
 			case 's':
 				if (ch->sex > 2 || ch->sex < 0) {
 					bug("act_string: player %s has sex set at %d!", ch->name,
@@ -2845,7 +2809,7 @@ act_string(const char *format, CHAR_DATA * to, CHAR_DATA * ch,
 					i = "its";
 				} else
 					i = capitalize ? chis_her[URANGE(0, ch->sex, 2)] : his_her[URANGE(0, ch->sex, 2)];
-				break;
+					    break;
 			case 'S':
 				if (vch->sex > 2 || vch->sex < 0) {
 					bug("act_string: player %s has sex set at %d!", vch->name,
@@ -2853,7 +2817,7 @@ act_string(const char *format, CHAR_DATA * to, CHAR_DATA * ch,
 					i = "its";
 				} else
 					i = capitalize ? chis_her[URANGE(0, vch->sex, 2)] : his_her[URANGE(0, vch->sex, 2)];
-				break;
+					    break;
 			case 'q':
 				i = (to == ch) ? "" : "s";
 				break;
@@ -2902,8 +2866,8 @@ act(sh_int AType, const char *format, CHAR_DATA * ch, const void *arg1, const vo
 	CHAR_DATA *vch = (CHAR_DATA *) arg2;
 
 	/*
-         * Discard null and zero-length messages.
-         */
+	 * Discard null and zero-length messages.
+	 */
 	if (!format || format[0] == '\0')
 		return;
 
@@ -2919,8 +2883,8 @@ act(sh_int AType, const char *format, CHAR_DATA * ch, const void *arg1, const vo
 		to = ch->in_room->first_person;
 
 	/*
-         * ACT_SECRETIVE handling
-         */
+	 * ACT_SECRETIVE handling
+	 */
 	if (IS_NPC(ch) && xIS_SET(ch->act, ACT_SECRETIVE) && type != TO_CHAR)
 		return;
 
@@ -2944,7 +2908,7 @@ act(sh_int AType, const char *format, CHAR_DATA * ch, const void *arg1, const vo
 		if (HAS_PROG(to->in_room, ACT_PROG))
 			rprog_act_trigger(txt, to->in_room, ch, (OBJ_DATA *) arg1, (void *) arg2);
 		for (to_obj = to->in_room->first_content; to_obj;
-		    to_obj = to_obj->next_content)
+		     to_obj = to_obj->next_content)
 			if (HAS_PROG(to_obj->pIndexData, ACT_PROG))
 				oprog_act_trigger(txt, to_obj, ch, (OBJ_DATA *) arg1, (void *) arg2);
 	}
@@ -2953,9 +2917,9 @@ act(sh_int AType, const char *format, CHAR_DATA * ch, const void *arg1, const vo
 	 * whole room when we're only sending to one char anyways..? -- Alty
 	 */
 	for (; to; to = (type == TO_CHAR || type == TO_VICT)
-	    ? NULL : to->next_in_room) {
+		 ? NULL : to->next_in_room) {
 		if ((!to->desc
-			&& (IS_NPC(to) && !HAS_PROG(to->pIndexData, ACT_PROG)))
+		    && (IS_NPC(to) && !HAS_PROG(to->pIndexData, ACT_PROG)))
 		    || !IS_AWAKE(to))
 			continue;
 		if (type == TO_CHAR && to != ch)
@@ -2967,8 +2931,8 @@ act(sh_int AType, const char *format, CHAR_DATA * ch, const void *arg1, const vo
 		if (type == TO_NOTVICT && (to == ch || to == vch))
 			continue;
 		if (type == TO_CANSEE && (to == ch ||
-			(!IS_IMMORTAL(to) && !IS_NPC(ch) && (xIS_SET(ch->act, PLR_WIZINVIS)
-				&& (get_trust(to) < (ch->pcdata ? ch->pcdata->wizinvis : 0))))))
+		    (!IS_IMMORTAL(to) && !IS_NPC(ch) && (xIS_SET(ch->act, PLR_WIZINVIS)
+		    && (get_trust(to) < (ch->pcdata ? ch->pcdata->wizinvis : 0))))))
 			continue;
 
 		if (IS_IMMORTAL(to))
@@ -3270,7 +3234,7 @@ display_prompt(DESCRIPTOR_DATA * d)
 	    && ch->pcdata->subprompt[0] != '\0')
 		prompt = ch->pcdata->subprompt;
 	else if (IS_NPC(ch) || (!ch->fighting && (!ch->pcdata->prompt
-		    || !*ch->pcdata->prompt)))
+	    || !*ch->pcdata->prompt)))
 		prompt = default_prompt(ch);
 	else if (ch->fighting) {
 		if (!ch->pcdata->fprompt || !*ch->pcdata->fprompt)
@@ -4067,8 +4031,8 @@ act2(sh_int AType, const char *format, CHAR_DATA * ch, const void *arg1, const v
 	CHAR_DATA *vch = (CHAR_DATA *) arg2;
 
 	/*
-         * Discard null and zero-length messages.
-         */
+	 * Discard null and zero-length messages.
+	 */
 	if (!format || format[0] == '\0')
 		return;
 
@@ -4084,8 +4048,8 @@ act2(sh_int AType, const char *format, CHAR_DATA * ch, const void *arg1, const v
 		to = ch->in_room->first_person;
 
 	/*
-         * ACT_SECRETIVE handling
-         */
+	 * ACT_SECRETIVE handling
+	 */
 	if (IS_NPC(ch) && xIS_SET(ch->act, ACT_SECRETIVE) && type != TO_CHAR)
 		return;
 
@@ -4109,7 +4073,7 @@ act2(sh_int AType, const char *format, CHAR_DATA * ch, const void *arg1, const v
 		if (HAS_PROG(to->in_room, ACT_PROG))
 			rprog_act_trigger(txt, to->in_room, ch, (OBJ_DATA *) arg1, (void *) arg2);
 		for (to_obj = to->in_room->first_content; to_obj;
-		    to_obj = to_obj->next_content)
+		     to_obj = to_obj->next_content)
 			if (HAS_PROG(to_obj->pIndexData, ACT_PROG))
 				oprog_act_trigger(txt, to_obj, ch, (OBJ_DATA *) arg1, (void *) arg2);
 	}
@@ -4118,9 +4082,9 @@ act2(sh_int AType, const char *format, CHAR_DATA * ch, const void *arg1, const v
 	 * whole room when we're only sending to one char anyways..? -- Alty
 	 */
 	for (; to; to = (type == TO_CHAR || type == TO_VICT)
-	    ? NULL : to->next_in_room) {
+		 ? NULL : to->next_in_room) {
 		if ((!to->desc
-			&& (IS_NPC(to) && !HAS_PROG(to->pIndexData, ACT_PROG)))
+		    && (IS_NPC(to) && !HAS_PROG(to->pIndexData, ACT_PROG)))
 		    || !IS_AWAKE(to))
 			continue;
 
@@ -4133,8 +4097,8 @@ act2(sh_int AType, const char *format, CHAR_DATA * ch, const void *arg1, const v
 		if (type == TO_NOTVICT && (to == ch || to == vch))
 			continue;
 		if (type == TO_CANSEE && (to == ch ||
-			(!IS_IMMORTAL(to) && !IS_NPC(ch) && (xIS_SET(ch->act, PLR_WIZINVIS)
-				&& (get_trust(to) < (ch->pcdata ? ch->pcdata->wizinvis : 0))))))
+		    (!IS_IMMORTAL(to) && !IS_NPC(ch) && (xIS_SET(ch->act, PLR_WIZINVIS)
+		    && (get_trust(to) < (ch->pcdata ? ch->pcdata->wizinvis : 0))))))
 			continue;
 
 		if (IS_IMMORTAL(to))
@@ -4165,26 +4129,35 @@ act2(sh_int AType, const char *format, CHAR_DATA * ch, const void *arg1, const v
 
 bool
 char_exists(char *fp) {
-     char pl[MAX_STRING_LENGTH];
- 
-     sprintf(pl, "%s%c/%s", PLAYER_DIR, tolower(fp[0]), capitalize(fp));
+	char pl[MAX_STRING_LENGTH];
+	p_to_fp(fp, pl);
 
-     if(access(pl, F_OK) != -1 ) {
-	  return (true);
-     } else {
-	  return (false);
-     }
+	if(access(pl, F_OK) != -1 ) {
+		return (true);
+	} else {
+		return (false);
+	}
 }
 
 bool
 check_pfile(DESCRIPTOR_DATA * d) {
-     if (!d->character) {
-	  sprintf(log_buf, "Bad player file %s", d->user);
-	  log_string(log_buf);
-	  send_to_desc_color("Your playerfile is corrupt... please notify case@capsulecorp.org\n\r", d);
-	  close_socket(d, false, false);
-	  return (false);
-     } else {
-	  return(true);
-     }
+	if (!d->character) {
+		sprintf(log_buf, "Bad player file %s", d->user);
+		log_string(log_buf);
+		send_to_desc_color("Your playerfile is corrupt... please notify case@capsulecorp.org\n\r", d);
+		close_socket(d, false, false);
+		return (false);
+	} else {
+		return(true);
+	}
+}
+
+void
+p_to_fp(char *p, char *fp) {
+	sprintf(fp, "%s%c/%s", PLAYER_DIR, tolower(p[0]), capitalize(p));
+}
+
+void
+load_from_fp(DESCRIPTOR_DATA * d) {
+	load_char_obj(d, d->user, false);
 }

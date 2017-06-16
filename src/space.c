@@ -1278,7 +1278,6 @@ load_ships()
 		snprintf(filename, sizeof(filename), "%s%s", SPACE_DIR, ship);
 		if (ship[0] == '$')
 			break;
-		printf("%s\n", filename);
 		if (!load_ship_file(filename)) {
 			sprintf(buf, "Cannot load ship file: %s", filename);
 			bug(buf, 0);

@@ -794,10 +794,6 @@ talk_channel(CHAR_DATA * ch, char *argument, int channel, const char *verb)
 					continue;
 				if (vch->pcdata->clan != ch->pcdata->clan)
 					continue;
-				if (is_swear(argument) && !xIS_SET(vch->act, PLR_CLAN_SWEAR)) {
-					pager_printf_color(vch, "&W(&CCLAN&W) &c%s starts swearing like there's no tomorrow!\n\r", ch->name);
-					continue;
-				}
 			}
 			if (channel == CHANNEL_COUNCIL) {
 				if (IS_NPC(vch))
@@ -989,10 +985,6 @@ do_hcchat(CHAR_DATA * ch, char *argument)
 		send_to_char("You can't use this channel until you are out of training.\n\r", ch);
 		return;
 	}
-	if (is_swear(argument)) {
-		send_to_char("Oops, you shouldn't be swearing!\n\r", ch);
-		return;
-	}
 	sysdata.outBytesFlag = LOGBOUTCHANNEL;
 	talk_channel(ch, drunk_speech(argument, ch), CHANNEL_HC, "HARDCORE");
 	sysdata.outBytesFlag = LOGBOUTNORM;
@@ -1031,16 +1023,6 @@ do_admintalk(CHAR_DATA * ch, char *argument)
 		    ch->pcdata->admintalk);
 		return;
 	}
-	if (is_swear(argument)) {
-		send_to_char("Oops, you shouldn't be swearing!\n\r", ch);
-		return;
-	}
-	/*
-	 * if (!can_admin(ch)) { send_to_char("&wSorry, no admins are online
-	 * or they are not answering questions at this time.\n\r", ch);
-	 * send_to_char("&wPlease try to ask your question again at a later
-	 * time.  Thank you.\n\r", ch); return; } else
-	 */
 	undeaf_admin();
 
 	sysdata.outBytesFlag = LOGBOUTCHANNEL;
@@ -1070,10 +1052,6 @@ do_ooc(CHAR_DATA * ch, char *argument)
 		send_to_char("You can't use this channel until you are out of training.\n\r", ch);
 		return;
 	}
-	if (is_swear(argument)) {
-		send_to_char("Oops, you shouldn't be swearing!\n\r", ch);
-		return;
-	}
 	sysdata.outBytesFlag = LOGBOUTCHANNEL;
 	talk_channel(ch, drunk_speech(argument, ch), CHANNEL_OOC, "OOC");
 	sysdata.outBytesFlag = LOGBOUTNORM;
@@ -1093,13 +1071,6 @@ do_clantalk(CHAR_DATA * ch, char *argument)
 		send_to_char("Huh?\n\r", ch);
 		return;
 	}
-	/*
-		if (is_swear(argument))
-	    {
-			send_to_char("Oops, you shouldn't be swearing!\n\r", ch);
-			return;
-	    }
-	*/
 	sysdata.outBytesFlag = LOGBOUTCHANNEL;
 	talk_channel(ch, drunk_speech(argument, ch), CHANNEL_CLAN, "CLAN");
 	sysdata.outBytesFlag = LOGBOUTNORM;
@@ -1114,11 +1085,6 @@ do_newbiechat(CHAR_DATA * ch, char *argument)
 		send_to_char("Huh?\n\r", ch);
 		return;
 	}
-	if (is_swear(argument)) {
-		send_to_char("Oops, you shouldn't be swearing!\n\r", ch);
-		return;
-	}
-	//argument = remove_color(argument);
 	sysdata.outBytesFlag = LOGBOUTCHANNEL;
 	talk_channel(ch, drunk_speech(argument, ch), CHANNEL_NEWBIE, "NewbiE");
 	sysdata.outBytesFlag = LOGBOUTNORM;
@@ -1143,10 +1109,6 @@ do_ordertalk(CHAR_DATA * ch, char *argument)
 		send_to_char("Huh?\n\r", ch);
 		return;
 	}
-	if (is_swear(argument)) {
-		send_to_char("Oops, you shouldn't be swearing!\n\r", ch);
-		return;
-	}
 	sysdata.outBytesFlag = LOGBOUTCHANNEL;
 	talk_channel(ch, drunk_speech(argument, ch), CHANNEL_ORDER, "ORDER");
 	sysdata.outBytesFlag = LOGBOUTNORM;
@@ -1164,10 +1126,6 @@ do_counciltalk(CHAR_DATA * ch, char *argument)
 		send_to_char("Huh?\n\r", ch);
 		return;
 	}
-	if (is_swear(argument)) {
-		send_to_char("Oops, you shouldn't be swearing!\n\r", ch);
-		return;
-	}
 	sysdata.outBytesFlag = LOGBOUTCHANNEL;
 	talk_channel(ch, drunk_speech(argument, ch), CHANNEL_COUNCIL, "COUNCIL");
 	sysdata.outBytesFlag = LOGBOUTNORM;
@@ -1183,10 +1141,6 @@ do_guildtalk(CHAR_DATA * ch, char *argument)
 	}
 	if (IS_NPC(ch) || !ch->pcdata->clan || ch->pcdata->clan->clan_type != CLAN_GUILD) {
 		send_to_char("Huh?\n\r", ch);
-		return;
-	}
-	if (is_swear(argument)) {
-		send_to_char("Oops, you shouldn't be swearing!\n\r", ch);
 		return;
 	}
 	sysdata.outBytesFlag = LOGBOUTCHANNEL;
@@ -1216,10 +1170,6 @@ do_quest(CHAR_DATA * ch, char *argument)
 		send_to_char("You can't use this channel until you are out of training.\n\r", ch);
 		return;
 	}
-	if (is_swear(argument)) {
-		send_to_char("Oops, you shouldn't be swearing!\n\r", ch);
-		return;
-	}
 	sysdata.outBytesFlag = LOGBOUTCHANNEL;
 	talk_channel(ch, drunk_speech(argument, ch), CHANNEL_QUEST, "QUEST");
 	sysdata.outBytesFlag = LOGBOUTNORM;
@@ -1233,11 +1183,6 @@ do_ask(CHAR_DATA * ch, char *argument)
 		send_to_char("You can't use this channel until you are out of training.\n\r", ch);
 		return;
 	}
-	if (is_swear(argument)) {
-		send_to_char("Oops, you shouldn't be swearing!\n\r", ch);
-		return;
-	}
-	//argument = remove_color(argument);
 	sysdata.outBytesFlag = LOGBOUTCHANNEL;
 	talk_channel(ch, argument, CHANNEL_ASK, "QUESTION");
 	sysdata.outBytesFlag = LOGBOUTNORM;
@@ -1253,11 +1198,6 @@ do_answer(CHAR_DATA * ch, char *argument)
 		send_to_char("You can't use this channel until you are out of training.\n\r", ch);
 		return;
 	}
-	if (is_swear(argument)) {
-		send_to_char("Oops, you shouldn't be swearing!\n\r", ch);
-		return;
-	}
-	//argument = remove_color(argument);
 	sysdata.outBytesFlag = LOGBOUTCHANNEL;
 	talk_channel(ch, argument, CHANNEL_ASK, "QUESTION");
 	sysdata.outBytesFlag = LOGBOUTNORM;
@@ -1271,10 +1211,6 @@ do_shout(CHAR_DATA * ch, char *argument)
 {
 	if (!IS_IMMORTAL(ch) && ch->exp < 5000) {
 		send_to_char("You can't use this channel until you are out of training.\n\r", ch);
-		return;
-	}
-	if (is_swear(argument)) {
-		send_to_char("Oops, you shouldn't be swearing!\n\r", ch);
 		return;
 	}
 	sysdata.outBytesFlag = LOGBOUTCHANNEL;
@@ -1291,10 +1227,6 @@ do_yell(CHAR_DATA * ch, char *argument)
 {
 	if (!IS_IMMORTAL(ch) && ch->exp < 5000) {
 		send_to_char("You can't use this channel until you are out of training.\n\r", ch);
-		return;
-	}
-	if (is_swear(argument)) {
-		send_to_char("Oops, you shouldn't be swearing!\n\r", ch);
 		return;
 	}
 	sysdata.outBytesFlag = LOGBOUTCHANNEL;
@@ -1389,29 +1321,14 @@ do_say(CHAR_DATA * ch, char *argument)
 		send_to_char("You can't do that here.\n\r", ch);
 		return;
 	}
-	/*
-	 * Bot check stuff since for the "answer" i can't use a mob prog
-	 * -Goku 09.26.04
-	 */
 	if (ch->in_room->vnum == 6500 || ch->in_room->vnum == 6510) {
 		/* code located in mud_comm.c even though it's no a mob prog */
 		mpchkbot(ch, argument);
 		return;
 	}
-	//argument = remove_color(argument);
 	actflags = ch->act;
 	if (IS_NPC(ch))
 		xREMOVE_BIT(ch->act, ACT_SECRETIVE);
-	if (is_swear(argument) && !xIS_SET(ch->act, PLR_SAY_SWEAR)) {
-		send_to_char("Oops, you shouldn't be swearing!\n\r", ch);
-		return;
-	}
-	/*
-	 * if ( !IS_NPC(ch) && xIS_SET(ch->act, PLR_SILENCE) ) {
-	 * send_to_char("You're silenced. You can't speak.\n\r",ch); return
-	 * ; }
-	 */
-
 	if (xIS_SET((ch)->affected_by, AFF_OOZARU) ||
 	    xIS_SET((ch)->affected_by, AFF_GOLDEN_OOZARU)) {
 		interpret(ch, "roar");
@@ -1455,9 +1372,7 @@ do_say(CHAR_DATA * ch, char *argument)
 		sbuf = drunk_speech(sbuf, ch);
 
 		MOBtrigger = false;
-		if (!IS_NPC(vch) && is_swear(argument) && !xIS_SET(vch->act, PLR_SAY_SWEAR))
-			act(AT_SAY, "$n starts swearing up a storm.", ch, sbuf, vch, TO_VICT);
-		else if (!xIS_SET(ch->act, PLR_NOSCREAM)) {
+		if (!xIS_SET(ch->act, PLR_NOSCREAM)) {
 			if (is_fused(ch) && !is_superandroid(ch))
 				act(AT_SAY, "$n says in a dual voice '$t'", ch, sbuf, vch, TO_VICT);
 			else
@@ -1543,10 +1458,6 @@ do_whisper(CHAR_DATA * ch, char *argument)
 	    && (!IS_IMMORTAL(ch) || (get_trust(ch) < get_trust(victim)))) {
 		act(AT_PLAIN, "$E has $S whispers turned off.", ch, NULL, victim,
 		    TO_CHAR);
-		return;
-	}
-	if (is_swear(argument)) {
-		send_to_char("Oops, you shouldn't be swearing!\n\r", ch);
 		return;
 	}
 	if (xIS_SET((ch)->affected_by, AFF_OOZARU) ||
@@ -1707,10 +1618,6 @@ do_tell(CHAR_DATA * ch, char *argument)
 	    && (!IS_IMMORTAL(ch) || (get_trust(ch) < get_trust(victim)))) {
 		act(AT_PLAIN, "$E has $S tells turned off.", ch, NULL, victim,
 		    TO_CHAR);
-		return;
-	}
-	if (is_swear(argument) && (!xIS_SET(victim->act, PLR_TELL_SWEAR) || !xIS_SET(ch->act, PLR_TELL_SWEAR))) {
-		send_to_char("Oops, you shouldn't be swearing!\n\r", ch);
 		return;
 	}
 	if (!IS_NPC(victim) && xIS_SET(victim->act, PLR_SILENCE))
@@ -1876,10 +1783,6 @@ do_reply(CHAR_DATA * ch, char *argument)
 		act(AT_PLAIN, "$E is currently in a writing buffer.  Please try again in a few minutes.", ch, 0, victim, TO_CHAR);
 		return;
 	}
-	if (is_swear(argument) && (!xIS_SET(victim->act, PLR_TELL_SWEAR) || !xIS_SET(ch->act, PLR_TELL_SWEAR))) {
-		send_to_char("Oops, you shouldn't be swearing!\n\r", ch);
-		return;
-	}
 	/* Check to see if the receiver is ignoring the sender */
 	if (is_ignoring(victim, ch)) {
 		/* If the sender is an imm they cannot be ignored */
@@ -2022,10 +1925,6 @@ do_retell(CHAR_DATA * ch, char *argument)
 	    (!IS_IMMORTAL(ch) || (get_trust(ch) < get_trust(victim)))) {
 		act(AT_PLAIN, "$E has $S tells turned off.", ch, NULL,
 		    victim, TO_CHAR);
-		return;
-	}
-	if (is_swear(argument) && (!xIS_SET(victim->act, PLR_TELL_SWEAR) || !xIS_SET(ch->act, PLR_TELL_SWEAR))) {
-		send_to_char("Oops, you shouldn't be swearing!\n\r", ch);
 		return;
 	}
 	if (!IS_NPC(victim) && xIS_SET(victim->act, PLR_SILENCE))
@@ -2198,10 +2097,6 @@ do_emote(CHAR_DATA * ch, char *argument)
 		xREMOVE_BIT(ch->act, ACT_SECRETIVE);
 	for (plast = argument; *plast != '\0'; plast++);
 
-	if (is_swear(argument)) {
-		send_to_char("Oops, you shouldn't be swearing!\n\r", ch);
-		return;
-	}
 	if (xIS_SET((ch)->affected_by, AFF_OOZARU) ||
 	    xIS_SET((ch)->affected_by, AFF_GOLDEN_OOZARU)) {
 		ch_printf(ch, "You can't while Oozaru.\n\r");
@@ -3742,11 +3637,6 @@ do_traffic(CHAR_DATA * ch, char *argument)
 		send_to_char("You can't use this channel until you are out of training.\n\r", ch);
 		return;
 	}
-	if (is_swear(argument)) {
-		send_to_char("Oops, you shouldn't be swearing!\n\r", ch);
-		return;
-	}
-
 	sysdata.outBytesFlag = LOGBOUTCHANNEL;
 	talk_channel(ch, argument, CHANNEL_TRAFFIC, "openly traffic");
 	sysdata.outBytesFlag = LOGBOUTNORM;
@@ -3759,11 +3649,6 @@ do_wartalk(CHAR_DATA * ch, char *argument)
 		send_to_char("You can't use this channel until you are out of training.\n\r", ch);
 		return;
 	}
-	if (is_swear(argument)) {
-		send_to_char("Oops, you shouldn't be swearing!\n\r", ch);
-		return;
-	}
-
 	sysdata.outBytesFlag = LOGBOUTCHANNEL;
 	talk_channel(ch, argument, CHANNEL_WARTALK, "WAR");
 	sysdata.outBytesFlag = LOGBOUTNORM;
@@ -3776,11 +3661,6 @@ do_racetalk(CHAR_DATA * ch, char *argument)
 		send_to_char("You can't use this channel until you are out of training.\n\r", ch);
 		return;
 	}
-	if (is_swear(argument)) {
-		send_to_char("Oops, you shouldn't be swearing!\n\r", ch);
-		return;
-	}
-
 	sysdata.outBytesFlag = LOGBOUTCHANNEL;
 	talk_channel(ch, argument, CHANNEL_RACETALK, "RACETALK");
 	sysdata.outBytesFlag = LOGBOUTNORM;

@@ -550,22 +550,16 @@ boot_db()
 
 	log_string("Loading classes");
 	load_classes();
-
 	log_string("Loading races");
 	load_races();
-
 	log_string("Loading herb table");
 	load_herb_table();
-
 	log_string("Loading tongues");
 	load_tongues();
-
 	log_string("Making wizlist");
 	make_wizlist();
-
 	log_string("Building wizinfo");
 	build_wizinfo(true);
-
 	log_string("Initializing request pipe");
 	init_request_pipe();
 
@@ -607,14 +601,6 @@ boot_db()
 	loading_char = NULL;
 	saving_char = NULL;
 	last_pkroom = 1;
-	immortal_host_start = NULL;
-	immortal_host_end = NULL;
-	first_ban_class = NULL;
-	last_ban_class = NULL;
-	first_ban_race = NULL;
-	last_ban_race = NULL;
-	first_ban = NULL;
-	last_ban = NULL;
 	top_mob_serial = 0;
 
 	CREATE(auction, AUCTION_DATA, 1);
@@ -925,8 +911,6 @@ boot_db()
 		load_deity();
 		log_string("Loading councils");
 		load_councils();
-		log_string("Loading watches");
-		load_watchlist();
 		log_string("Loading reserved names");
 		load_reserved();
 		log_string("Loading auth namelist");

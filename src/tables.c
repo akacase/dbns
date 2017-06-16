@@ -76,7 +76,6 @@ DO_FUN *skill_function( char *name )
       if ( !str_cmp( name, "do_absorb"                    ))    return do_absorb;
       if ( !str_cmp( name, "do_accelerate"                ))    return do_accelerate;
       if ( !str_cmp( name, "do_accessories"               ))    return do_accessories;
-      if ( !str_cmp( name, "do_add_imm_host"              ))    return do_add_imm_host;
       if ( !str_cmp( name, "do_addpilot"                  ))    return do_addpilot;
       if ( !str_cmp( name, "do_admintalk"                 ))    return do_admintalk;
       if ( !str_cmp( name, "do_adminto"                   ))    return do_adminto;
@@ -86,7 +85,6 @@ DO_FUN *skill_function( char *name )
       if ( !str_cmp( name, "do_ahelp"                     ))    return do_ahelp;
       if ( !str_cmp( name, "do_aid"                       ))    return do_aid;
       if ( !str_cmp( name, "do_alist"                     ))    return do_alist;
-      if ( !str_cmp( name, "do_allow"                     ))    return do_allow;
       if ( !str_cmp( name, "do_allhigh"			  ))	return do_allhigh;
       if ( !str_cmp( name, "do_allships"                  ))    return do_allships;
       if ( !str_cmp( name, "do_allspeeders"               ))    return do_allspeeders;
@@ -120,7 +118,6 @@ DO_FUN *skill_function( char *name )
       if ( !str_cmp( name, "do_balzhur"                   ))    return do_balzhur;
       if ( !str_cmp( name, "do_bamfin"                    ))    return do_bamfin;
       if ( !str_cmp( name, "do_bamfout"                   ))    return do_bamfout;
-      if ( !str_cmp( name, "do_ban"                       ))    return do_ban;
       if ( !str_cmp( name, "do_bash"                      ))    return do_bash;
       if ( !str_cmp( name, "do_bashdoor"                  ))    return do_bashdoor;
       if ( !str_cmp( name, "do_bbk"                       ))    return do_bbk;
@@ -152,7 +149,6 @@ DO_FUN *skill_function( char *name )
       if ( !str_cmp( name, "do_candy_blast"		  ))	return do_candy_blast;
       if ( !str_cmp( name, "do_cast"                      ))    return do_cast;
       if ( !str_cmp( name, "do_cedit"                     ))    return do_cedit;
-      if ( !str_cmp( name, "do_censor"                    ))    return do_censor;
       if ( !str_cmp( name, "do_chaff"                     ))    return do_chaff;
       if ( !str_cmp( name, "do_charge"                     ))    return do_charge;
       if ( !str_cmp( name, "do_channels"                  ))    return do_channels;
@@ -696,7 +692,6 @@ DO_FUN *skill_function( char *name )
       if ( !str_cmp( name, "do_showclass"                 ))    return do_showclass;
       if ( !str_cmp( name, "do_showcouncil"               ))    return do_showcouncil;
       if ( !str_cmp( name, "do_showdeity"                 ))    return do_showdeity;
-      if ( !str_cmp( name, "do_showimmlog"		  ))	return do_showimmlog;
       if ( !str_cmp( name, "do_showlayers"                ))    return do_showlayers;
       if ( !str_cmp( name, "do_showplanet"                ))    return do_showplanet;
       if ( !str_cmp( name, "do_showrace"                  ))    return do_showrace;
@@ -802,9 +797,7 @@ DO_FUN *skill_function( char *name )
       break;
    case 'w':
       if ( !str_cmp( name, "do_wake"                      ))    return do_wake;
-      if ( !str_cmp( name, "do_warn"                      ))    return do_warn;
       if ( !str_cmp( name, "do_wartalk"                   ))    return do_wartalk;
-      if ( !str_cmp( name, "do_watch"                     ))    return do_watch;
       if ( !str_cmp( name, "do_wear"                      ))    return do_wear;
       if ( !str_cmp( name, "do_weather"                   ))    return do_weather;
       if ( !str_cmp( name, "do_west"                      ))    return do_west;
@@ -816,7 +809,6 @@ DO_FUN *skill_function( char *name )
       if ( !str_cmp( name, "do_wizhelp"                   ))    return do_wizhelp;
       if ( !str_cmp( name, "do_wizinfo"                   ))    return do_wizinfo;
       if ( !str_cmp( name, "do_wizlist"                   ))    return do_wizlist;
-      if ( !str_cmp( name, "do_wizlock"                   ))    return do_wizlock;
       if ( !str_cmp( name, "do_worth"                     ))    return do_worth;
       if ( !str_cmp( name, "do_wss"			  ))	return do_wss;
       break;
@@ -847,7 +839,6 @@ char *skill_name( DO_FUN *skill )
       if ( skill == do_absorb                      )    return "do_absorb";
       if ( skill == do_accelerate                  )    return "do_accelerate";
       if ( skill == do_accessories                 )    return "do_accessories";
-      if ( skill == do_add_imm_host                )    return "do_add_imm_host";
       if ( skill == do_addpilot                    )    return "do_addpilot";
       if ( skill == do_admintalk                   )    return "do_admintalk";
       if ( skill == do_adminto                     )    return "do_adminto";
@@ -857,7 +848,6 @@ char *skill_name( DO_FUN *skill )
       if ( skill == do_ahelp                       )    return "do_ahelp";
       if ( skill == do_aid                         )    return "do_aid";
       if ( skill == do_alist                       )    return "do_alist";
-      if ( skill == do_allow                       )    return "do_allow";
       if ( skill == do_allhigh			   )	return "do_allhigh";
       if ( skill == do_allships                    )    return "do_allships";
       if ( skill == do_allspeeders                 )    return "do_allspeeders";
@@ -914,7 +904,6 @@ char *skill_name( DO_FUN *skill )
       if ( skill == do_balzhur                     )    return "do_balzhur";
       if ( skill == do_bamfin                      )    return "do_bamfin";
       if ( skill == do_bamfout                     )    return "do_bamfout";
-      if ( skill == do_ban                         )    return "do_ban";
       if ( skill == do_bash                        )    return "do_bash";
       if ( skill == do_bashdoor                    )    return "do_bashdoor";
       if ( skill == do_bbk                         )    return "do_bbk";
@@ -944,7 +933,6 @@ char *skill_name( DO_FUN *skill )
       if ( skill == do_candy_blast		   )	return "do_candy_blast";
       if ( skill == do_cast                        )    return "do_cast";
       if ( skill == do_cedit                       )    return "do_cedit";
-      if ( skill == do_censor                      )    return "do_censor";
       if ( skill == do_chaff                       )    return "do_chaff";
       if ( skill == do_charge                       )    return "do_charge";
       if ( skill == do_channels                    )    return "do_channels";
@@ -1436,7 +1424,6 @@ char *skill_name( DO_FUN *skill )
       if ( skill == do_showclass                   )    return "do_showclass";
       if ( skill == do_showcouncil                 )    return "do_showcouncil";
       if ( skill == do_showdeity                   )    return "do_showdeity";
-      if ( skill == do_showimmlog		   )	return "do_showimmlog";
       if ( skill == do_showlayers                  )    return "do_showlayers";
       if ( skill == do_showplanet                  )    return "do_showplanet";
       if ( skill == do_showrace                    )    return "do_showrace";
@@ -1531,9 +1518,7 @@ char *skill_name( DO_FUN *skill )
       if ( skill == do_vnums                       )    return "do_vnums";
       if ( skill == do_vsearch                     )    return "do_vsearch";
       if ( skill == do_wake                        )    return "do_wake";
-      if ( skill == do_warn                        )    return "do_warn";
       if ( skill == do_wartalk                     )    return "do_wartalk";
-      if ( skill == do_watch                       )    return "do_watch";
       if ( skill == do_wear                        )    return "do_wear";
       if ( skill == do_weather                     )    return "do_weather";
       if ( skill == do_west                        )    return "do_west";
@@ -1545,7 +1530,6 @@ char *skill_name( DO_FUN *skill )
       if ( skill == do_wizhelp                     )    return "do_wizhelp";
       if ( skill == do_wizinfo                     )    return "do_wizinfo";
       if ( skill == do_wizlist                     )    return "do_wizlist";
-      if ( skill == do_wizlock                     )    return "do_wizlock";
       if ( skill == do_worth                       )    return "do_worth";
       if ( skill == do_wss			   )	return "do_wss";
       if ( skill == do_yell                        )    return "do_yell";

@@ -135,109 +135,6 @@ bool check_pos( CHAR_DATA *ch, sh_int position )
 
 extern char lastplayercmd[MAX_INPUT_LENGTH*2];
 
-
-/*
- * Determine if this input line is eligible for writing to a watch file.
- * We don't want to write movement commands like (n, s, e, w, etc.)
- */
-bool valid_watch( char *logline )
-{
-int  len = strlen(logline);
-char c   = logline[0];
-
-if ( len==1 && (c=='n' || c=='s' || c=='e' || c=='w' || c=='u' || c=='d') )
-   return false;
-if ( len==2 && c=='n' && (logline[1]=='e' || logline[1]=='w') )
-   return false;
-if ( len==2 && c=='s' && (logline[1]=='e' || logline[1]=='w') )
-   return false;
-
-return true;
-}
-
-
-/*
- * Write input line to watch files if applicable
- */
-void write_watch_files( CHAR_DATA *ch, CMDTYPE *cmd, char *logline )
-{
-WATCH_DATA *pw;
-FILE *fp;
-char fname[MAX_INPUT_LENGTH], buf[MAX_STRING_LENGTH];
-struct tm *t = localtime(&current_time);
-
-if (!first_watch)         /* no active watches */
-   return;
-
-/* if we're watching a command we need to do some special stuff */
-/* to avoid duplicating log lines - relies upon watch list being */
-/* sorted by imm name */
-if(cmd)
-{
-	char *cur_imm;
-	bool found;
-	
-	pw = first_watch;
-	while(pw)
-	{
-		found = false;
-		
-		for(cur_imm = pw->imm_name;
-			pw && !strcmp(pw->imm_name, cur_imm); pw = pw->next)
-		{
-
-                        if(!found && ch->desc && get_trust(ch) < pw->imm_level 
-                        &&((pw->target_name&&!strcmp(cmd->name,pw->target_name))
-                        || (pw->player_site && 
-                        !str_prefix(pw->player_site, ch->desc->host))))
-			{
-				sprintf( fname, "%s%s", WATCH_DIR, strlower( pw->imm_name ) );
-				if ( !(fp = fopen(fname, "a+")) )
-   				{
-       	   				sprintf( buf, "%s%s", "Write_watch_files: Cannot open ", fname);
-          				bug( buf, 0 );
-          				perror(fname);
-          				return;
-       				}
-       				sprintf(buf, "%.2d/%.2d %.2d:%.2d %s: %s\n\r",
-               				t->tm_mon+1, t->tm_mday, t->tm_hour, t->tm_min,
-               				ch->name, logline );
-       				fputs(buf, fp);
-       				fclose(fp);
-				found = true;
-			}
-		}
-	}
-}
-else
-{
-	for ( pw = first_watch; pw; pw = pw->next )
-                if (((pw->target_name && !str_cmp   (pw->target_name, ch->name))
-                ||    (pw->player_site 
-                && !str_prefix(pw->player_site, ch->desc->host)) )
-                &&    get_trust(ch) < pw->imm_level
-                &&    ch->desc )
-    		{
-			sprintf( fname, "%s%s", WATCH_DIR, strlower( pw->imm_name ) );
-			if ( !(fp = fopen(fname, "a+")) )
-   			{
-       	   			sprintf( buf, "%s%s", "Write_watch_files: Cannot open ", fname);
-          			bug( buf, 0 );
-          			perror(fname);
-          			return;
-       			}
-       			sprintf(buf, "%.2d/%.2d %.2d:%.2d %s: %s\n\r",
-               			t->tm_mon+1, t->tm_mday, t->tm_hour, t->tm_min,
-               			ch->name, logline );
-       			fputs(buf, fp);
-       			fclose(fp);
-    		}
-}
-
-return;
-}
-
-
 /*
  * The main entry point for executing commands.
  * Can be recursively called from 'at', 'order', 'force'.
@@ -411,18 +308,6 @@ void interpret( CHAR_DATA *ch, char *argument )
 
     sprintf( lastplayercmd, "%s used %s", ch->name, logline );
     loglvl = found ? cmd->log : LOG_NORMAL;
-
-    /*
-     * Write input line to watch files if applicable
-     */
-    if ( !IS_NPC(ch) && ch->desc
-    && valid_watch(logline) )
-    {
-    	if(found && IS_SET(cmd->flags, CMD_WATCH))
-    		write_watch_files(ch, cmd, logline);
-    	else if(IS_SET(ch->pcdata->flags, PCFLAG_WATCH))
-    		write_watch_files(ch, NULL, logline);
-    }
 
 
     if ( ( !IS_NPC(ch) && xIS_SET(ch->act, PLR_LOG) )
