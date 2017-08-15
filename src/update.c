@@ -91,7 +91,7 @@ char   *corpse_descs[] = {
 
 extern int top_exit;
 
-void 
+void
 save_economy(void)
 {
 	char 	buf[MAX_STRING_LENGTH];
@@ -99,7 +99,6 @@ save_economy(void)
 	AREA_DATA *area;
 
 	for (area = first_area; area; area = area->next) {
-
 		sprintf(buf, "%s.econ", area->filename);
 		if ((fpout = fopen(buf, "w")) == NULL) {
 			bug("save_economy: fopen", 0);
@@ -115,7 +114,7 @@ save_economy(void)
 /*
  *  The actual oozaru morph
  */
-void 
+void
 transform_oozaru(CHAR_DATA * ch)
 {
 
@@ -142,7 +141,7 @@ transform_oozaru(CHAR_DATA * ch)
 	return;
 }
 
-void 
+void
 untransform_oozaru(CHAR_DATA * ch)
 {
 
@@ -163,7 +162,7 @@ untransform_oozaru(CHAR_DATA * ch)
 	return;
 }
 
-void 
+void
 transform_makeo(CHAR_DATA * ch)
 {
 
@@ -193,7 +192,7 @@ transform_makeo(CHAR_DATA * ch)
 	return;
 }
 
-void 
+void
 untransform_makeo(CHAR_DATA * ch)
 {
 	xREMOVE_BIT(ch->affected_by, AFF_MAKEOSTAR);
@@ -216,7 +215,7 @@ untransform_makeo(CHAR_DATA * ch)
 /*
  *  Golden Oozaru. -Karma
  */
-void 
+void
 transform_golden_oozaru(CHAR_DATA * ch)
 {
 
@@ -242,7 +241,7 @@ transform_golden_oozaru(CHAR_DATA * ch)
 	return;
 }
 
-void 
+void
 untransform_golden_oozaru(CHAR_DATA * ch)
 {
 
@@ -271,7 +270,7 @@ untransform_golden_oozaru(CHAR_DATA * ch)
  * or weather_update, like once a day, so hair doesn't grow super fast. *
  ************************************************************************/
 
-void 
+void
 hair_growth(CHAR_DATA * ch)
 {
 	if (IS_NPC(ch)) {
@@ -328,7 +327,7 @@ hair_growth(CHAR_DATA * ch)
 	}
 }
 
-void 
+void
 advance_level(CHAR_DATA * ch)
 {
 	char 	buf[MAX_STRING_LENGTH];
@@ -390,7 +389,7 @@ advance_level(CHAR_DATA * ch)
 	}
 }
 
-void 
+void
 do_plset(CHAR_DATA * ch, char *argument)
 {
 	CHAR_DATA *v;
@@ -405,7 +404,7 @@ do_plset(CHAR_DATA * ch, char *argument)
 	gain_exp(v, atoi(argument));
 }
 
-void 
+void
 gain_exp(CHAR_DATA * ch, long double gain)
 {
 	char 	buf[MAX_STRING_LENGTH];
@@ -540,7 +539,7 @@ gain_exp(CHAR_DATA * ch, long double gain)
 /*
  * Regeneration stuff.
  */
-int 
+int
 hit_gain(CHAR_DATA * ch)
 {
 	int 	gain;
@@ -588,7 +587,7 @@ hit_gain(CHAR_DATA * ch)
 	return UMIN(gain, ch->max_hit - ch->hit);
 }
 
-int 
+int
 mana_gain(CHAR_DATA * ch)
 {
 	int 	gain;
@@ -675,7 +674,7 @@ int move_gain( CHAR_DATA *ch )
 }
 */
 
-void 
+void
 gain_condition(CHAR_DATA * ch, int iCond, int value)
 {
 	int 	condition;
@@ -810,7 +809,7 @@ gain_condition(CHAR_DATA * ch, int iCond, int value)
  * This was added after a suggestion from Cronel	--Shaddai
  */
 
-void 
+void
 check_alignment(CHAR_DATA * ch)
 {
 	/*
@@ -834,7 +833,7 @@ check_alignment(CHAR_DATA * ch)
  * Mob autonomous action.
  * This function takes 25% to 35% of ALL Mud cpu time.
  */
-void 
+void
 mobile_update(void)
 {
 	char 	buf[MAX_STRING_LENGTH];
@@ -1041,7 +1040,7 @@ mobile_update(void)
 /* For the message if all seven dragonballs are in the same
    room. - Karma */
 
-void 
+void
 dball_check(void)
 {
 	CHAR_DATA *ch;
@@ -1066,7 +1065,7 @@ dball_check(void)
 	}
 }
 
-void 
+void
 summon_update(void)
 {
 	CHAR_DATA *ch;
@@ -1201,7 +1200,7 @@ summon_update(void)
 
 /* For handling mystic training - Karma */
 
-void 
+void
 mystic_check(void)
 {
 	CHAR_DATA *ch, *ch_next;
@@ -1284,7 +1283,7 @@ mystic_check(void)
  * added/needed. -Karma
  */
 
-void 
+void
 rank_update(void)
 {
 	CHAR_DATA *ch;
@@ -1341,7 +1340,7 @@ rank_update(void)
  * Update all chars, including mobs.
  * This function is performance sensitive.
  */
-void 
+void
 char_update(void)
 {
 	CHAR_DATA *ch;
@@ -2219,7 +2218,7 @@ char_update(void)
  * Update all objs.
  * This function is performance sensitive.
  */
-void 
+void
 obj_update(void)
 {
 	OBJ_DATA *obj;
@@ -2394,7 +2393,7 @@ obj_update(void)
  * Function to check important stuff happening to a player
  * This function should take about 5% of mud cpu time
  */
-void 
+void
 char_check(void)
 {
 	CHAR_DATA *ch, *ch_next;
@@ -2589,7 +2588,7 @@ char_check(void)
  *   who leads the party into the room.
  *
  */
-void 
+void
 aggr_update(void)
 {
 	DESCRIPTOR_DATA *d, *dnext;
@@ -2766,7 +2765,7 @@ bool check_social args((CHAR_DATA * ch, char *command, char *argument));
  * drunk randoms	- Tricops
  * (Made part of mobile_update	-Thoric)
  */
-void 
+void
 drunk_randoms(CHAR_DATA * ch)
 {
 	CHAR_DATA *rvch = NULL;
@@ -2808,7 +2807,7 @@ drunk_randoms(CHAR_DATA * ch)
  * Random hallucinations for those suffering from an overly high mentalstate
  * (Hats off to Albert Hoffman's "problem child")	-Thoric
  */
-void 
+void
 hallucinations(CHAR_DATA * ch)
 {
 	if (ch->mental_state >= 30
@@ -2894,7 +2893,7 @@ hallucinations(CHAR_DATA * ch)
 	return;
 }
 
-void 
+void
 tele_update(void)
 {
 	TELEPORT_DATA *tele, *tele_next;
@@ -2922,7 +2921,7 @@ tele_update(void)
 	}
 }
 
-bool 
+bool
 admin_online(void)
 {
 	DESCRIPTOR_DATA *d;
@@ -2939,39 +2938,9 @@ admin_online(void)
 	return false;
 }
 
-void 
-save_bandwidthLog()
-{
-	FILE   *fp;
-
-	if ((fp = fopen(BANDWIDTH_LOG_FILE, "a")) == NULL) {
-		bug("Could not open %s file", BANDWIDTH_LOG_FILE);
-		return;
-	}
-	fprintf(fp, "%d,", sysdata.outBytesOther);
-	fprintf(fp, "%d,", sysdata.outBytesChannel);
-	fprintf(fp, "%d,", sysdata.outBytesCombat);
-	fprintf(fp, "%d,", sysdata.outBytesMovement);
-	fprintf(fp, "%d,", sysdata.outBytesInformation);
-	fprintf(fp, "%d,", sysdata.outBytesPrompt);
-	fprintf(fp, "%d,", sysdata.outBytesInfoChannel);
-	fprintf(fp, "%s", ctime(&current_time));
-	sysdata.outBytesOther = 0;
-	sysdata.outBytesChannel = 0;
-	sysdata.outBytesCombat = 0;
-	sysdata.outBytesMovement = 0;
-	sysdata.outBytesInformation = 0;
-	sysdata.outBytesPrompt = 0;
-	sysdata.outBytesInfoChannel = 0;
-
-	fclose(fp);
-
-	return;
-}
-
 extern char *const clan_alliance_type[];
 
-void 
+void
 update_alliances(void)
 {
 	ALLIANCE_DATA *alliance;
@@ -3031,7 +3000,7 @@ update_alliances(void)
  * Called once per pulse from game loop.
  * Random times to defeat tick-timing clients and players.
  */
-void 
+void
 update_handler(void)
 {
 	static int pulse_area;
@@ -3045,7 +3014,6 @@ update_handler(void)
 	static int pulse_summon;
 	static int pulse_recharge;
 	static int pulse_minute;
-	static int pulse_saveBandwidthLog;
 	struct timeval stime;
 	struct timeval etime;
 
@@ -3053,10 +3021,6 @@ update_handler(void)
 		set_char_color(AT_PLAIN, timechar);
 		send_to_char("Starting update timer.\n\r", timechar);
 		gettimeofday(&stime, NULL);
-	}
-	if (--pulse_saveBandwidthLog <= 0) {
-		pulse_saveBandwidthLog = 5 * PULSE_MINUTE;
-		save_bandwidthLog();
 	}
 	if (--pulse_houseauc <= 0) {
 		pulse_houseauc = 1800 * PULSE_PER_SECOND;
@@ -3139,7 +3103,7 @@ update_handler(void)
 	tail_chain();
 }
 
-void 
+void
 remove_portal(OBJ_DATA * portal)
 {
 	ROOM_INDEX_DATA *fromRoom, *toRoom;
@@ -3177,7 +3141,7 @@ remove_portal(OBJ_DATA * portal)
 	return;
 }
 
-void 
+void
 bump_que()
 {
 	int 	i = 0;
@@ -3227,7 +3191,7 @@ bump_que()
 
 /* the auction update*/
 
-void 
+void
 auction_update(void)
 {
 	int 	tax, pay;
@@ -3365,7 +3329,7 @@ auction_update(void)
 	sysdata.outBytesFlag = LOGBOUTNORM;
 }					/* func */
 
-void 
+void
 subtract_times(struct timeval * etime, struct timeval * stime)
 {
 	etime->tv_sec -= stime->tv_sec;
@@ -3383,7 +3347,7 @@ subtract_times(struct timeval * etime, struct timeval * stime)
  * Last modified: July 18, 1997
  * - Fireblade
  */
-void 
+void
 adjust_vectors(WEATHER_DATA * weather)
 {
 	NEIGHBOR_DATA *neigh;
@@ -3464,7 +3428,7 @@ adjust_vectors(WEATHER_DATA * weather)
  * Last Modified: July 31, 1997
  * Fireblade
  */
-void 
+void
 weather_update()
 {
 	AREA_DATA *pArea;
@@ -3523,7 +3487,7 @@ weather_update()
  * Last Modified: August 10, 1997
  * Fireblade
  */
-void 
+void
 get_weather_echo(WEATHER_DATA * weath)
 {
 	int 	n;
@@ -3768,7 +3732,7 @@ get_weather_echo(WEATHER_DATA * weath)
  * Last Modified: August 10, 1997
  * Fireblade
  */
-void 
+void
 get_time_echo(WEATHER_DATA * weath)
 {
 	int 	n;
