@@ -4079,10 +4079,6 @@ void ext_toggle_bits args((EXT_BV * var, EXT_BV * bits));
 #define IS_PKILL(ch)            ((ch)->pcdata && IS_SET((ch)->pcdata->flags, PCFLAG_DEADLY))
 #define IS_HC(ch)				(xIS_SET((ch)->act, PLR_HC))
 #define CAN_PKILL(ch)           (IS_PKILL(ch) && (ch)->exp >= PK_PL)
-/*#define CAN_PKILL(ch)           (IS_PKILL(ch) && (ch)->exp >= PK_PL && !NOT_AUTHED(ch))*/
-
-//old
-#define CAN_PKILL(ch)           (IS_PKILL(ch) && (ch)->level >= 5 && get_age(ch) >= 18)
 
 /* Addition to make people with nuisance flag have more wait */
 
