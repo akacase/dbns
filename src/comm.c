@@ -356,20 +356,7 @@ sig_quit()
 static void
 sig_hup()
 {
-	CHAR_DATA *ch;
-	char 	buf[MAX_STRING_LENGTH];
-
-	for (ch = first_char; ch; ch = ch->next) {
-		if (!IS_NPC(ch))
-			save_char_obj(ch);
-		if (ch->desc) {
-			write_to_descriptor(ch->desc->descriptor, buf, 0);
-			write_to_descriptor(ch->desc->descriptor, "BRB -- going down for a minute or two.\n\r", 0);
-			write_to_descriptor(ch->desc->descriptor, "You have been saved to disk.\n\r", 0);
-		}
-	}
-	logmsg(LOG_ERR, "caught sighup, hanging up");
-	exit(0);
+	logmsg(LOG_ERR, "caught sighup");
 }
 
 static void
@@ -394,18 +381,6 @@ sig_int()
 static void
 seg_vio()
 {
-	CHAR_DATA *ch;
-	char 	buf[MAX_STRING_LENGTH];
-
-	for (ch = first_char; ch; ch = ch->next) {
-		if (!IS_NPC(ch))
-			save_char_obj(ch);
-		if (ch->desc) {
-			write_to_descriptor(ch->desc->descriptor, buf, 0);
-			write_to_descriptor(ch->desc->descriptor, "BRB -- going down for a minute or two.\n\r", 0);
-			write_to_descriptor(ch->desc->descriptor, "You have been saved to disk.\n\r", 0);
-		}
-	}
 	logmsg(LOG_ERR, "caught segvio, dumping");
 	exit(1);
 }
