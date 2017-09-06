@@ -49,9 +49,9 @@ init:
 	sudo systemctl enable ../init/dbns.service
 
 data:
-	@\cp ${DATA_PREFIX}/system/hiscores.dat /tmp/hiscores.dat
-	@\cp -R ${DATA_FOLDERS} ${DATA_PREFIX}
-	@\cp /tmp/hiscores.dat ${DATA_PREFIX}/system/hiscores.dat
+	@\sudo -u dbns cp ${DATA_PREFIX}/system/hiscores.dat /tmp/hiscores.dat
+	@\sudo -u dbns cp -R ${DATA_FOLDERS} ${DATA_PREFIX}
+	@\sudo -u dbns cp /tmp/hiscores.dat ${DATA_PREFIX}/system/hiscores.dat
 
 .c.o: mud.h
 	${CC} -c ${C_FLAGS} $<
