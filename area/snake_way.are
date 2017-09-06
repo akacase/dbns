@@ -92,14 +92,19 @@ mpecho &W$I chuckles and says, "You're not quite strong enough for that yet, lit
 endif
 ~
 > greet_prog 100~
-mpsleep 20
-if inroom($n) == 100300
-   mea $n &CKing Yemma says 'Hmm, $n, if you wish to return to your former life, just say "Send me home", and you will be returned.'&D
-endif
+mpsleep 10
+mea $n &CKing Yemma says 'Hmm, $n, if you wish to return to your former life, just say "Send me home", and you will be returned.'&d
 ~
 > speech_prog send me home~
 mppardon $n dead
+mpsleep 1
+mpechoat $n &YYou fade into an enveloping haze. When you open your eyes, you find yourself returned to the mortal realm.&D
+mpechoaround $n &Y$n disappears into an enveloping haze.&D
+if pl($n) > 50000
 mptransfer $n 6000
+else
+mptransfer $n 100
+endif
 ~
 |
 #100303
@@ -7900,9 +7905,13 @@ D1
 ~
 ~
 0 -1 100400
+D3
+~
+~
+0 -1 100333
 D10
 ~
-~
+hole~
 264192 -1 100333
 S
 #100400

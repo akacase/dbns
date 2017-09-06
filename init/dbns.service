@@ -1,0 +1,15 @@
+[Unit]
+Description=dbns
+Documentation=https://www.capsulecorp.org
+
+[Service]
+ExecStart=/usr/local/bin/dbnsd -p 4000
+ExecReload=/bin/kill -HUP $MAINPID
+LimitNOFILE=65536
+User=dbnsd
+Group=dbnsd
+Restart=always
+RestartSec=3
+
+[Install]
+WantedBy=multi-user.target

@@ -37,7 +37,6 @@ Skill 'battery' 20000000 95
 Skill 'blast zone' 100000000 95
 Skill 'cruise punch' 5000000 95
 Skill 'destructive wave' 10000000 95
-Skill 'destructo disk' 100000 95
 Skill 'double rocket punch' 500000000 95
 Skill 'electric hell ball' 300000000000 95
 Skill 'electric shield' 1000000 95
@@ -56,6 +55,7 @@ Skill 'scatter shot' 500000 95
 Skill 'self destruct' 50000000 95
 Skill 'ssd bomber' 2000000000 95
 Skill 'super android' 100000000000 100
+Skill 'suppress' 250000 95
 Skill 'upgraded absorb L1' 75000000 95
 Skill 'upgraded shield L1' 50000000 95
 Skill 'upgraded shield L2' 250000000 95

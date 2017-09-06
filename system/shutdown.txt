@@ -1,0 +1,232 @@
+Executing emergency shutdown proceedure.
+Executing emergency shutdown proceedure.
+Executing emergency shutdown proceedure.
+[*****] [*****] FILE: /var/dbns/player/a/Admin LINE: 137
+[*****] [*****] FILE: /var/dbns/player/a/Admin LINE: 137
+[*****] [*****] FILE: /var/dbns/player/a/Admin LINE: 138
+[*****] [*****] FILE: /var/dbns/player/a/Admin LINE: 138
+Executing emergency shutdown proceedure.
+[*****] [*****] FILE: /var/dbns/player/a/Admin LINE: 137
+[*****] [*****] FILE: /var/dbns/player/a/Admin LINE: 137
+[*****] [*****] FILE: /var/dbns/player/a/Admin LINE: 138
+[*****] [*****] FILE: /var/dbns/player/a/Admin LINE: 138
+Executing emergency shutdown proceedure.
+Executing emergency shutdown proceedure.
+Executing emergency shutdown proceedure.
+[*****] [*****] FILE: /var/dbns/player/a/Admin LINE: 137
+[*****] [*****] FILE: /var/dbns/player/a/Admin LINE: 137
+[*****] [*****] FILE: /var/dbns/player/a/Admin LINE: 138
+[*****] [*****] FILE: /var/dbns/player/a/Admin LINE: 138
+Executing emergency shutdown proceedure.
+Executing emergency shutdown proceedure.
+Executing emergency shutdown proceedure.
+Executing emergency shutdown proceedure.
+Executing emergency shutdown proceedure.
+Executing emergency shutdown proceedure.
+Executing emergency shutdown proceedure.
+Executing emergency shutdown proceedure.
+Executing emergency shutdown proceedure.
+Executing emergency shutdown proceedure.
+Executing emergency shutdown proceedure.
+Executing emergency shutdown proceedure.
+Executing emergency shutdown proceedure.
+Executing emergency shutdown proceedure.
+Executing emergency shutdown proceedure.
+Executing emergency shutdown proceedure.
+Executing emergency shutdown proceedure.
+Executing emergency shutdown proceedure.
+Executing emergency shutdown proceedure.
+Executing shutdown proceedure.
+Executing shutdown proceedure.
+Executing shutdown proceedure.
+Executing shutdown proceedure.
+Executing shutdown proceedure.
+[*****] [*****] FILE: /var/dbns/player/c/Case LINE: 53
+[*****] [*****] FILE: /var/dbns/player/c/Case LINE: 53
+[*****] [*****] FILE: /var/dbns/player/c/Case LINE: 53
+[*****] [*****] FILE: /var/dbns/player/c/Case LINE: 53
+Executing shutdown proceedure.
+[*****] [*****] FILE: /var/dbns/player/r/Ryuuji LINE: 51
+[*****] [*****] FILE: /var/dbns/player/r/Ryuuji LINE: 51
+[*****] [*****] FILE: /var/dbns/player/r/Ryuuji LINE: 51
+[*****] [*****] FILE: /var/dbns/player/r/Ryuuji LINE: 51
+[*****] [*****] FILE: /var/dbns/player/z/Zetean LINE: 53
+[*****] [*****] FILE: /var/dbns/player/z/Zetean LINE: 53
+[*****] [*****] FILE: /var/dbns/player/z/Zetean LINE: 53
+[*****] [*****] FILE: /var/dbns/player/z/Zetean LINE: 53
+Executing shutdown proceedure.
+[*****] [*****] FILE: /var/dbns/player/o/Okarot LINE: 50
+[*****] [*****] FILE: /var/dbns/player/o/Okarot LINE: 50
+[*****] [*****] FILE: /var/dbns/player/o/Okarot LINE: 50
+[*****] [*****] FILE: /var/dbns/player/o/Okarot LINE: 50
+Executing shutdown proceedure.
+Executing shutdown proceedure.
+Executing shutdown proceedure.
+[*****] [*****] FILE: /var/dbns/player/a/Aridus LINE: 50
+[*****] [*****] FILE: /var/dbns/player/a/Aridus LINE: 50
+Executing shutdown proceedure.
+[304289] Zerhyn: Shutdown by Zerhyn.
+Executing shutdown proceedure.
+Executing shutdown proceedure.
+Executing shutdown proceedure.
+Executing shutdown proceedure.
+Executing shutdown proceedure.
+Executing shutdown proceedure.
+Executing shutdown proceedure.
+Executing shutdown proceedure.
+Executing shutdown proceedure.
+[304583] Zerhyn: Shutdown by Zerhyn.
+[ 6000] Zerhyn: Shutdown by Zerhyn.
+Executing shutdown proceedure.
+Executing shutdown proceedure.
+Executing shutdown proceedure.
+[305000] Zerhyn: Shutdown by Zerhyn.
+Executing shutdown proceedure.
+Executing shutdown proceedure.
+Executing shutdown proceedure.
+Executing shutdown proceedure.
+Executing shutdown proceedure.
+Executing shutdown proceedure.
+[*****] [*****] FILE: /var/dbns/player/v/Vel LINE: 14
+[*****] [*****] FILE: /var/dbns/player/v/Vel LINE: 14
+Executing shutdown proceedure.
+Executing shutdown proceedure.
+Executing shutdown proceedure.
+Executing shutdown proceedure.
+[*****] [*****] FILE: $ LINE: 0
+[*****] [*****] FILE: $ LINE: 0
+[*****] [*****] FILE: $ LINE: 17
+[*****] [*****] FILE: $ LINE: 17
+[*****] [*****] FILE: $ LINE: 17
+[*****] [*****] FILE: $ LINE: 17
+[*****] [*****] FILE: $ LINE: 17
+Room flag not DES
+Executing shutdown proceedure.
+[*****] [*****] FILE: /var/dbns/area/Zerhyn.are LINE: 8
+duplicate vnum
+[*****] [*****] FILE: /var/dbns/area/Zerhyn.are LINE: 17
+[*****] [*****] FILE: $ LINE: 17
+[*****] [*****] FILE: $ LINE: 17
+[*****] [*****] FILE: $ LINE: 17
+[*****] [*****] FILE: $ LINE: 17
+[*****] [*****] FILE: $ LINE: 17
+Room flag not DES
+[*****] [*****] FILE: /var/dbns/player/z/Zetean LINE: 15
+[*****] [*****] FILE: /var/dbns/player/z/Zetean LINE: 15
+[*****] [*****] FILE: /var/dbns/player/z/Zerhyn LINE: 15
+[*****] [*****] FILE: /var/dbns/player/z/Zerhyn LINE: 15
+[*****] [*****] FILE: /var/dbns/player/z/Zetean LINE: 15
+[*****] [*****] FILE: /var/dbns/player/z/Zetean LINE: 15
+[ 6000] Zerhyn: Shutdown by Zerhyn.
+[*****] [*****] FILE: /var/dbns/area/cou3.are LINE: 39356
+[ 6000] Zerhyn: Shutdown by Zerhyn.
+[*****] [*****] FILE: /var/dbns/area/cou3.are LINE: 39356
+[ 6000] Zerhyn: Shutdown by Zerhyn.
+[*****] [*****] FILE: /var/dbns/area/cou3.are LINE: 39356
+[*****] [*****] FILE: /var/dbns/area/cou3.are LINE: 39356
+[*****] [*****] FILE: /var/dbns/area/cou3.are LINE: 39356
+[*****] [*****] FILE: /var/dbns/area/cou3.are LINE: 39356
+[*****] [*****] FILE: /var/dbns/player/t/Testone LINE: 102
+[*****] [*****] FILE: /var/dbns/player/t/Testone LINE: 102
+[*****] [*****] FILE: /var/dbns/player/t/Testone LINE: 103
+[*****] [*****] FILE: /var/dbns/player/t/Testone LINE: 103
+[*****] [*****] FILE: /var/dbns/area/cou3.are LINE: 39356
+[*****] [*****] FILE: /var/dbns/area/cou3.are LINE: 39356
+[*****] [*****] FILE: /var/dbns/area/cou3.are LINE: 39356
+[*****] [*****] FILE: /var/dbns/area/cou3.are LINE: 39356
+[*****] [*****] FILE: /var/dbns/area/cou3.are LINE: 39356
+[*****] [*****] FILE: /var/dbns/area/cou3.are LINE: 39356
+[*****] [*****] FILE: /var/dbns/area/cou3.are LINE: 39356
+[*****] [*****] FILE: /var/dbns/area/cou3.are LINE: 39356
+[*****] [*****] FILE: /var/dbns/area/cou3.are LINE: 39356
+[*****] [*****] FILE: /var/dbns/area/cou3.are LINE: 39356
+[*****] [*****] FILE: /var/dbns/area/cou3.are LINE: 39356
+[*****] [*****] FILE: /var/dbns/area/cou3.are LINE: 39356
+[*****] [*****] FILE: /var/dbns/area/cou3.are LINE: 39366
+[*****] [*****] FILE: /var/dbns/area/cou3.are LINE: 39366
+[*****] [*****] FILE: /var/dbns/player/z/Zaede LINE: 14
+[*****] [*****] FILE: /var/dbns/player/z/Zaede LINE: 14
+[*****] [*****] FILE: /var/dbns/area/cou3.are LINE: 39366
+[*****] [*****] FILE: /var/dbns/area/cou3.are LINE: 39366
+[*****] [*****] FILE: /var/dbns/player/z/Zerhyn LINE: 277
+[*****] [*****] FILE: /var/dbns/player/z/Zerhyn LINE: 277
+[*****] [*****] FILE: /var/dbns/player/z/Zerhyn LINE: 278
+[*****] [*****] FILE: /var/dbns/player/z/Zerhyn LINE: 278
+[*****] [*****] FILE: /var/dbns/area/cou3.are LINE: 39366
+[*****] [*****] FILE: /var/dbns/player/z/Zetean LINE: 14
+[*****] [*****] FILE: /var/dbns/player/z/Zetean LINE: 14
+[*****] [*****] FILE: /var/dbns/area/cou3.are LINE: 39366
+[*****] [*****] FILE: /var/dbns/player/d/Dedeaz LINE: 14
+[*****] [*****] FILE: /var/dbns/player/d/Dedeaz LINE: 14
+[*****] [*****] FILE: /var/dbns/area/cou3.are LINE: 39366
+[*****] [*****] FILE: /var/dbns/area/cou3.are LINE: 39366
+[ 6000] Zerhyn: Shutdown by Zerhyn.
+[*****] [*****] FILE: /var/dbns/area/cou3.are LINE: 39366
+[*****] [*****] FILE: /var/dbns/area/cou3.are LINE: 39366
+[*****] [*****] FILE: /var/dbns/area/cou3.are LINE: 39366
+[*****] [*****] FILE: /var/dbns/area/cou3.are LINE: 39366
+[*****] [*****] FILE: /var/dbns/area/cou3.are LINE: 39366
+[ 6000] Zerhyn: Shutdown by Zerhyn.
+[*****] [*****] FILE: /var/dbns/area/cou3.are LINE: 39366
+[*****] [*****] FILE: /var/dbns/area/cou3.are LINE: 39366
+Executing shutdown proceedure.
+[*****] [*****] FILE: /var/dbns/area/cou3.are LINE: 39366
+[*****] [*****] FILE: /var/dbns/area/cou3.are LINE: 39366
+[*****] [*****] FILE: /var/dbns/area/cou3.are LINE: 39366
+[*****] [*****] FILE: /var/dbns/area/cou3.are LINE: 39366
+[*****] [*****] FILE: /var/dbns/area/cou3.are LINE: 39366
+[*****] [*****] FILE: /var/dbns/area/cou3.are LINE: 39366
+[*****] [*****] FILE: /var/dbns/area/cou3.are LINE: 39366
+[*****] [*****] FILE: /var/dbns/area/cou3.are LINE: 39366
+[*****] [*****] FILE: /var/dbns/player/b/Blarg LINE: 14
+[*****] [*****] FILE: /var/dbns/player/b/Blarg LINE: 14
+[*****] [*****] FILE: /var/dbns/area/cou3.are LINE: 39366
+[*****] [*****] FILE: /var/dbns/area/cou3.are LINE: 39366
+[*****] [*****] FILE: /var/dbns/area/cou3.are LINE: 39366
+[*****] [*****] FILE: /var/dbns/area/cou3.are LINE: 39366
+[*****] [*****] FILE: /var/dbns/area/cou3.are LINE: 39366
+[*****] [*****] FILE: /var/dbns/area/cou3.are LINE: 39366
+[*****] [*****] FILE: /var/dbns/area/cou3.are LINE: 39366
+[*****] [*****] FILE: /var/dbns/area/cou3.are LINE: 39366
+[*****] [*****] FILE: /var/dbns/area/cou3.are LINE: 39366
+[*****] [*****] FILE: /var/dbns/area/cou3.are LINE: 39366
+[*****] [*****] FILE: /var/dbns/area/cou3.are LINE: 39366
+[*****] [*****] FILE: /var/dbns/area/cou3.are LINE: 39366
+Executing shutdown proceedure.
+[*****] [*****] FILE: /var/dbns/area/cou3.are LINE: 39366
+[*****] [*****] FILE: /var/dbns/area/cou3.are LINE: 39366
+[*****] [*****] FILE: /var/dbns/area/cou3.are LINE: 39366
+[*****] [*****] FILE: /var/dbns/area/cou3.are LINE: 39366
+[*****] [*****] FILE: /var/dbns/area/cou3.are LINE: 39366
+[*****] [*****] FILE: /var/dbns/area/cou3.are LINE: 39366
+[*****] [*****] FILE: /var/dbns/area/cou3.are LINE: 39366
+[*****] [*****] FILE: /var/dbns/area/cou3.are LINE: 39366
+[*****] [*****] FILE: /var/dbns/area/cou3.are LINE: 39366
+[*****] [*****] FILE: /var/dbns/area/cou3.are LINE: 39366
+[*****] [*****] FILE: /var/dbns/area/cou3.are LINE: 39366
+[*****] [*****] FILE: /var/dbns/area/cou3.are LINE: 39366
+[*****] [*****] FILE: /var/dbns/area/cou3.are LINE: 39366
+[*****] [*****] FILE: /var/dbns/area/cou3.are LINE: 39366
+[*****] [*****] FILE: /var/dbns/area/cou3.are LINE: 39366
+[*****] [*****] FILE: /var/dbns/area/cou3.are LINE: 39366
+[*****] [*****] FILE: /var/dbns/area/cou3.are LINE: 39366
+[*****] [*****] FILE: /var/dbns/area/cou3.are LINE: 39366
+[*****] [*****] FILE: /var/dbns/area/cou3.are LINE: 39366
+[*****] [*****] FILE: /var/dbns/area/cou3.are LINE: 39366
+[*****] [*****] FILE: /var/dbns/area/cou3.are LINE: 39366
+[*****] [*****] FILE: /var/dbns/area/cou3.are LINE: 39366
+[*****] [*****] FILE: /var/dbns/area/cou3.are LINE: 39366
+Executing shutdown proceedure.
+[*****] [*****] FILE: /var/dbns/area/cou3.are LINE: 39366
+[*****] [*****] FILE: /var/dbns/area/cou3.are LINE: 39366
+[*****] [*****] FILE: /var/dbns/area/cou3.are LINE: 39366
+[*****] [*****] FILE: /home/case/db/area/cou3.are LINE: 39366
+[*****] [*****] FILE: /home/case/db/area/cou3.are LINE: 39366
+[*****] [*****] FILE: /home/case/db/area/cou3.are LINE: 39366
+[*****] [*****] FILE: /home/case/db/area/cou3.are LINE: 39366
+[*****] [*****] FILE: /home/case/db/area/cou3.are LINE: 39366
+[*****] [*****] FILE: /home/case/db/area/cou3.are LINE: 39366
+[*****] [*****] FILE: /home/case/db/area/cou3.are LINE: 39366
+[*****] [*****] FILE: /home/case/db/area/cou3.are LINE: 39366
+Executing shutdown proceedure.
+[*****] [*****] FILE: /home/case/db/area/cou3.are LINE: 39366

@@ -3,7 +3,7 @@
 
 
 #VERSION 252
-#AUTHOR Kanzel~
+#AUTHOR Zerhyn~
 
 #RANGES
 1 65 1 65
@@ -14,7 +14,7 @@ $
 #RESETMSG &cThe lights lining the halls flicker and dim under the exertions of some massive power.&d~
 
 #FLAGS
-0 10
+2 1
 
 #CLIMATE 2 2 2
 
@@ -161,7 +161,7 @@ A weak ESF trainee is exercising here, preparing for another round of combat.
 1 0 100 1d20+0 2d5+0
 -1 50000
 112 112 1
-20 20 20 20 20
+10 10 10 10 20
 0 0 0 0 0
 1 1 0 0 1 1 0
 0 0 0 0 0 0 0 0
@@ -183,7 +183,7 @@ An ESF trainee is pumping iron here.
 1 0 100 1d20+0 2d5+0
 -1 150000
 112 112 1
-25 25 25 25 0
+15 15 15 15 0
 0 0 0 0 0
 1 1 0 0 1 1 0
 0 0 0 0 0 0 0 0
@@ -205,7 +205,7 @@ A stronger ESF trainee shadowboxes here in the arena.
 1 0 100 1d20+0 2d5+0
 -1 500000
 112 112 1
-30 30 30 30 0
+20 20 20 20 0
 0 0 0 0 0
 1 1 0 0 1 1 1
 0 0 0 0 0 0 0 0
@@ -227,7 +227,7 @@ An impressive ESF trainee sits here in deep meditation.
 1 0 100 1d20+0 2d5+0
 -1 1500000
 112 112 1
-40 40 40 40 0
+25 25 25 25 0
 0 0 0 0 0
 1 1 0 0 1 1 1
 0 0 0 0 0 0 0 0
@@ -249,7 +249,7 @@ An advanced ESF combatant stands here, ever at the ready for a new challenger.
 1 0 100 1d20+0 2d5+0
 -1 5000000
 112 112 1
-50 50 50 50 0
+30 30 30 30 0
 0 0 0 0 0
 1 1 0 0 1 1 2
 0 0 0 0 0 0 0 0
@@ -271,7 +271,7 @@ An elite member of the ESF stands here with arms crossed, a promising grin sprea
 1 0 100 1d20+0 2d5+0
 -1 15000000
 112 112 1
-60 60 60 60 0
+35 35 35 35 0
 0 0 0 0 0
 1 1 0 0 1 1 2
 0 0 0 0 0 0 0 0
@@ -404,7 +404,7 @@ A platform sits here beside a large terminal.
 0 0 0 0 0 0 0 0
 > speech_prog help~
 mpecho The holodeck Transporter lights up suddenly.
-say Greetings visitor. To ascend to the upper deck, simply say "down".
+say Greetings visitor. To descend to the lower deck, simply say "&Rdown&C".&D
 ~
 > speech_prog down~
 mpecho &YThe room flashes brightly.&d
@@ -579,11 +579,15 @@ A genetically engineered, superhuman warrior grins wickedly at the chance to tes
 0 0 0 0 0
 1 1 0 0 1 1 4
 0 0 0 0 0 0 0 0
-> fight_prog 5~
-destructive
+> rand_prog 10~
+mprestore $i 400
+mpecho &C$I flashes brightly, instantly recovering $kself.&D
+~
+> fight_prog 100~
+mprestore $i 400
+mpecho &Y$I grins wickedly, completely unaffected by your attacks.&D
 ~
 > death_prog 100~
-mpecho &YA MK-I Genetic Warrior's spontaneous regeneration prevents her untimely demise!&d
 mpmload 303923
 ~
 |
@@ -601,11 +605,15 @@ A superior genetically-enhanced warrior beckons for you to attack.
 0 0 0 0 0
 1 1 0 0 1 1 4
 0 0 0 0 0 0 0 0
-> fight_prog 5~
-destructive
+> rand_prog 10~
+mprestore $i 400
+mpecho &C$I flashes brightly, instantly recovering $kself.&D
+~
+> fight_prog 100~
+mprestore $i 400
+mpecho &Y$I grins wickedly, completely unaffected by your attacks.&D
 ~
 > death_prog 100~
-mpecho &YA MK-II Genetic Warrior's spontaneous regeneration prevents his untimely demise!&d
 mpmload 303924
 ~
 |
@@ -619,15 +627,19 @@ A supremely powerful genetic warrior struggles to contain his innermost power.
 1 0 100 1d20+0 2d5+0
 -1 500000000000000
 112 112 1
-150 150 100 150 0
+100 100 100 100 0
 0 0 0 0 0
 1 1 0 0 1 1 4
 0 0 0 0 0 0 0 0
-> fight_prog 30~
-dodon
+> rand_prog 10~
+mprestore $i 400
+mpecho &C$I flashes brightly, instantly recovering $kself.&D
 ~
-> death_prog 50~
-mpecho &YA Supreme Genetic Warrior's spontaneous regeneration prevents his untimely demise!
+> fight_prog 100~
+mprestore $i 400
+mpecho &Y$I grins wickedly, completely unaffected by your attacks.&D
+~
+> death_prog 100~
 mpmload 303925
 ~
 |
@@ -663,16 +675,20 @@ The ultimate fusion of flesh and metal soars through the skies here.
 1 0 100 1d20+0 2d5+0
 -1 5000000000000000
 112 112 0
-300 175 100 300 0
+10 100 50 10 0
 0 0 0 0 0
 1 1 0 0 1 1 4
 0 0 0 0 0 0 16 0
-> death_prog 50~
-mpmload 303927
-mpecho &YA Fused Cybernetic Warrior is down but not out, quickly reconstructing its shattered components.&d
+> rand_prog 10~
+mprestore $i 400
+mpecho &C$I flashes brightly, instantly recovering $kself.&D
 ~
-> fight_prog 40~
-dodon
+> fight_prog 100~
+mprestore $i 400
+mpecho &Y$I grins wickedly, completely unaffected by your attacks.&D
+~
+> death_prog 100~
+mpmload 303927
 ~
 |
 #303928
@@ -867,7 +883,7 @@ The Skill Master~
 A master of the fighting arts stands here, ready to aid you in your training.
 ~
 ~
-67109891 0 0 C
+-2080373757 0 0 C
 1 0 100 1d20+0 2d5+0
 -1 50000000000
 112 112 1
@@ -881,7 +897,7 @@ An Upgrade Chamber~
 A huge, flashing upgrade chamber sits here toward the rear of the room.
 ~
 ~
--2080374269 0 0 C
+67109379 0 0 C
 1 0 100 1d20+0 2d5+0
 -1 1
 112 112 0
@@ -889,6 +905,231 @@ A huge, flashing upgrade chamber sits here toward the rear of the room.
 0 0 0 0 0
 4 4 0 0 1 1 0
 0 0 0 0 0 0 0 0
+#304500
+immortal guinea pig~
+a newly created immortal guinea pig~
+Some god abandoned a newly created immortal guinea pig here.
+~
+~
+16777219 0 0 C
+1 0 100 1d20+0 2d5+0
+-1 100000
+112 112 0
+10 10 10 10 10
+0 0 0 0 0
+0 0 0 0 1 1 0
+0 0 0 0 0 0 0 0
+> death_prog 100~
+mpmload 304500
+~
+|
+#304721
+accelerated training assist droid~
+The Accelerated Training Assistance Droid~
+An assistance droid hovers here, awaiting your input.
+~
+~
+67108867 0 0 C
+1 0 100 1d20+0 2d5+0
+-1 1
+112 112 0
+10 10 10 10 0
+0 0 0 0 0
+4 4 0 0 1 1 0
+0 0 0 0 0 0 0 0
+> greet_prog 100~
+if pl($n) > 1000000000
+say Greetings, $n. I am now authorized to transport you to the acclerated gravity sparring chamber.
+say To accept, simply speak '&Rgravity&C' aloud.&D
+endif
+~
+> speech_prog 'gravity'~
+if pl($n) > 1000000000
+say Very well, $n. Take this gravity acceleration device and ensure you equip it.
+mpoload 304723
+give mk3 $n
+mpechoat $n &YYou disappear in a flash of light.&D
+mpecharound $n &Y$n disappears in a flash of light.&D
+mptransfer $n 304721
+mpat 304721 mpforce $n look
+else
+say I'm afraid you're not quite powerful enough to withstand the chambers, $n. You must be at least &R1 billion base powerlevel&C to enter.&D
+endif
+~
+|
+#304722
+gravotron droid~
+The Grav-O-Tron Assistance Droid~
+A training assistance droid floats nonchalantly here.
+~
+~
+67108867 0 0 C
+1 0 100 1d20+0 2d5+0
+-1 1
+112 112 0
+10 10 10 10 10
+0 0 0 0 0
+0 0 0 0 1 1 0
+0 0 0 0 0 0 0 0
+> speech_prog 'exit'~
+if carryingvnum($n) 304723
+say $n, you must equip your gravity acceleration device for verification purposes before I will let you leave.
+else
+if wearingvnum($n) 304723
+mpforce $n remove mk3
+mpforce $n give mk3 droid
+mppurge mk3
+mpechoat $n You disappear in a flash of light.
+mpecharound $n $n disappars in a flash of light.
+mptransfer $n 304583
+mpat 304583 mpforce $n look
+else
+say $n, it appears you've lost your gravity acceleration device. How odd. Oh well, off you go!
+mpechoat $n You disappear in a flash of light.
+mpecharound $n $n disappears in a flash of light.
+mptransfer $n 304583
+mpat 304583 mpforce $n look
+endif
+endif
+~
+|
+#304723
+gravotron droid 2~
+The MK-II Grav-O-Tron Assistance Droid~
+A training assistance droid floats nonchalantly here.
+~
+~
+67108867 0 0 C
+1 0 100 1d20+0 2d5+0
+-1 1
+112 112 0
+10 10 10 10 0
+0 0 0 0 0
+4 4 0 0 1 1 0
+0 0 0 0 0 0 0 0
+> speech_prog 'exit'~
+if wearingvnum($n) 304722
+mpforce $n remove mk2
+mpforce $n give mk2 droid
+mppurge mk2
+mpechoat $n &YYou disappear in a flash of light.&D
+mpecharound $n &Y$n disappars in a flash of light.&D
+mptransfer $n 304583
+mpat 304583 mpforce $n look
+else
+if carryingvnum($n) 304722
+say $n, you must equip your gravity acceleration device for verification purposes before I will let you leave.
+else
+say $n, it appears you've lost your gravity acceleration device. How odd. Oh well, off you go!
+mpechoat $n &YYou disappear in a flash of light.&D
+mpecharound $n &Y$n disappars in a flash of light.&D
+mptransfer $n 304583
+mpat 304583 mpforce $n look
+endif
+endif
+~
+|
+#304724
+gravotron droid 3~
+The MK-III Grav-O-Tron Assistance Droid~
+A training assistance droid floats nonchalantly here.
+~
+~
+1140850691 0 0 C
+1 0 100 1d20+0 2d5+0
+-1 1
+112 112 0
+10 10 10 10 0
+0 0 0 0 0
+4 4 0 0 1 1 0
+0 0 0 0 0 0 0 0
+> speech_prog 'exit'~
+if wearingvnum($n) 304723
+mpforce $n remove mk3
+mpforce $n give mk3 droid
+mppurge mk3
+mpechoat $n &YYou disappear in a flash of light.&D
+mpecharound $n &Y$n disappars in a flash of light.&D
+mptransfer $n 304583
+mpat 304583 mpforce $n look
+else
+if carryingvnum($n) 304723
+say $n, you must equip your gravity acceleration device for verification purposes before I will let you leave.
+else
+say $n, it appears you've lost your gravity acceleration device. How odd. Oh well, off you go!
+mpechoat $n &YYou disappear in a flash of light.&D
+mpecharound $n &Y$n disappars in a flash of light.&D
+mptransfer $n 304583
+mpat 304583 mpforce $n look
+endif
+endif
+~
+|
+#304725
+healotron~
+The HEALOTRON-9000~
+The HEALOTRON-9000 sits here, menacing all with its dubious appendages.
+~
+~
+67108867 0 0 C
+1 0 100 1d20+0 2d5+0
+-1 1
+112 112 0
+10 10 10 10 0
+0 0 0 0 0
+4 4 0 0 1 1 0
+0 0 0 0 0 0 0 0
+> greet_prog 100~
+say HELLO, USER. INSERT 1100001101010000 ZENI FOR SERVICES.
+say HA, HA. BINARY.
+say THAT'S 50 GRAND TO YOU, MEATBAG.
+~
+> bribe_prog 50000~
+mpechoat $n &YThe HEALOTRON-9000 grabs hold of you with its horrible, metal hands and drags you into the machine. You feel much better, at least after all the screaming.&D
+mpechoaround $n &YThe HEALOTRON-9000 drags $n off kicking and screaming, only to return $m moments later with a dazed expression. Uhh, maybe don't use this thing.&D
+mprestore $n 10000
+~
+|
+#304726
+third floor training assist droid~
+The Training Droid~
+A training assistance droid floats here expectantly.
+~
+~
+67108867 0 0 C
+1 0 100 1d20+0 2d5+0
+-1 1
+112 112 0
+10 10 10 10 0
+0 0 0 0 0
+4 4 0 0 1 1 0
+0 0 0 0 0 0 0 0
+> greet_prog 100~
+if ispc($n)
+say Greetings, $n.
+say If you've reached sufficient heights to train on this floor, I am authorized to present you with a device to aid in your &Rtraining&C.&D
+say Or, I have a separate device if you are a &Rbio&C-android.&D
+endif
+~
+> speech_prog 'training'~
+if pl($n) >= 1000000000000
+mpoload 304724
+say Very well. Take this &YPower Amplification Device&C and equip it to greatly increase your potential.
+give power $n
+else
+say I'm afraid you're too weak to use this training device. You'd tear your own body apart, $n...
+endif
+~
+> speech_prog 'bio'~
+if race($n) == Bio-Android
+if pl($n) >= 1000000000000
+say Ah yes, a mere Power Amp would do you little good, $n. Take this improved model.
+mpoload 304725
+give bio $n
+endif
+endif
+~
+|
 #305000
 shop len~
 Len~
@@ -901,7 +1142,7 @@ Len, the purveyor of ill-gotten goods, stands against the baby grand piano with 
 112 112 2
 100 10 10 10 10
 0 0 0 0 0
-0 0 0 0 0 0 0
+0 0 0 0 1 1 0
 0 0 0 0 0 0 0 0
 > greet_prog 100~
 peer $n
@@ -919,6 +1160,296 @@ mptransfer $n 304376
 mpat 304376 mpforce $n look
 ~
 |
+#305001
+withered test fighter~
+A Withered Test fighter~
+A fighter with almost no power at all stands here, horrified.
+~
+~
+3 0 0 C
+1 0 100 1d20+0 2d5+0
+-1 50
+112 112 0
+10 10 10 10 10
+0 0 0 0 0
+0 0 0 0 1 1 0
+0 0 0 0 0 0 0 0
+#305002
+spaceship mob terminal~
+A Humming Terminal~
+A humming terminal sits here, awaiting your input.
+~
+~
+67108867 0 0 C
+1 0 100 1d20+0 2d5+0
+-1 1
+112 112 0
+10 10 10 10 10
+0 0 0 0 0
+0 0 0 0 1 1 0
+0 0 0 0 0 0 0 0
+> speech_prog 1~
+mpecho &YThe terminal flashes, generating the specified combat opponent.&d
+mpmload 305001
+~
+|
+#305003
+holographic aspect of chaos~
+The Aspect of Chaos~
+A holographic representation of absolute chaos stands here, effecting the real world.
+~
+~
+3 0 0 C
+1 0 100 1d20+0 2d5+0
+-1 50000000000000000
+112 112 0
+100 100 100 100 0
+0 0 0 0 0
+0 0 0 0 1 1 4
+0 0 0 0 0 0 0 0
+> fight_prog 5~
+kame
+~
+|
+#305004
+greater aspect of chaos~
+The Greater Aspect of Chaos~
+The Greater Aspect of Chaos tears apart the fabric of reality.
+~
+~
+3 0 0 C
+1 0 100 1d20+0 2d5+0
+-1 100000000000000000
+112 112 0
+100 100 100 100 0
+0 0 0 0 0
+0 0 0 0 1 1 4
+0 0 0 0 0 0 0 0
+> fight_prog 5~
+kame
+~
+|
+#305005
+absolute chaos~
+Absolute Chaos~
+The absolute amalgamation of chaos is corrupting the universe.
+~
+~
+3 0 0 C
+1 0 100 1d20+0 2d5+0
+-1 200000000000000000
+112 112 0
+100 100 100 100 0
+0 0 0 0 0
+0 0 0 0 1 1 4
+0 0 0 0 0 0 0 0
+> fight_prog 5~
+kame
+~
+|
+#305006
+custom ship training partner 1~
+A Custom Training Partner~
+A custom training partner stands here, pieced together from various parts.
+~
+~
+16777219 0 0 C
+1 0 100 1d20+0 2d5+0
+-1 160000000000000000000
+112 112 0
+100 100 100 100 0
+0 0 0 0 0
+0 0 0 0 1 1 0
+0 0 0 0 0 0 0 0
+> rand_prog 10~
+mprestore $i 9000
+mpecho &C$I flashes brightly, instantly recovering $kself.&D
+~
+> fight_prog 100~
+mprestore $i 9000
+mpecho &Y$I grins wickedly, completely unaffected by your attacks.&D
+~
+|
+#305007
+custom ship training partner 2~
+A Weaker Custom Training Partner~
+A weaker custom training partner stands here, pieced together from various parts.
+~
+~
+16777219 0 0 C
+1 0 100 1d20+0 2d5+0
+-1 3200000000000000000
+112 112 0
+100 100 100 100 0
+0 0 0 0 0
+0 0 0 0 1 1 0
+0 0 0 0 0 0 0 0
+> rand_prog 10~
+mprestore $i 9000
+mpecho &C$I flashes brightly, instantly recovering $kself.&D
+~
+> fight_prog 100~
+mprestore $i 9000
+mpecho &Y$I grins wickedly, completely unaffected by your attacks.&D
+~
+|
+#305008
+blarg custom ship training partner~
+a newly created blarg custom ship training partner~
+Some god abandoned a newly created blarg custom ship training partner here.
+~
+~
+1073741825 0 0 C
+1 0 100 1d20+0 2d5+0
+-1 1
+112 112 0
+10 10 10 10 10
+0 0 0 0 0
+0 0 0 0 1 1 0
+0 0 0 0 0 0 0 0
+#305009
+bboat custom ship training partner~
+A custom training partner~
+A vaguely translucent custom training partner stands here.
+~
+~
+16777219 0 0 C
+1 0 100 1d20+0 2d5+0
+-1 4000000000000000000
+112 112 0
+100 100 100 100 0
+0 0 0 0 0
+0 0 0 0 1 1 0
+0 0 0 0 0 0 0 0
+> rand_prog 10~
+mprestore $i 9000
+mpecho &C$I flashes brightly, instantly recovering $kself.&D
+~
+> fight_prog 100~
+mprestore $i 9000
+mpecho &Y$I grins wickedly, completely unaffected by your attacks.&D
+~
+|
+#306032
+gnarly dude~
+a gnarly dude~
+A gnarly dude just begging to be punched is standing here.
+~
+When you gaze upon the dude's gnarled features you sense that they have
+committed many a social faux-pas and must be reprimanded.  Physically. 
+~
+16777219 0 0 C
+1 0 100 1d20+0 2d5+0
+-1 600000000000000000
+112 112 1
+100 100 100 100 0
+0 0 0 0 0
+0 0 0 0 1 1 4
+0 0 0 0 0 0 0 0
+> death_prog 100~
+say Gnarly, dude... Ugh.
+mpecho &YAnother gnarly dude appears with the previous gnarly dude's equally gnarly 'tude.&D
+mpmload 306032
+~
+> rand_prog 10~
+mprestore $i 9000
+mpecho &C$I flashes brightly, instantly recovering $kself.&D
+~
+> fight_prog 100~
+mprestore $i 9000
+mpecho &Y$I grins wickedly, completely unaffected by your attacks.&D
+~
+|
+#306033
+gnarlier dude~
+a gnarlier dude~
+A gnarlier dude just begging to be punched is standing here.
+~
+When you gaze upon the dude's mega-gnarled visage you sense that they
+have committed many a social faux-pas and must be reprimanded.  Physically.
+~
+16777219 0 0 C
+1 0 100 1d20+0 2d5+0
+-1 1600000000000000000
+112 112 1
+100 100 100 100 0
+0 0 0 0 0
+0 0 0 0 1 1 4
+0 0 0 0 0 0 0 0
+> death_prog 100~
+say Gnarly, dude... Ugh.
+mpecho &YAnother gnarlier dude appears with the previous gnarlier dude's equally gnarly 'tude.&D
+mpmload 306033
+~
+> rand_prog 10~
+mprestore $i 9000
+mpecho &C$I flashes brightly, instantly recovering $kself.&D
+~
+> fight_prog 100~
+mprestore $i 9000
+mpecho &Y$I grins wickedly, completely unaffected by your attacks.&D
+~
+|
+#308000
+invis parlor closer~
+The Parlor Closer~
+The invis parlor closer.
+~
+~
+1149239299 0 0 C
+50 0 100 1d20+0 2d5+0
+-1 1
+112 112 0
+10 10 10 10 10
+0 0 0 0 0
+0 0 0 0 1 1 0
+0 0 0 0 0 0 0 0
+> entry_prog 100~
+close s
+~
+|
+#308001
+shodan monk~
+a newly created shodan monk~
+Some god abandoned a newly created shodan monk here.
+~
+~
+1073741825 0 0 C
+1 0 100 1d20+0 2d5+0
+-1 1
+112 112 0
+10 10 10 10 10
+0 0 0 0 0
+0 0 0 0 1 1 0
+0 0 0 0 0 0 0 0
+#308002
+nidan monk~
+a newly created nidan monk~
+Some god abandoned a newly created nidan monk here.
+~
+~
+1073741825 0 0 C
+1 0 100 1d20+0 2d5+0
+-1 1
+112 112 0
+10 10 10 10 10
+0 0 0 0 0
+0 0 0 0 1 1 0
+0 0 0 0 0 0 0 0
+#308003
+sandan monk~
+a newly created sandan monk~
+Some god abandoned a newly created sandan monk here.
+~
+~
+1073741825 0 0 C
+1 0 100 1d20+0 2d5+0
+-1 1
+112 112 0
+10 10 10 10 10
+0 0 0 0 0
+0 0 0 0 1 1 0
+0 0 0 0 0 0 0 0
 #308900
 last mob~
 a newly created last mob~
@@ -1007,7 +1538,7 @@ knuckle duster~
 A pair of knuckle dusters lay here on the floor.~
 ~
 5 0 8193
-0 10 1 7 0 0
+0 10 1 0 0 0
 1 5000 500
  50000
 #303907
@@ -1129,6 +1660,88 @@ A
 4 1
 A
 3 1
+#303919
+hypertech advancement unit~
+Hyper-Tech Advancement Unit~
+This object should not exist on the ground.~
+~
+9 1073741824&260 9
+0 0 0 0 0 0
+1 0 0
+ 0
+A
+12 300
+#303920
+hypertech custom ship unit~
+&YHyper-Tech Custom Unit&D~
+An object that shouldn't be dropped is here.~
+~
+9 1073741824 9
+0 0 0 0 0 0
+1 0 0
+ 0
+A
+12 8900
+#303921
+jewel of sealing~
+&YThe Jewel of Sealing&D~
+A great and terrible jewel was set here.~
+~
+9 4096&260 5
+0 0 0 -9900 0 0
+1 0 0
+ 0
+#304721
+mki gravity accelerator~
+&YThe MK-I Gravity Accelerator&D~
+An object that should never have been dropped is laying here.~
+~
+9 0 16385
+0 0 0 20000 0 0
+1 0 0
+ 0
+#304722
+mk2 gravity acceleration device~
+&YThe MK-II Gravity Accelerator&D~
+An object that should not be dropped is laying here.~
+~
+9 0 16385
+0 0 0 50000 0 0
+1 0 0
+ 1000001
+#304723
+mk3 gravity acceleration device~
+&YA Gravity Accelerator&D~
+An unused gravity accelerator lays here on the floor.~
+~
+9 1073741824&260 16385
+0 0 0 90000 0 0
+1 0 0
+ 100000
+A
+12 8900
+#304724
+power amplification device~
+&YA Power Amplification Device&D~
+A device lays here on the floor, exerting huge amounts of power.~
+~
+9 0 16385
+0 0 0 40000 0 0
+1 0 0
+ 1000000000000
+> wear_prog 100~
+mpechoat $n &YYou feel your latent power building many times more quickly.&D
+~
+|
+#304725
+biodroid power amplification device~
+&YA Bio Amplification Device&D~
+A small device lays here on the floor, outputting massive amounts of power.~
+~
+9 1032192&192 16385
+0 0 0 90000 0 0
+1 0 0
+ 1000000000000
 #305000
 masterful gi~
 &WA Masterful Gi&d~
@@ -1265,6 +1878,48 @@ A
 3 5
 A
 4 5
+#305008
+portable wormhole~
+&RA Portable Wormhole?!&d~
+A tiny wormhole is sucking up all matter around it!~
+~
+15 0 524289
+1000 0 0 0 0 0
+1 10000000 1000000
+ 0
+> wear_prog 100~
+mpechoat $n &YThe Portable Wormhole howls menacingly. Maybe you shouldn't be wearing this...&d
+mpechoaround $n &Y$n is toying with the stability of the universe.&d
+~
+> exa_prog 25~
+mpechoat $n &YYou feel pretty brave for sticking your face in this thing.&d
+mpechoaround $n &Y$n sticks their face in a Portable Wormhole. Doesn't look too intelligent.&d
+~
+|
+#305009
+ultradense training weights~
+&WUltradense Training Weights&d~
+The heaviest set of training weights in the universe lay here, crushing the planet beneath them.~
+~
+9 0 297
+0 0 0 0 1 1
+1 10000000 1000000
+ 1
+A
+1 -100
+A
+2 -100
+A
+4 -100
+#308000
+parlor doors~
+The Doors to the Bright Parlor~
+The doors to The Bright Parlor remain shut to you for all time.~
+~
+13 0 0
+0 0 0 0 0 0
+1 0 0
+ 0
 #308900
 last obj~
 a newly created last obj~
@@ -5673,11 +6328,38 @@ ESF Turbolift~
 Two large sliding doors frame the better half of this cylindrical
 capsule, replete with a small computer terminal embedded in the right-hand
 side.  Immediately the terminal lights up, ready to assist its visitors. 
+
+&YIf you are restricted from speaking, use the 'crash#' command to smash your
+way through the elevator shaft to your desired floor, you brute.&d
 ~
 0 4 0
-> greet_prog 100~
-mea $n &YThe turbolift doors quickly shut behind you as you step inside.&d
-mer $n &YThe turbolift doors whisk open, then quickly shut behind $n.
+D10
+~
+crash1~
+526336 -1 303924
+D10
+~
+crash2~
+526336 -1 304125
+D10
+~
+crash4~
+526336 -1 304332
+D10
+~
+crash5~
+526336 -1 304581
+D10
+~
+crash5~
+526336 -1 304592
+D10
+~
+crash0~
+526336 -1 303911
+> entry_prog 100~
+mpechoat $n &YThe turbolift doors quickly shut behind you as you step inside.&d
+mpechoaround $n &YThe turbolift doors whisk open, then quickly shut behind $n.&d
 ~
 |
 S
@@ -11492,7 +12174,7 @@ D3
 0 -1 304407
 S
 #304415
-Floating in a void~
+Third Floor: Advanced Arena 1~
 The floor, the walls, and even the very air radiates an incredible
 amount of power at this stage of the facility.  Cracks and depressions line
 the floor tiles, but even under the incredible strain, whatever materials
@@ -15380,7 +16062,7 @@ even the simplest tasks consume great effort. The intense pressure
 contained here is a product of the machine located in the center of the
 room, constantly outputting a massive field of gravimetric energy. 
 ~
-0 268435460 0
+0 805306372 0
 D2
 ~
 ~
@@ -16547,10 +17229,6 @@ D3
 ~
 ~
 0 -1 304710
-D4
-~
-~
-0 -1 304652
 D5
 ~
 ~
@@ -17778,10 +18456,6 @@ D1
 ~
 ~
 0 -1 304651
-D4
-~
-~
-0 -1 304709
 D5
 ~
 ~
@@ -17955,34 +18629,117 @@ What is this, I don't even
 0 4 1
 S
 #304721
-Floating in a void~
+Gravity Acceleration Chamber Entryway~
+This entire room reverberates with an intense, glowing light that seems
+not of this world.  In the center sits a large computer terminal, flashing
+and beeping as it awaits warriors to input a command. 
+----------------------------------------------------------------------------
+&YThis room is designed exclusively with the Gravity Acceleration Device
+in mind. Safeguards are in place to ensure you cannot remove one from this
+room, but in the event you do manage to escape with one, do not, under any
+circumstance, use it outside under threat of severe punishment.  Report any
+bugs to an Administrator.&D
+
+&WTo leave this room, speak '&Rexit&W' aloud.&D
 ~
-0 4 1
+0 538976260 0
+D0
+~
+~
+0 -1 304724
+D1
+~
+~
+0 -1 304722
+D3
+~
+~
+0 -1 304723
 S
 #304722
-Floating in a void~
+Gravity Acceleration Chamber~
+This entire room reverberates with an intense, glowing light that seems
+not of this world.  In the center sits a large computer terminal, flashing
+and beeping as it awaits warriors to input a command.  
 ~
-0 4 1
+0 606085124 0
+D0
+~
+~
+0 -1 304726
+D3
+~
+~
+0 -1 304721
 S
 #304723
-Floating in a void~
+Gravity Acceleration Chamber~
+This entire room reverberates with an intense, glowing light that seems
+not of this world.  In the center sits a large computer terminal, flashing
+and beeping as it awaits warriors to input a command.  
 ~
-0 4 1
+0 606085124 0
+D0
+~
+~
+0 -1 304725
+D1
+~
+~
+0 -1 304721
 S
 #304724
-Floating in a void~
+Accelerated Healing Station~
+A terminal sits here between what looks like two ATMs, with two enormous
+robotic arms dangling off either side.  The prompt mentions something about
+'emergency healing' for a 'reasonable fee', but it would take an
+adventurous person to take it up on the offer. 
 ~
-0 4 1
+0 538976260 0
+D1
+~
+~
+0 -1 304726
+D2
+~
+~
+0 -1 304721
+D3
+~
+~
+0 -1 304725
 S
 #304725
-Floating in a void~
+Gravity Acceleration Chamber~
+This entire room reverberates with an intense, glowing light that seems
+not of this world.  In the center sits a large computer terminal, flashing
+and beeping as it awaits warriors to input a command.  
 ~
-0 4 1
+0 606085124 0
+D1
+~
+~
+0 -1 304724
+D2
+~
+~
+0 -1 304723
 S
 #304726
-Floating in a void~
+Gravity Acceleration Chamber~
+This entire room reverberates with an intense, glowing light that seems
+not of this world.  In the center sits a large computer terminal, flashing
+and beeping as it awaits warriors to input a command. 
 ~
-0 4 1
+0 606085124 0
+D2
+~
+~
+0 -1 304722
+D3
+~
+~
+0 -1 304724
 S
 #304727
 Floating in a void~
@@ -24365,184 +25122,561 @@ Floating in a void~
 0 4 1
 S
 #306000
-Floating in a void~
+Ship Cockpit~
+An array of terminals lines the transparisteel windows before you. 
+Thousands of tiny blinking buttons light up the room, and a fluffy black
+pilot's chair sits in the center of it all. A ladder behind it leads back
+down into the main hall, or continues up to the co-pilot's nest. 
 ~
-0 4 1
+0 12 0
+D4
+~
+~
+0 -1 306002
+D5
+~
+~
+0 -1 306001
 S
 #306001
-Floating in a void~
+Ship Access Hallway~
+A series of tubes run the length of the halls, disappearing into rooms
+to either side of you.  The low hum of the engine can be heard, and felt,
+reverberating beneath your feet. The cockpit lies above.
 ~
-0 4 1
+0 12 0
+D1
+~
+~
+0 -1 306004
+D2
+~
+~
+0 -1 306005
+D3
+~
+~
+0 -1 306003
+D4
+~
+~
+0 -1 306000
 S
 #306002
-Floating in a void~
+Co-Piloting Terminals~
+The co-pilot's chair sits here at the center of the room, much like the
+captain's below.  It's not quite as fluffy, but still seems comfortable
+enough. 
 ~
-0 4 1
+0 12 0
+D5
+~
+~
+0 -1 306000
 S
 #306003
-Floating in a void~
+Ship Bunk~
+This looks like a good place to lay down your head and get a good
+night's sleep.  Somehow, you feel rujevenated even standing here. 
 ~
-0 4 1
+0 536870924 0
+D1
+~
+~
+0 -1 306001
 S
 #306004
-Floating in a void~
+Ship Training Chamber~
+Two terminals are attached to the wall, humming in sync.  One flashes
+brightly, indicating it operates the ship's gravity, the other indicates
+something about "Holographic Training Partners". 
 ~
-0 4 1
+0 335544332 0
+D3
+~
+~
+0 -1 306001
 S
 #306005
-Floating in a void~
+Air Lock~
+This tiny air lock is the only thing protecting you from the cold vacuum
+of space.  Perhaps it's best not to fool around with the terminals here. 
 ~
-0 4 1
+0 12 0
+D0
+~
+~
+0 -1 306001
 S
 #306006
-Floating in a void~
+TS-0001: Ship Cockpit~
+An array of terminals lines the transparisteel windows before you. 
+Thousands of tiny blinking buttons light up the room, and a fluffy black
+pilot's chair sits in the center of it all. 
 ~
-0 4 1
+0 4 0
+D0
+~
+~
+0 -1 306007
 S
 #306007
-Floating in a void~
+Ship Access Hallway~
+A series of tubes run the length of the halls, disappearing into rooms
+to either side of you.  The low hum of the engine can be heard, and felt,
+reverberating beneath your feet.  The cockpit lies to the south. 
 ~
-0 4 1
+0 4 0
+D0
+~
+~
+0 -1 306010
+D1
+~
+~
+0 -1 306009
+D2
+~
+~
+0 -1 306006
+D3
+~
+~
+0 -1 306008
 S
 #306008
-Floating in a void~
+Ship Bunks~
+This looks like a good place to lay down your head and get a good
+night's sleep.  Somehow, you feel rujevenated even standing here.  
 ~
-0 4 1
+0 536870916 0
+D1
+~
+~
+0 -1 306007
 S
 #306009
-Floating in a void~
+Ship Training Chamber~
+Two terminals are attached to the wall, humming in sync.  One flashes
+brightly, indicating it operates the ship's gravity, the other indicates
+something about "Holographic Training Partners".  
 ~
-0 4 1
+0 268435460 0
+D3
+~
+~
+0 -1 306007
+> speech_prog 1~
+mpecho &YThe terminal flashes, generating the specified combat opponent.&d
+mpmload 305003
+~
+> speech_prog 2~
+mpecho &YThe terminal flashes, generating the specified combat opponent.&D
+mpmload 305004
+~
+> speech_prog 3~
+mpecho &YThe terminal flashes, generating the specified combat opponent.&D
+mpmload 305005
+~
+|
 S
 #306010
-Floating in a void~
+Ship Airlock~
+This tiny air lock is the only thing protecting you from the cold vacuum
+of space.  Perhaps it's best not to fool around with the terminals here.  
 ~
-0 4 1
+0 4 0
+D2
+~
+~
+0 -1 306007
 S
 #306011
-Floating in a void~
+The Unsinkable II: Ship Cockpit~
+An array of terminals lines the transparisteel windows before you. 
+Thousands of tiny blinking buttons light up the room, and a fluffy black
+pilot's chair sits in the center of it all. 
 ~
-0 4 1
+0 4 0
+D0
+~
+~
+0 -1 306012
 S
 #306012
-Floating in a void~
+Ship Access Hallway~
+A series of tubes run the length of the halls, disappearing into rooms
+to either side of you.  The low hum of the engine can be heard, and felt,
+reverberating beneath your feet.  The cockpit lies to the south. 
 ~
-0 4 1
+0 4 0
+D0
+~
+~
+0 -1 306015
+D1
+~
+~
+0 -1 306014
+D2
+~
+~
+0 -1 306011
+D3
+~
+~
+0 -1 306013
 S
 #306013
-Floating in a void~
+Ship Bunk~
+This looks like a good place to lay down your head and get a good
+night's sleep.  Somehow, you feel rujevenated even standing here.
 ~
-0 4 1
+0 536870916 0
+D1
+~
+~
+0 -1 306012
 S
 #306014
-Floating in a void~
+Ship Training Chamber~
+Two terminals are attached to the wall, humming in sync.  One flashes
+brightly, indicating it operates the ship's gravity, the other indicates
+something about "Holographic Training Partners". 
 ~
-0 4 1
+0 268435460 0
+D3
+~
+~
+0 -1 306012
+> speech_prog 1~
+mpecho &YThe terminal flashes, generating the specified combat opponent.&D
+mpmload 305003
+~
+> speech_prog 2~
+mpecho &YThe terminal flashes, generating the specified combat opponent.&D
+mpmload 305004
+~
+> speech_prog 3~
+mpecho &YThe terminal flashes, generating the specified combat opponent.&D
+mpmload 305005
+~
+|
 S
 #306015
-Floating in a void~
+Ship Airlock~
+This tiny air lock is the only thing protecting you from the cold vacuum
+of space.  Perhaps it's best not to fool around with the terminals here.
 ~
-0 4 1
+0 4 0
+D2
+~
+~
+0 -1 306012
 S
 #306016
-Floating in a void~
+Blarg's Boat: Ship Cockpit~
+An array of terminals lines the transparisteel windows before you. 
+Thousands of tiny blinking buttons light up the room, and a fluffy black
+pilot's chair sits in the center of it all.
 ~
-0 4 1
+0 4 0
+D0
+~
+~
+0 -1 306017
 S
 #306017
-Floating in a void~
+Ship Access Hallway~
+A series of tubes run the length of the halls, disappearing into rooms
+to either side of you.  The low hum of the engine can be heard, and felt,
+reverberating beneath your feet.  The cockpit lies to the south. 
 ~
-0 4 1
+0 4 0
+D0
+~
+~
+0 -1 306020
+D1
+~
+~
+0 -1 306019
+D2
+~
+~
+0 -1 306016
+D3
+~
+~
+0 -1 306018
 S
 #306018
-Floating in a void~
+Ship Bunks~
+This looks like a good place to lay down your head and get a good
+night's sleep.  Somehow, you feel rujevenated even standing here.  
 ~
-0 4 1
+0 536870916 0
+D1
+~
+~
+0 -1 306017
 S
 #306019
-Floating in a void~
+Ship Training Chamber~
+Two terminals are attached to the wall, humming in sync.  One flashes
+brightly, indicating it operates the ship's gravity, the other indicates
+something about "Holographic Training Partners".
 ~
-0 4 1
+0 268435460 0
+D3
+~
+~
+0 -1 306017
 S
 #306020
-Floating in a void~
+Ship Airlock~
+This tiny air lock is the only thing protecting you from the cold vacuum
+of space.  Perhaps it's best not to fool around with the terminals here. 
 ~
-0 4 1
+0 4 0
+D2
+~
+~
+0 -1 306017
 S
 #306021
-Floating in a void~
+Flight Deck - Cockpit~
+Various guidance instruments and display panels for piloting the ship
+sit above and a large viewing window that spans the width of the cockpit
+before you.  Two large and seemingly comfortable chairs sit in front of the
+instrument panels for the pilot and co-pilot, each outfitted with a control
+panel along the left arm and a piloting joystick for manual control, when
+necessary, on the right.  A ladder leading up into the Gunnery Station can
+be seen tucked in the corner to your right. 
 ~
-0 4 1
+0 1073741828 0
+D2
+~
+~
+0 -1 306023
 S
 #306022
-Floating in a void~
+Gunnery Station~
+As you ascend into the Gunnery Station you realize it is not so much a
+room but a compact bubble atop the ship providing an unobstructed view
+around and above the ship. Two chairs sit opposite one another suspended
+from a swivel mechanism mounted to the floor.  Both chairs have a large
+holographic display visible in front of them that can be utilized to
+operate the radar tracking and weapons targeting systems. 
 ~
-0 4 1
+0 1073741828 0
 S
 #306023
-Floating in a void~
+Flight Deck - Commons~
+A large table surrounded by chairs in the center of the room takes up
+much of the space in the commons area.  Visible over the center of the
+table is a holographic display that can be used for planning, research, or
+as is usually the case, cartoons.  A kitchen area can be seen to the west
+while a sign next to a hallway leading north reads 'Cockpit and Gunnery
+Station.' 
 ~
-0 4 1
+0 1073741828 0
+D0
+~
+~
+0 -1 306021
+D3
+~
+~
+0 -1 306024
+D5
+~
+~
+0 -1 306025
 S
 #306024
-Floating in a void~
+Flight Deck - Kitchen~
+A rather lavish kitchen setup greets you as you enter the room.  To your
+left are two refrigerators flanked by an assortment of cabinets while a
+double-sink and 8-burner oven are situated to your right. Directly in front
+of you a long preparation island runs the length of the middle of the room,
+providing more than enough space to cook the large meals necessary to feed
+the ship's crew. 
 ~
-0 4 1
+0 1073741828 0
+D1
+~
+~
+0 -1 306023
 S
 #306025
-Floating in a void~
+The Deliverer 3030 - Hatch~
+The area around the ship's hatch is nondescript, with only a control
+panel on the wall to your left and two ladders in front of you leading to
+separate levels of the ship. A sign near the ladder leading upwards reads
+'Flight Deck' while a similar sign near the lower ladder reads 'Training
+Deck.' 
 ~
-0 4 1
+0 1073741828 0
+D4
+~
+~
+0 -1 306023
+D5
+~
+~
+0 -1 306026
 S
 #306026
-Floating in a void~
+Training Deck - Hub~
+There is very little to note in this room save the doorways leading to
+each of the combat hologram training rooms and a small hallway to the south
+that looks to house the ship's healing tanks. 
 ~
-0 4 1
+0 1073741828 0
+D0
+~
+~
+0 -1 306027
+D1
+~
+~
+0 -1 306029
+D2
+~
+~
+0 -1 306030
+D3
+~
+~
+0 -1 306028
+D4
+~
+~
+0 -1 306025
 S
 #306027
-Floating in a void~
+Training Deck - Combat Training Room 1~
+The door closes behind you and a computerized voice informs you that the
+holographic combatant materializer is ready for operation.  With nothing
+else of note in the squared room, it's time to get to business. 
 ~
-0 4 1
+0 1073741828 0
+D2
+~
+~
+0 -1 306026
 S
 #306028
-Floating in a void~
+Training Deck - Combat Training Room 3~
+The door closes behind you and a computerized voice informs you that the
+holographic combatant materializer is ready for operation.  With nothing
+else of note in the squared room, it's time to get to business. 
 ~
-0 4 1
+0 1073741828 0
+D1
+~
+~
+0 -1 306026
 S
 #306029
-Floating in a void~
+Training Deck - Combat Training Room 2~
+The door closes behind you and a computerized voice informs you that the
+holographic combatant materializer is ready for operation.  With nothing
+else of note in the squared room, it's time to get to business. 
 ~
-0 4 1
+0 1073741828 0
+D3
+~
+~
+0 -1 306026
 S
 #306030
-Floating in a void~
+Training Deck - Healing Tanks~
+Healing tanks in a variety of sizes line the walls of this circular room
+with a large control panel in the middle responsible for displaying
+diagnostic information for each pod. 
 ~
-0 4 1
+0 1610612740 0
+D0
+~
+~
+0 -1 306026
 S
 #306031
-Floating in a void~
+The Deliverer 3030: Cockpit~
+Various guidance instruments and display panels for piloting the ship
+sit above and a large viewing window that spans the width of the cockpit
+before you. Two large and seemingly comfortable chairs sit in front of the
+instrument panels for the pilot and co-pilot, each outfitted with a control
+panel along the left arm and a piloting joystick for manual control, when
+necessary, on the right. 
 ~
-0 4 1
+0 4 0
+D2
+~
+~
+0 -1 306032
 S
 #306032
-Floating in a void~
+Hatch~
+The area around the ship's hatch is nondescript, with only a control
+panel on the wall near the airlock and hallways all around leading to the
+cockpit and various training 
 ~
-0 4 1
+0 4 0
+D0
+~
+~
+0 -1 306031
+D1
+~
+~
+0 -1 306034
+D2
+~
+~
+0 -1 306035
+D3
+~
+~
+0 -1 306033
 S
 #306033
-Floating in a void~
+Combat Training Room 1~
+The door closes behind you and a computerized voice informs you that the
+holographic combatant materializer is ready for operation.  With nothing
+else of note in the squared room, it's time to get to business. 
 ~
-0 4 1
+0 4 0
+D1
+~
+~
+0 -1 306032
 S
 #306034
-Floating in a void~
+Combat Training Room 2~
+The door closes behind you and a computerized voice informs you that the
+holographic combatant materializer is ready for operation.  With nothing
+else of note in the squared room, it's time to get to business. 
 ~
-0 4 1
+0 4 0
+D3
+~
+~
+0 -1 306032
 S
 #306035
-Floating in a void~
+Combat Training Room 3~
+The door closes behind you and a computerized voice informs you that the
+holographic combatant materializer is ready for operation.  With nothing
+else of note in the squared room, it's time to get to business. 
 ~
 0 4 1
+D0
+~
+~
+0 -1 306032
 S
 #306036
 Floating in a void~
@@ -34365,64 +35499,180 @@ Floating in a void~
 0 4 1
 S
 #308000
-Floating in a void~
+The Looming Gates~
+The gates of a seemingly infinite temple stretch upward into the
+unknown, casting looming shadows over an uncertain void.  Faint lights
+flicker around you, disappearing into the walls like ghostly apparitions. 
+The gates seem impenetrable, but as you approach they swing effortlessly
+open, welcoming you inside.  Nothing awaits but darkness. 
 ~
-0 4 1
+0 1075838980 0
+D0
+~
+~
+0 -1 308001
 S
 #308001
-Floating in a void~
+Bright Parlor~
+A bright light erupts through the darkness.  Before you understand what
+has happened, you find yourself in a very different place.  Monks hurriedly
+scatter in all directions, disappearing behind the great pillars lining the
+center of an ethereal parlor. 
 ~
-0 4 1
+0 1075838980 0
+D0
+~
+~
+0 -1 308002
+> leave_prog 100~
+mpechoat $n &cThe Bright Parlor doors slam shut behind you, never to welcome you back into limbo again.&d
+~
+|
 S
 #308002
-Floating in a void~
+A Flowery Hallway~
+Attached to the great rooms on either side is this hallway, stretching
+for what seems like forever between a canopy of flowery plantlife.  Unseen
+birds chirp a calming melody, and the subtle flittering of insect wings
+echoes above you. 
 ~
-0 4 1
+0 1073741828 0
+D0
+~
+~
+0 -1 308003
 S
 #308003
-Floating in a void~
+A Flowery Hallway~
+Attached to the great rooms on either side is this hallway, stretching
+for what seems like forever between a canopy of flowery plantlife.  Unseen
+birds chirp a calming melody, and the subtle flittering of insect wings
+echoes above you.  
 ~
-0 4 1
+0 1073741828 0
+D0
+~
+~
+0 -1 308004
+D2
+~
+~
+0 -1 308002
 S
 #308004
-Floating in a void~
+A Flowery Hallway~
+Attached to the great rooms on either side is this hallway, stretching
+for what seems like forever between a canopy of flowery plantlife.  Unseen
+birds chirp a calming melody, and the subtle flittering of insect wings
+echoes above you. 
 ~
-0 4 1
+0 1073741828 0
+D0
+~
+~
+3 -1 308005
+D2
+~
+~
+0 -1 308003
 S
 #308005
-Floating in a void~
+Temple Forum~
+A great many seats descend into a circle of dirt at the center of this
+massive room.  Looking up reveals there to be no ceiling, only a bright
+light that appears to grow faint, but never disappears no matter how far
+into the distance it travels.  Monks gather here and there, discussing the
+events of the day in some tongue you don't quite recognize.  A long hallway
+lies to the south, and to the east you can vaguely make out the sounds of
+fighting. 
 ~
-0 4 1
+0 1073741828 0
+D1
+~
+~
+0 -1 308006
+D2
+~
+~
+1 -1 308004
 S
 #308006
-Floating in a void~
+Resting Chambers~
+Despite the sounds of combat getting louder to the east, this room
+permeates with an aura of relaxation.  Merely standing here you feel rested
+and rejuvenated.  Perhaps it would be a good idea to take a break here when
+required. 
 ~
-0 4 1
+0 1610613764 0
+D1
+~
+~
+0 -1 308007
+D3
+~
+~
+0 -1 308005
 S
 #308007
-Floating in a void~
+First Ring of Testing~
 ~
-0 4 1
+0 1073741828 1
+D1
+~
+~
+0 -1 308008
+D3
+~
+~
+0 -1 308006
 S
 #308008
-Floating in a void~
+Path Between Rings~
 ~
-0 4 1
+0 1073741828 1
+D1
+~
+~
+0 -1 308009
+D3
+~
+~
+0 -1 308007
 S
 #308009
-Floating in a void~
+Second Ring of Testing~
 ~
-0 4 1
+0 1073741828 1
+D1
+~
+~
+0 -1 308010
+D3
+~
+~
+0 -1 308008
 S
 #308010
-Floating in a void~
+Path Between Rings~
 ~
-0 4 1
+0 1073741828 1
+D1
+~
+~
+0 -1 308011
+D3
+~
+~
+0 -1 308009
 S
 #308011
-Floating in a void~
+Third Ring of Testing~
 ~
-0 4 1
+0 1073741828 1
+D3
+~
+~
+0 -1 308010
 S
 #308012
 Floating in a void~
@@ -39115,7 +40365,6 @@ M 1 303919 1 304251
 M 1 303919 1 304250
 M 1 303919 1 304249
 M 1 303919 1 304248
-M 1 303919 1 304259
 M 1 303919 1 304258
 M 1 303919 1 304257
 M 1 303919 1 304256
@@ -39183,7 +40432,6 @@ M 1 303933 1 304339
 M 1 303933 1 304343
 M 1 303933 1 304345
 M 1 303933 1 304348
-M 1 303933 1 304351
 M 1 303935 1 304373
 M 1 303934 1 304376
 G 1 303904 1
@@ -39193,80 +40441,6 @@ G 1 303905 1
 M 1 303933 1 304354
 M 1 303933 1 304356
 M 1 303933 1 304360
-M 1 303923 1 304380
-M 1 303923 1 304389
-M 1 303923 1 304400
-M 1 303923 1 304390
-M 1 303923 1 304399
-M 1 303923 1 304398
-M 1 303923 1 304391
-M 1 303923 1 304388
-M 1 303923 1 304401
-M 1 303923 1 304402
-M 1 303923 1 304387
-M 1 303923 1 304382
-M 1 303923 1 304392
-M 1 303923 1 304397
-M 1 303923 1 304396
-M 1 303923 1 304393
-M 1 303923 1 304383
-M 1 303923 1 304386
-M 1 303923 1 304403
-M 1 303923 1 304404
-M 1 303923 1 304385
-M 1 303923 1 304384
-M 1 303923 1 304394
-M 1 303923 1 304395
-M 1 303924 1 304506
-M 1 303924 1 304507
-M 1 303924 1 304508
-M 1 303924 1 304509
-M 1 303924 1 304510
-M 1 303924 1 304511
-M 1 303924 1 304512
-M 1 303924 1 304513
-M 1 303924 1 304514
-M 1 303924 1 304515
-M 1 303924 1 304516
-M 1 303924 1 304517
-M 1 303924 1 304518
-M 1 303924 1 304519
-M 1 303924 1 304520
-M 1 303924 1 304521
-M 1 303924 1 304522
-M 1 303924 1 304523
-M 1 303924 1 304524
-M 1 303924 1 304525
-M 1 303924 1 304526
-M 1 303924 1 304527
-M 1 303924 1 304528
-M 1 303924 1 304529
-M 1 303924 1 304530
-M 1 303925 1 304531
-M 1 303925 1 304532
-M 1 303925 1 304533
-M 1 303925 1 304534
-M 1 303925 1 304535
-M 1 303925 1 304536
-M 1 303925 1 304537
-M 1 303925 1 304538
-M 1 303925 1 304539
-M 1 303925 1 304540
-M 1 303925 1 304541
-M 1 303925 1 304542
-M 1 303925 1 304543
-M 1 303925 1 304544
-M 1 303925 1 304545
-M 1 303925 1 304546
-M 1 303925 1 304547
-M 1 303925 1 304548
-M 1 303925 1 304549
-M 1 303925 1 304550
-M 1 303925 1 304555
-M 1 303925 1 304554
-M 1 303925 1 304553
-M 1 303925 1 304552
-M 1 303925 1 304551
 M 1 303933 1 304362
 M 1 303937 1 304370
 G 1 303913 1
@@ -39279,81 +40453,6 @@ G 1 303911 1
 G 1 303909 1
 M 1 303933 1 304365
 M 1 303933 1 304369
-M 1 303923 1 304426
-M 1 303923 1 304415
-M 1 303923 1 304406
-M 1 303923 1 304416
-M 1 303923 1 304425
-M 1 303923 1 304424
-M 1 303923 1 304417
-M 1 303923 1 304407
-M 1 303923 1 304414
-M 1 303923 1 304427
-M 1 303923 1 304428
-M 1 303923 1 304413
-M 1 303923 1 304408
-M 1 303923 1 304418
-M 1 303923 1 304423
-M 1 303923 1 304422
-M 1 303923 1 304419
-M 1 303923 1 304409
-M 1 303923 1 304412
-M 1 303923 1 304429
-M 1 303923 1 304430
-M 1 303923 1 304411
-M 1 303923 1 304410
-M 1 303923 1 304420
-M 1 303923 1 304421
-M 1 303924 1 304431
-M 1 303924 1 304432
-M 1 303924 1 304433
-M 1 303924 1 304434
-M 1 303924 1 304435
-M 1 303924 1 304436
-M 1 303924 1 304437
-M 1 303924 1 304438
-M 1 303924 1 304439
-M 1 303924 1 304440
-M 1 303924 1 304441
-M 1 303924 1 304442
-M 1 303924 1 304443
-M 1 303924 1 304444
-M 1 303924 1 304445
-M 1 303924 1 304446
-M 1 303924 1 304447
-M 1 303924 1 304448
-M 1 303924 1 304449
-M 1 303924 1 304450
-M 1 303924 1 304451
-M 1 303924 1 304452
-M 1 303924 1 304453
-M 1 303924 1 304454
-M 1 303924 1 304455
-M 1 303925 1 304456
-M 1 303925 1 304457
-M 1 303925 1 304458
-M 1 303925 1 304459
-M 1 303925 1 304460
-M 1 303925 1 304461
-M 1 303925 1 304462
-M 1 303925 1 304463
-M 1 303925 1 304464
-M 1 303925 1 304465
-M 1 303925 1 304466
-M 1 303925 1 304467
-M 1 303925 1 304468
-M 1 303925 1 304469
-M 1 303925 1 304470
-M 1 303925 1 304471
-M 1 303925 1 304472
-M 1 303925 1 304473
-M 1 303925 1 304474
-M 1 303925 1 304475
-M 1 303925 1 304476
-M 1 303925 1 304477
-M 1 303925 1 304478
-M 1 303925 1 304479
-M 1 303925 1 304480
 M 1 303926 1 304481
 M 1 303926 1 304482
 M 1 303926 1 304483
@@ -39369,7 +40468,6 @@ M 1 303926 1 304494
 M 1 303926 1 304493
 M 1 303926 1 304492
 M 1 303926 1 304491
-M 1 303926 1 304500
 M 1 303926 1 304499
 M 1 303926 1 304498
 M 1 303926 1 304497
@@ -39381,73 +40479,6 @@ M 1 303926 1 304502
 M 1 303926 1 304501
 M 1 303938 1 304591
 M 1 303928 1 304636
-M 1 303927 1 304675
-M 1 303927 1 304673
-M 1 303927 1 304672
-M 1 303927 1 304671
-M 1 303927 1 304670
-M 1 303927 1 304669
-M 1 303927 1 304668
-M 1 303927 1 304667
-M 1 303927 1 304666
-M 1 303927 1 304665
-M 1 303927 1 304664
-M 1 303927 1 304663
-M 1 303927 1 304662
-M 1 303927 1 304661
-M 1 303927 1 304660
-M 1 303927 1 304659
-M 1 303927 1 304658
-M 1 303927 1 304657
-M 1 303927 1 304656
-M 1 303927 1 304655
-M 1 303927 1 304654
-M 1 303927 1 304653
-M 1 303927 1 304652
-M 1 303927 1 304651
-M 1 303927 1 304650
-M 1 303927 1 304649
-M 1 303927 1 304648
-M 1 303927 1 304647
-M 1 303927 1 304646
-M 1 303927 1 304715
-M 1 303927 1 304714
-M 1 303927 1 304713
-M 1 303927 1 304712
-M 1 303927 1 304711
-M 1 303927 1 304710
-M 1 303927 1 304709
-M 1 303927 1 304708
-M 1 303927 1 304707
-M 1 303927 1 304706
-M 1 303927 1 304705
-M 1 303927 1 304704
-M 1 303927 1 304703
-M 1 303927 1 304702
-M 1 303927 1 304701
-M 1 303927 1 304700
-M 1 303927 1 304699
-M 1 303927 1 304698
-M 1 303927 1 304697
-M 1 303927 1 304696
-M 1 303927 1 304695
-M 1 303927 1 304694
-M 1 303927 1 304693
-M 1 303927 1 304692
-M 1 303927 1 304691
-M 1 303927 1 304690
-M 1 303927 1 304689
-M 1 303927 1 304688
-M 1 303927 1 304687
-M 1 303927 1 304686
-M 1 303927 1 304685
-M 1 303927 1 304684
-M 1 303927 1 304683
-M 1 303927 1 304682
-M 1 303927 1 304681
-M 1 303927 1 304676
-M 1 303927 1 304674
-M 1 303923 1 304381
 M 1 303939 1 304590
 M 1 303902 1 303911
 M 1 303931 1 304584
@@ -39486,6 +40517,354 @@ G 1 305005 1
 G 1 305002 1
 G 1 305003 1
 G 1 305004 1
+G 1 305008 1
+G 1 305009 1
+O 1 308000 1 308002
+D 0 308004 0 1
+M 1 304722 1 304721
+M 1 304725 1 304724
+M 1 304721 1 304583
+M 1 303919 1 304259
+M 1 303923 1 304389
+E 1 303919 1 5
+M 1 303923 1 304388
+E 1 303919 1 5
+M 1 303923 1 304387
+E 1 303919 1 5
+M 1 303923 1 304386
+E 1 303919 1 5
+M 1 303923 1 304385
+E 1 303919 1 5
+M 1 303923 1 304404
+E 1 303919 1 5
+M 1 303923 1 304403
+E 1 303919 1 5
+M 1 303923 1 304402
+E 1 303919 1 5
+M 1 303923 1 304401
+E 1 303919 1 5
+M 1 303923 1 304400
+E 1 303919 1 5
+M 1 303923 1 304380
+E 1 303919 1 5
+M 1 303923 1 304381
+E 1 303919 1 5
+M 1 303923 1 304382
+E 1 303919 1 5
+M 1 303923 1 304383
+E 1 303919 1 5
+M 1 303923 1 304384
+E 1 303919 1 5
+M 1 303923 1 304394
+E 1 303919 1 5
+M 1 303923 1 304393
+E 1 303919 1 5
+M 1 303923 1 304392
+E 1 303919 1 5
+M 1 303923 1 304391
+E 1 303919 1 5
+M 1 303923 1 304390
+E 1 303919 1 5
+M 1 303923 1 304399
+E 1 303919 1 5
+M 1 303923 1 304398
+E 1 303919 1 5
+M 1 303923 1 304397
+E 1 303919 1 5
+M 1 303923 1 304396
+E 1 303919 1 5
+M 1 303923 1 304395
+E 1 303919 1 5
+M 1 303923 1 304425
+E 1 303919 1 5
+M 1 303923 1 304424
+E 1 303919 1 5
+M 1 303923 1 304423
+E 1 303919 1 5
+M 1 303923 1 304422
+E 1 303919 1 5
+M 1 303923 1 304421
+E 1 303919 1 5
+M 1 303923 1 304420
+E 1 303919 1 5
+M 1 303923 1 304419
+E 1 303919 1 5
+M 1 303923 1 304418
+E 1 303919 1 5
+M 1 303923 1 304417
+E 1 303919 1 5
+M 1 303923 1 304416
+E 1 303919 1 5
+M 1 303923 1 304406
+E 1 303919 1 5
+M 1 303923 1 304407
+E 1 303919 1 5
+M 1 303923 1 304408
+E 1 303919 1 5
+M 1 303923 1 304409
+E 1 303919 1 5
+M 1 303923 1 304410
+E 1 303919 1 5
+M 1 303923 1 304411
+E 1 303919 1 5
+M 1 303923 1 304412
+E 1 303919 1 5
+M 1 303923 1 304413
+E 1 303919 1 5
+M 1 303923 1 304414
+E 1 303919 1 5
+M 1 303923 1 304415
+E 1 303919 1 5
+M 1 303923 1 304426
+E 1 303919 1 5
+M 1 303923 1 304427
+E 1 303919 1 5
+M 1 303923 1 304428
+E 1 303919 1 5
+M 1 303923 1 304429
+E 1 303919 1 5
+M 1 303923 1 304430
+E 1 303919 1 5
+M 1 303924 1 304432
+E 1 303919 1 5
+M 1 303924 1 304431
+E 1 303919 1 5
+M 1 303924 1 304433
+E 1 303919 1 5
+M 1 303924 1 304434
+E 1 303919 1 5
+M 1 303924 1 304435
+E 1 303919 1 5
+M 1 303924 1 304440
+E 1 303919 1 5
+M 1 303924 1 304439
+E 1 303919 1 5
+M 1 303924 1 304438
+E 1 303919 1 5
+M 1 303924 1 304437
+E 1 303919 1 5
+M 1 303924 1 304436
+E 1 303919 1 5
+M 1 303924 1 304445
+E 1 303919 1 5
+M 1 303924 1 304444
+E 1 303919 1 5
+M 1 303924 1 304443
+E 1 303919 1 5
+M 1 303924 1 304442
+E 1 303919 1 5
+M 1 303924 1 304441
+E 1 303919 1 5
+M 1 303924 1 304450
+E 1 303919 1 5
+M 1 303924 1 304449
+E 1 303919 1 5
+M 1 303924 1 304448
+E 1 303919 1 5
+M 1 303924 1 304447
+E 1 303919 1 5
+M 1 303924 1 304446
+E 1 303919 1 5
+M 1 303924 1 304455
+E 1 303919 1 5
+M 1 303924 1 304454
+E 1 303919 1 5
+M 1 303924 1 304453
+E 1 303919 1 5
+M 1 303924 1 304452
+E 1 303919 1 5
+M 1 303924 1 304451
+E 1 303919 1 5
+M 1 303924 1 304506
+E 1 303919 1 5
+M 1 303924 1 304507
+E 1 303919 1 5
+M 1 303924 1 304508
+E 1 303919 1 5
+M 1 303924 1 304509
+E 1 303919 1 5
+M 1 303924 1 304510
+E 1 303919 1 5
+M 1 303924 1 304511
+E 1 303919 1 5
+M 1 303924 1 304512
+E 1 303919 1 5
+M 1 303924 1 304513
+E 1 303919 1 5
+M 1 303924 1 304514
+E 1 303919 1 5
+M 1 303924 1 304515
+E 1 303919 1 5
+M 1 303924 1 304516
+E 1 303919 1 5
+M 1 303924 1 304517
+E 1 303919 1 5
+M 1 303924 1 304518
+E 1 303919 1 5
+M 1 303924 1 304519
+E 1 303919 1 5
+M 1 303924 1 304520
+E 1 303919 1 5
+M 1 303924 1 304521
+E 1 303919 1 5
+M 1 303924 1 304522
+E 1 303919 1 5
+M 1 303924 1 304523
+E 1 303919 1 5
+M 1 303924 1 304524
+E 1 303919 1 5
+M 1 303924 1 304525
+E 1 303919 1 5
+M 1 303924 1 304526
+E 1 303919 1 5
+M 1 303924 1 304527
+E 1 303919 1 5
+M 1 303924 1 304528
+E 1 303919 1 5
+M 1 303924 1 304529
+E 1 303919 1 5
+M 1 303924 1 304530
+E 1 303919 1 5
+M 1 303925 1 304531
+E 1 303919 1 5
+M 1 303925 1 304532
+E 1 303919 1 5
+M 1 303925 1 304533
+E 1 303919 1 5
+M 1 303925 1 304534
+E 1 303919 1 5
+M 1 303925 1 304535
+E 1 303919 1 5
+M 1 303925 1 304536
+E 1 303919 1 5
+M 1 303925 1 304537
+E 1 303919 1 5
+M 1 303925 1 304538
+E 1 303919 1 5
+M 1 303925 1 304539
+E 1 303919 1 5
+M 1 303925 1 304540
+E 1 303919 1 5
+M 1 303925 1 304541
+E 1 303919 1 5
+M 1 303925 1 304542
+E 1 303919 1 5
+M 1 303925 1 304543
+E 1 303919 1 5
+M 1 303925 1 304544
+E 1 303919 1 5
+M 1 303925 1 304545
+E 1 303919 1 5
+M 1 303925 1 304546
+E 1 303919 1 5
+M 1 303925 1 304547
+E 1 303919 1 5
+M 1 303925 1 304548
+E 1 303919 1 5
+M 1 303925 1 304549
+E 1 303919 1 5
+M 1 303925 1 304550
+E 1 303919 1 5
+M 1 303925 1 304551
+E 1 303919 1 5
+M 1 303925 1 304552
+E 1 303919 1 5
+M 1 303925 1 304553
+E 1 303919 1 5
+M 1 303925 1 304554
+E 1 303919 1 5
+M 1 303925 1 304555
+E 1 303919 1 5
+M 1 303925 1 304456
+E 1 303919 1 5
+M 1 303925 1 304457
+E 1 303919 1 5
+M 1 303925 1 304458
+E 1 303919 1 5
+M 1 303925 1 304459
+E 1 303919 1 5
+M 1 303925 1 304460
+E 1 303919 1 5
+M 1 303925 1 304461
+E 1 303919 1 5
+M 1 303925 1 304462
+E 1 303919 1 5
+M 1 303925 1 304463
+E 1 303919 1 5
+M 1 303925 1 304464
+E 1 303919 1 5
+M 1 303925 1 304465
+E 1 303919 1 5
+M 1 303925 1 304466
+E 1 303919 1 5
+M 1 303925 1 304467
+E 1 303919 1 5
+M 1 303925 1 304468
+E 1 303919 1 5
+M 1 303925 1 304469
+E 1 303919 1 5
+M 1 303925 1 304470
+E 1 303919 1 5
+M 1 303925 1 304471
+E 1 303919 1 5
+M 1 303925 1 304472
+E 1 303919 1 5
+M 1 303925 1 304473
+E 1 303919 1 5
+M 1 303925 1 304474
+E 1 303919 1 5
+M 1 303925 1 304475
+E 1 303919 1 5
+M 1 303925 1 304476
+E 1 303919 1 5
+M 1 303925 1 304477
+E 1 303919 1 5
+M 1 303925 1 304478
+E 1 303919 1 5
+M 1 303925 1 304479
+E 1 303919 1 5
+M 1 303925 1 304480
+E 1 303919 1 5
+M 1 303927 1 304651
+E 1 303919 1 5
+M 1 303927 1 304710
+E 1 303919 1 5
+M 1 303927 1 304711
+E 1 303919 1 5
+M 1 303927 1 304650
+E 1 303919 1 5
+M 1 303927 1 304649
+E 1 303919 1 5
+M 1 303927 1 304712
+E 1 303919 1 5
+M 1 303927 1 304713
+E 1 303919 1 5
+M 1 303927 1 304648
+E 1 303919 1 5
+M 1 303927 1 304647
+E 1 303919 1 5
+M 1 303927 1 304714
+E 1 303919 1 5
+M 1 303927 1 304715
+E 1 303919 1 5
+M 1 303927 1 304646
+E 1 303919 1 5
+M 1 304726 1 304351
+M 1 305006 1 306009
+E 1 303920 1 5
+M 1 305007 1 306007
+E 1 303920 1 5
+M 1 305009 1 306019
+E 1 303920 1 5
+M 1 304500 1 304500
+M 1 306033 1 306035
+E 1 303919 1 5
+M 1 306033 1 306034
+E 1 303919 1 5
+O 1 10 1 306034
+P 0 620 1 0
+M 1 306032 1 306033
+E 1 303919 1 5
 S
 
 

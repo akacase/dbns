@@ -91,43 +91,19 @@ else
 mpecho &W$I chuckles and says, "You're not quite strong enough for that yet, little one."&D
 endif
 ~
-> speech_prog p send me home~
-mpecho &W$I says, "Very well, I shall return you to your home world."&D
-mppardon $n dead
-if race($n) == human
-  mptransfer $n 9001
-else
-  if race($n) == icer
-    mptransfer $n 150000
-  else
-    if race($n) == namek
-      mptransfer $n 5003
-    else
-      if race($n) == saiyan
-        mptransfer $n 60007
-      else
-        if race($n) == bio-android
-          mptransfer $n 2305
-        else
-          if race($n) == halfbreed
-            if rand(50)
-              mptransfer $n 9001
-            else
-              mptransfer $n 60007
-            endif
-          else
-            mptransfer $n 9001
-          endif
-        endif
-      endif
-    endif
-  endif
-endif
-~
 > greet_prog 100~
-mpsleep 20
-if inroom($n) == 100300
-   mea $n &CKing Yemma says 'Hmm, $n, if you wish to return to your former life, just say "Send me home", and you will be returned.'&D
+mpsleep 10
+mea $n &CKing Yemma says 'Hmm, $n, if you wish to return to your former life, just say "Send me home", and you will be returned.'&d
+~
+> speech_prog send me home~
+mppardon $n dead
+mpsleep 1
+mpechoat $n &YYou fade into an enveloping haze. When you open your eyes, you find yourself returned to the mortal realm.&D
+mpechoaround $n &Y$n disappears into an enveloping haze.&D
+if pl($n) > 50000
+mptransfer $n 6000
+else
+mptransfer $n 100
 endif
 ~
 |
@@ -7929,9 +7905,13 @@ D1
 ~
 ~
 0 -1 100400
+D3
+~
+~
+0 -1 100333
 D10
 ~
-~
+hole~
 264192 -1 100333
 S
 #100400

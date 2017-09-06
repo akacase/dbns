@@ -8,7 +8,7 @@ DATA_FOLDERS = ../area ../clans ../classes ../councils ../deity ../doc ../gods \
 	../houses ../planets ../races ../space ../system
 
 C_FLAGS = -O2 -g3 -Wall -std=c99 ${DBUGFLG} ${TIME} ${REG}
-L_FLAGS = ${MATH_LINK} -lz
+L_FLAGS = ${MATH_LINK} -lz -lbsd
 
 O_FILES = act_comm.o act_info.o act_move.o act_obj.o act_wiz.o \
           board.o boards.o bounty.o build.o clans.o colorize.o comm.o \
@@ -46,12 +46,12 @@ install:
 	install -m 755 -g wheel -o root dbnsd ${PREFIX}/dbnsd
 
 init:
-	install -m 555 ../init/dbns /etc/rc.d
+	sudo systemctl enable ../init/dbns.service
 
 data:
-	@doas cp ${DATA_PREFIX}/system/hiscores.dat /tmp/hiscores.dat
+	@sudo cp ${DATA_PREFIX}/system/hiscores.dat /tmp/hiscores.dat
 	@\cp -R ${DATA_FOLDERS} ${DATA_PREFIX}
-	@doas cp /tmp/hiscores.dat ${DATA_PREFIX}/system/hiscores.dat
+	@sudo cp /tmp/hiscores.dat ${DATA_PREFIX}/system/hiscores.dat
 	chgrp -R _dbnsd ${DATA_PREFIX}
 
 .c.o: mud.h
@@ -59,5 +59,3 @@ data:
 
 clean:
 	@\rm -f *.o dbnsd *~
-
-.include <bsd.prog.mk>

@@ -2,8 +2,8 @@
 Name         Space Pod PXL-002~
 Filename     space_pod_pxl-002.ship~
 Description  A larger space pod, big enough multiple people.~
-Owner        ~
-Pilot        seishiro~
+Owner        Crear~
+Pilot        Hawkril~
 Copilot      ~
 Class        0
 Tractorbeam  0
@@ -46,10 +46,10 @@ Engineroom   0
 Entrance     1031
 Shipstate    0
 Missilestate 0
-Energy       6000
+Energy       5887
 Manuever     10
 Cost         1000000
-Home         CoU~
+Home         Namek System~
 End
 
 #END

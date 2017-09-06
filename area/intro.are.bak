@@ -35,6 +35,123 @@ An android is here ready to fight you.
 mpmload 100
 ~
 |
+#101
+start android upgrade chamber~
+An Upgrade Chamber~
+A mechanical upgrade chamber sits here.
+~
+~
+67109379 0 0 C
+1 0 100 1d20+0 2d5+0
+-1 1
+112 112 0
+10 10 10 10 10
+0 0 0 0 0
+0 0 0 0 1 1 0
+0 0 0 0 0 0 0 0
+#102
+better android~
+A better android training partner~
+A better android training partner is prepared to fight you.
+~
+~
+3 0 0 C
+1 0 100 1d20+0 2d5+0
+-1 500
+112 112 0
+10 10 10 10 10
+0 0 0 0 0
+0 0 0 0 1 1 0
+0 0 0 0 0 0 0 0
+#103
+advanced android~
+An advanced android~
+An advanced android training partner is prepared to fight you.
+~
+~
+3 0 0 C
+1 0 100 1d20+0 2d5+0
+-1 1500
+112 112 0
+10 10 10 10 10
+0 0 0 0 0
+0 0 0 0 1 1 0
+0 0 0 0 0 0 0 0
+#104
+hyper android~
+A hyper android~
+A hyper android training partner is prepared to fight you.
+~
+~
+3 0 0 C
+1 0 100 1d20+0 2d5+0
+-1 4500
+112 112 0
+10 10 10 10 10
+0 0 0 0 0
+0 0 0 0 1 1 0
+0 0 0 0 0 0 0 0
+#105
+supreme android~
+A supreme android~
+A supreme android training partner is prepared to fight you.
+~
+~
+3 0 0 C
+1 0 100 1d20+0 2d5+0
+-1 13500
+112 112 0
+10 10 10 10 10
+0 0 0 0 0
+0 0 0 0 1 1 0
+0 0 0 0 0 0 0 0
+#106
+ultimate android~
+An ultimate android~
+An ultimate android training partner is prepared to fight you.
+~
+~
+3 0 0 C
+1 0 100 1d20+0 2d5+0
+-1 40500
+112 112 0
+10 10 10 10 10
+0 0 0 0 0
+0 0 0 0 1 1 0
+0 0 0 0 0 0 0 0
+#107
+newbie master~
+The Newbie Master~
+The Newbie Master stands here, assisting newbies.
+~
+~
+-2080373757 0 0 C
+1 0 100 1d20+0 2d5+0
+-1 1
+112 112 0
+10 10 10 10 10
+0 0 0 0 0
+0 0 0 0 1 1 0
+0 0 0 0 0 0 0 0
+#108
+basic android~
+A basic android training partner~
+A basic android training partner is here, prepared to assist in your training.
+~
+~
+3 0 0 C
+1 0 100 1d20+0 2d5+0
+-1 75
+112 112 0
+10 10 10 10 10
+0 0 0 0 0
+0 0 0 0 1 1 0
+0 0 0 0 0 0 0 0
+> death_prog 100~
+mpecho &YA basic android training partner explodes into rattling chunks but pulls itself quickly together.&D
+mpmload 108
+~
+|
 #199
 last mob~
 a newly created last mob~
@@ -82,7 +199,7 @@ adventures and battles that you must endure.  Hopefully your time here will
 be entertaining!  We'll begin with a tutoral program for you so that you
 may learn how to play this MUD.  Please continue north by typing "north". 
 ~
-0 1073741828 1
+0 4 0
 D0
 ~
 ~
@@ -97,7 +214,7 @@ northeast, southwest, and southeast.  All of these directions can be
 abbreviated like this: n, s, w, e, nw, ne, sw, se.  That is all for this
 lesson. Now type "up" to continue with the tutorial.
 ~
-0 4 1
+0 4 0
 D2
 ~
 ~
@@ -120,7 +237,7 @@ use the "OOC" channel.  OOC stands for Out of Charecter.
 
 &YNew players are restricted to the 'newbie' channel for a short while.&d
 ~
-0 4 1
+0 4 0
 D4
 ~
 ~
@@ -132,14 +249,15 @@ D5
 S
 #103
 Lesson 3 - Combat~
-You will have to fight many diffrent battles in this world.  So you will
-need to learn how to fight back.  Use the "kill" command to get into a fight
-with someone.  Your powerlevel determinds how well you can fight in many
-ways.  It determinds how how strong you are compaired to your oponent.  If
-you would like to pratice fighting go to the "east" to the west are the
-"healing tanks" where you can quickly gain back your strength.
+You will have to fight many different battles in this world, so you must
+learn how to fight back.  Use the "kill" command to get into a fight with
+someone.  Your powerlevel determines how well you can fight in many ways,
+but most importantly how strong you are compared to your opponent.  If you
+would like to practice fighting go to the "east".  To the west are the
+healing tanks where you can quickly gain back your strength, as well a
+chamber to increase your stats. 
 ~
-0 4 1
+0 4 0
 D1
 ~
 ~
@@ -159,27 +277,44 @@ D5
 S
 #104
 Lesson 3a - Fighting~
-Here you will pratice actual combat.  There is an android here that is
-programed to help you learn how to fight.  Just type "kill android" to begin
-the battle.
+Here you will practice actual combat.  The android here is programmed to
+help you learn how to fight.  Just type "kill android" to begin battle.  If
+this android becomes too easy, more await you in the training chambers
+above.  If you require skill training, a master awaits you to the east. 
 ~
-0 4 1
+0 4 0
+D1
+~
+~
+0 -1 116
 D3
 ~
 ~
 0 -1 103
+D4
+~
+~
+0 -1 111
 S
 #105
 Break Room - The Healing Tanks~
 Take a load off and step into one of the state of the art healing tanks.
 While in this room your lifeforce and energy will go up two times faster
-then when you are not in the healing tanks.
+than when you are not. 
 ~
-0 4 1
+0 536870916 0
+D0
+~
+~
+0 -1 109
 D1
 ~
 ~
 0 -1 103
+D2
+~
+~
+0 -1 108
 S
 #106
 Tutoral End~
@@ -225,32 +360,394 @@ botting, multiplaying, or language, but the Administration does ask that
 you remain respectful to players and staff at all times.  Harassment of any
 kind will not be tolerated.  To continue to the game, please say "I agree".
 ~
-0 4 1
+0 4 0
 D5
 ~
 ~
 0 -1 103
 > speech_prog 'i agree'~
+if pl($n) > 50000
 mpecho Okay.
 mptransfer $n 6000
 mpat 6000 mpforce $n look
+else
+mpecho &CA mysterious voice says 'Your training is still incomplete.'
+mpecho &CThe voice continues, 'Return here when you've reached at least 50,000 Powerlevel.'
+endif
 ~
 |
 S
 #108
-Room 9~
+Gravity Chamber~
+This room allows you to increase your stats and gain powerlevel by
+training in increased gravity.  To begin, type 'gravtrain <stat> <minutes'.
+One game minute is roughly equal to one second of real time. 
 ~
-0 4 1
+0 805306372 0
+D0
+~
+~
+0 -1 105
 S
 #109
-Room 10~
+Android Upgrade Chamber~
+Androids, lacking the ability to train in gravity, must use upgrade
+chambers such as the one here to increase their statistics. 
 ~
-0 4 1
+0 4 0
+D2
+~
+~
+0 -1 105
 S
 #110
 Room 11~
 ~
 0 4 1
+S
+#111
+Combat Chamber Level 1~
+This chamber will provide you with a more advanced challenge than the
+one below.  To begin combat with an android partner, say '&Cbegin&g'. To
+gauge its strength beforehand, say '&Cinfo&g'. 
+~
+0 0 0
+D1
+~
+~
+0 -1 121
+D4
+~
+~
+0 -1 112
+D5
+~
+~
+0 -1 104
+> speech_prog begin~
+if mobinroom(111) > 0
+mea $n Only one mob may be fought in this room at a time.
+else
+if isfight($n)
+mpechoat $n You can only fight one mob at a time.
+else
+mpmload 102
+mpforce android mpkill $n
+endif
+endif
+~
+> speech_prog info~
+mpecho &CA robotic voice says, '500 powerlevel.'&d
+~
+|
+S
+#112
+Combat Chamber Level 2~
+This chamber will provide you with a more advanced challenge than the
+one below.  To begin combat with an android partner, say '&Cbegin&g'. To
+gauge its strength beforehand, say '&Cinfo&g'. 
+~
+0 0 0
+D1
+~
+~
+0 -1 122
+D4
+~
+~
+0 -1 113
+D5
+~
+~
+0 -1 111
+> speech_prog begin~
+if mobinroom(112) > 0
+mea $n Only one mob may be fought in this room at a time.
+else
+if isfight($n)
+mpechoat $n You can only fight one mob at a time.
+else
+mpmload 103
+mpforce android mpkill $n
+endif
+endif
+~
+> speech_prog info~
+mpecho &CA robotic voice says, '1500 powerlevel.'&d
+~
+|
+S
+#113
+Combat Chamber Level 3~
+This chamber will provide you with a more advanced challenge than the
+one below.  To begin combat with an android partner, say '&Cbegin&g'. To
+gauge its strength beforehand, say '&Cinfo&g'. 
+~
+0 0 0
+D1
+~
+~
+0 -1 123
+D4
+~
+~
+0 -1 114
+D5
+~
+~
+0 -1 112
+> speech_prog begin~
+if mobinroom(113) > 0
+mea $n Only one mob may be fought in this room at a time.
+else
+if isfight($n)
+mpechoat $n You can only fight one mob at a time.
+else
+mpmload 104
+mpforce android mpkill $n
+endif
+endif
+~
+> speech_prog info~
+mpecho &CA robotic voice says, '4500 powerlevel.'&d
+~
+|
+S
+#114
+Combat Chamber Level 4~
+This chamber will provide you with a more advanced challenge than the
+one below.  To begin combat with an android partner, say '&Cbegin&g'. To
+gauge its strength beforehand, say '&Cinfo&g'. 
+~
+0 0 0
+D1
+~
+~
+0 -1 124
+D4
+~
+~
+0 -1 115
+D5
+~
+~
+0 -1 113
+> speech_prog begin~
+if mobinroom(114) > 0
+mea $n Only one mob may be fought in this room at a time.
+else
+if isfight($n)
+mpechoat $n You can only fight one mob at a time.
+else
+mpmload 105
+mpforce android mpkill $n
+endif
+endif
+~
+> speech_prog info~
+mpecho &CA robotic voice says, '13500 powerlevel.'&d
+~
+|
+S
+#115
+Combat Chamber Level 5~
+This chamber will provide you with a more advanced challenge than the
+one below.  To begin combat with an android partner, say '&Cbegin&g'. To
+gauge its strength beforehand, say '&Cinfo&g'. 
+~
+0 0 0
+D1
+~
+~
+0 -1 125
+D5
+~
+~
+0 -1 114
+> speech_prog begin~
+if mobinroom(115) > 0
+mea $n Only one mob may be fought in this room at a time.
+else
+if isfight($n)
+mpechoat $n You can only fight one mob at a time.
+else
+mpmload 106
+mpforce android mpkill $n
+endif
+endif
+~
+> speech_prog info~
+mpecho &CA robotic voice says, '40500 powerlevel.'&d
+~
+|
+S
+#116
+Master's Dojo~
+This room contains various amenenities to assist with helping you unlock
+your hidden potential as a fighter.  To see a list of your racial
+abilities, type 'alist'.  To see a list of your generic skills, type
+'slist'. Once you're powerful enough to learn an ability, type 'practice
+<skillname>' to be taught the basics. 
+~
+0 0 0
+D3
+~
+~
+0 -1 104
+S
+#121
+Combat Chamber Level 1-2~
+This chamber will provide you with a more advanced challenge than the
+one below.  To begin combat with an android partner, say '&Cbegin&g'. To
+gauge its strength beforehand, say '&Cinfo&g'.&D
+~
+0 0 0
+D3
+~
+~
+0 -1 111
+D4
+~
+~
+0 -1 122
+> speech_prog begin~
+if isfight($n)
+mpechoat $n You can only fight one mob at a time.
+else
+mpmload 102
+mpforce android mpkill $n
+endif
+~
+> speech_prog info~
+mpecho &CA robotic voice says, '500 powerlevel.'&D
+~
+|
+S
+#122
+Combat Chamber Level 2-2~
+This chamber will provide you with a more advanced challenge than the
+one below.  To begin combat with an android partner, say '&Cbegin&g'. To
+gauge its strength beforehand, say '&Cinfo&g'.&D
+~
+0 0 0
+D3
+~
+~
+0 -1 112
+D4
+~
+~
+0 -1 123
+D5
+~
+~
+0 -1 121
+> speech_prog begin~
+~
+> speech_prog begin~
+if isfight($n)
+mpechoat $n You can only fight one mob at a time.
+else
+mpmload 103
+mpforce android mpkill $n
+endif
+~
+> speech_prog info~
+mpecho &CA robotic voice says, '1500 powerlevel.'&D
+~
+|
+S
+#123
+Combat Chamber Level 3-2~
+This chamber will provide you with a more advanced challenge than the
+one below.  To begin combat with an android partner, say '&Cbegin&g'. To
+gauge its strength beforehand, say '&Cinfo&g'.&D
+~
+0 0 0
+D3
+~
+~
+0 -1 113
+D4
+~
+~
+0 -1 124
+D5
+~
+~
+0 -1 122
+> speech_prog begin~
+if isfight($n)
+mpechoat $n You can only fight one mob at a time.
+else
+mpmload 104
+mpforce android mpkill $n
+endif
+~
+> speech_prog info~
+mpecho &CA robotic voice says, '4500 powerlevel.'&D
+~
+|
+S
+#124
+Combat Chamber Level 4-2~
+This chamber will provide you with a more advanced challenge than the
+one below.  To begin combat with an android partner, say '&Cbegin&g'. To
+gauge its strength beforehand, say '&Cinfo&g'.&D
+~
+0 0 0
+D3
+~
+~
+0 -1 114
+D4
+~
+~
+0 -1 125
+D5
+~
+~
+0 -1 123
+> speech_prog begin~
+if isfight($n)
+mpechoat $n You can only fight one mob at a time.
+else
+mpmload 105
+mpforce android mpkill $n
+endif
+~
+> speech_prog info~
+mpecho &CA robotic voice says, '13500 powerlevel.'&D
+~
+|
+S
+#125
+Combat Chamber Level 5-2~
+This chamber will provide you with a more advanced challenge than the
+one below.  To begin combat with an android partner, say '&Cbegin&g'. To
+gauge its strength beforehand, say '&Cinfo&g'.&D
+~
+0 0 0
+D3
+~
+~
+0 -1 115
+D5
+~
+~
+0 -1 124
+> speech_prog begin~
+if isfight($n)
+mpechoat $n You can only fight one mob at a time.
+else
+mpmload 106
+mpforce android mpkill $n
+endif
+~
+> speech_prog info~
+mpecho &CA robotic voice says, '40500 powerlevel.'&D
+~
+|
 S
 #199
 Floating in a void~
@@ -261,7 +758,9 @@ S
 
 
 #RESETS
-M 1 100 1 104
+M 1 101 1 109
+M 1 107 1 116
+M 1 108 1 104
 S
 
 

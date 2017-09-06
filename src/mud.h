@@ -23,7 +23,7 @@
 #include <limits.h>
 #include <stdbool.h>
 #include <string.h>
-
+#include <sys/types.h>
 /* force the who command to require an argument (should use cset) */
 #include <unistd.h>
 #include <sys/cdefs.h>
@@ -5185,7 +5185,7 @@ DECLARE_SPELL_FUN(spell_sensu_bean);
  *   so players can go ahead and telnet to all the other descriptors.
  * Then we close it whenever we need to open a file (e.g. a save file).
  */
-#define PREFIX_DIR      "/var/dbns"	/* prefix where the information is
+#define PREFIX_DIR      "/opt/dbns"	/* prefix where the information is
 					 * stored and installed to */
 #define PLAYER_DIR	PREFIX_DIR "/player/"	/* Player files         */
 #define BACKUP_DIR	PREFIX_DIR "/player/backup/"	/* Backup Player files  */

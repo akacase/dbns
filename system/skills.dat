@@ -564,8 +564,8 @@ Info         0
 Flags        0
 Target       1
 Minpos       105
-Mana         15
-Focus        2
+Mana         1
+Focus        1
 CanCharge    0
 Rounds       5
 Code         do_kick
@@ -629,7 +629,7 @@ Flags        530432
 Target       3
 Minpos       106
 CanCharge    0
-Rounds       5
+Rounds       2
 Code         do_meditate
 Dammsg       ~
 Minlevel     0
@@ -659,8 +659,8 @@ Info         0
 Flags        0
 Target       1
 Minpos       107
-Mana         15
-Focus        2
+Mana         1
+Focus        1
 CanCharge    0
 Rounds       5
 Code         do_punch
@@ -984,8 +984,8 @@ Info         8584
 Flags        6144
 Target       1
 Minpos       109
-Mana         25
-Focus        4
+Mana         5
+Focus        1
 CanCharge    0
 Rounds       8
 Code         do_uppercut
@@ -1071,28 +1071,13 @@ Minlevel     0
 End
 
 #SKILL
-Name         golden form~
-Type         Ability
-Info         0
-Flags        0
-Target       3
-Minpos       107
-Mana         3500
-CanCharge    0
-Rounds       6
-Code         do_icer_transform_golden_form
-Dammsg       ~
-Minlevel     0
-End
-
-#SKILL
 Name         absorb~
 Type         Ability
 Info         0
 Flags        0
 Target       1
 Minpos       106
-Focus        4
+Focus        1
 CanCharge    0
 Rounds       8
 Code         do_absorb
@@ -1122,8 +1107,8 @@ Info         0
 Flags        0
 Target       1
 Minpos       107
-Mana         2000
-Focus        50
+Mana         1000
+Focus        1
 CanCharge    1
 Rounds       8
 Code         do_bbk
@@ -1138,8 +1123,8 @@ Info         0
 Flags        0
 Target       1
 Minpos       107
-Mana         1000
-Focus        20
+Mana         500
+Focus        1
 CanCharge    1
 Rounds       8
 Code         do_big_bang
@@ -1155,7 +1140,7 @@ Flags        0
 Target       1
 Minpos       107
 Mana         800
-Focus        25
+Focus        1
 CanCharge    1
 Rounds       8
 Code         do_blast_zone
@@ -1170,8 +1155,8 @@ Info         0
 Flags        0
 Target       1
 Minpos       107
-Mana         700
-Focus        15
+Mana         250
+Focus        1
 CanCharge    1
 Rounds       8
 Code         do_burning_attack
@@ -1186,7 +1171,7 @@ Info         0
 Flags        0
 Minpos       107
 Mana         1000
-Focus        25
+Focus        1
 CanCharge    0
 Rounds       8
 Code         do_candy_blast
@@ -1233,7 +1218,7 @@ Flags        0
 Target       1
 Minpos       107
 Mana         275
-Focus        15
+Focus        1
 CanCharge    0
 Rounds       8
 Code         do_cruise_punch
@@ -1248,8 +1233,8 @@ Info         0
 Flags        0
 Target       1
 Minpos       107
-Mana         1000
-Focus        20
+Mana         400
+Focus        1
 CanCharge    0
 Rounds       8
 Code         do_darkness_flare
@@ -1281,7 +1266,7 @@ Info         0
 Flags        0
 Minpos       107
 Mana         450
-Focus        20
+Focus        1
 CanCharge    1
 Rounds       8
 Code         do_demon_wave
@@ -1311,8 +1296,8 @@ Info         0
 Flags        0
 Target       1
 Minpos       107
-Mana         3000
-Focus        35
+Mana         750
+Focus        1
 CanCharge    1
 Rounds       8
 Code         do_demonic_eclipse
@@ -1327,8 +1312,8 @@ Info         0
 Flags        0
 Target       1
 Minpos       107
-Mana         150
-Focus        10
+Mana         75
+Focus        1
 CanCharge    1
 Rounds       8
 Code         do_destructive_wave
@@ -1344,7 +1329,7 @@ Flags        0
 Target       1
 Minpos       107
 Mana         175
-Focus        10
+Focus        1
 CanCharge    0
 Rounds       8
 Code         do_dd
@@ -1359,8 +1344,8 @@ Info         0
 Flags        0
 Target       1
 Minpos       107
-Mana         3000
-Focus        35
+Mana         750
+Focus        1
 CanCharge    1
 Rounds       8
 Code         do_divinewrath
@@ -1375,8 +1360,8 @@ Info         0
 Flags        0
 Target       1
 Minpos       107
-Mana         600
-Focus        12
+Mana         250
+Focus        1
 CanCharge    1
 Rounds       8
 Code         do_dodon_ray
@@ -1392,7 +1377,7 @@ Flags        0
 Target       1
 Minpos       106
 Mana         1500
-Focus        25
+Focus        1
 CanCharge    0
 Rounds       8
 Code         do_drp
@@ -1408,7 +1393,7 @@ Flags        0
 Target       1
 Minpos       107
 Mana         400
-Focus        18
+Focus        1
 CanCharge    0
 Rounds       8
 Code         do_ddd
@@ -1439,7 +1424,7 @@ Flags        0
 Target       3
 Minpos       107
 Mana         7500
-Focus        50
+Focus        1
 CanCharge    1
 Rounds       6
 Code         do_ehb
@@ -1470,8 +1455,8 @@ Info         0
 Flags        0
 Target       1
 Minpos       107
-Mana         75
-Focus        7
+Mana         15
+Focus        1
 CanCharge    1
 Rounds       8
 Code         do_energy_ball
@@ -1501,7 +1486,7 @@ Info         0
 Flags        0
 Target       3
 Minpos       107
-Mana         150
+Mana         50
 CanCharge    0
 Rounds       6
 Code         do_evilboost
@@ -1531,7 +1516,7 @@ Info         0
 Flags        0
 Target       3
 Minpos       107
-Mana         300
+Mana         100
 CanCharge    0
 Rounds       6
 Code         do_evilsurge
@@ -1561,8 +1546,8 @@ Info         0
 Flags        0
 Target       1
 Minpos       107
-Mana         250
-Focus        13
+Mana         75
+Focus        1
 CanCharge    0
 Rounds       8
 Code         do_eye_beam
@@ -1577,8 +1562,8 @@ Info         0
 Flags        0
 Target       1
 Minpos       107
-Mana         1500
-Focus        35
+Mana         750
+Focus        1
 CanCharge    1
 Rounds       8
 Code         do_ff
@@ -1593,8 +1578,8 @@ Info         0
 Flags        0
 Target       1
 Minpos       107
-Mana         325
-Focus        15
+Mana         100
+Focus        1
 CanCharge    1
 Rounds       8
 Code         do_finger_beam
@@ -1609,8 +1594,8 @@ Info         0
 Flags        0
 Target       1
 Minpos       107
-Mana         1500
-Focus        40
+Mana         750
+Focus        1
 CanCharge    1
 Rounds       8
 Code         do_finishing_buster
@@ -1625,7 +1610,7 @@ Info         0
 Flags        0
 Target       2
 Minpos       109
-Mana         75
+Mana         10
 CanCharge    0
 Code         do_fly
 Dammsg       ~
@@ -1639,8 +1624,8 @@ Info         0
 Flags        0
 Target       1
 Minpos       107
-Mana         750
-Focus        20
+Mana         250
+Focus        1
 CanCharge    1
 Rounds       8
 Code         do_gallic_gun
@@ -1661,6 +1646,21 @@ Rounds       8
 Code         do_giant_size
 Dammsg       ~
 Wearoff      !giant size!~
+Minlevel     0
+End
+
+#SKILL
+Name         golden form~
+Type         Ability
+Info         0
+Flags        0
+Target       3
+Minpos       107
+Mana         3500
+CanCharge    0
+Rounds       6
+Code         do_icer_transform_golden_form
+Dammsg       ~
 Minlevel     0
 End
 
@@ -1687,8 +1687,8 @@ Info         0
 Flags        0
 Target       1
 Minpos       107
-Mana         1000
-Focus        30
+Mana         500
+Focus        1
 CanCharge    1
 Rounds       8
 Code         do_heaven_splitter_cannon
@@ -1704,7 +1704,7 @@ Flags        0
 Target       1
 Minpos       107
 Mana         800
-Focus        25
+Focus        1
 CanCharge    1
 Rounds       8
 Code         do_hells_flash
@@ -1719,8 +1719,8 @@ Info         0
 Flags        0
 Target       1
 Minpos       107
-Mana         50
-Focus        5
+Mana         25
+Focus        1
 CanCharge    0
 Rounds       8
 Code         do_hellzone_grenade
@@ -1795,8 +1795,8 @@ Info         0
 Flags        0
 Target       1
 Minpos       107
-Mana         375
-Focus        15
+Mana         100
+Focus        1
 CanCharge    1
 Rounds       8
 Code         do_kamehameha
@@ -1823,8 +1823,8 @@ Type         Ability
 Info         0
 Flags        0
 Minpos       107
-Mana         1000
-Focus        35
+Mana         750
+Focus        1
 CanCharge    1
 Rounds       8
 Code         do_ki_burst
@@ -1868,8 +1868,8 @@ Info         0
 Flags        0
 Target       1
 Minpos       107
-Mana         500
-Focus        15
+Mana         250
+Focus        1
 CanCharge    1
 Rounds       8
 Code         do_makosen
@@ -1884,8 +1884,8 @@ Info         0
 Flags        0
 Target       1
 Minpos       107
-Mana         350
-Focus        13
+Mana         100
+Focus        1
 CanCharge    1
 Rounds       8
 Code         do_maliceray
@@ -1900,8 +1900,8 @@ Info         0
 Flags        0
 Target       1
 Minpos       107
-Mana         150
-Focus        13
+Mana         50
+Focus        1
 CanCharge    1
 Rounds       8
 Code         do_masenko
@@ -1916,13 +1916,13 @@ Info         0
 Flags        0
 Target       1
 Minpos       107
-Mana         100
-Focus        12
+Mana         50
+Focus        1
 CanCharge    0
 Rounds       10
 Code         do_multi_disk
 Dammsg       multi disk~
-Teachers     100297~
+Teachers     303938~
 Minlevel     0
 End
 
@@ -1934,7 +1934,7 @@ Flags        0
 Target       1
 Minpos       107
 Mana         100
-Focus        12
+Focus        1
 CanCharge    0
 Rounds       8
 Code         do_multi_eye
@@ -1979,6 +1979,7 @@ Info         0
 Flags        0
 Target       1
 Minpos       107
+Focus        1
 CanCharge    0
 Rounds       8
 Code         do_monkey_gun
@@ -2019,8 +2020,8 @@ Info         0
 Flags        0
 Target       1
 Minpos       107
-Mana         1500
-Focus        20
+Mana         500
+Focus        1
 CanCharge    1
 Rounds       8
 Code         do_psiblast
@@ -2036,7 +2037,7 @@ Flags        0
 Target       1
 Minpos       107
 Mana         25000
-Focus        50
+Focus        1
 CanCharge    1
 Rounds       8
 Code         do_railgun
@@ -2063,7 +2064,7 @@ Flags        0
 Target       1
 Minpos       106
 Mana         275
-Focus        15
+Focus        1
 CanCharge    0
 Rounds       8
 Code         do_rocket_punch
@@ -2078,8 +2079,8 @@ Info         0
 Flags        0
 Target       1
 Minpos       107
-Mana         20
-Focus        4
+Mana         10
+Focus        1
 CanCharge    0
 Rounds       8
 Code         do_scatter_shot
@@ -2095,7 +2096,7 @@ Flags        0
 Target       1
 Minpos       107
 Mana         100
-Focus        12
+Focus        1
 CanCharge    0
 Rounds       8
 Code         do_scattered_finger_beam
@@ -2150,14 +2151,30 @@ Minlevel     0
 End
 
 #SKILL
+Name         sgod~
+Type         Ability
+Info         0
+Flags        0
+Target       3
+Minpos       107
+Mana         9000
+CanCharge    0
+Rounds       6
+Code         do_sgod
+Dammsg       ~
+Teachers     90~
+Minlevel     0
+End
+
+#SKILL
 Name         shockwave~
 Type         Ability
 Info         0
 Flags        0
 Target       1
 Minpos       107
-Mana         1000
-Focus        12
+Mana         250
+Focus        1
 CanCharge    1
 Rounds       8
 Code         do_shockwave
@@ -2173,7 +2190,7 @@ Flags        0
 Target       1
 Minpos       107
 Mana         1000
-Focus        3
+Focus        1
 CanCharge    0
 Rounds       8
 Code         do_skga
@@ -2188,7 +2205,7 @@ Info         0
 Flags        0
 Minpos       107
 Mana         750
-Focus        20
+Focus        1
 CanCharge    0
 Rounds       8
 Code         do_skin_trap
@@ -2204,7 +2221,7 @@ Flags        0
 Target       1
 Minpos       107
 Mana         1000
-Focus        20
+Focus        1
 CanCharge    0
 Rounds       8
 Code         do_solar_flare
@@ -2220,8 +2237,8 @@ Info         0
 Flags        0
 Target       1
 Minpos       107
-Mana         350
-Focus        13
+Mana         100
+Focus        1
 CanCharge    1
 Rounds       8
 Code         do_sbc
@@ -2236,8 +2253,8 @@ Info         0
 Flags        0
 Target       1
 Minpos       107
-Mana         800
-Focus        22
+Mana         500
+Focus        1
 CanCharge    1
 Rounds       8
 Code         do_spirit_ball
@@ -2253,7 +2270,7 @@ Flags        0
 Target       1
 Minpos       107
 Mana         99999
-Focus        100
+Focus        1
 CanCharge    0
 Rounds       10
 Code         do_spirit_bomb
@@ -2284,7 +2301,7 @@ Flags        0
 Target       1
 Minpos       107
 Mana         5000
-Focus        40
+Focus        1
 CanCharge    1
 Rounds       8
 Code         do_ssd_bomber
@@ -2357,22 +2374,6 @@ Minlevel     0
 End
 
 #SKILL
-Name         sgod~
-Type         Ability
-Info         0
-Flags        0
-Target       3
-Minpos       107
-Mana         9000
-CanCharge    0
-Rounds       6
-Code         do_sgod
-Dammsg       ~
-Teachers     90~
-Minlevel     0
-End
-
-#SKILL
 Name         super android~
 Type         Ability
 Info         0
@@ -2399,7 +2400,7 @@ CanCharge    0
 Rounds       6
 Code         do_super_namek
 Dammsg       ~
-Teachers     2000 100292~
+Teachers     2000 100292 303938~
 Minlevel     0
 End
 
@@ -2424,7 +2425,7 @@ Info         0
 Flags        0
 Target       3
 Minpos       107
-Mana         25
+Mana         10
 CanCharge    0
 Rounds       6
 Code         do_suppress
@@ -2453,8 +2454,8 @@ Info         0
 Flags        0
 Target       1
 Minpos       107
-Mana         1000
-Focus        25
+Mana         250
+Focus        1
 CanCharge    1
 Rounds       8
 Code         do_trap_ball
@@ -2469,8 +2470,8 @@ Info         0
 Flags        0
 Target       1
 Minpos       107
-Mana         2500
-Focus        25
+Mana         1000
+Focus        1
 CanCharge    1
 Rounds       8
 Code         do_tribeam
@@ -2609,7 +2610,7 @@ Flags        0
 Target       1
 Minpos       107
 Mana         2500
-Focus        25
+Focus        1
 CanCharge    0
 Rounds       8
 Code         do_wss

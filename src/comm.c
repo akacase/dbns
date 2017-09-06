@@ -18,6 +18,8 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <sys/wait.h>
+#include <bsd/stdlib.h>
+#include <getopt.h>
 #include <syslog.h>
 #include <ctype.h>
 #include <errno.h>
@@ -106,30 +108,13 @@ void    load_from_fp(DESCRIPTOR_DATA * d, bool np);
 void 	usage(void);
 
 /* locals */
-bool 	debug = false;
-bool 	log_debug;
 unsigned int port;
 
-__dead void
+void
 usage(void)
 {
 	fprintf(stderr, "usage: dbnsd [-Dp]\n");
 	exit(1);
-}
-
-void
-logmsg(int pri, const char *message,...)
-{
-	va_list ap;
-
-	va_start(ap, message);
-
-	if (log_debug) {
-		vfprintf(stderr, message, ap);
-		fprintf(stderr, "\n");
-	} else
-		vsyslog(pri, message, ap);
-	va_end(ap);
 }
 
 char
@@ -191,9 +176,6 @@ main(int argc, char **argv)
 
 	while ((ch = getopt(argc, argv, "Dp:")) != -1) {
 		switch (ch) {
-		case 'D':
-			debug = true;
-			break;
 		case 'p':
 			/*
 			 * minval and maxval correspond to unpriveledged
@@ -217,19 +199,13 @@ main(int argc, char **argv)
 	sysdata.NO_NAME_RESOLVING = true;
 
 	if (port == 0) {
-		logmsg(LOG_ERR, "port must be set via -p flag");
+		log_string("port must be set via -p flag");
 		exit(1);
 	} else if (port <= 1024) {
-		logmsg(LOG_ERR, "please select a port greater than 1024");
+		log_string("please select a port greater than 1024");
 		exit(1);
 	}
-	if (!debug) {
-		openlog("dbns", LOG_PID | LOG_CONS, LOG_DAEMON);
-		if (daemon(0, 1)) {
-			logmsg(LOG_WARNING, "failed to become daemon: %s",
-			    strerror(errno));
-		}
-	}
+
 	/* init time. */
 	gettimeofday(&now_time, NULL);
 	current_time = (time_t) now_time.tv_sec;
@@ -270,7 +246,6 @@ main(int argc, char **argv)
 	log_string("Initializing socket");
 	control = init_socket(port);
 	if (gethostname(hostn, sizeof(hostn)) < 0) {
-		logmsg(LOG_ERR, "main: gethostname");
 		perror("main: gethostname");
 		strcpy(hostn, "unresolved");
 	}
@@ -349,14 +324,14 @@ sig_quit()
 			write_to_descriptor(ch->desc->descriptor, "You have been saved to disk.\n\r", 0);
 		}
 	}
-	logmsg(LOG_ERR, "caught sigquit, hanging up");
+	log_string("caught sigquit, hanging up");
 	exit(0);
 }
 
 static void
 sig_hup()
 {
-	logmsg(LOG_ERR, "caught sighup");
+	log_string("caught sighup");
 }
 
 static void
@@ -374,14 +349,14 @@ sig_int()
 			write_to_descriptor(ch->desc->descriptor, "You have been saved to disk.\n\r", 0);
 		}
 	}
-	logmsg(LOG_ERR, "caught sigint, hanging up");
+	log_string("caught sigint, hanging up");
 	exit(0);
 }
 
 static void
 seg_vio()
 {
-	logmsg(LOG_ERR, "caught segvio, dumping");
+	log_string("caught segvio, dumping");
 	exit(1);
 }
 
@@ -1232,7 +1207,6 @@ write_to_descriptor(int desc, char *txt, int length)
 			return (false);
 
 		} else if (n_write < 0) {
-			logmsg(LOG_ERR, "write_to_descriptor");
 			perror("write_to_descriptor");
 			return (false);
 		}

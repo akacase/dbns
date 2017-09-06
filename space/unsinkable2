@@ -1,0 +1,55 @@
+#SHIP
+Name         The Unsinkable II~
+Filename     unsinkable2~
+Description  ~
+Owner        Zaeded~
+Pilot        ~
+Copilot      ~
+Class        0
+Tractorbeam  0
+Shipyard     9042
+Hanger       0
+Turret1      0
+Turret2      0
+Statet0      0
+Statet1      0
+Statet2      0
+Lasers       0
+Missiles     0
+Maxmissiles  0
+Rockets     0
+Maxrockets  0
+Torpedos     0
+Maxtorpedos  0
+Lastdoc      9042
+Firstroom    306011
+Lastroom     306015
+Shield       0
+Maxshield    1000
+Hull         1000
+Maxhull      1000
+Maxenergy    30000
+Hyperspeed   255
+Comm         0
+Chaff        0
+Maxchaff     0
+Sensor       0
+Astro_array  0
+Realspeed    150
+Type         0
+Cockpit      306011
+Coseat       306011
+Pilotseat    306011
+Gunseat      306011
+Navseat      306011
+Engineroom   0
+Entrance     306015
+Shipstate    0
+Missilestate 0
+Energy       30000
+Manuever     5
+Cost         500000000
+Home         corperate~
+End
+
+#END

@@ -19,6 +19,7 @@
  ****************************************************************************/
 
 #include <sys/types.h>
+#include <bsd/stdlib.h>
 #include <ctype.h>
 #include <stdio.h>
 #include <stdarg.h>
@@ -4552,18 +4553,14 @@ do_dmesg(CHAR_DATA * ch, char *argument)
 void
 log_string_plus(const char *str, sh_int log_type, sh_int level)
 {
-	char   *strtime;
 	int 	offset;
 
-	strtime = ctime(&current_time);
-	strtime[strlen(strtime) - 1] = '\0';
-	fprintf(stderr, "%s :: %s\n", strtime, str);
+	fprintf(stderr, "%s\n", str);
 	if (strncmp(str, "Log ", 4) == 0)
 		offset = 4;
 	else
 		offset = 0;
 	/* send to syslog */
-	logmsg(LOG_INFO, str + offset);
 	switch (log_type) {
 	default:
 		to_channel(str + offset, CHANNEL_LOG, "Log", level);

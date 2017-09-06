@@ -38,9 +38,7 @@ Skill 'bigbang' 250000000 95
 Skill 'burning attack' 100000000 95
 Skill 'clone' 75000000000 100
 Skill 'destructive wave' 10000000 95
-Skill 'destructo disk' 100000 95
 Skill 'dodon ray' 50000000 95
-Skill 'dual destructo disk' 50000000 95
 Skill 'electric shield' 1000000 95
 Skill 'energy ball' 40000 95
 Skill 'eye beam' 500000 95
@@ -53,7 +51,6 @@ Skill 'kamehameha' 1000000 95
 Skill 'ki burst' 2000000000 95
 Skill 'makosen' 50000000 95
 Skill 'masenko' 100000 95
-Skill 'multi disk' 2000000000 95
 Skill 'multi-form' 50000000000 95
 Skill 'perfect form' 75000000 100
 Skill 'regeneration' 75000000 95

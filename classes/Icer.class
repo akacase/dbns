@@ -37,18 +37,15 @@ Skill '2nd form' 5000000 100
 Skill '3rd form' 40000000 100
 Skill '4th form' 400000000 100
 Skill '5th form' 1500000000 100
-Skill 'golden form' 250000000000 100
-Skill 'death ball' 1000000000 95
 Skill 'destructive wave' 10000000 95
-Skill 'destructo disk' 100000 95
-Skill 'dual destructo disk' 50000000 95
 Skill 'energy ball' 40000 95
 Skill 'eye beam' 500000 95
 Skill 'finger beam' 5000000 95
 Skill 'fly' 50000 95
+Skill 'golden form' 250000000000 100
 Skill 'instant transmission' 800000000 95
+Skill 'ki burst' 2000000000 95
 Skill 'scatter shot' 500000 95
-Skill 'scattered finger beam' 1750000000 95
 Skill 'sense' 250000 95
 Skill 'suppress' 250000 100
 Skill 'trap ball' 250000000 95

@@ -1,1 +1,2 @@
 [*****] BOOT: ---------------------[ Boot Log ]--------------------
+[*****] BOOT: Load_resets: /home/case/db/area/cou3.are (1474) 'M': mobile 10010 doesn't exist.

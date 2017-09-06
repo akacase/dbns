@@ -1031,10 +1031,14 @@ Some god dropped a newly created last obj here.~
 #6000
 The Center of the Universe~
 You are standing at the center of the space station.  You can hear many
-things that sound like machines running around.  This place looks very clean
-and well kept.  You can sense a good force coming from above you, and an
-evil force from below.  To the south are sounds of space ships arriving and
-departing.
+things that sound like machines running around.  This place looks very
+clean and well kept.  You can sense a good force coming from above you, and
+an evil force from below.  To the south are sounds of space ships arriving
+and departing. 
+--------------------------------------------------------------------------
+&Y
+Visitors to The Center of the Universe may now seek training in the ESF
+Facility to the North.  We recommended your powerlevel be above 50, 000.
 ~
 0 8 0
 D0
@@ -1053,6 +1057,16 @@ D5
 ~
 ~
 0 0 6111
+> speech_prog 'back to intro'~
+if pl($n) > 150000
+mpecho Your power is a bit excessive for that place, don't you think?
+else
+mpecho Very well. Off with you!
+wait 1
+mptransfer $n 100
+endif
+~
+|
 S
 #6005
 Corridor to the Docking Bays~
@@ -39349,6 +39363,7 @@ M 1 6016 1 7996
 M 1 6016 1 7997
 M 1 6016 1 7998
 M 1 6016 1 7999
+M 1 10010 1 6163
 S
 
 

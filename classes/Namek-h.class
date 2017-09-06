@@ -33,7 +33,6 @@ Skill 'punch' 5000 95
 Skill 'second attack' 2000000 95
 Skill 'third attack' 100000000 95
 Skill 'destructive wave' 10000000 95
-Skill 'destructo disk' 100000 95
 Skill 'dodon ray' 50000000 95
 Skill 'energy ball' 40000 95
 Skill 'eye beam' 500000 95
@@ -48,10 +47,8 @@ Skill 'kamehameha' 1000000 95
 Skill 'ki heal' 1500000000 95
 Skill 'makosen' 50000000 95
 Skill 'masenko' 100000 95
-Skill 'multi disk' 2000000000 95
 Skill 'multi-form' 50000000000 95
 Skill 'mystic' 100000000000 95
-Skill 'preservation' 1000000 95
 Skill 'scatter shot' 500000 95
 Skill 'sense' 250000 95
 Skill 'solar flare' 200000000 95
