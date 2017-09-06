@@ -43,7 +43,7 @@ dbns: ${O_FILES}
 
 install:
 	@make dbns
-	install -m 755 -g wheel -o root dbnsd ${PREFIX}/dbnsd
+	sudo install -m 755 -g wheel -o root dbnsd ${PREFIX}/dbnsd
 
 init:
 	sudo systemctl enable ../init/dbns.service
