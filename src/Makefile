@@ -1,6 +1,6 @@
 CC ?= clang
 PREFIX ?= /usr/local/bin
-DATA_PREFIX ?= /var/dbns
+DATA_PREFIX ?= /opt/dbns
 
 MATH_LINK = -lm
 
@@ -49,10 +49,9 @@ init:
 	sudo systemctl enable ../init/dbns.service
 
 data:
-	@sudo cp ${DATA_PREFIX}/system/hiscores.dat /tmp/hiscores.dat
+	@\cp ${DATA_PREFIX}/system/hiscores.dat /tmp/hiscores.dat
 	@\cp -R ${DATA_FOLDERS} ${DATA_PREFIX}
-	@sudo cp /tmp/hiscores.dat ${DATA_PREFIX}/system/hiscores.dat
-	chgrp -R _dbnsd ${DATA_PREFIX}
+	@\cp /tmp/hiscores.dat ${DATA_PREFIX}/system/hiscores.dat
 
 .c.o: mud.h
 	${CC} -c ${C_FLAGS} $<
