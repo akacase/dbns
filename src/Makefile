@@ -1,6 +1,6 @@
 CC ?= clang
 PREFIX ?= /usr/local/bin
-DATA_PREFIX ?= /opt/dbns
+DATA_PREFIX ?= /opt/dbns/db
 
 MATH_LINK = -lm
 
