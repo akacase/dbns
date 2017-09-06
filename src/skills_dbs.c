@@ -10079,10 +10079,6 @@ do_teachmystic(CHAR_DATA * ch, char *argument)
 		ch_printf(ch, "Huh?!?\n\r");
 		return;
 	}
-	if (ch->kairank < 5 || ch->kairank > 6) {
-		ch_printf(ch, "Huh?!?\n\r");
-		return;
-	}
 	if (wearing_chip(ch)) {
 		ch_printf(ch, "You can't while you have a chip installed.\n\r");
 		return;

@@ -53,6 +53,9 @@ data:
 	@\sudo -u dbns cp -R ${DATA_FOLDERS} ${DATA_PREFIX}
 	@\sudo -u dbns cp /tmp/hiscores.dat ${DATA_PREFIX}/system/hiscores.dat
 
+restart:
+	sudo systemctl restart dbns
+
 .c.o: mud.h
 	${CC} -c ${C_FLAGS} $<
 
