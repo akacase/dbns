@@ -49,9 +49,11 @@ init:
 	sudo systemctl enable ../init/dbns.service
 
 data:
-	@\sudo -u dbns cp ${DATA_PREFIX}/system/hiscores.dat /tmp/hiscores.dat
-	@\sudo -u dbns cp -R ${DATA_FOLDERS} ${DATA_PREFIX}
-	@\sudo -u dbns cp /tmp/hiscores.dat ${DATA_PREFIX}/system/hiscores.dat
+	@\cp ${DATA_PREFIX}/system/hiscores.dat /tmp/hiscores.dat
+	@\cp -R ${DATA_FOLDERS} ${DATA_PREFIX}
+	@\cp /tmp/hiscores.dat ${DATA_PREFIX}/system/hiscores.dat
+	@\sudo chown -R dbns {DATA_PREFIX}
+	@\sudo chgrp -R dbns {DATA_PREFIX}
 
 restart:
 	sudo systemctl restart dbns
