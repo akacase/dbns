@@ -55,6 +55,9 @@ data:
 	@\sudo chown -R dbns {DATA_PREFIX}
 	@\sudo chgrp -R dbns {DATA_PREFIX}
 
+stop:
+	sudo systemctl stop../init/dbns.service
+
 restart:
 	sudo systemctl restart dbns
 
