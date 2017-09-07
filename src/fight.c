@@ -2482,10 +2482,10 @@ damage(CHAR_DATA * ch, CHAR_DATA * victim, int dam, int dt)
 		}
 		if (!IS_NPC(victim))
 			xp_gain =
-			    (long double)dam / 175 * pow(victim->pl, xp_mod);
+			    (long double)dam / 2575 * pow(victim->pl, xp_mod);
 		if (IS_NPC(victim))
 			xp_gain =
-			    (long double)dam / 175 * pow(victim->exp, xp_mod);
+			    (long double)dam / 2575 * pow(victim->exp, xp_mod);
 		/* Sparing and deadly combat pl gain's */
 		if (!IS_NPC(ch) && !IS_NPC(victim)
 		    && !xIS_SET(ch->act, PLR_SPAR)
@@ -2495,14 +2495,14 @@ damage(CHAR_DATA * ch, CHAR_DATA * victim, int dam, int dt)
 			else
 				xp_mod = (float)xp_mod + 0.01;
 			xp_gain =
-			    (long double)dam / 175 * pow(victim->pl, xp_mod);
+			    (long double)dam / 2575 * pow(victim->pl, xp_mod);
 		}
 		if (!IS_NPC(ch) && !IS_NPC(victim)
 		    && xIS_SET(ch->act, PLR_SPAR)
 		    && xIS_SET(victim->act, PLR_SPAR)) {
 			xp_mod = (float)xp_mod + 0.00;
 			xp_gain =
-			    (long double)dam / 175 * pow(victim->pl, xp_mod);
+			    (long double)dam / 2575 * pow(victim->pl, xp_mod);
 		}
 		/* PL Gains cut if player is stronger than opontants */
 		if (!IS_NPC(victim)) {
