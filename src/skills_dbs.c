@@ -1802,25 +1802,25 @@ do_powerup(CHAR_DATA * ch, char *argument)
 			    "With a blinding flash $n powers up to $s maximum.",
 			    ch, NULL, NULL, TO_NOTVICT);
 		}
-		if (ch->exp <= 1000) {
+		if (ch->exp <= 2499) {
 			ch->powerup = 1;
 			pl_mult = 1.1;
-		} else if (ch->exp <= 2500) {
+		} else if (ch->exp >= 2500 && ch->exp <= 4999) {
 			ch->powerup = 2;
 			pl_mult = 1.2;
-		} else if (ch->exp <= 5000) {
+		} else if (ch->exp >= 5000 && ch->exp <= 9999) {
 			ch->powerup = 3;
 			pl_mult = 1.3;
-		} else if (ch->exp <= 10000) {
+		} else if (ch->exp >= 10000 && ch->exp <= 19999) {
 			ch->powerup = 4;
 			pl_mult = 1.4;
-		} else if (ch->exp <= 20000) {
+		} else if (ch->exp >= 20000 && ch->exp <= 39999) {
 			ch->powerup = 5;
 			pl_mult = 1.5;
-		} else if (ch->exp <= 40000) {
+		} else if (ch->exp >= 40000 && ch->exp <= 79999) {
 			ch->powerup = 6;
 			pl_mult = 1.6;
-		} else if (ch->exp <= 80000) {
+		} else if (ch->exp >= 80000) {
 			ch->powerup = 7;
 			pl_mult = 1.7;
 		}
@@ -1898,7 +1898,7 @@ do_powerup(CHAR_DATA * ch, char *argument)
 					do_powerup(och, argument);
 			}
 		}
-	} else if (ch->powerup == 1 && ch->exp > 2500) {
+	} else if (ch->powerup == 1 && ch->exp >= 2500) {
 		if (is_android(ch) || is_superandroid(ch)) {
 			act(auraColor,
 			    "The soft hum coming from you is joined by whirring and grinding noises as you power up for the second time.",
@@ -1931,7 +1931,7 @@ do_powerup(CHAR_DATA * ch, char *argument)
 					do_powerup(och, argument);
 			}
 		}
-	} else if (ch->powerup == 2 && ch->exp > 5000) {
+	} else if (ch->powerup == 2 && ch->exp >= 5000) {
 		if (is_android(ch) || is_superandroid(ch)) {
 			act(auraColor,
 			    "The air around you gains a static charge as you power up for the third time.",
@@ -1964,7 +1964,7 @@ do_powerup(CHAR_DATA * ch, char *argument)
 					do_powerup(och, argument);
 			}
 		}
-	} else if (ch->powerup == 3 && ch->exp > 10000) {
+	} else if (ch->powerup == 3 && ch->exp >= 10000) {
 		if (is_android(ch) || is_superandroid(ch)) {
 			act(auraColor,
 			    "An internal engine roars to life, the ground shaking softly, as you power up for the fourth time.",
@@ -1997,7 +1997,7 @@ do_powerup(CHAR_DATA * ch, char *argument)
 					do_powerup(och, argument);
 			}
 		}
-	} else if (ch->powerup == 4 && ch->exp > 20000) {
+	} else if (ch->powerup == 4 && ch->exp >= 20000) {
 		if (is_android(ch) || is_superandroid(ch)) {
 			act(auraColor,
 			    "A high-pitched whine comes from your body, cracks appearing under your feet, as you power up for the fifth time.",
@@ -2030,7 +2030,7 @@ do_powerup(CHAR_DATA * ch, char *argument)
 					do_powerup(och, argument);
 			}
 		}
-	} else if (ch->powerup == 5 && ch->exp > 40000) {
+	} else if (ch->powerup == 5 && ch->exp >= 40000) {
 		if (is_android(ch) || is_superandroid(ch)) {
 			act(auraColor,
 			    "Engine roaring loudly and electricity crackling through the air, you power up for the sixth time.",
@@ -2063,7 +2063,7 @@ do_powerup(CHAR_DATA * ch, char *argument)
 					do_powerup(och, argument);
 			}
 		}
-	} else if (ch->powerup == 6 && ch->exp > 80000) {
+	} else if (ch->powerup == 6 && ch->exp >= 80000) {
 		if (is_android(ch) || is_superandroid(ch)) {
 			act(auraColor,
 			    "The stench of ozone fills the humming air, a deafening boom blasting from you, as you power up for the last time.",
