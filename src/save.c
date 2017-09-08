@@ -415,7 +415,7 @@ fwrite_char (CHAR_DATA * ch, FILE * fp)
      if (ch->pcdata && ch->pcdata->outcast_time)
 	  fprintf (fp, "Outcast_time   %ld\n", ch->pcdata->outcast_time);
      if (ch->pcdata && ch->pcdata->nuisance)
-	  fprintf (fp, "NuisanceNew    %lld %lld %d %d\n", ch->pcdata->nuisance->time,
+	  fprintf (fp, "NuisanceNew    %ld %ld %d %d\n", ch->pcdata->nuisance->time,
 	    ch->pcdata->nuisance->max_time, ch->pcdata->nuisance->flags,
 	    ch->pcdata->nuisance->power);
      if (ch->mental_state != -10)
@@ -450,7 +450,7 @@ fwrite_char (CHAR_DATA * ch, FILE * fp)
      /* Save number of boards in case that number changes */
      fprintf (fp, "Boards         %d ", MAX_BOARD);
      for (i = 0; i < MAX_BOARD; i++)
-	  fprintf (fp, "%s %lld ", boards[i].short_name, ch->pcdata->last_note[i]);
+	  fprintf (fp, "%s %ld ", boards[i].short_name, ch->pcdata->last_note[i]);
      fprintf (fp, "\n");
 
 
@@ -1724,7 +1724,7 @@ fread_char (CHAR_DATA * ch, FILE * fp, bool preload)
 			      DISPOSE (ch->pcdata->last_name);
 			      ch->pcdata->last_name = str_dup ("");
 			 }
-			 ch->pcdata->last_name = strdup (buf);
+			 ch->pcdata->last_name = strdup(buf);
 		    }
 		    fMatch = true;
 		    break;
@@ -2697,10 +2697,6 @@ fwrite_mobile (FILE * fp, CHAR_DATA * mob)
 	  fprintf (fp, "Description %s~\n", mob->description);
      fprintf (fp, "Position %d\n", mob->position);
      fprintf (fp, "Flags %s\n", print_bitvector (&mob->act));
-     /* Might need these later --Shaddai
-	de_equip_char( mob );
-	re_equip_char( mob );
-     */
      if (mob->first_carrying)
 	  fwrite_obj (mob, mob->last_carrying, fp, 0, OS_CARRY);
      fprintf (fp, "EndMobile\n");

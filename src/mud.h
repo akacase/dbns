@@ -34,6 +34,9 @@
 typedef int ch_ret;
 typedef int obj_ret;
 
+/* to appease c99 gods */
+extern char *strdup(const char *s);
+
 /*
  * Accommodate old non-Ansi compilers.
  */

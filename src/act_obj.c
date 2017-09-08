@@ -23,9 +23,6 @@
 #include "mud.h"
 #include "bet.h"
 
-
-/*double sqrt( double x );*/
-
 /*
  * External functions
  */

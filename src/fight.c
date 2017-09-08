@@ -17,6 +17,7 @@
 
 #include <sys/types.h>
 #include <stdio.h>
+#include <strings.h>
 #include <string.h>
 #include <stdbool.h>
 #include <time.h>
@@ -6177,12 +6178,6 @@ do_fslay(CHAR_DATA * ch, char *argument)
 			    victim, TO_NOTVICT);
 		}
 
-		/*
-		 * victim->hit       = victim->max_hit - victim->max_hit +
-		 * 1; victim->mana     = victim->mana; victim->move     =
-		 * victim->move; sprintf( buf, "%s 1500", victim->name );
-		 * do_transfer(ch, buf); update_pos(victim);
-		 */
 		return;
 	}
 

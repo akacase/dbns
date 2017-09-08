@@ -18,6 +18,7 @@
 #include <sys/types.h>
 #include <ctype.h>
 #include <stdio.h>
+#include <strings.h>
 #include <string.h>
 #include <stdbool.h>
 #include <time.h>

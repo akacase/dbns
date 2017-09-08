@@ -29,6 +29,7 @@
 
 #include <ctype.h>
 #include <string.h>
+#include <strings.h>
 #include <stdbool.h>
 #include <dirent.h>
 #include <sys/stat.h>

@@ -19,6 +19,7 @@
 #include <ctype.h>
 #include <stdio.h>
 #include <string.h>
+#include <strings.h>
 #include <stdbool.h>
 #include <time.h>
 #include "mud.h"
