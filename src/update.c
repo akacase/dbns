@@ -485,9 +485,8 @@ gain_exp(CHAR_DATA * ch, long double gain)
 			do_help(ch, "demigod");
 		}
 	}
-/*  PL high enough to gain a train point */
-
-	if ((ch->exp >= (pow(ch->max_train, 3.07) * 10000))
+	/*  PL high enough to gain a train point */
+	if ((ch->exp >= (pow(ch->max_train, 3.07) * 650))
 	    && (ch->max_train < 72)) {
 		set_char_color(AT_LBLUE + AT_BLINK, ch);
 		if (is_android(ch))
@@ -499,27 +498,8 @@ gain_exp(CHAR_DATA * ch, long double gain)
 		ch->train += 5;
 		ch->max_train += 1;
 	}
-/*  PL high enough to gain a practice point */
-
-/*  Disabled for DBS v2.0
-
-    if ( ( ch->exp >= ( (ch->max_prac - 1) * (ch->max_prac - 1) * 100000) )
-    	&& (ch->max_prac < 30) )
-    {
-	set_char_color( AT_LBLUE + AT_BLINK, ch );
-	if (is_android(ch))
-	ch_printf( ch, "You gained an additional software upgrade point!\n\r" );
-	else
-	ch_printf( ch, "You gained an additional practice point!\n\r" );
-
-	ch->practice += 1;
-	ch->max_prac += 1;
-    }
-*/
-
-/*  PL high enough to gain more energy */
-
-	if (ch->exp >= (pow(ch->max_energy, 2.27) * 750)
+	/*  PL high enough to gain more energy */
+	if (ch->exp >= (pow(ch->max_energy, 2.27) * 50)
 	    && ch->max_mana < 99999) {
 		set_char_color(AT_LBLUE + AT_BLINK, ch);
 		ch_printf(ch, "You gained some more energy!\n\r");
@@ -533,7 +513,6 @@ gain_exp(CHAR_DATA * ch, long double gain)
 		ch->mana = UMIN(ch->mana, ch->max_mana);
 		ch->max_energy += 1;
 	}
-	return;
 }
 
 /*
