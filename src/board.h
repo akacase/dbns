@@ -14,7 +14,8 @@
  */
 
 
-#define NOTE_DIR "../notes/" /* set it to something you like */
+#define PREFIX_DIR      "/opt/dbns/db"	/* prefix where the information is */
+#define NOTE_DIR PREFIX_DIR "/notes/" /* set it to something you like */
 
 #define DEF_NORMAL  0 /* No forced change, but default (any string)   */
 #define DEF_INCLUDE 1 /* 'names' MUST be included (only ONE name!)    */

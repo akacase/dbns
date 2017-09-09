@@ -2507,10 +2507,7 @@ damage(CHAR_DATA * ch, CHAR_DATA * victim, int dam, int dt)
 		}
 		/* PL Gains cut if player is stronger than opontants */
 		if (!IS_NPC(victim)) {
-			if ((ch->pl / victim->pl) < 3)
-			  // do nothing
-			  ;
-			else if ((ch->pl / victim->pl) < 4)
+			if ((ch->pl / victim->pl) < 4)
 				xp_gain *= 0.7;
 			else if ((ch->pl / victim->pl) < 5)
 				xp_gain *= 0.6;
@@ -2528,9 +2525,6 @@ damage(CHAR_DATA * ch, CHAR_DATA * victim, int dam, int dt)
 				xp_gain = 0;
 		}
 		if (IS_NPC(victim)) {
-			if ((ch->pl / victim->exp) < 3)
-			  // do nothing
-			  ;
 			if ((ch->pl / victim->exp) < 4)
 				xp_gain *= 0.75;
 			else if ((ch->pl / victim->exp) < 5)
@@ -2612,11 +2606,8 @@ damage(CHAR_DATA * ch, CHAR_DATA * victim, int dam, int dt)
 		    (long double)(race_table[ch->race]->exp_multiplier /
 		    100.0));
 
-		int a = 0;
-
 		if (is_android(ch) || is_superandroid(ch)) {
 			if (xp_gain_post != 1) {
-				a = 1;
 				sprintf(buf1,
 				    "Your tl increases by %s points.",
 				    num_punct_ld(xp_gain_post));

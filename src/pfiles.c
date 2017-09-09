@@ -57,13 +57,13 @@ save_timedata(void)
 		fprintf(fp, "Mday        %d\n", time_info.day);
 		fprintf(fp, "Mmonth      %d\n", time_info.month);
 		fprintf(fp, "Myear       %d\n", time_info.year);
-		fprintf(fp, "Purgetime   %lld\n", new_pfile_time_t);
+		fprintf(fp, "Purgetime   %ld\n", new_pfile_time_t);
 		fprintf(fp, "LastRMonth  %d\n", time_info.lastRealMonth);
 		fprintf(fp, "End\n\n");
 		fprintf(fp, "#END\n");
 	}
+
 	FCLOSE(fp);
-	return;
 }
 
 #ifdef KEY
@@ -197,7 +197,6 @@ init_pfile_scan_time(void)
 		log_string(log_buf);
 	}
 #endif
-	return;
 }
 
 time_t 	now_time;
@@ -388,8 +387,6 @@ pfile_scan(bool count)
 	} else {
 		num_pfiles = cou;
 	}
-
-	return;
 }
 
 void 
@@ -423,7 +420,6 @@ do_pfiles(CHAR_DATA * ch, char *argument)
 		return;
 	}
 	send_to_char("Invalid argument.\n\r", ch);
-	return;
 }
 
 void
@@ -451,20 +447,11 @@ check_pfiles(time_t reset)
 			save_timedata();
 			log_string("Automated pfile cleanup beginning....");
 			pfile_scan(false);
-#ifdef RENTCODE
-			if (reset == 0)
-				rent_update();
-#endif
 		} else {
 			new_pfile_time_t = current_time + 86400;
 			save_timedata();
 			log_string("Counting pfiles.....");
 			pfile_scan(true);
-#ifdef RENTCODE
-			if (reset == 0)
-				rent_update();
-#endif
 		}
 	}
-	return;
 }

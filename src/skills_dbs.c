@@ -3147,8 +3147,8 @@ do_ssj(CHAR_DATA * ch, char *argument)
 		    "$n's hair flashes blonde and $s eyes turn blue as a fiery aura erupts around $m.",
 		    ch, NULL, NULL, TO_NOTVICT);
 		xSET_BIT((ch)->affected_by, AFF_SSJ);
-		ch->pl = ch->exp * 10;
-		transStatApply(ch, 10, 5, 3, 5);
+		ch->pl = ch->exp * 12;
+		transStatApply(ch, 12, 7, 5, 7);
 		learn_from_success(ch, gsn_ssj);
 		if (!IS_NPC(ch)) {
 			ch->pcdata->eyes = 0;
@@ -3235,8 +3235,8 @@ do_ssj2(CHAR_DATA * ch, char *argument)
 		if (xIS_SET((ch)->affected_by, AFF_SSJ4)) {
 			xREMOVE_BIT((ch)->affected_by, AFF_SSJ4);
 		}
-		ch->pl = ch->exp * 10;
-		transStatApply(ch, 10, 5, 3, 5);
+		ch->pl = ch->exp * 12;
+		transStatApply(ch, 12, 7, 5, 7);
 		if (!IS_NPC(ch)) {
 			ch->pcdata->eyes = 0;
 			ch->pcdata->haircolor = 3;
@@ -3268,8 +3268,8 @@ do_ssj2(CHAR_DATA * ch, char *argument)
 			    ch, NULL, NULL, TO_NOTVICT);
 			xSET_BIT((ch)->affected_by, AFF_SSJ);
 			xSET_BIT((ch)->affected_by, AFF_SSJ2);
-			ch->pl = ch->exp * 16;
-			transStatApply(ch, 16, 8, 4, 8);
+			ch->pl = ch->exp * 20;
+			transStatApply(ch, 20, 12, 8, 12);
 			learn_from_success(ch, gsn_ssj2);
 			if (!IS_NPC(ch)) {
 				ch->pcdata->eyes = 0;
@@ -3321,8 +3321,8 @@ do_ssj2(CHAR_DATA * ch, char *argument)
 		    "$n's hair straightens and stands more on end, $s aura flaring as "
 		    "electricity arcs around $m.", ch, NULL, NULL, TO_NOTVICT);
 		xSET_BIT((ch)->affected_by, AFF_SSJ2);
-		ch->pl = ch->exp * 16;
-		transStatApply(ch, 16, 8, 4, 8);
+		ch->pl = ch->exp * 20;
+		transStatApply(ch, 20, 12, 8, 12);
 		learn_from_success(ch, gsn_ssj2);
 		if (!IS_NPC(ch)) {
 			ch->pcdata->eyes = 0;
@@ -3402,8 +3402,8 @@ do_ssj3(CHAR_DATA * ch, char *argument)
 		if (xIS_SET((ch)->affected_by, AFF_SSJ4)) {
 			xREMOVE_BIT((ch)->affected_by, AFF_SSJ4);
 		}
-		ch->pl = ch->exp * 16;
-		transStatApply(ch, 16, 8, 4, 8);
+		ch->pl = ch->exp * 20;
+		transStatApply(ch, 20, 12, 8, 12);
 		if (!IS_NPC(ch)) {
 			ch->pcdata->eyes = 0;
 			ch->pcdata->haircolor = 3;
@@ -3434,8 +3434,8 @@ do_ssj3(CHAR_DATA * ch, char *argument)
 			xSET_BIT((ch)->affected_by, AFF_SSJ);
 			xSET_BIT((ch)->affected_by, AFF_SSJ2);
 			xSET_BIT((ch)->affected_by, AFF_SSJ3);
-			ch->pl = ch->exp * 24;
-			transStatApply(ch, 24, 12, 6, 12);
+			ch->pl = ch->exp * 30;
+			transStatApply(ch, 30, 18, 14, 18);
 			learn_from_success(ch, gsn_ssj3);
 			if (!IS_NPC(ch)) {
 				ch->pcdata->eyes = 0;
@@ -3495,8 +3495,8 @@ do_ssj3(CHAR_DATA * ch, char *argument)
 		    "$n's hair lengthens, flowing down $s back.  $n's eyebrows disappear as $s "
 		    "aura flashes a bright gold.", ch, NULL, NULL, TO_NOTVICT);
 		xSET_BIT((ch)->affected_by, AFF_SSJ3);
-		ch->pl = ch->exp * 24;
-		transStatApply(ch, 24, 12, 6, 12);
+		ch->pl = ch->exp * 30;
+		transStatApply(ch, 30, 18, 14, 18);
 		learn_from_success(ch, gsn_ssj3);
 		if (!IS_NPC(ch)) {
 			ch->pcdata->eyes = 0;
@@ -3586,8 +3586,8 @@ do_ssj4(CHAR_DATA * ch, char *argument)
 	if (xIS_SET((ch)->affected_by, AFF_SSJ4)) {
 		send_to_char("You power down to super Saiyan 3.\n\r", ch);
 		xREMOVE_BIT((ch)->affected_by, AFF_SSJ4);
-		ch->pl = ch->exp * 24;
-		transStatApply(ch, 24, 12, 6, 12);
+		ch->pl = ch->exp * 30;
+		transStatApply(ch, 30, 18, 14, 18);
 		if (!IS_NPC(ch)) {
 			ch->pcdata->eyes = 0;
 			ch->pcdata->haircolor = 3;
@@ -3619,8 +3619,8 @@ do_ssj4(CHAR_DATA * ch, char *argument)
 			xSET_BIT((ch)->affected_by, AFF_SSJ2);
 			xSET_BIT((ch)->affected_by, AFF_SSJ3);
 			xSET_BIT((ch)->affected_by, AFF_SSJ4);
-			ch->pl = ch->exp * 30;
-			transStatApply(ch, 30, 15, 8, 15);
+			ch->pl = ch->exp * 35;
+			transStatApply(ch, 35, 20, 13, 20);
 			learn_from_success(ch, gsn_ssj4);
 			if (!IS_NPC(ch)) {
 				ch->pcdata->eyes = 4;
@@ -3690,8 +3690,8 @@ do_ssj4(CHAR_DATA * ch, char *argument)
 		    "$n's hair returns to its original shade and form as thick red fur begins "
 		    "to sprout all over $s body.", ch, NULL, NULL, TO_NOTVICT);
 		xSET_BIT((ch)->affected_by, AFF_SSJ4);
-		ch->pl = ch->exp * 30;
-		transStatApply(ch, 30, 15, 8, 15);
+		ch->pl = ch->exp * 35;
+		transStatApply(ch, 35, 20, 13, 20);
 		learn_from_success(ch, gsn_ssj4);
 		if (!IS_NPC(ch)) {
 			ch->pcdata->eyes = 4;
@@ -3782,8 +3782,8 @@ do_sgod(CHAR_DATA * ch, char *argument)
 	if (xIS_SET((ch)->affected_by, AFF_SGOD)) {
 		send_to_char("You power down to super Saiyan 4.\n\r", ch);
 		xREMOVE_BIT((ch)->affected_by, AFF_SGOD);
-		ch->pl = ch->exp * 30;
-		transStatApply(ch, 30, 15, 8, 15);
+		ch->pl = ch->exp * 35;
+		transStatApply(ch, 35, 20, 13, 20);
 		if (!IS_NPC(ch)) {
 			ch->pcdata->eyes = 4;
 			ch->pcdata->haircolor = 9;
@@ -3817,7 +3817,7 @@ do_sgod(CHAR_DATA * ch, char *argument)
 			xSET_BIT((ch)->affected_by, AFF_SSJ4);
 			xSET_BIT((ch)->affected_by, AFF_SGOD);
 			ch->pl = ch->exp * 40;
-			transStatApply(ch, 40, 20, 12, 18);
+			transStatApply(ch, 40, 25, 18, 23);
 			learn_from_success(ch, gsn_sgod);
 			if (!IS_NPC(ch)) {
 				ch->pcdata->eyes = 4;
@@ -3886,7 +3886,7 @@ do_sgod(CHAR_DATA * ch, char *argument)
 		    ch, NULL, NULL, TO_NOTVICT);
 		xSET_BIT((ch)->affected_by, AFF_SGOD);
 		ch->pl = ch->exp * 40;
-		transStatApply(ch, 40, 20, 12, 18);
+		transStatApply(ch, 40, 25, 18, 23);
 		learn_from_success(ch, gsn_sgod);
 		if (!IS_NPC(ch)) {
 			ch->pcdata->eyes = 4;
@@ -10441,7 +10441,6 @@ do_spirit_bomb(CHAR_DATA * ch, char *arg)
 	int 	damPercent = 0;
 	float 	numFound = 1.0;
 	int 	damMult = 0;
-	bool 	max = false;
 	char 	size[MAX_STRING_LENGTH];
 	char 	facialExpression[MAX_STRING_LENGTH];
 	char 	engeryColor[MAX_STRING_LENGTH];
@@ -10481,7 +10480,6 @@ do_spirit_bomb(CHAR_DATA * ch, char *arg)
 		return;
 	}
 	if (!strcmp(arg, "max")) {
-		max = true;
 		damPercent = 100;
 	} else if (is_number(arg)) {
 		damPercent = atoi(arg);
@@ -10756,7 +10754,7 @@ do_ussj(CHAR_DATA * ch, char *argument)
 		    "$n draws in energy, forcing it directly into $s body.  $n's muscles bulge as $s hair "
 		    "turns slightly spikier.", ch, NULL, NULL, TO_NOTVICT);
 		xSET_BIT((ch)->affected_by, AFF_USSJ);
-		ch->pl = ch->exp * 12;
+		ch->pl = ch->exp * 14;
 		transStatApply(ch, 16, 5, 3, 5);
 		learn_from_success(ch, gsn_ussj);
 	} else {
@@ -10854,7 +10852,7 @@ do_ussj2(CHAR_DATA * ch, char *argument)
 		    "bulge to inhuman sizes, $s hair becomes wildly spiked.",
 		    ch, NULL, NULL, TO_NOTVICT);
 		xSET_BIT((ch)->affected_by, AFF_USSJ2);
-		ch->pl = ch->exp * 14;
+		ch->pl = ch->exp * 16;
 		transStatApply(ch, 24, -15, 5, 8);
 		learn_from_success(ch, gsn_ussj2);
 	} else {

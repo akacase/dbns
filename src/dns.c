@@ -211,7 +211,7 @@ save_dns(void)
 			fprintf(fp, "#CACHE\n");
 			fprintf(fp, "IP		%s~\n", cache->ip);
 			fprintf(fp, "Name		%s~\n", cache->name);
-			fprintf(fp, "Time		%lld\n", cache->time);
+			fprintf(fp, "Time		%ld\n", cache->time);
 			fprintf(fp, "End\n\n");
 		}
 		fprintf(fp, "#END\n");
