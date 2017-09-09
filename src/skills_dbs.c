@@ -4099,24 +4099,16 @@ do_icer_transform_2(CHAR_DATA * ch, char *argument)
 	}
 	WAIT_STATE(ch, skill_table[gsn_icer2]->beats);
 	if (can_use_skill(ch, number_percent(), gsn_icer2)) {
-		//act(AT_SKILL, "The temperature in the room plummets as you transform into your second form.", ch, NULL, NULL, TO_CHAR);
-		//act(AT_SKILL, "A dread chill emanates from you as your stature grows, your body and", ch, NULL, NULL, TO_CHAR);
-		//act(AT_SKILL, "muscle mass increase and your horns become more prominent, completing your", ch, NULL, NULL, TO_CHAR);
-		//act(AT_SKILL, "transformation to your second form.", ch, NULL, NULL, TO_CHAR);
 		act(AT_PURPLE,
 		    "A dread chill emanates from you as your form grows huge in size, your muscles bulge and your horns"
 		    " become much more prominent, completing your transformation to your second form.",
 		    ch, NULL, NULL, TO_CHAR);
-		//act(AT_SKILL, "The temperature in the room plummets as $n transforms into $s second form.", ch, NULL, NULL, TO_NOTVICT);
-		//act(AT_SKILL, "A dread chill emanates from $n as $s stature grows, $s body and muscle", ch, NULL, NULL, TO_NOTVICT);
-		//act(AT_SKILL, "mass increases and $s horns become more prominent, completing $s", ch, NULL, NULL, TO_NOTVICT);
-		//act(AT_SKILL, "transformation to $s second form.", ch, NULL, NULL, TO_NOTVICT);
 		act(AT_PURPLE,
 		    "A dread chill emanates from $n as $s form grows huge in size, $s muscles bulge and $s horns"
 		    " become much more prominent, completing $s transformation to $s second form.",
 		    ch, NULL, NULL, TO_NOTVICT);
 		xSET_BIT((ch)->affected_by, AFF_ICER2);
-		ch->pl = ch->exp * 7;
+		ch->pl = ch->exp * 2;
 		transStatApply(ch, 4, 4, 2, 7);
 		learn_from_success(ch, gsn_icer2);
 	} else {
@@ -4142,7 +4134,6 @@ do_icer_transform_2(CHAR_DATA * ch, char *argument)
 void
 do_icer_transform_3(CHAR_DATA * ch, char *argument)
 {
-
 	if (IS_NPC(ch) && is_split(ch)) {
 		if (!ch->master)
 			return;
@@ -4174,7 +4165,7 @@ do_icer_transform_3(CHAR_DATA * ch, char *argument)
 			xREMOVE_BIT((ch)->affected_by, AFF_ICER5);
 		if (!xIS_SET((ch)->affected_by, AFF_ICER2))
 			xSET_BIT((ch)->affected_by, AFF_ICER2);
-		ch->pl = ch->exp * 7;
+		ch->pl = ch->exp * 2;
 		transStatApply(ch, 4, 4, 2, 7);
 		return;
 	}
@@ -4198,7 +4189,7 @@ do_icer_transform_3(CHAR_DATA * ch, char *argument)
 		    " a monster in $s third form.", ch, NULL, NULL, TO_NOTVICT);
 		xSET_BIT((ch)->affected_by, AFF_ICER3);
 		xREMOVE_BIT((ch)->affected_by, AFF_ICER2);
-		ch->pl = ch->exp * 14;
+		ch->pl = ch->exp * 8;
 		transStatApply(ch, 7, 7, 4, 14);
 		learn_from_success(ch, gsn_icer3);
 	} else {
@@ -4253,7 +4244,7 @@ do_icer_transform_4(CHAR_DATA * ch, char *argument)
 			xREMOVE_BIT((ch)->affected_by, AFF_ICER5);
 		if (!xIS_SET((ch)->affected_by, AFF_ICER3))
 			xSET_BIT((ch)->affected_by, AFF_ICER3);
-		ch->pl = ch->exp * 14;
+		ch->pl = ch->exp * 8;
 		transStatApply(ch, 7, 7, 4, 14);
 		return;
 	}
@@ -4279,7 +4270,7 @@ do_icer_transform_4(CHAR_DATA * ch, char *argument)
 		    NULL, NULL, TO_NOTVICT);
 		xSET_BIT((ch)->affected_by, AFF_ICER4);
 		xREMOVE_BIT((ch)->affected_by, AFF_ICER3);
-		ch->pl = ch->exp * 20;
+		ch->pl = ch->exp * 16;
 		transStatApply(ch, 10, 10, 5, 20);
 		learn_from_success(ch, gsn_icer4);
 	} else {
@@ -4331,7 +4322,7 @@ do_icer_transform_5(CHAR_DATA * ch, char *argument)
 			xREMOVE_BIT((ch)->affected_by, AFF_ICER5);
 		if (!xIS_SET((ch)->affected_by, AFF_ICER4))
 			xSET_BIT((ch)->affected_by, AFF_ICER4);
-		ch->pl = ch->exp * 20;
+		ch->pl = ch->exp * 16;
 		transStatApply(ch, 10, 10, 5, 20);
 		return;
 	}
@@ -4357,8 +4348,8 @@ do_icer_transform_5(CHAR_DATA * ch, char *argument)
 		    ch, NULL, NULL, TO_NOTVICT);
 		xSET_BIT((ch)->affected_by, AFF_ICER5);
 		xREMOVE_BIT((ch)->affected_by, AFF_ICER4);
-		ch->pl = ch->exp * 26;
-		transStatApply(ch, 13, 13, 7, 26);
+		ch->pl = ch->exp * 30;
+		transStatApply(ch, 17, 17, 12, 30);
 		learn_from_success(ch, gsn_icer5);
 	} else {
 		act(AT_PURPLE,
@@ -4408,8 +4399,8 @@ do_icer_transform_golden_form(CHAR_DATA * ch, char *argument)
 			xREMOVE_BIT((ch)->affected_by, AFF_GOLDENFORM);
 		if (!xIS_SET((ch)->affected_by, AFF_ICER5))
 			xSET_BIT((ch)->affected_by, AFF_ICER5);
-		ch->pl = ch->exp * 26;
-		transStatApply(ch, 13, 13, 7, 26);
+		ch->pl = ch->exp * 30;
+		transStatApply(ch, 17, 17, 12, 30);
 		return;
 	}
 	if (ch->mana < skill_table[gsn_goldenform]->min_mana) {
@@ -4430,8 +4421,8 @@ do_icer_transform_golden_form(CHAR_DATA * ch, char *argument)
 		    ch, NULL, NULL, TO_NOTVICT);
 		xSET_BIT((ch)->affected_by, AFF_GOLDENFORM);
 		xREMOVE_BIT((ch)->affected_by, AFF_ICER5);
-		ch->pl = ch->exp * 30;
-		transStatApply(ch, 16, 16, 10, 30);
+		ch->pl = ch->exp * 35;
+		transStatApply(ch, 21, 21, 15, 35);
 		learn_from_success(ch, gsn_goldenform);
 	} else {
 		act(AT_PURPLE,
