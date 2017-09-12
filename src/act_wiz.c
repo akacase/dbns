@@ -1396,6 +1396,9 @@ do_mstat(CHAR_DATA * ch, char *argument)
 		    clan->clan_type == CLAN_GUILD ? "Guild" : "Clan",
 		    victim->pcdata->clan->name);
 	send_to_pager("\n\r", ch);
+	if (get_trust(ch) >= LEVEL_GOD)
+		pager_printf_color(ch,
+		    "&cWorth: &w%lld\n\r", victim->worth);
 	if (get_trust(ch) >= LEVEL_GOD && !IS_NPC(victim) && victim->desc)
 		pager_printf_color(ch,
 		    "&cUser: &w%s@%s   Descriptor: %d  &cTrust: &w%d\n\r",
