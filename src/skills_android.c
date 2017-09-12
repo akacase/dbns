@@ -1105,7 +1105,7 @@ do_uppercut(CHAR_DATA * ch, char *argument)
 
 		learn_from_success(ch, gsn_uppercut);
 		ch->melee = true;
-		global_retcode = damage(ch, victim, (get_attmod(ch, victim) * number_range(6, 10)), gsn_uppercut);
+		global_retcode = damage(ch, victim, (get_attmod(ch, victim) * number_range(6, 10)), TYPE_HIT);
 		ch->melee = false;
 	} else {
 		act(AT_SKILL, "You launch your fist upwards, but you miss $N.", ch, NULL, victim, TO_CHAR);
@@ -1113,7 +1113,7 @@ do_uppercut(CHAR_DATA * ch, char *argument)
 		act(AT_SKILL, "$n launchs $s fist upwards, but $e misses $N.", ch, NULL, victim, TO_NOTVICT);
 		learn_from_failure(ch, gsn_uppercut);
 		ch->melee = true;
-		global_retcode = damage(ch, victim, 0, gsn_uppercut);
+		global_retcode = damage(ch, victim, 0, TYPE_HIT);
 		ch->melee = false;
 	}
 }
