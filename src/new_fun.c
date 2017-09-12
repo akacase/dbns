@@ -520,39 +520,11 @@ char *get_rank_color( CHAR_DATA *ch)
 
 	if (IS_HC(ch))
 		return ("&rUnknown");
-	else if (ch->exp < 5000)
-		return ("&PFighter in Training");
 	else if (ch->exp < 100000)
-		return ("&cTrained Fighter");
-	else if (ch->exp < 1000000)
-		return ("&OSkilled Fighter");
-	else if (ch->exp < 10000000)
-		return ("&wExperienced Fighter");
-	else if (ch->exp < 100000000)
-		return ("&RUltimate Fighter");
-	else if (ch->exp < 1000000000)
-		return ("&CVeteran Warrior");
-	else if (ch->exp < 10000000000ULL)
-		return ("&rFearsome Warrior");
-	else if (ch->exp <  50000000000ULL)
-		return ("&BLegendary Warrior");
-	else if (ch->exp < 100000000000ULL)
-		return ("&WEpic Warrior");
-	else if (ch->exp < 300000000000ULL)
-		return ("&gAscendant Warrior");
-	else if (ch->exp < 600000000000ULL)
-		return ("&GTranscendent Warrior");
-	else if (ch->exp < 1000000000000ULL)
-		return ("&BChampion");
-	else if (ch->exp < 10000000000000ULL)
-		return ("&WTitan");
-        else if (ch->exp < 50000000000000ULL)
-                return ("&CMythical Warrior");
-        else if (ch->exp < 100000000000000ULL)
-                return ("&ROmnipotent Warrior");
-        else /*if (ch->exp >= 10000000000000ULL)*/
-                return ("&zDemi-God");
-
+		return ("&PFighter in Training");
+	else
+		return ("&cDeadly Fighter");
+	
 	return ("&rBUG: NOTIFY GOKU");
 }
 
