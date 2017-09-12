@@ -2385,19 +2385,19 @@ damage(CHAR_DATA * ch, CHAR_DATA * victim, int dam, int dt)
 
 	if (!IS_NPC(victim) && !IS_IMMORTAL(victim)) {
 		if ((victim->pcdata->learned[gsn_ssj] <= 0
-		    && victim->exp >= 8000000)
+		    && victim->exp > ch->exp)
 		    || (victim->pcdata->learned[gsn_ssj] > 0
 		    && victim->pcdata->learned[gsn_ssj2] <= 0
-		    && victim->exp >= 50000000)
+		    && victim->exp > ch->exp)
 		    || (victim->pcdata->learned[gsn_ssj2] > 0
 		    && victim->pcdata->learned[gsn_ssj3] <= 0
-		    && victim->exp >= 500000000)
+		    && victim->exp > ch->exp)
 		    || (victim->pcdata->learned[gsn_ssj3] > 0
 		    && victim->pcdata->learned[gsn_ssj4] <= 0
-		    && victim->exp >= 2000000000)
+		    && victim->exp > ch->exp)
 		    || (victim->pcdata->learned[gsn_ssj4] > 0
 		    && victim->pcdata->learned[gsn_sgod] <= 0
-		    && victim->exp >= 500000000000)) {
+		    && victim->exp > ch->exp)) {
 			if (IS_NPC(ch)
 			    || (!IS_NPC(ch) && !xIS_SET(ch->act, PLR_SPAR))) {
 				if (!IS_NPC(victim) && is_saiyan(victim)) {
@@ -2424,32 +2424,27 @@ damage(CHAR_DATA * ch, CHAR_DATA * victim, int dam, int dt)
 					else
 						victim->rage += 1;
 				}
-				if (victim->exp >= 8000000	/* 8 million */
-				    && victim->pcdata->learned[gsn_ssj] <= 0)
-					rage(victim, ch);
-				else if (victim->exp >= 50000000	/* 50 million */
-					    && victim->pcdata->learned[gsn_ssj] > 0
-					    && victim->pcdata->learned[gsn_ssj2] <=
-				    0)
-					rage2(victim, ch);
-				else if (victim->exp >= 500000000	/* 500 million */
-					    && victim->pcdata->learned[gsn_ssj2] >
-					    0
-					    && victim->pcdata->learned[gsn_ssj3] <=
-				    0)
-					rage3(victim, ch);
-				else if (victim->exp >= 2000000000	/* 2 billion */
-					    && victim->pcdata->learned[gsn_ssj3] >
-					    0
-					    && victim->pcdata->learned[gsn_ssj4] <=
-				    0)
-					rage4(victim, ch);
-				else if (victim->exp >= 500000000000	/* 500 billion */
-					    && victim->pcdata->learned[gsn_ssj4] >
-					    0
-					    && victim->pcdata->learned[gsn_sgod] <=
-				    0)
-					rage5(victim, ch);
+				if (victim->pcdata->learned[gsn_ssj] <= 0)
+				  rage(victim, ch);
+				else if (victim->pcdata->learned[gsn_ssj] > 0
+					 && victim->pcdata->learned[gsn_ssj2] <=
+					 0)
+				  rage2(victim, ch);
+				else if (victim->pcdata->learned[gsn_ssj2] >
+					 0
+					 && victim->pcdata->learned[gsn_ssj3] <=
+					 0)
+				  rage3(victim, ch);
+				else if (victim->pcdata->learned[gsn_ssj3] >
+					 0
+					 && victim->pcdata->learned[gsn_ssj4] <=
+					 0)
+				  rage4(victim, ch);
+				else if (victim->pcdata->learned[gsn_ssj4] >
+					 0
+					 && victim->pcdata->learned[gsn_sgod] <=
+					 0)
+				  rage5(victim, ch);
 			}
 		}
 	}

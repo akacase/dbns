@@ -669,10 +669,8 @@ rage(CHAR_DATA * ch, CHAR_DATA * victim)
 void
 rage2(CHAR_DATA * ch, CHAR_DATA * victim)
 {
-
 	if (!ch->desc)
 		return;
-
 	if (!victim)
 		return;
 	if (IS_NPC(ch))
