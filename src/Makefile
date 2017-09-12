@@ -1,4 +1,4 @@
-CC ?= clang
+CC ?= gcc
 PREFIX ?= /usr/local/bin
 DATA_PREFIX ?= /opt/dbns/db
 
