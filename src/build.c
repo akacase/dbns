@@ -1559,13 +1559,10 @@ do_mset(CHAR_DATA * ch, char *argument)
 	if (!str_cmp(arg2, "worth")) {
 		if (!can_mmodify(ch, victim))
 			return;
-		if (value >= 0 || value <= 100) {
-		    victim->worth = value;
-		    if (IS_NPC(victim) && xIS_SET(victim->act, ACT_PROTOTYPE))
-			    victim->pIndexData->worth = value;
-		} else {
-		  send_to_char("Worth range is 0 to 100.\n\r", ch);
-		}
+		/* worth is long long int, so shouldn't be an issue on range */
+		victim->worth = value;
+		if (IS_NPC(victim) && xIS_SET(victim->act, ACT_PROTOTYPE))
+			victim->pIndexData->worth = value;
 	}
 	if (!str_cmp(arg2, "class")) {
 		if (!can_mmodify(ch, victim))

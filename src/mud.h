@@ -2512,7 +2512,7 @@ struct mob_index_data {
 	char   *long_descr;
 	char   *description;
 	int 	vnum;
-	int     worth;
+	long long int worth;
 	sh_int 	count;
 	sh_int 	killed;
 	sh_int 	sex;
@@ -5473,6 +5473,7 @@ args((const char *argument, int channel,
 	RID    *get_room_index args((int vnum));
 	char fread_letter args((FILE *fp));
 	int fread_number args((FILE *fp));
+	long long int fread_number_ll args((FILE *fp));
 	long double fread_number_ld args((FILE *fp));
 	double fread_number_skill args((FILE *fp));
 	EXT_BV fread_bitvector args((FILE *fp));

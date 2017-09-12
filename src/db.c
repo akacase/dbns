@@ -3494,6 +3494,60 @@ fread_number(FILE *fp)
 	return number;
 }
 
+long long int
+fread_number_ll(FILE *fp)
+{
+	long long int 	number;
+	bool 	sign;
+	char 	c;
+
+	do {
+		if (feof(fp)) {
+			bug("fread_number: EOF encountered on read.\n\r", 0);
+			if (fBootDb)
+				exit(1);
+			return 0;
+		}
+		c = getc(fp);
+	}
+	while (isspace(c));
+
+	number = 0;
+
+	sign = false;
+	if (c == '+') {
+		c = getc(fp);
+	} else if (c == '-') {
+		sign = true;
+		c = getc(fp);
+	}
+	if (!isdigit(c)) {
+		bug("Fread_number: bad format. (%c)", c, 0);
+		if (fBootDb)
+			exit(1);
+		return 0;
+	}
+	while (isdigit(c)) {
+		if (feof(fp)) {
+			bug("fread_number: EOF encountered on read.\n\r", 0);
+			if (fBootDb)
+				exit(1);
+			return number;
+		}
+		number = number * 10 + c - '0';
+		c = getc(fp);
+	}
+
+	if (sign)
+		number = 0 - number;
+	if (c == '|')
+		number += fread_number_ll(fp);
+	else if (c != ' ')
+		ungetc(c, fp);
+
+	return number;
+}
+
 /*
  * Read a number from a file.
  */
