@@ -3840,7 +3840,7 @@ do_who(CHAR_DATA * ch, char *argument)
 		return;
 	}
 	send_to_pager_color
-	    ("&z------------------------------------------------------------------------------\n\r",
+	    ("\n\r&z------------------------------------------------------------------------------\n\r",
 	    ch);
 	pager_printf_color(ch, "&Y%d &Wplayer%s.\n\r", nMatch,
 	    nMatch == 1 ? "" : "s");
