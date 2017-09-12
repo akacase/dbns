@@ -10,6 +10,7 @@ User=dbns
 Group=dbns
 Restart=always
 RestartSec=3
+Nice=-15
 
 [Install]
 WantedBy=multi-user.target
