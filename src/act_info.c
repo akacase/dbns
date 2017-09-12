@@ -3160,27 +3160,12 @@ do_who(CHAR_DATA * ch, char *argument)
 
 	WHO_DATA *cur_who = NULL;
 	WHO_DATA *next_who = NULL;
-	WHO_DATA *first_unknown = NULL;
 	WHO_DATA *first_grouped = NULL;
 	WHO_DATA *first_groupwho = NULL;
-	WHO_DATA *first_mortal = NULL;
+	WHO_DATA *first_training = NULL;
 	WHO_DATA *first_imm = NULL;
 	WHO_DATA *first_deadly = NULL;
-	WHO_DATA *first_skilled = NULL;
-	WHO_DATA *first_experienced = NULL;
-	WHO_DATA *first_ultimate = NULL;
-	WHO_DATA *first_veteran = NULL;
-	WHO_DATA *first_fearsome = NULL;
-	WHO_DATA *first_legendary = NULL;
-	WHO_DATA *first_epic = NULL;
-	WHO_DATA *first_ascendant = NULL;
-	WHO_DATA *first_transcendent = NULL;
-	WHO_DATA *first_champion = NULL;
-	WHO_DATA *first_titan = NULL;
-	WHO_DATA *first_mythical = NULL;
-	WHO_DATA *first_omnipotent = NULL;
-	WHO_DATA *first_demigod = NULL;
-
+	
 	argument2 = strcat(argument, "");
 
 	/*
@@ -3714,112 +3699,26 @@ do_who(CHAR_DATA * ch, char *argument)
 			else
 				cur_who->type = WT_GROUPWHO;
 		else if (IS_HC(wch))
-			cur_who->type = WT_UNKNOWN;
+			cur_who->type = WT_DEADLY;
 		else if (CAN_PKILL(wch)) {
-			if (wch->exp < 100000)	/* less than 100k  */
-				cur_who->type = WT_DEADLY;
-			else if (wch->exp < 1000000)	/* less than 1 mil */
-				cur_who->type = WT_SKILLED;
-			else if (wch->exp < 10000000)	/* less than 10 mil */
-				cur_who->type = WT_EXPERIENCED;
-			else if (wch->exp < 100000000)	/* less than 100 mil */
-				cur_who->type = WT_ULTIMATE;
-			else if (wch->exp < 1000000000)	/* less than 1 bil */
-				cur_who->type = WT_VETERAN;
-			else if (wch->exp < 10000000000ULL)	/* less than 10 bil */
-				cur_who->type = WT_FEARSOME;
-			else if (wch->exp < 50000000000ULL)	/* less than 50 bil */
-				cur_who->type = WT_LEGENDARY;
-			else if (wch->exp < 100000000000ULL)	/* less than 100 bil */
-				cur_who->type = WT_EPIC;
-			else if (wch->exp < 300000000000ULL)	/* less than 300 bil */
-				cur_who->type = WT_ASCENDANT;
-			else if (wch->exp < 600000000000ULL)	/* less than 600 bil */
-				cur_who->type = WT_TRANSCENDENT;
-			else if (wch->exp < 1000000000000ULL)	/* less than 1 trillion */
-				cur_who->type = WT_CHAMPION;
-			else if (wch->exp < 10000000000000ULL)	/* < 10t */
-				cur_who->type = WT_TITAN;
-			else if (wch->exp < 50000000000000ULL)	/* < 50t */
-				cur_who->type = WT_MYTHICAL;
-			else if (wch->exp < 100000000000000ULL)	/* < 100t */
-				cur_who->type = WT_OMNIPOTENT;
-			else
-				cur_who->type = WT_DEMIGOD;
-		} else
-			cur_who->type = WT_MORTAL;
+		        if(wch->exp < 100000)
+			        cur_who->type = WT_TRAINING;
+		        else
+		                cur_who->type = WT_DEADLY;
+       		} else
+			cur_who->type = WT_TRAINING;
 
 		/* Then put it into the appropriate list. */
 		switch (cur_who->type) {
-		case WT_MORTAL:
-			cur_who->next = first_mortal;
-			first_mortal = cur_who;
-			break;
-		case WT_UNKNOWN:
-			cur_who->next = first_unknown;
-			first_unknown = cur_who;
+		case WT_TRAINING:
+			cur_who->next = first_training;
+			first_training = cur_who;
 			break;
 		case WT_DEADLY:
 			cur_who->next = first_deadly;
 			first_deadly = cur_who;
 			break;
-		case WT_SKILLED:
-			cur_who->next = first_skilled;
-			first_skilled = cur_who;
-			break;
-		case WT_EXPERIENCED:
-			cur_who->next = first_experienced;
-			first_experienced = cur_who;
-			break;
-		case WT_ULTIMATE:
-			cur_who->next = first_ultimate;
-			first_ultimate = cur_who;
-			break;
-		case WT_VETERAN:
-			cur_who->next = first_veteran;
-			first_veteran = cur_who;
-			break;
-		case WT_FEARSOME:
-			cur_who->next = first_fearsome;
-			first_fearsome = cur_who;
-			break;
-		case WT_LEGENDARY:
-			cur_who->next = first_legendary;
-			first_legendary = cur_who;
-			break;
-		case WT_EPIC:
-			cur_who->next = first_epic;
-			first_epic = cur_who;
-			break;
-		case WT_ASCENDANT:
-			cur_who->next = first_ascendant;
-			first_ascendant = cur_who;
-			break;
-		case WT_TRANSCENDENT:
-			cur_who->next = first_transcendent;
-			first_transcendent = cur_who;
-			break;
-		case WT_CHAMPION:
-			cur_who->next = first_champion;
-			first_champion = cur_who;
-			break;
-		case WT_TITAN:
-			cur_who->next = first_titan;
-			first_titan = cur_who;
-			break;
-		case WT_MYTHICAL:
-			cur_who->next = first_mythical;
-			first_mythical = cur_who;
-			break;
-		case WT_OMNIPOTENT:
-			cur_who->next = first_omnipotent;
-			first_omnipotent = cur_who;
-			break;
-		case WT_DEMIGOD:
-			cur_who->next = first_demigod;
-			first_demigod = cur_who;
-			break;
-		case WT_GROUPED:
+       		case WT_GROUPED:
 			cur_who->next = first_grouped;
 			first_grouped = cur_who;
 			break;
@@ -3846,7 +3745,7 @@ do_who(CHAR_DATA * ch, char *argument)
 
 	send_to_pager_color("\n\r", ch);
 
-	if (first_mortal) {
+	if (first_training) {
 		if (!ch)
 			fprintf(whoout,
 			    "\n\r---------------------------[ FIGHTERS IN TRAINING ]---------------------------\n\r\n\r");
@@ -3855,26 +3754,7 @@ do_who(CHAR_DATA * ch, char *argument)
 			    ("\n\r&z---------------------------[ &PFIGHTERS IN TRAINING &z]---------------------------\n\r",
 			    ch);
 	}
-	for (cur_who = first_mortal; cur_who; cur_who = next_who) {
-		if (!ch)
-		  fprintf(whoout, "%s", cur_who->text);
-		else
-			send_to_pager_color(cur_who->text, ch);
-		next_who = cur_who->next;
-		DISPOSE(cur_who->text);
-		DISPOSE(cur_who);
-	}
-
-	if (first_unknown) {
-		if (!ch)
-			fprintf(whoout,
-			    "\n\r---------------------------------[ UNKNOWN ]----------------------------------\n\r\n\r");
-		else
-			send_to_pager_color
-			    ("&z---------------------------------[ &rUNKNOWN &z]----------------------------------\n\r",
-			    ch);
-	}
-	for (cur_who = first_unknown; cur_who; cur_who = next_who) {
+	for (cur_who = first_training; cur_who; cur_who = next_who) {
 		if (!ch)
 		  fprintf(whoout, "%s", cur_who->text);
 		else
@@ -3887,279 +3767,13 @@ do_who(CHAR_DATA * ch, char *argument)
 	if (first_deadly) {
 		if (!ch)
 			fprintf(whoout,
-			    "\n\r-----------------------------[ TRAINED FIGHTERS ]-----------------------------\n\r\n\r");
+			    "\n\r-----------------------------[ DEADLY FIGHTERS ]------------------------------\n\r\n\r");
 		else
 			send_to_pager_color
-			    ("&z-----------------------------[ &cTRAINED FIGHTERS &z]-----------------------------\n\r",
+			    ("&z-----------------------------[ &cDEADLY FIGHTERS &z]------------------------------\n\r",
 			    ch);
 	}
 	for (cur_who = first_deadly; cur_who; cur_who = next_who) {
-		if (!ch)
-		  fprintf(whoout, "%s", cur_who->text);
-		else
-			send_to_pager_color(cur_who->text, ch);
-		next_who = cur_who->next;
-		DISPOSE(cur_who->text);
-		DISPOSE(cur_who);
-	}
-
-	if (first_skilled) {
-		if (!ch)
-			fprintf(whoout,
-			    "\n\r-----------------------------[ SKILLED FIGHTERS ]-----------------------------\n\r\n\r");
-		else
-			send_to_pager_color
-			    ("&z-----------------------------[ &OSKILLED FIGHTERS &z]-----------------------------\n\r",
-			    ch);
-	}
-	for (cur_who = first_skilled; cur_who; cur_who = next_who) {
-		if (!ch)
-		  fprintf(whoout, "%s", cur_who->text);
-		else
-			send_to_pager_color(cur_who->text, ch);
-		next_who = cur_who->next;
-		DISPOSE(cur_who->text);
-		DISPOSE(cur_who);
-	}
-
-	if (first_experienced) {
-		if (!ch)
-			fprintf(whoout,
-			    "\n\r---------------------------[ EXPERIENCED FIGHTERS ]---------------------------\n\r\n\r");
-		else
-			send_to_pager_color
-			    ("&z---------------------------[ &wEXPERIENCED FIGHTERS &z]---------------------------\n\r",
-			    ch);
-	}
-	for (cur_who = first_experienced; cur_who; cur_who = next_who) {
-		if (!ch)
-		  fprintf(whoout, "%s", cur_who->text);
-		else
-			send_to_pager_color(cur_who->text, ch);
-		next_who = cur_who->next;
-		DISPOSE(cur_who->text);
-		DISPOSE(cur_who);
-	}
-
-	if (first_ultimate) {
-		if (!ch)
-			fprintf(whoout,
-			    "\n\r----------------------------[ ULTIMATE  FIGHTERS ]----------------------------\n\r\n\r");
-		else
-			send_to_pager_color
-			    ("&z----------------------------[ &RULTIMATE  FIGHTERS &z]----------------------------\n\r",
-			    ch);
-	}
-	for (cur_who = first_ultimate; cur_who; cur_who = next_who) {
-		if (!ch)
-		  fprintf(whoout, "%s", cur_who->text);
-		else
-			send_to_pager_color(cur_who->text, ch);
-		next_who = cur_who->next;
-		DISPOSE(cur_who->text);
-		DISPOSE(cur_who);
-	}
-
-	if (first_veteran) {
-		if (!ch)
-			fprintf(whoout,
-			    "\n\r-----------------------------[ VETERAN WARRIORS ]-----------------------------\n\r\n\r");
-		else
-			send_to_pager_color
-			    ("&z-----------------------------[ &CVETERAN WARRIORS &z]-----------------------------\n\r",
-			    ch);
-	}
-	for (cur_who = first_veteran; cur_who; cur_who = next_who) {
-		if (!ch)
-		  fprintf(whoout, "%s", cur_who->text);
-		else
-			send_to_pager_color(cur_who->text, ch);
-		next_who = cur_who->next;
-		DISPOSE(cur_who->text);
-		DISPOSE(cur_who);
-	}
-
-	if (first_fearsome) {
-		if (!ch)
-			fprintf(whoout,
-			    "\n\r-----------------------------[ FEARSOME WARRIORS ]----------------------------\n\r\n\r");
-		else
-			send_to_pager_color
-			    ("&z-----------------------------[ &rFEARSOME WARRIORS &z]----------------------------\n\r",
-			    ch);
-	}
-	for (cur_who = first_fearsome; cur_who; cur_who = next_who) {
-		if (!ch)
-		  fprintf(whoout, "%s", cur_who->text);
-		else
-			send_to_pager_color(cur_who->text, ch);
-		next_who = cur_who->next;
-		DISPOSE(cur_who->text);
-		DISPOSE(cur_who);
-	}
-
-	if (first_legendary) {
-		if (!ch)
-			fprintf(whoout,
-			    "\n\r----------------------------[ LEGENDARY WARRIORS ]----------------------------\n\r\n\r");
-		else
-			send_to_pager_color
-			    ("&z----------------------------[ &BLEGENDARY WARRIORS &z]----------------------------\n\r",
-			    ch);
-	}
-	for (cur_who = first_legendary; cur_who; cur_who = next_who) {
-		if (!ch)
-		  fprintf(whoout, "%s", cur_who->text);
-		else
-			send_to_pager_color(cur_who->text, ch);
-		next_who = cur_who->next;
-		DISPOSE(cur_who->text);
-		DISPOSE(cur_who);
-	}
-
-	if (first_epic) {
-		if (!ch)
-			fprintf(whoout,
-			    "\n\r------------------------------[ EPIC WARRIORS ]-------------------------------\n\r\n\r");
-		else
-			send_to_pager_color
-			    ("&z------------------------------[ &WEPIC WARRIORS &z]-------------------------------\n\r",
-			    ch);
-	}
-	for (cur_who = first_epic; cur_who; cur_who = next_who) {
-		if (!ch)
-		  fprintf(whoout, "%s", cur_who->text);
-		else
-			send_to_pager_color(cur_who->text, ch);
-		next_who = cur_who->next;
-		DISPOSE(cur_who->text);
-		DISPOSE(cur_who);
-	}
-
-	if (first_ascendant) {
-		if (!ch)
-			fprintf(whoout,
-			    "\n\r----------------------------[ ASCENDANT WARRIORS ]----------------------------\n\r\n\r");
-		else
-			send_to_pager_color
-			    ("&z----------------------------[ &gASCENDANT WARRIORS &z]----------------------------\n\r",
-			    ch);
-	}
-	for (cur_who = first_ascendant; cur_who; cur_who = next_who) {
-		if (!ch)
-		  fprintf(whoout, "%s", cur_who->text);
-		else
-			send_to_pager_color(cur_who->text, ch);
-		next_who = cur_who->next;
-		DISPOSE(cur_who->text);
-		DISPOSE(cur_who);
-	}
-
-	if (first_transcendent) {
-		if (!ch)
-			fprintf(whoout,
-			    "\n\r--------------------------[ TRANSCENDENT WARRIORS ]---------------------------\n\r\n\r");
-		else
-			send_to_pager_color
-			    ("&z--------------------------[ &GTRANSCENDENT WARRIORS &z]---------------------------\n\r",
-			    ch);
-	}
-	for (cur_who = first_transcendent; cur_who; cur_who = next_who) {
-		if (!ch)
-		  fprintf(whoout, "%s", cur_who->text);
-		else
-			send_to_pager_color(cur_who->text, ch);
-		next_who = cur_who->next;
-		DISPOSE(cur_who->text);
-		DISPOSE(cur_who);
-	}
-
-	if (first_champion) {
-		if (!ch)
-			fprintf(whoout,
-			    "\n\r------------------------------[ CHAMPIONS ]-------------------------------\n\r\n\r");
-		else
-			send_to_pager_color
-			    ("&z--------------------------------[ &BCHAMPIONS &z]---------------------------------\n\r",
-			    ch);
-	}
-	for (cur_who = first_champion; cur_who; cur_who = next_who) {
-		if (!ch)
-		  fprintf(whoout, "%s", cur_who->text);
-		else
-			send_to_pager_color(cur_who->text, ch);
-		next_who = cur_who->next;
-		DISPOSE(cur_who->text);
-		DISPOSE(cur_who);
-	}
-
-	if (first_titan) {
-		if (!ch)
-			fprintf(whoout,
-			    "\n\r-------------------------------[ TITANS ]--------------------------------\n\r\n\r");
-		else
-			send_to_pager_color
-			    ("&z---------------------------------[ &WTITANS &z]-----------------------------------\n\r",
-			    ch);
-	}
-	for (cur_who = first_titan; cur_who; cur_who = next_who) {
-		if (!ch)
-		  fprintf(whoout, "%s", cur_who->text);
-		else
-			send_to_pager_color(cur_who->text, ch);
-		next_who = cur_who->next;
-		DISPOSE(cur_who->text);
-		DISPOSE(cur_who);
-	}
-
-	if (first_mythical) {
-		if (!ch)
-			fprintf(whoout,
-			    "\n\r-------------------------[ MYTHICAL WARRIORS ]-----------------------------\n\r\n\r");
-		else
-			send_to_pager_color
-			    ("&z---------------------------[ &CMYTHICAL WARRIORS &z]------------------------------\n\r",
-			    ch);
-	}
-	for (cur_who = first_mythical; cur_who; cur_who = next_who) {
-		if (!ch)
-		  fprintf(whoout, "%s", cur_who->text);
-		else
-			send_to_pager_color(cur_who->text, ch);
-		next_who = cur_who->next;
-		DISPOSE(cur_who->text);
-		DISPOSE(cur_who);
-	}
-
-	if (first_omnipotent) {
-		if (!ch)
-			fprintf(whoout,
-			    "\n\r------------------------[ OMNIPOTENT WARRIORS ]----------------------------\n\r\n\r");
-		else
-			send_to_pager_color
-			    ("&z--------------------------[ &ROMNIPOTENT WARRIORS &z]-----------------------------\n\r",
-			    ch);
-	}
-	for (cur_who = first_omnipotent; cur_who; cur_who = next_who) {
-		if (!ch)
-		  fprintf(whoout, "%s", cur_who->text);
-		else
-			send_to_pager_color(cur_who->text, ch);
-		next_who = cur_who->next;
-		DISPOSE(cur_who->text);
-		DISPOSE(cur_who);
-	}
-
-	if (first_demigod) {
-		if (!ch)
-			fprintf(whoout,
-			    "\n\r--------------------------------[ DEMI-GODS ]---------------------------------\n\r\n\r");
-		else
-			send_to_pager_color
-			    ("&r--------------------------------[ &zDEMI-GODS &r]---------------------------------\n\r",
-			    ch);
-	}
-	for (cur_who = first_demigod; cur_who; cur_who = next_who) {
 		if (!ch)
 		  fprintf(whoout, "%s", cur_who->text);
 		else

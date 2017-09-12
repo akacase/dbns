@@ -493,40 +493,10 @@ int get_rank_number( CHAR_DATA *ch )
 	if (IS_NPC(ch))
 		return -1;
 
-	if (IS_HC(ch))
-		return 0;
-	else if (ch->exp < 5000)
+	if (ch->exp < 100000)
 		return 1;
-	else if (ch->exp < 100000)
-		return 2;
-	else if (ch->exp < 1000000)
-		return 3;
-	else if (ch->exp < 10000000)
-		return 4;
-	else if (ch->exp < 100000000)
-		return 5;
-	else if (ch->exp < 1000000000)
-		return 6;
-	else if (ch->exp < 10000000000ULL)
-		return 7;
-	else if (ch->exp < 50000000000ULL)
-		return 8;
-	else if (ch->exp < 100000000000ULL)
-		return 9;
-	else if (ch->exp < 300000000000ULL)
-		return 10;
-	else if (ch->exp < 600000000000ULL)
-		return 11;
-	else if (ch->exp < 1000000000000ULL)
-		return 12;
-	else if (ch->exp < 10000000000000ULL)
-		return 13;
-        else if (ch->exp < 50000000000000ULL)
-                return 14;
-        else if (ch->exp < 100000000000000ULL)
-                return 15;
 	else
-		return 16;
+		return 2;
 	return -1;
 }
 
@@ -536,43 +506,10 @@ char *get_rank( CHAR_DATA *ch)
 	if (IS_NPC(ch))
 		return ("NPC");
 
-	if (IS_HC(ch))
-		return ("Unknown");
-	else if (ch->exp < 5000)
-		return ("Fighter in Training");
-	else if (ch->exp < 100000)
-		return ("Trained Fighter");
-	else if (ch->exp < 1000000)
-		return ("Skilled Fighter");
-	else if (ch->exp < 10000000)
-		return ("Experienced Fighter");
-	else if (ch->exp < 100000000)
-		return ("Ultimate Fighter");
-	else if (ch->exp < 1000000000)
-		return ("Veteran Warrior");
-	else if (ch->exp < 10000000000ULL)
-		return ("Fearsome Warrior");
-	else if (ch->exp < 50000000000ULL)
-		return ("Legendary Warrior");
-	else if (ch->exp < 100000000000ULL)
-		return ("Epic Warrior");
-	else if (ch->exp < 300000000000ULL)
-		return ("Ascendant Warrior");
-	else if (ch->exp < 600000000000ULL)
-		return ("Transcendant Warrior");
-	else if (ch->exp < 1000000000000ULL)
-		return ("Champion");
-	else if (ch->exp < 10000000000000ULL)
-		return ("Titan");
-        else if (ch->exp < 50000000000000ULL)
-                return ("Mythical Warrior");
-        else if (ch->exp < 100000000000000ULL)
-                return ("Omnipotent Warrior");
-        else /*if (ch->exp >= 100000000000000ULL)*/
-                return ("Demi-God");
-
-
-	return ("BUG: NOTIFY GOKU");
+        if (ch->exp < 100000)
+	    return ("Fighter in Training");
+	else 
+	    return ("Deadly Fighter");
 }
 
 char *get_rank_color( CHAR_DATA *ch)

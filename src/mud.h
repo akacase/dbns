@@ -351,22 +351,8 @@ typedef enum {
 #define ECHOTAR_IMM	2
 
 /* defines for new do_who */
-#define WT_MORTAL			0
+#define WT_TRAINING			0
 #define WT_DEADLY			1
-#define WT_SKILLED			2
-#define WT_EXPERIENCED		        3
-#define WT_ULTIMATE			4
-#define WT_VETERAN			5
-#define WT_FEARSOME		        6
-#define WT_LEGENDARY			7
-#define WT_EPIC                         8
-#define WT_ASCENDANT	                9
-#define WT_TRANSCENDENT		        10
-#define WT_CHAMPION			11
-#define WT_TITAN			12
-#define WT_MYTHICAL			13
-#define WT_OMNIPOTENT			14
-#define WT_DEMIGOD			15
 #define WT_IMM				16
 #define WT_GROUPED			17
 #define WT_GROUPWHO			18
@@ -2836,7 +2822,7 @@ struct pc_data {
 	char   *bamfin;
 	char   *bamfout;
 	char   *filename;		/* For the safe mset name -Shaddai */
-	char   *rank;
+        char   *rank;
 	char   *pretitle;
 	char   *title;
 	char   *bestowments;		/* Special bestowed commands       */
