@@ -4885,7 +4885,7 @@ new_dam_message(CHAR_DATA * ch, CHAR_DATA * victim, int dam, int dt,
 			case 2:
 				sprintf(buf1, "$n %s $N%c  [%s]", vp, punct,
 				    num_punct(dam));
-				sprintf(buf2, "You %s $N%c  [%s]", vs, punct,
+				sprintf(buf2, "You %s $N%c  [%s]", vp, punct,
 				    num_punct(dam));
 				sprintf(buf3, "$n %s you%c  [%s]", vp, punct,
 				    num_punct(dam));

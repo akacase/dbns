@@ -2807,12 +2807,12 @@ do_kick(CHAR_DATA * ch, char *argument)
 		global_retcode =
 		    damage(ch, victim,
 		    (get_attmod(ch, victim) * number_range(2, 4)),
-		    gsn_kick);
+		    TYPE_HIT);
 		ch->melee = false;
 	} else {
 		learn_from_failure(ch, gsn_kick);
 		ch->melee = true;
-		global_retcode = damage(ch, victim, 0, gsn_kick);
+		global_retcode = damage(ch, victim, 0, TYPE_HIT);
 		ch->melee = false;
 	}
 
@@ -2862,12 +2862,12 @@ do_punch(CHAR_DATA * ch, char *argument)
 		global_retcode =
 		    damage(ch, victim,
 		    (get_attmod(ch, victim) * number_range(1, 3)),
-		    gsn_punch);
+		    TYPE_HIT);
 		ch->melee = false;
 	} else {
 		learn_from_failure(ch, gsn_punch);
 		ch->melee = true;
-		global_retcode = damage(ch, victim, 0, gsn_punch);
+		global_retcode = damage(ch, victim, 0, TYPE_HIT);
 		ch->melee = false;
 	}
 
