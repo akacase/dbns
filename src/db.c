@@ -3130,6 +3130,7 @@ clear_char(CHAR_DATA * ch)
 	ch->max_train = 4;
 	ch->hit = 100;
 	ch->max_hit = 100;
+	ch->worth = 100;
 	ch->mana = 100;
 	ch->max_mana = 100;
 	ch->max_energy = 1;
@@ -3165,7 +3166,6 @@ clear_char(CHAR_DATA * ch)
 	ch->inter_editing = NULL;	/* BUILD INTERFACE */
 	ch->inter_editing_vnum = -1;	/* BUILD INTERFACE */
 	ch->inter_substate = SUB_NORTH;	/* BUILD INTERFACE */
-	return;
 }
 
 

@@ -69,9 +69,6 @@ sh_int get_obj_resistance( OBJ_DATA *obj )
 	if ( IS_OBJ_STAT( obj, ITEM_INVENTORY ) )
 		resist += 20;
 
-	/* okay... let's add some bonus/penalty for item level... */
-	//    resist += (obj->level / 10) - 2;
-
 	/* and lasty... take armor or weapon's condition into consideration */
 	if (obj->item_type == ITEM_ARMOR || obj->item_type == ITEM_WEAPON)
 		resist += (obj->value[0] / 2) - 2;
@@ -202,30 +199,6 @@ void get_obj( CHAR_DATA *ch, OBJ_DATA *obj, OBJ_DATA *container )
 		 *  by more than 1.0.  Use less than 1.0 for ogre, orc, troll, etc.
 		 *  (Ie: a penalty rather than a bonus)
 		 */
-#ifdef GOLD_MULT
-
-		switch (ch->race)
-		{
-			case(1): amt *= 1.1;
-				break; /* elf */
-			case(2): amt *= 0.97;
-				break; /* dwarf */
-			case(3): amt *= 1.02;
-				break; /* halfling */
-			case(4): amt *= 1.08;
-				break; /* pixie */
-			case(6): amt *= 0.92;
-				break; /* half-ogre */
-			case(7): amt *= 0.94;
-				break; /* half-orc */
-			case(8): amt *= 0.90;
-				break; /* half-troll */
-			case(9): amt *= 1.04;
-				break; /* half-elf */
-			case(10): amt *= 1.06;
-				break; /* gith */
-		}
-#endif
 
 		ch->gold += amt;
 		extract_obj( obj );
@@ -373,10 +346,7 @@ void do_get( CHAR_DATA *ch, char *argument )
 			else
 			{
 				save_house_by_vnum(ch->in_room->vnum); /* House Object Saving */
-
-//				if ( IS_SET( sysdata.save_flags, SV_GET ) )
-//				if ( IS_SET( sysdata.save_flags, SV_GIVE ) )
-					save_char_obj( ch );
+				save_char_obj( ch );
 			}
 		}
 	}
@@ -620,8 +590,6 @@ void do_get( CHAR_DATA *ch, char *argument )
 			        */
 			if ( container->item_type == ITEM_CORPSE_PC )
 				write_corpses( NULL, container->short_descr + 14, NULL );
-//			if ( found && IS_SET( sysdata.save_flags, SV_GET ) )
-//			if ( found && IS_SET( sysdata.save_flags, SV_GIVE ) )
                         if ( found )
 				save_char_obj( ch );
 		}
@@ -685,8 +653,6 @@ void do_put( CHAR_DATA *ch, char *argument )
 		return ;
 	}
 
-//	if ( !container->carried_by && IS_SET(sysdata.save_flags, SV_PUT) )
-//	if ( !container->carried_by && IS_SET(sysdata.save_flags, SV_GIVE) )
 	if ( !container->carried_by )
 		save_char = true;
 
@@ -905,8 +871,6 @@ void do_put( CHAR_DATA *ch, char *argument )
 					save_clan_storeroom(ch, clan);
 		}
 	}
-
-	return ;
 }
 
 
@@ -958,47 +922,7 @@ void do_drop( CHAR_DATA *ch, char *argument )
 		send_to_char( "Someone tells you, 'No littering here!'\n\r", ch );
 		return ;
 	}
-/*
-	if ( number > 0 )
-	{
-		if ( !str_cmp( arg, "coins" ) || !str_cmp( arg, "coin" ) || !str_cmp( arg, "zeni" ))
-		{
-			if ( ch->gold < number )
-			{
-				send_to_char( "You haven't got that many zeni.\n\r", ch );
-				return ;
-			}
 
-			ch->gold -= number;
-
-			for ( obj = ch->in_room->first_content; obj; obj = obj_next )
-			{
-				obj_next = obj->next_content;
-
-				switch ( obj->pIndexData->vnum )
-				{
-					case OBJ_VNUM_MONEY_ONE:
-						number += 1;
-						extract_obj( obj );
-						break;
-
-					case OBJ_VNUM_MONEY_SOME:
-						number += obj->value[0];
-						extract_obj( obj );
-						break;
-				}
-			}
-
-			act( AT_ACTION, "$n drops some zeni.", ch, NULL, NULL, TO_ROOM );
-			obj_to_room( create_money( number ), ch->in_room );
-			save_house_by_vnum(ch->in_room->vnum);
-			send_to_char( "You let the zeni slip from your hand.\n\r", ch );
-				save_char_obj( ch );
-			return ;
-		}
-
-	}
-*/
 	if ( number <= 1 && str_cmp( arg, "all" ) && str_prefix( "all.", arg ) )
 	{
 		/* 'drop obj' */
@@ -1122,10 +1046,7 @@ void do_drop( CHAR_DATA *ch, char *argument )
 	}
 
 	save_house_by_vnum(ch->in_room->vnum); /* House Object Saving */
-
-//	if ( IS_SET( sysdata.save_flags, SV_DROP ) )
-//	if ( IS_SET( sysdata.save_flags, SV_GIVE ) )
-		save_char_obj( ch );	/* duping protector */
+	save_char_obj( ch );	/* duping protector */
 	return ;
 }
 
@@ -1204,11 +1125,8 @@ void do_give( CHAR_DATA *ch, char *argument )
 		act( AT_ACTION, "$n gives $N some zeni.", ch, NULL, victim, TO_NOTVICT );
 		act( AT_ACTION, "You give $N some zeni.", ch, NULL, victim, TO_CHAR );
 		mprog_bribe_trigger( victim, ch, amount );
-//		if ( IS_SET( sysdata.save_flags, SV_GIVE ) && !char_died(ch) )
                 if ( !char_died( ch ) )
 			save_char_obj(ch);
-//		if ( IS_SET( sysdata.save_flags, SV_RECEIVE ) && !char_died(victim) )
-//		if ( IS_SET( sysdata.save_flags, SV_GIVE ) && !char_died(victim) )
                 if ( !char_died( victim ) )
 			save_char_obj(victim);
 		return ;
@@ -1275,13 +1193,10 @@ void do_give( CHAR_DATA *ch, char *argument )
 	act(AT_ACTION, "You give $p to $N.", ch, obj, victim, TO_CHAR );
 	obj = obj_to_char(obj, victim);
 	mprog_give_trigger(victim, ch, obj);
-//	if ( IS_SET(sysdata.save_flags, SV_GIVE) && !char_died(ch) )
-                if ( !char_died( ch ) )
-		save_char_obj(ch);
-//	if ( IS_SET(sysdata.save_flags, SV_RECEIVE) && !char_died(victim) )
-//	if ( IS_SET(sysdata.save_flags, SV_GIVE) && !char_died(victim) )
-                if ( !char_died( victim ) )
-		save_char_obj(victim);
+	if ( !char_died( ch ) )
+	    save_char_obj(ch);
+	if ( !char_died( victim ) )
+	    save_char_obj(victim);
 	return ;
 }
 

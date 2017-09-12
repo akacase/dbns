@@ -1015,7 +1015,7 @@ do_mset(CHAR_DATA * ch, char *argument)
 		break;
 	case SUB_MOB_DESC:
 		if (!ch->dest_buf) {
-			send_to_char("Fatal error: report to Goku.\n\r", ch);
+			send_to_char("Fatal error: report to Admin.\n\r", ch);
 			bug("do_mset: sub_mob_desc: NULL ch->dest_buf", 0);
 			ch->substate = SUB_NONE;
 			return;
@@ -1095,7 +1095,7 @@ do_mset(CHAR_DATA * ch, char *argument)
 			send_to_char("Syntax: mset <victim> <field>  <value>\n\r", ch);
 		send_to_char("\n\r", ch);
 		send_to_char("Field being one of:\n\r", ch);
-		send_to_char("  str int spd con lck sex class\n\r", ch);
+		send_to_char("  str int spd con lck sex worth class\n\r", ch);
 		send_to_char("  zeni hp mana move practice align race\n\r", ch);
 		send_to_char("  hitroll damroll damage affected level\n\r", ch);
 		send_to_char("  thirst drunk full blood flags\n\r", ch);
@@ -1140,15 +1140,6 @@ do_mset(CHAR_DATA * ch, char *argument)
 	}
 	if (lockvictim)
 		ch->dest_buf = victim;
-
-	/*
-          if (!IS_NPC(victim) && ch->level < LEVEL_SUPREME && ch != victim)
-          {
-          send_to_char("Use GODSET to change a players stats\n\r", ch);
-          ch->dest_buf = NULL;
-          return;
-          }
-        */
 
 	minattr = 1;
 	maxattr = 500;
@@ -1565,10 +1556,20 @@ do_mset(CHAR_DATA * ch, char *argument)
 			victim->pIndexData->sex = value;
 		return;
 	}
+	if (!str_cmp(arg2, "worth")) {
+		if (!can_mmodify(ch, victim))
+			return;
+		if (value >= 0 || value <= 100) {
+		    victim->worth = value;
+		    if (IS_NPC(victim) && xIS_SET(victim->act, ACT_PROTOTYPE))
+			    victim->pIndexData->worth = value;
+		} else {
+		  send_to_char("Worth range is 0 to 100.\n\r", ch);
+		}
+	}
 	if (!str_cmp(arg2, "class")) {
 		if (!can_mmodify(ch, victim))
 			return;
-
 
 		if (IS_NPC(victim)) {
 			if (value >= MAX_NPC_CLASS || value < 0) {

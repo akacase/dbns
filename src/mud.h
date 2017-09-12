@@ -2512,6 +2512,7 @@ struct mob_index_data {
 	char   *long_descr;
 	char   *description;
 	int 	vnum;
+	int     worth;
 	sh_int 	count;
 	sh_int 	killed;
 	sh_int 	sex;
@@ -2644,6 +2645,7 @@ struct char_data {
 	sh_int 	wait;
 	sh_int 	hit;
 	sh_int 	max_hit;
+	int     worth;
 	int 	mana;
 	int 	max_mana;
 	sh_int 	max_energy;
