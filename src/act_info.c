@@ -3748,10 +3748,10 @@ do_who(CHAR_DATA * ch, char *argument)
 	if (first_training) {
 		if (!ch)
 			fprintf(whoout,
-			    "\n\r---------------------------[ FIGHTERS IN TRAINING ]---------------------------\n\r\n\r");
+			    "\n\r---------------------------[ FIGHTERS IN TRAINING ]---------------------------\n\r\n\r\n\r");
 		else
 			send_to_pager_color
-			    ("\n\r&z---------------------------[ &PFIGHTERS IN TRAINING &z]---------------------------\n\r",
+			    ("\n\r&z---------------------------[ &PFIGHTERS IN TRAINING &z]---------------------------\n\r\n\r",
 			    ch);
 	}
 	for (cur_who = first_training; cur_who; cur_who = next_who) {
@@ -3767,10 +3767,10 @@ do_who(CHAR_DATA * ch, char *argument)
 	if (first_deadly) {
 		if (!ch)
 			fprintf(whoout,
-			    "\n\r-----------------------------[ DEADLY FIGHTERS ]------------------------------\n\r\n\r");
+			    "\n\r------------------------------[ DEADLY FIGHTERS ]-----------------------------\n\r\n\r\n\r");
 		else
 			send_to_pager_color
-			    ("&z-----------------------------[ &cDEADLY FIGHTERS &z]------------------------------\n\r",
+			    ("\n\r&z-----------------------------[ &cDEADLY FIGHTERS &z]------------------------------\n\r\n\r",
 			    ch);
 	}
 	for (cur_who = first_deadly; cur_who; cur_who = next_who) {
@@ -3817,10 +3817,10 @@ do_who(CHAR_DATA * ch, char *argument)
 	if (first_imm) {
 		if (!ch)
 			fprintf(whoout,
-			    "\n\r------------------------------[ ADMINISTRATORS ]------------------------------\n\r\n\r");
+			    "\n\r------------------------------[ ADMINISTRATORS ]------------------------------\n\r\n\r\n\r");
 		else
 			send_to_pager_color
-			    ("&z------------------------------[ &YADMINISTRATORS &z]------------------------------\n\r",
+			    ("\n\r&z------------------------------[ &YADMINISTRATORS &z]------------------------------\n\r\n\r",
 			    ch);
 	}
 	for (cur_who = first_imm; cur_who; cur_who = next_who) {
