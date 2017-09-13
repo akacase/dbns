@@ -1549,7 +1549,7 @@ A light training gi lays here on the floor.~
 9 0 9 256
 0 0 0 150 150 150
 1 5000 500
- 50000
+ 100
 A
 1 1
 A
@@ -1558,6 +1558,8 @@ A
 4 1
 A
 3 1
+A
+11 100
 #303908
 light training belt~
 &WA Light Training Belt&d~
@@ -1566,7 +1568,7 @@ A light training belt lays here on the floor.~
 9 0 2049 256
 0 0 0 150 150 150
 1 5000 500
- 50000
+ 100
 A
 1 1
 A
@@ -1575,6 +1577,8 @@ A
 4 1
 A
 3 1
+A
+11 100
 #303909
 light training gloves~
 &WA pair of Light Training Gloves&d~
@@ -1583,7 +1587,7 @@ A pair of light training gloves lay here on the floor.~
 9 0 129 256
 0 0 0 150 150 150
 1 5000 500
- 50000
+ 100
 A
 1 1
 A
@@ -1592,6 +1596,8 @@ A
 4 1
 A
 3 1
+A
+11 100
 #303910
 light training head wrap~
 &WA Light Training Headwrap&d~
@@ -1600,7 +1606,7 @@ A light training headwrap lays here on the floor.~
 9 0 17 256
 0 0 0 150 150 150
 1 5000 500
- 50000
+ 100
 A
 1 1
 A
@@ -1609,6 +1615,8 @@ A
 4 1
 A
 3 1
+A
+11 100
 #303911
 light training boots~
 &WA pair of Light Training Boots&d~
@@ -1617,7 +1625,7 @@ A pair of light training boots lay here on the floor.~
 9 0 65 256
 0 0 0 150 150 150
 1 5000 500
- 50000
+ 100
 A
 1 1
 A
@@ -1626,6 +1634,8 @@ A
 4 1
 A
 3 1
+A
+11 100
 #303912
 light training bracers~
 &WA Light Training Bracer&d~
@@ -1634,7 +1644,7 @@ A light training bracer lays here on the floor.~
 9 0 4097 256
 0 0 0 150 150 150
 1 5000 500
- 50000
+ 100
 A
 1 1
 A
@@ -1643,6 +1653,8 @@ A
 4 1
 A
 3 1
+A
+11 100
 #303913
 light training anklets~
 &WA Light Training Anklet&d~
@@ -1651,7 +1663,7 @@ A light training anklet lays here on the floor.~
 9 0 2097153 256
 0 0 0 150 150 150
 1 5000 500
- 50000
+ 100
 A
 1 1
 A
@@ -1660,6 +1672,8 @@ A
 4 1
 A
 3 1
+A
+11 100
 #303919
 hypertech advancement unit~
 Hyper-Tech Advancement Unit~
@@ -40442,15 +40456,6 @@ M 1 303933 1 304354
 M 1 303933 1 304356
 M 1 303933 1 304360
 M 1 303933 1 304362
-M 1 303937 1 304370
-G 1 303913 1
-G 1 303908 1
-G 1 303912 1
-G 1 303907 1
-G 1 303910 1
-G 1 303906 1
-G 1 303911 1
-G 1 303909 1
 M 1 303933 1 304365
 M 1 303933 1 304369
 M 1 303926 1 304481
@@ -40862,9 +40867,16 @@ E 1 303919 1 5
 M 1 306033 1 306034
 E 1 303919 1 5
 O 1 10 1 306034
-P 0 620 1 0
 M 1 306032 1 306033
 E 1 303919 1 5
+M 1 303937 1 304370
+G 1 303913 1
+G 1 303908 1
+G 1 303912 1
+G 1 303907 1
+G 1 303910 1
+G 1 303911 1
+G 1 303909 1
 S
 
 

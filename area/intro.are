@@ -63,6 +63,11 @@ A better android training partner is prepared to fight you.
 0 0 0 0 0
 0 0 0 0 1 1 0
 0 0 0 0 0 0 0 0
+> death_prog 100~
+mpecho &YThe android explodes into rattling chunks but pulls itself quickly together.&D
+mpmload 102
+~
+|
 #103
 advanced android~
 An advanced android~
@@ -77,6 +82,11 @@ An advanced android training partner is prepared to fight you.
 0 0 0 0 0
 0 0 0 0 1 1 0
 0 0 0 0 0 0 0 0
+> death_prog 100~
+mpecho &YThe android explodes into rattling chunks but pulls itself quickly together.&D
+mpmload 103
+~
+|
 #104
 hyper android~
 A hyper android~
@@ -91,6 +101,11 @@ A hyper android training partner is prepared to fight you.
 0 0 0 0 0
 0 0 0 0 1 1 0
 0 0 0 0 0 0 0 0
+> death_prog 100~
+mpecho &YThe android explodes into rattling chunks but pulls itself quickly together.&D
+mpmload 104
+~
+|
 #105
 supreme android~
 A supreme android~
@@ -105,6 +120,11 @@ A supreme android training partner is prepared to fight you.
 0 0 0 0 0
 0 0 0 0 1 1 0
 0 0 0 0 0 0 0 0
+> death_prog 100~
+mpecho &YThe android explodes into rattling chunks but pulls itself quickly together.&D
+mpmload 105
+~
+|
 #106
 ultimate android~
 An ultimate android~
@@ -119,6 +139,11 @@ An ultimate android training partner is prepared to fight you.
 0 0 0 0 0
 0 0 0 0 1 1 0
 0 0 0 0 0 0 0 0
+> death_prog 100~
+mpecho &YThe android explodes into rattling chunks but pulls itself quickly together.&D
+mpmload 106
+~
+|
 #107
 newbie master~
 The Newbie Master~
@@ -152,6 +177,20 @@ mpecho &YA basic android training partner explodes into rattling chunks but pull
 mpmload 108
 ~
 |
+#109
+intro seller~
+The Intro Shopkeeper~
+The Intro Shopkeeper stands here peddling his wares.
+~
+~
+67108867 0 0 C
+1 0 100 1d20+0 2d5+0
+-1 1
+112 112 1
+500 10 10 10 0
+0 0 0 0 0
+0 0 0 0 1 1 0
+0 0 0 0 0 0 0 0
 #199
 last mob~
 a newly created last mob~
@@ -198,8 +237,19 @@ You are entering the world of DragonBall: North Star.  Within lie many
 adventures and battles that you must endure.  Hopefully your time here will
 be entertaining!  We'll begin with a tutoral program for you so that you
 may learn how to play this MUD.  Please continue north by typing "north". 
+
+&RIMPORTANT ANNOUNCEMENT: &YAfter migrating to another server we ran into some
+password decryption problems on the new architecture, resulting in passwords
+no longer properly functioning for existing pfiles. Unfortunately, this means
+we had to perform a pwipe. We've used this opportunity to dramatically change
+up game balance, reducing powerelvels across the board for a more "show-like"
+feel. We're now also no longer in a "fully operational" state, and have moved
+into a public testing phase.
+
+Your Superbest Buddy,
+-- Zerhyn&D
 ~
-0 4 0
+0 536870916 0
 D0
 ~
 ~
@@ -214,7 +264,7 @@ northeast, southwest, and southeast.  All of these directions can be
 abbreviated like this: n, s, w, e, nw, ne, sw, se.  That is all for this
 lesson. Now type "up" to continue with the tutorial.
 ~
-0 4 0
+0 536870916 0
 D2
 ~
 ~
@@ -237,7 +287,7 @@ use the "OOC" channel.  OOC stands for Out of Charecter.
 
 &YNew players are restricted to the 'newbie' channel for a short while.&d
 ~
-0 4 0
+0 536870916 0
 D4
 ~
 ~
@@ -257,7 +307,7 @@ would like to practice fighting go to the "east".  To the west are the
 healing tanks where you can quickly gain back your strength, as well a
 chamber to increase your stats. 
 ~
-0 4 0
+0 536870916 0
 D1
 ~
 ~
@@ -282,7 +332,7 @@ help you learn how to fight.  Just type "kill android" to begin battle.  If
 this android becomes too easy, more await you in the training chambers
 above.  If you require skill training, a master awaits you to the east. 
 ~
-0 4 0
+0 536870916 0
 D1
 ~
 ~
@@ -295,6 +345,10 @@ D4
 ~
 ~
 0 -1 111
+D5
+~
+~
+0 -1 117
 S
 #105
 Break Room - The Healing Tanks~
@@ -360,7 +414,7 @@ botting, multiplaying, or language, but the Administration does ask that
 you remain respectful to players and staff at all times.  Harassment of any
 kind will not be tolerated.  To continue to the game, please say "I agree".
 ~
-0 4 0
+0 536870916 0
 D5
 ~
 ~
@@ -394,7 +448,7 @@ Android Upgrade Chamber~
 Androids, lacking the ability to train in gravity, must use upgrade
 chambers such as the one here to increase their statistics. 
 ~
-0 4 0
+0 536870916 0
 D2
 ~
 ~
@@ -408,10 +462,9 @@ S
 #111
 Combat Chamber Level 1~
 This chamber will provide you with a more advanced challenge than the
-one below.  To begin combat with an android partner, say '&Cbegin&g'. To
-gauge its strength beforehand, say '&Cinfo&g'. 
+one below.  To gauge the android's strength, say '&Cinfo&g'.&D 
 ~
-0 0 0
+0 536870912 0
 D1
 ~
 ~
@@ -444,10 +497,9 @@ S
 #112
 Combat Chamber Level 2~
 This chamber will provide you with a more advanced challenge than the
-one below.  To begin combat with an android partner, say '&Cbegin&g'. To
-gauge its strength beforehand, say '&Cinfo&g'. 
+one below.  To gauge the android's strength, say '&Cinfo&g'.&D 
 ~
-0 0 0
+0 536870912 0
 D1
 ~
 ~
@@ -480,10 +532,9 @@ S
 #113
 Combat Chamber Level 3~
 This chamber will provide you with a more advanced challenge than the
-one below.  To begin combat with an android partner, say '&Cbegin&g'. To
-gauge its strength beforehand, say '&Cinfo&g'. 
+one below.  To gauge the android's strength, say '&Cinfo&g'.&D 
 ~
-0 0 0
+0 536870912 0
 D1
 ~
 ~
@@ -516,10 +567,9 @@ S
 #114
 Combat Chamber Level 4~
 This chamber will provide you with a more advanced challenge than the
-one below.  To begin combat with an android partner, say '&Cbegin&g'. To
-gauge its strength beforehand, say '&Cinfo&g'. 
+one below.  To gauge the android's strength, say '&Cinfo&g'.&D 
 ~
-0 0 0
+0 536870912 0
 D1
 ~
 ~
@@ -552,10 +602,9 @@ S
 #115
 Combat Chamber Level 5~
 This chamber will provide you with a more advanced challenge than the
-one below.  To begin combat with an android partner, say '&Cbegin&g'. To
-gauge its strength beforehand, say '&Cinfo&g'. 
+one below.  To gauge the android's strength, say '&Cinfo&g'.&D 
 ~
-0 0 0
+0 536870912 0
 D1
 ~
 ~
@@ -589,19 +638,65 @@ abilities, type 'alist'.  To see a list of your generic skills, type
 'slist'. Once you're powerful enough to learn an ability, type 'practice
 <skillname>' to be taught the basics. 
 ~
-0 0 0
+0 536870912 0
 D3
 ~
 ~
 0 -1 104
 S
+#117
+Lesson 3a - Fighting~
+Here you will practice actual combat.  The android here is programmed to
+help you learn how to fight.  Just type "kill android" to begin battle.  If
+this android becomes too easy, more await you in the training chambers
+above.
+~
+0 536870912 0
+D1
+~
+~
+0 -1 119
+D3
+~
+~
+0 -1 118
+D4
+~
+~
+0 -1 104
+S
+#118
+Lesson 3a - Fighting~
+Here you will practice actual combat.  The android here is programmed to
+help you learn how to fight.  Just type "kill android" to begin battle.  If
+this android becomes too easy, more await you in the training chambers
+above.
+~
+0 536870912 0
+D1
+~
+~
+0 -1 117
+S
+#119
+Lesson 3a - Fighting~
+Here you will practice actual combat.  The android here is programmed to
+help you learn how to fight.  Just type "kill android" to begin battle.  If
+this android becomes too easy, more await you in the training chambers
+above.
+~
+0 536870912 0
+D3
+~
+~
+0 -1 117
+S
 #121
 Combat Chamber Level 1-2~
 This chamber will provide you with a more advanced challenge than the
-one below.  To begin combat with an android partner, say '&Cbegin&g'. To
-gauge its strength beforehand, say '&Cinfo&g'.&D
+one below.  To gauge the android's strength, say '&Cinfo&g'.&D 
 ~
-0 0 0
+0 536870912 0
 D3
 ~
 ~
@@ -626,10 +721,9 @@ S
 #122
 Combat Chamber Level 2-2~
 This chamber will provide you with a more advanced challenge than the
-one below.  To begin combat with an android partner, say '&Cbegin&g'. To
-gauge its strength beforehand, say '&Cinfo&g'.&D
+one below.  To gauge the android's strength, say '&Cinfo&g'.&D 
 ~
-0 0 0
+0 536870912 0
 D3
 ~
 ~
@@ -660,10 +754,9 @@ S
 #123
 Combat Chamber Level 3-2~
 This chamber will provide you with a more advanced challenge than the
-one below.  To begin combat with an android partner, say '&Cbegin&g'. To
-gauge its strength beforehand, say '&Cinfo&g'.&D
+one below.  To gauge the android's strength, say '&Cinfo&g'.&D 
 ~
-0 0 0
+0 536870912 0
 D3
 ~
 ~
@@ -692,10 +785,9 @@ S
 #124
 Combat Chamber Level 4-2~
 This chamber will provide you with a more advanced challenge than the
-one below.  To begin combat with an android partner, say '&Cbegin&g'. To
-gauge its strength beforehand, say '&Cinfo&g'.&D
+one below.  To gauge the android's strength, say '&Cinfo&g'.&D 
 ~
-0 0 0
+0 536870912 0
 D3
 ~
 ~
@@ -724,10 +816,9 @@ S
 #125
 Combat Chamber Level 5-2~
 This chamber will provide you with a more advanced challenge than the
-one below.  To begin combat with an android partner, say '&Cbegin&g'. To
-gauge its strength beforehand, say '&Cinfo&g'.&D
+one below.  To gauge the android's strength, say '&Cinfo&g'.&D 
 ~
-0 0 0
+0 536870912 0
 D3
 ~
 ~
@@ -761,10 +852,32 @@ S
 M 1 101 1 109
 M 1 107 1 116
 M 1 108 1 104
+M 1 109 1 103
+G 1 303913 1
+G 1 303908 1
+G 1 303912 1
+G 1 303907 1
+G 1 303910 1
+G 1 303911 1
+G 1 303909 1
+M 1 108 1 119
+M 1 108 1 117
+M 1 108 1 118
+M 1 102 1 121
+M 1 102 1 111
+M 1 103 1 122
+M 1 103 1 112
+M 1 104 1 123
+M 1 104 1 113
+M 1 105 1 124
+M 1 105 1 114
+M 1 106 1 125
+M 1 106 1 115
 S
 
 
 #SHOPS
+ 109    0  0  0  0  0   100  90         0 23    ; The Intro Shopkeeper
 0
 
 

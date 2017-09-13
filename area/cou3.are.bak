@@ -1039,6 +1039,8 @@ and departing.
 &Y
 Visitors to The Center of the Universe may now seek training in the ESF
 Facility to the North.  We recommended your powerlevel be above 50, 000.
+
+&YTo return to the Newbie Intro, say '&Cback to intro&Y'.&D
 ~
 0 8 0
 D0
@@ -1058,13 +1060,9 @@ D5
 ~
 0 0 6111
 > speech_prog 'back to intro'~
-if pl($n) > 150000
-mpecho Your power is a bit excessive for that place, don't you think?
-else
 mpecho Very well. Off with you!
 wait 1
 mptransfer $n 100
-endif
 ~
 |
 S
@@ -1096,18 +1094,6 @@ D0
 ~
 ~
 0 -1 6005
-D1
-~
-~
-0 -1 6007
-D3
-~
-~
-0 -1 6009
-D4
-~
-~
-0 -1 6070
 S
 #6007
 Waiting Room~
@@ -1119,10 +1105,6 @@ D2
 ~
 ~
 0 -1 6008
-D3
-~
-~
-0 -1 6006
 S
 #6008
 Docking Bay 2~
@@ -1142,10 +1124,6 @@ You are standing in a very well kept room.  There are many comfortable
 looking chairs every where.  The landing bay is further towards the south.
 ~
 0 8 0
-D1
-~
-~
-0 -1 6006
 D2
 ~
 ~
@@ -1520,15 +1498,12 @@ D3
 0 0 6011
 S
 #6032
-Halfway Down the Corridor~
+A Pile of Rubble~
 As you get closer to the battle arena the sounds of fighting become much
-louder.
+louder. The entrance to the arena appears to have been completely
+demolished.  From the looks of it, it happened a very, very long time ago. 
 ~
 0 2097160 0
-D1
-~
-~
-0 0 6500
 D3
 ~
 ~
@@ -2199,10 +2174,6 @@ ice and snow theme, so there are fake blocks of ice sitting around and
 oversized fake snowflakes hanging from the ceiling.
 ~
 0 2097160 0
-D5
-~
-~
-0 -1 6006
 S
 #6111
 Lower Section~
@@ -2553,15 +2524,11 @@ D3
 0 0 6111
 S
 #6132
-Halfway Down the Corridor~
-As you get closer to the battle arena the sounds of fighting become much
-louder.
+A Pile of Rubble~
+The entrance to the arena appears to have been completely demolished. 
+From the looks of it, it happened a very, very long time ago. 
 ~
 0 2097160 0
-D1
-~
-~
-0 0 6510
 D3
 ~
 ~
@@ -3174,10 +3141,6 @@ D1
 ~
 ~
 7 -1 6501
-D3
-~
-~
-0 -1 6032
 S
 #6501
 Battle Arena Level 1 Entrance~
@@ -3320,10 +3283,6 @@ D1
 ~
 ~
 7 -1 6511
-D3
-~
-~
-0 -1 6132
 S
 #6511
 Battle Arena Level 1 Entrance~

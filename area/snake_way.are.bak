@@ -77,20 +77,6 @@ seem to happy to be here, dealing with this, but it is his job afterall.
 0 0 0 0 0
 71 71 0 0 1 1 0
 0 0 0 0 0 0 0 0
-> speech_prog p snake way~
-if pl($n) > 1000000
-mpecho &W$I says, "So, you want to try your luck on Snake Way?  Give King Kai my best regards."&D
-mpechoaround $n &YThe double doors to the north swing open, letting $n pass through before slamming shut and locking behind $m.&D
-mpechoat $n &YThe double doors to the north swing open, letting you pass through before slamming shut and locking behind you.&D
-unlock north
-open north
-mpforce $n n
-close n
-lock n
-else
-mpecho &W$I chuckles and says, "You're not quite strong enough for that yet, little one."&D
-endif
-~
 > greet_prog 100~
 mpsleep 10
 mea $n &CKing Yemma says 'Hmm, $n, if you wish to return to your former life, just say "Send me home", and you will be returned.'&d
