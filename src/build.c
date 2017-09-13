@@ -1563,6 +1563,7 @@ do_mset(CHAR_DATA * ch, char *argument)
 		victim->worth = value;
 		if (IS_NPC(victim) && xIS_SET(victim->act, ACT_PROTOTYPE))
 			victim->pIndexData->worth = value;
+		return;
 	}
 	if (!str_cmp(arg2, "class")) {
 		if (!can_mmodify(ch, victim))
