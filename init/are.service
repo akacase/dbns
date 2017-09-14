@@ -1,0 +1,7 @@
+[Unit]
+Description=backup .are files
+
+[Service]
+Type=oneshot
+ExecStart=/home/case/db/scripts/backup.sh
+User=case
