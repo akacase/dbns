@@ -1330,11 +1330,6 @@ do_say(CHAR_DATA * ch, char *argument)
 	actflags = ch->act;
 	if (IS_NPC(ch))
 		xREMOVE_BIT(ch->act, ACT_SECRETIVE);
-	if (xIS_SET((ch)->affected_by, AFF_OOZARU) ||
-	    xIS_SET((ch)->affected_by, AFF_GOLDEN_OOZARU)) {
-		interpret(ch, "roar");
-		return;
-	}
 	sysdata.outBytesFlag = LOGBOUTCHANNEL;
 	for (vch = ch->in_room->first_person; vch; vch = vch->next_in_room) {
 		char *sbuf = argument;
