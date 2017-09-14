@@ -26,6 +26,7 @@ The Trainer is here doing pushups.
 ~
 ~
 67109443 0 0 C
+1
 1 0 100 1d20+1 2d5+1
 -1 10000
 112 112 1
@@ -40,6 +41,7 @@ The Master is here practicing his skills here.
 ~
 ~
 67109955 0 0 C
+1
 1 0 100 1d20+1 2d5+1
 -1 10000
 112 112 1
@@ -54,6 +56,7 @@ A sales clerk is standing beside you ready to help you find what you need.
 ~
 ~
 67108931 0 0 C
+1
 1 0 100 1d20+1 2d5+1
 -1 5000
 112 112 2
@@ -71,6 +74,7 @@ A Newbie Fighter is trembling in fear.
 ~
 This guy looks like he will be an easy battle.~
 16777281&8 0&0&64 0 C
+1
 1 0 100 1d20+0 2d5+0
 -1 100
 112 112 1
@@ -85,6 +89,7 @@ A Fighter is here looking nervous.
 ~
 ~
 16777281&8 0&0&64 0 C
+1
 1 0 100 1d20+1 2d5+1
 -1 1000
 112 112 1
@@ -99,6 +104,7 @@ A Better Fighter is here, attempting to look strong.
 ~
 ~
 16777281&8 0&0&64 -50 C
+1
 1 0 90 1d20+1 2d5+1
 -1 10000
 112 112 1
@@ -118,6 +124,7 @@ An Advanced Fighter is here jumping around practicing his moves.
 ~
 ~
 16777281&8 0&0&64 -100 C
+1
 1 0 90 1d20+1 2d5+1
 -1 100000
 112 112 1
@@ -135,6 +142,7 @@ A Supreme Fighter is powering up getting ready to fight.
 ~
 ~
 16777281&8 0&0&64 -150 C
+1
 1 0 85 1d20+1 2d5+2
 -1 1000000
 112 112 1
@@ -153,6 +161,7 @@ challenger.
 ~
 ~
 16777281&8 0&0&64 -200 C
+1
 1 0 80 1d20+2 2d5+2
 -1 10000000
 112 112 2
@@ -170,6 +179,7 @@ The Master Fighter is ready to put your skills to the test.
 ~
 ~
 16777281&8 0&0&64 -250 C
+1
 1 0 70 1d20+3 2d5+2
 -1 100000000
 112 112 1
@@ -188,6 +198,7 @@ A Newbie Fighter is trembling in fear.
 ~
 This guy looks like he will be an easy battle.~
 16777281&8 0&0&64 0 C
+1
 1 0 100 1d20+0 2d5+0
 -1 100
 112 112 1
@@ -202,6 +213,7 @@ A Fighter is here looking nervous.
 ~
 ~
 16777281&8 0&0&64 0 C
+1
 1 0 100 1d20+1 2d5+1
 -1 1000
 112 112 1
@@ -216,6 +228,7 @@ A Better Fighter is here, attempting to look strong.
 ~
 ~
 16777281&8 0&0&64 50 C
+1
 1 0 90 1d20+1 2d5+1
 -1 10000
 112 112 1
@@ -233,6 +246,7 @@ An Advanced Fighter is here jumping around practicing his moves.
 ~
 ~
 16777281&8 0&0&64 100 C
+1
 1 0 90 1d20+1 2d5+1
 -1 100000
 112 112 1
@@ -250,6 +264,7 @@ A Supreme Fighter is powering up getting ready to fight.
 ~
 ~
 16777281&8 0&0&64 150 C
+1
 1 0 85 1d20+1 2d5+2
 -1 1000000
 112 112 1
@@ -268,6 +283,7 @@ challenger.
 ~
 ~
 16777281&8 0&0&64 200 C
+1
 1 0 80 1d20+2 2d5+2
 -1 10000000
 112 112 2
@@ -285,6 +301,7 @@ The Master Fighter is ready to put your skills to the test.
 ~
 ~
 16777281&8 0&0&64 250 C
+1
 1 0 70 1d20+3 2d5+2
 -1 100000000
 112 112 1
@@ -303,6 +320,7 @@ An Apprentice Medic is wandering around looking for the wounded
 ~
 ~
 83886273 0 0 C
+1
 1 0 100 1d20+0 2d5+0
 -1 100
 112 112 2
@@ -330,6 +348,7 @@ A Security Guard is keeping order.
 ~
 He looks pretty strong.~
 65 0 0 C
+1
 1 0 75 1d20+0 2d5+1
 -1 10000
 112 112 1
@@ -357,6 +376,7 @@ The armor salesman is looking over his inventory.
 ~
 ~
 67 0 0 C
+1
 1 0 100 1d20+0 2d5+0
 -1 100
 112 112 1
@@ -374,6 +394,7 @@ The store owner is waiting politely to help you.
 ~
 ~
 67 0 0 C
+1
 1 0 100 1d20+0 2d5+0
 -1 100
 112 112 1
@@ -391,6 +412,7 @@ A Scientist is here working at his computer terminal.
 ~
 ~
 67108931 0 0 C
+1
 1 0 100 0d0+0 1d5+0
 -1 1
 112 112 0
@@ -408,6 +430,7 @@ The Bounty Officer is leaning against the wall smoking.
 ~
 ~
 16777283 0 0 C
+1
 1 0 100 0d0+0 1d5+0
 -1 50000000
 112 112 1
@@ -422,6 +445,7 @@ A shady looking man is here eyeing you.
 ~
 ~
 16777281 0 0 C
+1
 1 0 100 1d20+1 2d5+0
 -1 2500000
 112 112 0
@@ -449,6 +473,7 @@ The super duper strong Saiyan fighter stands firm, with arms crossed.
 ~
 ~
 16777283 524288&64 0 C
+1
 1 0 50 1d20+5 2d5+5
 -1 25000000000
 112 112 1
@@ -470,6 +495,7 @@ The super duper strong Saiyan fighter stands firm, with arms crossed.
 ~
 ~
 16777283 0&64 0 C
+1
 1 0 50 1d20+5 2d5+5
 -1 25000000000
 112 112 1
@@ -491,6 +517,7 @@ A nondescript Icer stands here, ready to transport you to and from Iceria.
 ~
 ~
 67108867 0 0 C
+1
 1 0 100 1d20+0 2d5+0
 -1 1
 112 112 0
@@ -519,6 +546,7 @@ The Trix Rabbit is running around here.
 ~
 ~
 67108865 0 0 C
+1
 1 0 100 1d20+0 2d5+0
 -1 1
 112 112 0
@@ -541,6 +569,7 @@ A huge powerful man stands guard here.
 ~
 ~
 67108867 0 0 C
+1
 1 0 0 1d20+0 2d5+0
 -1 1
 112 112 1
@@ -559,6 +588,7 @@ The armor salesman is looking over his inventory.
 ~
 ~
 67&16 0 0 C
+1
 1 0 100 1d20+0 2d5+0
 -1 100
 112 112 1
@@ -576,6 +606,7 @@ The armor salesman is looking over his inventory.
 ~
 ~
 67&16 0 0 C
+1
 1 0 100 1d20+0 2d5+0
 -1 1000
 112 112 1
@@ -593,6 +624,7 @@ The armor salesman is looking over his inventory.
 ~
 ~
 67&16 0 0 C
+1
 1 0 100 1d20+0 2d5+0
 -1 10000
 112 112 1
@@ -610,6 +642,7 @@ The armor salesman is looking over his inventory.
 ~
 ~
 67&16 0 0 C
+1
 1 0 100 1d20+0 2d5+0
 -1 100000
 112 112 1
@@ -627,6 +660,7 @@ The armor salesman is looking over his inventory.
 ~
 ~
 67&16 0 0 C
+1
 1 0 100 1d20+0 2d5+0
 -1 1000000
 112 112 1
@@ -644,6 +678,7 @@ The armor salesman is looking over his inventory.
 ~
 ~
 67&16 0 0 C
+1
 1 0 100 1d20+0 2d5+0
 -1 10000000
 112 112 1
@@ -661,6 +696,7 @@ The armor salesman is looking over his inventory.
 ~
 ~
 67&16 0 0 C
+1
 1 0 100 1d20+0 2d5+0
 -1 100000000
 112 112 1
@@ -678,6 +714,7 @@ The armor salesman is looking over his inventory.
 ~
 ~
 67&16 0 0 C
+1
 1 0 100 1d20+0 2d5+0
 -1 100
 112 112 1
@@ -695,6 +732,7 @@ The armor salesman is looking over his inventory.
 ~
 ~
 67&16 0 0 C
+1
 1 0 100 1d20+0 2d5+0
 -1 1000
 112 112 1
@@ -712,6 +750,7 @@ The armor salesman is looking over his inventory.
 ~
 ~
 67&16 0 0 C
+1
 1 0 100 1d20+0 2d5+0
 -1 10000
 112 112 1
@@ -729,6 +768,7 @@ The armor salesman is looking over his inventory.
 ~
 ~
 67&16 0 0 C
+1
 1 0 100 1d20+0 2d5+0
 -1 100000
 112 112 1
@@ -746,6 +786,7 @@ The armor salesman is looking over his inventory.
 ~
 ~
 67&16 0 0 C
+1
 1 0 100 1d20+0 2d5+0
 -1 1000000
 112 112 1
@@ -763,6 +804,7 @@ The armor salesman is looking over his inventory.
 ~
 ~
 67&16 0 0 C
+1
 1 0 100 1d20+0 2d5+0
 -1 10000000
 112 112 1
@@ -780,6 +822,7 @@ The armor salesman is looking over his inventory.
 ~
 ~
 67&16 0 0 C
+1
 1 0 100 1d20+0 2d5+0
 -1 100000000
 112 112 1
@@ -797,6 +840,7 @@ Some god abandoned a newly created first last here.
 ~
 ~
 1 0 0 C
+1
 1 0 100 1d20+0 2d5+0
 -1 1
 112 112 0

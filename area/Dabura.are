@@ -24,6 +24,7 @@ Some god abandoned a newly created first mob here.
 ~
 ~
 1 0 0 C
+1
 1 0 100 1d20+0 2d5+0
 -1 1
 112 112 0
@@ -38,6 +39,7 @@ The Sanitarium Secretary sits at her desk, typing loudly.
 ~
 ~
 67 0 0 C
+1
 1 0 100 1d20+0 2d5+0
 -1 1
 112 112 2
@@ -63,6 +65,7 @@ A police officer lolls about, looking for violators of the law.
 ~
 ~
 67 0 100 C
+1
 1 0 100 1d20+0 2d5+0
 -1 80000
 112 112 1
@@ -77,6 +80,7 @@ An orderly stands alert, watching for misbehaving patients.
 ~
 ~
 3 0 0 C
+1
 1 0 100 1d20+0 2d5+0
 -1 50000
 112 112 1
@@ -91,6 +95,7 @@ A mentally unstable patient looks around, not aware of their surroundings.
 ~
 ~
 3 0 0 C
+1
 1 0 100 1d20+0 2d5+0
 -1 1000
 112 112 1
@@ -120,6 +125,7 @@ A severely unstable patient stares forward, veins throbbing on his forehead.
 ~
 ~
 3 0 0 C
+1
 1 0 100 1d20+0 2d5+0
 -1 7500
 112 112 1
@@ -152,6 +158,7 @@ A patient sits here in the corner, rocking back and forth.
 ~
 ~
 35 0 0 C
+1
 1 0 100 1d20+0 2d5+0
 -1 30000
 112 112 1
@@ -170,6 +177,7 @@ The janitor sits on a bench, lifting massive weights.
 ~
 ~
 3 0 0 C
+1
 1 0 100 1d20+0 2d5+0
 -1 75000
 112 112 1
@@ -221,6 +229,7 @@ The director of the Satan City Sanitarium sits at her desk, eyes closed.
 ~
 ~
 3 0 0 C
+1
 1 0 100 1d20+0 2d5+0
 -1 100000
 112 112 2
@@ -241,6 +250,7 @@ The cook stands over a range, watching a pot of boiling water.
 ~
 ~
 3 0 250 C
+1
 1 0 100 1d20+0 2d5+0
 -1 10000
 112 112 2
@@ -260,6 +270,7 @@ Some god abandoned a newly created last mob here.
 ~
 ~
 1 0 0 C
+1
 1 0 100 1d20+0 2d5+0
 -1 1
 112 112 0

@@ -28,6 +28,7 @@ A mobile is here.
 ~
 ~
 1073741825 0 0 C
+1
 1 50 0 0d0+0 0d0+0
 -1 4000
 112 112 0
@@ -42,6 +43,7 @@ A Small Frog sits here croaking wildly
 ~
 ~
 67 0 0 C
+1
 1 0 100 0d0+0 1d5+0
 -1 1
 112 112 0
@@ -56,6 +58,7 @@ A Fat Toad Sits here, snoozing
 ~
 ~
 67 0 0 C
+1
 1 0 100 0d0+0 1d5+0
 -1 1
 112 112 0
@@ -70,6 +73,7 @@ A small hairy man sits here.
 ~
 ~
 1 0 0 C
+1
 1 0 100 0d0+0 1d5+0
 -1 1
 112 112 0
@@ -84,6 +88,7 @@ The Eternal Dragon 'Shenron'~
 ~
 ~
 67108867 524288 0 C
+1
 1 0 100 1d20+0 2d5+0
 -1 1000000000000000000
 112 112 0
@@ -98,6 +103,7 @@ The anti-bug bug is crawling around here.
 ~
 ~
 67 2 0 C
+1
 1 0 100 0d0+0 1d5+0
 -1 1
 112 112 0
@@ -112,6 +118,7 @@ Sigma~
 ~
 ~
 16777219 524416&0&544 -1000 C
+1
 1 0 100 1d20+0 2d5+0
 -1 50000000000000
 112 112 1
@@ -174,6 +181,7 @@ Some god abandoned a newly created last mob here.
 ~
 ~
 1073741825 0 0 C
+1
 1 0 100 1d20+0 2d5+0
 -1 1
 112 112 0

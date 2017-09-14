@@ -1561,7 +1561,7 @@ do_mset(CHAR_DATA * ch, char *argument)
 			return;
 		/* worth is long long int, so shouldn't be an issue on range */
 		victim->worth = value;
-		if (IS_NPC(victim) && xIS_SET(victim->act, ACT_PROTOTYPE))
+		if (IS_NPC(victim))
 			victim->pIndexData->worth = value;
 		return;
 	}
@@ -5256,7 +5256,7 @@ fold_area(AREA_DATA * tarea, char *filename, bool install)
 		fprintf(fpout, "%s %d %c\n", print_bitvector(&pMobIndex->affected_by),
 		    pMobIndex->alignment,
 		    complexmob ? 'C' : 'S');
-
+		fprintf(fpout, "%lld\n", pMobIndex->worth);
 		fprintf(fpout, "%d %d %d ", pMobIndex->level,
 		    pMobIndex->mobthac0,
 		    pMobIndex->ac);
@@ -5394,22 +5394,14 @@ fold_area(AREA_DATA * tarea, char *filename, bool install)
 			}
 			break;
 		}
-		//if (val4 || val5)
 			fprintf(fpout, "%d %d %d %d %d %d\n", val0,
 			    val1,
 			    val2,
 			    val3,
 			    val4,
 			    val5);
-		/*
-	          else
-	          fprintf(fpout, "%d %d %d %d\n",	val0,
-	          val1,
-	          val2,
-	          val3);
-	        */
-		/* backwards compatibility for AEX's -- Dracones */
 
+		/* backwards compatibility for AEX's -- Dracones */
 		if (AREA_VERSION_WRITE > 200) {
 			fprintf(fpout, "%d %d %d\n %.0Lf\n", pObjIndex->weight,
 			    pObjIndex->cost,
@@ -5767,7 +5759,6 @@ do_loadarea(CHAR_DATA * ch, char *argument)
 	if (tarea->first_reset) {
 		tmp = tarea->nplayer;
 		tarea->nplayer = 0;
-		send_to_char("Resetting area...\n\r", ch);
 		reset_area(tarea);
 		tarea->nplayer = tmp;
 	}

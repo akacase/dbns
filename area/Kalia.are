@@ -28,6 +28,7 @@ A short little green man loiters around here, up to no good.
 ~
 ~
 18874373 622594 -1000 C
+1
 1 0 100 1d20+0 2d5+0
 0 250
 112 112 0
@@ -46,6 +47,7 @@ Fight it at your own risk.
 Mobzor hates everyone.
 ~
 16777219 3670400&1459648 1000 C
+1
 51 0 60 500d50+50 6d15+10
 0 750000000000
 112 112 2
@@ -68,6 +70,7 @@ Captain Ginyu flies about here, wondering where his squad ran off to.
 ~
 ~
 16908353 524416&2048 -1000 C
+1
 1 0 35 4d30+50 2d12+0
 1000 50000000000
 112 112 1
@@ -99,6 +102,7 @@ The grocier sits here behind a long counter.
 ~
 ~
 83886147 0 0 C
+1
 1 0 100 1d20+0 2d5+0
 0 1
 112 112 0
@@ -117,6 +121,7 @@ A salesman of the tourist shop is selling his wares here.
 ~
 ~
 83886147 0 0 C
+1
 1 0 100 1d20+0 2d5+0
 0 1
 112 112 0
@@ -136,6 +141,7 @@ A tall green man stands here, vigilant of who passes to and from the village.
 ~
 ~
 16777283 0 1000 C
+1
 1 0 75 1d20+0 2d5+0
 0 1000000
 112 112 0
@@ -160,6 +166,7 @@ A scarecrow is planted into the ground here, keeping birds away from the vegetab
 ~
 ~
 83886083 0 0 C
+1
 1 0 80 1d20+0 2d5+0
 0 500
 112 112 0
@@ -184,6 +191,7 @@ A namekian worker is here, turning the soil.
 ~
 ~
 16908289 0 1000 C
+1
 1 0 100 1d20+0 2d5+0
 0 5000
 112 112 0
@@ -198,6 +206,7 @@ A tired Namekian worker rests here, leaning against its pitchfork.
 ~
 ~
 16908353 0 750 C
+1
 1 0 100 1d20+0 2d5+0
 0 25000
 112 112 0
@@ -216,6 +225,7 @@ An exhausted namek sits on the bed here during its work break.
 ~
 ~
 16777283 0 500 C
+1
 1 0 100 1d20+0 2d5+0
 0 1250
 112 112 0
@@ -230,6 +240,7 @@ The Village Elder is here lounging on a couch, teaching new pupils information f
 ~
 ~
 83887683&1 0 1000 C
+1
 1 0 100 1d20+0 2d5+0
 0 100000
 112 112 0
@@ -250,6 +261,7 @@ A young Namek splashes around in the shallow coast waters.
 ~
 ~
 16908353 0 1000 C
+1
 1 0 100 1d20+0 2d5+0
 0 50
 112 112 0
@@ -264,6 +276,7 @@ The towering Recoome is making his way through the grasses, leaving destruction 
 ~
 ~
 131137 0 -1000 C
+1
 1 0 45 4d20+50 4d5+15
 0 15000000000
 112 112 1
@@ -291,6 +304,7 @@ A large crab is here, guarding its eggs from intruders.
 ~
 ~
 131171 0 -250 C
+1
 1 0 65 1d20+0 4d5+5
 0 5000000
 112 112 0
@@ -318,6 +332,7 @@ A school of large fish is swimming around here.
 ~
 ~
 131139 0 50 C
+1
 1 0 90 1d20+0 2d5+0
 0 25000
 112 112 0
@@ -337,6 +352,7 @@ Guldo is running around here, tormenting the island's inhabitants.
 ~
 ~
 131137 0 -1000 C
+1
 1 0 85 1d20+0 2d5+0
 25000 10000000000
 112 112 1
@@ -359,6 +375,7 @@ A Ginyu Force wannabe is here striking poses in an attempt to impress captain Gi
 ~
 ~
 16908353 0 -750 C
+1
 1 0 75 1d20+0 2d5+0
 0 25000000
 112 112 1
@@ -377,6 +394,7 @@ A henchman hired by Captain Ginyu is securing the area here.
 ~
 ~
 131169 524288 -100 C
+1
 1 0 70 1d20+5 2d5+2
 0 50000000
 112 112 0
@@ -401,6 +419,7 @@ Jeice is high in the air here, hurling a red ball of energy down upon an inhabit
 ~
 ~
 196705 524288 -1000 C
+1
 1 0 60 6d40+50 2d6+4
 0 25000000000
 112 112 1
@@ -423,6 +442,7 @@ Burter hovers just about the ground, watching Jeice.
 ~
 ~
 131169 524288 -1000 C
+1
 1 0 60 2d20+50 3d8+2
 0 20000000000
 112 112 1
@@ -447,6 +467,7 @@ A large Namek elder seems to be asleep in a giant throne here, coughing faintly.
 ~
 ~
 84017219 0 0 C
+1
 1 0 100 1d20+0 2d5+0
 0 1
 112 112 0
@@ -461,6 +482,7 @@ A thick inflatable training dummy is hovering here, awaiting use from an aspirin
 ~
 ~
 150995011 0 0 C
+1
 1 0 0 1d20+0 2d5+0
 0 999999999999999
 112 112 0
@@ -475,6 +497,7 @@ Frieza hovers a few inches above the ground here, his arms crossed over his ches
 ~
 ~
 131139 524416&16384 -1000 C
+1
 1 0 30 5d30+50 2d12+2
 0 150000000000
 112 112 1
@@ -496,6 +519,7 @@ Yamma's little helper is floating around here.
 ~
 ~
 1 32768 0 C
+1
 1 0 100 1d20+0 2d5+0
 0 1
 112 112 0
@@ -514,6 +538,7 @@ Some god abandoned a newly created item guy here.
 ~
 ~
 1 0 0 C
+1
 1 0 100 1d20+0 2d5+0
 0 1
 112 112 0
@@ -535,6 +560,7 @@ Some god abandoned a newly created mob guy here.
 ~
 ~
 1 0 0 C
+1
 1 0 100 1d20+0 2d5+0
 0 1
 112 112 0

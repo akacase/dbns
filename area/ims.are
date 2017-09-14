@@ -24,6 +24,7 @@ Some god abandoned a newly created first mob here.
 ~
 ~
 1 0 0 C
+1
 1 0 100 0d0+0 1d5+0
 -1 1
 112 112 0
@@ -38,6 +39,7 @@ Ultra Perfect Cell is powered up and ready to destroy the universe.
 ~
 ~
 16777217 524416&16777280 -1000 C
+1
 1 0 80 1d20+2 2d5+1
 -1 250000000000
 112 112 1
@@ -105,6 +107,7 @@ A Cell Junior is here making funny faces.
 ~
 ~
 3 0 0 C
+1
 1 0 100 1d20+0 2d5+0
 -1 25000000000
 112 112 0
@@ -132,6 +135,7 @@ Majin Buu is wandering around looking for something to eat.
 ~
 ~
 3 524416&8192 -1000 C
+1
 1 0 25 1d20+0 2d5+0
 -1 3500000000000
 112 112 0
@@ -210,6 +214,7 @@ Your Mother is standing here.
 ~
 ~
 285474821 0 0 C
+1
 1 0 5 1d20+0 2d5+0
 -1 1000000000
 112 112 2
@@ -324,6 +329,7 @@ Prototype X is here causing havoc.
 ~
 ~
 65 128 -1000 C
+1
 1 0 100 1d20+0 2d5+0
 -1 4000000000000
 112 112 0
@@ -352,6 +358,7 @@ Vegeta stands here, powered up into full Super Saiya-jin 4.
 ~
 ~
 1 128&960 0 C
+1
 1 0 100 1d20+0 2d5+0
 -1 10000000000000
 112 112 1
@@ -432,6 +439,7 @@ The Vegeta Purger - Do Not Purge This Room
 ~
 ~
 1 0 0 C
+1
 1 0 100 1d20+0 2d5+0
 -1 1
 112 112 0
@@ -450,6 +458,7 @@ Meta King Cold is standing tall, arms folded across his chest.
 ~
 ~
 1 128&2048 0 C
+1
 1 0 100 1d20+0 2d5+0
 -1 50000000000
 112 112 1
@@ -503,6 +512,7 @@ Brolli, the Super Saiya-jin of Legend stands here.
 ~
 ~
 83886081 128&-1073741760 0 C
+1
 1 0 100 1d20+0 2d5+0
 -1 10000000000000000
 112 112 1
@@ -527,6 +537,7 @@ An empty namek body is standing here.
 ~
 ~
 16777219 0 0 C
+1
 1 0 100 1d20+0 2d4+0
 -1 1
 112 112 0
@@ -541,6 +552,7 @@ Puff the Fractal Dragon is here, contemplating a higher reality.
 ~
 ~
 1073741827 4203176 1000 C
+1
 50 20 -30 5d10+30550 4d10+200
 -1 1000
 112 112 2
@@ -555,6 +567,7 @@ an invading bioandroid~
 ~
 ~
 1 128&8388608 0 C
+1
 10 0 100 1d20+0 2d5+0
 -1 1000000000000
 112 112 0
@@ -607,6 +620,7 @@ an invading bioandroid~
 ~
 ~
 1 128&8388608 0 C
+1
 1 0 100 1d20+0 2d5+0
 -1 5000000000000
 112 112 0
@@ -659,6 +673,7 @@ an invading bioandroid~
 ~
 ~
 1 128&8388608 0 C
+1
 1 0 100 1d20+0 2d5+0
 -1 10000000000000
 112 112 0
@@ -711,6 +726,7 @@ an invading bioandroid~
 ~
 ~
 1 128&8388608 0 C
+1
 1 0 100 1d20+0 2d5+0
 -1 25000000000000
 112 112 0
@@ -763,6 +779,7 @@ the Invasion Commander~
 ~
 ~
 1 128&16777216 0 C
+1
 1 0 100 1d20+0 2d5+0
 -1 50000000000000
 112 112 0
@@ -815,6 +832,7 @@ The anti-bug bug is crawling around here.
 ~
 ~
 67 2 0 C
+1
 1 0 100 0d0+0 1d5+0
 -1 1
 112 112 0
@@ -829,6 +847,7 @@ Last mob
 ~
 ~
 1140850691 0 0 C
+1
 1 0 100 0d0+0 1d5+0
 -1 1
 112 112 0

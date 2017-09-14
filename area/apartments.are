@@ -26,6 +26,7 @@ Some god abandoned a newly created first mob here.
 ~
 ~
 1 0 0 C
+1
 1 0 100 1d20+0 2d5+0
 0 1
 112 112 0
@@ -40,6 +41,7 @@ Koji's personal helper is here, waiting to serve his master.
 ~
 ~
 1 0 0 C
+1
 1 0 100 1d20+0 2d5+0
 0 100
 112 112 0
@@ -61,6 +63,7 @@ An Elevator Operator is here, waiting to serve the MegaPlex clients.
 ~
 ~
 67240003 0 0 C
+1
 1 0 100 1d20+0 2d5+0
 0 1
 112 112 0
@@ -123,6 +126,7 @@ The MegaPlex Receptionist sits here, behind a large oak desk.
 ~
 ~
 67240003 0 0 C
+1
 1 0 100 1d20+0 2d5+0
 0 15
 112 112 0
@@ -148,6 +152,7 @@ The Key Invoker
 ~
 ~
 1 0 0 C
+1
 1 0 100 1d20+0 2d5+0
 0 1
 112 112 0
@@ -556,6 +561,7 @@ A Super Duper Mega Fighter of Death is here! Blarg!
 ~
 ~
 1 524288&148992&1 0 C
+1
 1 0 100 1d20+0 2d5+0
 0 15000000000000000
 112 112 0
@@ -570,6 +576,7 @@ An empty namek body is standing here.
 ~
 ~
 16777219 0 0 C
+1
 1 0 100 1d20+0 2d4+0
 0 1
 112 112 0
@@ -584,6 +591,7 @@ Some god abandoned a newly created last mob here.
 ~
 ~
 1 0 0 C
+1
 1 0 100 1d20+0 2d5+0
 0 1
 112 112 0

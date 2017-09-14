@@ -26,6 +26,7 @@ Some god abandoned a newly created first mob here.
 ~
 ~
 1 0 0 C
+1
 1 0 100 1d20+0 2d5+0
 0 1
 112 112 0
@@ -43,6 +44,7 @@ looking curved stinger on the end of its tail. The color of its
 carapace is mostly red, with some mottled brown color mixed in.
 ~
 1 0 0 C
+1
 1 0 100 1d20+0 2d5+0
 0 200000
 112 112 1
@@ -60,6 +62,7 @@ constantly scuttling about at a high speed, and the stinger on the tail
 looks like it could delier some damage with ease.
 ~
 65 0 0 C
+1
 1 0 100 1d20+0 2d5+0
 0 75000
 112 112 0
@@ -78,6 +81,7 @@ desert floor. The main body of this scorpion is reddish with some green
 stripes, while the legs and tail are solid blood-red.
 ~
 65 0 0 C
+1
 1 0 100 1d20+0 2d5+0
 0 750000
 112 112 0
@@ -97,6 +101,7 @@ is various shades of brown, save for the claws and tail, which are
 reddish, possibly with the stain of human blood.
 ~
 35 0 0 C
+1
 1 0 100 1d20+0 2d5+0
 0 2000000
 112 112 0
@@ -118,6 +123,7 @@ against the ground, but it does nothing to budge the massive bulk of the
 scorpion from the ground.
 ~
 1 0 0 C
+1
 1 0 100 1d20+0 2d5+0
 0 7500000
 112 112 2
@@ -135,6 +141,7 @@ shirt, the attire of a group of bandits known to operate in the desert.
 He doesn't look too sure of himself, as he appears to be a weakling. 
 ~
 69 0 0 C
+1
 1 0 100 1d20+0 2d5+0
 250 2500000
 112 112 1
@@ -154,6 +161,7 @@ and mumbling under his breath violently. His face is cherry red, all this
 anger and stress must be very bad for his heart...
 ~
 69 0 0 C
+1
 1 0 100 1d20+0 2d5+0
 125 10000000
 112 112 1
@@ -175,6 +183,7 @@ scars only half and inch long, and everything in between. He's quite
 old for a bandit, possibly in his 50's. 
 ~
 7 0 0 C
+1
 1 0 100 1d20+0 2d5+0
 550 15000000
 112 112 1
@@ -195,6 +204,7 @@ clear that this man is more adept at combat than a typical overweight
 person.
 ~
 7 0 0 C
+1
 1 0 100 1d20+0 2d5+0
 0 7500000
 112 112 1
@@ -214,6 +224,7 @@ Regardless of him being short, he does look like he could hold his own in
 a fight.
 ~
 69 0 0 C
+1
 1 0 100 1d20+0 2d5+0
 100 3500000
 112 112 1
@@ -233,6 +244,7 @@ thick and muscular either. His long hair is light brown, and reaches to
 below his shoulders.
 ~
 69 0 0 C
+1
 1 0 100 1d20+0 2d5+0
 375 5000000
 112 112 1
@@ -252,6 +264,7 @@ must have been strong enough to assume leadership of a pretty large group
 of bandits. He's well muscled, but lithe and fast looking.
 ~
 3 0 -500 C
+1
 1 0 100 1d20+0 2d5+0
 0 25000000
 112 112 1
@@ -283,6 +296,7 @@ cheerful looking fellow, with creases at the edge of his mouth from years
 of wide smiles. What he's doing in a camp of vicious bandits is not clear.
 ~
 67108867 0 0 C
+1
 1 0 100 1d20+0 2d5+0
 0 1000000
 112 112 1
@@ -311,6 +325,7 @@ Its eyes are red and blootshot, and its pants expel a greyish green mist
 into the air. 
 ~
 65 0 0 C
+1
 1 0 100 1d20+0 2d5+0
 0 30000000
 112 112 0
@@ -343,6 +358,7 @@ tentacles, a head or body is visible under the shifting sands, but
 not long enough to get a good view.
 ~
 3 0 0 C
+1
 1 0 65 1d20+0 2d5+0
 0 40000000
 112 112 0
@@ -366,6 +382,7 @@ is asleep against a large rock. His guard duties abandoned, he occasionally
 emits a sputtering snore and shifts position.
 ~
 1 0 0 C
+1
 1 0 100 1d20+0 2d5+0
 0 1500000
 112 112 1
@@ -391,6 +408,7 @@ shirt and khaki pants, and a white hat with a floppy brim. Anyone would
 be tempted to sit next to him and enjoy the shade.
 ~
 67108867 0 0 C
+1
 1 0 100 1d20+0 2d5+0
 0 1
 112 112 1
@@ -405,6 +423,7 @@ A door locker is here to lock the door after someone goes in
 ~
 ~
 69206019 4194306 0 C
+1
 1 0 100 1d20+0 2d5+0
 0 1
 112 112 0
@@ -423,6 +442,7 @@ snout that has some very sharp teeth in it. The gila monster is low to
 the ground for its length, only about a foot and a half tall.
 ~
 3 0 0 C
+1
 1 0 100 1d20+0 2d5+0
 0 50000000
 112 112 0
@@ -453,6 +473,7 @@ and the torso is too high. No detail is visible because of the swirling
 thick sand, but it definately does not look like a natural creature.
 ~
 3 0 0 C
+1
 1 0 100 1d20+0 2d5+0
 750 75000000
 112 112 0
@@ -489,6 +510,7 @@ meaty and it looks capable of smashing through a weak person's body.  It
 moves about slowly, and seemingly with great confidence. 
 ~
 65 0 0 C
+1
 1 0 100 1d20+0 2d5+0
 0 20000000
 112 112 0
@@ -507,6 +529,7 @@ vultures look. The beak of this animal is curved and mean looking. It's
 designed to tear apart dead flesh, but it could tear up living flesh, too...
 ~
 65 0 0 C
+1
 1 0 100 1d20+0 2d5+0
 0 1000000
 112 112 0
@@ -525,6 +548,7 @@ are adorned with many rings of different colors, and he's got nice,
 fancy clothes that have semi-precious stones woven into them. 
 ~
 67108867 0 0 C
+1
 1 0 100 1d20+0 2d5+0
 0 1
 112 112 1
@@ -568,6 +592,7 @@ A dropper mob (unknown force)
 ~
 ~
 67108865 2 0 C
+1
 1 0 100 1d20+0 2d5+0
 0 1
 112 112 0
@@ -595,6 +620,7 @@ features are almost visible on the smoky face, but not quite defined
 enough to make a definite face.
 ~
 3 0 -350 C
+1
 1 0 75 1d20+0 3d5+0
 0 2500000000000
 112 112 0
@@ -624,6 +650,7 @@ slowly walking around, and its footsteps shake the floor. Its eyeless
 visage stares into your eyes, and it seems to pierce into your soul.
 ~
 3 0 0 C
+1
 1 0 50 1d20+0 2d5+0
 0 1000000000000
 112 112 0
@@ -665,6 +692,7 @@ places. The robe he's wearing is very long. It covers his legs and all
 of his body. The robe itself looks smooth and soft, but thick. 
 ~
 3 0 1000 C
+1
 1 0 65 1d20+0 2d5+0
 5000 20000000000000
 112 112 1
@@ -716,6 +744,7 @@ like ice, it's clear and a little bluish, and it casts miniature rainbows
 around the room, like a prism.
 ~
 1 0 0 C
+1
 1 0 100 1d20+0 2d5+0
 0 1
 112 112 0
@@ -738,6 +767,7 @@ A stunted creature made of transparent crystal shakily stands here.
 ~
 ~
 3 0 0 C
+1
 1 0 80 1d20+0 2d5+0
 0 2500000000000
 112 112 0
@@ -763,6 +793,7 @@ A huge crystal behemoth angrily thrashes around the room.
 ~
 ~
 1 0 0 C
+1
 1 0 80 1d20+0 2d5+0
 0 8500000000000
 112 112 0
@@ -803,6 +834,7 @@ still shiny. Around the equator of the sphere are eight very sharp spikes
 with what look like razor sharp edges.
 ~
 65 524288 0 C
+1
 1 0 75 1d20+0 2d5+0
 1750 750000000000
 112 112 0
@@ -846,6 +878,7 @@ moving around as if it were a person, and if you look at it the right
 way, it almost looks like it has the shape of a man.
 ~
 3 0 -750 C
+1
 1 0 70 1d20+0 2d5+0
 0 3000000000000
 112 112 0
@@ -872,6 +905,7 @@ A computer voice
 ~
 ~
 69206017 2 0 C
+1
 30 0 100 1d20+0 2d5+0
 1000000 99999999999999991611392
 112 112 0
@@ -903,6 +937,7 @@ A hole checker
 ~
 ~
 69206017 2 0 C
+1
 1 0 100 1d20+0 2d5+0
 1000000 10000000000000000904921088
 112 112 0
@@ -938,6 +973,7 @@ The shades dropped is here to put the shades in the box
 ~
 ~
 1 2 0 S
+1
 1 0 100 1d20+0 2d5+0
 0 1
 112 112 0
@@ -955,6 +991,7 @@ Some god abandoned a newly created last mob here.
 ~
 ~
 1 0 0 C
+1
 1 0 100 1d20+0 2d5+0
 0 1
 112 112 0

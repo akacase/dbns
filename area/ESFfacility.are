@@ -26,6 +26,7 @@ Some god abandoned a newly created first mob here.
 ~
 ~
 1 0 0 C
+1
 1 0 100 1d20+0 2d5+0
 -1 1
 112 112 0
@@ -40,6 +41,7 @@ A security officer stands here by the terminal, rifling through unattended bags.
 ~
 ~
 67108867 0 0 C
+1
 1 0 100 1d20+0 2d5+0
 -1 1
 112 112 1
@@ -58,6 +60,7 @@ A spherical information terminal sits here at the center of the intersection.
 ~
 ~
 67108867 0 0 C
+1
 1 0 100 1d20+0 2d5+0
 -1 1
 112 112 0
@@ -95,6 +98,7 @@ A miniature spherical android hovers above the computer terminal here.
 ~
 ~
 67108867 0 0 C
+1
 1 0 100 1d20+0 2d5+0
 -1 1
 112 112 0
@@ -158,6 +162,7 @@ A weak ESF trainee is exercising here, preparing for another round of combat.
 ~
 ~
 3 0 0 C
+500
 1 0 100 1d20+0 2d5+0
 -1 50000
 112 112 1
@@ -180,6 +185,7 @@ An ESF trainee is pumping iron here.
 ~
 ~
 3 0 0 C
+1
 1 0 100 1d20+0 2d5+0
 -1 150000
 112 112 1
@@ -202,6 +208,7 @@ A stronger ESF trainee shadowboxes here in the arena.
 ~
 ~
 3 0 0 C
+1
 1 0 100 1d20+0 2d5+0
 -1 500000
 112 112 1
@@ -224,6 +231,7 @@ An impressive ESF trainee sits here in deep meditation.
 ~
 ~
 3 0 0 C
+1
 1 0 100 1d20+0 2d5+0
 -1 1500000
 112 112 1
@@ -246,6 +254,7 @@ An advanced ESF combatant stands here, ever at the ready for a new challenger.
 ~
 ~
 3 0 0 C
+1
 1 0 100 1d20+0 2d5+0
 -1 5000000
 112 112 1
@@ -268,6 +277,7 @@ An elite member of the ESF stands here with arms crossed, a promising grin sprea
 ~
 ~
 16777219 0 0 C
+1
 1 0 100 1d20+0 2d5+0
 -1 15000000
 112 112 1
@@ -290,6 +300,7 @@ A burly maintenance worker is here making repairs to the facility.
 ~
 ~
 1 0 0 C
+1
 1 0 100 1d20+0 2d5+0
 -1 3000000
 112 112 1
@@ -308,6 +319,7 @@ A maintenance droid meanders about here, fumbling through piles of trash and spa
 ~
 ~
 3 0 0 C
+1
 1 0 100 1d20+0 2d5+0
 -1 20000000
 112 112 0
@@ -329,6 +341,7 @@ An abomination of twisted metal and fused wiring lurches slowly forward through 
 ~
 ~
 3 0 0 C
+1
 1 0 100 1d20+0 2d5+0
 -1 30000000
 112 112 0
@@ -351,6 +364,7 @@ An even greater mechanical abomination lurks here, its body fused with the surro
 ~
 ~
 3 0 0 C
+1
 1 0 100 1d20+0 2d5+0
 -1 75000000
 112 112 0
@@ -372,6 +386,7 @@ A platform sits here beside a large terminal.
 ~
 ~
 67108867 0 0 C
+1
 1 0 100 1d20+0 2d5+0
 -1 1
 112 112 0
@@ -395,6 +410,7 @@ A platform sits here beside a large terminal.
 ~
 ~
 67108867 0 0 C
+1
 1 0 100 1d20+0 2d5+0
 -1 1
 112 112 0
@@ -418,6 +434,7 @@ Particles of light have solidified here to create a translucent, holographic war
 ~
 ~
 3 0 0 C
+1
 1 0 100 1d20+0 2d5+0
 -1 50000000
 112 112 0
@@ -440,6 +457,7 @@ A fully solidified hologram stands here with a vaguely human facade.
 ~
 ~
 3 0 0 C
+1
 1 0 100 1d20+0 2d5+0
 -1 150000000
 112 112 0
@@ -462,6 +480,7 @@ A fully-formed human hologram stands here, prepared to execute its programming.
 ~
 ~
 3 0 0 C
+1
 1 0 100 1d20+0 2d5+0
 -1 500000000
 112 112 0
@@ -484,6 +503,7 @@ A Namekian Hologram flashes repeatedly in and out of existence here.
 ~
 ~
 3 0 0 C
+1
 1 0 100 1d20+0 2d5+0
 -1 5000000000
 112 112 0
@@ -506,6 +526,7 @@ An Icerian hologram crouches low to the floor here, its prehensile tail snaking 
 ~
 ~
 3 0 0 C
+1
 1 0 100 1d20+0 2d5+0
 -1 50000000000
 112 112 0
@@ -528,6 +549,7 @@ A mighty saiyan hologram stands here, prepared for its final battle.
 ~
 ~
 3 0 0 C
+1
 1 0 100 1d20+0 2d5+0
 -1 500000000000
 112 112 0
@@ -550,6 +572,7 @@ A fiendish hologram stands here, ready to unleash chaos.
 ~
 ~
 3 0 0 C
+1
 1 0 100 1d20+0 2d5+0
 -1 5000000000000
 112 112 0
@@ -572,6 +595,7 @@ A genetically engineered, superhuman warrior grins wickedly at the chance to tes
 ~
 ~
 3 0 0 C
+1
 1 0 100 1d20+0 2d5+0
 -1 25000000000000
 112 112 2
@@ -598,6 +622,7 @@ A superior genetically-enhanced warrior beckons for you to attack.
 ~
 ~
 3 0 0 C
+1
 1 0 100 1d20+0 2d5+0
 -1 100000000000000
 112 112 1
@@ -624,6 +649,7 @@ A supremely powerful genetic warrior struggles to contain his innermost power.
 ~
 ~
 3 0&2097216 0 C
+1
 1 0 100 1d20+0 2d5+0
 -1 500000000000000
 112 112 1
@@ -650,6 +676,7 @@ A warrior of bio-engineering perfection stands before you, prepared to unleash i
 ~
 ~
 3 0&-2147483584&1 0 C
+1
 1 0 100 1d20+0 2d5+0
 -1 1000000000000000
 112 112 1
@@ -672,6 +699,7 @@ The ultimate fusion of flesh and metal soars through the skies here.
 ~
 ~
 3 524288 0 C
+1
 1 0 100 1d20+0 2d5+0
 -1 5000000000000000
 112 112 0
@@ -698,6 +726,7 @@ A turbolift terminal sits here beside the door.
 ~
 ~
 67108867 0 0 C
+1
 1 0 100 1d20+0 2d5+0
 -1 1
 112 112 0
@@ -726,6 +755,7 @@ A couple of lounging visitors sit in a booth here, kicking back and enjoying the
 ~
 ~
 67108867 0 0 C
+1
 1 0 100 1d20+0 2d5+0
 -1 1
 112 112 1
@@ -740,6 +770,7 @@ An officer of the law patrols here, ensuring visitors don't get out of line.
 ~
 ~
 65 0 0 C
+1
 1 0 100 1d20+0 2d5+0
 -1 25000
 112 112 0
@@ -754,6 +785,7 @@ An injured ESF trainee sits here against the wall, using a spare moment to take 
 ~
 ~
 67108867 0 0 C
+1
 1 0 100 1d20+0 2d5+0
 -1 1
 112 112 2
@@ -768,6 +800,7 @@ Some god abandoned a newly created full power ESF elite here.
 ~
 ~
 1 0 0 C
+1
 1 0 100 1d20+0 2d5+0
 -1 1
 112 112 0
@@ -782,6 +815,7 @@ An ESF Peacekeeper wanders the halls, ready to put the hurt on any repeat offend
 ~
 ~
 1 0 0 C
+1
 1 0 100 1d20+0 2d5+0
 -1 100000000
 112 112 1
@@ -800,6 +834,7 @@ The bartender, Bernie, stands here behind the bar with a polished set of glasses
 ~
 ~
 67108867 0 0 C
+1
 1 0 100 1d20+0 2d5+0
 -1 5
 112 112 1
@@ -834,6 +869,7 @@ A chatty patron sits here with his buddies over a cold drink.
 ~
 ~
 67108867 0 0 C
+1
 1 0 100 1d20+0 2d5+0
 -1 1
 112 112 1
@@ -852,6 +888,7 @@ An ESF nurse stands behind the counter here.
 ~
 ~
 67108867 0 0 C
+1
 1 0 100 1d20+0 2d5+0
 -1 1
 112 112 2
@@ -866,6 +903,7 @@ The armorer stands here with a grizzled look on his face.
 ~
 ~
 67108867 0 0 C
+1
 1 0 100 1d20+0 2d5+0
 -1 10
 112 112 1
@@ -884,6 +922,7 @@ A master of the fighting arts stands here, ready to aid you in your training.
 ~
 ~
 -2080373757 0 0 C
+1
 1 0 100 1d20+0 2d5+0
 -1 50000000000
 112 112 1
@@ -898,6 +937,7 @@ A huge, flashing upgrade chamber sits here toward the rear of the room.
 ~
 ~
 67109379 0 0 C
+1
 1 0 100 1d20+0 2d5+0
 -1 1
 112 112 0
@@ -912,6 +952,7 @@ Some god abandoned a newly created immortal guinea pig here.
 ~
 ~
 16777219 0 0 C
+1
 1 0 100 1d20+0 2d5+0
 -1 100000
 112 112 0
@@ -930,6 +971,7 @@ An assistance droid hovers here, awaiting your input.
 ~
 ~
 67108867 0 0 C
+1
 1 0 100 1d20+0 2d5+0
 -1 1
 112 112 0
@@ -964,6 +1006,7 @@ A training assistance droid floats nonchalantly here.
 ~
 ~
 67108867 0 0 C
+1
 1 0 100 1d20+0 2d5+0
 -1 1
 112 112 0
@@ -1000,6 +1043,7 @@ A training assistance droid floats nonchalantly here.
 ~
 ~
 67108867 0 0 C
+1
 1 0 100 1d20+0 2d5+0
 -1 1
 112 112 0
@@ -1036,6 +1080,7 @@ A training assistance droid floats nonchalantly here.
 ~
 ~
 1140850691 0 0 C
+1
 1 0 100 1d20+0 2d5+0
 -1 1
 112 112 0
@@ -1072,6 +1117,7 @@ The HEALOTRON-9000 sits here, menacing all with its dubious appendages.
 ~
 ~
 67108867 0 0 C
+1
 1 0 100 1d20+0 2d5+0
 -1 1
 112 112 0
@@ -1097,6 +1143,7 @@ A training assistance droid floats here expectantly.
 ~
 ~
 67108867 0 0 C
+1
 1 0 100 1d20+0 2d5+0
 -1 1
 112 112 0
@@ -1137,6 +1184,7 @@ Len, the purveyor of ill-gotten goods, stands against the baby grand piano with 
 ~
 ~
 67108867 0 0 C
+1
 1 0 100 1d20+0 2d5+0
 -1 1
 112 112 2
@@ -1167,6 +1215,7 @@ A fighter with almost no power at all stands here, horrified.
 ~
 ~
 3 0 0 C
+1
 1 0 100 1d20+0 2d5+0
 -1 50
 112 112 0
@@ -1181,6 +1230,7 @@ A humming terminal sits here, awaiting your input.
 ~
 ~
 67108867 0 0 C
+1
 1 0 100 1d20+0 2d5+0
 -1 1
 112 112 0
@@ -1200,6 +1250,7 @@ A holographic representation of absolute chaos stands here, effecting the real w
 ~
 ~
 3 0 0 C
+1
 1 0 100 1d20+0 2d5+0
 -1 50000000000000000
 112 112 0
@@ -1218,6 +1269,7 @@ The Greater Aspect of Chaos tears apart the fabric of reality.
 ~
 ~
 3 0 0 C
+1
 1 0 100 1d20+0 2d5+0
 -1 100000000000000000
 112 112 0
@@ -1236,6 +1288,7 @@ The absolute amalgamation of chaos is corrupting the universe.
 ~
 ~
 3 0 0 C
+1
 1 0 100 1d20+0 2d5+0
 -1 200000000000000000
 112 112 0
@@ -1254,6 +1307,7 @@ A custom training partner stands here, pieced together from various parts.
 ~
 ~
 16777219 0 0 C
+1
 1 0 100 1d20+0 2d5+0
 -1 160000000000000000000
 112 112 0
@@ -1277,6 +1331,7 @@ A weaker custom training partner stands here, pieced together from various parts
 ~
 ~
 16777219 0 0 C
+1
 1 0 100 1d20+0 2d5+0
 -1 3200000000000000000
 112 112 0
@@ -1300,6 +1355,7 @@ Some god abandoned a newly created blarg custom ship training partner here.
 ~
 ~
 1073741825 0 0 C
+1
 1 0 100 1d20+0 2d5+0
 -1 1
 112 112 0
@@ -1314,6 +1370,7 @@ A vaguely translucent custom training partner stands here.
 ~
 ~
 16777219 0 0 C
+1
 1 0 100 1d20+0 2d5+0
 -1 4000000000000000000
 112 112 0
@@ -1339,6 +1396,7 @@ When you gaze upon the dude's gnarled features you sense that they have
 committed many a social faux-pas and must be reprimanded.  Physically. 
 ~
 16777219 0 0 C
+1
 1 0 100 1d20+0 2d5+0
 -1 600000000000000000
 112 112 1
@@ -1369,6 +1427,7 @@ When you gaze upon the dude's mega-gnarled visage you sense that they
 have committed many a social faux-pas and must be reprimanded.  Physically.
 ~
 16777219 0 0 C
+1
 1 0 100 1d20+0 2d5+0
 -1 1600000000000000000
 112 112 1
@@ -1397,6 +1456,7 @@ The invis parlor closer.
 ~
 ~
 1149239299 0 0 C
+1
 50 0 100 1d20+0 2d5+0
 -1 1
 112 112 0
@@ -1415,6 +1475,7 @@ Some god abandoned a newly created shodan monk here.
 ~
 ~
 1073741825 0 0 C
+1
 1 0 100 1d20+0 2d5+0
 -1 1
 112 112 0
@@ -1429,6 +1490,7 @@ Some god abandoned a newly created nidan monk here.
 ~
 ~
 1073741825 0 0 C
+1
 1 0 100 1d20+0 2d5+0
 -1 1
 112 112 0
@@ -1443,6 +1505,7 @@ Some god abandoned a newly created sandan monk here.
 ~
 ~
 1073741825 0 0 C
+1
 1 0 100 1d20+0 2d5+0
 -1 1
 112 112 0
@@ -1457,6 +1520,7 @@ Some god abandoned a newly created last mob here.
 ~
 ~
 1 0 0 C
+1
 1 0 100 1d20+0 2d5+0
 -1 1
 112 112 0

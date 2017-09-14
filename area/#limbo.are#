@@ -164,6 +164,7 @@ goes throughout the world now always wandering, never tarrying.
 ~
 5 4203176 600 C
 1
+1
 50 0 -200 100d50+3500 4d10+14
 -1 0
 112 112 1
@@ -213,6 +214,7 @@ its tasks.
 ~
 1 0 0 C
 1
+1
 1 0 0 10d0+2 0d0+0
 -1 0
 112 112 0
@@ -232,6 +234,7 @@ with something.
 ~
 1073741825 0 0 C
 1
+1
 1 0 0 0d0+0 0d0+0
 -1 0
 112 112 0
@@ -250,6 +253,7 @@ suddenly find yourself overcome with an unknown power.
 ~
 1073741825 2129920 0 C
 1
+1
 1 0 0 0d0+0 0d0+0
 -1 0
 112 112 0
@@ -267,6 +271,7 @@ eyes that stare at your jugular vein.  This little black bat has the
 intentions of drinking your blood until there is none left in your body.
 ~
 1073741825 524288 0 C
+1
 1
 1 0 0 0d0+0 0d0+0
 -1 0
@@ -287,6 +292,7 @@ know what has happened, it comes flying towards you.
 ~
 1073741825 524288 0 C
 1
+1
 1 0 0 0d0+0 0d0+0
 -1 0
 112 112 0
@@ -304,6 +310,7 @@ across your path, bringing you several years of bad luck.  Its tail moves
 slowly to tell you that it is laughing at your misfortune.
 ~
 1073741825 8 0 C
+1
 1
 1 0 0 0d0+0 0d0+0
 -1 0
@@ -324,6 +331,7 @@ are at peace as you listen to this lovable creature.
 ~
 1073741825 524288 0 C
 1
+1
 1 0 0 0d0+0 0d0+0
 -1 0
 112 112 0
@@ -343,6 +351,7 @@ quickly swims past you.
 ~
 1073741825 -2147483648 0 C
 1
+1
 1 0 0 0d0+0 0d0+0
 -1 0
 112 112 0
@@ -358,6 +367,7 @@ The daunting and powerful avatar of %s occupies the ground here.
 The avatar of %s appears calm and cool, ready for whatever might come.
 ~
 16777219 0 0 C
+1
 1
 1 0 0 5d5+25 5d5+26
 -1 0
@@ -387,6 +397,7 @@ The executive of the Chateau stands here, looking very pompous.
 ~
 ~
 83888195 188 0 C
+1
 1
 50 0 -300 1d1+30000 50d100+50
 -1 0
@@ -440,6 +451,7 @@ A Chateau waiter stands here, looking very preoccupied.
 ~
 83888195 2097852 0 C
 1
+1
 50 0 -300 1d1+30000 50d100+50
 -1 0
 112 112 1
@@ -484,6 +496,7 @@ An Albatross lurkes in the darkness, here.
 ~
 3 4194472 0 C
 1
+1
 51 0 0 500d0+30000 100d0+1000
 -1 0
 112 112 0
@@ -507,6 +520,7 @@ The ungodly strong, fused warrior Vegeto floats here smirking
 ~
 ~
 3 524416&64 0 C
+1
 1
 1 0 100 1d20+0 2d5+0
 -1 25000000000000
@@ -588,6 +602,7 @@ that he appears too formidable to be a minor minion.
 ~
 35 40 -1000 C
 1
+1
 25 0 -4 1d1+385 4d5+15
 -1 105000
 112 112 1
@@ -610,6 +625,7 @@ An owl with large wide eyes rests on his perch, hooting madly.
 ~
 1 0 0 C
 1
+1
 1 0 0 10d10+30000 40d40+1000
 -1 0
 112 112 0
@@ -624,6 +640,7 @@ Some god abandoned a newly created final mob here.
 ~
 ~
 1073741825 0 0 C
+1
 1
 1 0 0 0d0+0 0d0+0
 -1 0

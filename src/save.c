@@ -315,7 +315,7 @@ fwrite_char (CHAR_DATA * ch, FILE * fp)
      fprintf (fp, "Room           %d\n",
        (ch->in_room == get_room_index (ROOM_VNUM_LIMBO)
 	 && ch->was_in_room) ? ch->was_in_room->vnum : ch->in_room->vnum);
-     fprintf (fp, "Worth           %d\n", ch->worth);
+     fprintf (fp, "Worth           %lld\n", ch->worth);
      fprintf (fp, "HpManaMove     %d %d %d %d %d %d\n",
        ch->hit, ch->max_hit, ch->mana, ch->max_mana, ch->move,
        ch->max_move);
@@ -2698,6 +2698,7 @@ fwrite_mobile (FILE * fp, CHAR_DATA * mob)
 	  fprintf (fp, "Description %s~\n", mob->description);
      fprintf (fp, "Position %d\n", mob->position);
      fprintf (fp, "Flags %s\n", print_bitvector (&mob->act));
+     fprintf (fp, "Worth %lld\n", mob->pIndexData->worth);
      if (mob->first_carrying)
 	  fwrite_obj (mob, mob->last_carrying, fp, 0, OS_CARRY);
      fprintf (fp, "EndMobile\n");
@@ -2789,6 +2790,9 @@ fread_mobile (FILE * fp)
 	       break;
 	  case 'S':
 	       KEY ("Short", mob->short_descr, fread_string (fp));
+	       break;
+	  case 'W':
+	       KEY ("Worth", mob->worth, fread_number_ll(fp));
 	       break;
 	  }
 	  if (!fMatch) {

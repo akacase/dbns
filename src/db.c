@@ -1255,7 +1255,6 @@ load_mobiles(AREA_DATA * tarea, FILE *fp)
 			} else {
 				pMobIndex = get_mob_index(vnum);
 				sprintf(buf, "Cleaning mobile: %d", vnum);
-				log_string_plus(buf, LOG_BUILD, sysdata.log_level);
 				clean_mob(pMobIndex);
 				oldmob = true;
 			}
@@ -1287,6 +1286,7 @@ load_mobiles(AREA_DATA * tarea, FILE *fp)
 		pMobIndex->rShop = NULL;
 		pMobIndex->alignment = fread_number(fp);
 		letter = fread_letter(fp);
+		pMobIndex->worth = fread_number_ll(fp);
 		pMobIndex->level = fread_number(fp);
 
 		pMobIndex->mobthac0 = fread_number(fp);
@@ -1554,7 +1554,6 @@ load_objects(AREA_DATA * tarea, FILE *fp)
 			} else {
 				pObjIndex = get_obj_index(vnum);
 				sprintf(buf, "Cleaning object: %d", vnum);
-				log_string_plus(buf, LOG_BUILD, sysdata.log_level);
 				clean_obj(pObjIndex);
 				oldobj = true;
 			}
@@ -1755,7 +1754,6 @@ load_resets(AREA_DATA * tarea, FILE *fp)
 		         * Clean out the old resets
 		         */
 			sprintf(buf, "Cleaning resets: %s", tarea->name);
-			log_string_plus(buf, LOG_BUILD, sysdata.log_level);
 			clean_resets(tarea);
 		}
 	}
@@ -2002,7 +2000,6 @@ load_rooms(AREA_DATA * tarea, FILE *fp)
 			} else {
 				pRoomIndex = get_room_index(vnum);
 				sprintf(buf, "Cleaning room: %d", vnum);
-				log_string_plus(buf, LOG_BUILD, sysdata.log_level);
 				clean_room(pRoomIndex);
 				oldroom = true;
 			}
@@ -2716,6 +2713,7 @@ create_mobile(MOB_INDEX_DATA * pMobIndex)
 		mob->max_mana = 99999;
 	}
 
+	mob->worth = pMobIndex->worth;
 	mob->position = pMobIndex->position;
 	mob->defposition = pMobIndex->defposition;
 	mob->barenumdie = pMobIndex->damnodice;
@@ -3126,11 +3124,11 @@ clear_char(CHAR_DATA * ch)
 	ch->position = POS_STANDING;
 	ch->practice = 2;
 	ch->max_prac = 2;
+	ch->worth = 1;
 	ch->train = 4;
 	ch->max_train = 4;
 	ch->hit = 100;
 	ch->max_hit = 100;
-	ch->worth = 100;
 	ch->mana = 100;
 	ch->max_mana = 100;
 	ch->max_energy = 1;
@@ -4614,13 +4612,11 @@ log_string_plus(const char *str, sh_int log_type, sh_int level)
 		offset = 4;
 	else
 		offset = 0;
-	/* send to syslog */
 	switch (log_type) {
 	default:
 		to_channel(str + offset, CHANNEL_LOG, "Log", level);
 		break;
 	case LOG_BUILD:
-		to_channel(str + offset, CHANNEL_BUILD, "Build", level);
 		break;
 	case LOG_COMM:
 		to_channel(str + offset, CHANNEL_COMM, "Comm", level);
@@ -4637,7 +4633,6 @@ log_string_plus(const char *str, sh_int log_type, sh_int level)
 /*
  * wizlist builder!						-Thoric
  */
-
 void
 towizfile(const char *line)
 {

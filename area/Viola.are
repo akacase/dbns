@@ -28,6 +28,7 @@ Some god abandoned a newly created first mob here.
 ~
 ~
 1 0 0 C
+1
 1 0 100 1d20+0 2d5+0
 0 1
 112 112 0
@@ -46,6 +47,7 @@ flowing from his chin.  The top of his head is clear, showing through to a
 human brain.
 ~
 67108867 0 0 C
+1
 1 0 100 1d20+0 2d5+0
 0 50000000000
 112 112 1
@@ -121,6 +123,7 @@ metal, which has mostly rusted.  It's covered with cobwebs and dust, and
 sports a deadly set of three clawed hands, on long arms.
 ~
 3 0 0 C
+1
 1 0 100 1d20+0 2d5+0
 0 3000000000
 112 112 0
@@ -165,6 +168,7 @@ eyes in the front.  Both legs end with tread feet, its arms long, dull
 blades below the elbows.
 ~
 3 0 0 C
+1
 1 0 100 1d20+0 2d5+0
 0 20000000000
 112 112 0
@@ -208,6 +212,7 @@ rubber, which is covered in dust and cobwebs.  Her hands are simple metal
 pincers, her head just a security camera stuck on a thin, metal neck.
 ~
 3 0 0 C
+1
 1 0 100 1d20+0 2d5+0
 0 30000000000
 112 112 2
@@ -253,6 +258,7 @@ open lips. The rest of his body is sculpted as it were wearing metal
 clothing, his fingers all one piece, like a metal mitten.
 ~
 3 0 0 C
+1
 1 0 100 1d20+0 2d5+0
 0 40000000000
 112 112 1
@@ -290,6 +296,7 @@ A metal head rests here on a short pillar
 ~
 ~
 67108867 0 0 C
+1
 1 0 100 1d20+0 2d5+0
 0 1
 112 112 1
@@ -370,6 +377,7 @@ to have been unfinished, a laser cannon of some sort attached to it instead
 of a lower arm or hand.
 ~
 1 524288 -1000 C
+1
 1 0 100 1d20+0 2d5+0
 0 10000000000
 112 112 1
@@ -426,6 +434,7 @@ the window.  There's also a warning, stating that there is no way to
 teleport back to this room.
 ~
 67108867 0 0 C
+1
 1 0 100 1d20+0 2d5+0
 0 1
 112 112 0
@@ -468,6 +477,7 @@ many pieces are missing, showing through to the inner workings of the
 android.
 ~
 3 0 0 C
+1
 1 0 100 1d20+0 2d5+0
 0 7500000000
 112 112 1
@@ -507,6 +517,7 @@ weaponry.  Blades, claws, laser and gun barrels. This is simply a walking
 weapon, built for nothing but destruction.
 ~
 3 0 0 C
+1
 1 0 100 1d20+0 2d5+0
 0 25000000000
 112 112 0
@@ -562,6 +573,7 @@ wears as managed to survive all her time down here, and she is completely
 free of dirt or cobwebs.
 ~
 67108867 0 0 C
+1
 1 0 100 1d20+0 2d5+0
 0 50000000000
 112 112 2
@@ -633,6 +645,7 @@ human brain.  To either side sprout long, black pigtails. The android and
 her dress both seem in very good condition.
 ~
 67108867 0 0 C
+1
 1 0 100 1d20+0 2d5+0
 0 1
 112 112 2
@@ -698,6 +711,7 @@ is a reminder of his firey attitude, as this robot seems to have quite a
 temper.
 ~
 67108867 0 0 C
+1
 1 0 100 1d20+0 2d5+0
 0 30000000000
 112 112 1
@@ -746,6 +760,7 @@ looking rather relaxed as he sits in his chair and re-reads the same books
 over and over...
 ~
 67108867 0 0 C
+1
 1 0 100 1d20+0 2d5+0
 0 40000000000
 112 112 1
@@ -791,6 +806,7 @@ A human head with a mass of spikey hair rests on a pillar here
 ~
 ~
 67108867 0 0 C
+1
 1 0 100 1d20+0 2d5+0
 0 1
 112 112 1
@@ -871,6 +887,7 @@ quite a few places you can see inside of his body.  He consantly sneers,
 his hat and clothing looking very poorly made.
 ~
 3 0 0 C
+1
 1 0 100 1d20+0 2d5+0
 0 60000000000
 112 112 1
@@ -919,6 +936,7 @@ projection system has been installed on this android, causing realistic
 aura affects to surround his body.
 ~
 3 524288&-1073741760 0 C
+1
 1 0 100 1d20+0 2d5+0
 0 90000000000
 112 112 1
@@ -982,6 +1000,7 @@ the window.  There's also a warning, stating that there is no way to
 teleport back to this room.
 ~
 1 0 0 C
+1
 1 0 100 1d20+0 2d5+0
 0 1
 112 112 0
@@ -1024,6 +1043,7 @@ bank of small monitors wraps around a pole sticking out of the top of the
 robot, with one main one facing toward its front.
 ~
 67108867 0 0 C
+1
 1 0 100 1d20+0 2d5+0
 0 1
 112 112 0
@@ -1101,6 +1121,7 @@ A rusty skeletal robot is standing in the center of the dais and waving its tube
 ~
 ~
 3 0 0 C
+1
 1 0 35 1d20+5 2d8+4
 0 75000000000
 112 112 0
@@ -1138,6 +1159,7 @@ An extremely damaged and very old android body is sprawled out at the end of the
 ~
 ~
 3 0 0 C
+1
 1 0 100 1d20+0 2d5+0
 0 1
 112 112 0
@@ -1163,6 +1185,7 @@ A dull metal box with an open receptacle and a speaker grill is sitting on the g
 ~
 ~
 67108867 0 0 C
+1
 1 0 100 1d20+0 2d5+0
 0 1
 112 112 0
@@ -1213,6 +1236,7 @@ A quite damaged android is standing here, with a reddish humming power pack in i
 ~
 ~
 3 0 0 C
+1
 1 0 100 1d20+0 3d7+3
 0 110000000000
 112 112 0
@@ -1254,6 +1278,7 @@ A giant spherical robot with tiny hands and feet is clumsily wandering around.
 ~
 ~
 1 0 0 C
+1
 1 0 100 1d20+0 3d6+5
 0 90000000000
 112 112 0
@@ -1284,6 +1309,7 @@ Some god abandoned a newly created last mob here.
 ~
 ~
 1 0 0 C
+1
 1 0 100 1d20+0 2d5+0
 0 1
 112 112 0

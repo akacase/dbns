@@ -2645,7 +2645,7 @@ struct char_data {
 	sh_int 	wait;
 	sh_int 	hit;
 	sh_int 	max_hit;
-	int     worth;
+	long long int     worth;
 	int 	mana;
 	int 	max_mana;
 	sh_int 	max_energy;
@@ -5176,7 +5176,7 @@ DECLARE_SPELL_FUN(spell_sensu_bean);
  *   so players can go ahead and telnet to all the other descriptors.
  * Then we close it whenever we need to open a file (e.g. a save file).
  */
-#define PREFIX_DIR      "/opt/dbns/db"	/* prefix where the information is
+#define PREFIX_DIR      ".."	/* prefix where the information is
 					 * stored and installed to */
 #define PLAYER_DIR	PREFIX_DIR "/player/"	/* Player files         */
 #define BACKUP_DIR	PREFIX_DIR "/player/backup/"	/* Backup Player files  */

@@ -33,6 +33,7 @@
 #include <unistd.h>
 #include <locale.h>
 #include "mud.h"
+#include "utf8.h"
 #include "sha256.h"
 
 /* socket and TCP/IP stuff */
@@ -170,7 +171,6 @@ main(int argc, char **argv)
 {
 	struct timeval now_time;
 	char 	hostn[128];
-	const char *locale = NULL;
 	const char *errstr = NULL;
 	int 	ch;
 
@@ -191,7 +191,7 @@ main(int argc, char **argv)
 
 	}
 
-	locale = setlocale(LC_ALL, "en_US.UTF-8");
+	setlocale(LC_ALL, "en_US.UTF-8");
 	DONT_UPPER = false;
 	num_descriptors = 0;
 	first_descriptor = NULL;
@@ -210,7 +210,7 @@ main(int argc, char **argv)
 	gettimeofday(&now_time, NULL);
 	current_time = (time_t) now_time.tv_sec;
 	boot_time = time(0);
-	strcpy(str_boot_time, ctime(&current_time));
+	utf8cpy(str_boot_time, ctime(&current_time));
 
 	/* init boot time. */
 	set_boot_time = &set_boot_time_struct;
@@ -247,7 +247,7 @@ main(int argc, char **argv)
 	control = init_socket(port);
 	if (gethostname(hostn, sizeof(hostn)) < 0) {
 		perror("main: gethostname");
-		strcpy(hostn, "unresolved");
+		utf8cpy(hostn, "unresolved");
 	}
 	sprintf(log_buf, "%s ready at address %s on port %d.",
 	    sysdata.mud_name, hostn, port);
@@ -320,7 +320,7 @@ sig_quit()
 			save_char_obj(ch);
 		if (ch->desc) {
 			write_to_descriptor(ch->desc->descriptor, buf, 0);
-			write_to_descriptor(ch->desc->descriptor, "BRB -- going down for a minute or two.\n\r", 0);
+			write_to_descriptor(ch->desc->descriptor, "BRB -- in a few seconds.\n\r", 0);
 			write_to_descriptor(ch->desc->descriptor, "You have been saved to disk.\n\r", 0);
 		}
 	}
@@ -331,7 +331,7 @@ sig_quit()
 static void
 sig_hup()
 {
-	log_string("caught sighup");
+	log_string("reloading configuration... restart process to finalize.");
 }
 
 static void
@@ -345,7 +345,7 @@ sig_int()
 			save_char_obj(ch);
 		if (ch->desc) {
 			write_to_descriptor(ch->desc->descriptor, buf, 0);
-			write_to_descriptor(ch->desc->descriptor, "BRB -- going down for a minute or two.\n\r", 0);
+			write_to_descriptor(ch->desc->descriptor, "BRB -- in a few seconds.\n\r", 0);
 			write_to_descriptor(ch->desc->descriptor, "You have been saved to disk.\n\r", 0);
 		}
 	}
@@ -385,7 +385,7 @@ sig_term()
 			log_string(log_buf);
 			if (vch->desc) {
 				write_to_descriptor(vch->desc->descriptor, buf, 0);
-				write_to_descriptor(vch->desc->descriptor, "BRB -- going down for a minute or two.\n\r", 0);
+				write_to_descriptor(vch->desc->descriptor, "BRB -- in a few seconds.\n\r", 0);
 				write_to_descriptor(vch->desc->descriptor, "You have been saved to disk.\n\r", 0);
 			}
 		}
@@ -441,7 +441,7 @@ caught_alarm()
 
 	sprintf(buf, "ALARM CLOCK! In section %s", alarm_section);
 	bug(buf);
-	strcpy(buf, "Alas, the hideous malevalent entity known only as 'Lag' rises once more!\n\r");
+	utf8cpy(buf, "Alas, the hideous malevalent entity known only as 'Lag' rises once more!\n\r");
 	echo_to_all(AT_IMMORT, buf, ECHOTAR_ALL);
 	if (newdesc) {
 		FD_CLR(newdesc, &in_set);
@@ -530,7 +530,6 @@ game_loop()
 		accept_new(control);
 		/*
 		 * Kick out descriptors with raised exceptions
-		 * or have been idle, then check for input.
 		 */
 		for (d = first_descriptor; d; d = d_next) {
 			if (d == d->next) {
@@ -595,7 +594,7 @@ game_loop()
 				read_from_buffer(d);
 				if (d->incomm[0] != '\0') {
 					d->fcommand = true;
-					strcpy(cmdline, d->incomm);
+					utf8cpy(cmdline, d->incomm);
 					d->incomm[0] = '\0';
 
 					if (d->character)
@@ -737,7 +736,7 @@ new_descriptor(int new_desc)
 	dnew->ipid = -1;
 
 	CREATE(dnew->outbuf, char, dnew->outsize);
-	strcpy(log_buf, inet_ntoa(sock.sin_addr));
+	utf8cpy(log_buf, inet_ntoa(sock.sin_addr));
 
 	dnew->host = STRALLOC(log_buf);
 	from = gethostbyaddr((char *) &sock.sin_addr,
@@ -927,7 +926,7 @@ read_from_descriptor(DESCRIPTOR_DATA * d)
 		return (true);
 
 	/* check for overflow. */
-	i_start = strlen(d->inbuf);
+	i_start = utf8len(d->inbuf);
 	if (i_start >= sizeof(d->inbuf) - 10) {
 		sprintf(log_buf, "%s input overflow!", d->host);
 		log_string(log_buf);
@@ -1006,27 +1005,26 @@ read_from_buffer(DESCRIPTOR_DATA * d)
 
 	/* deal with bozos with #repeat 1000 */
 	if (k > 1 || d->incomm[0] == '!') {
-		if (d->incomm[0] != '!' && strcmp(d->incomm, d->inlast)) {
+		if (d->incomm[0] != '!' && utf8cmp(d->incomm, d->inlast)) {
 			d->repeat = 0;
 		} else {
 			if (++d->repeat >= 20) {
 				write_to_descriptor(d->descriptor,
 				    "\n\rYou cannot enter the same command more than 20 consecutive times!\n\r", 0);
-				strcpy(d->incomm, "quit");
+				utf8cpy(d->incomm, "quit");
 			}
 		}
 	}
 	/* do '!' substitution. */
 	if (d->incomm[0] == '!')
-		strcpy(d->incomm, d->inlast);
+		utf8cpy(d->incomm, d->inlast);
 	else
-		strcpy(d->inlast, d->incomm);
+		utf8cpy(d->inlast, d->incomm);
 
 	/* shift the input buffer. */
 	while (d->inbuf[i] == '\n' || d->inbuf[i] == '\r')
 		i++;
 	for (j = 0; (d->inbuf[j] = d->inbuf[i + j]) != '\0'; j++);
-	return;
 }
 
 bool
@@ -1158,7 +1156,7 @@ write_to_buffer(DESCRIPTOR_DATA * d, const char *txt, int length)
 
 	/* find length in case caller didn't. */
 	if (length <= 0)
-		length = strlen(txt);
+		length = utf8len(txt);
 
 	/* initial \n\r if needed. */
 	if (d->outtop == 0 && !d->fcommand) {
@@ -1196,7 +1194,7 @@ write_to_descriptor(int desc, char *txt, int length)
 	int 	i_err;
 
 	if (length <= 0)
-		length = strlen(txt);
+		length = utf8len(txt);
 
 	for (i_start = 0; i_start < length; i_start += n_write) {
 		n_block = UMIN(length - i_start, 4096);
@@ -1418,7 +1416,7 @@ nanny(DESCRIPTOR_DATA * d, char *argument)
 		break;
 	case CON_GET_NEW_PASSWORD:
 		send_to_desc_color("\n\r", d);
-		if (strlen(argument) < 5) {
+		if (utf8len(argument) < 5) {
 			send_to_desc_color("&wPassword must be at least five characters long.\n\rPassword: &D", d);
 			return;
 		}
@@ -1463,7 +1461,7 @@ nanny(DESCRIPTOR_DATA * d, char *argument)
 		DISPOSE(ch->pcdata->last_name);
 		ch->pcdata->last_name = str_dup("");
 		buf[0] = ' ';
-		strcpy(buf + 1, argument);
+		utf8cpy(buf + 1, argument);
 		ch->pcdata->last_name = strdup(buf);
 		d->connected = CON_CONFIRM_LAST_NAME;
 		return;
@@ -2291,9 +2289,9 @@ check_parse_name(char *name, bool newchar)
 
 	if (is_reserved_name(name) && newchar)
 		return (false);
-	if (strlen(name) < 3)
+	if (utf8len(name) < 3)
 		return (false);
-	if (strlen(name) > 12)
+	if (utf8len(name) > 12)
 		return (false);
 
 	/*
@@ -2407,31 +2405,31 @@ send_to_char_color(const char *txt, CHAR_DATA * ch)
 
 	switch (sysdata.outBytesFlag) {
 	default:
-		sysdata.outBytesOther += strlen(txt);
+		sysdata.outBytesOther += utf8len(txt);
 		break;
 
 	case LOGBOUTCHANNEL:
-		sysdata.outBytesChannel += strlen(txt);
+		sysdata.outBytesChannel += utf8len(txt);
 		break;
 
 	case LOGBOUTCOMBAT:
-		sysdata.outBytesCombat += strlen(txt);
+		sysdata.outBytesCombat += utf8len(txt);
 		break;
 
 	case LOGBOUTMOVEMENT:
-		sysdata.outBytesMovement += strlen(txt);
+		sysdata.outBytesMovement += utf8len(txt);
 		break;
 
 	case LOGBOUTINFORMATION:
-		sysdata.outBytesInformation += strlen(txt);
+		sysdata.outBytesInformation += utf8len(txt);
 		break;
 
 	case LOGBOUTPROMPT:
-		sysdata.outBytesPrompt += strlen(txt);
+		sysdata.outBytesPrompt += utf8len(txt);
 		break;
 
 	case LOGBOUTINFOCHANNEL:
-		sysdata.outBytesInfoChannel += strlen(txt);
+		sysdata.outBytesInfoChannel += utf8len(txt);
 		break;
 	}
 	while ((colstr = strpbrk(prevstr, "&^}")) != NULL) {
@@ -2507,11 +2505,11 @@ set_char_color(sh_int AType, CHAR_DATA * ch)
 	if (!IS_NPC(och) && xIS_SET(och->act, PLR_ANSI)) {
 		AType = figure_color(AType, och);
 		if (AType == 7)
-			strcpy(buf, "\033[0;37m");
+			utf8cpy(buf, "\033[0;37m");
 		else
 			sprintf(buf, "\033[0;%d;%s%dm", (AType & 8) == 8,
 			    (AType > 15 ? "5;" : ""), (AType & 7) + 30);
-		write_to_buffer(ch->desc, buf, strlen(buf));
+		write_to_buffer(ch->desc, buf, utf8len(buf));
 	}
 }
 
@@ -2528,7 +2526,7 @@ set_pager_color(sh_int AType, CHAR_DATA * ch)
 	if (!IS_NPC(och) && xIS_SET(och->act, PLR_ANSI)) {
 		AType = figure_color(AType, och);
 		if (AType == 7)
-			strcpy(buf, "\033[0;37m");
+			utf8cpy(buf, "\033[0;37m");
 		else
 			sprintf(buf, "\033[0;%d;%s%dm", (AType & 8) == 8,
 			    (AType > 15 ? "5;" : ""), (AType & 7) + 30);
@@ -2783,7 +2781,7 @@ act_string(const char *format, CHAR_DATA * to, CHAR_DATA * ch,
 		while ((*point = *i) != '\0')
 			++point, ++i;
 	}
-	strcpy(point, "\n\r");
+	utf8cpy(point, "\n\r");
 	if (!DONT_UPPER)
 		buf[0] = UPPER(buf[0]);
 
@@ -2901,7 +2899,7 @@ default_fprompt(CHAR_DATA * ch)
 		switch (ch->pcdata->battlePromptConfig) {
 		default:
 			if (is_android(ch)) {
-				strcpy(buf, "&D<Damage(&c%h&w) En(&c%m&w) ");
+				utf8cpy(buf, "&D<Damage(&c%h&w) En(&c%m&w) ");
 				if (ch->exp < ch->pl)
 					strcat(buf, "TL(%x/&Y%P&w)>");
 				else if (ch->exp > ch->pl)
@@ -2912,7 +2910,7 @@ default_fprompt(CHAR_DATA * ch)
 				if (IS_NPC(ch) || IS_IMMORTAL(ch))
 					strcat(buf, " %i%R");
 			} else {
-				strcpy(buf, "&D<Life(&c%h&w) Ki(&c%m&w) ");
+				utf8cpy(buf, "&D<Life(&c%h&w) Ki(&c%m&w) ");
 				if (ch->exp < ch->pl)
 					strcat(buf, "PL(%x/&Y%P&w)>");
 				else if (ch->exp > ch->pl)
@@ -2927,7 +2925,7 @@ default_fprompt(CHAR_DATA * ch)
 			break;
 		case 1:
 			if (is_android(ch)) {
-				strcpy(buf, "&D<Damage(&c%h&w) En(&c%m&w) ");
+				utf8cpy(buf, "&D<Damage(&c%h&w) En(&c%m&w) ");
 				if (ch->exp < ch->pl)
 					strcat(buf, "TL(%x/&Y%P&w)>");
 				else if (ch->exp > ch->pl)
@@ -2938,7 +2936,7 @@ default_fprompt(CHAR_DATA * ch)
 				if (IS_NPC(ch) || IS_IMMORTAL(ch))
 					strcat(buf, " %i%R");
 			} else {
-				strcpy(buf, "&D<Life(&c%h&w) Ki(&c%m&w) ");
+				utf8cpy(buf, "&D<Life(&c%h&w) Ki(&c%m&w) ");
 				if (ch->exp < ch->pl)
 					strcat(buf, "PL(%x/&Y%P&w)>");
 				else if (ch->exp > ch->pl)
@@ -2953,7 +2951,7 @@ default_fprompt(CHAR_DATA * ch)
 			break;
 		case 2:
 			if (is_android(ch)) {
-				strcpy(buf, "&D<Damage(&c%h&w) En(&c%m&w) ");
+				utf8cpy(buf, "&D<Damage(&c%h&w) En(&c%m&w) ");
 				if (ch->exp < ch->pl)
 					strcat(buf, "TL(&Y%p&w)>");
 				else if (ch->exp > ch->pl)
@@ -2964,7 +2962,7 @@ default_fprompt(CHAR_DATA * ch)
 				if (IS_NPC(ch) || IS_IMMORTAL(ch))
 					strcat(buf, " %i%R");
 			} else {
-				strcpy(buf, "&D<Life(&c%h&w) Ki(&c%m&w) ");
+				utf8cpy(buf, "&D<Life(&c%h&w) Ki(&c%m&w) ");
 				if (ch->exp < ch->pl)
 					strcat(buf, "PL(&Y%p&w)>");
 				else if (ch->exp > ch->pl)
@@ -2979,7 +2977,7 @@ default_fprompt(CHAR_DATA * ch)
 			break;
 		case 3:
 			if (is_android(ch)) {
-				strcpy(buf, "&D<Damage(&c%h&w) En(&c%m&w) ");
+				utf8cpy(buf, "&D<Damage(&c%h&w) En(&c%m&w) ");
 				if (ch->exp < ch->pl)
 					strcat(buf, "TL(&Y%p&w)>");
 				else if (ch->exp > ch->pl)
@@ -2990,7 +2988,7 @@ default_fprompt(CHAR_DATA * ch)
 				if (IS_NPC(ch) || IS_IMMORTAL(ch))
 					strcat(buf, " %i%R");
 			} else {
-				strcpy(buf, "&D<Life(&c%h&w) Ki(&c%m&w) ");
+				utf8cpy(buf, "&D<Life(&c%h&w) Ki(&c%m&w) ");
 				if (ch->exp < ch->pl)
 					strcat(buf, "PL(&Y%p&w)>");
 				else if (ch->exp > ch->pl)
@@ -3006,7 +3004,7 @@ default_fprompt(CHAR_DATA * ch)
 		}
 	} else {
 		if (is_android(ch)) {
-			strcpy(buf, "&D<Damage(&c%h&w) En(&c%m&w) ");
+			utf8cpy(buf, "&D<Damage(&c%h&w) En(&c%m&w) ");
 			if (ch->exp < ch->pl)
 				strcat(buf, "TL(%x/&Y%P&w)>");
 			else if (ch->exp > ch->pl)
@@ -3017,7 +3015,7 @@ default_fprompt(CHAR_DATA * ch)
 			if (IS_NPC(ch) || IS_IMMORTAL(ch))
 				strcat(buf, " %i%R");
 		} else {
-			strcpy(buf, "&D<Life(&c%h&w) Ki(&c%m&w) ");
+			utf8cpy(buf, "&D<Life(&c%h&w) Ki(&c%m&w) ");
 			if (ch->exp < ch->pl)
 				strcat(buf, "PL(%x/&Y%P&w)>");
 			else if (ch->exp > ch->pl)
@@ -3045,7 +3043,7 @@ default_prompt(CHAR_DATA * ch)
 		switch (ch->pcdata->normalPromptConfig) {
 		default:
 			if (is_android(ch)) {
-				strcpy(buf, "&D<Damage(&c%h&w) En(&c%m&w) ");
+				utf8cpy(buf, "&D<Damage(&c%h&w) En(&c%m&w) ");
 				if (ch->exp < ch->pl)
 					strcat(buf, "TL(%x/&Y%P&w)>");
 				else if (ch->exp > ch->pl)
@@ -3058,7 +3056,7 @@ default_prompt(CHAR_DATA * ch)
 				else
 					strcat(buf, " ");
 			} else {
-				strcpy(buf, "&D<Life(&c%h&w) Ki(&c%m&w) ");
+				utf8cpy(buf, "&D<Life(&c%h&w) Ki(&c%m&w) ");
 				if (ch->exp < ch->pl)
 					strcat(buf, "PL(%x/&Y%P&w)>");
 				else if (ch->exp > ch->pl)
@@ -3074,7 +3072,7 @@ default_prompt(CHAR_DATA * ch)
 			break;
 		case 1:
 			if (is_android(ch)) {
-				strcpy(buf, "&D<Damage(&c%h&w) En(&c%m&w) ");
+				utf8cpy(buf, "&D<Damage(&c%h&w) En(&c%m&w) ");
 				if (ch->exp < ch->pl)
 					strcat(buf, "TL(&Y%p&w)>");
 				else if (ch->exp > ch->pl)
@@ -3087,7 +3085,7 @@ default_prompt(CHAR_DATA * ch)
 				else
 					strcat(buf, " ");
 			} else {
-				strcpy(buf, "&D<Life(&c%h&w) Ki(&c%m&w) ");
+				utf8cpy(buf, "&D<Life(&c%h&w) Ki(&c%m&w) ");
 				if (ch->exp < ch->pl)
 					strcat(buf, "PL(&Y%p&w)>");
 				else if (ch->exp > ch->pl)
@@ -3104,7 +3102,7 @@ default_prompt(CHAR_DATA * ch)
 		}
 	} else {
 		if (is_android(ch)) {
-			strcpy(buf, "&D<Damage(&c%h&w) En(&c%m&w) ");
+			utf8cpy(buf, "&D<Damage(&c%h&w) En(&c%m&w) ");
 			if (ch->exp < ch->pl)
 				strcat(buf, "TL(%x/&Y%P&w)>");
 			else if (ch->exp > ch->pl)
@@ -3115,7 +3113,7 @@ default_prompt(CHAR_DATA * ch)
 			if (IS_NPC(ch) || IS_IMMORTAL(ch))
 				strcat(buf, " %i%R");
 		} else {
-			strcpy(buf, "&D<Life(&c%h&w) Ki(&c%m&w) ");
+			utf8cpy(buf, "&D<Life(&c%h&w) Ki(&c%m&w) ");
 			if (ch->exp < ch->pl)
 				strcat(buf, "PL(%x/&Y%P&w)>");
 			else if (ch->exp > ch->pl)
@@ -3180,7 +3178,7 @@ display_prompt(DESCRIPTOR_DATA * d)
 	} else
 		prompt = ch->pcdata->prompt;
 	if (ansi) {
-		strcpy(pbuf, "\033[0;37m");
+		utf8cpy(pbuf, "\033[0;37m");
 		d->prevcolor = 0x07;
 		pbuf += 7;
 	}
@@ -3212,11 +3210,11 @@ display_prompt(DESCRIPTOR_DATA * d)
 				if (ch->level >= 10)
 					stat = ch->alignment;
 				else if (IS_GOOD(ch))
-					strcpy(pbuf, "good");
+					utf8cpy(pbuf, "good");
 				else if (IS_EVIL(ch))
-					strcpy(pbuf, "evil");
+					utf8cpy(pbuf, "evil");
 				else
-					strcpy(pbuf, "neutral");
+					utf8cpy(pbuf, "neutral");
 				break;
 			case 'A':
 				sprintf(pbuf, "%s%s%s", IS_AFFECTED(ch, AFF_INVISIBLE) ? "I" : "",
@@ -3227,70 +3225,70 @@ display_prompt(DESCRIPTOR_DATA * d)
 				if (!IS_IMMORTAL(ch))
 					break;
 				if (!ch->fighting || (victim = ch->fighting->who) == NULL)
-					strcpy(pbuf, "N/A");
+					utf8cpy(pbuf, "N/A");
 				else if (!victim->fighting || (victim = victim->fighting->who) == NULL)
-					strcpy(pbuf, "N/A");
+					utf8cpy(pbuf, "N/A");
 				else {
 					if (victim->max_hit > 0)
 						percent = (100 * victim->hit) / victim->max_hit;
 					else
 						percent = -1;
 					if (percent >= 100)
-						strcpy(pbuf, "perfect health");
+						utf8cpy(pbuf, "perfect health");
 					else if (percent >= 90)
-						strcpy(pbuf, "slightly scratched");
+						utf8cpy(pbuf, "slightly scratched");
 					else if (percent >= 80)
-						strcpy(pbuf, "few bruises");
+						utf8cpy(pbuf, "few bruises");
 					else if (percent >= 70)
-						strcpy(pbuf, "some cuts");
+						utf8cpy(pbuf, "some cuts");
 					else if (percent >= 60)
-						strcpy(pbuf, "several wounds");
+						utf8cpy(pbuf, "several wounds");
 					else if (percent >= 50)
-						strcpy(pbuf, "nasty wounds");
+						utf8cpy(pbuf, "nasty wounds");
 					else if (percent >= 40)
-						strcpy(pbuf, "bleeding freely");
+						utf8cpy(pbuf, "bleeding freely");
 					else if (percent >= 30)
-						strcpy(pbuf, "covered in blood");
+						utf8cpy(pbuf, "covered in blood");
 					else if (percent >= 20)
-						strcpy(pbuf, "leaking guts");
+						utf8cpy(pbuf, "leaking guts");
 					else if (percent >= 10)
-						strcpy(pbuf, "almost dead");
+						utf8cpy(pbuf, "almost dead");
 					else
-						strcpy(pbuf, "DYING");
+						utf8cpy(pbuf, "DYING");
 				}
 				break;
 			case 'c':
 				if (!IS_IMMORTAL(ch))
 					break;
 				if (!ch->fighting || (victim = ch->fighting->who) == NULL)
-					strcpy(pbuf, "N/A");
+					utf8cpy(pbuf, "N/A");
 				else {
 					if (victim->max_hit > 0)
 						percent = (100 * victim->hit) / victim->max_hit;
 					else
 						percent = -1;
 					if (percent >= 100)
-						strcpy(pbuf, "perfect health");
+						utf8cpy(pbuf, "perfect health");
 					else if (percent >= 90)
-						strcpy(pbuf, "slightly scratched");
+						utf8cpy(pbuf, "slightly scratched");
 					else if (percent >= 80)
-						strcpy(pbuf, "few bruises");
+						utf8cpy(pbuf, "few bruises");
 					else if (percent >= 70)
-						strcpy(pbuf, "some cuts");
+						utf8cpy(pbuf, "some cuts");
 					else if (percent >= 60)
-						strcpy(pbuf, "several wounds");
+						utf8cpy(pbuf, "several wounds");
 					else if (percent >= 50)
-						strcpy(pbuf, "nasty wounds");
+						utf8cpy(pbuf, "nasty wounds");
 					else if (percent >= 40)
-						strcpy(pbuf, "bleeding freely");
+						utf8cpy(pbuf, "bleeding freely");
 					else if (percent >= 30)
-						strcpy(pbuf, "covered in blood");
+						utf8cpy(pbuf, "covered in blood");
 					else if (percent >= 20)
-						strcpy(pbuf, "leaking guts");
+						utf8cpy(pbuf, "leaking guts");
 					else if (percent >= 10)
-						strcpy(pbuf, "almost dead");
+						utf8cpy(pbuf, "almost dead");
 					else
-						strcpy(pbuf, "DYING");
+						utf8cpy(pbuf, "DYING");
 				}
 				break;
 			case 'h':
@@ -3315,16 +3313,16 @@ display_prompt(DESCRIPTOR_DATA * d)
 				if (!IS_IMMORTAL(ch))
 					break;
 				if (!ch->fighting || (victim = ch->fighting->who) == NULL)
-					strcpy(pbuf, "N/A");
+					utf8cpy(pbuf, "N/A");
 				else if (!victim->fighting || (victim = victim->fighting->who) == NULL)
-					strcpy(pbuf, "N/A");
+					utf8cpy(pbuf, "N/A");
 				else {
 					if (ch == victim)
-						strcpy(pbuf, "You");
+						utf8cpy(pbuf, "You");
 					else if (IS_NPC(victim))
-						strcpy(pbuf, victim->short_descr);
+						utf8cpy(pbuf, victim->short_descr);
 					else
-						strcpy(pbuf, victim->name);
+						utf8cpy(pbuf, victim->name);
 					pbuf[0] = UPPER(pbuf[0]);
 				}
 				break;
@@ -3332,28 +3330,28 @@ display_prompt(DESCRIPTOR_DATA * d)
 				if (!IS_IMMORTAL(ch))
 					break;
 				if (!ch->fighting || (victim = ch->fighting->who) == NULL)
-					strcpy(pbuf, "N/A");
+					utf8cpy(pbuf, "N/A");
 				else {
 					if (ch == victim)
-						strcpy(pbuf, "You");
+						utf8cpy(pbuf, "You");
 					else if (IS_NPC(victim))
-						strcpy(pbuf, victim->short_descr);
+						utf8cpy(pbuf, victim->short_descr);
 					else
-						strcpy(pbuf, victim->name);
+						utf8cpy(pbuf, victim->name);
 					pbuf[0] = UPPER(pbuf[0]);
 				}
 				break;
 			case 'T':
 				if (time_info.hour < 5)
-					strcpy(pbuf, "night");
+					utf8cpy(pbuf, "night");
 				else if (time_info.hour < 6)
-					strcpy(pbuf, "dawn");
+					utf8cpy(pbuf, "dawn");
 				else if (time_info.hour < 19)
-					strcpy(pbuf, "day");
+					utf8cpy(pbuf, "day");
 				else if (time_info.hour < 21)
-					strcpy(pbuf, "dusk");
+					utf8cpy(pbuf, "dusk");
 				else
-					strcpy(pbuf, "night");
+					utf8cpy(pbuf, "night");
 				break;
 			case 'b':
 				stat = 0;
@@ -3395,7 +3393,7 @@ display_prompt(DESCRIPTOR_DATA * d)
 				stat = exp_level(ch, ch->level + 1) - ch->exp;
 			case 'y':
 				if (!ch->fighting || (victim = ch->fighting->who) == NULL)
-					strcpy(pbuf, "N/A");
+					utf8cpy(pbuf, "N/A");
 				else {
 					stat = victim->hit;
 				}
@@ -3403,19 +3401,19 @@ display_prompt(DESCRIPTOR_DATA * d)
 
 			case 'o':	/* display name of object on auction */
 				if (auction->item)
-					strcpy(pbuf, auction->item->name);
+					utf8cpy(pbuf, auction->item->name);
 				break;
 			case 'S':
 				if (ch->style == STYLE_BERSERK)
-					strcpy(pbuf, "B");
+					utf8cpy(pbuf, "B");
 				else if (ch->style == STYLE_AGGRESSIVE)
-					strcpy(pbuf, "A");
+					utf8cpy(pbuf, "A");
 				else if (ch->style == STYLE_DEFENSIVE)
-					strcpy(pbuf, "D");
+					utf8cpy(pbuf, "D");
 				else if (ch->style == STYLE_EVASIVE)
-					strcpy(pbuf, "E");
+					utf8cpy(pbuf, "E");
 				else
-					strcpy(pbuf, "S");
+					utf8cpy(pbuf, "S");
 				break;
 			case 'i':
 				if ((!IS_NPC(ch) && xIS_SET(ch->act, PLR_WIZINVIS)) ||
@@ -3451,7 +3449,7 @@ display_prompt(DESCRIPTOR_DATA * d)
 				sprintf(pbuf, "%s", num_punct_ld(stat_ldLong));
 				stat_ldLong = -1;
 			}
-			pbuf += strlen(pbuf);
+			pbuf += utf8len(pbuf);
 			break;
 		}
 	}
@@ -3490,22 +3488,22 @@ make_color_sequence(const char *col, char *code, DESCRIPTOR_DATA * d)
 				return 2;
 			case 'i':	/* Italic text */
 			case 'I':
-				strcpy(code, ANSI_ITALIC);
+				utf8cpy(code, ANSI_ITALIC);
 				break;
 			case 'v':	/* Reverse colors */
 			case 'V':
-				strcpy(code, ANSI_REVERSE);
+				utf8cpy(code, ANSI_REVERSE);
 				break;
 			case 'u':	/* Underline */
 			case 'U':
-				strcpy(code, ANSI_UNDERLINE);
+				utf8cpy(code, ANSI_UNDERLINE);
 				break;
 			case 'd':	/* Player's client default color */
-				strcpy(code, ANSI_RESET);
+				utf8cpy(code, ANSI_RESET);
 				break;
 			case 'D':	/* Reset to custom color for whatever
 					 * is being displayed */
-				strcpy(code, ANSI_RESET);	/* Yes, this reset here
+				utf8cpy(code, ANSI_RESET);	/* Yes, this reset here
 								 * is quite necessary to
 								 * cancel out other
 								 * things */
@@ -3513,52 +3511,52 @@ make_color_sequence(const char *col, char *code, DESCRIPTOR_DATA * d)
 				//strcat(code, color_str(ch->desc->pagecolor, ch));
 				break;
 			case 'x':	/* Black */
-				strcpy(code, ANSI_BLACK);
+				utf8cpy(code, ANSI_BLACK);
 				break;
 			case 'O':	/* Orange/Brown */
-				strcpy(code, ANSI_ORANGE);
+				utf8cpy(code, ANSI_ORANGE);
 				break;
 			case 'c':	/* Cyan */
-				strcpy(code, ANSI_CYAN);
+				utf8cpy(code, ANSI_CYAN);
 				break;
 			case 'z':	/* Dark Grey */
-				strcpy(code, ANSI_DGREY);
+				utf8cpy(code, ANSI_DGREY);
 				break;
 			case 'g':	/* Dark Green */
-				strcpy(code, ANSI_DGREEN);
+				utf8cpy(code, ANSI_DGREEN);
 				break;
 			case 'G':	/* Light Green */
-				strcpy(code, ANSI_GREEN);
+				utf8cpy(code, ANSI_GREEN);
 				break;
 			case 'P':	/* Pink/Light Purple */
-				strcpy(code, ANSI_PINK);
+				utf8cpy(code, ANSI_PINK);
 				break;
 			case 'r':	/* Dark Red */
-				strcpy(code, ANSI_DRED);
+				utf8cpy(code, ANSI_DRED);
 				break;
 			case 'b':	/* Dark Blue */
-				strcpy(code, ANSI_DBLUE);
+				utf8cpy(code, ANSI_DBLUE);
 				break;
 			case 'w':	/* Grey */
-				strcpy(code, ANSI_GREY);
+				utf8cpy(code, ANSI_GREY);
 				break;
 			case 'Y':	/* Yellow */
-				strcpy(code, ANSI_YELLOW);
+				utf8cpy(code, ANSI_YELLOW);
 				break;
 			case 'C':	/* Light Blue */
-				strcpy(code, ANSI_LBLUE);
+				utf8cpy(code, ANSI_LBLUE);
 				break;
 			case 'p':	/* Purple */
-				strcpy(code, ANSI_PURPLE);
+				utf8cpy(code, ANSI_PURPLE);
 				break;
 			case 'R':	/* Red */
-				strcpy(code, ANSI_RED);
+				utf8cpy(code, ANSI_RED);
 				break;
 			case 'B':	/* Blue */
-				strcpy(code, ANSI_BLUE);
+				utf8cpy(code, ANSI_BLUE);
 				break;
 			case 'W':	/* White */
-				strcpy(code, ANSI_WHITE);
+				utf8cpy(code, ANSI_WHITE);
 				break;
 			}
 		}
@@ -3571,52 +3569,52 @@ make_color_sequence(const char *col, char *code, DESCRIPTOR_DATA * d)
 				code[2] = '\0';
 				return 2;
 			case 'x':	/* Black */
-				strcpy(code, BLINK_BLACK);
+				utf8cpy(code, BLINK_BLACK);
 				break;
 			case 'O':	/* Orange/Brown */
-				strcpy(code, BLINK_ORANGE);
+				utf8cpy(code, BLINK_ORANGE);
 				break;
 			case 'c':	/* Cyan */
-				strcpy(code, BLINK_CYAN);
+				utf8cpy(code, BLINK_CYAN);
 				break;
 			case 'z':	/* Dark Grey */
-				strcpy(code, BLINK_DGREY);
+				utf8cpy(code, BLINK_DGREY);
 				break;
 			case 'g':	/* Dark Green */
-				strcpy(code, BLINK_DGREEN);
+				utf8cpy(code, BLINK_DGREEN);
 				break;
 			case 'G':	/* Light Green */
-				strcpy(code, BLINK_GREEN);
+				utf8cpy(code, BLINK_GREEN);
 				break;
 			case 'P':	/* Pink/Light Purple */
-				strcpy(code, BLINK_PINK);
+				utf8cpy(code, BLINK_PINK);
 				break;
 			case 'r':	/* Dark Red */
-				strcpy(code, BLINK_DRED);
+				utf8cpy(code, BLINK_DRED);
 				break;
 			case 'b':	/* Dark Blue */
-				strcpy(code, BLINK_DBLUE);
+				utf8cpy(code, BLINK_DBLUE);
 				break;
 			case 'w':	/* Grey */
-				strcpy(code, BLINK_GREY);
+				utf8cpy(code, BLINK_GREY);
 				break;
 			case 'Y':	/* Yellow */
-				strcpy(code, BLINK_YELLOW);
+				utf8cpy(code, BLINK_YELLOW);
 				break;
 			case 'C':	/* Light Blue */
-				strcpy(code, BLINK_LBLUE);
+				utf8cpy(code, BLINK_LBLUE);
 				break;
 			case 'p':	/* Purple */
-				strcpy(code, BLINK_PURPLE);
+				utf8cpy(code, BLINK_PURPLE);
 				break;
 			case 'R':	/* Red */
-				strcpy(code, BLINK_RED);
+				utf8cpy(code, BLINK_RED);
 				break;
 			case 'B':	/* Blue */
-				strcpy(code, BLINK_BLUE);
+				utf8cpy(code, BLINK_BLUE);
 				break;
 			case 'W':	/* White */
-				strcpy(code, BLINK_WHITE);
+				utf8cpy(code, BLINK_WHITE);
 				break;
 			}
 		}
@@ -3630,32 +3628,32 @@ make_color_sequence(const char *col, char *code, DESCRIPTOR_DATA * d)
 				code[2] = '\0';
 				return 2;
 			case 'x':	/* Black */
-				strcpy(code, BACK_BLACK);
+				utf8cpy(code, BACK_BLACK);
 				break;
 			case 'r':	/* Dark Red */
-				strcpy(code, BACK_DRED);
+				utf8cpy(code, BACK_DRED);
 				break;
 			case 'g':	/* Dark Green */
-				strcpy(code, BACK_DGREEN);
+				utf8cpy(code, BACK_DGREEN);
 				break;
 			case 'O':	/* Orange/Brown */
-				strcpy(code, BACK_ORANGE);
+				utf8cpy(code, BACK_ORANGE);
 				break;
 			case 'b':	/* Dark Blue */
-				strcpy(code, BACK_DBLUE);
+				utf8cpy(code, BACK_DBLUE);
 				break;
 			case 'p':	/* Purple */
-				strcpy(code, BACK_PURPLE);
+				utf8cpy(code, BACK_PURPLE);
 				break;
 			case 'c':	/* Cyan */
-				strcpy(code, BACK_CYAN);
+				utf8cpy(code, BACK_CYAN);
 				break;
 			case 'w':	/* Grey */
-				strcpy(code, BACK_GREY);
+				utf8cpy(code, BACK_GREY);
 				break;
 			}
 		}
-		ln = strlen(code);
+		ln = utf8len(code);
 	}
 	if (ln <= 0)
 		*code = '\0';
@@ -3796,11 +3794,11 @@ remove_color(char *str)
 
 	char   *aa = (char *) strdup(str);
 
-	for (ii = 0, jj = strlen(aa); ii < jj; ii++) {
+	for (ii = 0, jj = utf8len(aa); ii < jj; ii++) {
 		for (kk = 0; kk < 3; kk++) {
 			if (aa[ii] == list[kk]) {
 				if (aa[ii + 1] != list[kk])
-					strcpy(&aa[ii], &aa[ii + 2]);
+					utf8cpy(&aa[ii], &aa[ii + 2]);
 				ii += 2;
 				break;
 			}
@@ -3951,7 +3949,7 @@ act2_string(const char *format, CHAR_DATA * to, CHAR_DATA * ch,
 		while ((*point = *i) != '\0')
 			++point, ++i;
 	}
-	strcpy(point, "\n\r");
+	utf8cpy(point, "\n\r");
 	if (!DONT_UPPER)
 		buf[0] = UPPER(buf[0]);
 	return (buf);
