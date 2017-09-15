@@ -4284,13 +4284,13 @@ bool gTrainSuccess(CHAR_DATA *ch, int stat, sh_int *tAbility)
 
 	gain_exp(ch, xp_gain);
 
-	if (*tAbility >= 32700)
+	if (*tAbility >= 100)
 	  return (true);
 	else
 	  return (false);
 }
 
-void do_train( CHAR_DATA *ch, char *argument )
+void do_train(CHAR_DATA *ch, char *argument)
 {
 	char buf[MAX_STRING_LENGTH];
 	char tBuf[MAX_STRING_LENGTH];
@@ -4463,10 +4463,9 @@ void do_train( CHAR_DATA *ch, char *argument )
 			act(AT_SKILL, "$n starts training $s $T.", ch, NULL, pOutput, TO_ROOM );
 			WAIT_STATE( ch, 2 * PULSE_VIOLENCE );
 
-			if ( (checkLearn = gTrainSuccess(ch, stat, tAbility)) )
+			if ((checkLearn = gTrainSuccess(ch, stat, tAbility)))
 				break;
 
-			/*		    WAIT_STATE( ch, 6 );*/
 			add_timer( ch, TIMER_DO_FUN, 1, do_train, 1);
 			sysdata.outBytesFlag = LOGBOUTNORM;
 			return ;
@@ -4617,7 +4616,6 @@ void do_train( CHAR_DATA *ch, char *argument )
 			*pAbility += 1;
 			*permTstat += 1;
 			sprintf( tBuf, "Your $T increases to %d!", *pAbility );
-			/*		act(AT_RED, "Your $T increases!", ch, NULL, pOutput, TO_CHAR );*/
 			act(AT_RED, tBuf, ch, NULL, pOutput, TO_CHAR );
 			act(AT_RED, "$n's $T increases!", ch, NULL, pOutput, TO_ROOM );
 			act(AT_SKILL, "You take a break and stop training your $T.", ch, NULL, pOutput, TO_CHAR );
@@ -4642,7 +4640,6 @@ void do_train( CHAR_DATA *ch, char *argument )
 	}
 
 	sysdata.outBytesFlag = LOGBOUTNORM;
-	return ;
 }
 
 #undef STR
