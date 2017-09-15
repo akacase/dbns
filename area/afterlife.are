@@ -35,7 +35,11 @@ King Yamma, the Demon Lord sits behind his desk.
 > speech_prog 'send me home'~
 mpecho _whi $I says, 'Very well, I shall return you to your home world.'
 mppardon $n dead
-mptransfer $n 9001
+if pl($n) < 50000
+mptransfer $n 100
+else
+mptransfer $n 6000
+endif
 ~
 |
 #1599
@@ -85,11 +89,11 @@ Well, it looks like you died. You're floating in a vast misty void.
 Looks like there's only one way to go from here.
 There's a bright light in front of you.
 ~
-0 2098176&16 1
+0 2098180&16 1
 D0
 ~
 ~
-0 -1 100493
+0 -1 1501
 S
 #1501
 A Long Hallway~
