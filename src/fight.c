@@ -2385,19 +2385,19 @@ damage(CHAR_DATA * ch, CHAR_DATA * victim, int dam, int dt)
 
 	if (!IS_NPC(victim) && !IS_IMMORTAL(victim)) {
 		if ((victim->pcdata->learned[gsn_ssj] <= 0
-		    && victim->exp > ch->exp)
+		    && victim->exp < ch->exp)
 		    || (victim->pcdata->learned[gsn_ssj] > 0
 		    && victim->pcdata->learned[gsn_ssj2] <= 0
-		    && victim->exp > ch->exp)
+		    && victim->exp < ch->exp)
 		    || (victim->pcdata->learned[gsn_ssj2] > 0
 		    && victim->pcdata->learned[gsn_ssj3] <= 0
-		    && victim->exp > ch->exp)
+		    && victim->exp < ch->exp)
 		    || (victim->pcdata->learned[gsn_ssj3] > 0
 		    && victim->pcdata->learned[gsn_ssj4] <= 0
-		    && victim->exp > ch->exp)
+		    && victim->exp < ch->exp)
 		    || (victim->pcdata->learned[gsn_ssj4] > 0
 		    && victim->pcdata->learned[gsn_sgod] <= 0
-		    && victim->exp > ch->exp)) {
+		    && victim->exp < ch->exp)) {
 			if (IS_NPC(ch)
 			    || (!IS_NPC(ch) && !xIS_SET(ch->act, PLR_SPAR))) {
 				if (!IS_NPC(victim) && is_saiyan(victim)) {
