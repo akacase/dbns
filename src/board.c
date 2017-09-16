@@ -140,8 +140,8 @@ void append_note (FILE *fp, NOTE_DATA *note)
 {
 	fprintf (fp, "Sender  %s~\n", note->sender);
 	fprintf (fp, "Date    %s~\n", note->date);
-	fprintf (fp, "Stamp   %lld\n", note->date_stamp);
-	fprintf (fp, "Expire  %lld\n", note->expire);
+	fprintf (fp, "Stamp   %ld\n", note->date_stamp);
+	fprintf (fp, "Expire  %ld\n", note->expire);
 	fprintf (fp, "To      %s~\n", note->to_list);
 	fprintf (fp, "Subject %s~\n", note->subject);
 	fprintf (fp, "Text\n%s~\n\n", note->text);

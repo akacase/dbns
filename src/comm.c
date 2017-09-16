@@ -1179,7 +1179,7 @@ write_to_buffer(DESCRIPTOR_DATA * d, const char *txt, int length)
 	}
 
 	/* copy */
-	strncpy(d->outbuf + d->outtop, txt, length);
+	utf8ncpy(d->outbuf + d->outtop, txt, length);
 	d->outtop += length;
 	d->outbuf[d->outtop] = '\0';
 	return;
@@ -2407,23 +2407,18 @@ send_to_char_color(const char *txt, CHAR_DATA * ch)
 	default:
 		sysdata.outBytesOther += utf8len(txt);
 		break;
-
 	case LOGBOUTCHANNEL:
 		sysdata.outBytesChannel += utf8len(txt);
 		break;
-
 	case LOGBOUTCOMBAT:
 		sysdata.outBytesCombat += utf8len(txt);
 		break;
-
 	case LOGBOUTMOVEMENT:
 		sysdata.outBytesMovement += utf8len(txt);
 		break;
-
 	case LOGBOUTINFORMATION:
 		sysdata.outBytesInformation += utf8len(txt);
 		break;
-
 	case LOGBOUTPROMPT:
 		sysdata.outBytesPrompt += utf8len(txt);
 		break;

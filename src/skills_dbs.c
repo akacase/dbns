@@ -460,7 +460,7 @@ rage(CHAR_DATA * ch, CHAR_DATA * victim)
 		if (!is_saiyan(ch) && !is_hb(ch))
 			return;
 
-		if (ch->rage < 500 || ch->exp < 8000000)
+		if (ch->rage < 500)
 			return;
 
 		if (ch->pcdata->learned[gsn_ssj] > 0)
@@ -691,7 +691,7 @@ rage2(CHAR_DATA * ch, CHAR_DATA * victim)
 		if (!is_saiyan(ch) && !is_hb(ch))
 			return;
 
-		if (ch->rage < 800 || ch->exp < 50000000)
+		if (ch->rage < 800)
 			return;
 
 		if (ch->pcdata->learned[gsn_ssj2] > 0)
@@ -912,7 +912,7 @@ rage3(CHAR_DATA * ch, CHAR_DATA * victim)
 		if (!is_saiyan(ch) && !is_hb(ch))
 			return;
 
-		if (ch->rage < 1000 || ch->exp < 500000000)
+		if (ch->rage < 1000)
 			return;
 
 		if (ch->pcdata->learned[gsn_ssj3] > 0)
@@ -1092,7 +1092,7 @@ rage4(CHAR_DATA * ch, CHAR_DATA * victim)
 		if (!is_saiyan(ch))
 			return;
 
-		if (ch->rage < 1500 || ch->exp < 2000000000)
+		if (ch->rage < 1500)
 			return;
 
 		if (ch->pcdata->learned[gsn_ssj4] > 0)
@@ -1289,7 +1289,7 @@ rage5(CHAR_DATA * ch, CHAR_DATA * victim)
 		if (!is_saiyan(ch))
 			return;
 
-		if (ch->rage < 1500 || ch->exp < 500000000000)
+		if (ch->rage < 1500)
 			return;
 
 		if (ch->pcdata->learned[gsn_sgod] > 0)

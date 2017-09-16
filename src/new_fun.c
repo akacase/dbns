@@ -1118,8 +1118,6 @@ void evolveCheck(CHAR_DATA *ch, CHAR_DATA *victim,  bool death)
                           vPL = victim->exp;
                         else
                           vPL = victim->pl;
-
-//                        if( vPL < cPL )
                         if( ( cPL / vPL ) > 5 )
                           return;
 			if (!death)
@@ -1147,8 +1145,6 @@ void evolveCheck(CHAR_DATA *ch, CHAR_DATA *victim,  bool death)
                           vPL = victim->exp;
                         else
                           vPL = victim->pl;
-
-//                        if( vPL < cPL )
                         if( ( cPL / vPL ) > 5 )
                           return;
 			if (!death)
@@ -1176,8 +1172,6 @@ void evolveCheck(CHAR_DATA *ch, CHAR_DATA *victim,  bool death)
                           vPL = victim->exp;
                         else
                           vPL = victim->pl;
-
-//                        if( vPL < cPL )
                         if( ( cPL / vPL ) > 5 )
                           return;
 			if (!death)
@@ -1191,8 +1185,6 @@ void evolveCheck(CHAR_DATA *ch, CHAR_DATA *victim,  bool death)
 			}
 		}
 	}
-
-	return;
 }
 
 void update_absorb(CHAR_DATA *ch, CHAR_DATA *victim)
