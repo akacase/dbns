@@ -4424,15 +4424,6 @@ void do_train(CHAR_DATA *ch, char *argument)
 		return ;
 	}
 
-	if ( ch->train < 1 && ch->pcdata->xTrain < 1 && *tAbility >= 99)
-	{
-		pager_printf(ch, "You don't have enough training points to work on your %s anymore.\n\r", pOutput );
-		ch->pcdata->tStat = 0;
-		ch->pcdata->tRounds = 0;
-		return ;
-	}
-
-
 	sysdata.outBytesFlag = LOGBOUTCOMBAT;
 
 	switch (ch->substate)
