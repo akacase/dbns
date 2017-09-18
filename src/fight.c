@@ -1389,7 +1389,8 @@ one_hit(CHAR_DATA * ch, CHAR_DATA * victim, int dt)
 	 */
 	dam += get_damroll(ch);
 	if (dt == TYPE_HIT)
-	  dam /= (get_strDef(victim) + get_conDef(victim));
+          dam -= get_strDef(victim);
+	  dam -= get_conDef(victim);
 
 	if (!IS_NPC(ch)) {
 	  fightTrainSpd = ch->pcdata->tSpd;
@@ -1415,7 +1416,6 @@ one_hit(CHAR_DATA * ch, CHAR_DATA * victim, int dt)
             fightTrainStr = 99;
 	  }  
         }
-	      
 
 	if (dam < 0)
 		dam = 0;
