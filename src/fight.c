@@ -1223,6 +1223,12 @@ one_hit(CHAR_DATA * ch, CHAR_DATA * victim, int dt)
 	static bool dual_flip = false;
 	double attmod = 0.000;
 	int baseToHit = 0;
+	/* new ints */
+	int fightTrainSpd = 0;
+	int fightTrainStr = 0;
+	int fightSpdGain = 0;
+	int fightStrGain = 0;
+	
 
 	attmod = get_attmod(ch, victim);
 
@@ -1383,8 +1389,33 @@ one_hit(CHAR_DATA * ch, CHAR_DATA * victim, int dt)
 	 */
 	dam += get_damroll(ch);
 	if (dt == TYPE_HIT)
-		dam -= get_strDef(victim);
-	dam -= get_conDef(victim);
+	  dam /= (get_strDef(victim) + get_conDef(victim));
+
+	if (!IS_NPC(ch)) {
+	  fightTrainSpd = ch->pcdata->tSpd;
+	  fightTrainStr = ch->pcdata->tStr;
+	  fightSpdGain = number_range(1, 2);
+	  fightStrGain = number_range(1, 2);
+	  fightTrainSpd += fightSpdGain;
+	  fightTrainStr += fightStrGain;
+
+	  if(fightTrainSpd >= 100 && ch->pcdata->permTspd < 32700) {
+	    fightTrainSpd = 0;
+	    ch->perm_dex += 1;
+	    ch->pcdata->permTspd += 1;
+	  } else if (ch->pcdata->permTspd >= 32700 && fightTrainSpd >= 99) {
+	    fightTrainSpd = 99;
+	  }
+
+	  if(fightTrainStr >= 100 && ch->pcdata->permTstr < 32700) {
+            fightTrainStr = 0;
+            ch->perm_str += 1;
+            ch->pcdata->permTstr += 1;
+	  } else if (ch->pcdata->permTstr >= 32700 && fightTrainStr >= 99) {
+            fightTrainStr = 99;
+	  }  
+        }
+	      
 
 	if (dam < 0)
 		dam = 0;
@@ -2453,52 +2484,27 @@ damage(CHAR_DATA * ch, CHAR_DATA * victim, int dam, int dt)
 	    !IS_IMMORTAL(ch) && !IS_IMMORTAL(victim) && !is_split(victim)) {
 		if (dam < 1)
 			dam = 1;
-		if (ch->race != 6) {
-			if (is_saiyan(ch))	/* Saiyan */
-				xp_mod = 0.655;
-			else if (is_namek(ch))	/* Namek */
-				xp_mod = 0.66;
-			else if (ch->race == 19)	/* Halfbreed-HB */
-				xp_mod = 0.685;
-			else if (is_hb(ch))	/* Halfbreed */
-				xp_mod = 0.675;
-			else		/* Everyone Else */
-				xp_mod = 0.665;
-		} else {
-			if (ch->pcdata->absorb_pl_mod == 0)	/* Saiyan */
-				xp_mod = 0.655;
-			else if (ch->pcdata->absorb_pl_mod == 3)	/* Namek */
-				xp_mod = 0.66;
-			else if (ch->pcdata->absorb_pl_mod == 2)	/* Halfbreed */
-				xp_mod = 0.675;
-			else if (ch->pcdata->absorb_pl_mod == 6)
-				xp_mod = 0.65;
-			else		/* Everyone Else */
-				xp_mod = 0.665;
-		}
+		xp_mod = 1;
 		if (!IS_NPC(victim))
 			xp_gain =
-			    (long double)dam / 2575 * pow(victim->pl, xp_mod);
+			    (long double)dam / 1000 * pow(victim->worth, xp_mod);
 		if (IS_NPC(victim))
 			xp_gain =
-			    (long double)dam / 2575 * pow(victim->exp, xp_mod);
+			    (long double)dam / 1000 * pow(victim->worth, xp_mod);
 		/* Sparing and deadly combat pl gain's */
 		if (!IS_NPC(ch) && !IS_NPC(victim)
 		    && !xIS_SET(ch->act, PLR_SPAR)
 		    && !xIS_SET(victim->act, PLR_SPAR)) {
-			if (ch->race == 6)
-				xp_mod = (float)xp_mod + 0.03;
-			else
-				xp_mod = (float)xp_mod + 0.01;
+		        xp_mod = (float)xp_mod + 0.3;
 			xp_gain =
-			    (long double)dam / 2575 * pow(victim->pl, xp_mod);
+			    (long double)dam / 1000 * pow(victim->worth, xp_mod);
 		}
 		if (!IS_NPC(ch) && !IS_NPC(victim)
 		    && xIS_SET(ch->act, PLR_SPAR)
 		    && xIS_SET(victim->act, PLR_SPAR)) {
 			xp_mod = (float)xp_mod + 0.00;
 			xp_gain =
-			    (long double)dam / 2575 * pow(victim->pl, xp_mod);
+			    (long double)dam / 1000 * pow(victim->worth, xp_mod);
 		}
 		/* PL Gains cut if player is stronger than opontants */
 		if (!IS_NPC(victim)) {
@@ -2537,21 +2543,10 @@ damage(CHAR_DATA * ch, CHAR_DATA * victim, int dam, int dt)
 			else
 				xp_gain = 0;
 		}
-		/* pl gains cut if player is weaker than opontant */
-		if (ch->exp != ch->pl && ch->exp < ch->pl) {
-			int pl_exp = 0;
-
-			pl_exp = (ch->pl / ch->exp);
-			xp_gain =
-			    xp_gain - ((long double)pl_exp * 0.025 * xp_gain);
-		}
+		
 		/* a little help to get newbies started */
-		if (ch->pl < 2500)
-			xp_gain += 1;
-		if (ch->pl < 5000)
-			xp_gain += 1;
 		if (xp_gain < 0)
-			xp_gain = 0;
+		  xp_gain = 0;
 
 		if (xIS_SET(ch->in_room->room_flags, ROOM_TIME_CHAMBER)) {
 			switch (number_range(1, 4)) {

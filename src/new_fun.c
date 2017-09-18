@@ -279,34 +279,28 @@ int get_damroll( CHAR_DATA *ch)
 }
 
 // For finding the defence bonus based on str
-int get_strDef( CHAR_DATA *victim )
+double get_strDef( CHAR_DATA *victim )
 {
-	int strDef = 0;
+	double strDef = 0;
 
-	strDef = get_curr_str(victim) / 50;
+	strDef = get_curr_str(victim) / 4000 + 1;
 
-	if (victim->mental_state > 5 && victim->mental_state < 15)
-		strDef++;
-
-        if( victim->skillGsn > 0 )
-          strDef /= 2;
+	if (strDef > 2.5)
+	  strDef = 2.5;
 
 	return strDef;
 }
 
 // For finding the defence bonus based on con
-int get_conDef( CHAR_DATA *victim )
+double get_conDef( CHAR_DATA *victim )
 {
-	int conDef = 0;
+	double conDef = 0;
 
-	conDef = get_curr_con(victim) / 25;
+	conDef = get_curr_con(victim) / 2000 + 1;
 
-	if (victim->mental_state > 5 && victim->mental_state < 15)
-		conDef++;
-
-        if( victim->skillGsn > 0 )
-          conDef /= 2;
-
+	if (conDef > 2.5)
+	  conDef = 2.5;
+	
 	return conDef;
 }
 

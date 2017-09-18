@@ -5594,8 +5594,8 @@ args((const char *argument, int channel,
 	bool can_pk args((CHAR_DATA * ch));
 	char   *get_pkColor args((CHAR_DATA * ch));
 	int get_damroll args((CHAR_DATA * ch));
-	int get_strDef args((CHAR_DATA * victim));
-	int get_conDef args((CHAR_DATA * victim));
+	double get_strDef args((CHAR_DATA * victim));
+	double get_conDef args((CHAR_DATA * victim));
 	int get_armor args((CHAR_DATA * ch));
 	int get_maxarmor args((CHAR_DATA * ch));
 	double get_attmod args((CHAR_DATA * ch, CHAR_DATA * victim));
