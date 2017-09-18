@@ -1,10 +1,13 @@
 #!/bin/sh
-BACKUP_DIR=/var/dbns/backup
-if [ ! -d $BACKUP_DIR ]; then
-    doas mkdir -p $BACKUP_DIR
-fi		
-	
-cd /var/dbns/player && doas tar czf $BACKUP_DIR/$(date +%Y%m%d-%H%M%S).tar.gz .
+AREA_DIR=/opt/dbns/db/area
+BACKUP_DIR=/home/case/db/area
+
+\cp $AREA_DIR/*.are $BACKUP_DIR
+echo $AREA_DIR
+echo $BACKUP_DIR
+cd $BACKUP_DIR
+git add .
+git commit -m ".are copyover at $(date)"
 
 
 
