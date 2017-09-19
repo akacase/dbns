@@ -1223,13 +1223,7 @@ one_hit(CHAR_DATA * ch, CHAR_DATA * victim, int dt)
 	static bool dual_flip = false;
 	double attmod = 0.000;
 	int baseToHit = 0;
-	/* new ints */
-	int fightTrainSpd = 0;
-	int fightTrainStr = 0;
-	int fightSpdGain = 0;
-	int fightStrGain = 0;
 	
-
 	attmod = get_attmod(ch, victim);
 
 	/*
@@ -1392,33 +1386,8 @@ one_hit(CHAR_DATA * ch, CHAR_DATA * victim, int dt)
           dam -= get_strDef(victim);
 	  dam -= get_conDef(victim);
 
-	if (!IS_NPC(ch)) {
-	  fightTrainSpd = ch->pcdata->tSpd;
-	  fightTrainStr = ch->pcdata->tStr;
-	  fightSpdGain = number_range(1, 2);
-	  fightStrGain = number_range(1, 2);
-	  fightTrainSpd += fightSpdGain;
-	  fightTrainStr += fightStrGain;
-
-	  if(fightTrainSpd >= 100 && ch->pcdata->permTspd < 32700) {
-	    fightTrainSpd = 0;
-	    ch->perm_dex += 1;
-	    ch->pcdata->permTspd += 1;
-	  } else if (ch->pcdata->permTspd >= 32700 && fightTrainSpd >= 99) {
-	    fightTrainSpd = 99;
-	  }
-
-	  if(fightTrainStr >= 100 && ch->pcdata->permTstr < 32700) {
-            fightTrainStr = 0;
-            ch->perm_str += 1;
-            ch->pcdata->permTstr += 1;
-	  } else if (ch->pcdata->permTstr >= 32700 && fightTrainStr >= 99) {
-            fightTrainStr = 99;
-	  }  
-        }
-
 	if (dam < 0)
-		dam = 0;
+	  dam = 0;
 
 	/*
 	 * Bonuses.
@@ -2010,6 +1979,11 @@ damage(CHAR_DATA * ch, CHAR_DATA * victim, int dam, int dt)
 	bool immortal = false;
 	ROOM_INDEX_DATA *pRoomIndex;
 	double clothingPlMod = 0;
+	/* fight training */
+	sh_int *tAbility;
+	sh_int *pAbility;
+	sh_int *permTstat;
+	int fightIncrease = 0;
 
 	retcode = rNONE;
 
@@ -2622,6 +2596,21 @@ damage(CHAR_DATA * ch, CHAR_DATA * victim, int dam, int dt)
 		}
 
 		gain_exp(ch, xp_gain);
+
+		/* fight train */
+		fightIncrease = number_range(1, 2);
+		tAbility = &ch->pcdata->tStr;
+		pAbility = &ch->perm_str;
+		permTstat = &ch->pcdata->permTstr;
+		*tAbility += fightIncrease;
+
+		if ( *tAbility >= 100 && *permTstat < 32700 ) {
+		  *tAbility = 0;
+		  *pAbility += 1;
+		  *permTstat += 1;
+		} else if ( *permTstat >= 32700 && *tAbility >= 99) {
+		    *tAbility = 99;
+		}
 	}
 	if (!IS_NPC(victim) && victim->level >= LEVEL_IMMORTAL
 	    && victim->hit < 1) {
