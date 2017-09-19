@@ -604,11 +604,11 @@ A genetically engineered, superhuman warrior grins wickedly at the chance to tes
 1 1 0 0 1 1 4
 0 0 0 0 0 0 0 0
 > rand_prog 10~
-mprestore $i 400
+mprestore $i 5100
 mpecho &C$I flashes brightly, instantly recovering $kself.&D
 ~
 > fight_prog 100~
-mprestore $i 400
+mprestore $i 5100
 mpecho &Y$I grins wickedly, completely unaffected by your attacks.&D
 ~
 > death_prog 100~
@@ -1748,7 +1748,7 @@ This object should not exist on the ground.~
 1 0 0
  0
 A
-12 300
+12 5000
 #303920
 hypertech custom ship unit~
 &YHyper-Tech Custom Unit&D~
