@@ -2375,13 +2375,13 @@ damage(CHAR_DATA * ch, CHAR_DATA * victim, int dam, int dt)
 					    permTstat = &victim->pcdata->permTspd;
 					    *tAbility += fightIncrease;
 
-					    if ( *tAbility >= 100 && *permTstat < 32000 ) {
+					    if ( *tAbility >= 1000 && *permTstat < 32000 ) {
 					      *tAbility = 0;
 					      *pAbility += 1;
 					      *permTstat += 1;
 					      send_to_char( "&CYou feel your speed improving!&D\n\r", ch );
-					    } else if (*permTstat >= 32000 && *tAbility >= 99) {
-					      *tAbility = 99;
+					    } else if (*permTstat >= 32000 && *tAbility >= 999) {
+					      *tAbility = 999;
 					    }
 					  }
 						
@@ -2621,13 +2621,13 @@ damage(CHAR_DATA * ch, CHAR_DATA * victim, int dam, int dt)
 		permTstat = &ch->pcdata->permTstr;
 		*tAbility += fightIncrease;
 
-		if ( *tAbility >= 100 && *permTstat < 32000 ) {
+		if ( *tAbility >= 1000 && *permTstat < 32000 ) {
 		  *tAbility = 0;
 		  *pAbility += 1;
 		  *permTstat += 1;
 		  send_to_char( "&CYou feel your strength improving!&D\n\r", ch );
-		} else if ( *permTstat >= 32000 && *tAbility >= 99) {
-		    *tAbility = 99;
+		} else if ( *permTstat >= 32000 && *tAbility >= 999) {
+		    *tAbility = 999;
 		}
 	}
 	if (!IS_NPC(victim) && victim->level >= LEVEL_IMMORTAL

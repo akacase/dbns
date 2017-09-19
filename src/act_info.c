@@ -4244,9 +4244,8 @@ bool gTrainSuccess(CHAR_DATA *ch, int stat, sh_int *tAbility)
 	long double xp_gain = 0;
 	int increase = 0;
 
-
 	increase = number_range(1, 3);
-	*tAbility += increase;
+	*tAbility += (increase * 10);
 	if (xIS_SET(ch->in_room->room_flags, ROOM_TIME_CHAMBER)
 	    && number_range(1, 100) < 35)
 	{
@@ -4284,7 +4283,7 @@ bool gTrainSuccess(CHAR_DATA *ch, int stat, sh_int *tAbility)
 
 	gain_exp(ch, xp_gain);
 
-	if (*tAbility >= 100)
+	if (*tAbility >= 1000)
 	  return (true);
 	else
 	  return (false);
@@ -4416,7 +4415,7 @@ void do_train(CHAR_DATA *ch, char *argument)
 		return ;
 	}
 
-	if ( *permTstat >= 32700 && *tAbility >= 99 && ch->pcdata->xTrain < 1)
+	if ( *permTstat >= 32000 && *tAbility >= 999 && ch->pcdata->xTrain < 1)
 	{
 		act(AT_RED, "Your $T is already at maximum.", ch, NULL, pOutput, TO_CHAR );
 		ch->pcdata->tStat = 0;
@@ -4440,7 +4439,7 @@ void do_train(CHAR_DATA *ch, char *argument)
 				ch->pcdata->tRounds = 0;
 				break;
 			}
-			if (*tAbility >= 100)
+			if (*tAbility >= 1000)
 			{
 				checkLearn = true;
 				break;
@@ -4470,7 +4469,7 @@ void do_train(CHAR_DATA *ch, char *argument)
 				act(AT_SKILL, "$n stops training $s $T.", ch, NULL, pOutput, TO_ROOM );
 				break;
 			}
-			if (*tAbility >= 100)
+			if (*tAbility >= 1000)
 			{
 				checkLearn = true;
 				break;
@@ -4530,7 +4529,7 @@ void do_train(CHAR_DATA *ch, char *argument)
 				act(AT_SKILL, "$n takes a break and stops training $s $T.", ch, NULL, pOutput, TO_ROOM );
 				break;
 			}
-			if (*tAbility >= 100)
+			if (*tAbility >= 1000)
 			{
 				checkLearn = true;
 				break;
@@ -4591,17 +4590,17 @@ void do_train(CHAR_DATA *ch, char *argument)
 	ch->pcdata->tStat = 0;
 	ch->pcdata->tRounds = 0;
 
-	if ( *permTstat >= 32700 && ch->pcdata->xTrain < 1 && *tAbility >= 99)
+	if ( *permTstat >= 32000 && ch->pcdata->xTrain < 1 && *tAbility >= 999)
 	{
 		act(AT_SKILL, "Your $T has reached it's peak for now.", ch, NULL, pOutput, TO_CHAR );
-		*tAbility = 99;
+		*tAbility = 999;
 		sysdata.outBytesFlag = LOGBOUTNORM;
 		return ;
 	}
 
 	if (checkLearn)
 	{
-		if (*permTstat < 32700)
+		if (*permTstat < 32000)
 		{
 			*tAbility = 0;
 			*pAbility += 1;
@@ -4626,7 +4625,7 @@ void do_train(CHAR_DATA *ch, char *argument)
 		else
 		{
 			act(AT_SKILL, "Your $T has reached its peak for now.", ch, NULL, pOutput, TO_CHAR );
-			*tAbility = 99;
+			*tAbility = 999;
 		}
 	}
 
