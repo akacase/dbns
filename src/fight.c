@@ -2363,13 +2363,32 @@ damage(CHAR_DATA * ch, CHAR_DATA * victim, int dam, int dt)
 				if (can_use_skill
 				    (victim, number_percent(), gsn_block)) {
 					if (number_range(1, 100) <= check) {
-						dam = 0;
-						victim->block = true;
-						learn_from_success(victim,
+					  dam = 0;
+					  victim->block = true;
+					  learn_from_success(victim,
 						    gsn_block);
-					} else
-						learn_from_failure(victim,
-						    gsn_block);
+					  /* fight training for speed  */
+					  if (!IS_NPC(victim)) {
+					    fightIncrease = number_range(1,2);
+					    tAbility = &victim->pcdata->tSpd;
+					    pAbility = &victim->perm_dex;
+					    permTstat = &victim->pcdata->permTspd;
+					    *tAbility += fightIncrease;
+
+					    if ( *tAbility >= 100 && *permTstat < 32000 ) {
+					      *tAbility = 0;
+					      *pAbility += 1;
+					      *permTstat += 1;
+					      send_to_char( "&CYou feel your speed improving!&D\n\r", ch );
+					    } else if (*permTstat >= 32000 && *tAbility >= 99) {
+					      *tAbility = 99;
+					    }
+					  }
+						
+					} else {
+					  learn_from_failure(victim,
+					      gsn_block);
+					}
 				}
 			}
 			ch->melee = false;
@@ -2595,18 +2614,19 @@ damage(CHAR_DATA * ch, CHAR_DATA * victim, int dam, int dt)
 
 		gain_exp(ch, xp_gain);
 
-		/* fight train */
+		/* fight training for strength */
 		fightIncrease = number_range(1, 2);
 		tAbility = &ch->pcdata->tStr;
 		pAbility = &ch->perm_str;
 		permTstat = &ch->pcdata->permTstr;
 		*tAbility += fightIncrease;
 
-		if ( *tAbility >= 100 && *permTstat < 32700 ) {
+		if ( *tAbility >= 100 && *permTstat < 32000 ) {
 		  *tAbility = 0;
 		  *pAbility += 1;
 		  *permTstat += 1;
-		} else if ( *permTstat >= 32700 && *tAbility >= 99) {
+		  send_to_char( "&CYou feel your strength improving!&D\n\r", ch );
+		} else if ( *permTstat >= 32000 && *tAbility >= 99) {
 		    *tAbility = 99;
 		}
 	}
