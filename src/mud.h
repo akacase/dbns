@@ -5648,6 +5648,7 @@ args((const char *argument, int channel,
 		args   ((CHAR_DATA * ch, CHAR_DATA * victim, OBJ_DATA * wield,
 		OBJ_DATA * projectile, sh_int dist));
 	int ris_damage args((CHAR_DATA * ch, int dam, int ris));
+	void fight_train args((CHAR_DATA * ch, char * stat));
 	ch_ret damage args((CHAR_DATA * ch, CHAR_DATA * victim, int dam, int dt));
 	void update_pos args((CHAR_DATA * victim));
 	void set_fighting args((CHAR_DATA * ch, CHAR_DATA * victim));

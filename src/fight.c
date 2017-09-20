@@ -1951,6 +1951,61 @@ ris_damage(CHAR_DATA * ch, int dam, int ris)
 	return (dam * modifier) / 10;
 }
 
+/*
+ * fight training
+ */
+void
+fight_train(CHAR_DATA * ch, char* stat)
+{
+	sh_int *tAbility;
+	sh_int *pAbility;
+	sh_int *permTstat;
+	int fightIncrease = 0;
+	char message = "You feel your power increasing!";
+
+	fightIncrease = number_range(1,2);
+
+	if ( stat == "str" )
+	{
+		tAbility = &ch->pcdata->tStr;
+		pAbility = &ch->perm_str;
+		permTstat = &ch->pcdata->permTstr;
+		message = "&CYou feel your strength improving!&D\n\r";
+	}
+	else if ( stat == "int" )
+	{
+		tAbility = &ch->pcdata->tInt;
+		pAbility = &ch->perm_int;
+		permTstat = &ch->pcdata->permTint;
+		message = "&CYou feel your intelligence improving!&D\n\r";
+	}
+	else if ( stat == "spd" )
+	{
+		tAbility = &ch->pcdata->tSpd;
+		pAbility = &ch->perm_dex;
+		permTstat = &ch->pcdata->permTspd;
+		message = "&CYou feel your speed improving!&D\n\r";
+	}
+	else if ( stat == "con" )
+	{
+		tAbility = &ch->pcdata->tCon;
+		pAbility = &ch->perm_con;
+		permTstat = &ch->pcdata->permTcon;
+		message = "&CYou feel your constitution improving!&D\n\r";
+	}
+
+    *tAbility += fightIncrease;
+
+    if ( *tAbility >= 1000 && *permTstat < 32000 ) {
+      *tAbility = 0;
+      *pAbility += 1;
+      *permTstat += 1;
+      send_to_char( message, ch );
+    } else if (*permTstat >= 32000 && *tAbility >= 999) {
+      *tAbility = 999;
+    }
+}
+
 ch_ret
 damage(CHAR_DATA * ch, CHAR_DATA * victim, int dam, int dt)
 {
@@ -2369,20 +2424,7 @@ damage(CHAR_DATA * ch, CHAR_DATA * victim, int dam, int dt)
 						    gsn_block);
 					  /* fight training for speed  */
 					  if (!IS_NPC(victim)) {
-					    fightIncrease = number_range(1,2);
-					    tAbility = &victim->pcdata->tSpd;
-					    pAbility = &victim->perm_dex;
-					    permTstat = &victim->pcdata->permTspd;
-					    *tAbility += fightIncrease;
-
-					    if ( *tAbility >= 1000 && *permTstat < 32000 ) {
-					      *tAbility = 0;
-					      *pAbility += 1;
-					      *permTstat += 1;
-					      send_to_char( "&CYou feel your speed improving!&D\n\r", ch );
-					    } else if (*permTstat >= 32000 && *tAbility >= 999) {
-					      *tAbility = 999;
-					    }
+					  	fight_train(victim, "spd");
 					  }
 						
 					} else {
@@ -2615,20 +2657,7 @@ damage(CHAR_DATA * ch, CHAR_DATA * victim, int dam, int dt)
 		gain_exp(ch, xp_gain);
 
 		/* fight training for strength */
-		fightIncrease = number_range(1, 2);
-		tAbility = &ch->pcdata->tStr;
-		pAbility = &ch->perm_str;
-		permTstat = &ch->pcdata->permTstr;
-		*tAbility += fightIncrease;
-
-		if ( *tAbility >= 1000 && *permTstat < 32000 ) {
-		  *tAbility = 0;
-		  *pAbility += 1;
-		  *permTstat += 1;
-		  send_to_char( "&CYou feel your strength improving!&D\n\r", ch );
-		} else if ( *permTstat >= 32000 && *tAbility >= 999) {
-		    *tAbility = 999;
-		}
+		fight_train(ch, "str");
 	}
 	if (!IS_NPC(victim) && victim->level >= LEVEL_IMMORTAL
 	    && victim->hit < 1) {
