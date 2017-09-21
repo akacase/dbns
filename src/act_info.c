@@ -4441,7 +4441,7 @@ void do_train(CHAR_DATA *ch, char *argument)
 		act(AT_SKILL, "$n starts training $s $T.", ch, NULL, pOutput, TO_ROOM);
 		WAIT_STATE(ch, 2 * PULSE_VIOLENCE);
 
-		if ((checkLearn = gTrainSuccess(ch, stat, tAbility)))
+		if ((checkLearn = gTrainSuccess(ch, stat, tAbility, gravLevel)))
 			break;
 
 		/*		    WAIT_STATE( ch, 6 );*/
@@ -4502,7 +4502,7 @@ void do_train(CHAR_DATA *ch, char *argument)
 			pager_printf(ch, "&w\n\r");
 		}
 
-		if ((checkLearn = gTrainSuccess(ch, stat, tAbility)))
+		if ((checkLearn = gTrainSuccess(ch, stat, tAbility, gravLevel)))
 			break;
 
 		add_timer(ch, TIMER_DO_FUN, 1, do_train, 2);
@@ -4520,7 +4520,7 @@ void do_train(CHAR_DATA *ch, char *argument)
 		}
 		if (*tAbility >= 1000)
 		{
-			checkLearn = TRUE;
+			checkLearn = (true);
 			break;
 		}
 		if (ch->hit <= minLF)
@@ -4562,7 +4562,7 @@ void do_train(CHAR_DATA *ch, char *argument)
 			pager_printf(ch, "&w\n\r");
 		}
 
-		if ((checkLearn = gTrainSuccess(ch, stat, tAbility)))
+		if ((checkLearn = gTrainSuccess(ch, stat, tAbility, gravLevel)))
 			break;
 
 		add_timer(ch, TIMER_DO_FUN, 1, do_train, 1);
