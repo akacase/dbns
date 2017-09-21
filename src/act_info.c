@@ -4257,17 +4257,12 @@ bool gTrainSuccess(CHAR_DATA *ch, int stat, sh_int *tAbility, int gravLevel)
 
 	xp_gain = (long double)increase / 100 * gravLevel;
 
-	if (ch->exp < 100)
-		xp_gain = 0;
-
-	if (xp_gain < 1 && xp_gain > 0)
-		sprintf(buf, "Your power level increases very slightly.");
-
-	else
-	{
-		sprintf(buf, "Your power level increases by %s points.", num_punct(xp_gain));
-		act(AT_HIT, buf, ch, NULL, NULL, TO_CHAR);
+	if( ch->exp < 100) {
+	    xp_gain = 0;
 	}
+
+	sprintf(buf, "Your power level increases by %s points.", num_punct(xp_gain));
+	act(AT_HIT, buf, ch, NULL, NULL, TO_CHAR);
 
 	gain_exp(ch, xp_gain);
 
@@ -4501,7 +4496,7 @@ void do_train(CHAR_DATA *ch, char *argument)
 			}
 			pager_printf(ch, "&w\n\r");
 		}
-
+		gravLevel = ((get_curr_str(ch) + get_curr_dex(ch) + get_curr_int(ch) + get_curr_con(ch)) - 39);
 		if ((checkLearn = gTrainSuccess(ch, stat, tAbility, gravLevel)))
 			break;
 
@@ -4561,7 +4556,7 @@ void do_train(CHAR_DATA *ch, char *argument)
 			}
 			pager_printf(ch, "&w\n\r");
 		}
-
+		gravLevel = ((get_curr_str(ch) + get_curr_dex(ch) + get_curr_int(ch) + get_curr_con(ch)) - 39);
 		if ((checkLearn = gTrainSuccess(ch, stat, tAbility, gravLevel)))
 			break;
 
