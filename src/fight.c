@@ -1955,55 +1955,61 @@ ris_damage(CHAR_DATA * ch, int dam, int ris)
  * fight training
  */
 void
-fight_train(CHAR_DATA * ch, char* stat)
+fight_train(CHAR_DATA * ch, char *stat)
 {
 	sh_int *tAbility;
 	sh_int *pAbility;
 	sh_int *permTstat;
 	int fightIncrease = 0;
-	char message = "You feel your power increasing!";
-
+	
 	fightIncrease = number_range(1,2);
 
 	if ( stat == "str" )
 	{
-		tAbility = &ch->pcdata->tStr;
-		pAbility = &ch->perm_str;
-		permTstat = &ch->pcdata->permTstr;
-		message = "&CYou feel your strength improving!&D\n\r";
+	    tAbility = &ch->pcdata->tStr;
+	    pAbility = &ch->perm_str;
+	    permTstat = &ch->pcdata->permTstr;
 	}
 	else if ( stat == "int" )
 	{
-		tAbility = &ch->pcdata->tInt;
-		pAbility = &ch->perm_int;
-		permTstat = &ch->pcdata->permTint;
-		message = "&CYou feel your intelligence improving!&D\n\r";
+	    tAbility = &ch->pcdata->tInt;
+	    pAbility = &ch->perm_int;
+	    permTstat = &ch->pcdata->permTint;
 	}
 	else if ( stat == "spd" )
 	{
-		tAbility = &ch->pcdata->tSpd;
-		pAbility = &ch->perm_dex;
-		permTstat = &ch->pcdata->permTspd;
-		message = "&CYou feel your speed improving!&D\n\r";
+	    tAbility = &ch->pcdata->tSpd;
+	    pAbility = &ch->perm_dex;
+	    permTstat = &ch->pcdata->permTspd;
 	}
 	else if ( stat == "con" )
 	{
-		tAbility = &ch->pcdata->tCon;
-		pAbility = &ch->perm_con;
-		permTstat = &ch->pcdata->permTcon;
-		message = "&CYou feel your constitution improving!&D\n\r";
+	    tAbility = &ch->pcdata->tCon;
+	    pAbility = &ch->perm_con;
+	    permTstat = &ch->pcdata->permTcon;
 	}
 
-    *tAbility += fightIncrease;
+	*tAbility += fightIncrease;
 
-    if ( *tAbility >= 1000 && *permTstat < 32000 ) {
-      *tAbility = 0;
-      *pAbility += 1;
-      *permTstat += 1;
-      send_to_char( message, ch );
-    } else if (*permTstat >= 32000 && *tAbility >= 999) {
-      *tAbility = 999;
-    }
+	if ( *tAbility >= 1000 && *permTstat < 32000 ) {
+	    *tAbility = 0;
+	    *pAbility += 1;
+	    *permTstat += 1;
+	    if( stat == "str") {
+	        send_to_char( "&CYou feel your strength improving!&D\n\r", ch);
+	    }
+	    if( stat == "spd") {
+                send_to_char( "&CYou feel your speed improving!&D\n\r", ch);
+            }
+	    if( stat == "int") {
+                send_to_char( "&CYou feel your intelligence improving!&D\n\r", ch);
+            }
+            if( stat == "con") {
+                send_to_char( "&CYou feel your constitution improving!&D\n\r", ch);
+            }
+	} else if (*permTstat >= 32000 && *tAbility >= 999) {
+	    *tAbility = 999;
+	}
 }
 
 ch_ret
@@ -2769,59 +2775,6 @@ damage(CHAR_DATA * ch, CHAR_DATA * victim, int dam, int dt)
 		    num_punct_ld(cspar));
 		ch_printf(victim, "&cTotal pl gained this spar: &C%s\n\r",
 		    num_punct_ld(vspar));
-
-		if (!IS_NPC(ch)) {
-			switch (number_range(1, 4)) {
-			default:
-				break;
-			case 1:
-				ch->pcdata->tStr -= number_range(0, 3);
-				ch->pcdata->tStr =
-				    URANGE(0, ch->pcdata->tStr, 99);
-				break;
-			case 2:
-				ch->pcdata->tSpd -= number_range(0, 3);
-				ch->pcdata->tSpd =
-				    URANGE(0, ch->pcdata->tSpd, 99);
-				break;
-			case 3:
-				ch->pcdata->tInt -= number_range(0, 3);
-				ch->pcdata->tInt =
-				    URANGE(0, ch->pcdata->tInt, 99);
-				break;
-			case 4:
-				ch->pcdata->tCon -= number_range(0, 3);
-				ch->pcdata->tCon =
-				    URANGE(0, ch->pcdata->tCon, 99);
-				break;
-			}
-		}
-		if (!IS_NPC(victim)) {
-			switch (number_range(1, 4)) {
-			default:
-				break;
-			case 1:
-				victim->pcdata->tStr -= number_range(0, 3);
-				victim->pcdata->tStr =
-				    URANGE(0, victim->pcdata->tStr, 99);
-				break;
-			case 2:
-				victim->pcdata->tSpd -= number_range(0, 3);
-				victim->pcdata->tSpd =
-				    URANGE(0, victim->pcdata->tSpd, 99);
-				break;
-			case 3:
-				victim->pcdata->tInt -= number_range(0, 3);
-				victim->pcdata->tInt =
-				    URANGE(0, victim->pcdata->tInt, 99);
-				break;
-			case 4:
-				victim->pcdata->tCon -= number_range(0, 3);
-				victim->pcdata->tCon =
-				    URANGE(0, victim->pcdata->tCon, 99);
-				break;
-			}
-		}
 	}
 	update_pos(victim);
 
@@ -3141,58 +3094,7 @@ damage(CHAR_DATA * ch, CHAR_DATA * victim, int dam, int dt)
 				}
 			}
 		}
-		if (!IS_NPC(ch)) {
-			switch (number_range(1, 4)) {
-			default:
-				break;
-			case 1:
-				ch->pcdata->tStr -= number_range(0, 3);
-				ch->pcdata->tStr =
-				    URANGE(0, ch->pcdata->tStr, 99);
-				break;
-			case 2:
-				ch->pcdata->tSpd -= number_range(0, 3);
-				ch->pcdata->tSpd =
-				    URANGE(0, ch->pcdata->tSpd, 99);
-				break;
-			case 3:
-				ch->pcdata->tInt -= number_range(0, 3);
-				ch->pcdata->tInt =
-				    URANGE(0, ch->pcdata->tInt, 99);
-				break;
-			case 4:
-				ch->pcdata->tCon -= number_range(0, 3);
-				ch->pcdata->tCon =
-				    URANGE(0, ch->pcdata->tCon, 99);
-				break;
-			}
-		}
-		if (!IS_NPC(victim)) {
-			switch (number_range(1, 4)) {
-			default:
-				break;
-			case 1:
-				victim->pcdata->tStr -= number_range(0, 3);
-				victim->pcdata->tStr =
-				    URANGE(0, victim->pcdata->tStr, 99);
-				break;
-			case 2:
-				victim->pcdata->tSpd -= number_range(0, 3);
-				victim->pcdata->tSpd =
-				    URANGE(0, victim->pcdata->tSpd, 99);
-				break;
-			case 3:
-				victim->pcdata->tInt -= number_range(0, 3);
-				victim->pcdata->tInt =
-				    URANGE(0, victim->pcdata->tInt, 99);
-				break;
-			case 4:
-				victim->pcdata->tCon -= number_range(0, 3);
-				victim->pcdata->tCon =
-				    URANGE(0, victim->pcdata->tCon, 99);
-				break;
-			}
-		}
+ 
 		if (!npcvict) {
 			/* Bounty stuff begins - Garinan */
 			if (!IS_NPC(ch) && !IS_NPC(victim)) {
