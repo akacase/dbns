@@ -1142,7 +1142,7 @@ do_mset(CHAR_DATA * ch, char *argument)
 		ch->dest_buf = victim;
 
 	minattr = 1;
-	maxattr = 500;
+	maxattr = 500000;
 
 	if (!can_mmodify(ch, victim))
 		return;
