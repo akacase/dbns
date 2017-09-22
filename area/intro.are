@@ -58,7 +58,7 @@ A better android training partner is prepared to fight you.
 ~
 ~
 3 0 0 C
-2
+13
 1 0 100 1d20+0 2d5+0
 -1 50
 112 112 0
@@ -78,7 +78,7 @@ An advanced android training partner is prepared to fight you.
 ~
 ~
 3 0 0 C
-3
+16
 1 0 100 1d20+0 2d5+0
 -1 150
 112 112 0
@@ -98,7 +98,7 @@ A hyper android training partner is prepared to fight you.
 ~
 ~
 3 0 0 C
-4
+19
 1 0 100 1d20+0 2d5+0
 -1 450
 112 112 0
@@ -118,7 +118,7 @@ A supreme android training partner is prepared to fight you.
 ~
 ~
 3 0 0 C
-5
+22
 1 0 100 1d20+0 2d5+0
 -1 1350
 112 112 0
@@ -138,7 +138,7 @@ An ultimate android training partner is prepared to fight you.
 ~
 ~
 3 0 0 C
-6
+25
 1 0 100 1d20+0 2d5+0
 -1 4050
 112 112 0
@@ -431,7 +431,7 @@ D5
 ~
 0 -1 103
 > speech_prog 'i agree'~
-if pl($n) > 50000
+if pl($n) > 2500
 mpecho Okay.
 mptransfer $n 6000
 mpat 6000 mpforce $n look
