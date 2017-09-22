@@ -1962,7 +1962,7 @@ fight_train(CHAR_DATA * ch, char *stat)
 	sh_int *permTstat;
 	int fightIncrease = 0;
 	
-	fightIncrease = number_range(1,2);
+	fightIncrease = (number_range(1,2) * 5);
 
 	if ( stat == "str" )
 	{
