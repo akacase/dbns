@@ -400,15 +400,15 @@ struct char_morph {
 	int 	timer;			/* How much time is left */
 	sh_int 	ac;
 	sh_int 	blood;
-	sh_int 	con;
+	int 	con;
 	sh_int 	damroll;
-	sh_int 	dex;
+	int 	dex;
 	sh_int 	dodge;
-	sh_int 	hit;
+	int 	hit;
 	sh_int 	hitroll;
-	sh_int 	inte;
-	sh_int 	lck;
-	sh_int 	mana;
+	int 	inte;
+	int 	lck;
+	int 	mana;
 	sh_int 	move;
 	sh_int 	parry;
 	sh_int 	saving_breath;
@@ -416,7 +416,7 @@ struct char_morph {
 	sh_int 	saving_poison_death;
 	sh_int 	saving_spell_staff;
 	sh_int 	saving_wand;
-	sh_int 	str;
+	int 	str;
 	sh_int 	tumble;
 };
 
@@ -461,19 +461,19 @@ struct morph_data {
 	sh_int 	ac;
 	sh_int 	bloodused;		/* Amount of blood morph requires
 					 * Vamps only */
-	sh_int 	con;			/* Amount of Con gained/Lost */
+	int 	con;			/* Amount of Con gained/Lost */
 	sh_int 	dayfrom;		/* Starting Day you can morph into
 					 * this */
 	sh_int 	dayto;			/* Ending Day you can morph into this */
-	sh_int 	dex;			/* Amount of dex added */
+	int 	dex;			/* Amount of dex added */
 	sh_int 	dodge;			/* Percent of dodge added IE 1 = 1% */
 	sh_int 	favourused;		/* Amount of favour to morph */
 	sh_int 	gloryused;		/* Amount of glory used to morph */
-	sh_int 	hpused;			/* Amount of hps used to morph */
-	sh_int 	inte;			/* Amount of Int gained/lost */
-	sh_int 	lck;			/* Amount of Lck gained/lost */
+	int 	hpused;			/* Amount of hps used to morph */
+	int 	inte;			/* Amount of Int gained/lost */
+	int 	lck;			/* Amount of Lck gained/lost */
 	sh_int 	level;			/* Minimum level to use this morph */
-	sh_int 	manaused;		/* Amount of mana used to morph */
+	int 	manaused;		/* Amount of mana used to morph */
 	sh_int 	moveused;		/* Amount of move used to morph */
 	sh_int 	parry;			/* Percent of parry added IE 1 = 1% */
 	sh_int 	pkill;			/* Pkill Only, Peacefull Only or Both */
@@ -483,7 +483,7 @@ struct morph_data {
 	sh_int 	saving_spell_staff;
 	sh_int 	saving_wand;
 	sh_int 	sex;			/* The sex that can morph into this */
-	sh_int 	str;			/* Amount of str gained lost */
+	int 	str;			/* Amount of str gained lost */
 	sh_int 	timefrom;		/* Hour starting you can morph */
 	sh_int 	timeto;			/* Hour ending that you can morph */
 	sh_int 	tumble;			/* Percent of tumble added IE 1 = 1% */
@@ -1088,13 +1088,13 @@ struct class_type {
 struct race_type {
 	char 	race_name[16];		/* Race name                    */
 	EXT_BV 	affected;		/* Default affect bitvectors    */
-	sh_int 	str_plus;		/* Str bonus/penalty            */
-	sh_int 	dex_plus;		/* Dex      "                   */
-	sh_int 	int_plus;		/* Int      "                   */
-	sh_int 	con_plus;		/* Con      "                   */
-	sh_int 	lck_plus;		/* Lck      "                   */
-	sh_int 	hit;
-	sh_int 	mana;
+	int 	str_plus;		/* Str bonus/penalty            */
+	int 	dex_plus;		/* Dex      "                   */
+	int 	int_plus;		/* Int      "                   */
+	int 	con_plus;		/* Con      "                   */
+	int 	lck_plus;		/* Lck      "                   */
+	int 	hit;
+	int 	mana;
 	int 	resist;
 	int 	suscept;
 	int 	class_restriction;	/* Flags for illegal classes    */
@@ -2522,9 +2522,9 @@ struct mob_index_data {
 	sh_int 	alignment;
 	sh_int 	mobthac0;		/* Unused */
 	sh_int 	ac;
-	sh_int 	hitnodice;
-	sh_int 	hitsizedice;
-	sh_int 	hitplus;
+	int 	hitnodice;
+	int 	hitsizedice;
+	int 	hitplus;
 	sh_int 	damnodice;
 	sh_int 	damsizedice;
 	sh_int 	damplus;
@@ -2547,11 +2547,11 @@ struct mob_index_data {
 	sh_int 	class;
 	sh_int 	hitroll;
 	sh_int 	damroll;
-	sh_int 	perm_str;
-	sh_int 	perm_int;
-	sh_int 	perm_dex;
-	sh_int 	perm_con;
-	sh_int 	perm_lck;
+	int 	perm_str;
+	int 	perm_int;
+	int 	perm_dex;
+	int 	perm_con;
+	int 	perm_lck;
 	sh_int 	saving_poison_death;
 	sh_int 	saving_wand;
 	sh_int 	saving_para_petri;
@@ -2643,8 +2643,8 @@ struct char_data {
 	time_t 	save_time;
 	sh_int 	timer;
 	sh_int 	wait;
-	sh_int 	hit;
-	sh_int 	max_hit;
+	int 	hit;
+	int 	max_hit;
 	long long int     worth;
 	int 	mana;
 	int 	max_mana;
@@ -2699,27 +2699,24 @@ struct char_data {
 	sh_int 	armor;
 	sh_int 	wimpy;
 	EXT_BV 	deaf;
-	sh_int 	perm_str;
-	sh_int 	perm_int;
-	sh_int 	perm_dex;
-	sh_int 	perm_con;
-	sh_int 	perm_lck;
-	sh_int 	mod_str;
-	sh_int 	mod_int;
-	sh_int 	mod_dex;
-	sh_int 	mod_con;
-	sh_int 	mod_lck;
-	sh_int 	add_str;
-	      //For the enhance command
-		sh_int add_dex;
-	      //For the enhance command
-		sh_int add_int;
-	      //For the enhance command
-		sh_int add_con;
-	      //For the enhance command
-		sh_int add_lck;
-	      //For the enhance command
-		sh_int mental_state;	/* simplified */
+	int 	perm_str;
+	int 	perm_int;
+	int 	perm_dex;
+	int 	perm_con;
+	int 	perm_lck;
+	int 	mod_str;
+	int 	mod_int;
+	int 	mod_dex;
+	int 	mod_con;
+	int 	mod_lck;
+	int 	add_str;
+	//For the enhance command
+	int add_dex;
+	int add_int;
+	int add_con;
+	int add_lck;
+	//For the enhance command
+	sh_int mental_state;	/* simplified */
 	sh_int 	emotional_state;	/* simplified */
 	int 	pagelen;		/* BUILD INTERFACE */
 	sh_int 	inter_page;		/* BUILD INTERFACE */
@@ -2948,10 +2945,10 @@ struct pc_data {
 
 	sh_int 	xTrain;
 	sh_int 	total_xTrain;
-	sh_int 	permTstr;
-	sh_int 	permTspd;
-	sh_int 	permTint;
-	sh_int 	permTcon;
+	int 	permTstr;
+	int 	permTspd;
+	int 	permTint;
+	int 	permTcon;
 
 	int 	upgradeL;
 
@@ -5867,11 +5864,11 @@ args((const char *argument, int channel,
 	int exp_level args((CHAR_DATA * ch, sh_int level));
 	sh_int get_trust args((CHAR_DATA * ch));
 	sh_int get_age args((CHAR_DATA * ch));
-	sh_int get_curr_str args((CHAR_DATA * ch));
-	sh_int get_curr_int args((CHAR_DATA * ch));
-	sh_int get_curr_dex args((CHAR_DATA * ch));
-	sh_int get_curr_con args((CHAR_DATA * ch));
-	sh_int get_curr_lck args((CHAR_DATA * ch));
+	int get_curr_str args((CHAR_DATA * ch));
+	int get_curr_int args((CHAR_DATA * ch));
+	int get_curr_dex args((CHAR_DATA * ch));
+	int get_curr_con args((CHAR_DATA * ch));
+	int get_curr_lck args((CHAR_DATA * ch));
 	bool can_take_proto args((CHAR_DATA * ch));
 	int can_carry_n args((CHAR_DATA * ch));
 	int can_carry_w args((CHAR_DATA * ch));

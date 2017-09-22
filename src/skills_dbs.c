@@ -1479,6 +1479,9 @@ heart_calc(CHAR_DATA * ch, char *argument)
 	if (!IS_SET(ch->pcdata->combatFlags, CMB_NO_HEART))
 		return;
 
+	if (IS_SET(ch->pcdata->combatFlags, CMB_NO_HEART))
+		return;
+
 	if (!xIS_SET(ch->affected_by, AFF_HEART))
 		ch->heart_pl = ch->pl;
 

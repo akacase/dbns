@@ -349,8 +349,8 @@ advance_level(CHAR_DATA * ch)
 		add_move = add_move + add_move * .3;
 		sprintf(buf, "Gravoc's Pandect steels your sinews.\n\r");
 	}
-	ch->max_hit = 100;
-	ch->max_mana += add_mana;
+	ch->max_hit = (ch->perm_con + 90);
+	ch->max_mana += (ch->perm_int * 6) + (ch->perm_con * 2) + (ch->perm_dex) + (ch->perm_str);
 	ch->max_move += add_move;
 	ch->practice += add_prac;
 
@@ -485,34 +485,13 @@ gain_exp(CHAR_DATA * ch, long double gain)
 			do_help(ch, "demigod");
 		}
 	}
-	/*  PL high enough to gain a train point */
-	if ((ch->exp >= (pow(ch->max_train, 3.07) * 650))
-	    && (ch->max_train < 72)) {
-		set_char_color(AT_LBLUE + AT_BLINK, ch);
-		if (is_android(ch))
-			ch_printf(ch,
-			    "You gained 5 additional hardware upgrade points!\n\r");
-		else
-			ch_printf(ch,
-			    "You gained 5 additional training points!\n\r");
-		ch->train += 5;
-		ch->max_train += 1;
-	}
-	/*  PL high enough to gain more energy */
-	if (ch->exp >= (pow(ch->max_energy, 2.27) * 50)
-	    && ch->max_mana < 99999) {
-		set_char_color(AT_LBLUE + AT_BLINK, ch);
-		ch_printf(ch, "You gained some more energy!\n\r");
 
-		energygain =
-		    (double) ((double) get_curr_con(ch) / 100 +
-		    1) * get_curr_con(ch) + number_range(5, 15);
-		ch->mana += energygain;
-		ch->max_mana += energygain;
-		ch->max_mana = URANGE(100, ch->max_mana, 99999);
-		ch->mana = UMIN(ch->mana, ch->max_mana);
-		ch->max_energy += 1;
-	}
+	/*  Check to gain more HP on gaining pl */
+	if (ch->max_hit != (ch->perm_con + 90))
+		ch->max_hit = (ch->perm_con + 90);
+	/* Check to gain more ki on gaining pl */
+	if (ch->max_mana != ((ch->perm_int * 6) + (ch->perm_con * 2) + (ch->perm_dex) + (ch->perm_str)))
+		ch->max_mana = ((ch->perm_int * 6) + (ch->perm_con * 2) + (ch->perm_dex) + (ch->perm_str));
 }
 
 /*
