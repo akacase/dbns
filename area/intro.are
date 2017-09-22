@@ -60,7 +60,7 @@ A better android training partner is prepared to fight you.
 3 0 0 C
 2
 1 0 100 1d20+0 2d5+0
--1 500
+-1 50
 112 112 0
 10 10 10 10 10
 0 0 0 0 0
@@ -80,7 +80,7 @@ An advanced android training partner is prepared to fight you.
 3 0 0 C
 3
 1 0 100 1d20+0 2d5+0
--1 1500
+-1 150
 112 112 0
 10 10 10 10 10
 0 0 0 0 0
@@ -100,7 +100,7 @@ A hyper android training partner is prepared to fight you.
 3 0 0 C
 4
 1 0 100 1d20+0 2d5+0
--1 4500
+-1 450
 112 112 0
 10 10 10 10 10
 0 0 0 0 0
@@ -120,7 +120,7 @@ A supreme android training partner is prepared to fight you.
 3 0 0 C
 5
 1 0 100 1d20+0 2d5+0
--1 13500
+-1 1350
 112 112 0
 10 10 10 10 10
 0 0 0 0 0
@@ -140,7 +140,7 @@ An ultimate android training partner is prepared to fight you.
 3 0 0 C
 6
 1 0 100 1d20+0 2d5+0
--1 40500
+-1 4050
 112 112 0
 10 10 10 10 10
 0 0 0 0 0
@@ -867,14 +867,6 @@ S
 M 1 101 1 109
 M 1 107 1 116
 M 1 108 1 104
-M 1 109 1 103
-G 1 303913 1
-G 1 303908 1
-G 1 303912 1
-G 1 303907 1
-G 1 303910 1
-G 1 303911 1
-G 1 303909 1
 M 1 108 1 119
 M 1 108 1 117
 M 1 108 1 118
