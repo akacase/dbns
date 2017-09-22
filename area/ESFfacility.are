@@ -162,13 +162,13 @@ A weak ESF trainee is exercising here, preparing for another round of combat.
 ~
 ~
 3 0 0 C
-50
+100
 1 0 100 1d20+0 2d5+0
 -1 5000
 112 112 1
 10 10 10 10 20
 0 0 0 0 0
-1 1 0 0 1 1 0
+1 1 0 0 1 1 1
 0 0 0 0 0 0 0 0
 > death_prog 100~
 mpecho &YThey collapse to the floor but quickly scramble to their feet, prepared for another round.&d
@@ -185,13 +185,13 @@ An ESF trainee is pumping iron here.
 ~
 ~
 3 0 0 C
-75
+125
 1 0 100 1d20+0 2d5+0
 -1 15000
 112 112 1
 15 15 15 15 0
 0 0 0 0 0
-1 1 0 0 1 1 0
+1 1 0 0 1 1 1
 0 0 0 0 0 0 0 0
 > death_prog 100~
 mpecho &YThey collapse to the floor but quickly scramble to their feet, prepared for another round.&d
@@ -208,7 +208,7 @@ A stronger ESF trainee shadowboxes here in the arena.
 ~
 ~
 3 0 0 C
-100
+150
 1 0 100 1d20+0 2d5+0
 -1 50000
 112 112 1
@@ -231,7 +231,7 @@ An impressive ESF trainee sits here in deep meditation.
 ~
 ~
 3 0 0 C
-125
+175
 1 0 100 1d20+0 2d5+0
 -1 150000
 112 112 1
@@ -254,7 +254,7 @@ An advanced ESF combatant stands here, ever at the ready for a new challenger.
 ~
 ~
 3 0 0 C
-150
+200
 1 0 100 1d20+0 2d5+0
 -1 500000
 112 112 1
@@ -277,7 +277,7 @@ An elite member of the ESF stands here with arms crossed, a promising grin sprea
 ~
 ~
 16777219 0 0 C
-200
+225
 1 0 100 1d20+0 2d5+0
 -1 1500000
 112 112 1
