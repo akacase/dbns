@@ -1479,6 +1479,9 @@ heart_calc(CHAR_DATA * ch, char *argument)
 	if (!IS_SET(ch->pcdata->combatFlags, CMB_NO_HEART))
 		return;
 
+	if (IS_SET(ch->pcdata->combatFlags, CMB_NO_HEART))
+		return;
+
 	if (!xIS_SET(ch->affected_by, AFF_HEART))
 		ch->heart_pl = ch->pl;
 
@@ -1744,8 +1747,9 @@ do_powerup(CHAR_DATA * ch, char *argument)
 	CHAR_DATA *och;
 	CHAR_DATA *och_next;
 
-	float 	pl_mult = 1;
+	double 	pl_mult = 1;
 	int 	auraColor = AT_YELLOW;
+	int		kicontrol = 0;
 
 	if (IS_AFFECTED(ch, AFF_BIOJR) && IS_NPC(ch))
 		return;
@@ -1755,72 +1759,110 @@ do_powerup(CHAR_DATA * ch, char *argument)
 		return;
 	}
 	if (xIS_SET((ch)->affected_by, AFF_SSJ)
-	    || xIS_SET((ch)->affected_by, AFF_SSJ2)
-	    || xIS_SET((ch)->affected_by, AFF_SSJ3)
-	    || xIS_SET((ch)->affected_by, AFF_SSJ4)
-	    || xIS_SET((ch)->affected_by, AFF_KAIOKEN)
-	    || xIS_SET((ch)->affected_by, AFF_HYPER)
-	    || xIS_SET((ch)->affected_by, AFF_SNAMEK)
-	    || xIS_SET((ch)->affected_by, AFF_ICER2)
-	    || xIS_SET((ch)->affected_by, AFF_ICER3)
-	    || xIS_SET((ch)->affected_by, AFF_ICER4)
-	    || xIS_SET((ch)->affected_by, AFF_ICER5)
-	    || xIS_SET((ch)->affected_by, AFF_SEMIPERFECT)
-	    || xIS_SET((ch)->affected_by, AFF_PERFECT)
-	    || xIS_SET((ch)->affected_by, AFF_ULTRAPERFECT)
-	    || xIS_SET((ch)->affected_by, AFF_OOZARU)
-	    || xIS_SET((ch)->affected_by, AFF_GOLDEN_OOZARU)
-	    || xIS_SET((ch)->affected_by, AFF_EXTREME)
-	    || xIS_SET((ch)->affected_by, AFF_MYSTIC)
-	    || xIS_SET((ch)->affected_by, AFF_SUPERANDROID)
-	    || xIS_SET((ch)->affected_by, AFF_MAKEOSTAR)
-	    || xIS_SET((ch)->affected_by, AFF_EVILBOOST)
-	    || xIS_SET((ch)->affected_by, AFF_EVILSURGE)
-	    || xIS_SET((ch)->affected_by, AFF_EVILOVERLOAD)) {
+		|| xIS_SET((ch)->affected_by, AFF_SSJ2)
+		|| xIS_SET((ch)->affected_by, AFF_SSJ3)
+		|| xIS_SET((ch)->affected_by, AFF_SSJ4)
+		|| xIS_SET((ch)->affected_by, AFF_KAIOKEN)
+		|| xIS_SET((ch)->affected_by, AFF_HYPER)
+		|| xIS_SET((ch)->affected_by, AFF_SNAMEK)
+		|| xIS_SET((ch)->affected_by, AFF_ICER2)
+		|| xIS_SET((ch)->affected_by, AFF_ICER3)
+		|| xIS_SET((ch)->affected_by, AFF_ICER4)
+		|| xIS_SET((ch)->affected_by, AFF_ICER5)
+		|| xIS_SET((ch)->affected_by, AFF_SEMIPERFECT)
+		|| xIS_SET((ch)->affected_by, AFF_PERFECT)
+		|| xIS_SET((ch)->affected_by, AFF_ULTRAPERFECT)
+		|| xIS_SET((ch)->affected_by, AFF_OOZARU)
+		|| xIS_SET((ch)->affected_by, AFF_GOLDEN_OOZARU)
+		|| xIS_SET((ch)->affected_by, AFF_EXTREME)
+		|| xIS_SET((ch)->affected_by, AFF_MYSTIC)
+		|| xIS_SET((ch)->affected_by, AFF_SUPERANDROID)
+		|| xIS_SET((ch)->affected_by, AFF_MAKEOSTAR)
+		|| xIS_SET((ch)->affected_by, AFF_EVILBOOST)
+		|| xIS_SET((ch)->affected_by, AFF_EVILSURGE)
+		|| xIS_SET((ch)->affected_by, AFF_EVILOVERLOAD)) {
 		send_to_pager_color
-		    ("&BYou can't power up any more in this form.\n\r", ch);
+		("&BYour ki is too uncontrollable in this form.\n\r", ch);
 		return;
 	}
+	/* Variable Powerup */
+	kicontrol = get_curr_int(ch);
+
 	if (!IS_NPC(ch) && ch->pcdata->auraColorPowerUp > 0)
 		auraColor = ch->pcdata->auraColorPowerUp;
 
 	if (!str_cmp(argument, "max")) {
-		if (is_android(ch) || is_superandroid(ch)) {
+		if (is_android(ch) || is_superandroid(ch))
+		{
 			act(auraColor,
-			    "With a bright flash and a deafening boom that fills the air with a static charge you power up to your maximum.",
-			    ch, NULL, NULL, TO_CHAR);
+				"With a bright flash and a deafening boom that fills the air with a static charge you power up to your maximum.",
+				ch, NULL, NULL, TO_CHAR);
 			act(auraColor,
-			    "With a bright flash and a deafening boom that fills the air with a static charge $n powers up to $s maximum.",
-			    ch, NULL, NULL, TO_NOTVICT);
-		} else {
-			act(auraColor,
-			    "With a blinding flash you power up to your maximum.",
-			    ch, NULL, NULL, TO_CHAR);
-			act(auraColor,
-			    "With a blinding flash $n powers up to $s maximum.",
-			    ch, NULL, NULL, TO_NOTVICT);
+				"With a bright flash and a deafening boom that fills the air with a static charge $n powers up to $s maximum.",
+				ch, NULL, NULL, TO_NOTVICT);
 		}
-		if (ch->exp <= 2499) {
+
+		else
+		{
+			act(auraColor, "With a blinding flash you power up to your maximum.", ch, NULL, NULL, TO_CHAR);
+			act(auraColor, "With a blinding flash $n powers up to $s maximum.", ch, NULL, NULL, TO_NOTVICT);
+		}
+
+		if (kicontrol >= 10 && kicontrol <= 19)
+		{
 			ch->powerup = 1;
-			pl_mult = 1.1;
-		} else if (ch->exp >= 2500 && ch->exp <= 4999) {
+			pl_mult = (double) kicontrol * 10 / 1600 + 1;
+
+			if (pl_mult > 1.5)
+				pl_mult = 1.5;
+		}
+		else if (kicontrol >= 20 && kicontrol <= 29)
+		{
 			ch->powerup = 2;
-			pl_mult = 1.2;
-		} else if (ch->exp >= 5000 && ch->exp <= 9999) {
+			pl_mult = (double) kicontrol * 10 / 1500 + 1;
+
+			if (pl_mult > 2)
+				pl_mult = 2;
+		}
+		else if (kicontrol >= 30 && kicontrol <= 39)
+		{
 			ch->powerup = 3;
-			pl_mult = 1.3;
-		} else if (ch->exp >= 10000 && ch->exp <= 19999) {
+			pl_mult = (double) kicontrol * 10 / 1400 + 1;
+
+			if (pl_mult > 4)
+				pl_mult = 4;
+		}
+		else if (kicontrol >= 40 && kicontrol <= 49)
+		{
 			ch->powerup = 4;
-			pl_mult = 1.4;
-		} else if (ch->exp >= 20000 && ch->exp <= 39999) {
+			pl_mult = (double) kicontrol * 10 / 1300 + 1;
+
+			if (pl_mult > 8)
+				pl_mult = 8;
+		}
+		else if (kicontrol >= 50 && kicontrol <= 59)
+		{
 			ch->powerup = 5;
-			pl_mult = 1.5;
-		} else if (ch->exp >= 40000 && ch->exp <= 79999) {
+			pl_mult = (double) kicontrol * 10 / 1200 + 1;
+
+			if (pl_mult > 12)
+				pl_mult = 12;
+		}
+		else if (kicontrol >= 60 && kicontrol <= 69)
+		{
 			ch->powerup = 6;
-			pl_mult = 1.6;
-		} else if (ch->exp >= 80000) {
+			pl_mult = (double) kicontrol * 10 / 1100 + 1;
+
+			if (pl_mult > 16)
+				pl_mult = 16;
+		}
+		else if (kicontrol >= 70)
+		{
 			ch->powerup = 7;
-			pl_mult = 1.7;
+			pl_mult = (double) kicontrol * 10 / 1000 + 1;
+
+			if (pl_mult > 20)
+				pl_mult = 20;
 		}
 
 		if (xIS_SET((ch)->affected_by, AFF_HEART))
@@ -1842,9 +1884,9 @@ do_powerup(CHAR_DATA * ch, char *argument)
 	}
 	if (ch->pl < ch->exp) {
 		act(auraColor, "You power up to your base.", ch, NULL, NULL,
-		    TO_CHAR);
+			TO_CHAR);
 		act(auraColor, "$n powers up to $s base.", ch, NULL, NULL,
-		    TO_NOTVICT);
+			TO_NOTVICT);
 		if (xIS_SET((ch)->affected_by, AFF_HEART))
 			xREMOVE_BIT(ch->affected_by, AFF_HEART);
 		ch->powerup = 0;
@@ -1866,21 +1908,24 @@ do_powerup(CHAR_DATA * ch, char *argument)
 	if (ch->powerup == 0) {
 		if (is_android(ch) || is_superandroid(ch)) {
 			act(auraColor,
-			    "A soft hum begins to fill the air as you power up for the first time.",
-			    ch, NULL, NULL, TO_CHAR);
+				"A soft hum begins to fill the air as you power up for the first time.",
+				ch, NULL, NULL, TO_CHAR);
 			act(auraColor,
-			    "A soft hum begins to fill the air as $n powers up for the first time.",
-			    ch, NULL, NULL, TO_NOTVICT);
-		} else {
+				"A soft hum begins to fill the air as $n powers up for the first time.",
+				ch, NULL, NULL, TO_NOTVICT);
+		}
+		else {
 			act(auraColor,
-			    "You begin to glow as you power up for the first time.",
-			    ch, NULL, NULL, TO_CHAR);
+				"You let out a mighty shout, reaching deep inside yourself to increase your power.",
+				ch, NULL, NULL, TO_CHAR);
 			act(auraColor,
-			    "$n begins to glow as $e powers up for the first time.",
-			    ch, NULL, NULL, TO_NOTVICT);
+				"$n lets out a mighty shout.",
+				ch, NULL, NULL, TO_NOTVICT);
 		}
 		ch->powerup = 1;
-		pl_mult = 1.1;
+		pl_mult = (double) kicontrol * 10 / 1600 + 1;
+		if (pl_mult > 1.5)
+			pl_mult = 1.5;
 		if (xIS_SET((ch)->affected_by, AFF_HEART))
 			xREMOVE_BIT(ch->affected_by, AFF_HEART);
 		ch->pl = ch->exp * pl_mult;
@@ -1896,24 +1941,28 @@ do_powerup(CHAR_DATA * ch, char *argument)
 					do_powerup(och, argument);
 			}
 		}
-	} else if (ch->powerup == 1 && ch->exp >= 2500) {
+	}
+	else if (ch->powerup == 1 && kicontrol >= 20) {
 		if (is_android(ch) || is_superandroid(ch)) {
 			act(auraColor,
-			    "The soft hum coming from you is joined by whirring and grinding noises as you power up for the second time.",
-			    ch, NULL, NULL, TO_CHAR);
+				"The soft hum coming from you is joined by whirring and grinding noises as you power up for the second time.",
+				ch, NULL, NULL, TO_CHAR);
 			act(auraColor,
-			    "The soft hum coming from $n is joined by whirring and grinding noises as $e powers up for the second time.",
-			    ch, NULL, NULL, TO_NOTVICT);
-		} else {
+				"The soft hum coming from $n is joined by whirring and grinding noises as $e powers up for the second time.",
+				ch, NULL, NULL, TO_NOTVICT);
+		}
+		else {
 			act(auraColor,
-			    "You begin to glow more as you power up for the second time.",
-			    ch, NULL, NULL, TO_CHAR);
+				"You clench your hands tightly into fists, doubling forward as every muscle tenses.",
+				ch, NULL, NULL, TO_CHAR);
 			act(auraColor,
-			    "$n begins to glow more as $e powers up for the second time.",
-			    ch, NULL, NULL, TO_NOTVICT);
+				"$n clenches &s hands and doubles forward, &s power sharply increasing.",
+				ch, NULL, NULL, TO_NOTVICT);
 		}
 		ch->powerup = 2;
-		pl_mult = 1.2;
+		pl_mult = (double) kicontrol * 10 / 1500 + 1;
+		if (pl_mult > 2)
+			pl_mult = 2;
 		if (xIS_SET((ch)->affected_by, AFF_HEART))
 			xREMOVE_BIT(ch->affected_by, AFF_HEART);
 		ch->pl = ch->exp * pl_mult;
@@ -1929,24 +1978,28 @@ do_powerup(CHAR_DATA * ch, char *argument)
 					do_powerup(och, argument);
 			}
 		}
-	} else if (ch->powerup == 2 && ch->exp >= 5000) {
+	}
+	else if (ch->powerup == 2 && kicontrol >= 30) {
 		if (is_android(ch) || is_superandroid(ch)) {
 			act(auraColor,
-			    "The air around you gains a static charge as you power up for the third time.",
-			    ch, NULL, NULL, TO_CHAR);
+				"The air around you gains a static charge as you power up for the third time.",
+				ch, NULL, NULL, TO_CHAR);
 			act(auraColor,
-			    "The air around $n gains a static charge as $e powers up for the third time.",
-			    ch, NULL, NULL, TO_NOTVICT);
-		} else {
+				"The air around $n gains a static charge as $e powers up for the third time.",
+				ch, NULL, NULL, TO_NOTVICT);
+		}
+		else {
 			act(auraColor,
-			    "You begin to glow brightly as you power up for the third time.",
-			    ch, NULL, NULL, TO_CHAR);
+				"The air sways gently around you as you focus on increasing your ki.",
+				ch, NULL, NULL, TO_CHAR);
 			act(auraColor,
-			    "$n begins to glow brightly as $e powers up for the third time.",
-			    ch, NULL, NULL, TO_NOTVICT);
+				"The air sways gently around $n as $e focuses $s ki.",
+				ch, NULL, NULL, TO_NOTVICT);
 		}
 		ch->powerup = 3;
-		pl_mult = 1.3;
+		pl_mult = (double) kicontrol * 10 / 1400 + 1;
+		if (pl_mult > 4)
+			pl_mult = 4;
 		if (xIS_SET((ch)->affected_by, AFF_HEART))
 			xREMOVE_BIT(ch->affected_by, AFF_HEART);
 		ch->pl = ch->exp * pl_mult;
@@ -1962,24 +2015,28 @@ do_powerup(CHAR_DATA * ch, char *argument)
 					do_powerup(och, argument);
 			}
 		}
-	} else if (ch->powerup == 3 && ch->exp >= 10000) {
+	}
+	else if (ch->powerup == 3 && kicontrol >= 40) {
 		if (is_android(ch) || is_superandroid(ch)) {
 			act(auraColor,
-			    "An internal engine roars to life, the ground shaking softly, as you power up for the fourth time.",
-			    ch, NULL, NULL, TO_CHAR);
+				"An internal engine roars to life, the ground shaking softly, as you power up for the fourth time.",
+				ch, NULL, NULL, TO_CHAR);
 			act(auraColor,
-			    "An internal engine roars to life, the ground shaking softly, as $e powers up for the fourth time.",
-			    ch, NULL, NULL, TO_NOTVICT);
-		} else {
+				"An internal engine roars to life, the ground shaking softly, as $e powers up for the fourth time.",
+				ch, NULL, NULL, TO_NOTVICT);
+		}
+		else {
 			act(auraColor,
-			    "The ground trembles under your feet as you power up for the fourth time.",
-			    ch, NULL, NULL, TO_CHAR);
+				"Your entire body glows with building energy.",
+				ch, NULL, NULL, TO_CHAR);
 			act(auraColor,
-			    "The ground trembles under $n's feet as $e powers up for the fourth time.",
-			    ch, NULL, NULL, TO_NOTVICT);
+				"$n's entire body begins to glow with energy.'",
+				ch, NULL, NULL, TO_NOTVICT);
 		}
 		ch->powerup = 4;
-		pl_mult = 1.4;
+		pl_mult = (double) kicontrol * 10 / 1300 + 1;
+		if (pl_mult > 8)
+			pl_mult = 8;
 		if (xIS_SET((ch)->affected_by, AFF_HEART))
 			xREMOVE_BIT(ch->affected_by, AFF_HEART);
 		ch->pl = ch->exp * pl_mult;
@@ -1995,24 +2052,28 @@ do_powerup(CHAR_DATA * ch, char *argument)
 					do_powerup(och, argument);
 			}
 		}
-	} else if (ch->powerup == 4 && ch->exp >= 20000) {
+	}
+	else if (ch->powerup == 4 && kicontrol >= 50) {
 		if (is_android(ch) || is_superandroid(ch)) {
 			act(auraColor,
-			    "A high-pitched whine comes from your body, cracks appearing under your feet, as you power up for the fifth time.",
-			    ch, NULL, NULL, TO_CHAR);
+				"A high-pitched whine comes from your body, cracks appearing under your feet, as you power up for the fifth time.",
+				ch, NULL, NULL, TO_CHAR);
 			act(auraColor,
-			    "A high-pithced whine comes from $n's body, cracks appearing under $s feet, as $e powers up for the fifth time.",
-			    ch, NULL, NULL, TO_NOTVICT);
-		} else {
+				"A high-pithced whine comes from $n's body, cracks appearing under $s feet, as $e powers up for the fifth time.",
+				ch, NULL, NULL, TO_NOTVICT);
+		}
+		else {
 			act(auraColor,
-			    "The ground really shakes as you power up for the fifth time.",
-			    ch, NULL, NULL, TO_CHAR);
+				"The ground trembles violently, your power growing even greater.",
+				ch, NULL, NULL, TO_CHAR);
 			act(auraColor,
-			    "The ground really shakes as $n powers up for the fifth time.",
-			    ch, NULL, NULL, TO_NOTVICT);
+				"The ground trembles violently as $n continues to power up.",
+				ch, NULL, NULL, TO_NOTVICT);
 		}
 		ch->powerup = 5;
-		pl_mult = 1.5;
+		pl_mult = (double) kicontrol * 10 / 1200 + 1;
+		if (pl_mult > 12)
+			pl_mult = 12;
 		if (xIS_SET((ch)->affected_by, AFF_HEART))
 			xREMOVE_BIT(ch->affected_by, AFF_HEART);
 		ch->pl = ch->exp * pl_mult;
@@ -2028,24 +2089,28 @@ do_powerup(CHAR_DATA * ch, char *argument)
 					do_powerup(och, argument);
 			}
 		}
-	} else if (ch->powerup == 5 && ch->exp >= 40000) {
+	}
+	else if (ch->powerup == 5 && kicontrol >= 60) {
 		if (is_android(ch) || is_superandroid(ch)) {
 			act(auraColor,
-			    "Engine roaring loudly and electricity crackling through the air, you power up for the sixth time.",
-			    ch, NULL, NULL, TO_CHAR);
+				"Engine roaring loudly and electricity crackling through the air, you power up for the sixth time.",
+				ch, NULL, NULL, TO_CHAR);
 			act(auraColor,
-			    "Engine roaring loudly and electricity crackling through the air, $n powers up for the sixth time.",
-			    ch, NULL, NULL, TO_NOTVICT);
-		} else {
+				"Engine roaring loudly and electricity crackling through the air, $n powers up for the sixth time.",
+				ch, NULL, NULL, TO_NOTVICT);
+		}
+		else {
 			act(auraColor,
-			    "Pieces of rock fly around as you power up for the sixth time.",
-			    ch, NULL, NULL, TO_CHAR);
+				"Chunks of splintering rock erupt near your feet as you reach deeper into your potential.",
+				ch, NULL, NULL, TO_CHAR);
 			act(auraColor,
-			    "Pieces of rock fly around as $n powers up for the sixth time.",
-			    ch, NULL, NULL, TO_NOTVICT);
+				"Chunks of spintering rock erupt everywhere as $n reaches deep into $s potential.",
+				ch, NULL, NULL, TO_NOTVICT);
 		}
 		ch->powerup = 6;
-		pl_mult = 1.6;
+		pl_mult = (double) kicontrol * 10 / 1100 + 1;
+		if (pl_mult > 16)
+			pl_mult = 16;
 		if (xIS_SET((ch)->affected_by, AFF_HEART))
 			xREMOVE_BIT(ch->affected_by, AFF_HEART);
 		ch->pl = ch->exp * pl_mult;
@@ -2061,24 +2126,28 @@ do_powerup(CHAR_DATA * ch, char *argument)
 					do_powerup(och, argument);
 			}
 		}
-	} else if (ch->powerup == 6 && ch->exp >= 80000) {
+	}
+	else if (ch->powerup == 6 && kicontrol >= 70) {
 		if (is_android(ch) || is_superandroid(ch)) {
 			act(auraColor,
-			    "The stench of ozone fills the humming air, a deafening boom blasting from you, as you power up for the last time.",
-			    ch, NULL, NULL, TO_CHAR);
+				"The stench of ozone fills the humming air, a deafening boom blasting from you, as you unleash your potential.",
+				ch, NULL, NULL, TO_CHAR);
 			act(auraColor,
-			    "The stench of ozone fills the humming air, a deafening boom blasting from $n, as $e powers up for the last time.",
-			    ch, NULL, NULL, TO_NOTVICT);
-		} else {
+				"The stench of ozone fills the humming air, a deafening boom blasting from $n, as $e swells with newfound potential.",
+				ch, NULL, NULL, TO_NOTVICT);
+		}
+		else {
 			act(auraColor,
-			    "Large chunks of rock crumble all around as you power up for the last time.",
-			    ch, NULL, NULL, TO_CHAR);
+				"You unleash the depths of your potential with an incredible shockwave of energy.",
+				ch, NULL, NULL, TO_CHAR);
 			act(auraColor,
-			    "Large chunks of rock crumble all around as $n powers up for the last time.",
-			    ch, NULL, NULL, TO_NOTVICT);
+				"You unleash the depths of your potential with an incredible shockwave of energy.",
+				ch, NULL, NULL, TO_NOTVICT);
 		}
 		ch->powerup = 7;
-		pl_mult = 1.7;
+		pl_mult = (double) kicontrol * 10 / 1000 + 1;
+		if (pl_mult > 20)
+			pl_mult = 20;
 		if (xIS_SET((ch)->affected_by, AFF_HEART))
 			xREMOVE_BIT(ch->affected_by, AFF_HEART);
 		ch->pl = ch->exp * pl_mult;
@@ -2094,9 +2163,10 @@ do_powerup(CHAR_DATA * ch, char *argument)
 					do_powerup(och, argument);
 			}
 		}
-	} else
+	}
+	else
 		send_to_pager_color
-		    ("&BYou are already powered up to your max.\n\r", ch);
+		("&BYour body cannot contain any more energy like this!\n\r", ch);
 
 	return;
 }
@@ -2883,6 +2953,7 @@ do_kaioken(CHAR_DATA * ch, char *argument)
 	long double max = 0.0;
 	int 	strMod = 0, spdMod = 0, intMod = 0, conMod = 0;
 	char 	buf[MAX_STRING_LENGTH];
+	int		kicontrol = 0;
 
 	arg = atoi(argument);
 
@@ -2897,30 +2968,30 @@ do_kaioken(CHAR_DATA * ch, char *argument)
 		return;
 	}
 	if (xIS_SET((ch)->affected_by, AFF_SSJ)
-	    || xIS_SET((ch)->affected_by, AFF_SSJ2)
-	    || xIS_SET((ch)->affected_by, AFF_SSJ3)
-	    || xIS_SET((ch)->affected_by, AFF_SSJ4)) {
+		|| xIS_SET((ch)->affected_by, AFF_SSJ2)
+		|| xIS_SET((ch)->affected_by, AFF_SSJ3)
+		|| xIS_SET((ch)->affected_by, AFF_SSJ4)) {
 		send_to_char
-		    ("You can't use kaioken if you are a Super Saiyan.\n\r",
-		    ch);
+		("You can't use kaioken if you are a Super Saiyan.\n\r",
+			ch);
 		return;
 	}
 	if (xIS_SET((ch)->affected_by, AFF_OOZARU) ||
-	    xIS_SET((ch)->affected_by, AFF_GOLDEN_OOZARU)) {
+		xIS_SET((ch)->affected_by, AFF_GOLDEN_OOZARU)) {
 		send_to_char
-		    ("You can't use kaioken while you are an Oozaru.\n\r", ch);
+		("You can't use kaioken while you are an Oozaru.\n\r", ch);
 		return;
 	}
 	if (xIS_SET((ch)->affected_by, AFF_EXTREME)) {
 		send_to_char
-		    ("You can't use kaioken while using the 'Extreme Technique'.\n\r",
-		    ch);
+		("You can't use kaioken while using the 'Extreme Technique'.\n\r",
+			ch);
 		return;
 	}
 	if (xIS_SET((ch)->affected_by, AFF_HYPER)) {
 		send_to_char
-		    ("You can't use kaioken while you are using the Hyper technique.\n\r",
-		    ch);
+		("You can't use kaioken while you are using the Hyper technique.\n\r",
+			ch);
 		return;
 	}
 	transStatRemove(ch);
@@ -2935,41 +3006,44 @@ do_kaioken(CHAR_DATA * ch, char *argument)
 	}
 	if (arg <= 1) {
 		act(AT_SKILL,
-		    "Isn't it kind of pointless to do Kaioken times 1?", ch,
-		    NULL, NULL, TO_CHAR);
+			"Isn't it kind of pointless to do Kaioken times 1?", ch,
+			NULL, NULL, TO_CHAR);
 		return;
 	}
-	max = (ch->exp / 1000000) + 3;
+
+	kicontrol = get_curr_int(ch);
+	max = (kicontrol / 100) + 4;
 
 	if (arg > max) {
 		act(AT_SKILL, "Your body can't sustain that level of Kaioken.",
-		    ch, NULL, NULL, TO_CHAR);
+			ch, NULL, NULL, TO_CHAR);
 		return;
 	}
-	if (arg > 10 && !is_kaio(ch)) {
-		act(AT_SKILL, "Kaioken can't go beyond 10 times.", ch, NULL,
-		    NULL, TO_CHAR);
+	if (arg > 20 && !is_kaio(ch)) {
+		act(AT_SKILL, "More than 20x Kaioken would rip your body to pieces.", ch, NULL,
+			NULL, TO_CHAR);
 		return;
-	} else if (arg > 14 && is_kaio(ch)) {
-		act(AT_SKILL, "Kaioken can't go beyond 14 times.", ch, NULL,
-		    NULL, TO_CHAR);
+	}
+	else if (arg > 30 && is_kaio(ch)) {
+		act(AT_SKILL, "More than 30x Kaioken would rip your body to pieces.", ch, NULL,
+			NULL, TO_CHAR);
 		return;
 	}
 	WAIT_STATE(ch, skill_table[gsn_kaioken]->beats);
 
 	if (can_use_skill(ch, number_percent(), gsn_kaioken)) {
 		sprintf(buf,
-		    "Bright red flames erupt around you as you yell out KAIOKEN TIMES %d!!!",
-		    arg);
+			"Bright red flames erupt around you as you yell out KAIOKEN TIMES %d!!!",
+			arg);
 		act(AT_FIRE, buf, ch, NULL, NULL, TO_CHAR);
 		if (IS_NPC(ch))
 			sprintf(buf,
-			    "Bright red flames erupt around %s as $e yells out KAIOKEN TIMES %d!!!",
-			    ch->short_descr, arg);
+				"Bright red flames erupt around %s as $e yells out KAIOKEN TIMES %d!!!",
+				ch->short_descr, arg);
 		else
 			sprintf(buf,
-			    "Bright red flames erupt around %s as $e yells out KAIOKEN TIMES %d!!!",
-			    ch->name, arg);
+				"Bright red flames erupt around %s as $e yells out KAIOKEN TIMES %d!!!",
+				ch->name, arg);
 		act(AT_FIRE, buf, ch, NULL, NULL, TO_NOTVICT);
 		xSET_BIT((ch)->affected_by, AFF_KAIOKEN);
 		if (xIS_SET((ch)->affected_by, AFF_HEART))
@@ -3056,16 +3130,113 @@ do_kaioken(CHAR_DATA * ch, char *argument)
 			intMod = 8;
 			conMod = -10;
 			break;
+		case 15:
+			strMod = 28;
+			spdMod = 32;
+			intMod = 8;
+			conMod = -10;
+			break;
+		case 16:
+			strMod = 28;
+			spdMod = 32;
+			intMod = 8;
+			conMod = -10;
+			break;
+		case 17:
+			strMod = 28;
+			spdMod = 32;
+			intMod = 8;
+			conMod = -10;
+			break;
+		case 18:
+			strMod = 28;
+			spdMod = 32;
+			intMod = 8;
+			conMod = -10;
+			break;
+		case 19:
+			strMod = 28;
+			spdMod = 32;
+			intMod = 8;
+			conMod = -10;
+			break;
+		case 20:
+			strMod = 28;
+			spdMod = 32;
+			intMod = 8;
+			conMod = -10;
+			break;
+		case 21:
+			strMod = 28;
+			spdMod = 32;
+			intMod = 8;
+			conMod = -10;
+			break;
+		case 22:
+			strMod = 28;
+			spdMod = 32;
+			intMod = 8;
+			conMod = -10;
+			break;
+		case 23:
+			strMod = 28;
+			spdMod = 32;
+			intMod = 8;
+			conMod = -10;
+			break;
+		case 24:
+			strMod = 28;
+			spdMod = 32;
+			intMod = 8;
+			conMod = -10;
+			break;
+		case 25:
+			strMod = 28;
+			spdMod = 32;
+			intMod = 8;
+			conMod = -10;
+			break;
+		case 26:
+			strMod = 28;
+			spdMod = 32;
+			intMod = 8;
+			conMod = -10;
+			break;
+		case 27:
+			strMod = 28;
+			spdMod = 32;
+			intMod = 8;
+			conMod = -10;
+			break;
+		case 28:
+			strMod = 28;
+			spdMod = 32;
+			intMod = 8;
+			conMod = -10;
+			break;
+		case 29:
+			strMod = 28;
+			spdMod = 32;
+			intMod = 8;
+			conMod = -10;
+			break;
+		case 30:
+			strMod = 28;
+			spdMod = 32;
+			intMod = 8;
+			conMod = -10;
+			break;
 		}
 		transStatApply(ch, strMod, spdMod, intMod, conMod);
-	} else {
+	}
+	else {
 		sprintf(buf,
-		    "You yell out KAIOKEN TIMES %d!!!  Red flames flicker around your body, but quickly fade away.",
-		    arg);
+			"You yell out KAIOKEN TIMES %d!!!  Red flames flicker around your body, but quickly fade away.",
+			arg);
 		act(AT_FIRE, buf, ch, NULL, NULL, TO_CHAR);
 		sprintf(buf,
-		    "%s yells out KAIOKEN TIMES %d!!!  Red flames flicker around $s body, but quickly fade away.",
-		    ch->name, arg);
+			"%s yells out KAIOKEN TIMES %d!!!  Red flames flicker around $s body, but quickly fade away.",
+			ch->name, arg);
 		act(AT_FIRE, buf, ch, NULL, NULL, TO_NOTVICT);
 		learn_from_failure(ch, gsn_kaioken);
 	}
@@ -3087,7 +3258,7 @@ do_ssj(CHAR_DATA * ch, char *argument)
 	if (!IS_NPC(ch)) {
 		if (IS_SET(ch->pcdata->flags, PCFLAG_KNOWSMYSTIC)) {
 			ch_printf(ch,
-			    "You are unable to call upon those powers while you know mystic.\n\r");
+				"You are unable to call upon those powers while you know mystic.\n\r");
 			return;
 		}
 	}
@@ -3097,14 +3268,14 @@ do_ssj(CHAR_DATA * ch, char *argument)
 	}
 	if (xIS_SET((ch)->affected_by, AFF_KAIOKEN)) {
 		send_to_char
-		    ("You can't transform in to a super saiyan while using kaioken.\n\r",
-		    ch);
+		("You can't transform in to a super saiyan while using kaioken.\n\r",
+			ch);
 		return;
 	}
 	if (xIS_SET((ch)->affected_by, AFF_SSJ)
-	    || xIS_SET((ch)->affected_by, AFF_SSJ2)
-	    || xIS_SET((ch)->affected_by, AFF_SSJ3)
-	    || xIS_SET((ch)->affected_by, AFF_SSJ4)) {
+		|| xIS_SET((ch)->affected_by, AFF_SSJ2)
+		|| xIS_SET((ch)->affected_by, AFF_SSJ3)
+		|| xIS_SET((ch)->affected_by, AFF_SSJ4)) {
 		send_to_char("You power down and return to normal.\n\r", ch);
 		if (xIS_SET((ch)->affected_by, AFF_USSJ))
 			xREMOVE_BIT((ch)->affected_by, AFF_USSJ);
@@ -3127,9 +3298,9 @@ do_ssj(CHAR_DATA * ch, char *argument)
 		return;
 	}
 	if (xIS_SET((ch)->affected_by, AFF_OOZARU)
-	    || xIS_SET((ch)->affected_by, AFF_GOLDEN_OOZARU)) {
+		|| xIS_SET((ch)->affected_by, AFF_GOLDEN_OOZARU)) {
 		send_to_char("You can't transform while you are an Oozaru.\n\r",
-		    ch);
+			ch);
 		return;
 	}
 	if (ch->mana < skill_table[gsn_ssj]->min_mana) {
@@ -3139,48 +3310,49 @@ do_ssj(CHAR_DATA * ch, char *argument)
 	WAIT_STATE(ch, skill_table[gsn_ssj]->beats);
 	if (can_use_skill(ch, number_percent(), gsn_ssj)) {
 		act(AT_YELLOW,
-		    "Your hair flashes blonde and your eyes turn blue as a fiery aura erupts around you.",
-		    ch, NULL, NULL, TO_CHAR);
+			"Your hair flashes blonde and your eyes turn blue as a fiery aura erupts around you.",
+			ch, NULL, NULL, TO_CHAR);
 		act(AT_YELLOW,
-		    "$n's hair flashes blonde and $s eyes turn blue as a fiery aura erupts around $m.",
-		    ch, NULL, NULL, TO_NOTVICT);
+			"$n's hair flashes blonde and $s eyes turn blue as a fiery aura erupts around $m.",
+			ch, NULL, NULL, TO_NOTVICT);
 		xSET_BIT((ch)->affected_by, AFF_SSJ);
-		ch->pl = ch->exp * 12;
+		ch->pl = ch->exp * 50;
 		transStatApply(ch, 12, 7, 5, 7);
 		learn_from_success(ch, gsn_ssj);
 		if (!IS_NPC(ch)) {
 			ch->pcdata->eyes = 0;
 			ch->pcdata->haircolor = 3;
 		}
-	} else {
+	}
+	else {
 		switch (number_range(1, 3)) {
 		default:
 			act(AT_BLUE,
-			    "Your hair flashes blonde, but quickly returns to normal.",
-			    ch, NULL, NULL, TO_CHAR);
+				"Your hair flashes blonde, but quickly returns to normal.",
+				ch, NULL, NULL, TO_CHAR);
 			act(AT_BLUE,
-			    "$n's hair flashes blonde, but quickly returns to normal.",
-			    ch, NULL, NULL, TO_NOTVICT);
+				"$n's hair flashes blonde, but quickly returns to normal.",
+				ch, NULL, NULL, TO_NOTVICT);
 			break;
 		case 1:
 			act(AT_BLUE,
-			    "Your hair flashes blonde, but quickly returns to normal.",
-			    ch, NULL, NULL, TO_CHAR);
+				"Your hair flashes blonde, but quickly returns to normal.",
+				ch, NULL, NULL, TO_CHAR);
 			act(AT_BLUE,
-			    "$n's hair flashes blonde, but quickly returns to normal.",
-			    ch, NULL, NULL, TO_NOTVICT);
+				"$n's hair flashes blonde, but quickly returns to normal.",
+				ch, NULL, NULL, TO_NOTVICT);
 			break;
 		case 2:
 			act(AT_BLUE, "You, a super Saiyan?  I don't think so.",
-			    ch, NULL, NULL, TO_CHAR);
+				ch, NULL, NULL, TO_CHAR);
 			break;
 		case 3:
 			act(AT_BLUE,
-			    "You almost pop a vein trying to transform in to a super Saiyan.",
-			    ch, NULL, NULL, TO_CHAR);
+				"You almost pop a vein trying to transform in to a super Saiyan.",
+				ch, NULL, NULL, TO_CHAR);
 			act(AT_BLUE,
-			    "$n almost pops a vein trying to transform in to a super Saiyan",
-			    ch, NULL, NULL, TO_NOTVICT);
+				"$n almost pops a vein trying to transform in to a super Saiyan",
+				ch, NULL, NULL, TO_NOTVICT);
 			break;
 		}
 		learn_from_failure(ch, gsn_ssj);
@@ -3203,7 +3375,7 @@ do_ssj2(CHAR_DATA * ch, char *argument)
 	if (!IS_NPC(ch)) {
 		if (IS_SET(ch->pcdata->flags, PCFLAG_KNOWSMYSTIC)) {
 			ch_printf(ch,
-			    "You are unable to call upon those powers while you know mystic.\n\r");
+				"You are unable to call upon those powers while you know mystic.\n\r");
 			return;
 		}
 	}
@@ -3213,14 +3385,14 @@ do_ssj2(CHAR_DATA * ch, char *argument)
 	}
 	if (xIS_SET((ch)->affected_by, AFF_KAIOKEN)) {
 		send_to_char
-		    ("You can't transform in to a super saiyan while using kaioken.\n\r",
-		    ch);
+		("You can't transform in to a super saiyan while using kaioken.\n\r",
+			ch);
 		return;
 	}
 	if (xIS_SET((ch)->affected_by, AFF_USSJ)
-	    || xIS_SET((ch)->affected_by, AFF_USSJ2)) {
+		|| xIS_SET((ch)->affected_by, AFF_USSJ2)) {
 		send_to_char("You have to power out of USSJ to do this.\n\r",
-		    ch);
+			ch);
 		return;
 	}
 	if (xIS_SET((ch)->affected_by, AFF_SSJ2)) {
@@ -3233,7 +3405,7 @@ do_ssj2(CHAR_DATA * ch, char *argument)
 		if (xIS_SET((ch)->affected_by, AFF_SSJ4)) {
 			xREMOVE_BIT((ch)->affected_by, AFF_SSJ4);
 		}
-		ch->pl = ch->exp * 12;
+		ch->pl = ch->exp * 50;
 		transStatApply(ch, 12, 7, 5, 7);
 		if (!IS_NPC(ch)) {
 			ch->pcdata->eyes = 0;
@@ -3242,9 +3414,9 @@ do_ssj2(CHAR_DATA * ch, char *argument)
 		return;
 	}
 	if (xIS_SET((ch)->affected_by, AFF_OOZARU) ||
-	    xIS_SET((ch)->affected_by, AFF_GOLDEN_OOZARU)) {
+		xIS_SET((ch)->affected_by, AFF_GOLDEN_OOZARU)) {
 		send_to_char("You can't transform while you are an Oozaru.\n\r",
-		    ch);
+			ch);
 		return;
 	}
 	if (!xIS_SET((ch)->affected_by, AFF_SSJ)) {
@@ -3255,49 +3427,50 @@ do_ssj2(CHAR_DATA * ch, char *argument)
 		WAIT_STATE(ch, skill_table[gsn_ssj2]->beats);
 		if (can_use_skill(ch, number_percent(), gsn_ssj2)) {
 			act(AT_YELLOW,
-			    "Your hair flashes blonde, standing up in a mass of spikes. "
-			    "Your eyes turn blue as a fiery aura bursts into existence around you, "
-			    "quickly becoming charged with sheets of electricity.",
-			    ch, NULL, NULL, TO_CHAR);
+				"Your hair flashes blonde, standing up in a mass of spikes. "
+				"Your eyes turn blue as a fiery aura bursts into existence around you, "
+				"quickly becoming charged with sheets of electricity.",
+				ch, NULL, NULL, TO_CHAR);
 			act(AT_YELLOW,
-			    "$n's hair flashes blonde, standing up in a mass of spikes. "
-			    "$n's eyes turn blue as a fiery aura bursts into existence around $m, "
-			    "quickly becoming charged with sheets of electricity.",
-			    ch, NULL, NULL, TO_NOTVICT);
+				"$n's hair flashes blonde, standing up in a mass of spikes. "
+				"$n's eyes turn blue as a fiery aura bursts into existence around $m, "
+				"quickly becoming charged with sheets of electricity.",
+				ch, NULL, NULL, TO_NOTVICT);
 			xSET_BIT((ch)->affected_by, AFF_SSJ);
 			xSET_BIT((ch)->affected_by, AFF_SSJ2);
-			ch->pl = ch->exp * 20;
+			ch->pl = ch->exp * 225;
 			transStatApply(ch, 20, 12, 8, 12);
 			learn_from_success(ch, gsn_ssj2);
 			if (!IS_NPC(ch)) {
 				ch->pcdata->eyes = 0;
 				ch->pcdata->haircolor = 3;
 			}
-		} else {
+		}
+		else {
 			switch (number_range(1, 2)) {
 			default:
 				act(AT_BLUE,
-				    "Electricity begins arcing around your body, but it quickly disappears.",
-				    ch, NULL, NULL, TO_CHAR);
+					"Electricity begins arcing around your body, but it quickly disappears.",
+					ch, NULL, NULL, TO_CHAR);
 				act(AT_BLUE,
-				    "Electricity begins arcing around $n's body, but it quickly disappears.",
-				    ch, NULL, NULL, TO_NOTVICT);
+					"Electricity begins arcing around $n's body, but it quickly disappears.",
+					ch, NULL, NULL, TO_NOTVICT);
 				break;
 			case 1:
 				act(AT_BLUE,
-				    "Your hair flashes blonde and starts to spike up, but quickly returns to normal.",
-				    ch, NULL, NULL, TO_CHAR);
+					"Your hair flashes blonde and starts to spike up, but quickly returns to normal.",
+					ch, NULL, NULL, TO_CHAR);
 				act(AT_BLUE,
-				    "$n's hair flashes blonde and starts to spike up, but quickly returns to normal.",
-				    ch, NULL, NULL, TO_NOTVICT);
+					"$n's hair flashes blonde and starts to spike up, but quickly returns to normal.",
+					ch, NULL, NULL, TO_NOTVICT);
 				break;
 			case 2:
 				act(AT_BLUE,
-				    "You almost pop a vein trying to transform in to a super saiyan 2.",
-				    ch, NULL, NULL, TO_CHAR);
+					"You almost pop a vein trying to transform in to a super saiyan 2.",
+					ch, NULL, NULL, TO_CHAR);
 				act(AT_BLUE,
-				    "$n almost pops a vein trying to transform in to a super saiyan 2.",
-				    ch, NULL, NULL, TO_NOTVICT);
+					"$n almost pops a vein trying to transform in to a super saiyan 2.",
+					ch, NULL, NULL, TO_NOTVICT);
 				break;
 			}
 			learn_from_failure(ch, gsn_ssj2);
@@ -3313,44 +3486,45 @@ do_ssj2(CHAR_DATA * ch, char *argument)
 	WAIT_STATE(ch, skill_table[gsn_ssj2]->beats);
 	if (can_use_skill(ch, number_percent(), gsn_ssj2)) {
 		act(AT_YELLOW,
-		    "Your hair straightens and stands more on end, your aura flaring as "
-		    "electricity arcs around you.", ch, NULL, NULL, TO_CHAR);
+			"Your hair straightens and stands more on end, your aura flaring as "
+			"electricity arcs around you.", ch, NULL, NULL, TO_CHAR);
 		act(AT_YELLOW,
-		    "$n's hair straightens and stands more on end, $s aura flaring as "
-		    "electricity arcs around $m.", ch, NULL, NULL, TO_NOTVICT);
+			"$n's hair straightens and stands more on end, $s aura flaring as "
+			"electricity arcs around $m.", ch, NULL, NULL, TO_NOTVICT);
 		xSET_BIT((ch)->affected_by, AFF_SSJ2);
-		ch->pl = ch->exp * 20;
+		ch->pl = ch->exp * 225;
 		transStatApply(ch, 20, 12, 8, 12);
 		learn_from_success(ch, gsn_ssj2);
 		if (!IS_NPC(ch)) {
 			ch->pcdata->eyes = 0;
 			ch->pcdata->haircolor = 3;
 		}
-	} else {
+	}
+	else {
 		switch (number_range(1, 2)) {
 		default:
 			act(AT_BLUE,
-			    "Electricity begins arcing around your body, but it quickly disappears.",
-			    ch, NULL, NULL, TO_CHAR);
+				"Electricity begins arcing around your body, but it quickly disappears.",
+				ch, NULL, NULL, TO_CHAR);
 			act(AT_BLUE,
-			    "Electricity begins arcing around $n's body, but it quickly disappears.",
-			    ch, NULL, NULL, TO_NOTVICT);
+				"Electricity begins arcing around $n's body, but it quickly disappears.",
+				ch, NULL, NULL, TO_NOTVICT);
 			break;
 		case 1:
 			act(AT_BLUE,
-			    "Electricity begins arcing around your body, but it quickly disappears.",
-			    ch, NULL, NULL, TO_CHAR);
+				"Electricity begins arcing around your body, but it quickly disappears.",
+				ch, NULL, NULL, TO_CHAR);
 			act(AT_BLUE,
-			    "Electricity begins arcing around $n's body, but it quickly disappears.",
-			    ch, NULL, NULL, TO_NOTVICT);
+				"Electricity begins arcing around $n's body, but it quickly disappears.",
+				ch, NULL, NULL, TO_NOTVICT);
 			break;
 		case 2:
 			act(AT_BLUE,
-			    "You almost pop a vein trying to transform in to a super Saiyan 2.",
-			    ch, NULL, NULL, TO_CHAR);
+				"You almost pop a vein trying to transform in to a super Saiyan 2.",
+				ch, NULL, NULL, TO_CHAR);
 			act(AT_BLUE,
-			    "$n almost pops a vein trying to transform in to a super Saiyan 2.",
-			    ch, NULL, NULL, TO_NOTVICT);
+				"$n almost pops a vein trying to transform in to a super Saiyan 2.",
+				ch, NULL, NULL, TO_NOTVICT);
 			break;
 		}
 		learn_from_failure(ch, gsn_ssj2);
@@ -3373,7 +3547,7 @@ do_ssj3(CHAR_DATA * ch, char *argument)
 	if (!IS_NPC(ch)) {
 		if (IS_SET(ch->pcdata->flags, PCFLAG_KNOWSMYSTIC)) {
 			ch_printf(ch,
-			    "You are unable to call upon those powers while you know mystic.\n\r");
+				"You are unable to call upon those powers while you know mystic.\n\r");
 			return;
 		}
 	}
@@ -3383,14 +3557,14 @@ do_ssj3(CHAR_DATA * ch, char *argument)
 	}
 	if (xIS_SET((ch)->affected_by, AFF_KAIOKEN)) {
 		send_to_char
-		    ("You can't transform in to a super saiyan while using kaioken.\n\r",
-		    ch);
+		("You can't transform in to a super saiyan while using kaioken.\n\r",
+			ch);
 		return;
 	}
 	if (xIS_SET((ch)->affected_by, AFF_USSJ)
-	    || xIS_SET((ch)->affected_by, AFF_USSJ2)) {
+		|| xIS_SET((ch)->affected_by, AFF_USSJ2)) {
 		send_to_char("You have to power out of USSJ to do this.\n\r",
-		    ch);
+			ch);
 		return;
 	}
 	if (xIS_SET((ch)->affected_by, AFF_SSJ3)) {
@@ -3400,7 +3574,7 @@ do_ssj3(CHAR_DATA * ch, char *argument)
 		if (xIS_SET((ch)->affected_by, AFF_SSJ4)) {
 			xREMOVE_BIT((ch)->affected_by, AFF_SSJ4);
 		}
-		ch->pl = ch->exp * 20;
+		ch->pl = ch->exp * 225;
 		transStatApply(ch, 20, 12, 8, 12);
 		if (!IS_NPC(ch)) {
 			ch->pcdata->eyes = 0;
@@ -3409,9 +3583,9 @@ do_ssj3(CHAR_DATA * ch, char *argument)
 		return;
 	}
 	if (xIS_SET((ch)->affected_by, AFF_OOZARU) ||
-	    xIS_SET((ch)->affected_by, AFF_GOLDEN_OOZARU)) {
+		xIS_SET((ch)->affected_by, AFF_GOLDEN_OOZARU)) {
 		send_to_char("You can't transform while you are an Oozaru.\n\r",
-		    ch);
+			ch);
 		return;
 	}
 	if (!xIS_SET((ch)->affected_by, AFF_SSJ2)) {
@@ -3422,56 +3596,57 @@ do_ssj3(CHAR_DATA * ch, char *argument)
 		WAIT_STATE(ch, skill_table[gsn_ssj3]->beats);
 		if (can_use_skill(ch, number_percent(), gsn_ssj3)) {
 			act(AT_YELLOW,
-			    "A brilliant golden aura explodes around you as your hair suddenly flashes a similar color. "
-			    "It flows rapidly down your back as your eyebrows disappear.",
-			    ch, NULL, NULL, TO_CHAR);
+				"A brilliant golden aura explodes around you as your hair suddenly flashes a similar color. "
+				"It flows rapidly down your back as your eyebrows disappear.",
+				ch, NULL, NULL, TO_CHAR);
 			act(AT_YELLOW,
-			    "A brilliant golden aura explodes around $n as $s hair suddenly flashes a similar color. "
-			    "It flows rapidly down $s back as $s eyebrows disappear.",
-			    ch, NULL, NULL, TO_NOTVICT);
+				"A brilliant golden aura explodes around $n as $s hair suddenly flashes a similar color. "
+				"It flows rapidly down $s back as $s eyebrows disappear.",
+				ch, NULL, NULL, TO_NOTVICT);
 			xSET_BIT((ch)->affected_by, AFF_SSJ);
 			xSET_BIT((ch)->affected_by, AFF_SSJ2);
 			xSET_BIT((ch)->affected_by, AFF_SSJ3);
-			ch->pl = ch->exp * 30;
+			ch->pl = ch->exp * 325;
 			transStatApply(ch, 30, 18, 14, 18);
 			learn_from_success(ch, gsn_ssj3);
 			if (!IS_NPC(ch)) {
 				ch->pcdata->eyes = 0;
 				ch->pcdata->haircolor = 3;
 			}
-		} else {
+		}
+		else {
 			switch (number_range(1, 3)) {
 			default:
 				act(AT_BLUE,
-				    "Your hair begins to crawl down your back, but it quickly returns.",
-				    ch, NULL, NULL, TO_CHAR);
+					"Your hair begins to crawl down your back, but it quickly returns.",
+					ch, NULL, NULL, TO_CHAR);
 				act(AT_BLUE,
-				    "$n's hair begins to crawl down $s back, but it quickly returns.",
-				    ch, NULL, NULL, TO_NOTVICT);
+					"$n's hair begins to crawl down $s back, but it quickly returns.",
+					ch, NULL, NULL, TO_NOTVICT);
 				break;
 			case 1:
 				act(AT_BLUE,
-				    "Your hair begins to crawl down your back, but it quickly returns.",
-				    ch, NULL, NULL, TO_CHAR);
+					"Your hair begins to crawl down your back, but it quickly returns.",
+					ch, NULL, NULL, TO_CHAR);
 				act(AT_BLUE,
-				    "$n's hair begins to crawl down $s back, but it quickly returns.",
-				    ch, NULL, NULL, TO_NOTVICT);
+					"$n's hair begins to crawl down $s back, but it quickly returns.",
+					ch, NULL, NULL, TO_NOTVICT);
 				break;
 			case 2:
 				act(AT_BLUE,
-				    "You almost pop a vein trying to transform in to a super saiyan 3.",
-				    ch, NULL, NULL, TO_CHAR);
+					"You almost pop a vein trying to transform in to a super saiyan 3.",
+					ch, NULL, NULL, TO_CHAR);
 				act(AT_BLUE,
-				    "$n almost pops a vein trying to transform in to a super saiyan 3.",
-				    ch, NULL, NULL, TO_NOTVICT);
+					"$n almost pops a vein trying to transform in to a super saiyan 3.",
+					ch, NULL, NULL, TO_NOTVICT);
 				break;
 			case 3:
 				act(AT_BLUE,
-				    "Your hair starts to lengthen and change color, but quickly returns to normal.",
-				    ch, NULL, NULL, TO_CHAR);
+					"Your hair starts to lengthen and change color, but quickly returns to normal.",
+					ch, NULL, NULL, TO_CHAR);
 				act(AT_BLUE,
-				    "$n's hair starts to lengthen and change color, but quickly returns to normal.",
-				    ch, NULL, NULL, TO_NOTVICT);
+					"$n's hair starts to lengthen and change color, but quickly returns to normal.",
+					ch, NULL, NULL, TO_NOTVICT);
 				break;
 			}
 			learn_from_failure(ch, gsn_ssj3);
@@ -3487,52 +3662,53 @@ do_ssj3(CHAR_DATA * ch, char *argument)
 	WAIT_STATE(ch, skill_table[gsn_ssj3]->beats);
 	if (can_use_skill(ch, number_percent(), gsn_ssj3)) {
 		act(AT_YELLOW,
-		    "Your hair lengthens, flowing down your back.  Your eyebrows disappear as your "
-		    "aura flashes a bright gold.", ch, NULL, NULL, TO_CHAR);
+			"Your hair lengthens, flowing down your back.  Your eyebrows disappear as your "
+			"aura flashes a bright gold.", ch, NULL, NULL, TO_CHAR);
 		act(AT_YELLOW,
-		    "$n's hair lengthens, flowing down $s back.  $n's eyebrows disappear as $s "
-		    "aura flashes a bright gold.", ch, NULL, NULL, TO_NOTVICT);
+			"$n's hair lengthens, flowing down $s back.  $n's eyebrows disappear as $s "
+			"aura flashes a bright gold.", ch, NULL, NULL, TO_NOTVICT);
 		xSET_BIT((ch)->affected_by, AFF_SSJ3);
-		ch->pl = ch->exp * 30;
+		ch->pl = ch->exp * 325;
 		transStatApply(ch, 30, 18, 14, 18);
 		learn_from_success(ch, gsn_ssj3);
 		if (!IS_NPC(ch)) {
 			ch->pcdata->eyes = 0;
 			ch->pcdata->haircolor = 3;
 		}
-	} else {
+	}
+	else {
 		switch (number_range(1, 3)) {
 		default:
 			act(AT_BLUE,
-			    "Your hair begins to crawl down your back, but it quickly returns.",
-			    ch, NULL, NULL, TO_CHAR);
+				"Your hair begins to crawl down your back, but it quickly returns.",
+				ch, NULL, NULL, TO_CHAR);
 			act(AT_BLUE,
-			    "$n's hair begins to crawl down $s back, but it quickly returns.",
-			    ch, NULL, NULL, TO_NOTVICT);
+				"$n's hair begins to crawl down $s back, but it quickly returns.",
+				ch, NULL, NULL, TO_NOTVICT);
 			break;
 		case 1:
 			act(AT_BLUE,
-			    "Your hair begins to crawl down your back, but it quickly returns.",
-			    ch, NULL, NULL, TO_CHAR);
+				"Your hair begins to crawl down your back, but it quickly returns.",
+				ch, NULL, NULL, TO_CHAR);
 			act(AT_BLUE,
-			    "$n's hair begins to crawl down $s back, but it quickly returns.",
-			    ch, NULL, NULL, TO_NOTVICT);
+				"$n's hair begins to crawl down $s back, but it quickly returns.",
+				ch, NULL, NULL, TO_NOTVICT);
 			break;
 		case 2:
 			act(AT_BLUE,
-			    "You almost pop a vein trying to transform in to a super Saiyan 3.",
-			    ch, NULL, NULL, TO_CHAR);
+				"You almost pop a vein trying to transform in to a super Saiyan 3.",
+				ch, NULL, NULL, TO_CHAR);
 			act(AT_BLUE,
-			    "$n almost pops a vein trying to transform in to a super Saiyan 3.",
-			    ch, NULL, NULL, TO_NOTVICT);
+				"$n almost pops a vein trying to transform in to a super Saiyan 3.",
+				ch, NULL, NULL, TO_NOTVICT);
 			break;
 		case 3:
 			act(AT_BLUE,
-			    "Your aura begins to flare up, but it quickly shrinks down again.",
-			    ch, NULL, NULL, TO_CHAR);
+				"Your aura begins to flare up, but it quickly shrinks down again.",
+				ch, NULL, NULL, TO_CHAR);
 			act(AT_BLUE,
-			    "$n's aura begins to flare up, but it quickly shrinks down again.",
-			    ch, NULL, NULL, TO_NOTVICT);
+				"$n's aura begins to flare up, but it quickly shrinks down again.",
+				ch, NULL, NULL, TO_NOTVICT);
 			break;
 		}
 		learn_from_failure(ch, gsn_ssj3);
@@ -3554,7 +3730,7 @@ do_ssj4(CHAR_DATA * ch, char *argument)
 	if (!IS_NPC(ch)) {
 		if (IS_SET(ch->pcdata->flags, PCFLAG_KNOWSMYSTIC)) {
 			ch_printf(ch,
-			    "You are unable to call upon those powers while you know mystic.\n\r");
+				"You are unable to call upon those powers while you know mystic.\n\r");
 			return;
 		}
 	}
@@ -3565,26 +3741,26 @@ do_ssj4(CHAR_DATA * ch, char *argument)
 	if (!IS_NPC(ch)) {
 		if (ch->pcdata->tail < 1) {
 			ch_printf(ch,
-			    "You can't become a Super Saiyan 4 without a tail!\n\r");
+				"You can't become a Super Saiyan 4 without a tail!\n\r");
 			return;
 		}
 	}
 	if (xIS_SET((ch)->affected_by, AFF_KAIOKEN)) {
 		send_to_char
-		    ("You can't transform in to a super saiyan while using kaioken.\n\r",
-		    ch);
+		("You can't transform in to a super saiyan while using kaioken.\n\r",
+			ch);
 		return;
 	}
 	if (xIS_SET((ch)->affected_by, AFF_USSJ)
-	    || xIS_SET((ch)->affected_by, AFF_USSJ2)) {
+		|| xIS_SET((ch)->affected_by, AFF_USSJ2)) {
 		send_to_char("You have to power out of USSJ to do this.\n\r",
-		    ch);
+			ch);
 		return;
 	}
 	if (xIS_SET((ch)->affected_by, AFF_SSJ4)) {
 		send_to_char("You power down to super Saiyan 3.\n\r", ch);
 		xREMOVE_BIT((ch)->affected_by, AFF_SSJ4);
-		ch->pl = ch->exp * 30;
+		ch->pl = ch->exp * 325;
 		transStatApply(ch, 30, 18, 14, 18);
 		if (!IS_NPC(ch)) {
 			ch->pcdata->eyes = 0;
@@ -3593,9 +3769,9 @@ do_ssj4(CHAR_DATA * ch, char *argument)
 		return;
 	}
 	if (xIS_SET((ch)->affected_by, AFF_OOZARU) ||
-	    xIS_SET((ch)->affected_by, AFF_GOLDEN_OOZARU)) {
+		xIS_SET((ch)->affected_by, AFF_GOLDEN_OOZARU)) {
 		send_to_char("You can't transform while you are an Oozaru.\n\r",
-		    ch);
+			ch);
 		return;
 	}
 	if (!xIS_SET((ch)->affected_by, AFF_SSJ3)) {
@@ -3606,65 +3782,66 @@ do_ssj4(CHAR_DATA * ch, char *argument)
 		WAIT_STATE(ch, skill_table[gsn_ssj4]->beats);
 		if (can_use_skill(ch, number_percent(), gsn_ssj4)) {
 			act(AT_RED,
-			    "You howl with anger as a menacing, fiery, red aura explodes around you. "
-			    "Thick red fur sprouts all over your body as your hair turns a darker variant of normal.",
-			    ch, NULL, NULL, TO_CHAR);
+				"You howl with anger as a menacing, fiery, red aura explodes around you. "
+				"Thick red fur sprouts all over your body as your hair turns a darker variant of normal.",
+				ch, NULL, NULL, TO_CHAR);
 			act(AT_RED,
-			    "$n howls with anger as a menacing, fiery, red aura explodes around $m. "
-			    "Thick red fur sprouts all over $s body as $s hair turns a darker variant of normal.",
-			    ch, NULL, NULL, TO_NOTVICT);
+				"$n howls with anger as a menacing, fiery, red aura explodes around $m. "
+				"Thick red fur sprouts all over $s body as $s hair turns a darker variant of normal.",
+				ch, NULL, NULL, TO_NOTVICT);
 			xSET_BIT((ch)->affected_by, AFF_SSJ);
 			xSET_BIT((ch)->affected_by, AFF_SSJ2);
 			xSET_BIT((ch)->affected_by, AFF_SSJ3);
 			xSET_BIT((ch)->affected_by, AFF_SSJ4);
-			ch->pl = ch->exp * 35;
+			ch->pl = ch->exp * 425;
 			transStatApply(ch, 35, 20, 13, 20);
 			learn_from_success(ch, gsn_ssj4);
 			if (!IS_NPC(ch)) {
 				ch->pcdata->eyes = 4;
 				ch->pcdata->haircolor = 9;
 			}
-		} else {
+		}
+		else {
 			switch (number_range(1, 4)) {
 			default:
 				act(AT_BLUE,
-				    "Your hair flashes black, but quickly returns to blonde.",
-				    ch, NULL, NULL, TO_CHAR);
+					"Your hair flashes black, but quickly returns to blonde.",
+					ch, NULL, NULL, TO_CHAR);
 				act(AT_BLUE,
-				    "$n's hair flashes black, but quickly returns to blonde.",
-				    ch, NULL, NULL, TO_NOTVICT);
+					"$n's hair flashes black, but quickly returns to blonde.",
+					ch, NULL, NULL, TO_NOTVICT);
 				break;
 			case 1:
 				act(AT_BLUE,
-				    "Your hair flashes black, but quickly returns to blonde.",
-				    ch, NULL, NULL, TO_CHAR);
+					"Your hair flashes black, but quickly returns to blonde.",
+					ch, NULL, NULL, TO_CHAR);
 				act(AT_BLUE,
-				    "$n's hair flashes black, but quickly returns to blonde.",
-				    ch, NULL, NULL, TO_NOTVICT);
+					"$n's hair flashes black, but quickly returns to blonde.",
+					ch, NULL, NULL, TO_NOTVICT);
 				break;
 			case 2:
 				act(AT_BLUE,
-				    "You almost pop a vein trying to transform in to a super Saiyan 4.",
-				    ch, NULL, NULL, TO_CHAR);
+					"You almost pop a vein trying to transform in to a super Saiyan 4.",
+					ch, NULL, NULL, TO_CHAR);
 				act(AT_BLUE,
-				    "$n almost pops a vein trying to transform in to a super Saiyan 4.",
-				    ch, NULL, NULL, TO_NOTVICT);
+					"$n almost pops a vein trying to transform in to a super Saiyan 4.",
+					ch, NULL, NULL, TO_NOTVICT);
 				break;
 			case 3:
 				act(AT_BLUE,
-				    "Red fur begins to sprout all over your body, but quickly disappears.",
-				    ch, NULL, NULL, TO_CHAR);
+					"Red fur begins to sprout all over your body, but quickly disappears.",
+					ch, NULL, NULL, TO_CHAR);
 				act(AT_BLUE,
-				    "Red fur begins to sprout all over $n's body, but quickly disappears.",
-				    ch, NULL, NULL, TO_NOTVICT);
+					"Red fur begins to sprout all over $n's body, but quickly disappears.",
+					ch, NULL, NULL, TO_NOTVICT);
 				break;
 			case 4:
 				act(AT_BLUE,
-				    "Your aura flashes a fiery red, but quickly goes back to gold.",
-				    ch, NULL, NULL, TO_CHAR);
+					"Your aura flashes a fiery red, but quickly goes back to gold.",
+					ch, NULL, NULL, TO_CHAR);
 				act(AT_BLUE,
-				    "$n's aura flashes a fiery red, but quickly goes back to gold.",
-				    ch, NULL, NULL, TO_NOTVICT);
+					"$n's aura flashes a fiery red, but quickly goes back to gold.",
+					ch, NULL, NULL, TO_NOTVICT);
 				break;
 			}
 			learn_from_failure(ch, gsn_ssj4);
@@ -3680,62 +3857,63 @@ do_ssj4(CHAR_DATA * ch, char *argument)
 	WAIT_STATE(ch, skill_table[gsn_ssj4]->beats);
 	if (can_use_skill(ch, number_percent(), gsn_ssj4)) {
 		act(AT_RED,
-		    "You howl with anger, your golden aura exploding and reforming as a fiery red.  "
-		    "Your hair returns to its original shade and form as thick red fur begins "
-		    "to sprout all over your body.", ch, NULL, NULL, TO_CHAR);
+			"You howl with anger, your golden aura exploding and reforming as a fiery red.  "
+			"Your hair returns to its original shade and form as thick red fur begins "
+			"to sprout all over your body.", ch, NULL, NULL, TO_CHAR);
 		act(AT_RED,
-		    "$n howls with anger, $s golden aura exploding and reforming as a fiery red.  "
-		    "$n's hair returns to its original shade and form as thick red fur begins "
-		    "to sprout all over $s body.", ch, NULL, NULL, TO_NOTVICT);
+			"$n howls with anger, $s golden aura exploding and reforming as a fiery red.  "
+			"$n's hair returns to its original shade and form as thick red fur begins "
+			"to sprout all over $s body.", ch, NULL, NULL, TO_NOTVICT);
 		xSET_BIT((ch)->affected_by, AFF_SSJ4);
-		ch->pl = ch->exp * 35;
+		ch->pl = ch->exp * 425;
 		transStatApply(ch, 35, 20, 13, 20);
 		learn_from_success(ch, gsn_ssj4);
 		if (!IS_NPC(ch)) {
 			ch->pcdata->eyes = 4;
 			ch->pcdata->haircolor = 9;
 		}
-	} else {
+	}
+	else {
 		switch (number_range(1, 4)) {
 		default:
 			act(AT_BLUE,
-			    "Your hair flashes black, but quickly returns to blonde.",
-			    ch, NULL, NULL, TO_CHAR);
+				"Your hair flashes black, but quickly returns to blonde.",
+				ch, NULL, NULL, TO_CHAR);
 			act(AT_BLUE,
-			    "$n's hair flashes black, but quickly returns to blonde.",
-			    ch, NULL, NULL, TO_NOTVICT);
+				"$n's hair flashes black, but quickly returns to blonde.",
+				ch, NULL, NULL, TO_NOTVICT);
 			break;
 		case 1:
 			act(AT_BLUE,
-			    "Your hair flashes black, but quickly returns to blonde.",
-			    ch, NULL, NULL, TO_CHAR);
+				"Your hair flashes black, but quickly returns to blonde.",
+				ch, NULL, NULL, TO_CHAR);
 			act(AT_BLUE,
-			    "$n's hair flashes black, but quickly returns to blonde.",
-			    ch, NULL, NULL, TO_NOTVICT);
+				"$n's hair flashes black, but quickly returns to blonde.",
+				ch, NULL, NULL, TO_NOTVICT);
 			break;
 		case 2:
 			act(AT_BLUE,
-			    "You almost pop a vein trying to transform in to a super Saiyan 4.",
-			    ch, NULL, NULL, TO_CHAR);
+				"You almost pop a vein trying to transform in to a super Saiyan 4.",
+				ch, NULL, NULL, TO_CHAR);
 			act(AT_BLUE,
-			    "$n almost pops a vein trying to transform in to a super Saiyan 4.",
-			    ch, NULL, NULL, TO_NOTVICT);
+				"$n almost pops a vein trying to transform in to a super Saiyan 4.",
+				ch, NULL, NULL, TO_NOTVICT);
 			break;
 		case 3:
 			act(AT_BLUE,
-			    "Red fur begins to sprout all over your body, but quickly disappears.",
-			    ch, NULL, NULL, TO_CHAR);
+				"Red fur begins to sprout all over your body, but quickly disappears.",
+				ch, NULL, NULL, TO_CHAR);
 			act(AT_BLUE,
-			    "Red fur begins to sprout all over $n's body, but quickly disappears.",
-			    ch, NULL, NULL, TO_NOTVICT);
+				"Red fur begins to sprout all over $n's body, but quickly disappears.",
+				ch, NULL, NULL, TO_NOTVICT);
 			break;
 		case 4:
 			act(AT_BLUE,
-			    "Your aura flashes a fiery red, but quickly goes back to gold.",
-			    ch, NULL, NULL, TO_CHAR);
+				"Your aura flashes a fiery red, but quickly goes back to gold.",
+				ch, NULL, NULL, TO_CHAR);
 			act(AT_BLUE,
-			    "$n's aura flashes a fiery red, but quickly goes back to gold.",
-			    ch, NULL, NULL, TO_NOTVICT);
+				"$n's aura flashes a fiery red, but quickly goes back to gold.",
+				ch, NULL, NULL, TO_NOTVICT);
 			break;
 		}
 		learn_from_failure(ch, gsn_ssj4);
@@ -3757,7 +3935,7 @@ do_sgod(CHAR_DATA * ch, char *argument)
 	if (!IS_NPC(ch)) {
 		if (IS_SET(ch->pcdata->flags, PCFLAG_KNOWSMYSTIC)) {
 			ch_printf(ch,
-			    "You are unable to call upon those powers while you know mystic.\n\r");
+				"You are unable to call upon those powers while you know mystic.\n\r");
 			return;
 		}
 	}
@@ -3767,20 +3945,20 @@ do_sgod(CHAR_DATA * ch, char *argument)
 	}
 	if (xIS_SET((ch)->affected_by, AFF_KAIOKEN)) {
 		send_to_char
-		    ("You can't transform in to a Saiyan God while using Kaioken.\n\r",
-		    ch);
+		("You can't transform in to a Saiyan God while using Kaioken.\n\r",
+			ch);
 		return;
 	}
 	if (xIS_SET((ch)->affected_by, AFF_USSJ)
-	    || xIS_SET((ch)->affected_by, AFF_USSJ2)) {
+		|| xIS_SET((ch)->affected_by, AFF_USSJ2)) {
 		send_to_char("You have to power out of USSJ to do this.\n\r",
-		    ch);
+			ch);
 		return;
 	}
 	if (xIS_SET((ch)->affected_by, AFF_SGOD)) {
 		send_to_char("You power down to super Saiyan 4.\n\r", ch);
 		xREMOVE_BIT((ch)->affected_by, AFF_SGOD);
-		ch->pl = ch->exp * 35;
+		ch->pl = ch->exp * 425;
 		transStatApply(ch, 35, 20, 13, 20);
 		if (!IS_NPC(ch)) {
 			ch->pcdata->eyes = 4;
@@ -3789,9 +3967,9 @@ do_sgod(CHAR_DATA * ch, char *argument)
 		return;
 	}
 	if (xIS_SET((ch)->affected_by, AFF_OOZARU) ||
-	    xIS_SET((ch)->affected_by, AFF_GOLDEN_OOZARU)) {
+		xIS_SET((ch)->affected_by, AFF_GOLDEN_OOZARU)) {
 		send_to_char("You can't transform while you are an Oozaru.\n\r",
-		    ch);
+			ch);
 		return;
 	}
 	if (!xIS_SET((ch)->affected_by, AFF_SSJ4)) {
@@ -3802,66 +3980,67 @@ do_sgod(CHAR_DATA * ch, char *argument)
 		WAIT_STATE(ch, skill_table[gsn_sgod]->beats);
 		if (can_use_skill(ch, number_percent(), gsn_sgod)) {
 			act(AT_PURPLE,
-			    "You shimmer in a gold light. "
-			    "Your hair flashes purple.",
-			    ch, NULL, NULL, TO_CHAR);
+				"You shimmer in a gold light. "
+				"Your hair flashes purple.",
+				ch, NULL, NULL, TO_CHAR);
 			act(AT_PURPLE,
-			    "$n shimmers in a gold light. "
-			    "$ hair flashes purple.",
-			    ch, NULL, NULL, TO_NOTVICT);
+				"$n shimmers in a gold light. "
+				"$ hair flashes purple.",
+				ch, NULL, NULL, TO_NOTVICT);
 			xSET_BIT((ch)->affected_by, AFF_SSJ);
 			xSET_BIT((ch)->affected_by, AFF_SSJ2);
 			xSET_BIT((ch)->affected_by, AFF_SSJ3);
 			xSET_BIT((ch)->affected_by, AFF_SSJ4);
 			xSET_BIT((ch)->affected_by, AFF_SGOD);
-			ch->pl = ch->exp * 40;
+			ch->pl = ch->exp * 500;
 			transStatApply(ch, 40, 25, 18, 23);
 			learn_from_success(ch, gsn_sgod);
 			if (!IS_NPC(ch)) {
 				ch->pcdata->eyes = 4;
 				ch->pcdata->haircolor = 8;
 			}
-		} else {
+		}
+		else {
 			switch (number_range(1, 4)) {
 			default:
 				act(AT_BLUE,
-				    "Your hair flashes purple, but quickly returns to black.",
-				    ch, NULL, NULL, TO_CHAR);
+					"Your hair flashes purple, but quickly returns to black.",
+					ch, NULL, NULL, TO_CHAR);
 				act(AT_BLUE,
-				    "$n's hair flashes purple, but quickly returns to black.",
-				    ch, NULL, NULL, TO_NOTVICT);
+					"$n's hair flashes purple, but quickly returns to black.",
+					ch, NULL, NULL, TO_NOTVICT);
 				break;
 			case 1:
 				act(AT_BLUE,
-				    "Your hair flashes purple, but quickly returns to black.",
-				    ch, NULL, NULL, TO_CHAR);
+					"Your hair flashes purple, but quickly returns to black.",
+					ch, NULL, NULL, TO_CHAR);
 				act(AT_BLUE,
-				    "$n's hair flashes purple, but quickly returns to black.",
-				    ch, NULL, NULL, TO_NOTVICT);
+					"$n's hair flashes purple, but quickly returns to black.",
+					ch, NULL, NULL, TO_NOTVICT);
 				break;
 			case 2:
 				act(AT_BLUE,
-				    "You almost transform in to a super Saiyan God, your golden aura glows brightly",
-				    ch, NULL, NULL, TO_CHAR);
+					"You almost transform in to a super Saiyan God, your golden aura glows brightly",
+					ch, NULL, NULL, TO_CHAR);
 				act(AT_BLUE,
-				    "$n almost transforms in to a super Saiyan God, $ns golden aura glows brightly.",
-				    ch, NULL, NULL, TO_NOTVICT);
+					"$n almost transforms in to a super Saiyan God, $ns golden aura glows brightly.",
+					ch, NULL, NULL, TO_NOTVICT);
 				break;
 			case 3:
 				act(AT_BLUE,
-				    "Your eyes flash purple, your aura grows.",
-				    ch, NULL, NULL, TO_CHAR);
+					"Your eyes flash purple, your aura grows.",
+					ch, NULL, NULL, TO_CHAR);
 				act(AT_BLUE,
-				    "$n's eyes flash purple, his aura grows.",
-				    ch, NULL, NULL, TO_NOTVICT);
+					"$n's eyes flash purple, his aura grows.",
+					ch, NULL, NULL, TO_NOTVICT);
 				break;
 			case 4:
 				act(AT_BLUE,
-				    "Your golden aura begins to pulse.",
-				    ch, NULL, NULL, TO_CHAR);
+					"Your golden aura begins to pulse.",
+					ch, NULL, NULL, TO_CHAR);
 				act(AT_BLUE,
-				    "$n's golden aura begins to pulse.",
-				    ch, NULL, NULL, TO_NOTVICT);
+					"$n's golden aura begins to pulse.",
+					ch, NULL, NULL, TO_NOTVICT);
 				break;
 			}
 			learn_from_failure(ch, gsn_sgod);
@@ -3876,61 +4055,62 @@ do_sgod(CHAR_DATA * ch, char *argument)
 	}
 	WAIT_STATE(ch, skill_table[gsn_sgod]->beats);
 	if (can_use_skill(ch, number_percent(), gsn_sgod)) {
-		act(AT_BLUE,
-		    "Your aura envelopes you, your senses highten and you lose touch with humanity as you ascend.",
-		    ch, NULL, NULL, TO_CHAR);
-		act(AT_BLUE,
-		    "$n's aura envelopes everything, you're temporarily blinded and can no longer sense his power.",
-		    ch, NULL, NULL, TO_NOTVICT);
+		act(AT_WHITE,
+			"Your aura envelopes you, your senses highten and you lose touch with humanity as you ascend.",
+			ch, NULL, NULL, TO_CHAR);
+		act(AT_WHITE,
+			"$n's aura envelopes everything, you're temporarily blinded and can no longer sense his power.",
+			ch, NULL, NULL, TO_NOTVICT);
 		xSET_BIT((ch)->affected_by, AFF_SGOD);
-		ch->pl = ch->exp * 40;
+		ch->pl = ch->exp * 500;
 		transStatApply(ch, 40, 25, 18, 23);
 		learn_from_success(ch, gsn_sgod);
 		if (!IS_NPC(ch)) {
 			ch->pcdata->eyes = 4;
 			ch->pcdata->haircolor = 8;
 		}
-	} else {
+	}
+	else {
 		switch (number_range(1, 4)) {
 		default:
 			act(AT_BLUE,
-			    "Your hair flashes purple, but quickly returns to black.",
-			    ch, NULL, NULL, TO_CHAR);
+				"Your hair flashes purple, but quickly returns to black.",
+				ch, NULL, NULL, TO_CHAR);
 			act(AT_BLUE,
-			    "$n's hair flashes purple, but quickly returns to black.",
-			    ch, NULL, NULL, TO_NOTVICT);
+				"$n's hair flashes purple, but quickly returns to black.",
+				ch, NULL, NULL, TO_NOTVICT);
 			break;
 		case 1:
 			act(AT_BLUE,
-			    "Your hair flashes purple, but quickly returns to black.",
-			    ch, NULL, NULL, TO_CHAR);
+				"Your hair flashes purple, but quickly returns to black.",
+				ch, NULL, NULL, TO_CHAR);
 			act(AT_BLUE,
-			    "$n's hair flashes purple, but quickly returns to black.",
-			    ch, NULL, NULL, TO_NOTVICT);
+				"$n's hair flashes purple, but quickly returns to black.",
+				ch, NULL, NULL, TO_NOTVICT);
 			break;
 		case 2:
 			act(AT_BLUE,
-			    "You almost transform in to a super Saiyan God, your golden aura glows brightly",
-			    ch, NULL, NULL, TO_CHAR);
+				"You almost transform in to a super Saiyan God, your golden aura glows brightly",
+				ch, NULL, NULL, TO_CHAR);
 			act(AT_BLUE,
-			    "$n almost transforms in to a super Saiyan God, $ns golden aura glows brightly.",
-			    ch, NULL, NULL, TO_NOTVICT);
+				"$n almost transforms in to a super Saiyan God, $ns golden aura glows brightly.",
+				ch, NULL, NULL, TO_NOTVICT);
 			break;
 		case 3:
 			act(AT_BLUE,
-			    "Your eyes flash purple, your aura grows.",
-			    ch, NULL, NULL, TO_CHAR);
+				"Your eyes flash purple, your aura grows.",
+				ch, NULL, NULL, TO_CHAR);
 			act(AT_BLUE,
-			    "$n's eyes flash purple, his aura grows.",
-			    ch, NULL, NULL, TO_NOTVICT);
+				"$n's eyes flash purple, his aura grows.",
+				ch, NULL, NULL, TO_NOTVICT);
 			break;
 		case 4:
 			act(AT_BLUE,
-			    "Your golden aura begins to pulse.",
-			    ch, NULL, NULL, TO_CHAR);
+				"Your golden aura begins to pulse.",
+				ch, NULL, NULL, TO_CHAR);
 			act(AT_BLUE,
-			    "$n's golden aura begins to pulse.",
-			    ch, NULL, NULL, TO_NOTVICT);
+				"$n's golden aura begins to pulse.",
+				ch, NULL, NULL, TO_NOTVICT);
 			break;
 		}
 		learn_from_failure(ch, gsn_sgod);
@@ -3953,7 +4133,7 @@ do_super_namek(CHAR_DATA * ch, char *argument)
 	if (!IS_NPC(ch)) {
 		if (IS_SET(ch->pcdata->flags, PCFLAG_KNOWSMYSTIC)) {
 			ch_printf(ch,
-			    "You are unable to call upon those powers while you know mystic.\n\r");
+				"You are unable to call upon those powers while you know mystic.\n\r");
 			return;
 		}
 	}
@@ -3961,11 +4141,13 @@ do_super_namek(CHAR_DATA * ch, char *argument)
 		ch_printf(ch, "You can't while you have a chip installed.\n\r");
 		return;
 	}
+	int		kicontrol = 0;
 	double 	pl_mult = 0;
 	int 	arg;
 	bool 	affGrowth = false;
 	int 	sizeStr = 0, sizeSpd = 0, sizeCon = 0, sizeInt = 0;
 
+	kicontrol = get_curr_int(ch);
 	arg = atoi(argument);
 
 	if (xIS_SET((ch)->affected_by, AFF_GROWTH)) {
@@ -3991,22 +4173,23 @@ do_super_namek(CHAR_DATA * ch, char *argument)
 			transStatApply(ch, sizeStr, sizeSpd, sizeInt, sizeCon);
 		}
 		return;
-	} else if (!xIS_SET((ch)->affected_by, AFF_SNAMEK) && arg == 0) {
+	}
+	else if (!xIS_SET((ch)->affected_by, AFF_SNAMEK) && arg == 0) {
 		ch_printf(ch, "You're not in super namek, though!\n\r");
 		return;
 	}
-	pl_mult = (double) pow(ch->exp, 0.373) * 0.01;
-	if (pl_mult > 26)
-		pl_mult = 26;
+	pl_mult = (double)kicontrol * 2 * 0.01;
+	if (pl_mult > 500)
+		pl_mult = 500;
 	if (pl_mult < 5)
-		pl_mult = (double) 2 + pl_mult;
+		pl_mult = (double)2 + pl_mult;
 	else if (pl_mult < 6)
-		pl_mult = (double) 1 + pl_mult;
+		pl_mult = (double)1 + pl_mult;
 	else if (pl_mult < 6.5)
 		pl_mult = (double) 0.5 + pl_mult;
 
 	if (arg > pl_mult)
-		pl_mult = (int) pl_mult;
+		pl_mult = (int)pl_mult;
 	else if (arg < 1)
 		pl_mult = 1;
 	else
@@ -4019,31 +4202,33 @@ do_super_namek(CHAR_DATA * ch, char *argument)
 	WAIT_STATE(ch, skill_table[gsn_snamek]->beats);
 	if (can_use_skill(ch, number_percent(), gsn_snamek)) {
 		act(AT_SKILL,
-		    "You draw upon the ancient knowledge of the Namekians to transform into a Super Namek.",
-		    ch, NULL, NULL, TO_CHAR);
+			"You draw upon the ancient knowledge of the Namekians to transform into a Super Namek.",
+			ch, NULL, NULL, TO_CHAR);
 		act(AT_SKILL,
-		    "$n draws upon the ancient knowledge of the Namekians to transform into a Super Namek.",
-		    ch, NULL, NULL, TO_NOTVICT);
+			"$n draws upon the ancient knowledge of the Namekians to transform into a Super Namek.",
+			ch, NULL, NULL, TO_NOTVICT);
 		xSET_BIT((ch)->affected_by, AFF_SNAMEK);
 
 		ch->pl = ch->exp * pl_mult;
 		if (affGrowth) {
 			transStatApply(ch, pl_mult / 4 + sizeStr,
-			    pl_mult / 2 + sizeSpd, pl_mult + sizeInt,
-			    pl_mult / 4 + sizeCon);
-		} else {
+				pl_mult / 2 + sizeSpd, pl_mult + sizeInt,
+				pl_mult / 4 + sizeCon);
+		}
+		else {
 			transStatApply(ch, pl_mult / 4, pl_mult / 2, pl_mult,
-			    pl_mult / 4);
+				pl_mult / 4);
 		}
 
 		learn_from_success(ch, gsn_snamek);
-	} else {
+	}
+	else {
 		act(AT_SKILL,
-		    "You can not quite comprehend the ancient knowledge necessary to become a Super Namek.",
-		    ch, NULL, NULL, TO_CHAR);
+			"You can not quite comprehend the ancient knowledge necessary to become a Super Namek.",
+			ch, NULL, NULL, TO_CHAR);
 		act(AT_SKILL,
-		    "$n can not quite comprehend the ancient knowledge necessary to become a Super Namek.",
-		    ch, NULL, NULL, TO_NOTVICT);
+			"$n can not quite comprehend the ancient knowledge necessary to become a Super Namek.",
+			ch, NULL, NULL, TO_NOTVICT);
 		learn_from_failure(ch, gsn_snamek);
 	}
 
@@ -4064,7 +4249,7 @@ do_icer_transform_2(CHAR_DATA * ch, char *argument)
 	if (!IS_NPC(ch)) {
 		if (IS_SET(ch->pcdata->flags, PCFLAG_KNOWSMYSTIC)) {
 			ch_printf(ch,
-			    "You are unable to call upon those powers while you know mystic.\n\r");
+				"You are unable to call upon those powers while you know mystic.\n\r");
 			return;
 		}
 	}
@@ -4073,12 +4258,12 @@ do_icer_transform_2(CHAR_DATA * ch, char *argument)
 		return;
 	}
 	if (xIS_SET((ch)->affected_by, AFF_ICER2)
-	    || xIS_SET((ch)->affected_by, AFF_ICER3)
-	    || xIS_SET((ch)->affected_by, AFF_ICER4)
-	    || xIS_SET((ch)->affected_by, AFF_ICER5)) {
+		|| xIS_SET((ch)->affected_by, AFF_ICER3)
+		|| xIS_SET((ch)->affected_by, AFF_ICER4)
+		|| xIS_SET((ch)->affected_by, AFF_ICER5)) {
 		send_to_char
-		    ("You power down and transform into your first form.\n\r",
-		    ch);
+		("You power down and transform into your first form.\n\r",
+			ch);
 		if (xIS_SET((ch)->affected_by, AFF_ICER2))
 			xREMOVE_BIT((ch)->affected_by, AFF_ICER2);
 		if (xIS_SET((ch)->affected_by, AFF_ICER3))
@@ -4098,24 +4283,25 @@ do_icer_transform_2(CHAR_DATA * ch, char *argument)
 	WAIT_STATE(ch, skill_table[gsn_icer2]->beats);
 	if (can_use_skill(ch, number_percent(), gsn_icer2)) {
 		act(AT_PURPLE,
-		    "A dread chill emanates from you as your form grows huge in size, your muscles bulge and your horns"
-		    " become much more prominent, completing your transformation to your second form.",
-		    ch, NULL, NULL, TO_CHAR);
+			"A dread chill emanates from you as your form grows huge in size, your muscles bulge and your horns"
+			" become much more prominent, completing your transformation to your second form.",
+			ch, NULL, NULL, TO_CHAR);
 		act(AT_PURPLE,
-		    "A dread chill emanates from $n as $s form grows huge in size, $s muscles bulge and $s horns"
-		    " become much more prominent, completing $s transformation to $s second form.",
-		    ch, NULL, NULL, TO_NOTVICT);
+			"A dread chill emanates from $n as $s form grows huge in size, $s muscles bulge and $s horns"
+			" become much more prominent, completing $s transformation to $s second form.",
+			ch, NULL, NULL, TO_NOTVICT);
 		xSET_BIT((ch)->affected_by, AFF_ICER2);
-		ch->pl = ch->exp * 2;
+		ch->pl = ch->exp * 4;
 		transStatApply(ch, 4, 4, 2, 7);
 		learn_from_success(ch, gsn_icer2);
-	} else {
+	}
+	else {
 		act(AT_PURPLE,
-		    "The temperature dips a few degrees, but quickly returns to normal, as you are unable to transform.",
-		    ch, NULL, NULL, TO_CHAR);
+			"The temperature dips a few degrees, but quickly returns to normal, as you are unable to transform.",
+			ch, NULL, NULL, TO_CHAR);
 		act(AT_PURPLE,
-		    "The temperature dips a few degrees, but quickly returns to normal, as $n is unable to transform.",
-		    ch, NULL, NULL, TO_NOTVICT);
+			"The temperature dips a few degrees, but quickly returns to normal, as $n is unable to transform.",
+			ch, NULL, NULL, TO_NOTVICT);
 		learn_from_failure(ch, gsn_icer2);
 	}
 	if (xIS_SET((ch)->affected_by, AFF_ICER3))
@@ -4141,7 +4327,7 @@ do_icer_transform_3(CHAR_DATA * ch, char *argument)
 	if (!IS_NPC(ch)) {
 		if (IS_SET(ch->pcdata->flags, PCFLAG_KNOWSMYSTIC)) {
 			ch_printf(ch,
-			    "You are unable to call upon those powers while you know mystic.\n\r");
+				"You are unable to call upon those powers while you know mystic.\n\r");
 			return;
 		}
 	}
@@ -4150,11 +4336,11 @@ do_icer_transform_3(CHAR_DATA * ch, char *argument)
 		return;
 	}
 	if (xIS_SET((ch)->affected_by, AFF_ICER3)
-	    || xIS_SET((ch)->affected_by, AFF_ICER4)
-	    || xIS_SET((ch)->affected_by, AFF_ICER5)) {
+		|| xIS_SET((ch)->affected_by, AFF_ICER4)
+		|| xIS_SET((ch)->affected_by, AFF_ICER5)) {
 		send_to_char
-		    ("You power down and transform into your second form.\n\r",
-		    ch);
+		("You power down and transform into your second form.\n\r",
+			ch);
 		if (xIS_SET((ch)->affected_by, AFF_ICER3))
 			xREMOVE_BIT((ch)->affected_by, AFF_ICER3);
 		if (xIS_SET((ch)->affected_by, AFF_ICER4))
@@ -4163,7 +4349,7 @@ do_icer_transform_3(CHAR_DATA * ch, char *argument)
 			xREMOVE_BIT((ch)->affected_by, AFF_ICER5);
 		if (!xIS_SET((ch)->affected_by, AFF_ICER2))
 			xSET_BIT((ch)->affected_by, AFF_ICER2);
-		ch->pl = ch->exp * 2;
+		ch->pl = ch->exp * 4;
 		transStatApply(ch, 4, 4, 2, 7);
 		return;
 	}
@@ -4178,25 +4364,26 @@ do_icer_transform_3(CHAR_DATA * ch, char *argument)
 	WAIT_STATE(ch, skill_table[gsn_icer3]->beats);
 	if (can_use_skill(ch, number_percent(), gsn_icer3)) {
 		act(AT_PURPLE,
-		    "A cold breeze swirls out from your form as you shrink slightly, your head elongates and your"
-		    " mouth and nose form into a sort of beak.  Your horns shrink, leaving you looking like quite"
-		    " a monster in your third form.", ch, NULL, NULL, TO_CHAR);
+			"A cold breeze swirls out from your form as you shrink slightly, your head elongates and your"
+			" mouth and nose form into a sort of beak.  Your horns shrink, leaving you looking like quite"
+			" a monster in your third form.", ch, NULL, NULL, TO_CHAR);
 		act(AT_PURPLE,
-		    "A cold breeze swirls out from $n's form as $e shrinks slightly, $s head elongates and $s"
-		    " mouth and nose form into a sort of beak.  $n's horns shrink, leaving $m looking like quite"
-		    " a monster in $s third form.", ch, NULL, NULL, TO_NOTVICT);
+			"A cold breeze swirls out from $n's form as $e shrinks slightly, $s head elongates and $s"
+			" mouth and nose form into a sort of beak.  $n's horns shrink, leaving $m looking like quite"
+			" a monster in $s third form.", ch, NULL, NULL, TO_NOTVICT);
 		xSET_BIT((ch)->affected_by, AFF_ICER3);
 		xREMOVE_BIT((ch)->affected_by, AFF_ICER2);
-		ch->pl = ch->exp * 8;
+		ch->pl = ch->exp * 12;
 		transStatApply(ch, 7, 7, 4, 14);
 		learn_from_success(ch, gsn_icer3);
-	} else {
+	}
+	else {
 		act(AT_PURPLE,
-		    "The temperature dips a few degrees, but quickly returns to normal, as you are unable to transform.",
-		    ch, NULL, NULL, TO_CHAR);
+			"The temperature dips a few degrees, but quickly returns to normal, as you are unable to transform.",
+			ch, NULL, NULL, TO_CHAR);
 		act(AT_PURPLE,
-		    "The temperature dips a few degrees, but quickly returns to normal, as $n is unable to transform.",
-		    ch, NULL, NULL, TO_NOTVICT);
+			"The temperature dips a few degrees, but quickly returns to normal, as $n is unable to transform.",
+			ch, NULL, NULL, TO_NOTVICT);
 		learn_from_failure(ch, gsn_icer3);
 	}
 
@@ -4221,7 +4408,7 @@ do_icer_transform_4(CHAR_DATA * ch, char *argument)
 	if (!IS_NPC(ch)) {
 		if (IS_SET(ch->pcdata->flags, PCFLAG_KNOWSMYSTIC)) {
 			ch_printf(ch,
-			    "You are unable to call upon those powers while you know mystic.\n\r");
+				"You are unable to call upon those powers while you know mystic.\n\r");
 			return;
 		}
 	}
@@ -4230,10 +4417,10 @@ do_icer_transform_4(CHAR_DATA * ch, char *argument)
 		return;
 	}
 	if (xIS_SET((ch)->affected_by, AFF_ICER4)
-	    || xIS_SET((ch)->affected_by, AFF_ICER5)) {
+		|| xIS_SET((ch)->affected_by, AFF_ICER5)) {
 		send_to_char
-		    ("You power down and transform into your third form.\n\r",
-		    ch);
+		("You power down and transform into your third form.\n\r",
+			ch);
 		if (xIS_SET((ch)->affected_by, AFF_ICER2))
 			xREMOVE_BIT((ch)->affected_by, AFF_ICER2);
 		if (xIS_SET((ch)->affected_by, AFF_ICER4))
@@ -4242,7 +4429,7 @@ do_icer_transform_4(CHAR_DATA * ch, char *argument)
 			xREMOVE_BIT((ch)->affected_by, AFF_ICER5);
 		if (!xIS_SET((ch)->affected_by, AFF_ICER3))
 			xSET_BIT((ch)->affected_by, AFF_ICER3);
-		ch->pl = ch->exp * 8;
+		ch->pl = ch->exp * 12;
 		transStatApply(ch, 7, 7, 4, 14);
 		return;
 	}
@@ -4257,27 +4444,28 @@ do_icer_transform_4(CHAR_DATA * ch, char *argument)
 	WAIT_STATE(ch, skill_table[gsn_icer4]->beats);
 	if (can_use_skill(ch, number_percent(), gsn_icer4)) {
 		act(AT_PURPLE,
-		    "With a sudden gust of freezing air your body reverts to a more normal shape and size.  "
-		    "Your horns disappear completely now, your skin and features turning as smooth as glass, "
-		    "leaving you looking rather sleek in your fourth form.", ch,
-		    NULL, NULL, TO_CHAR);
+			"With a sudden gust of freezing air your body reverts to a more normal shape and size.  "
+			"Your horns disappear completely now, your skin and features turning as smooth as glass, "
+			"leaving you looking rather sleek in your fourth form.", ch,
+			NULL, NULL, TO_CHAR);
 		act(AT_PURPLE,
-		    "With a sudden gust of freezing air $n's body reverts to a more normal shape and size.  "
-		    "$n's horns disappear completely now, $s skin and features turning as smooth as glass, "
-		    "leaving $m looking rather sleek in $s fourth form.", ch,
-		    NULL, NULL, TO_NOTVICT);
+			"With a sudden gust of freezing air $n's body reverts to a more normal shape and size.  "
+			"$n's horns disappear completely now, $s skin and features turning as smooth as glass, "
+			"leaving $m looking rather sleek in $s fourth form.", ch,
+			NULL, NULL, TO_NOTVICT);
 		xSET_BIT((ch)->affected_by, AFF_ICER4);
 		xREMOVE_BIT((ch)->affected_by, AFF_ICER3);
-		ch->pl = ch->exp * 16;
+		ch->pl = ch->exp * 50;
 		transStatApply(ch, 10, 10, 5, 20);
 		learn_from_success(ch, gsn_icer4);
-	} else {
+	}
+	else {
 		act(AT_PURPLE,
-		    "The temperature dips a few degrees, but quickly returns to normal, as you are unable to transform.",
-		    ch, NULL, NULL, TO_CHAR);
+			"The temperature dips a few degrees, but quickly returns to normal, as you are unable to transform.",
+			ch, NULL, NULL, TO_CHAR);
 		act(AT_PURPLE,
-		    "The temperature dips a few degrees, but quickly returns to normal, as $n is unable to transform.",
-		    ch, NULL, NULL, TO_NOTVICT);
+			"The temperature dips a few degrees, but quickly returns to normal, as $n is unable to transform.",
+			ch, NULL, NULL, TO_NOTVICT);
 		learn_from_failure(ch, gsn_icer4);
 	}
 
@@ -4300,7 +4488,7 @@ do_icer_transform_5(CHAR_DATA * ch, char *argument)
 	if (!IS_NPC(ch)) {
 		if (IS_SET(ch->pcdata->flags, PCFLAG_KNOWSMYSTIC)) {
 			ch_printf(ch,
-			    "You are unable to call upon those powers while you know mystic.\n\r");
+				"You are unable to call upon those powers while you know mystic.\n\r");
 			return;
 		}
 	}
@@ -4310,8 +4498,8 @@ do_icer_transform_5(CHAR_DATA * ch, char *argument)
 	}
 	if (xIS_SET((ch)->affected_by, AFF_ICER5)) {
 		send_to_char
-		    ("You power down and transform into your fourth form.\n\r",
-		    ch);
+		("You power down and transform into your fourth form.\n\r",
+			ch);
 		if (xIS_SET((ch)->affected_by, AFF_ICER2))
 			xREMOVE_BIT((ch)->affected_by, AFF_ICER2);
 		if (xIS_SET((ch)->affected_by, AFF_ICER3))
@@ -4320,7 +4508,7 @@ do_icer_transform_5(CHAR_DATA * ch, char *argument)
 			xREMOVE_BIT((ch)->affected_by, AFF_ICER5);
 		if (!xIS_SET((ch)->affected_by, AFF_ICER4))
 			xSET_BIT((ch)->affected_by, AFF_ICER4);
-		ch->pl = ch->exp * 16;
+		ch->pl = ch->exp * 50;
 		transStatApply(ch, 10, 10, 5, 20);
 		return;
 	}
@@ -4335,27 +4523,28 @@ do_icer_transform_5(CHAR_DATA * ch, char *argument)
 	WAIT_STATE(ch, skill_table[gsn_icer5]->beats);
 	if (can_use_skill(ch, number_percent(), gsn_icer5)) {
 		act(AT_PURPLE,
-		    "An arctic tempest roars as your body grows huge, your muscles bulging.  Armored plates "
-		    "slide over weak points, spikes bristling over your body for extra protection.  An armored "
-		    "mask slides over your face, ending your transformation to your fifth form.",
-		    ch, NULL, NULL, TO_CHAR);
+			"An arctic tempest roars as your body grows huge, your muscles bulging.  Armored plates "
+			"slide over weak points, spikes bristling over your body for extra protection.  An armored "
+			"mask slides over your face, ending your transformation to your fifth form.",
+			ch, NULL, NULL, TO_CHAR);
 		act(AT_PURPLE,
-		    "An arctic tempest roars as $n's body grows huge, $s muscles bulging.  Armored plates "
-		    "slide over weak points, spikes bristling over $s body for extra protection.  An armored "
-		    "mask slides over $n's face, ending $s transformation to $s fifth form.",
-		    ch, NULL, NULL, TO_NOTVICT);
+			"An arctic tempest roars as $n's body grows huge, $s muscles bulging.  Armored plates "
+			"slide over weak points, spikes bristling over $s body for extra protection.  An armored "
+			"mask slides over $n's face, ending $s transformation to $s fifth form.",
+			ch, NULL, NULL, TO_NOTVICT);
 		xSET_BIT((ch)->affected_by, AFF_ICER5);
 		xREMOVE_BIT((ch)->affected_by, AFF_ICER4);
-		ch->pl = ch->exp * 30;
+		ch->pl = ch->exp * 150;
 		transStatApply(ch, 17, 17, 12, 30);
 		learn_from_success(ch, gsn_icer5);
-	} else {
+	}
+	else {
 		act(AT_PURPLE,
-		    "The temperature dips a few degrees, but quickly returns to normal, as you are unable to transform.",
-		    ch, NULL, NULL, TO_CHAR);
+			"The temperature dips a few degrees, but quickly returns to normal, as you are unable to transform.",
+			ch, NULL, NULL, TO_CHAR);
 		act(AT_PURPLE,
-		    "The temperature dips a few degrees, but quickly returns to normal, as $n is unable to transform.",
-		    ch, NULL, NULL, TO_NOTVICT);
+			"The temperature dips a few degrees, but quickly returns to normal, as $n is unable to transform.",
+			ch, NULL, NULL, TO_NOTVICT);
 		learn_from_failure(ch, gsn_icer5);
 	}
 
@@ -4366,6 +4555,9 @@ do_icer_transform_5(CHAR_DATA * ch, char *argument)
 void
 do_icer_transform_golden_form(CHAR_DATA * ch, char *argument)
 {
+	double pl_mult = 0;
+	int kicontrol = 0;
+
 	if (IS_NPC(ch) && is_split(ch)) {
 		if (!ch->master)
 			return;
@@ -4375,7 +4567,7 @@ do_icer_transform_golden_form(CHAR_DATA * ch, char *argument)
 	if (!IS_NPC(ch)) {
 		if (IS_SET(ch->pcdata->flags, PCFLAG_KNOWSMYSTIC)) {
 			ch_printf(ch,
-			    "You are unable to call upon those powers while you know mystic.\n\r");
+				"You are unable to call upon those powers while you know mystic.\n\r");
 			return;
 		}
 	}
@@ -4385,8 +4577,8 @@ do_icer_transform_golden_form(CHAR_DATA * ch, char *argument)
 	}
 	if (xIS_SET((ch)->affected_by, AFF_GOLDENFORM)) {
 		send_to_char
-		    ("You power down and transform into your fifth form.\n\r",
-		    ch);
+		("You power down and transform into your fifth form.\n\r",
+			ch);
 		if (xIS_SET((ch)->affected_by, AFF_ICER2))
 			xREMOVE_BIT((ch)->affected_by, AFF_ICER2);
 		if (xIS_SET((ch)->affected_by, AFF_ICER3))
@@ -4397,7 +4589,7 @@ do_icer_transform_golden_form(CHAR_DATA * ch, char *argument)
 			xREMOVE_BIT((ch)->affected_by, AFF_GOLDENFORM);
 		if (!xIS_SET((ch)->affected_by, AFF_ICER5))
 			xSET_BIT((ch)->affected_by, AFF_ICER5);
-		ch->pl = ch->exp * 30;
+		ch->pl = ch->exp * 150;
 		transStatApply(ch, 17, 17, 12, 30);
 		return;
 	}
@@ -4409,26 +4601,31 @@ do_icer_transform_golden_form(CHAR_DATA * ch, char *argument)
 		send_to_char("You must be in fifth form first.\n\r", ch);
 		return;
 	}
+
+	kicontrol = get_curr_int(ch);
+
 	WAIT_STATE(ch, skill_table[gsn_goldenform]->beats);
 	if (can_use_skill(ch, number_percent(), gsn_goldenform)) {
 		act(AT_PURPLE,
-		    "An arctic blast surrounds you, the ground freezes and your golden aura shimmers.",
-		    ch, NULL, NULL, TO_CHAR);
+			"An arctic blast surrounds you, the ground freezes and your golden aura shimmers.",
+			ch, NULL, NULL, TO_CHAR);
 		act(AT_PURPLE,
-		    "An arctic blast hits you, the ground freezes underneath you, you shiver in fear.",
-		    ch, NULL, NULL, TO_NOTVICT);
+			"An arctic blast hits you, the ground freezes underneath you, you shiver in fear.",
+			ch, NULL, NULL, TO_NOTVICT);
 		xSET_BIT((ch)->affected_by, AFF_GOLDENFORM);
 		xREMOVE_BIT((ch)->affected_by, AFF_ICER5);
-		ch->pl = ch->exp * 35;
+		pl_mult = (double)kicontrol / 100 + 380;
+		ch->pl = ch->exp * pl_mult;
 		transStatApply(ch, 21, 21, 15, 35);
 		learn_from_success(ch, gsn_goldenform);
-	} else {
+	}
+	else {
 		act(AT_PURPLE,
-		    "The temperature dips a few degrees, but quickly returns to normal, as you are unable to transform.",
-		    ch, NULL, NULL, TO_CHAR);
+			"The temperature dips a few degrees, but quickly returns to normal, as you are unable to transform.",
+			ch, NULL, NULL, TO_CHAR);
 		act(AT_PURPLE,
-		    "The temperature dips a few degrees, but quickly returns to normal, as $n is unable to transform.",
-		    ch, NULL, NULL, TO_NOTVICT);
+			"The temperature dips a few degrees, but quickly returns to normal, as $n is unable to transform.",
+			ch, NULL, NULL, TO_NOTVICT);
 		learn_from_failure(ch, gsn_goldenform);
 	}
 
@@ -6080,7 +6277,7 @@ do_hyper(CHAR_DATA * ch, char *argument)
 	if (!IS_NPC(ch)) {
 		if (IS_SET(ch->pcdata->flags, PCFLAG_KNOWSMYSTIC)) {
 			ch_printf(ch,
-			    "You are unable to call upon those powers while you know mystic.\n\r");
+				"You are unable to call upon those powers while you know mystic.\n\r");
 			return;
 		}
 	}
@@ -6097,14 +6294,14 @@ do_hyper(CHAR_DATA * ch, char *argument)
 	}
 	if (xIS_SET((ch)->affected_by, AFF_EXTREME)) {
 		send_to_char
-		    ("You can't use the hyper technique while using extreme.\n\r",
-		    ch);
+		("You can't use the hyper technique while using extreme.\n\r",
+			ch);
 		return;
 	}
 	if (xIS_SET((ch)->affected_by, AFF_KAIOKEN)) {
 		send_to_char
-		    ("You can't use the hyper technique while using kaioken.\n\r",
-		    ch);
+		("You can't use the hyper technique while using kaioken.\n\r",
+			ch);
 		return;
 	}
 	if (ch->mana < skill_table[gsn_hyper]->min_mana) {
@@ -6116,25 +6313,26 @@ do_hyper(CHAR_DATA * ch, char *argument)
 	WAIT_STATE(ch, skill_table[gsn_hyper]->beats);
 	if (can_use_skill(ch, number_percent(), gsn_hyper)) {
 		act(z,
-		    "You clench your fists and yell out as all your muscles bulge and your aura explodes outward.",
-		    ch, NULL, NULL, TO_CHAR);
+			"You clench your fists and yell out as all your muscles bulge and your aura explodes outward.",
+			ch, NULL, NULL, TO_CHAR);
 		act(z,
-		    "$n clenches $s fists and yells out as all of $s muscles bulge and $s aura explodes outward.",
-		    ch, NULL, NULL, TO_NOTVICT);
+			"$n clenches $s fists and yells out as all of $s muscles bulge and $s aura explodes outward.",
+			ch, NULL, NULL, TO_NOTVICT);
 		xSET_BIT((ch)->affected_by, AFF_HYPER);
 		if (xIS_SET((ch)->affected_by, AFF_HEART))
 			xREMOVE_BIT(ch->affected_by, AFF_HEART);
-		ch->pl = ch->exp * 12;
+		ch->pl = ch->exp * 50;
 		transStatApply(ch, 18, 12, 6, 24);
 		heart_calc(ch, "");
 		learn_from_success(ch, gsn_hyper);
-	} else {
+	}
+	else {
 		act(z,
-		    "You clench your fists and yell out, but nothing happens.",
-		    ch, NULL, NULL, TO_CHAR);
+			"You clench your fists and yell out, but nothing happens.",
+			ch, NULL, NULL, TO_CHAR);
 		act(z,
-		    "$n clenchs $s fists and yells out, but nothing happens.",
-		    ch, NULL, NULL, TO_NOTVICT);
+			"$n clenchs $s fists and yells out, but nothing happens.",
+			ch, NULL, NULL, TO_NOTVICT);
 		learn_from_failure(ch, gsn_hyper);
 	}
 
@@ -9945,6 +10143,7 @@ do_banish(CHAR_DATA * ch, char *argument)
 void
 do_mystic(CHAR_DATA * ch, char *argument)
 {
+	int kicontrol = 0;
 
 	if (IS_NPC(ch) && is_split(ch)) {
 		if (!ch->master)
@@ -9954,9 +10153,9 @@ do_mystic(CHAR_DATA * ch, char *argument)
 	}
 	if (!IS_NPC(ch)) {
 		if (!IS_SET(ch->pcdata->flags, PCFLAG_KNOWSMYSTIC) &&
-		    !is_kaio(ch)) {
+			!is_kaio(ch)) {
 			ch_printf(ch,
-			    "You don't know how to use this technique.\n\r");
+				"You don't know how to use this technique.\n\r");
 			return;
 		}
 	}
@@ -9967,14 +10166,15 @@ do_mystic(CHAR_DATA * ch, char *argument)
 	if (!IS_NPC(ch)) {
 		if (IS_SET(ch->pcdata->combatFlags, CMB_NO_HEART)) {
 			send_to_char
-			    ("You must first disable heart to use the Mystic.\n\r",
-			    ch);
+			("You must first disable heart to use the Mystic technique.\n\r",
+				ch);
 			return;
 		}
 	}
 	if (xIS_SET(ch->affected_by, AFF_KAIOKEN))
 		xREMOVE_BIT(ch->affected_by, AFF_KAIOKEN);
 
+	kicontrol = get_curr_int(ch);
 	double 	pl_mult = 0;
 	int 	arg;
 
@@ -9986,14 +10186,36 @@ do_mystic(CHAR_DATA * ch, char *argument)
 		transStatRemove(ch);
 		ch->pl = ch->exp;
 		return;
-	} else if (!xIS_SET((ch)->affected_by, AFF_MYSTIC) && arg == 0) {
+	}
+	else if (!xIS_SET((ch)->affected_by, AFF_MYSTIC) && arg == 0) {
 		ch_printf(ch, "You're not in mystic, though!\n\r");
 		return;
 	}
-	pl_mult = 20;
+	if (kicontrol < 1000)
+		pl_mult = 50;
+	else if (kicontrol < 1500)
+		pl_mult = 75;
+	else if (kicontrol < 2000)
+		pl_mult = 100;
+	else if (kicontrol < 2500)
+		pl_mult = 125;
+	else if (kicontrol < 3000)
+		pl_mult = 150;
+	else if (kicontrol < 3500)
+		pl_mult = 175;
+	else if (kicontrol < 4000)
+		pl_mult = 200;
+	else if (kicontrol < 4500)
+		pl_mult = 225;
+	else if (kicontrol < 5000)
+		pl_mult = 250;
+	else if (kicontrol < 5500)
+		pl_mult = 275;
+	else if (kicontrol < 6000)
+		pl_mult = 300;
 
 	if (arg > pl_mult)
-		pl_mult = (int) pl_mult;
+		pl_mult = (int)pl_mult;
 	else if (arg < 1)
 		pl_mult = 1;
 	else
@@ -10006,26 +10228,27 @@ do_mystic(CHAR_DATA * ch, char *argument)
 	WAIT_STATE(ch, skill_table[gsn_mystic]->beats);
 	if (can_use_skill(ch, number_percent(), gsn_mystic)) {
 		act(AT_WHITE,
-		    "You focus your mind's eye on the full extent of your innermost recesses of power and try to draw it out all at once; setting off a shockwave that makes the ground beneath you tremble.",
-		    ch, NULL, NULL, TO_CHAR);
+			"You focus your mind's eye on the full extent of your innermost recesses of power and try to draw it out all at once, setting off a shockwave that makes the ground beneath you tremble.",
+			ch, NULL, NULL, TO_CHAR);
 		act(AT_WHITE,
-		    "$n focuses $s mind's eye on the full extent of $s innermost recesses of power and tries to draw it out all at once; setting off a shockwave that makes the ground beneath you tremble.",
-		    ch, NULL, NULL, TO_NOTVICT);
+			"$n focuses $s mind's eye on the full extent of $s innermost recesses of power and tries to draw it out all at once, setting off a shockwave that makes the ground beneath you tremble.",
+			ch, NULL, NULL, TO_NOTVICT);
 
 		xSET_BIT((ch)->affected_by, AFF_MYSTIC);
 
 		ch->pl = ch->exp * pl_mult;
 
-		transStatApply(ch, pl_mult, pl_mult, pl_mult, pl_mult);
+		transStatApply(ch, 20, 20, 20, 20);
 
 		learn_from_success(ch, gsn_mystic);
-	} else {
+	}
+	else {
 		act(AT_WHITE,
-		    "You can't quite focus well enough to draw out your hidden powers.",
-		    ch, NULL, NULL, TO_CHAR);
+			"You can't quite focus well enough to draw out your hidden powers.",
+			ch, NULL, NULL, TO_CHAR);
 		act(AT_WHITE,
-		    "$n can't quite focus well enough to draw out $s hidden powers.",
-		    ch, NULL, NULL, TO_NOTVICT);
+			"$n can't quite focus well enough to draw out $s hidden powers.",
+			ch, NULL, NULL, TO_NOTVICT);
 		learn_from_failure(ch, gsn_mystic);
 	}
 
@@ -10680,7 +10903,7 @@ do_ussj(CHAR_DATA * ch, char *argument)
 	if (!IS_NPC(ch)) {
 		if (IS_SET(ch->pcdata->flags, PCFLAG_KNOWSMYSTIC)) {
 			ch_printf(ch,
-			    "You are unable to call upon those powers while you know mystic.\n\r");
+				"You are unable to call upon those powers while you know mystic.\n\r");
 			return;
 		}
 	}
@@ -10690,44 +10913,46 @@ do_ussj(CHAR_DATA * ch, char *argument)
 	}
 	if (xIS_SET((ch)->affected_by, AFF_KAIOKEN)) {
 		send_to_char
-		    ("You can't transform in to a super saiyan while using kaioken.\n\r",
-		    ch);
+		("You can't transform in to a super saiyan while using kaioken.\n\r",
+			ch);
 		return;
 	}
 	if (xIS_SET((ch)->affected_by, AFF_SSJ)
-	    && xIS_SET((ch)->affected_by, AFF_USSJ)
-	    && !xIS_SET((ch)->affected_by, AFF_USSJ2)) {
+		&& xIS_SET((ch)->affected_by, AFF_USSJ)
+		&& !xIS_SET((ch)->affected_by, AFF_USSJ2)) {
 		send_to_char
-		    ("Your bulging muscles retract as you power down.\n\r", ch);
+		("Your bulging muscles retract as you power down.\n\r", ch);
 		xREMOVE_BIT((ch)->affected_by, AFF_USSJ);
 		transStatRemove(ch);
-		ch->pl = ch->exp * 10;
+		ch->pl = ch->exp * 50;
 		transStatApply(ch, 10, 5, 3, 5);
 		return;
-	} else if (xIS_SET((ch)->affected_by, AFF_SSJ2)
-		    || xIS_SET((ch)->affected_by, AFF_SSJ3)
-	    || xIS_SET((ch)->affected_by, AFF_SSJ4)) {
+	}
+	else if (xIS_SET((ch)->affected_by, AFF_SSJ2)
+		|| xIS_SET((ch)->affected_by, AFF_SSJ3)
+		|| xIS_SET((ch)->affected_by, AFF_SSJ4)) {
 		send_to_char
-		    ("You are already powered up beyond this technique.\n\r",
-		    ch);
+		("You are already powered up beyond this technique.\n\r",
+			ch);
 		return;
-	} else if (xIS_SET((ch)->affected_by, AFF_SSJ)
-		    && xIS_SET((ch)->affected_by, AFF_USSJ)
-	    && xIS_SET((ch)->affected_by, AFF_USSJ2)) {
+	}
+	else if (xIS_SET((ch)->affected_by, AFF_SSJ)
+		&& xIS_SET((ch)->affected_by, AFF_USSJ)
+		&& xIS_SET((ch)->affected_by, AFF_USSJ2)) {
 		send_to_char("You have to power out of USSJ2 to do this.\n\r",
-		    ch);
+			ch);
 		return;
 	}
 	if (!xIS_SET((ch)->affected_by, AFF_SSJ)) {
 		send_to_char
-		    ("You need to be powered up to super saiyan to use this!\n\r",
-		    ch);
+		("You need to be powered up to super saiyan to use this!\n\r",
+			ch);
 		return;
 	}
 	if (xIS_SET((ch)->affected_by, AFF_OOZARU) ||
-	    xIS_SET((ch)->affected_by, AFF_GOLDEN_OOZARU)) {
+		xIS_SET((ch)->affected_by, AFF_GOLDEN_OOZARU)) {
 		send_to_char("You can't transform while you are an Oozaru.\n\r",
-		    ch);
+			ch);
 		return;
 	}
 	if (ch->mana < skill_table[gsn_ussj]->min_mana) {
@@ -10737,22 +10962,23 @@ do_ussj(CHAR_DATA * ch, char *argument)
 	WAIT_STATE(ch, skill_table[gsn_ussj]->beats);
 	if (can_use_skill(ch, number_percent(), gsn_ussj)) {
 		act(AT_YELLOW,
-		    "You draw in energy, forcing it directly into your body.  Your muscles bulge as your hair "
-		    "turns slightly spikier.", ch, NULL, NULL, TO_CHAR);
+			"You draw in energy, forcing it directly into your body.  Your muscles bulge as your hair "
+			"turns slightly spikier.", ch, NULL, NULL, TO_CHAR);
 		act(AT_YELLOW,
-		    "$n draws in energy, forcing it directly into $s body.  $n's muscles bulge as $s hair "
-		    "turns slightly spikier.", ch, NULL, NULL, TO_NOTVICT);
+			"$n draws in energy, forcing it directly into $s body.  $n's muscles bulge as $s hair "
+			"turns slightly spikier.", ch, NULL, NULL, TO_NOTVICT);
 		xSET_BIT((ch)->affected_by, AFF_USSJ);
-		ch->pl = ch->exp * 14;
+		ch->pl = ch->exp * 75;
 		transStatApply(ch, 16, 5, 3, 5);
 		learn_from_success(ch, gsn_ussj);
-	} else {
+	}
+	else {
 		act(AT_BLUE,
-		    "You grunt in exertion and your muscles bulge for a moment.",
-		    ch, NULL, NULL, TO_CHAR);
+			"You grunt in exertion and your muscles bulge for a moment.",
+			ch, NULL, NULL, TO_CHAR);
 		act(AT_BLUE,
-		    "$n grunts in exertion and $s muscles bulge for a moment.",
-		    ch, NULL, NULL, TO_NOTVICT);
+			"$n grunts in exertion and $s muscles bulge for a moment.",
+			ch, NULL, NULL, TO_NOTVICT);
 		learn_from_failure(ch, gsn_ussj);
 	}
 
@@ -10773,7 +10999,7 @@ do_ussj2(CHAR_DATA * ch, char *argument)
 	if (!IS_NPC(ch)) {
 		if (IS_SET(ch->pcdata->flags, PCFLAG_KNOWSMYSTIC)) {
 			ch_printf(ch,
-			    "You are unable to call upon those powers while you know mystic.\n\r");
+				"You are unable to call upon those powers while you know mystic.\n\r");
 			return;
 		}
 	}
@@ -10783,47 +11009,48 @@ do_ussj2(CHAR_DATA * ch, char *argument)
 	}
 	if (xIS_SET((ch)->affected_by, AFF_KAIOKEN)) {
 		send_to_char
-		    ("You can't transform in to a super saiyan while using kaioken.\n\r",
-		    ch);
+		("You can't transform in to a super saiyan while using kaioken.\n\r",
+			ch);
 		return;
 	}
 	if (xIS_SET((ch)->affected_by, AFF_SSJ)
-	    && xIS_SET((ch)->affected_by, AFF_USSJ)
-	    && xIS_SET((ch)->affected_by, AFF_USSJ2)) {
+		&& xIS_SET((ch)->affected_by, AFF_USSJ)
+		&& xIS_SET((ch)->affected_by, AFF_USSJ2)) {
 		send_to_char
-		    ("Your bulging muscles retract a little as you power down.\n\r",
-		    ch);
+		("Your bulging muscles retract a little as you power down.\n\r",
+			ch);
 		xREMOVE_BIT((ch)->affected_by, AFF_USSJ2);
 		transStatRemove(ch);
-		ch->pl = ch->exp * 12;
+		ch->pl = ch->exp * 75;
 		transStatApply(ch, 16, 5, 3, 5);
 		return;
-	} else if (xIS_SET((ch)->affected_by, AFF_SSJ2)
-		    || xIS_SET((ch)->affected_by, AFF_SSJ3)
-	    || xIS_SET((ch)->affected_by, AFF_SSJ4)) {
+	}
+	else if (xIS_SET((ch)->affected_by, AFF_SSJ2)
+		|| xIS_SET((ch)->affected_by, AFF_SSJ3)
+		|| xIS_SET((ch)->affected_by, AFF_SSJ4)) {
 		send_to_char
-		    ("You are already powered up beyond this technique.\n\r",
-		    ch);
+		("You are already powered up beyond this technique.\n\r",
+			ch);
 		return;
 	}
 	if (!xIS_SET((ch)->affected_by, AFF_SSJ)
-	    && !xIS_SET((ch)->affected_by, AFF_USSJ)) {
+		&& !xIS_SET((ch)->affected_by, AFF_USSJ)) {
 		send_to_char
-		    ("You need to be powered up to ultra super saiyan to use this!\n\r",
-		    ch);
+		("You need to be powered up to ultra super saiyan to use this!\n\r",
+			ch);
 		return;
 	}
 	if (xIS_SET((ch)->affected_by, AFF_SSJ)
-	    && !xIS_SET((ch)->affected_by, AFF_USSJ)) {
+		&& !xIS_SET((ch)->affected_by, AFF_USSJ)) {
 		send_to_char
-		    ("You need to be powered up to ultra super saiyan to use this!\n\r",
-		    ch);
+		("You need to be powered up to ultra super saiyan to use this!\n\r",
+			ch);
 		return;
 	}
 	if (xIS_SET((ch)->affected_by, AFF_OOZARU) ||
-	    xIS_SET((ch)->affected_by, AFF_GOLDEN_OOZARU)) {
+		xIS_SET((ch)->affected_by, AFF_GOLDEN_OOZARU)) {
 		send_to_char("You can't transform while you are an Oozaru.\n\r",
-		    ch);
+			ch);
 		return;
 	}
 	if (ch->mana < skill_table[gsn_ussj2]->min_mana) {
@@ -10833,24 +11060,25 @@ do_ussj2(CHAR_DATA * ch, char *argument)
 	WAIT_STATE(ch, skill_table[gsn_ussj2]->beats);
 	if (can_use_skill(ch, number_percent(), gsn_ussj2)) {
 		act(AT_YELLOW,
-		    "You draw in massive amounts of energy, forcing it directly into your body.  Your muscles "
-		    "bulge to inhuman sizes, your hair becomes wildly spiked.",
-		    ch, NULL, NULL, TO_CHAR);
+			"You draw in massive amounts of energy, forcing it directly into your body.  Your muscles "
+			"bulge to inhuman sizes, your hair becomes wildly spiked.",
+			ch, NULL, NULL, TO_CHAR);
 		act(AT_YELLOW,
-		    "$n draws in massive amounts of energy, forcing it directly into $s body.  $n's muscles "
-		    "bulge to inhuman sizes, $s hair becomes wildly spiked.",
-		    ch, NULL, NULL, TO_NOTVICT);
+			"$n draws in massive amounts of energy, forcing it directly into $s body.  $n's muscles "
+			"bulge to inhuman sizes, $s hair becomes wildly spiked.",
+			ch, NULL, NULL, TO_NOTVICT);
 		xSET_BIT((ch)->affected_by, AFF_USSJ2);
-		ch->pl = ch->exp * 16;
+		ch->pl = ch->exp * 150;
 		transStatApply(ch, 24, -15, 5, 8);
 		learn_from_success(ch, gsn_ussj2);
-	} else {
+	}
+	else {
 		act(AT_BLUE,
-		    "You grunt in massive exertion and your muscles bulge for a moment.",
-		    ch, NULL, NULL, TO_CHAR);
+			"You grunt in massive exertion and your muscles bulge for a moment.",
+			ch, NULL, NULL, TO_CHAR);
 		act(AT_BLUE,
-		    "$n grunts in massive exertion and $s muscles bulge for a moment.",
-		    ch, NULL, NULL, TO_NOTVICT);
+			"$n grunts in massive exertion and $s muscles bulge for a moment.",
+			ch, NULL, NULL, TO_NOTVICT);
 		learn_from_failure(ch, gsn_ussj2);
 	}
 
@@ -10861,6 +11089,11 @@ do_ussj2(CHAR_DATA * ch, char *argument)
 void
 do_extreme(CHAR_DATA * ch, char *argument)
 {
+	double pl_mult;
+	int kicontrol = 0;
+
+	kicontrol = get_curr_int(ch);
+
 	if (IS_NPC(ch) && !is_split(ch))
 		return;
 
@@ -10873,7 +11106,7 @@ do_extreme(CHAR_DATA * ch, char *argument)
 	if (!IS_NPC(ch)) {
 		if (IS_SET(ch->pcdata->flags, PCFLAG_KNOWSMYSTIC)) {
 			ch_printf(ch,
-			    "You are unable to call upon those powers while you know mystic.\n\r");
+				"You are unable to call upon those powers while you know mystic.\n\r");
 			return;
 		}
 	}
@@ -10891,21 +11124,21 @@ do_extreme(CHAR_DATA * ch, char *argument)
 	if (!IS_NPC(ch)) {
 		if (IS_SET(ch->pcdata->combatFlags, CMB_NO_HEART)) {
 			send_to_char
-			    ("You must first disable heart to use the 'Extreme Technique.'\n\r",
-			    ch);
+			("You must first disable heart to use the 'Extreme Technique.'\n\r",
+				ch);
 			return;
 		}
 	}
 	if (xIS_SET((ch)->affected_by, AFF_KAIOKEN)) {
 		send_to_char
-		    ("You cannot use the 'Extreme Technique' in combination with kaioken.\n\r",
-		    ch);
+		("You cannot use the 'Extreme Technique' in combination with kaioken.\n\r",
+			ch);
 		return;
 	}
 	if (xIS_SET((ch)->affected_by, AFF_HYPER)) {
 		send_to_char
-		    ("You may not be in 'Hyper' to use the 'Extreme Technique'.\n\r",
-		    ch);
+		("You may not be in 'Hyper' to use the 'Extreme Technique'.\n\r",
+			ch);
 		return;
 	}
 	if (ch->mana < skill_table[gsn_extreme]->min_mana) {
@@ -10917,28 +11150,30 @@ do_extreme(CHAR_DATA * ch, char *argument)
 	WAIT_STATE(ch, skill_table[gsn_extreme]->beats);
 	if (can_use_skill(ch, number_percent(), gsn_extreme)) {
 		/*
-		 * note to self in case this needs to be changed back to
-		 * white color. it originally says "bright white light" in a
-		 * section of these messages. Changed it to bright light for
-		 * now. - Karma
-		 */
+		* note to self in case this needs to be changed back to
+		* white color. it originally says "bright white light" in a
+		* section of these messages. Changed it to bright light for
+		* now. - Karma
+		*/
 		act(z,
-		    "You close your eyes and concentrate, focusing all your energy and will to live on one point in your body.  A dot of light forms on your forehead, a bright light spreading out and bathing you in its glow as your hidden power awakens.",
-		    ch, NULL, NULL, TO_CHAR);
+			"You close your eyes and concentrate, focusing all your energy and will to live on one point in your body.  A dot of light forms on your forehead, a bright light spreading out and bathing you in its glow as your hidden power awakens.",
+			ch, NULL, NULL, TO_CHAR);
 		act(z,
-		    "$n closes $s eyes and concentrates, focusing all of $s energy and will to live on one point in $s body.  A dot of light forms on $n's forehead, a bright light spreading out and bathing $s in its glow as $s hidden power awakens.",
-		    ch, NULL, NULL, TO_NOTVICT);
+			"$n closes $s eyes and concentrates, focusing all of $s energy and will to live on one point in $s body.  A dot of light forms on $n's forehead, a bright light spreading out and bathing $s in its glow as $s hidden power awakens.",
+			ch, NULL, NULL, TO_NOTVICT);
 		xSET_BIT((ch)->affected_by, AFF_EXTREME);
-		ch->pl = ch->exp * 25;
+		pl_mult = (double)kicontrol / 50 + 125;
+		ch->pl = ch->exp * pl_mult;
 		transStatApply(ch, 12, 12, 6, 25);
 		learn_from_success(ch, gsn_extreme);
-	} else {
+	}
+	else {
 		act(z,
-		    "You close your eyes and concentrate, but can't seem to properly focus your immense energies.",
-		    ch, NULL, NULL, TO_CHAR);
+			"You close your eyes and concentrate, but can't seem to properly focus your immense energies.",
+			ch, NULL, NULL, TO_CHAR);
 		act(z,
-		    "$n closes $s eyes and concentrates, but can't seem to properly focus $s immense energies.",
-		    ch, NULL, NULL, TO_NOTVICT);
+			"$n closes $s eyes and concentrates, but can't seem to properly focus $s immense energies.",
+			ch, NULL, NULL, TO_NOTVICT);
 		learn_from_failure(ch, gsn_extreme);
 	}
 

@@ -286,10 +286,9 @@ int get_strDef( CHAR_DATA *victim )
 	strDef = get_curr_str(victim) / 50;
 
 	if (victim->mental_state > 5 && victim->mental_state < 15)
-		strDef++;
-
-        if( victim->skillGsn > 0 )
-          strDef /= 2;
+	  strDef++;
+	if (victim->skillGsn > 0)
+	  strDef/= 2;
 
 	return strDef;
 }
@@ -302,11 +301,11 @@ int get_conDef( CHAR_DATA *victim )
 	conDef = get_curr_con(victim) / 25;
 
 	if (victim->mental_state > 5 && victim->mental_state < 15)
-		conDef++;
+	  conDef++;
 
-        if( victim->skillGsn > 0 )
-          conDef /= 2;
-
+	if(victim->skillGsn > 0)
+	  conDef /= 2;
+	
 	return conDef;
 }
 

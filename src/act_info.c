@@ -4238,7 +4238,7 @@ char * const conTrainRoom [MAX_CON_TRAINING] =
         "$n cranks the gravity up to double what $e can handle."
     };
 
-bool gTrainSuccess(CHAR_DATA *ch, int stat, sh_int *tAbility)
+bool gTrainSuccess(CHAR_DATA *ch, int stat, sh_int *tAbility, int gravLevel)
 {
 	char buf[MAX_STRING_LENGTH];
 	long double xp_gain = 0;
@@ -4246,29 +4246,7 @@ bool gTrainSuccess(CHAR_DATA *ch, int stat, sh_int *tAbility)
 
 
 	increase = number_range(1, 3);
-	*tAbility += increase;
-	if (xIS_SET(ch->in_room->room_flags, ROOM_TIME_CHAMBER)
-	    && number_range(1, 100) < 35)
-	{
-		switch ( number_range( 1, 4 ) )
-		{
-			case 1:
-				increase *= 1;
-				break;
-
-			case 2:
-				increase *= 1;
-				break;
-
-			case 3:
-				increase *= 2;
-				break;
-
-			case 4:
-				increase *= 3;
-				break;
-		}
-	}
+	*tAbility += (increase * 10);
 
 	if (increase >= 2)
 	{
@@ -4277,17 +4255,21 @@ bool gTrainSuccess(CHAR_DATA *ch, int stat, sh_int *tAbility)
 
 	ch->mana -= URANGE(0, ch->mana * 0.005, ch->mana);
 
-	xp_gain = (long double) increase / 20000 * ch->exp + 1;
+	xp_gain = (long double)increase / 100 * gravLevel;
 
-	sprintf( buf, "Your power level increases by %s points.", num_punct(xp_gain) );
-	act( AT_HIT, buf, ch, NULL, NULL, TO_CHAR );
+	if( ch->exp < 100) {
+	    xp_gain = 0;
+	}
+
+	sprintf(buf, "Your power level increases by %s points.", num_punct(xp_gain));
+	act(AT_HIT, buf, ch, NULL, NULL, TO_CHAR);
 
 	gain_exp(ch, xp_gain);
 
-	if (*tAbility >= 100)
-	  return (true);
+	if (*tAbility >= 1000)
+		return (true);
 	else
-	  return (false);
+		return (false);
 }
 
 void do_train(CHAR_DATA *ch, char *argument)
@@ -4300,7 +4282,7 @@ void do_train(CHAR_DATA *ch, char *argument)
 	sh_int *permTstat;
 	char *pOutput;
 	int stat;
-	bool checkLearn = false;
+	bool checkLearn = (false);
 	int minLF;
 	int trainTime = 0;
 	int gravLevel = 0;
@@ -4309,23 +4291,23 @@ void do_train(CHAR_DATA *ch, char *argument)
 	/* Lifeforce to quit training at */
 	minLF = 5;
 
-	if ( IS_NPC(ch) )
-		return ;
+	if (IS_NPC(ch))
+		return;
 
-	argument = one_argument( argument, arg1 );
-	
+	argument = one_argument(argument, arg1);
+
 	if (!xIS_SET((ch)->in_room->room_flags, ROOM_GRAV))
 	{
-		send_to_char( "This doesn't appear to be a gravity chamber...\n\r", ch );
-		return ;
+		send_to_char("This doesn't appear to be a gravity chamber...\n\r", ch);
+		return;
 	}
 
 
 	if (IS_IMMORTAL(ch))
 	{
-		sprintf( buf, "Administrators don't need to train.\n\r");
+		sprintf(buf, "Administrators don't need to train.\n\r");
 		send_to_char(buf, ch);
-		return ;
+		return;
 	}
 
 	if (ch->pcdata->tStat == 0)
@@ -4333,24 +4315,24 @@ void do_train(CHAR_DATA *ch, char *argument)
 		if (ch->substate != SUB_TIMER_DO_ABORT)
 		{
 			/* -------- DO NON-ABORTING STUFF -------- */
-			if ( arg1[0] == '\0')
+			if (arg1[0] == '\0')
 			{
-				sprintf( buf, "Syntax: gravtrain <attribute> <minutes>\n\r");
+				sprintf(buf, "Syntax: gravtrain <attribute> <minutes>\n\r");
 				send_to_char(buf, ch);
 				pager_printf(ch, "You have %d training points and %d extended training points\n\r",
-				             ch->train, ch->pcdata->xTrain);
-				return ;
+					ch->train, ch->pcdata->xTrain);
+				return;
 			}
-			if ( argument[0] == '\0')
+			if (argument[0] == '\0')
 			{
-				sprintf( buf, "Syntax: gravtrain <attribute> <minutes>\n\rYou have %d training sessions left.\n\r", ch->train );
+				sprintf(buf, "Syntax: gravtrain <attribute> <minutes>\n\rYou have %d training sessions left.\n\r", ch->train);
 				send_to_char(buf, ch);
-				return ;
+				return;
 			}
 			if (!is_number(argument))
 			{
 				pager_printf(ch, "Those aren't minutes...\n\r");
-				return ;
+				return;
 			}
 
 			trainTime = atoi(argument);
@@ -4358,12 +4340,12 @@ void do_train(CHAR_DATA *ch, char *argument)
 			if (trainTime <= 0)
 			{
 				pager_printf(ch, "Last time I checked, time travel wasn't an option...\n\r");
-				return ;
+				return;
 			}
 			if (trainTime >= 480)
 			{
 				pager_printf(ch, "Training for more than 8 hours at a time isn't a good idea.\n\r");
-				return ;
+				return;
 			}
 		}
 
@@ -4371,37 +4353,37 @@ void do_train(CHAR_DATA *ch, char *argument)
 	}
 
 
-	if ( !str_cmp( arg1, "str" ) || !str_cmp( arg1, "strength" )
-	     || ch->pcdata->tStat == STR)
+	if (!str_cmp(arg1, "str") || !str_cmp(arg1, "strength")
+		|| ch->pcdata->tStat == STR)
 	{
-		stat	= ch->pcdata->tStat = STR;
+		stat = ch->pcdata->tStat = STR;
 		tAbility = &ch->pcdata->tStr;
 		pAbility = &ch->perm_str;
 		permTstat = &ch->pcdata->permTstr;
 		pOutput = "strength";
 	}
-	else if ( !str_cmp( arg1, "int" ) || !str_cmp( arg1, "intelligence" )
-	          || ch->pcdata->tStat == INTEL)
+	else if (!str_cmp(arg1, "int") || !str_cmp(arg1, "intelligence")
+		|| ch->pcdata->tStat == INTEL)
 	{
-		stat	= ch->pcdata->tStat = INTEL;
+		stat = ch->pcdata->tStat = INTEL;
 		tAbility = &ch->pcdata->tInt;
 		pAbility = &ch->perm_int;
 		permTstat = &ch->pcdata->permTint;
 		pOutput = "intelligence";
 	}
-	else if ( !str_cmp( arg1, "spd" ) || !str_cmp( arg1, "speed" )
-	          || ch->pcdata->tStat == SPD)
+	else if (!str_cmp(arg1, "spd") || !str_cmp(arg1, "speed")
+		|| ch->pcdata->tStat == SPD)
 	{
-		stat	= ch->pcdata->tStat = SPD;
+		stat = ch->pcdata->tStat = SPD;
 		tAbility = &ch->pcdata->tSpd;
 		pAbility = &ch->perm_dex;
 		permTstat = &ch->pcdata->permTspd;
 		pOutput = "speed";
 	}
-	else if ( !str_cmp( arg1, "con" ) || !str_cmp( arg1, "constitution" )
-	          || ch->pcdata->tStat == CON )
+	else if (!str_cmp(arg1, "con") || !str_cmp(arg1, "constitution")
+		|| ch->pcdata->tStat == CON)
 	{
-		stat	= ch->pcdata->tStat = CON;
+		stat = ch->pcdata->tStat = CON;
 		tAbility = &ch->pcdata->tCon;
 		pAbility = &ch->perm_con;
 		permTstat = &ch->pcdata->permTcon;
@@ -4410,227 +4392,232 @@ void do_train(CHAR_DATA *ch, char *argument)
 	else
 	{
 		pager_printf(ch, "You have %d training points and %d extended training points\n\r",
-		             ch->train, ch->pcdata->xTrain);
+			ch->train, ch->pcdata->xTrain);
 		ch->pcdata->tStat = 0;
 		ch->pcdata->tRounds = 0;
-		return ;
+		return;
 	}
 
-	if ( *permTstat >= 32700 && *tAbility >= 99 && ch->pcdata->xTrain < 1)
+	if (*permTstat >= 32000 && *tAbility >= 999 && ch->pcdata->xTrain < 1)
 	{
-		act(AT_RED, "Your $T is already at maximum.", ch, NULL, pOutput, TO_CHAR );
+		act(AT_RED, "Your $T is already at maximum.", ch, NULL, pOutput, TO_CHAR);
 		ch->pcdata->tStat = 0;
 		ch->pcdata->tRounds = 0;
-		return ;
+		return;
 	}
 
 	sysdata.outBytesFlag = LOGBOUTCOMBAT;
 
 	switch (ch->substate)
 	{
-		default:
-			bug( "do_train: illegal substate (%s)", ch->name );
-			sysdata.outBytesFlag = LOGBOUTNORM;
-			return ;
+	default:
+		bug("do_train: illegal substate (%s)", ch->name);
+		sysdata.outBytesFlag = LOGBOUTNORM;
+		return;
 
-		case SUB_NONE:
-			ch->pcdata->tRounds = trainTime;
-			if (ch->pcdata->tRounds <= 0)
-			{
-				ch->pcdata->tRounds = 0;
-				break;
-			}
-			if (*tAbility >= 100)
-			{
-				checkLearn = true;
-				break;
-			}
-			if (ch->hit <= minLF)
-				break;
-
-			gravLevel = ((get_curr_str(ch) + get_curr_dex(ch) + get_curr_int(ch) + get_curr_con(ch)) - 40) * 5;
-			pager_printf(ch, "&GYou turn the dial to %d times gravity and begin training your %s.\n\r",
-			             gravLevel, pOutput);
-			act(AT_SKILL, "$n starts training $s $T.", ch, NULL, pOutput, TO_ROOM );
-			WAIT_STATE( ch, 2 * PULSE_VIOLENCE );
-
-			if ((checkLearn = gTrainSuccess(ch, stat, tAbility)))
-				break;
-
-			add_timer( ch, TIMER_DO_FUN, 1, do_train, 1);
-			sysdata.outBytesFlag = LOGBOUTNORM;
-			return ;
-
-		case 1:
-			ch->pcdata->tRounds--;
-			if (ch->pcdata->tRounds <= 0)
-			{
-				ch->pcdata->tRounds = 0;
-				act(AT_SKILL, "You stop training your $T.", ch, NULL, pOutput, TO_CHAR );
-				act(AT_SKILL, "$n stops training $s $T.", ch, NULL, pOutput, TO_ROOM );
-				break;
-			}
-			if (*tAbility >= 100)
-			{
-				checkLearn = true;
-				break;
-			}
-			if (ch->hit <= minLF)
-			{
-				act(AT_SKILL, "You almost pass out from training your $T to hard.", ch, NULL, pOutput, TO_CHAR );
-				act(AT_SKILL, "$n almost passes out from training $s $T to hard.", ch, NULL, pOutput, TO_ROOM );
-				break;
-			}
-
-			if (number_range(1, 100) < 25)
-			{
-				pager_printf(ch, "&G");
-				switch (ch->pcdata->tStat)
-				{
-					default:
-						activity = -1;
-						break;
-					case 1:
-						activity = number_range(0, MAX_STR_TRAINING - 1);
-						pager_printf(ch, strTrainUser[activity]);
-						act(AT_SKILL, strTrainRoom[activity], ch, NULL, pOutput, TO_ROOM );
-						break;
-					case 2:
-						activity = number_range(0, MAX_SPD_TRAINING - 1);
-						pager_printf(ch, spdTrainUser[activity]);
-						act(AT_SKILL, spdTrainRoom[activity], ch, NULL, pOutput, TO_ROOM );
-						break;
-					case 3:
-						activity = number_range(0, MAX_INT_TRAINING - 1);
-						pager_printf(ch, intTrainUser[activity]);
-						act(AT_SKILL, intTrainRoom[activity], ch, NULL, pOutput, TO_ROOM );
-						break;
-					case 4:
-						activity = number_range(0, MAX_CON_TRAINING - 1);
-						pager_printf(ch, conTrainUser[activity]);
-						act(AT_SKILL, conTrainRoom[activity], ch, NULL, pOutput, TO_ROOM );
-						break;
-				}
-				pager_printf(ch, "&w\n\r");
-			}
-
-			if ( (checkLearn = gTrainSuccess(ch, stat, tAbility)) )
-				break;
-
-			add_timer( ch, TIMER_DO_FUN, 1, do_train, 2);
-			sysdata.outBytesFlag = LOGBOUTNORM;
-			return ;
-
-		case 2:
-			ch->pcdata->tRounds--;
-			if (ch->pcdata->tRounds <= 0)
-			{
-				ch->pcdata->tRounds = 0;
-				act(AT_SKILL, "You take a break and stop training your $T.", ch, NULL, pOutput, TO_CHAR );
-				act(AT_SKILL, "$n takes a break and stops training $s $T.", ch, NULL, pOutput, TO_ROOM );
-				break;
-			}
-			if (*tAbility >= 100)
-			{
-				checkLearn = true;
-				break;
-			}
-			if (ch->hit <= minLF)
-			{
-				act(AT_SKILL, "You almost pass out from training your $T to hard.", ch, NULL, pOutput, TO_CHAR );
-				act(AT_SKILL, "$n almost passes out from training $s $T to hard.", ch, NULL, pOutput, TO_ROOM );
-				break;
-			}
-
-			if (number_range(1, 100) < 25)
-			{
-				pager_printf(ch, "&G");
-				switch (ch->pcdata->tStat)
-				{
-					default:
-						activity = -1;
-						break;
-					case 1:
-						activity = number_range(0, MAX_STR_TRAINING - 1);
-						pager_printf(ch, strTrainUser[activity]);
-						act(AT_SKILL, strTrainRoom[activity], ch, NULL, pOutput, TO_ROOM );
-						break;
-					case 2:
-						activity = number_range(0, MAX_SPD_TRAINING - 1);
-						pager_printf(ch, spdTrainUser[activity]);
-						act(AT_SKILL, spdTrainRoom[activity], ch, NULL, pOutput, TO_ROOM );
-						break;
-					case 3:
-						activity = number_range(0, MAX_INT_TRAINING - 1);
-						pager_printf(ch, intTrainUser[activity]);
-						act(AT_SKILL, intTrainRoom[activity], ch, NULL, pOutput, TO_ROOM );
-						break;
-					case 4:
-						activity = number_range(0, MAX_CON_TRAINING - 1);
-						pager_printf(ch, conTrainUser[activity]);
-						act(AT_SKILL, conTrainRoom[activity], ch, NULL, pOutput, TO_ROOM );
-						break;
-				}
-				pager_printf(ch, "&w\n\r");
-			}
-
-			if ( (checkLearn = gTrainSuccess(ch, stat, tAbility)) )
-				break;
-
-			add_timer( ch, TIMER_DO_FUN, 1, do_train, 1);
-			sysdata.outBytesFlag = LOGBOUTNORM;
-			return ;
-
-		case SUB_TIMER_DO_ABORT:
+	case SUB_NONE:
+		ch->pcdata->tRounds = trainTime;
+		if (ch->pcdata->tRounds <= 0)
+		{
 			ch->pcdata->tRounds = 0;
-			act(AT_SKILL, "You stop training your $T.", ch, NULL, pOutput, TO_CHAR );
-			act(AT_SKILL, "$n stops training $s $T.", ch, NULL, pOutput, TO_ROOM );
 			break;
+		}
+		if (*tAbility >= 1000)
+		{
+			checkLearn = (true);
+			break;
+		}
+		if (ch->hit <= minLF)
+			break;
+
+		gravLevel = ((get_curr_str(ch) + get_curr_dex(ch) + get_curr_int(ch) + get_curr_con(ch)) - 39);
+		pager_printf(ch, "&GYou turn the dial to %d times gravity and begin training your %s.\n\r",
+			gravLevel, pOutput);
+		act(AT_SKILL, "$n starts training $s $T.", ch, NULL, pOutput, TO_ROOM);
+		WAIT_STATE(ch, 2 * PULSE_VIOLENCE);
+
+		if ((checkLearn = gTrainSuccess(ch, stat, tAbility, gravLevel)))
+			break;
+
+		/*		    WAIT_STATE( ch, 6 );*/
+		add_timer(ch, TIMER_DO_FUN, 1, do_train, 1);
+		sysdata.outBytesFlag = LOGBOUTNORM;
+		return;
+
+	case 1:
+		ch->pcdata->tRounds--;
+		if (ch->pcdata->tRounds <= 0)
+		{
+			ch->pcdata->tRounds = 0;
+			act(AT_SKILL, "You stop training your $T.", ch, NULL, pOutput, TO_CHAR);
+			act(AT_SKILL, "$n stops training $s $T.", ch, NULL, pOutput, TO_ROOM);
+			break;
+		}
+		if (*tAbility >= 1000)
+		{
+			checkLearn = (true);
+			break;
+		}
+		if (ch->hit <= minLF)
+		{
+			act(AT_SKILL, "You almost pass out from training your $T to hard.", ch, NULL, pOutput, TO_CHAR);
+			act(AT_SKILL, "$n almost passes out from training $s $T to hard.", ch, NULL, pOutput, TO_ROOM);
+			break;
+		}
+
+		if (number_range(1, 100) < 25)
+		{
+			pager_printf(ch, "&G");
+			switch (ch->pcdata->tStat)
+			{
+			default:
+				activity = -1;
+				break;
+			case 1:
+				activity = number_range(0, MAX_STR_TRAINING - 1);
+				pager_printf(ch, strTrainUser[activity]);
+				act(AT_SKILL, strTrainRoom[activity], ch, NULL, pOutput, TO_ROOM);
+				break;
+			case 2:
+				activity = number_range(0, MAX_SPD_TRAINING - 1);
+				pager_printf(ch, spdTrainUser[activity]);
+				act(AT_SKILL, spdTrainRoom[activity], ch, NULL, pOutput, TO_ROOM);
+				break;
+			case 3:
+				activity = number_range(0, MAX_INT_TRAINING - 1);
+				pager_printf(ch, intTrainUser[activity]);
+				act(AT_SKILL, intTrainRoom[activity], ch, NULL, pOutput, TO_ROOM);
+				break;
+			case 4:
+				activity = number_range(0, MAX_CON_TRAINING - 1);
+				pager_printf(ch, conTrainUser[activity]);
+				act(AT_SKILL, conTrainRoom[activity], ch, NULL, pOutput, TO_ROOM);
+				break;
+			}
+			pager_printf(ch, "&w\n\r");
+		}
+		gravLevel = ((get_curr_str(ch) + get_curr_dex(ch) + get_curr_int(ch) + get_curr_con(ch)) - 39);
+		if ((checkLearn = gTrainSuccess(ch, stat, tAbility, gravLevel)))
+			break;
+
+		add_timer(ch, TIMER_DO_FUN, 1, do_train, 2);
+		sysdata.outBytesFlag = LOGBOUTNORM;
+		return;
+
+	case 2:
+		ch->pcdata->tRounds--;
+		if (ch->pcdata->tRounds <= 0)
+		{
+			ch->pcdata->tRounds = 0;
+			act(AT_SKILL, "You take a break and stop training your $T.", ch, NULL, pOutput, TO_CHAR);
+			act(AT_SKILL, "$n takes a break and stops training $s $T.", ch, NULL, pOutput, TO_ROOM);
+			break;
+		}
+		if (*tAbility >= 1000)
+		{
+			checkLearn = (true);
+			break;
+		}
+		if (ch->hit <= minLF)
+		{
+			act(AT_SKILL, "You almost pass out from training your $T to hard.", ch, NULL, pOutput, TO_CHAR);
+			act(AT_SKILL, "$n almost passes out from training $s $T to hard.", ch, NULL, pOutput, TO_ROOM);
+			break;
+		}
+
+		if (number_range(1, 100) < 25)
+		{
+			pager_printf(ch, "&G");
+			switch (ch->pcdata->tStat)
+			{
+			default:
+				activity = -1;
+				break;
+			case 1:
+				activity = number_range(0, MAX_STR_TRAINING - 1);
+				pager_printf(ch, strTrainUser[activity]);
+				act(AT_SKILL, strTrainRoom[activity], ch, NULL, pOutput, TO_ROOM);
+				break;
+			case 2:
+				activity = number_range(0, MAX_SPD_TRAINING - 1);
+				pager_printf(ch, spdTrainUser[activity]);
+				act(AT_SKILL, spdTrainRoom[activity], ch, NULL, pOutput, TO_ROOM);
+				break;
+			case 3:
+				activity = number_range(0, MAX_INT_TRAINING - 1);
+				pager_printf(ch, intTrainUser[activity]);
+				act(AT_SKILL, intTrainRoom[activity], ch, NULL, pOutput, TO_ROOM);
+				break;
+			case 4:
+				activity = number_range(0, MAX_CON_TRAINING - 1);
+				pager_printf(ch, conTrainUser[activity]);
+				act(AT_SKILL, conTrainRoom[activity], ch, NULL, pOutput, TO_ROOM);
+				break;
+			}
+			pager_printf(ch, "&w\n\r");
+		}
+		gravLevel = ((get_curr_str(ch) + get_curr_dex(ch) + get_curr_int(ch) + get_curr_con(ch)) - 39);
+		if ((checkLearn = gTrainSuccess(ch, stat, tAbility, gravLevel)))
+			break;
+
+		add_timer(ch, TIMER_DO_FUN, 1, do_train, 1);
+		sysdata.outBytesFlag = LOGBOUTNORM;
+		return;
+
+	case SUB_TIMER_DO_ABORT:
+		ch->pcdata->tRounds = 0;
+		act(AT_SKILL, "You stop training your $T.", ch, NULL, pOutput, TO_CHAR);
+		act(AT_SKILL, "$n stops training $s $T.", ch, NULL, pOutput, TO_ROOM);
+		break;
 	}
 
 	ch->pcdata->tStat = 0;
 	ch->pcdata->tRounds = 0;
 
-	if ( *permTstat >= 32700 && ch->pcdata->xTrain < 1 && *tAbility >= 99)
+	if (*permTstat >= 32000 && ch->pcdata->xTrain < 1 && *tAbility >= 999)
 	{
-		act(AT_SKILL, "Your $T has reached it's peak for now.", ch, NULL, pOutput, TO_CHAR );
-		*tAbility = 99;
+		act(AT_SKILL, "Your $T has reached it's peak for now.", ch, NULL, pOutput, TO_CHAR);
+		*tAbility = 999;
 		sysdata.outBytesFlag = LOGBOUTNORM;
-		return ;
+		return;
 	}
 
 	if (checkLearn)
 	{
-		if (*permTstat < 32700)
+		if (*permTstat < 32000)
 		{
 			*tAbility = 0;
 			*pAbility += 1;
 			*permTstat += 1;
-			sprintf( tBuf, "Your $T increases to %d!", *pAbility );
-			act(AT_RED, tBuf, ch, NULL, pOutput, TO_CHAR );
-			act(AT_RED, "$n's $T increases!", ch, NULL, pOutput, TO_ROOM );
-			act(AT_SKILL, "You take a break and stop training your $T.", ch, NULL, pOutput, TO_CHAR );
-			act(AT_SKILL, "$n takes a break and stops training $s $T.", ch, NULL, pOutput, TO_ROOM );
+			ch->exp += 1;
+			sprintf(tBuf, "Your $T increases to %d!", *pAbility);
+			sprintf(tBuf, "Your power level increases by 1 point.");
+			/*		act(AT_RED, "Your $T increases!", ch, NULL, pOutput, TO_CHAR );*/
+			act(AT_RED, tBuf, ch, NULL, pOutput, TO_CHAR);
+			act(AT_RED, "$n's $T increases!", ch, NULL, pOutput, TO_ROOM);
+			act(AT_SKILL, "You take a break and stop training your $T.", ch, NULL, pOutput, TO_CHAR);
+			act(AT_SKILL, "$n takes a break and stops training $s $T.", ch, NULL, pOutput, TO_ROOM);
 		}
 		else if (ch->pcdata->xTrain >= 1)
 		{
 			ch->pcdata->xTrain -= 1;
 			*tAbility = 0;
 			*pAbility += 1;
-			sprintf( tBuf, "Your $T increases to %d!", *pAbility );
-			act(AT_RED, tBuf, ch, NULL, pOutput, TO_CHAR );
-			act(AT_RED, "$n's $T increases!", ch, NULL, pOutput, TO_ROOM );
-			act(AT_SKILL, "You take a break and stop training your $T.", ch, NULL, pOutput, TO_CHAR );
-			act(AT_SKILL, "$n takes a break and stops training $s $T.", ch, NULL, pOutput, TO_ROOM );
+			sprintf(tBuf, "Your $T increases to %d!", *pAbility);
+			act(AT_RED, tBuf, ch, NULL, pOutput, TO_CHAR);
+			act(AT_RED, "$n's $T increases!", ch, NULL, pOutput, TO_ROOM);
+			act(AT_SKILL, "You take a break and stop training your $T.", ch, NULL, pOutput, TO_CHAR);
+			act(AT_SKILL, "$n takes a break and stops training $s $T.", ch, NULL, pOutput, TO_ROOM);
 		}
 		else
 		{
-			act(AT_SKILL, "Your $T has reached its peak for now.", ch, NULL, pOutput, TO_CHAR );
-			*tAbility = 99;
+			act(AT_SKILL, "Your $T has reached its peak for now.", ch, NULL, pOutput, TO_CHAR);
+			*tAbility = 999;
 		}
 	}
 
 	sysdata.outBytesFlag = LOGBOUTNORM;
+	return;
 }
 
 #undef STR

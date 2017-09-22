@@ -155,7 +155,7 @@ get_age(CHAR_DATA * ch)
 /*
  * Retrieve character's current strength.
  */
-sh_int 
+int 
 get_curr_str(CHAR_DATA * ch)
 {
 	return UMAX((ch->perm_str + ch->mod_str), 1);
@@ -164,7 +164,7 @@ get_curr_str(CHAR_DATA * ch)
 /*
  * Retrieve character's current intelligence.
  */
-sh_int 
+int 
 get_curr_int(CHAR_DATA * ch)
 {
 	return UMAX((ch->perm_int + ch->mod_int), 1);
@@ -173,7 +173,7 @@ get_curr_int(CHAR_DATA * ch)
 /*
  * Retrieve character's current dexterity.
  */
-sh_int 
+int 
 get_curr_dex(CHAR_DATA * ch)
 {
 	return UMAX((ch->perm_dex + ch->mod_dex), 1);
@@ -182,7 +182,7 @@ get_curr_dex(CHAR_DATA * ch)
 /*
  * Retrieve character's current constitution.
  */
-sh_int 
+int 
 get_curr_con(CHAR_DATA * ch)
 {
 	return UMAX((ch->perm_con + ch->mod_con), 1);
@@ -191,7 +191,7 @@ get_curr_con(CHAR_DATA * ch)
 /*
  * Retrieve character's current luck.
  */
-sh_int 
+int 
 get_curr_lck(CHAR_DATA * ch)
 {
 	return UMAX((ch->perm_lck + ch->mod_lck), 1);

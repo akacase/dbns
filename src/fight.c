@@ -1223,7 +1223,7 @@ one_hit(CHAR_DATA * ch, CHAR_DATA * victim, int dt)
 	static bool dual_flip = false;
 	double attmod = 0.000;
 	int baseToHit = 0;
-
+	
 	attmod = get_attmod(ch, victim);
 
 	/*
@@ -1383,11 +1383,11 @@ one_hit(CHAR_DATA * ch, CHAR_DATA * victim, int dt)
 	 */
 	dam += get_damroll(ch);
 	if (dt == TYPE_HIT)
-		dam -= get_strDef(victim);
-	dam -= get_conDef(victim);
+          dam -= get_strDef(victim);
+	  dam -= get_conDef(victim);
 
 	if (dam < 0)
-		dam = 0;
+	  dam = 0;
 
 	/*
 	 * Bonuses.
@@ -1951,6 +1951,67 @@ ris_damage(CHAR_DATA * ch, int dam, int ris)
 	return (dam * modifier) / 10;
 }
 
+/*
+ * fight training
+ */
+void
+fight_train(CHAR_DATA * ch, char *stat)
+{
+	sh_int *tAbility;
+	sh_int *pAbility;
+	sh_int *permTstat;
+	int fightIncrease = 0;
+	
+	fightIncrease = (number_range(1,2) * 5);
+
+	if ( stat == "str" )
+	{
+	    tAbility = &ch->pcdata->tStr;
+	    pAbility = &ch->perm_str;
+	    permTstat = &ch->pcdata->permTstr;
+	}
+	else if ( stat == "int" )
+	{
+	    tAbility = &ch->pcdata->tInt;
+	    pAbility = &ch->perm_int;
+	    permTstat = &ch->pcdata->permTint;
+	}
+	else if ( stat == "spd" )
+	{
+	    tAbility = &ch->pcdata->tSpd;
+	    pAbility = &ch->perm_dex;
+	    permTstat = &ch->pcdata->permTspd;
+	}
+	else if ( stat == "con" )
+	{
+	    tAbility = &ch->pcdata->tCon;
+	    pAbility = &ch->perm_con;
+	    permTstat = &ch->pcdata->permTcon;
+	}
+
+	*tAbility += fightIncrease;
+
+	if ( *tAbility >= 1000 && *permTstat < 32000 ) {
+	    *tAbility = 0;
+	    *pAbility += 1;
+	    *permTstat += 1;
+	    if( stat == "str") {
+	        send_to_char( "&CYou feel your strength improving!&D\n\r", ch);
+	    }
+	    if( stat == "spd") {
+                send_to_char( "&CYou feel your speed improving!&D\n\r", ch);
+            }
+	    if( stat == "int") {
+                send_to_char( "&CYou feel your intelligence improving!&D\n\r", ch);
+            }
+            if( stat == "con") {
+                send_to_char( "&CYou feel your constitution improving!&D\n\r", ch);
+            }
+	} else if (*permTstat >= 32000 && *tAbility >= 999) {
+	    *tAbility = 999;
+	}
+}
+
 ch_ret
 damage(CHAR_DATA * ch, CHAR_DATA * victim, int dam, int dt)
 {
@@ -1979,6 +2040,11 @@ damage(CHAR_DATA * ch, CHAR_DATA * victim, int dam, int dt)
 	bool immortal = false;
 	ROOM_INDEX_DATA *pRoomIndex;
 	double clothingPlMod = 0;
+	/* fight training */
+	sh_int *tAbility;
+	sh_int *pAbility;
+	sh_int *permTstat;
+	int fightIncrease = 0;
 
 	retcode = rNONE;
 
@@ -2358,13 +2424,19 @@ damage(CHAR_DATA * ch, CHAR_DATA * victim, int dam, int dt)
 				if (can_use_skill
 				    (victim, number_percent(), gsn_block)) {
 					if (number_range(1, 100) <= check) {
-						dam = 0;
-						victim->block = true;
-						learn_from_success(victim,
+					  dam = 0;
+					  victim->block = true;
+					  learn_from_success(victim,
 						    gsn_block);
-					} else
-						learn_from_failure(victim,
-						    gsn_block);
+					  /* fight training for speed  */
+					  if (!IS_NPC(victim)) {
+					  	fight_train(victim, "spd");
+					  }
+						
+					} else {
+					  learn_from_failure(victim,
+					      gsn_block);
+					}
 				}
 			}
 			ch->melee = false;
@@ -2453,52 +2525,25 @@ damage(CHAR_DATA * ch, CHAR_DATA * victim, int dam, int dt)
 	    !IS_IMMORTAL(ch) && !IS_IMMORTAL(victim) && !is_split(victim)) {
 		if (dam < 1)
 			dam = 1;
-		if (ch->race != 6) {
-			if (is_saiyan(ch))	/* Saiyan */
-				xp_mod = 0.655;
-			else if (is_namek(ch))	/* Namek */
-				xp_mod = 0.66;
-			else if (ch->race == 19)	/* Halfbreed-HB */
-				xp_mod = 0.685;
-			else if (is_hb(ch))	/* Halfbreed */
-				xp_mod = 0.675;
-			else		/* Everyone Else */
-				xp_mod = 0.665;
-		} else {
-			if (ch->pcdata->absorb_pl_mod == 0)	/* Saiyan */
-				xp_mod = 0.655;
-			else if (ch->pcdata->absorb_pl_mod == 3)	/* Namek */
-				xp_mod = 0.66;
-			else if (ch->pcdata->absorb_pl_mod == 2)	/* Halfbreed */
-				xp_mod = 0.675;
-			else if (ch->pcdata->absorb_pl_mod == 6)
-				xp_mod = 0.65;
-			else		/* Everyone Else */
-				xp_mod = 0.665;
-		}
+		xp_mod = 1;
 		if (!IS_NPC(victim))
 			xp_gain =
-			    (long double)dam / 2575 * pow(victim->pl, xp_mod);
+			    (long double)dam / 1000 * pow(victim->worth, xp_mod);
 		if (IS_NPC(victim))
 			xp_gain =
-			    (long double)dam / 2575 * pow(victim->exp, xp_mod);
+			    (long double)dam / 1000 * pow(victim->worth, xp_mod);
 		/* Sparing and deadly combat pl gain's */
 		if (!IS_NPC(ch) && !IS_NPC(victim)
 		    && !xIS_SET(ch->act, PLR_SPAR)
 		    && !xIS_SET(victim->act, PLR_SPAR)) {
-			if (ch->race == 6)
-				xp_mod = (float)xp_mod + 0.03;
-			else
-				xp_mod = (float)xp_mod + 0.01;
-			xp_gain =
-			    (long double)dam / 2575 * pow(victim->pl, xp_mod);
+		      xp_gain =
+		        (long double)dam / 500 * pow(victim->worth, xp_mod);
 		}
 		if (!IS_NPC(ch) && !IS_NPC(victim)
 		    && xIS_SET(ch->act, PLR_SPAR)
 		    && xIS_SET(victim->act, PLR_SPAR)) {
-			xp_mod = (float)xp_mod + 0.00;
-			xp_gain =
-			    (long double)dam / 2575 * pow(victim->pl, xp_mod);
+		      xp_gain =
+		        (long double)dam / 750 * pow(victim->worth, xp_mod);
 		}
 		/* PL Gains cut if player is stronger than opontants */
 		if (!IS_NPC(victim)) {
@@ -2537,21 +2582,10 @@ damage(CHAR_DATA * ch, CHAR_DATA * victim, int dam, int dt)
 			else
 				xp_gain = 0;
 		}
-		/* pl gains cut if player is weaker than opontant */
-		if (ch->exp != ch->pl && ch->exp < ch->pl) {
-			int pl_exp = 0;
-
-			pl_exp = (ch->pl / ch->exp);
-			xp_gain =
-			    xp_gain - ((long double)pl_exp * 0.025 * xp_gain);
-		}
+		
 		/* a little help to get newbies started */
-		if (ch->pl < 2500)
-			xp_gain += 1;
-		if (ch->pl < 5000)
-			xp_gain += 1;
 		if (xp_gain < 0)
-			xp_gain = 0;
+		  xp_gain = 0;
 
 		if (xIS_SET(ch->in_room->room_flags, ROOM_TIME_CHAMBER)) {
 			switch (number_range(1, 4)) {
@@ -2627,6 +2661,9 @@ damage(CHAR_DATA * ch, CHAR_DATA * victim, int dam, int dt)
 		}
 
 		gain_exp(ch, xp_gain);
+
+		/* fight training for strength */
+		fight_train(ch, "str");
 	}
 	if (!IS_NPC(victim) && victim->level >= LEVEL_IMMORTAL
 	    && victim->hit < 1) {
@@ -2738,59 +2775,6 @@ damage(CHAR_DATA * ch, CHAR_DATA * victim, int dam, int dt)
 		    num_punct_ld(cspar));
 		ch_printf(victim, "&cTotal pl gained this spar: &C%s\n\r",
 		    num_punct_ld(vspar));
-
-		if (!IS_NPC(ch)) {
-			switch (number_range(1, 4)) {
-			default:
-				break;
-			case 1:
-				ch->pcdata->tStr -= number_range(0, 3);
-				ch->pcdata->tStr =
-				    URANGE(0, ch->pcdata->tStr, 99);
-				break;
-			case 2:
-				ch->pcdata->tSpd -= number_range(0, 3);
-				ch->pcdata->tSpd =
-				    URANGE(0, ch->pcdata->tSpd, 99);
-				break;
-			case 3:
-				ch->pcdata->tInt -= number_range(0, 3);
-				ch->pcdata->tInt =
-				    URANGE(0, ch->pcdata->tInt, 99);
-				break;
-			case 4:
-				ch->pcdata->tCon -= number_range(0, 3);
-				ch->pcdata->tCon =
-				    URANGE(0, ch->pcdata->tCon, 99);
-				break;
-			}
-		}
-		if (!IS_NPC(victim)) {
-			switch (number_range(1, 4)) {
-			default:
-				break;
-			case 1:
-				victim->pcdata->tStr -= number_range(0, 3);
-				victim->pcdata->tStr =
-				    URANGE(0, victim->pcdata->tStr, 99);
-				break;
-			case 2:
-				victim->pcdata->tSpd -= number_range(0, 3);
-				victim->pcdata->tSpd =
-				    URANGE(0, victim->pcdata->tSpd, 99);
-				break;
-			case 3:
-				victim->pcdata->tInt -= number_range(0, 3);
-				victim->pcdata->tInt =
-				    URANGE(0, victim->pcdata->tInt, 99);
-				break;
-			case 4:
-				victim->pcdata->tCon -= number_range(0, 3);
-				victim->pcdata->tCon =
-				    URANGE(0, victim->pcdata->tCon, 99);
-				break;
-			}
-		}
 	}
 	update_pos(victim);
 
@@ -3110,58 +3094,7 @@ damage(CHAR_DATA * ch, CHAR_DATA * victim, int dam, int dt)
 				}
 			}
 		}
-		if (!IS_NPC(ch)) {
-			switch (number_range(1, 4)) {
-			default:
-				break;
-			case 1:
-				ch->pcdata->tStr -= number_range(0, 3);
-				ch->pcdata->tStr =
-				    URANGE(0, ch->pcdata->tStr, 99);
-				break;
-			case 2:
-				ch->pcdata->tSpd -= number_range(0, 3);
-				ch->pcdata->tSpd =
-				    URANGE(0, ch->pcdata->tSpd, 99);
-				break;
-			case 3:
-				ch->pcdata->tInt -= number_range(0, 3);
-				ch->pcdata->tInt =
-				    URANGE(0, ch->pcdata->tInt, 99);
-				break;
-			case 4:
-				ch->pcdata->tCon -= number_range(0, 3);
-				ch->pcdata->tCon =
-				    URANGE(0, ch->pcdata->tCon, 99);
-				break;
-			}
-		}
-		if (!IS_NPC(victim)) {
-			switch (number_range(1, 4)) {
-			default:
-				break;
-			case 1:
-				victim->pcdata->tStr -= number_range(0, 3);
-				victim->pcdata->tStr =
-				    URANGE(0, victim->pcdata->tStr, 99);
-				break;
-			case 2:
-				victim->pcdata->tSpd -= number_range(0, 3);
-				victim->pcdata->tSpd =
-				    URANGE(0, victim->pcdata->tSpd, 99);
-				break;
-			case 3:
-				victim->pcdata->tInt -= number_range(0, 3);
-				victim->pcdata->tInt =
-				    URANGE(0, victim->pcdata->tInt, 99);
-				break;
-			case 4:
-				victim->pcdata->tCon -= number_range(0, 3);
-				victim->pcdata->tCon =
-				    URANGE(0, victim->pcdata->tCon, 99);
-				break;
-			}
-		}
+ 
 		if (!npcvict) {
 			/* Bounty stuff begins - Garinan */
 			if (!IS_NPC(ch) && !IS_NPC(victim)) {
