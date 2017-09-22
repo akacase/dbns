@@ -11258,6 +11258,8 @@ The walls and floorspace here are covered entirely in specially-designed
 suits of training equipment, arranged and displayed in various makes and
 sizes. The counters bear the marks of more than a few over-zealous shoppers
 who decided to try out their fancy new duds before even leaving the store. 
+
+&WA sign reads: 'Closed for renovations.'&D
 ~
 0 0 0
 D2
@@ -40932,14 +40934,6 @@ E 1 303919 1 5
 O 1 10 1 306034
 M 1 306032 1 306033
 E 1 303919 1 5
-M 1 303937 1 304370
-G 1 303913 1
-G 1 303908 1
-G 1 303912 1
-G 1 303907 1
-G 1 303910 1
-G 1 303911 1
-G 1 303909 1
 S
 
 

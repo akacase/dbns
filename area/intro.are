@@ -173,7 +173,7 @@ A basic android training partner is here, prepared to assist in your training.
 ~
 ~
 3 0 0 C
-1
+10
 1 0 100 1d20+0 2d5+0
 -1 5
 112 112 0
@@ -264,7 +264,7 @@ For a full list of changes, come visit us at:
 Your Superbest Buddy,
 -- Zerhyn&D
 ~
-0 536870916 0
+0 4 0
 D0
 ~
 ~
@@ -279,7 +279,7 @@ northeast, southwest, and southeast.  All of these directions can be
 abbreviated like this: n, s, w, e, nw, ne, sw, se.  That is all for this
 lesson. Now type "up" to continue with the tutorial.
 ~
-0 536870916 0
+0 4 0
 D2
 ~
 ~
@@ -302,7 +302,7 @@ use the "OOC" channel.  OOC stands for Out of Charecter.
 
 &YNew players are restricted to the 'newbie' channel for a short while.&d
 ~
-0 536870916 0
+0 4 0
 D4
 ~
 ~
@@ -322,7 +322,7 @@ would like to practice fighting go to the "east".  To the west are the
 healing tanks where you can quickly gain back your strength, as well a
 chamber to increase your stats. 
 ~
-0 536870916 0
+0 4 0
 D1
 ~
 ~
@@ -347,7 +347,7 @@ help you learn how to fight.  Just type "kill android" to begin battle.  If
 this android becomes too easy, more await you in the training chambers
 above.  If you require skill training, a master awaits you to the east. 
 ~
-0 536870916 0
+0 4 0
 D1
 ~
 ~
@@ -372,10 +372,6 @@ While in this room your lifeforce and energy will go up two times faster
 than when you are not. 
 ~
 0 536870916 0
-D0
-~
-~
-0 -1 109
 D1
 ~
 ~
@@ -429,7 +425,7 @@ botting, multiplaying, or language, but the Administration does ask that
 you remain respectful to players and staff at all times.  Harassment of any
 kind will not be tolerated.  To continue to the game, please say "I agree".
 ~
-0 536870916 0
+0 4 0
 D5
 ~
 ~
@@ -452,7 +448,7 @@ This room allows you to increase your stats and gain powerlevel by
 training in increased gravity.  To begin, type 'gravtrain <stat> <minutes'.
 One game minute is roughly equal to one second of real time. 
 ~
-0 805306372 0
+0 268435460 0
 D0
 ~
 ~
@@ -463,11 +459,7 @@ Android Upgrade Chamber~
 Androids, lacking the ability to train in gravity, must use upgrade
 chambers such as the one here to increase their statistics. 
 ~
-0 536870916 0
-D2
-~
-~
-0 -1 105
+0 4 0
 S
 #110
 Room 11~
@@ -479,7 +471,7 @@ Combat Chamber Level 1~
 This chamber will provide you with a more advanced challenge than the
 one below.  To gauge the android's strength, say '&Cinfo&g'.&D 
 ~
-0 536870912 0
+0 0 0
 D1
 ~
 ~
@@ -505,7 +497,7 @@ endif
 endif
 ~
 > speech_prog info~
-mpecho &CA robotic voice says, '500 powerlevel.'&d
+mpecho &CA robotic voice says, '50 powerlevel.'&D
 ~
 |
 S
@@ -514,7 +506,7 @@ Combat Chamber Level 2~
 This chamber will provide you with a more advanced challenge than the
 one below.  To gauge the android's strength, say '&Cinfo&g'.&D 
 ~
-0 536870912 0
+0 0 0
 D1
 ~
 ~
@@ -540,7 +532,7 @@ endif
 endif
 ~
 > speech_prog info~
-mpecho &CA robotic voice says, '1500 powerlevel.'&d
+mpecho &CA robotic voice says, '150 powerlevel.'&D
 ~
 |
 S
@@ -549,7 +541,7 @@ Combat Chamber Level 3~
 This chamber will provide you with a more advanced challenge than the
 one below.  To gauge the android's strength, say '&Cinfo&g'.&D 
 ~
-0 536870912 0
+0 0 0
 D1
 ~
 ~
@@ -575,7 +567,7 @@ endif
 endif
 ~
 > speech_prog info~
-mpecho &CA robotic voice says, '4500 powerlevel.'&d
+mpecho &CA robotic voice says, '450 powerlevel.'&D
 ~
 |
 S
@@ -584,7 +576,7 @@ Combat Chamber Level 4~
 This chamber will provide you with a more advanced challenge than the
 one below.  To gauge the android's strength, say '&Cinfo&g'.&D 
 ~
-0 536870912 0
+0 0 0
 D1
 ~
 ~
@@ -610,7 +602,7 @@ endif
 endif
 ~
 > speech_prog info~
-mpecho &CA robotic voice says, '13500 powerlevel.'&d
+mpecho &CA robotic voice says, '1350 powerlevel.'&D
 ~
 |
 S
@@ -619,7 +611,7 @@ Combat Chamber Level 5~
 This chamber will provide you with a more advanced challenge than the
 one below.  To gauge the android's strength, say '&Cinfo&g'.&D 
 ~
-0 536870912 0
+0 0 0
 D1
 ~
 ~
@@ -641,7 +633,7 @@ endif
 endif
 ~
 > speech_prog info~
-mpecho &CA robotic voice says, '40500 powerlevel.'&d
+mpecho &CA robotic voice says, '4050 powerlevel.'&D
 ~
 |
 S
@@ -653,7 +645,7 @@ abilities, type 'alist'.  To see a list of your generic skills, type
 'slist'. Once you're powerful enough to learn an ability, type 'practice
 <skillname>' to be taught the basics. 
 ~
-0 536870912 0
+0 0 0
 D3
 ~
 ~
@@ -666,7 +658,7 @@ help you learn how to fight.  Just type "kill android" to begin battle.  If
 this android becomes too easy, more await you in the training chambers
 above.
 ~
-0 536870912 0
+0 0 0
 D1
 ~
 ~
@@ -687,7 +679,7 @@ help you learn how to fight.  Just type "kill android" to begin battle.  If
 this android becomes too easy, more await you in the training chambers
 above.
 ~
-0 536870912 0
+0 0 0
 D1
 ~
 ~
@@ -700,7 +692,7 @@ help you learn how to fight.  Just type "kill android" to begin battle.  If
 this android becomes too easy, more await you in the training chambers
 above.
 ~
-0 536870912 0
+0 0 0
 D3
 ~
 ~
@@ -711,7 +703,7 @@ Combat Chamber Level 1-2~
 This chamber will provide you with a more advanced challenge than the
 one below.  To gauge the android's strength, say '&Cinfo&g'.&D 
 ~
-0 536870912 0
+0 0 0
 D3
 ~
 ~
@@ -729,7 +721,7 @@ mpforce android mpkill $n
 endif
 ~
 > speech_prog info~
-mpecho &CA robotic voice says, '500 powerlevel.'&D
+mpecho &CA robotic voice says, '50 powerlevel.'&D
 ~
 |
 S
@@ -738,7 +730,7 @@ Combat Chamber Level 2-2~
 This chamber will provide you with a more advanced challenge than the
 one below.  To gauge the android's strength, say '&Cinfo&g'.&D 
 ~
-0 536870912 0
+0 0 0
 D3
 ~
 ~
@@ -751,18 +743,8 @@ D5
 ~
 ~
 0 -1 121
-> speech_prog begin~
-~
-> speech_prog begin~
-if isfight($n)
-mpechoat $n You can only fight one mob at a time.
-else
-mpmload 103
-mpforce android mpkill $n
-endif
-~
 > speech_prog info~
-mpecho &CA robotic voice says, '1500 powerlevel.'&D
+mpecho &CA robotic voice says, '150 powerlevel.'&D
 ~
 |
 S
@@ -771,7 +753,7 @@ Combat Chamber Level 3-2~
 This chamber will provide you with a more advanced challenge than the
 one below.  To gauge the android's strength, say '&Cinfo&g'.&D 
 ~
-0 536870912 0
+0 0 0
 D3
 ~
 ~
@@ -793,7 +775,7 @@ mpforce android mpkill $n
 endif
 ~
 > speech_prog info~
-mpecho &CA robotic voice says, '4500 powerlevel.'&D
+mpecho &CA robotic voice says, '450 powerlevel.'&D
 ~
 |
 S
@@ -802,7 +784,7 @@ Combat Chamber Level 4-2~
 This chamber will provide you with a more advanced challenge than the
 one below.  To gauge the android's strength, say '&Cinfo&g'.&D 
 ~
-0 536870912 0
+0 0 0
 D3
 ~
 ~
@@ -824,7 +806,7 @@ mpforce android mpkill $n
 endif
 ~
 > speech_prog info~
-mpecho &CA robotic voice says, '13500 powerlevel.'&D
+mpecho &CA robotic voice says, '1350 powerlevel.'&D
 ~
 |
 S
@@ -833,7 +815,7 @@ Combat Chamber Level 5-2~
 This chamber will provide you with a more advanced challenge than the
 one below.  To gauge the android's strength, say '&Cinfo&g'.&D 
 ~
-0 536870912 0
+0 0 0
 D3
 ~
 ~
@@ -851,7 +833,7 @@ mpforce android mpkill $n
 endif
 ~
 > speech_prog info~
-mpecho &CA robotic voice says, '40500 powerlevel.'&D
+mpecho &CA robotic voice says, '4050 powerlevel.'&D
 ~
 |
 S
