@@ -162,9 +162,9 @@ A weak ESF trainee is exercising here, preparing for another round of combat.
 ~
 ~
 3 0 0 C
-500
+50
 1 0 100 1d20+0 2d5+0
--1 50000
+-1 5000
 112 112 1
 10 10 10 10 20
 0 0 0 0 0
@@ -184,10 +184,10 @@ An ESF trainee~
 An ESF trainee is pumping iron here.
 ~
 ~
-3 0 0 C
-1
+1073741827 0 0 C
+75
 1 0 100 1d20+0 2d5+0
--1 150000
+-1 15000
 112 112 1
 15 15 15 15 0
 0 0 0 0 0
@@ -208,9 +208,9 @@ A stronger ESF trainee shadowboxes here in the arena.
 ~
 ~
 3 0 0 C
-1
+112
 1 0 100 1d20+0 2d5+0
--1 500000
+-1 50000
 112 112 1
 20 20 20 20 0
 0 0 0 0 0
@@ -231,9 +231,9 @@ An impressive ESF trainee sits here in deep meditation.
 ~
 ~
 3 0 0 C
-1
+168
 1 0 100 1d20+0 2d5+0
--1 1500000
+-1 150000
 112 112 1
 25 25 25 25 0
 0 0 0 0 0
@@ -254,9 +254,9 @@ An advanced ESF combatant stands here, ever at the ready for a new challenger.
 ~
 ~
 3 0 0 C
-1
+253
 1 0 100 1d20+0 2d5+0
--1 5000000
+-1 500000
 112 112 1
 30 30 30 30 0
 0 0 0 0 0
@@ -277,9 +277,9 @@ An elite member of the ESF stands here with arms crossed, a promising grin sprea
 ~
 ~
 16777219 0 0 C
-1
+379
 1 0 100 1d20+0 2d5+0
--1 15000000
+-1 1500000
 112 112 1
 35 35 35 35 0
 0 0 0 0 0
@@ -2452,7 +2452,7 @@ A Battered Doorway~
 This doorway has seen better days.  A pair of broken hinges lay
 haphazardly on the floor here, and the door itself is no where to be found.
 
-&YA signs reads: 50k+ Powerlevel&d
+&YA sign reads: 5k+ Powerlevel&D
 ~
 0 8 0
 D1
@@ -2833,7 +2833,7 @@ A Battered Doorway~
 This doorway has seen better days.  A pair of broken hinges lay
 haphazardly on the floor here, and the door itself is no where to be found.
 
-&YA signs reads: 150k+ Powerlevel&d
+&YA sign reads: 15k+ Powerlevel&D
 ~
 0 8 0
 D1
@@ -3252,7 +3252,7 @@ A Battered Doorway~
 This doorway has seen better days.  A pair of broken hinges lay
 haphazardly on the floor here, and the door itself is no where to be found.
 
-&YA signs reads: 500k+ Powerlevel&d
+&YA sign reads: 50k+ Powerlevel&D
 ~
 0 0 0
 D1
@@ -3721,7 +3721,7 @@ A Battered Doorway~
 This doorway has seen better days.  A pair of broken hinges lay
 haphazardly on the floor here, and the door itself is no where to be found.
 
-&YA signs reads: 1,500,000+ Powerlevel&d
+&YA sign reads: 150k+ Powerlevel&D
 ~
 0 8 0
 D1
@@ -4278,7 +4278,7 @@ appears to block off any stray energy that might escape the confines of the
 room beyond, but it allows for physical matter to pass through
 effortlessly. 
 
-&YA signs reads: 5,000,000+ Powerlevel&d
+&YA sign reads: 500k+ Powerlevel&D
 ~
 0 0 0
 D0
@@ -4353,7 +4353,7 @@ appears to block off any stray energy that might escape the confines of the
 room beyond, but it allows for physical matter to pass through
 effortlessly.
 
-&YA signs reads: 15,000,000+ Powerlevel&d
+&YA sign reads: 1,500,000+ Powerlevel&D
 ~
 0 0 0
 D0
