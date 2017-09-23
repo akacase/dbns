@@ -5389,8 +5389,8 @@ do_meditate(CHAR_DATA * ch, char *argument)
 	float 	left = 0;
 	float 	right = 0;
 	long double xp_gain = 0;
-	//int statComb = 0;
-	//int increase = number_range(1, 3);
+	int statComb = 0;
+	int increase = 0;
 
 	if (IS_NPC(ch))
 		return;
@@ -5440,10 +5440,10 @@ do_meditate(CHAR_DATA * ch, char *argument)
 			    ch);
 			learn_from_success(ch, gsn_meditate);
 			stat_train(ch, "int", 30);
-			// commenting out the xp gain, not working properly
-			/* statComb = ((get_curr_str(ch) + get_curr_dex(ch) + get_curr_int(ch) + get_curr_con(ch)) - 39);
+		        statComb = ((get_curr_str(ch) + get_curr_dex(ch) + get_curr_int(ch) + get_curr_con(ch)) - 39);
+			increase = number_range(1,3);
 			xp_gain = (long double)increase / 200 * statComb;
-			gain_exp(ch, xp_gain); */
+			gain_exp(ch, xp_gain);
 			ch->mana += (float) right / 50 * ch->max_mana;
 		} else {
 			send_to_char
@@ -5472,10 +5472,10 @@ do_meditate(CHAR_DATA * ch, char *argument)
 			    ch);
 			learn_from_success(ch, gsn_meditate);
 			stat_train(ch, "int", 30);
-			// commenting out xp gain, not working properly
-                        /* statComb = ((get_curr_str(ch) + get_curr_dex(ch) + get_curr_int(ch) + get_curr_con(ch)) - 39);
+                        statComb = ((get_curr_str(ch) + get_curr_dex(ch) + get_curr_int(ch) + get_curr_con(ch)) - 39);
+			increase = number_range(1,3);
                         xp_gain = (long double)increase / 200 * statComb;
-			gain_exp(ch, xp_gain); */
+			gain_exp(ch, xp_gain);
 			ch->mana += (float) right / 50 * ch->max_mana;
 		} else {
 			send_to_char
