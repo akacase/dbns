@@ -43,10 +43,10 @@ dbns: ${O_FILES}
 
 install:
 	@make dbns
-	sudo install -m 755 -g wheel -o root dbnsd ${PREFIX}/dbnsd
+	install -m 755 -g wheel -o root dbnsd ${PREFIX}/dbnsd
 
 init:
-	sudo systemctl enable ../init/dbns.service
+	systemctl enable ../init/dbns.service
 
 data:
 	@\cp ${DATA_PREFIX}/system/hiscores.dat /tmp/hiscores.dat
@@ -56,10 +56,10 @@ data:
 	@\sudo chgrp -R dbns {DATA_PREFIX}
 
 stop:
-	sudo systemctl stop../init/dbns.service
+	systemctl stop../init/dbns.service
 
 restart:
-	sudo systemctl restart dbns
+	systemctl restart dbns
 
 .c.o: mud.h
 	${CC} -c ${C_FLAGS} $<
