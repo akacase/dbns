@@ -440,6 +440,10 @@ transStatApply(CHAR_DATA * ch, int strMod, int spdMod, int intMod,
 void
 rage(CHAR_DATA * ch, CHAR_DATA * victim)
 {
+	
+	int	kicontrol = 0;
+	
+	kicontrol = get_curr_int(ch);
 
 	if (!ch->desc)
 		return;
@@ -461,6 +465,9 @@ rage(CHAR_DATA * ch, CHAR_DATA * victim)
 			return;
 
 		if (ch->rage < 500)
+			return;
+			
+		if (kicontrol < 2000)
 			return;
 
 		if (ch->pcdata->learned[gsn_ssj] > 0)
@@ -669,6 +676,11 @@ rage(CHAR_DATA * ch, CHAR_DATA * victim)
 void
 rage2(CHAR_DATA * ch, CHAR_DATA * victim)
 {
+
+	int	kicontrol = 0;
+	
+	kicontrol = get_curr_int(ch);
+	
 	if (!ch->desc)
 		return;
 	if (!victim)
@@ -692,6 +704,9 @@ rage2(CHAR_DATA * ch, CHAR_DATA * victim)
 			return;
 
 		if (ch->rage < 800)
+			return;
+			
+		if (kicontrol < 4000)
 			return;
 
 		if (ch->pcdata->learned[gsn_ssj2] > 0)
@@ -887,6 +902,10 @@ rage2(CHAR_DATA * ch, CHAR_DATA * victim)
 void
 rage3(CHAR_DATA * ch, CHAR_DATA * victim)
 {
+	
+	int kicontrol =0;
+	
+	kicontrol = get_curr_int(ch);
 
 	if (!ch->desc)
 		return;
@@ -913,6 +932,9 @@ rage3(CHAR_DATA * ch, CHAR_DATA * victim)
 			return;
 
 		if (ch->rage < 1000)
+			return;
+			
+		if (kicontrol < 6000)
 			return;
 
 		if (ch->pcdata->learned[gsn_ssj3] > 0)
@@ -1068,6 +1090,11 @@ rage3(CHAR_DATA * ch, CHAR_DATA * victim)
 void
 rage4(CHAR_DATA * ch, CHAR_DATA * victim)
 {
+	
+	int kicontrol = 0;
+	
+	kicontrol = get_curr_int(ch);
+	
 	if (!ch->desc)
 		return;
 	if (!victim)
@@ -1093,6 +1120,9 @@ rage4(CHAR_DATA * ch, CHAR_DATA * victim)
 			return;
 
 		if (ch->rage < 1500)
+			return;
+			
+		if (kicontrol < 8000)
 			return;
 
 		if (ch->pcdata->learned[gsn_ssj4] > 0)
@@ -1267,6 +1297,11 @@ rage4(CHAR_DATA * ch, CHAR_DATA * victim)
 void
 rage5(CHAR_DATA * ch, CHAR_DATA * victim)
 {
+	
+	int kicontrol = 0;
+	
+	kicontrol = get_curr_int(ch);
+	
 	if (!ch->desc)
 		return;
 	if (!victim)
@@ -1290,6 +1325,9 @@ rage5(CHAR_DATA * ch, CHAR_DATA * victim)
 			return;
 
 		if (ch->rage < 1500)
+			return;
+			
+		if (kicontrol < 10000)
 			return;
 
 		if (ch->pcdata->learned[gsn_sgod] > 0)
