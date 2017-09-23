@@ -1955,14 +1955,20 @@ ris_damage(CHAR_DATA * ch, int dam, int ris)
  * fight training
  */
 void
-fight_train(CHAR_DATA * ch, char *stat)
+stat_train(CHAR_DATA * ch, char *stat, int *modifier)
 {
 	sh_int *tAbility;
 	sh_int *pAbility;
 	sh_int *permTstat;
 	int fightIncrease = 0;
+	int gainMod = 0;
+	if(modifier > 0) {
+	  gainMod = modifier;
+	} else {
+	  gainMod = 5;
+	}
 	
-	fightIncrease = (number_range(1,2) * 5);
+	fightIncrease = (number_range(1,2) * gainMod);
 
 	if ( stat == "str" )
 	{
@@ -2412,6 +2418,10 @@ damage(CHAR_DATA * ch, CHAR_DATA * victim, int dam, int dt)
 						victim->dodge = true;
 						learn_from_success(victim,
 						    gsn_dodge);
+						if(!IS_NPC(victim)){
+						  stat_train(victim, "spd", 0);
+						}
+						
 					} else
 						learn_from_failure(victim,
 						    gsn_dodge);
@@ -2430,7 +2440,7 @@ damage(CHAR_DATA * ch, CHAR_DATA * victim, int dam, int dt)
 						    gsn_block);
 					  /* fight training for speed  */
 					  if (!IS_NPC(victim)) {
-					  	fight_train(victim, "spd");
+					    stat_train(victim, "spd", 0);
 					  }
 						
 					} else {
@@ -2663,7 +2673,7 @@ damage(CHAR_DATA * ch, CHAR_DATA * victim, int dam, int dt)
 		gain_exp(ch, xp_gain);
 
 		/* fight training for strength */
-		fight_train(ch, "str");
+		stat_train(ch, "str", 0);
 	}
 	if (!IS_NPC(victim) && victim->level >= LEVEL_IMMORTAL
 	    && victim->hit < 1) {

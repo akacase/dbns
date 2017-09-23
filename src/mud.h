@@ -5173,7 +5173,7 @@ DECLARE_SPELL_FUN(spell_sensu_bean);
  *   so players can go ahead and telnet to all the other descriptors.
  * Then we close it whenever we need to open a file (e.g. a save file).
  */
-#define PREFIX_DIR      "/opt/dbns/db"	/* prefix where the information is
+#define PREFIX_DIR      ".."	/* prefix where the information is
 					 * stored and installed to */
 #define PLAYER_DIR	PREFIX_DIR "/player/"	/* Player files         */
 #define BACKUP_DIR	PREFIX_DIR "/player/backup/"	/* Backup Player files  */
@@ -5645,7 +5645,7 @@ args((const char *argument, int channel,
 		args   ((CHAR_DATA * ch, CHAR_DATA * victim, OBJ_DATA * wield,
 		OBJ_DATA * projectile, sh_int dist));
 	int ris_damage args((CHAR_DATA * ch, int dam, int ris));
-	void fight_train args((CHAR_DATA * ch, char * stat));
+        void stat_train args((CHAR_DATA * ch, char * stat, int *modifier));
 	ch_ret damage args((CHAR_DATA * ch, CHAR_DATA * victim, int dam, int dt));
 	void update_pos args((CHAR_DATA * victim));
 	void set_fighting args((CHAR_DATA * ch, CHAR_DATA * victim));
