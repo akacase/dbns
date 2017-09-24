@@ -2453,16 +2453,16 @@ damage(CHAR_DATA * ch, CHAR_DATA * victim, int dam, int dt)
 			// train con when taking damage
 			if (dam > 0) {
 			  if (dam < 4) {
-			    fight_train(victim, "con", 3);
+			    stat_train(victim, "con", 3);
 			  }
 			  else if (dam < 10) {
-			    fight_train(victim, "con", 5);
+			    stat_train(victim, "con", 5);
 			  }
 			  else if (dam < 20) {
-			    fight_train(victim, "con", 7);
+			    stat_train(victim, "con", 7);
 			  }
 			  else if (dam > 20) {
-			    fight_train(victim, "con", 10);
+			    stat_train(victim, "con", 10);
 			  }
 			}
 			ch->melee = false;
