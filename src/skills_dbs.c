@@ -4646,11 +4646,25 @@ do_icer_transform_golden_form(CHAR_DATA * ch, char *argument)
 			return;
 		}
 	}
-	if (get_curr_str(ch) < 1500 && get_curr_int(ch) < 1500 && get_curr_dex(ch) < 1500 && get_curr_con(ch) < 2000)
+	if (get_curr_str(ch) < 1500)
 	{
-		send_to_char("Your body is tough and durable, but that is not enough.\n\r", ch);
+		send_to_char("Your body is tough and durable, but that alone is not enough to achieve true power.\n\r", ch);
 		return;
-		
+	}
+	if (get_curr_int(ch) < 1500)
+	{
+		send_to_char("Your body is tough and durable, but that alone is not enough to achieve true power.\n\r", ch);
+		return;
+	}
+	if (get_curr_dex(ch) < 1500)
+	{
+		send_to_char("Your body is tough and durable, but that alone is not enough to achieve true power.\n\r", ch);
+		return;
+	}
+	if (get_curr_con(ch) < 2000)
+	{
+		send_to_char("Your body is tough and durable, but that alone is not enough to achieve true power.\n\r", ch);
+		return;
 	}
 	if (wearing_chip(ch)) {
 		ch_printf(ch, "You can't while you have a chip installed.\n\r");
@@ -6375,7 +6389,22 @@ do_hyper(CHAR_DATA * ch, char *argument)
 			return;
 		}
 	}
-	if (get_curr_str(ch) < 300 && get_curr_int(ch) < 300 && get_curr_dex(ch) < 100 && get_curr_con(ch) < 800)
+	if (get_curr_str(ch) < 300)
+	{
+		send_to_char("Someday--with the right training--you feel you may be ready to use this technique.\n\r", ch);
+		return;
+	}
+	if (get_curr_int(ch) < 300)
+	{
+		send_to_char("Someday--with the right training--you feel you may be ready to use this technique.\n\r", ch);
+		return;
+	}
+	if (get_curr_dex(ch) < 100)
+	{
+		send_to_char("Someday--with the right training--you feel you may be ready to use this technique.\n\r", ch);
+		return;
+	}
+	if (get_curr_con(ch) < 800)
 	{
 		send_to_char("Someday--with the right training--you feel you may be ready to use this technique.\n\r", ch);
 		return;
@@ -10243,6 +10272,8 @@ void
 do_mystic(CHAR_DATA * ch, char *argument)
 {
 	int kicontrol = 0;
+	
+	kicontrol = get_curr_int(ch);
 
 	if (IS_NPC(ch) && is_split(ch)) {
 		if (!ch->master)
@@ -10257,6 +10288,11 @@ do_mystic(CHAR_DATA * ch, char *argument)
 				"You don't know how to use this technique.\n\r");
 			return;
 		}
+	}
+	if (kicontrol < 1500)
+	{
+		send_to_char("Your mastery over your own mind is too lacking to use this ability.\n\r", ch);
+		return;
 	}
 	if (wearing_chip(ch)) {
 		ch_printf(ch, "You can't while you have a chip installed.\n\r");
@@ -10273,7 +10309,6 @@ do_mystic(CHAR_DATA * ch, char *argument)
 	if (xIS_SET(ch->affected_by, AFF_KAIOKEN))
 		xREMOVE_BIT(ch->affected_by, AFF_KAIOKEN);
 
-	kicontrol = get_curr_int(ch);
 	double 	pl_mult = 0;
 	int 	arg;
 
@@ -11209,11 +11244,25 @@ do_extreme(CHAR_DATA * ch, char *argument)
 			return;
 		}
 	}
-	if (get_curr_str(ch) < 600 && get_curr_int(ch) < 600 && get_curr_dex(ch) < 250 && get_curr_con(ch) < 1600)
+	if (get_curr_str(ch) < 600)
 	{
 		send_to_char("Someday--with the right training--you feel you may be ready to use this technique.\n\r", ch);
 		return;
-		
+	}
+	if (get_curr_int(ch) < 600)
+	{
+		send_to_char("Someday--with the right training--you feel you may be ready to use this technique.\n\r", ch);
+		return;
+	}
+	if (get_curr_dex(ch) < 250)
+	{
+		send_to_char("Someday--with the right training--you feel you may be ready to use this technique.\n\r", ch);
+		return;
+	}
+	if (get_curr_con(ch) < 1600)
+	{
+		send_to_char("Someday--with the right training--you feel you may be ready to use this technique.\n\r", ch);
+		return;
 	}
 	if (wearing_chip(ch)) {
 		ch_printf(ch, "You can't while you have a chip installed.\n\r");
