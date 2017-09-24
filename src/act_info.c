@@ -4257,10 +4257,6 @@ bool gTrainSuccess(CHAR_DATA *ch, int stat, sh_int *tAbility, int gravLevel)
 
 	xp_gain = (long double)increase / 100 * gravLevel;
 
-	if( ch->exp < 100) {
-	    xp_gain = 0;
-	}
-
 	sprintf(buf, "Your power level increases by %s points.", num_punct(xp_gain));
 	act(AT_HIT, buf, ch, NULL, NULL, TO_CHAR);
 
