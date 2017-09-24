@@ -11041,7 +11041,6 @@ do_ussj(CHAR_DATA * ch, char *argument)
 			return;
 		}
 	}
-	}
 	if (get_curr_str(ch) < 750)
 	{
 		send_to_char("Your muscles can't possibly contain that much energy.\n\r", ch);
@@ -11142,7 +11141,6 @@ do_ussj2(CHAR_DATA * ch, char *argument)
 				"You are unable to call upon those powers while you know mystic.\n\r");
 			return;
 		}
-	}
 	}
 	if (get_curr_str(ch) < 1000)
 	{
