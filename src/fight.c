@@ -2418,6 +2418,7 @@ damage(CHAR_DATA * ch, CHAR_DATA * victim, int dam, int dt)
 						victim->dodge = true;
 						learn_from_success(victim,
 						    gsn_dodge);
+                        // train speed stat on dodge success
 						if(!IS_NPC(victim)){
 						  stat_train(victim, "spd", 0);
 						}
@@ -2438,7 +2439,7 @@ damage(CHAR_DATA * ch, CHAR_DATA * victim, int dam, int dt)
 					  victim->block = true;
 					  learn_from_success(victim,
 						    gsn_block);
-					  /* fight training for speed  */
+					  // train speed stat on block success
 					  if (!IS_NPC(victim)) {
 					    stat_train(victim, "spd", 0);
 					  }
@@ -2449,6 +2450,21 @@ damage(CHAR_DATA * ch, CHAR_DATA * victim, int dam, int dt)
 					}
 				}
 			}
+            // train con when taking damage
+            if (dam > 0) {
+                if (dam < 4) {
+                    fight_train(victim, "con", 3);
+                }
+                else if (dam < 10) {
+                    fight_train(victim, "con", 5);
+                }
+                else if (dam < 20) {
+                    fight_train(victim, "con", 7);
+                }
+                else if (dam > 20) {
+                    fight_train(victim, "con", 10);
+                }
+            }
 			ch->melee = false;
 		}
 		dam_message(ch, victim, dam, dt);
