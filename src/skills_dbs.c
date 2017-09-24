@@ -440,10 +440,6 @@ transStatApply(CHAR_DATA * ch, int strMod, int spdMod, int intMod,
 void
 rage(CHAR_DATA * ch, CHAR_DATA * victim)
 {
-	
-	int	kicontrol = 0;
-	
-	kicontrol = get_curr_int(ch);
 
 	if (!ch->desc)
 		return;
@@ -467,8 +463,18 @@ rage(CHAR_DATA * ch, CHAR_DATA * victim)
 		if (ch->rage < 500)
 			return;
 			
-		if (kicontrol < 2000)
+		if (get_curr_str(ch) < 500 )
 			return;
+			
+		if (get_curr_dex(ch) < 100 )
+			return;
+			
+		if (get_curr_int(ch) < 500 )
+			return;
+			
+		if (get_curr_con(ch) < 500 )
+			return;
+			
 
 		if (ch->pcdata->learned[gsn_ssj] > 0)
 			return;
@@ -662,7 +668,7 @@ rage(CHAR_DATA * ch, CHAR_DATA * victim)
 		if (xIS_SET((ch)->affected_by, AFF_OOZARU))
 			xREMOVE_BIT((ch)->affected_by, AFF_OOZARU);
 		xSET_BIT((ch)->affected_by, AFF_SSJ);
-		ch->pl = ch->exp * 10;
+		ch->pl = ch->exp * 50;
 		transStatApply(ch, 10, 5, 3, 5);
 		ch->rage = 0;
 		ch->delay = 0;
@@ -676,10 +682,6 @@ rage(CHAR_DATA * ch, CHAR_DATA * victim)
 void
 rage2(CHAR_DATA * ch, CHAR_DATA * victim)
 {
-
-	int	kicontrol = 0;
-	
-	kicontrol = get_curr_int(ch);
 	
 	if (!ch->desc)
 		return;
@@ -706,7 +708,16 @@ rage2(CHAR_DATA * ch, CHAR_DATA * victim)
 		if (ch->rage < 800)
 			return;
 			
-		if (kicontrol < 4000)
+		if (get_curr_str(ch) < 1000 )
+			return;
+			
+		if (get_curr_dex(ch) < 500 )
+			return;
+			
+		if (get_curr_int(ch) < 1000 )
+			return;
+			
+		if (get_curr_con(ch) < 1000 )
 			return;
 
 		if (ch->pcdata->learned[gsn_ssj2] > 0)
@@ -888,7 +899,7 @@ rage2(CHAR_DATA * ch, CHAR_DATA * victim)
 		if (!xIS_SET(ch->affected_by, AFF_SSJ))
 			xSET_BIT((ch)->affected_by, AFF_SSJ);
 		xSET_BIT((ch)->affected_by, AFF_SSJ2);
-		ch->pl = ch->exp * 16;
+		ch->pl = ch->exp * 225;
 		transStatApply(ch, 16, 8, 4, 8);
 		ch->delay = 0;
 		ch->rage = 0;
@@ -902,10 +913,6 @@ rage2(CHAR_DATA * ch, CHAR_DATA * victim)
 void
 rage3(CHAR_DATA * ch, CHAR_DATA * victim)
 {
-	
-	int kicontrol =0;
-	
-	kicontrol = get_curr_int(ch);
 
 	if (!ch->desc)
 		return;
@@ -934,7 +941,16 @@ rage3(CHAR_DATA * ch, CHAR_DATA * victim)
 		if (ch->rage < 1000)
 			return;
 			
-		if (kicontrol < 6000)
+		if (get_curr_str(ch) < 2000 )
+			return;
+			
+		if (get_curr_dex(ch) < 1000 )
+			return;
+			
+		if (get_curr_int(ch) < 2000 )
+			return;
+			
+		if (get_curr_con(ch) < 2000 )
 			return;
 
 		if (ch->pcdata->learned[gsn_ssj3] > 0)
@@ -1076,7 +1092,7 @@ rage3(CHAR_DATA * ch, CHAR_DATA * victim)
 		if (!xIS_SET(ch->affected_by, AFF_SSJ2))
 			xSET_BIT((ch)->affected_by, AFF_SSJ2);
 		xSET_BIT((ch)->affected_by, AFF_SSJ3);
-		ch->pl = ch->exp * 24;
+		ch->pl = ch->exp * 325;
 		transStatApply(ch, 24, 12, 6, 12);
 		ch->delay = 0;
 		ch->rage = 0;
@@ -1090,10 +1106,6 @@ rage3(CHAR_DATA * ch, CHAR_DATA * victim)
 void
 rage4(CHAR_DATA * ch, CHAR_DATA * victim)
 {
-	
-	int kicontrol = 0;
-	
-	kicontrol = get_curr_int(ch);
 	
 	if (!ch->desc)
 		return;
@@ -1111,10 +1123,7 @@ rage4(CHAR_DATA * ch, CHAR_DATA * victim)
 	    && ch->pcdata->learned[gsn_ssj2] <= 0
 	    && ch->pcdata->learned[gsn_ssj3] <= 0)
 		return;
-
-	if (!xIS_SET(ch->affected_by, AFF_GOLDEN_OOZARU))
-		return;
-
+		
 	if (ch->delay <= 0) {
 		if (!is_saiyan(ch))
 			return;
@@ -1122,7 +1131,16 @@ rage4(CHAR_DATA * ch, CHAR_DATA * victim)
 		if (ch->rage < 1500)
 			return;
 			
-		if (kicontrol < 8000)
+		if (get_curr_str(ch) < 4000 )
+			return;
+			
+		if (get_curr_dex(ch) < 2000 )
+			return;
+			
+		if (get_curr_int(ch) < 4000 )
+			return;
+			
+		if (get_curr_con(ch) < 4000 )
 			return;
 
 		if (ch->pcdata->learned[gsn_ssj4] > 0)
@@ -1283,7 +1301,7 @@ rage4(CHAR_DATA * ch, CHAR_DATA * victim)
 		if (!xIS_SET(ch->affected_by, AFF_SSJ3))
 			xSET_BIT((ch)->affected_by, AFF_SSJ3);
 		xSET_BIT((ch)->affected_by, AFF_SSJ4);
-		ch->pl = ch->exp * 30;
+		ch->pl = ch->exp * 425;
 		transStatApply(ch, 30, 15, 8, 15);
 		ch->delay = 0;
 		ch->rage = 0;
@@ -1297,10 +1315,6 @@ rage4(CHAR_DATA * ch, CHAR_DATA * victim)
 void
 rage5(CHAR_DATA * ch, CHAR_DATA * victim)
 {
-	
-	int kicontrol = 0;
-	
-	kicontrol = get_curr_int(ch);
 	
 	if (!ch->desc)
 		return;
@@ -1327,7 +1341,16 @@ rage5(CHAR_DATA * ch, CHAR_DATA * victim)
 		if (ch->rage < 1500)
 			return;
 			
-		if (kicontrol < 10000)
+		if (get_curr_str(ch) < 16000 )
+			return;
+			
+		if (get_curr_dex(ch) < 8000 )
+			return;
+			
+		if (get_curr_int(ch) < 16000 )
+			return;
+			
+		if (get_curr_con(ch) < 16000 )
 			return;
 
 		if (ch->pcdata->learned[gsn_sgod] > 0)
@@ -1488,7 +1511,7 @@ rage5(CHAR_DATA * ch, CHAR_DATA * victim)
 		if (!xIS_SET(ch->affected_by, AFF_SSJ4))
 			xSET_BIT((ch)->affected_by, AFF_SSJ4);
 		xSET_BIT((ch)->affected_by, AFF_SGOD);
-		ch->pl = ch->exp * 50;
+		ch->pl = ch->exp * 500;
 		transStatApply(ch, 50, 25, 15, 20);
 		ch->delay = 0;
 		ch->rage = 0;
@@ -3050,7 +3073,7 @@ do_kaioken(CHAR_DATA * ch, char *argument)
 	}
 
 	kicontrol = get_curr_int(ch);
-	max = (kicontrol / 100) + 4;
+	max = (kicontrol / 50) + 4;
 
 	if (arg > max) {
 		act(AT_SKILL, "Your body can't sustain that level of Kaioken.",
@@ -4175,6 +4198,11 @@ do_super_namek(CHAR_DATA * ch, char *argument)
 			return;
 		}
 	}
+	if (get_curr_int(ch) < 1000)
+	{
+		send_to_char("You feel that you lack enough control over your ki to use this technique.\n\r", ch);
+		return;
+	}
 	if (wearing_chip(ch)) {
 		ch_printf(ch, "You can't while you have a chip installed.\n\r");
 		return;
@@ -4216,15 +4244,9 @@ do_super_namek(CHAR_DATA * ch, char *argument)
 		ch_printf(ch, "You're not in super namek, though!\n\r");
 		return;
 	}
-	pl_mult = (double)kicontrol * 2 * 0.01;
+	pl_mult = (double)kicontrol * 0.02;
 	if (pl_mult > 500)
 		pl_mult = 500;
-	if (pl_mult < 5)
-		pl_mult = (double)2 + pl_mult;
-	else if (pl_mult < 6)
-		pl_mult = (double)1 + pl_mult;
-	else if (pl_mult < 6.5)
-		pl_mult = (double) 0.5 + pl_mult;
 
 	if (arg > pl_mult)
 		pl_mult = (int)pl_mult;
@@ -4369,6 +4391,11 @@ do_icer_transform_3(CHAR_DATA * ch, char *argument)
 			return;
 		}
 	}
+	if (get_curr_con(ch) < 200)
+	{
+		send_to_char("Your body lacks the necessary toughness to withstand your transformation.\n\r", ch);
+		return;
+	}
 	if (wearing_chip(ch)) {
 		ch_printf(ch, "You can't while you have a chip installed.\n\r");
 		return;
@@ -4450,6 +4477,11 @@ do_icer_transform_4(CHAR_DATA * ch, char *argument)
 			return;
 		}
 	}
+	if (get_curr_con(ch) < 1250)
+	{
+		send_to_char("Your body lacks the necessary toughness to withstand your transformation.\n\r", ch);
+		return;
+	}
 	if (wearing_chip(ch)) {
 		ch_printf(ch, "You can't while you have a chip installed.\n\r");
 		return;
@@ -4530,6 +4562,11 @@ do_icer_transform_5(CHAR_DATA * ch, char *argument)
 			return;
 		}
 	}
+	if (get_curr_con(ch) < 2000)
+	{
+		send_to_char("Your body lacks the necessary toughness to withstand your transformation.\n\r", ch);
+		return;
+	}
 	if (wearing_chip(ch)) {
 		ch_printf(ch, "You can't while you have a chip installed.\n\r");
 		return;
@@ -4608,6 +4645,26 @@ do_icer_transform_golden_form(CHAR_DATA * ch, char *argument)
 				"You are unable to call upon those powers while you know mystic.\n\r");
 			return;
 		}
+	}
+	if (get_curr_str(ch) < 1500)
+	{
+		send_to_char("Your body is tough and durable, but that alone is not enough to achieve true power.\n\r", ch);
+		return;
+	}
+	if (get_curr_int(ch) < 1500)
+	{
+		send_to_char("Your body is tough and durable, but that alone is not enough to achieve true power.\n\r", ch);
+		return;
+	}
+	if (get_curr_dex(ch) < 1500)
+	{
+		send_to_char("Your body is tough and durable, but that alone is not enough to achieve true power.\n\r", ch);
+		return;
+	}
+	if (get_curr_con(ch) < 2000)
+	{
+		send_to_char("Your body is tough and durable, but that alone is not enough to achieve true power.\n\r", ch);
+		return;
 	}
 	if (wearing_chip(ch)) {
 		ch_printf(ch, "You can't while you have a chip installed.\n\r");
@@ -5388,6 +5445,9 @@ do_meditate(CHAR_DATA * ch, char *argument)
 {
 	float 	left = 0;
 	float 	right = 0;
+	long double xp_gain = 0;
+	int statComb = 0;
+	int increase = 0;
 
 	if (IS_NPC(ch))
 		return;
@@ -5436,6 +5496,11 @@ do_meditate(CHAR_DATA * ch, char *argument)
 			    ("&wYou meditate peacefully, collecting energy from the cosmos\n\r",
 			    ch);
 			learn_from_success(ch, gsn_meditate);
+			stat_train(ch, "int", 30);
+		        statComb = ((get_curr_str(ch) + get_curr_dex(ch) + get_curr_int(ch) + get_curr_con(ch)) - 39);
+			increase = number_range(1,3);
+			xp_gain = (long double)increase / 200 * statComb;
+			gain_exp(ch, xp_gain);
 			ch->mana += (float) right / 50 * ch->max_mana;
 		} else {
 			send_to_char
@@ -5463,6 +5528,11 @@ do_meditate(CHAR_DATA * ch, char *argument)
 			    ("&wYou meditate peacefully, collecting energy from the cosmos\n\r",
 			    ch);
 			learn_from_success(ch, gsn_meditate);
+			stat_train(ch, "int", 30);
+                        statComb = ((get_curr_str(ch) + get_curr_dex(ch) + get_curr_int(ch) + get_curr_con(ch)) - 39);
+			increase = number_range(1,3);
+                        xp_gain = (long double)increase / 200 * statComb;
+			gain_exp(ch, xp_gain);
 			ch->mana += (float) right / 50 * ch->max_mana;
 		} else {
 			send_to_char
@@ -6318,6 +6388,26 @@ do_hyper(CHAR_DATA * ch, char *argument)
 				"You are unable to call upon those powers while you know mystic.\n\r");
 			return;
 		}
+	}
+	if (get_curr_str(ch) < 300)
+	{
+		send_to_char("Someday--with the right training--you feel you may be ready to use this technique.\n\r", ch);
+		return;
+	}
+	if (get_curr_int(ch) < 300)
+	{
+		send_to_char("Someday--with the right training--you feel you may be ready to use this technique.\n\r", ch);
+		return;
+	}
+	if (get_curr_dex(ch) < 100)
+	{
+		send_to_char("Someday--with the right training--you feel you may be ready to use this technique.\n\r", ch);
+		return;
+	}
+	if (get_curr_con(ch) < 800)
+	{
+		send_to_char("Someday--with the right training--you feel you may be ready to use this technique.\n\r", ch);
+		return;
 	}
 	if (wearing_chip(ch)) {
 		ch_printf(ch, "You can't while you have a chip installed.\n\r");
@@ -10182,6 +10272,8 @@ void
 do_mystic(CHAR_DATA * ch, char *argument)
 {
 	int kicontrol = 0;
+	
+	kicontrol = get_curr_int(ch);
 
 	if (IS_NPC(ch) && is_split(ch)) {
 		if (!ch->master)
@@ -10196,6 +10288,11 @@ do_mystic(CHAR_DATA * ch, char *argument)
 				"You don't know how to use this technique.\n\r");
 			return;
 		}
+	}
+	if (kicontrol < 1500)
+	{
+		send_to_char("Your mastery over your own mind is too lacking to use this ability.\n\r", ch);
+		return;
 	}
 	if (wearing_chip(ch)) {
 		ch_printf(ch, "You can't while you have a chip installed.\n\r");
@@ -10212,7 +10309,6 @@ do_mystic(CHAR_DATA * ch, char *argument)
 	if (xIS_SET(ch->affected_by, AFF_KAIOKEN))
 		xREMOVE_BIT(ch->affected_by, AFF_KAIOKEN);
 
-	kicontrol = get_curr_int(ch);
 	double 	pl_mult = 0;
 	int 	arg;
 
@@ -10945,6 +11041,11 @@ do_ussj(CHAR_DATA * ch, char *argument)
 			return;
 		}
 	}
+	if (get_curr_str(ch) < 750)
+	{
+		send_to_char("Your muscles can't possibly contain that much energy.\n\r", ch);
+		return;
+	}
 	if (wearing_chip(ch)) {
 		ch_printf(ch, "You can't while you have a chip installed.\n\r");
 		return;
@@ -11040,6 +11141,11 @@ do_ussj2(CHAR_DATA * ch, char *argument)
 				"You are unable to call upon those powers while you know mystic.\n\r");
 			return;
 		}
+	}
+	if (get_curr_str(ch) < 1000)
+	{
+		send_to_char("Your muscles can't possibly contain that much energy.\n\r", ch);
+		return;
 	}
 	if (wearing_chip(ch)) {
 		ch_printf(ch, "You can't while you have a chip installed.\n\r");
@@ -11147,6 +11253,26 @@ do_extreme(CHAR_DATA * ch, char *argument)
 				"You are unable to call upon those powers while you know mystic.\n\r");
 			return;
 		}
+	}
+	if (get_curr_str(ch) < 600)
+	{
+		send_to_char("Someday--with the right training--you feel you may be ready to use this technique.\n\r", ch);
+		return;
+	}
+	if (get_curr_int(ch) < 600)
+	{
+		send_to_char("Someday--with the right training--you feel you may be ready to use this technique.\n\r", ch);
+		return;
+	}
+	if (get_curr_dex(ch) < 250)
+	{
+		send_to_char("Someday--with the right training--you feel you may be ready to use this technique.\n\r", ch);
+		return;
+	}
+	if (get_curr_con(ch) < 1600)
+	{
+		send_to_char("Someday--with the right training--you feel you may be ready to use this technique.\n\r", ch);
+		return;
 	}
 	if (wearing_chip(ch)) {
 		ch_printf(ch, "You can't while you have a chip installed.\n\r");

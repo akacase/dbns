@@ -490,8 +490,8 @@ gain_exp(CHAR_DATA * ch, long double gain)
 	if (ch->max_hit != (ch->perm_con + 90))
 		ch->max_hit = (ch->perm_con + 90);
 	/* Check to gain more ki on gaining pl */
-	if (ch->max_mana != ((ch->perm_int * 6) + (ch->perm_con * 2) + (ch->perm_dex) + (ch->perm_str)))
-		ch->max_mana = ((ch->perm_int * 6) + (ch->perm_con * 2) + (ch->perm_dex) + (ch->perm_str));
+	if (ch->max_mana != ((ch->perm_int * 12) + (ch->perm_con * 4) + (ch->perm_dex * 2) + (ch->perm_str * 2)))
+		ch->max_mana = ((ch->perm_int * 12) + (ch->perm_con * 4) + (ch->perm_dex * 2) + (ch->perm_str * 2));
 }
 
 /*
