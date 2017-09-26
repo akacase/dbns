@@ -543,7 +543,7 @@ game_loop()
 				/* exceptional state, fquit */
 				if (d->character) {
 					log_string("preparing to fquit comm.c:652\n");
-					fquit(d->character);
+					close_socket(d, true, false);
 					continue;
 				}
 				d->outtop = 0;
