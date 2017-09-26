@@ -480,7 +480,7 @@ mptransfer $n 6000
 mpat 6000 mpforce $n look
 else
 mpecho &CA mysterious voice says 'Your training is still incomplete.'
-mpecho &CThe voice continues, 'Return here when you've reached at least 50,000 Powerlevel.'
+mpecho &CA mysterious voice says, 'Return here when you've reached at least 5,000 Powerlevel.'
 endif
 ~
 |
