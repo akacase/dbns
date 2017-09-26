@@ -62,7 +62,7 @@ A better android training partner is prepared to fight you.
 1 0 100 1d20+0 2d5+0
 -1 50
 112 112 0
-20 10 20 10 10
+10 10 10 10 10
 0 0 0 0 0
 0 0 0 0 1 1 0
 0 0 0 0 0 0 0 0
@@ -237,7 +237,7 @@ The Gravity Serv-O-Bot floats around aimlessly in the chamber.
 112 112 0
 10 10 10 10 0
 0 0 0 0 0
-4 4 0 0 0 0 0
+4 4 0 0 1 1 0
 0 0 0 0 0 0 0 0
 > greet_prog 100~
 if pl($n) < 50
