@@ -43,7 +43,7 @@ A mechanical upgrade chamber sits here.
 ~
 ~
 67109379 0 0 C
-1
+250
 1 0 100 1d20+0 2d5+0
 -1 1
 112 112 0
@@ -58,11 +58,11 @@ A better android training partner is prepared to fight you.
 ~
 ~
 3 0 0 C
-13
+100
 1 0 100 1d20+0 2d5+0
 -1 50
 112 112 0
-10 10 10 10 10
+20 10 20 10 10
 0 0 0 0 0
 0 0 0 0 1 1 0
 0 0 0 0 0 0 0 0
@@ -78,11 +78,11 @@ An advanced android training partner is prepared to fight you.
 ~
 ~
 3 0 0 C
-16
+125
 1 0 100 1d20+0 2d5+0
 -1 150
 112 112 0
-10 10 10 10 10
+40 10 40 10 10
 0 0 0 0 0
 0 0 0 0 1 1 0
 0 0 0 0 0 0 0 0
@@ -98,11 +98,11 @@ A hyper android training partner is prepared to fight you.
 ~
 ~
 3 0 0 C
-19
+150
 1 0 100 1d20+0 2d5+0
 -1 450
 112 112 0
-10 10 10 10 10
+60 10 60 10 10
 0 0 0 0 0
 0 0 0 0 1 1 0
 0 0 0 0 0 0 0 0
@@ -118,11 +118,11 @@ A supreme android training partner is prepared to fight you.
 ~
 ~
 3 0 0 C
-22
+175
 1 0 100 1d20+0 2d5+0
 -1 1350
 112 112 0
-10 10 10 10 10
+80 10 80 10 10
 0 0 0 0 0
 0 0 0 0 1 1 0
 0 0 0 0 0 0 0 0
@@ -138,11 +138,11 @@ An ultimate android training partner is prepared to fight you.
 ~
 ~
 3 0 0 C
-25
+200
 1 0 100 1d20+0 2d5+0
 -1 4050
 112 112 0
-10 10 10 10 10
+100 10 100 10 10
 0 0 0 0 0
 0 0 0 0 1 1 0
 0 0 0 0 0 0 0 0
@@ -201,6 +201,53 @@ The Intro Shopkeeper stands here peddling his wares.
 0 0 0 0 0
 0 0 0 0 1 1 0
 0 0 0 0 0 0 0 0
+#110
+newbie servobot~
+The Newbie Serv-O-Bot~
+The Newbie Serv-O-Bot hovers here, ready to assist.
+~
+~
+67108867 0 0 C
+0
+1 0 100 1d20+0 2d5+0
+-1 1
+112 112 0
+10 10 10 10 0
+0 0 0 0 0
+4 4 0 0 1 1 0
+0 0 0 0 0 0 0 0
+> greet_prog 100~
+if pl($n) < 50
+say Greetings, $n. The tower above will provide combat training, but it appears you still require basic training.
+peer $n
+say Seek the gravity chamber in the west section, or you will surely be horribly, horrifically -- [REDACTED}
+endif
+~
+|
+#111
+gravity servobot~
+The Gravity Serv-O-Bot~
+The Gravity Serv-O-Bot floats around aimlessly in the chamber.
+~
+~
+67108867 0 0 C
+0
+1 0 100 1d20+0 2d5+0
+-1 1
+112 112 0
+10 10 10 10 0
+0 0 0 0 0
+4 4 0 0 0 0 0
+0 0 0 0 0 0 0 0
+> greet_prog 100~
+if pl($n) < 50
+say Hello, $n! For assistance with gravity, please refer to 'help gravity'.
+ponder
+say You may feel yourself not increasing in power at first, but this is normal.
+say Keep at it, and I'm certain your meatbag body will positively FLOW with power.
+endif
+~
+|
 #199
 last mob~
 a newly created last mob~
@@ -342,10 +389,10 @@ D5
 S
 #104
 Lesson 3a - Fighting~
-Here you will practice actual combat.  The android here is programmed to
-help you learn how to fight.  Just type "kill android" to begin battle.  If
-this android becomes too easy, more await you in the training chambers
-above.  If you require skill training, a master awaits you to the east. 
+In the tower above you will practice actual combat, provided you're
+powerful enough.  The androids here are programmed to help you learn how to
+fight.  Just type "kill android to begin a battle.  If you require skill
+training, a master awaits you to the east. 
 ~
 0 4 0
 D1
@@ -360,10 +407,6 @@ D4
 ~
 ~
 0 -1 111
-D5
-~
-~
-0 -1 117
 S
 #105
 Break Room - The Healing Tanks~
@@ -658,19 +701,7 @@ help you learn how to fight.  Just type "kill android" to begin battle.  If
 this android becomes too easy, more await you in the training chambers
 above.
 ~
-0 0 0
-D1
-~
-~
-0 -1 119
-D3
-~
-~
-0 -1 118
-D4
-~
-~
-0 -1 104
+0 4 0
 S
 #118
 Lesson 3a - Fighting~
@@ -679,11 +710,7 @@ help you learn how to fight.  Just type "kill android" to begin battle.  If
 this android becomes too easy, more await you in the training chambers
 above.
 ~
-0 0 0
-D1
-~
-~
-0 -1 117
+0 4 0
 S
 #119
 Lesson 3a - Fighting~
@@ -692,11 +719,7 @@ help you learn how to fight.  Just type "kill android" to begin battle.  If
 this android becomes too easy, more await you in the training chambers
 above.
 ~
-0 0 0
-D3
-~
-~
-0 -1 117
+0 4 0
 S
 #121
 Combat Chamber Level 1-2~
@@ -848,10 +871,6 @@ S
 #RESETS
 M 1 101 1 109
 M 1 107 1 116
-M 1 108 1 104
-M 1 108 1 119
-M 1 108 1 117
-M 1 108 1 118
 M 1 102 1 121
 M 1 102 1 111
 M 1 103 1 122
@@ -862,6 +881,8 @@ M 1 105 1 124
 M 1 105 1 114
 M 1 106 1 125
 M 1 106 1 115
+M 1 110 1 104
+M 1 111 1 108
 S
 
 
