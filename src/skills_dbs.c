@@ -4811,7 +4811,7 @@ do_energy_ball(CHAR_DATA * ch, char *argument)
 	sh_int 	z = get_aura(ch);
 
 	if (can_use_skill(ch, number_percent(), gsn_energy_ball)) {
-		dam = get_attmod(ch, victim) * number_range(6, 8);
+		dam = get_attmod(ch, victim) * (number_range(6, 8) + (get_curr_int(ch) / 50));
 		if (ch->charge > 0)
 			dam = chargeDamMult(ch, dam);
 		act(z, "You hit $N with an energy ball. &W[$t]", ch,
@@ -4823,6 +4823,7 @@ do_energy_ball(CHAR_DATA * ch, char *argument)
 		dam = ki_absorb(victim, ch, dam, gsn_energy_ball);
 		learn_from_success(ch, gsn_energy_ball);
 		global_retcode = damage(ch, victim, dam, TYPE_HIT);
+		stat_train(ch, "int", 5);
 	} else {
 		act(z, "You missed $N with your energy ball.", ch, NULL, victim,
 		    TO_CHAR);
@@ -5496,10 +5497,10 @@ do_meditate(CHAR_DATA * ch, char *argument)
 			    ("&wYou meditate peacefully, collecting energy from the cosmos\n\r",
 			    ch);
 			learn_from_success(ch, gsn_meditate);
-			stat_train(ch, "int", 30);
+			stat_train(ch, "int", 60);
 		        statComb = ((get_curr_str(ch) + get_curr_dex(ch) + get_curr_int(ch) + get_curr_con(ch)) - 39);
 			increase = number_range(1,3);
-			xp_gain = (long double)increase / 200 * statComb;
+			xp_gain = (long double)increase / 100 * statComb;
 			gain_exp(ch, xp_gain);
 			ch->mana += (float) right / 50 * ch->max_mana;
 		} else {
