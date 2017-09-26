@@ -415,6 +415,10 @@ While in this room your lifeforce and energy will go up two times faster
 than when you are not. 
 ~
 0 536870916 0
+D0
+~
+~
+0 -1 109
 D1
 ~
 ~
@@ -486,7 +490,7 @@ endif
 |
 S
 #108
-Gravity Chamber~
+Gravity Chamber 01~
 This room allows you to increase your stats and gain powerlevel by
 training in increased gravity.  To begin, type 'gravtrain <stat> <minutes'.
 One game minute is roughly equal to one second of real time. 
@@ -496,13 +500,24 @@ D0
 ~
 ~
 0 -1 105
+D3
+~
+~
+0 -1 126
 S
 #109
-Android Upgrade Chamber~
-Androids, lacking the ability to train in gravity, must use upgrade
-chambers such as the one here to increase their statistics. 
+Sparring Arena~
+A large elevated combat ring sits in the center of this room, covered in
+chunks of rubble.  This special place allows you to engage in combat with
+other players, provided you are both above 5000 base Power Level.  To
+begin, you must both choose your partner with 'partner <player>' then begin
+combat with 'spar <player>'. 
 ~
-0 4 0
+0 67108868 0
+D2
+~
+~
+0 -1 105
 S
 #110
 Room 11~
@@ -860,6 +875,50 @@ mpecho &CA robotic voice says, '4050 powerlevel.'&D
 ~
 |
 S
+#126
+Gravity Chamber 02~
+This room allows you to increase your stats and gain powerlevel by
+training in increased gravity.  To begin, type 'gravtrain <stat> <minutes'.
+One game minute is roughly equal to one second of real time. 
+~
+0 268435456 0
+D1
+~
+~
+0 -1 108
+D3
+~
+~
+0 -1 127
+S
+#127
+Gravity Chamber 03~
+This room allows you to increase your stats and gain powerlevel by
+training in increased gravity.  To begin, type 'gravtrain <stat> <minutes'.
+One game minute is roughly equal to one second of real time. 
+~
+0 268435456 0
+D1
+~
+~
+0 -1 126
+D3
+~
+~
+0 -1 128
+S
+#128
+Gravity Chamber 04~
+This room allows you to increase your stats and gain powerlevel by
+training in increased gravity.  To begin, type 'gravtrain <stat> <minutes'.
+One game minute is roughly equal to one second of real time. 
+~
+0 268435456 0
+D1
+~
+~
+0 -1 127
+S
 #199
 Floating in a void~
 ~
@@ -869,7 +928,6 @@ S
 
 
 #RESETS
-M 1 101 1 109
 M 1 107 1 116
 M 1 102 1 121
 M 1 102 1 111
