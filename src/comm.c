@@ -1692,14 +1692,23 @@ nanny(DESCRIPTOR_DATA * d, char *argument)
 			return;
 		}
 
-		if (i_class != 28 && i_class != 29 && i_class != 30)
-			if (i_class > 8
-			    || !class_table[i_class]->who_name
-			    || class_table[i_class]->who_name[0] == '\0'
-			    || !str_cmp(class_table[i_class]->who_name, "unused")) {
-				send_to_desc_color("&wThat's not a race.\n\rWhat IS your race? &D", d);
-				return;
-			}
+		if (i_class != 28 && i_class != 29 && i_class != 30) {
+		    if (i_class > 8
+		      || !class_table[i_class]->who_name
+		      || class_table[i_class]->who_name[0] == '\0'
+		      || !str_cmp(class_table[i_class]->who_name, "unused")) {
+			send_to_desc_color("&wThat's not a race.\n\rWhat IS your race? &D", d);
+			return;
+		    }
+		}
+		if (!str_cmp(class_table[i_class]->who_name, "bio-android")
+		  || !str_cmp(class_table[i_class]->who_name, "demon")
+		  || !str_cmp(class_table[i_class]->who_name, "android-e")
+		  || !str_cmp(class_table[i_class]->who_name, "android-h")
+		  || !str_cmp(class_table[i_class]->who_name, "android-fm")) {
+		    send_to_desc_color("&wThat race is currently disabled.\n\rPlease select a different race. &D", d);
+                    return;
+		}
 		if (ch->race == 3 || ch->race == 5 || ch->race == 6) {
 			ch->pcdata->haircolor = 24;
 			ch->pcdata->orignalhaircolor = 24;
