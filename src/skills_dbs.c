@@ -4878,7 +4878,7 @@ do_kamehameha(CHAR_DATA * ch, char *argument)
 
 	WAIT_STATE(ch, skill_table[gsn_kamehameha]->beats);
 	if (can_use_skill(ch, number_percent(), gsn_kamehameha)) {
-		dam = get_attmod(ch, victim) * number_range(20, 25);
+		dam = get_attmod(ch, victim) * (number_range(20, 25) + (get_curr_int(ch) / 40));
 		if (ch->charge > 0)
 			dam = chargeDamMult(ch, dam);
 		act(AT_LBLUE,
@@ -4903,6 +4903,7 @@ do_kamehameha(CHAR_DATA * ch, char *argument)
 		dam = ki_absorb(victim, ch, dam, gsn_kamehameha);
 		learn_from_success(ch, gsn_kamehameha);
 		global_retcode = damage(ch, victim, dam, TYPE_HIT);
+		stat_train(ch, "int", 8);
 	} else {
 		act(AT_LBLUE, "You missed $N with your kamehameha.", ch, NULL,
 		    victim, TO_CHAR);
@@ -4954,7 +4955,7 @@ do_masenko(CHAR_DATA * ch, char *argument)
 
 	WAIT_STATE(ch, skill_table[gsn_masenko]->beats);
 	if (can_use_skill(ch, number_percent(), gsn_masenko)) {
-		dam = get_attmod(ch, victim) * number_range(10, 16);
+		dam = get_attmod(ch, victim) * (number_range(10, 16) + (get_curr_int(ch) / 45));
 		if (ch->charge > 0)
 			dam = chargeDamMult(ch, dam);
 		act(AT_YELLOW,
@@ -4979,6 +4980,7 @@ do_masenko(CHAR_DATA * ch, char *argument)
 		dam = ki_absorb(victim, ch, dam, gsn_masenko);
 		learn_from_success(ch, gsn_masenko);
 		global_retcode = damage(ch, victim, dam, TYPE_HIT);
+		stat_train(ch, "int", 6);
 	} else {
 		act(AT_YELLOW, "You missed $N with your masenko blast.", ch,
 		    NULL, victim, TO_CHAR);
@@ -5030,7 +5032,7 @@ do_sbc(CHAR_DATA * ch, char *argument)
 
 	WAIT_STATE(ch, skill_table[gsn_sbc]->beats);
 	if (can_use_skill(ch, number_percent(), gsn_sbc)) {
-		dam = get_attmod(ch, victim) * number_range(22, 26);
+		dam = get_attmod(ch, victim) * (number_range(22, 26) + (get_curr_int(ch) / 40));
 		if (ch->charge > 0)
 			dam = chargeDamMult(ch, dam);
 		act(AT_YELLOW,
@@ -5058,6 +5060,7 @@ do_sbc(CHAR_DATA * ch, char *argument)
 		dam = ki_absorb(victim, ch, dam, gsn_sbc);
 		learn_from_success(ch, gsn_sbc);
 		global_retcode = damage(ch, victim, dam, TYPE_HIT);
+		stat_train(ch, "int", 8);
 	} else {
 		act(AT_YELLOW, "You missed $N with your special beam cannon.",
 		    ch, NULL, victim, TO_CHAR);
@@ -5109,7 +5112,7 @@ do_dd(CHAR_DATA * ch, char *argument)
 
 	WAIT_STATE(ch, skill_table[gsn_dd]->beats);
 	if (can_use_skill(ch, number_percent(), gsn_dd)) {
-		dam = get_attmod(ch, victim) * number_range(12, 18);
+		dam = get_attmod(ch, victim) * (number_range(12, 18) + (get_curr_int(ch) / 45));
 		if (ch->charge > 0)
 			dam = chargeDamMult(ch, dam);
 		act(AT_YELLOW,
@@ -5136,6 +5139,7 @@ do_dd(CHAR_DATA * ch, char *argument)
 
 		learn_from_success(ch, gsn_dd);
 		global_retcode = damage(ch, victim, dam, TYPE_HIT);
+		stat_train(ch, "int", 6);
 	} else {
 		act(AT_YELLOW, "You missed $N with your destructo disk.", ch,
 		    NULL, victim, TO_CHAR);
@@ -5188,7 +5192,7 @@ do_ff(CHAR_DATA * ch, char *argument)
 
 	WAIT_STATE(ch, skill_table[gsn_ff]->beats);
 	if (can_use_skill(ch, number_percent(), gsn_ff)) {
-		dam = get_attmod(ch, victim) * number_range(56, 62);
+		dam = get_attmod(ch, victim) * (number_range(56, 62) + (get_curr_int(ch) / 20));
 		if (ch->charge > 0)
 			dam = chargeDamMult(ch, dam);
 		act(AT_YELLOW,
@@ -5211,6 +5215,7 @@ do_ff(CHAR_DATA * ch, char *argument)
 		    ch, num_punct(dam), victim, TO_NOTVICT);
 		learn_from_success(ch, gsn_ff);
 		global_retcode = damage(ch, victim, dam, TYPE_HIT);
+		stat_train(ch, "int", 12);
 	} else {
 		act(AT_YELLOW, "You missed $N with your final flash.", ch, NULL,
 		    victim, TO_CHAR);
@@ -5658,6 +5663,7 @@ do_scatter_shot(CHAR_DATA * ch, char *arg)
 		    TO_NOTVICT, buf2);
 
 		learn_from_success(ch, gsn_scatter_shot);
+		stat_train(ch, "int", 6);
 		global_retcode =
 		    damage(ch, victim,
 		    (get_attmod(ch, victim) * dam * damPerShot),
@@ -5826,74 +5832,7 @@ do_ddd(CHAR_DATA * ch, char *argument)
 
 	WAIT_STATE(ch, skill_table[gsn_ddd]->beats);
 	if (can_use_skill(ch, number_percent(), gsn_ddd)) {
-		switch (number_range(1, 100)) {
-		case 100:
-		case 99:
-			if (IS_NPC(victim)
-			    || (!IS_NPC(victim)
-				&& (!xIS_SET(ch->act, PLR_SPAR)
-				    || !xIS_SET(ch->act, PLR_SPAR)))) {
-
-				/*
-				 * Redone so that instant death can't be
-				 * abused to instant kill players over 2x
-				 * their power. -- Islvin
-				 */
-				if (victim->pl / ch->pl >= 2) {
-					act(AT_RED,
-					    "You charge two spinning energy disks above your head and hurl them towards $N.",
-					    ch, NULL, victim, TO_CHAR);
-					act(AT_RED,
-					    "They fly staight towards $N, but their damage is absorbed by $s powerful aura.",
-					    ch, NULL, victim, TO_CHAR);
-					act(AT_RED,
-					    "$n charges two spinning energy disks above $s head and hurls them towards you.",
-					    ch, NULL, victim, TO_VICT);
-					act(AT_RED,
-					    "They fly staight towards you, but their damage is absorbed by your powerful aura.",
-					    ch, NULL, victim, TO_VICT);
-					act(AT_RED,
-					    "$n charges two spinning energy disks above $s head and hurl them towards $N.",
-					    ch, NULL, victim, TO_NOTVICT);
-					act(AT_RED,
-					    "They fly staight towards $N, but their damage is absorbed by $s powerful aura.",
-					    ch, NULL, victim, TO_NOTVICT);
-					dam = 0;
-					break;
-				}
-/* Redone so it _is_ instant death -- Melora
- * 	if (victim->max_hit >= victim->hit)
- * 		dam = victim->max_hit * 2;
- * 	else
- * 		dam = victim->hit * 2;
- */
-				dam = 999999999;
-				act(AT_RED,
-				    "You charge two spinning energy disks above your head and hurl them towards $N.",
-				    ch, NULL, victim, TO_CHAR);
-				act(AT_DGREY,
-				    "THEY BOTH CUT STRAIGHT THROUGH $N!!!  Killing $M instantly.",
-				    ch, NULL, victim, TO_CHAR);
-				act(AT_RED,
-				    "$n charges two spinning energy disks above $s head and hurls them towards you.",
-				    ch, NULL, victim, TO_VICT);
-				act(AT_DGREY,
-				    "THEY BOTH CUT STRAIGHT THROUGH YOU!!!  Killing you instantly.",
-				    ch, NULL, victim, TO_VICT);
-				act(AT_RED,
-				    "$n charges two spinning energy disks above $s head and hurl them towards $N.",
-				    ch, NULL, victim, TO_NOTVICT);
-				act(AT_DGREY,
-				    "THEY BOTH CUT STRAIGHT THROUGH $N!!!  Killing $M instantly.",
-				    ch, NULL, victim, TO_NOTVICT);
-
-				learn_from_success(ch, gsn_ddd);
-				global_retcode =
-				    damage(ch, victim, dam, TYPE_HIT);
-				break;
-			}
-		default:
-			dam = get_attmod(ch, victim) * number_range(24, 30);
+			dam = get_attmod(ch, victim) * (number_range(24, 30) + (get_curr_int(ch) / 35));
 			if (ch->charge > 0)
 				dam = chargeDamMult(ch, dam);
 			act(AT_RED,
@@ -5908,9 +5847,9 @@ do_ddd(CHAR_DATA * ch, char *argument)
 
 			learn_from_success(ch, gsn_ddd);
 			global_retcode = damage(ch, victim, dam, TYPE_HIT);
-			break;
+			stat_train(ch, "int", 8);
 		}
-	} else {
+	else {
 		act(AT_RED, "You missed $N with your dual destructo disk.", ch,
 		    NULL, victim, TO_CHAR);
 		act(AT_RED, "$n misses you with $s dual destructo disk.", ch,
@@ -5962,77 +5901,7 @@ do_death_ball(CHAR_DATA * ch, char *argument)
 
 	WAIT_STATE(ch, skill_table[gsn_death_ball]->beats);
 	if (can_use_skill(ch, number_percent(), gsn_death_ball)) {
-		switch (number_range(1, 100)) {
-		case 100:
-		case 99:
-			if (IS_NPC(victim)
-			    || (!IS_NPC(victim)
-				&& (!xIS_SET(ch->act, PLR_SPAR)
-				    || !xIS_SET(ch->act, PLR_SPAR)))) {
-
-				/*
-				 * Redone so it can't be used to kill
-				 * players above 5x their pl. Was going to
-				 * do 2x like DDD, but if I did that, it'd
-				 * remove the challenge from Coolers. --
-				 * Islvin
-				 */
-				if (victim->pl / ch->pl >= 2) {
-					act(AT_ORANGE,
-					    "You charge a huge ball of energy on the tip of your finger and then direct it quickly towards $n.",
-					    ch, NULL, victim, TO_CHAR);
-					act(AT_RED,
-					    "$n is enveloped by the death ball, but when all is done, seems unaffected.",
-					    ch, NULL, victim, TO_CHAR);
-					act(AT_ORANGE,
-					    "$n charges a huge ball of energy on the tip of $s finger and then directs it quickly towards you.",
-					    ch, NULL, victim, TO_VICT);
-					act(AT_RED,
-					    "You are enveloped by the death ball, but seem unaffected when it's over.",
-					    ch, NULL, victim, TO_VICT);
-					act(AT_ORANGE,
-					    "$n charges a huge ball of energy on the tip of $s finger and then directs it quickly towards $N.",
-					    ch, NULL, victim, TO_NOTVICT);
-					act(AT_RED,
-					    "$N is enveloped by the death ball, but when all is done, seems unaffected.",
-					    ch, NULL, victim, TO_NOTVICT);
-					dam = 0;
-					break;
-				}
-/* Redo damage so it _is_ instant death
- * Melora
- * 	if (victim->max_hit >= victim->hit)
- * 		dam = victim->max_hit * 2;
- * 	else
- * 		dam = victim->hit * 2;
- */
-				dam = 999999999;
-				act(AT_ORANGE,
-				    "You charge a huge ball of energy on the tip of your finger and then direct it quickly towards $N.",
-				    ch, NULL, victim, TO_CHAR);
-				act(AT_RED,
-				    "$N is slowly enveloped by the death ball, killing $M instantly.",
-				    ch, NULL, victim, TO_CHAR);
-				act(AT_ORANGE,
-				    "$n charges a huge ball of energy on the tip of $s finger and then directs it quickly towards you.",
-				    ch, NULL, victim, TO_VICT);
-				act(AT_RED,
-				    "You are slowly enveloped by the death ball, killing you instantly.",
-				    ch, NULL, victim, TO_VICT);
-				act(AT_ORANGE,
-				    "$n charges a huge ball of energy on the tip of $s finger and then directs it quickly towards $N.",
-				    ch, NULL, victim, TO_NOTVICT);
-				act(AT_RED,
-				    "$N is slowly enveloped by the death ball, killing $M instantly.",
-				    ch, NULL, victim, TO_NOTVICT);
-
-				learn_from_success(ch, gsn_death_ball);
-				global_retcode =
-				    damage(ch, victim, dam, TYPE_HIT);
-				break;
-			}
-		default:
-			dam = get_attmod(ch, victim) * number_range(55, 65);
+			dam = get_attmod(ch, victim) * (number_range(55, 65) + (get_curr_int(ch) / 20));
 			if (ch->charge > 0)
 				dam = chargeDamMult(ch, dam);
 			act(AT_ORANGE,
@@ -6047,6 +5916,7 @@ do_death_ball(CHAR_DATA * ch, char *argument)
 
 			learn_from_success(ch, gsn_death_ball);
 			global_retcode = damage(ch, victim, dam, TYPE_HIT);
+			stat_train(ch, "int", 12);
 			break;
 		}
 	} else {
@@ -6102,7 +5972,7 @@ do_eye_beam(CHAR_DATA * ch, char *argument)
 
 	WAIT_STATE(ch, skill_table[gsn_eye_beam]->beats);
 	if (can_use_skill(ch, number_percent(), gsn_eye_beam)) {
-		dam = get_attmod(ch, victim) * number_range(12, 14);
+		dam = get_attmod(ch, victim) * (number_range(12, 14) + (get_curr_int(ch) / 45));
 		if (ch->charge > 0)
 			dam = chargeDamMult(ch, dam);
 		act(z,
@@ -6118,6 +5988,7 @@ do_eye_beam(CHAR_DATA * ch, char *argument)
 		dam = ki_absorb(victim, ch, dam, gsn_eye_beam);
 		learn_from_success(ch, gsn_eye_beam);
 		global_retcode = damage(ch, victim, dam, TYPE_HIT);
+		stat_train(ch, "int", 6);
 	} else {
 		act(z, "You missed $N with your eye beam.", ch, NULL, victim,
 		    TO_CHAR);
@@ -6174,7 +6045,7 @@ do_finger_beam(CHAR_DATA * ch, char *argument)
 
 	WAIT_STATE(ch, skill_table[gsn_finger_beam]->beats);
 	if (can_use_skill(ch, number_percent(), gsn_finger_beam)) {
-		dam = get_attmod(ch, victim) * number_range(16, 22);
+		dam = get_attmod(ch, victim) * (number_range(16, 22) + (get_curr_int(ch) / 40));
 		if (ch->charge > 0)
 			dam = chargeDamMult(ch, dam);
 		act(z,
@@ -6190,6 +6061,7 @@ do_finger_beam(CHAR_DATA * ch, char *argument)
 		dam = ki_absorb(victim, ch, dam, gsn_finger_beam);
 		learn_from_success(ch, gsn_finger_beam);
 		global_retcode = damage(ch, victim, dam, TYPE_HIT);
+		stat_train(ch, "int", 8);
 	} else {
 		act(z, "You missed $N with your finger beam.", ch, NULL, victim,
 		    TO_CHAR);
@@ -6245,7 +6117,7 @@ do_tribeam(CHAR_DATA * ch, char *argument)
 		/*
 		   dam = get_attmod(ch, victim) * number_range( 34, 40 );
 		 */
-		dam = get_attmod(ch, victim) * number_range(52, 56);
+		dam = get_attmod(ch, victim) * (number_range(52, 56) + (get_curr_int(ch) / 20));
 		if (ch->charge > 0)
 			dam = chargeDamMult(ch, dam);
 /*	act( AT_SKILL, "You form your fingers into a triangle, spotting $N in your sights before pummeling $M with a powerfull beam of inner energy. &W[$t]", ch, num_punct(dam), victim, TO_CHAR );
@@ -6276,6 +6148,7 @@ do_tribeam(CHAR_DATA * ch, char *argument)
 
 		learn_from_success(ch, gsn_tribeam);
 		global_retcode = damage(ch, victim, dam, TYPE_HIT);
+		stat_train(ch, "int", 12);
 	} else {
 		act(AT_YELLOW, "You missed $N with your tri-beam attack.", ch,
 		    NULL, victim, TO_CHAR);
@@ -8040,7 +7913,7 @@ do_destructive_wave(CHAR_DATA * ch, char *argument)
 
 	WAIT_STATE(ch, skill_table[gsn_destructive_wave]->beats);
 	if (can_use_skill(ch, number_percent(), gsn_destructive_wave)) {
-		dam = get_attmod(ch, victim) * number_range(15, 20);
+		dam = get_attmod(ch, victim) * (number_range(15, 20) + (get_curr_int(ch) / 45));
 		if (ch->charge > 0)
 			dam = chargeDamMult(ch, dam);
 		act(z,
@@ -8065,6 +7938,7 @@ do_destructive_wave(CHAR_DATA * ch, char *argument)
 		dam = ki_absorb(victim, ch, dam, gsn_destructive_wave);
 		learn_from_success(ch, gsn_destructive_wave);
 		global_retcode = damage(ch, victim, dam, TYPE_HIT);
+		stat_train(ch, "int", 8);
 	} else {
 		act(z, "You missed $N with your destructive wave attack.", ch,
 		    NULL, victim, TO_CHAR);
@@ -8119,7 +7993,7 @@ do_dodon_ray(CHAR_DATA * ch, char *argument)
 
 	WAIT_STATE(ch, skill_table[gsn_dodon_ray]->beats);
 	if (can_use_skill(ch, number_percent(), gsn_dodon_ray)) {
-		dam = get_attmod(ch, victim) * number_range(22, 26);
+		dam = get_attmod(ch, victim) * (number_range(22, 26) + (get_curr_int(ch) / 40));
 		if (ch->charge > 0)
 			dam = chargeDamMult(ch, dam);
 
@@ -8144,6 +8018,7 @@ do_dodon_ray(CHAR_DATA * ch, char *argument)
 
 		learn_from_success(ch, gsn_dodon_ray);
 		global_retcode = damage(ch, victim, dam, TYPE_HIT);
+		stat_train(ch, "int", 8);
 	} else {
 		act(z, "You missed $N with your dodon ray attack.", ch, NULL,
 		    victim, TO_CHAR);
@@ -8196,7 +8071,7 @@ do_spirit_ball(CHAR_DATA * ch, char *argument)
 
 	WAIT_STATE(ch, skill_table[gsn_spirit_ball]->beats);
 	if (can_use_skill(ch, number_percent(), gsn_spirit_ball)) {
-		dam = get_attmod(ch, victim) * number_range(26, 32);
+		dam = get_attmod(ch, victim) * (number_range(26, 32) + (get_curr_int(ch) / 35));
 		if (ch->charge > 0)
 			dam = chargeDamMult(ch, dam);
 
@@ -8221,6 +8096,7 @@ do_spirit_ball(CHAR_DATA * ch, char *argument)
 
 		learn_from_success(ch, gsn_spirit_ball);
 		global_retcode = damage(ch, victim, dam, TYPE_HIT);
+		stat_train(ch, "int", 8);
 	} else {
 		act(AT_YELLOW, "You missed $N with your spirit ball attack.",
 		    ch, NULL, victim, TO_CHAR);
@@ -8274,7 +8150,7 @@ do_shockwave(CHAR_DATA * ch, char *argument)
 
 	WAIT_STATE(ch, skill_table[gsn_shockwave]->beats);
 	if (can_use_skill(ch, number_percent(), gsn_shockwave)) {
-		dam = get_attmod(ch, victim) * number_range(22, 26);
+		dam = get_attmod(ch, victim) * (number_range(22, 26) + (get_curr_int(ch) / 40));
 		if (ch->charge > 0)
 			dam = chargeDamMult(ch, dam);
 		act(z,
@@ -8299,6 +8175,7 @@ do_shockwave(CHAR_DATA * ch, char *argument)
 		dam = ki_absorb(victim, ch, dam, gsn_shockwave);
 		learn_from_success(ch, gsn_shockwave);
 		global_retcode = damage(ch, victim, dam, TYPE_HIT);
+		stat_train(ch, "int", 8);
 	} else {
 		act(z, "You missed $N with your shockwave.", ch, NULL, victim,
 		    TO_CHAR);
@@ -8352,7 +8229,7 @@ do_psiblast(CHAR_DATA * ch, char *argument)
 
 	WAIT_STATE(ch, skill_table[gsn_psiblast]->beats);
 	if (can_use_skill(ch, number_percent(), gsn_psiblast)) {
-		dam = get_attmod(ch, victim) * number_range(33, 40);
+		dam = get_attmod(ch, victim) * (number_range(33, 40) + (get_curr_int(ch) / 30));
 		if (ch->charge > 0)
 			dam = chargeDamMult(ch, dam);
 
@@ -8369,6 +8246,7 @@ do_psiblast(CHAR_DATA * ch, char *argument)
 		dam = ki_absorb(victim, ch, dam, gsn_psiblast);
 		learn_from_success(ch, gsn_psiblast);
 		global_retcode = damage(ch, victim, dam, TYPE_HIT);
+		stat_train(ch, "int", 10);
 	} else {
 		act(z, "You missed $N with your psionic blast.", ch, NULL,
 		    victim, TO_CHAR);
@@ -8420,7 +8298,7 @@ do_divinewrath(CHAR_DATA * ch, char *argument)
 
 	WAIT_STATE(ch, skill_table[gsn_divine]->beats);
 	if (can_use_skill(ch, number_percent(), gsn_divine)) {
-		dam = get_attmod(ch, victim) * number_range(56, 62);
+		dam = get_attmod(ch, victim) * (number_range(56, 62) + (get_curr_int(ch) / 20));
 		if (ch->charge > 0)
 			dam = chargeDamMult(ch, dam);
 
@@ -8446,6 +8324,7 @@ do_divinewrath(CHAR_DATA * ch, char *argument)
 		dam = ki_absorb(victim, ch, dam, gsn_divine);
 		learn_from_success(ch, gsn_divine);
 		global_retcode = damage(ch, victim, dam, TYPE_HIT);
+		stat_train(ch, "int", 12);
 	} else {
 		act(AT_RED, "You missed $N with your divine wrath.", ch, NULL,
 		    victim, TO_CHAR);
@@ -8497,7 +8376,7 @@ do_big_bang(CHAR_DATA * ch, char *argument)
 
 	WAIT_STATE(ch, skill_table[gsn_big_bang]->beats);
 	if (can_use_skill(ch, number_percent(), gsn_big_bang)) {
-		dam = get_attmod(ch, victim) * number_range(33, 40);
+		dam = get_attmod(ch, victim) * (number_range(33, 40) + (get_curr_int(ch) / 30));
 		if (ch->charge > 0)
 			dam = chargeDamMult(ch, dam);
 
@@ -8523,6 +8402,7 @@ do_big_bang(CHAR_DATA * ch, char *argument)
 		dam = ki_absorb(victim, ch, dam, gsn_big_bang);
 		learn_from_success(ch, gsn_big_bang);
 		global_retcode = damage(ch, victim, dam, TYPE_HIT);
+		stat_train(ch, "int", 10);
 	} else {
 		act(AT_BLUE, "You missed $N with your big bang attack.", ch,
 		    NULL, victim, TO_CHAR);
@@ -8575,7 +8455,7 @@ do_gallic_gun(CHAR_DATA * ch, char *argument)
 
 	WAIT_STATE(ch, skill_table[gsn_gallic_gun]->beats);
 	if (can_use_skill(ch, number_percent(), gsn_gallic_gun)) {
-		dam = get_attmod(ch, victim) * number_range(29, 33);
+		dam = get_attmod(ch, victim) * (number_range(29, 33) + (get_curr_int(ch) / 35));
 		if (ch->charge > 0)
 			dam = chargeDamMult(ch, dam);
 
@@ -8601,6 +8481,7 @@ do_gallic_gun(CHAR_DATA * ch, char *argument)
 		dam = ki_absorb(victim, ch, dam, gsn_gallic_gun);
 		learn_from_success(ch, gsn_gallic_gun);
 		global_retcode = damage(ch, victim, dam, TYPE_HIT);
+		stat_train(ch, "int", 8);
 	} else {
 		act(AT_PURPLE, "You missed $N with your gallic gun attack.", ch,
 		    NULL, victim, TO_CHAR);
@@ -8654,7 +8535,7 @@ do_burning_attack(CHAR_DATA * ch, char *argument)
 
 	WAIT_STATE(ch, skill_table[gsn_burning_attack]->beats);
 	if (can_use_skill(ch, number_percent(), gsn_burning_attack)) {
-		dam = get_attmod(ch, victim) * number_range(24, 28);
+		dam = get_attmod(ch, victim) * (number_range(24, 28) + (get_curr_int(ch) / 35));
 		if (ch->charge > 0)
 			dam = chargeDamMult(ch, dam);
 
@@ -8679,6 +8560,7 @@ do_burning_attack(CHAR_DATA * ch, char *argument)
 
 		learn_from_success(ch, gsn_burning_attack);
 		global_retcode = damage(ch, victim, dam, TYPE_HIT);
+		stat_train(ch, "int", 8);
 	} else {
 		act(AT_YELLOW, "You missed $N with your burning attack.", ch,
 		    NULL, victim, TO_CHAR);
@@ -8732,7 +8614,7 @@ do_finishing_buster(CHAR_DATA * ch, char *argument)
 
 	WAIT_STATE(ch, skill_table[gsn_finishing_buster]->beats);
 	if (can_use_skill(ch, number_percent(), gsn_finishing_buster)) {
-		dam = get_attmod(ch, victim) * number_range(56, 60);
+		dam = get_attmod(ch, victim) * (number_range(58, 64) + (get_curr_int(ch) / 20));
 		if (ch->charge > 0)
 			dam = chargeDamMult(ch, dam);
 
@@ -8757,6 +8639,7 @@ do_finishing_buster(CHAR_DATA * ch, char *argument)
 
 		learn_from_success(ch, gsn_finishing_buster);
 		global_retcode = damage(ch, victim, dam, TYPE_HIT);
+		stat_train(ch, "int", 12);
 	} else {
 		act(AT_BLUE, "You missed $N with your finishing buster attack.",
 		    ch, NULL, victim, TO_CHAR);
@@ -8810,7 +8693,7 @@ do_heaven_splitter_cannon(CHAR_DATA * ch, char *argument)
 
 	WAIT_STATE(ch, skill_table[gsn_heaven_splitter_cannon]->beats);
 	if (can_use_skill(ch, number_percent(), gsn_heaven_splitter_cannon)) {
-		dam = get_attmod(ch, victim) * number_range(54, 58);
+		dam = get_attmod(ch, victim) * (number_range(60, 66) + (get_curr_int(ch) / 20));
 		if (ch->charge > 0)
 			dam = chargeDamMult(ch, dam);
 
@@ -8835,6 +8718,7 @@ do_heaven_splitter_cannon(CHAR_DATA * ch, char *argument)
 
 		learn_from_success(ch, gsn_heaven_splitter_cannon);
 		global_retcode = damage(ch, victim, dam, TYPE_HIT);
+		stat_train(ch, "int", 12);
 	} else {
 		act(AT_YELLOW,
 		    "You missed $N with your heaven-splitter cannon attack.",
@@ -9026,7 +8910,7 @@ do_makosen(CHAR_DATA * ch, char *argument)
 
 	WAIT_STATE(ch, skill_table[gsn_makosen]->beats);
 	if (can_use_skill(ch, number_percent(), gsn_makosen)) {
-		dam = get_attmod(ch, victim) * number_range(23, 27);
+		dam = get_attmod(ch, victim) * (number_range(23, 27) + (get_curr_int(ch) / 40));
 		if (ch->charge > 0)
 			dam = chargeDamMult(ch, dam);
 
@@ -9051,6 +8935,7 @@ do_makosen(CHAR_DATA * ch, char *argument)
 
 		learn_from_success(ch, gsn_makosen);
 		global_retcode = damage(ch, victim, dam, TYPE_HIT);
+		stat_train(ch, "int", 8);
 	} else {
 		act(AT_YELLOW, "You missed $N with your makosen attack.", ch,
 		    NULL, victim, TO_CHAR);
@@ -9102,7 +8987,7 @@ do_trap_ball(CHAR_DATA * ch, char *argument)
 
 	WAIT_STATE(ch, skill_table[gsn_trap_ball]->beats);
 	if (can_use_skill(ch, number_percent(), gsn_trap_ball)) {
-		dam = get_attmod(ch, victim) * number_range(32, 36);
+		dam = get_attmod(ch, victim) * (number_range(32, 36) + (get_curr_int(ch) / 35));
 		if (ch->charge > 0)
 			dam = chargeDamMult(ch, dam);
 
@@ -9136,6 +9021,7 @@ do_trap_ball(CHAR_DATA * ch, char *argument)
 
 		learn_from_success(ch, gsn_trap_ball);
 		global_retcode = damage(ch, victim, dam, TYPE_HIT);
+		stat_train(ch, "int", 10);
 	} else {
 		act(AT_YELLOW, "You missed $N with your trap ball attack.", ch,
 		    NULL, victim, TO_CHAR);
