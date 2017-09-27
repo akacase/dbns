@@ -377,8 +377,8 @@ do_score(CHAR_DATA * ch, char *argument)
 		    xIS_SET(ch->act, PLR_AUTO_COMPASS) ? 'X' : ' ',
 		    xIS_SET(ch->act, PLR_AUTOGOLD) ? 'X' : ' ');
 	} else {
-		pager_printf_color(ch, "TRAIN: &G%-3d&C     &YLifeforce&C: [&Y%3d&C]%c              AutoCompass: (&W%c&C) AutoZeni: (&W%c&C)\n\r",
-		    ch->train, ch->hit, '%',
+		pager_printf_color(ch, "TRAIN: &G%-3d&C     &YLifeforce&C: [&Y%3d / %3d&C]              AutoCompass: (&W%c&C) AutoZeni: (&W%c&C)\n\r",
+				   ch->train, ch->hit, ch->max_hit,
 		    xIS_SET(ch->act, PLR_AUTO_COMPASS) ? 'X' : ' ',
 		    xIS_SET(ch->act, PLR_AUTOGOLD) ? 'X' : ' ');
 	}
