@@ -5902,23 +5902,25 @@ do_death_ball(CHAR_DATA * ch, char *argument)
 	WAIT_STATE(ch, skill_table[gsn_death_ball]->beats);
 	if (can_use_skill(ch, number_percent(), gsn_death_ball)) {
 			dam = get_attmod(ch, victim) * (number_range(55, 65) + (get_curr_int(ch) / 20));
-			if (ch->charge > 0)
-				dam = chargeDamMult(ch, dam);
-			act(AT_ORANGE,
+			if (ch->charge > 0) {
+			    dam = chargeDamMult(ch, dam);
+
+			    act(AT_ORANGE,
 			    "You raise your arm to the heavens, palm open. A swirling vortex of hellish light gathers into a ball, hovering lifelessly above. You point, effortlessly, at $N sending them to their impending demise. &W[$t]",
 			    ch, num_punct(dam), victim, TO_CHAR);
-			act(AT_ORANGE,
+
+			    act(AT_ORANGE,
 			    "$n raises $m arm to the heavens, palm open. A swirling vortex of hellish light gathers into a ball, hovering lifelessly above. $n points effortlessly, sending you to your impending demise. &W[$t]",
 			    ch, num_punct(dam), victim, TO_VICT);
-			act(AT_ORANGE,
+
+			    act(AT_ORANGE,
 			    "$n raises $m arm to the heavens, palm open. A swirling vortex of hellish light gathers into a ball, hovering lifelessly above. $n points effortlessly, at $N sending them to their impending demise. &W[$t]",
 			    ch, num_punct(dam), victim, TO_NOTVICT);
 
-			learn_from_success(ch, gsn_death_ball);
-			global_retcode = damage(ch, victim, dam, TYPE_HIT);
-			stat_train(ch, "int", 12);
-			break;
-		}
+			    learn_from_success(ch, gsn_death_ball);
+			    global_retcode = damage(ch, victim, dam, TYPE_HIT);
+			    stat_train(ch, "int", 12);
+			}
 	} else {
 		act(AT_ORANGE, "You missed $N with your death ball.", ch, NULL,
 		    victim, TO_CHAR);
