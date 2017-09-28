@@ -267,7 +267,7 @@ do_score(CHAR_DATA * ch, char *argument)
 		sprintf(buf, "&WERROR: Please report&C");
 
 	if (get_curr_con(ch) >= 100 || ch->perm_con >= 100)
-		pager_printf(ch, "CON  : &W%-3d&C(&w%3d.%2.2d&C)   Armor: &W%d, %s\n\r",
+		pager_printf(ch, "CON  : &W%-3d&C(&w%3d.%2.2d&C)  Armor: &W%d, %s\n\r",
 		    get_curr_con(ch), ch->perm_con, ch->pcdata->tCon, get_armor(ch), buf);
 	else
 		pager_printf(ch, "CON  : &W%-2d&C(&w%2d.%2.2d&C)   Armor: &W%d, %s\n\r",
@@ -378,7 +378,7 @@ do_score(CHAR_DATA * ch, char *argument)
 		    xIS_SET(ch->act, PLR_AUTOGOLD) ? 'X' : ' ');
 	} else {
 		pager_printf_color(ch, "&YLifeforce&C: [&Y%3d &C/ &Y%3d&C]         AutoCompass: (&W%c&C) AutoZeni: (&W%c&C)\n\r",
-				   ch->train, ch->hit, ch->max_hit,
+		    ch->hit, ch->max_hit,
 		    xIS_SET(ch->act, PLR_AUTO_COMPASS) ? 'X' : ' ',
 		    xIS_SET(ch->act, PLR_AUTOGOLD) ? 'X' : ' ');
 	}
