@@ -1877,75 +1877,62 @@ do_powerup(CHAR_DATA * ch, char *argument)
 			ch->powerup = 1;
 			pl_mult = (double) kicontrol * 10 / 1600 + 1;
 
-			if (pl_mult > 1.2) {
+			if (pl_mult > 1.2)
 				pl_mult = 1.2;
-				transStatApply(ch, kistat, kistat, kistat, kistat);
-			}
 		}
 		else if (kicontrol >= 20 && kicontrol <= 29)
 		{
 			ch->powerup = 2;
 			pl_mult = (double) kicontrol * 10 / 1500 + 1;
 
-			if (pl_mult > 1.5) {
+			if (pl_mult > 1.5)
 				pl_mult = 1.5;
-				transStatApply(ch, kistat, kistat, kistat, kistat);
-			}
 		}
 		else if (kicontrol >= 30 && kicontrol <= 39)
 		{
 			ch->powerup = 3;
 			pl_mult = (double) kicontrol * 10 / 1400 + 1;
 
-			if (pl_mult > 2) {
+			if (pl_mult > 2)
 				pl_mult = 2;
-				transStatApply(ch, kistat, kistat, kistat, kistat);
-			}
 		}
 		else if (kicontrol >= 40 && kicontrol <= 49)
 		{
 			ch->powerup = 4;
 			pl_mult = (double) kicontrol * 10 / 1300 + 1;
 
-			if (pl_mult > 4) {
+			if (pl_mult > 4)
 				pl_mult = 4;
-				transStatApply(ch, kistat, kistat, kistat, kistat);
-			}
 		}
 		else if (kicontrol >= 50 && kicontrol <= 59)
 		{
 			ch->powerup = 5;
 			pl_mult = (double) kicontrol * 10 / 1200 + 1;
 
-			if (pl_mult > 8) {
+			if (pl_mult > 8)
 				pl_mult = 8;
-				transStatApply(ch, kistat, kistat, kistat, kistat);
-			}
 		}
 		else if (kicontrol >= 60 && kicontrol <= 69)
 		{
 			ch->powerup = 6;
 			pl_mult = (double) kicontrol * 10 / 1100 + 1;
 
-			if (pl_mult > 16) {
+			if (pl_mult > 16)
 				pl_mult = 16;
-				transStatApply(ch, kistat, kistat, kistat, kistat);
-			}
 		}
 		else if (kicontrol >= 70)
 		{
 			ch->powerup = 7;
 			pl_mult = (double) kicontrol * 10 / 1000 + 1;
 
-			if (pl_mult > 20) {
+			if (pl_mult > 20)
 				pl_mult = 20;
-				transStatApply(ch, kistat, kistat, kistat, kistat);
-			}
 		}
 
 		if (xIS_SET((ch)->affected_by, AFF_HEART))
 			xREMOVE_BIT(ch->affected_by, AFF_HEART);
 		ch->pl = ch->exp * pl_mult;
+		transStatApply(ch, kistat, kistat, kistat, kistat);
 		heart_calc(ch, "");
 		if (is_splitformed(ch)) {
 			for (och = first_char; och; och = och_next) {
