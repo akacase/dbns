@@ -10272,7 +10272,7 @@ do_mystic(CHAR_DATA * ch, char *argument)
 			return;
 		}
 	}
-	if (kicontrol < 1500)
+	if (kicontrol < 1000)
 	{
 		send_to_char("Your mastery over your own mind is too lacking to use this ability.\n\r", ch);
 		return;
