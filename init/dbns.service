@@ -5,12 +5,15 @@ Documentation=https://www.capsulecorp.org
 [Service]
 ExecStart=/usr/local/bin/dbnsd -p 4000
 ExecReload=/bin/kill -HUP $MAINPID
+LimitAS=infinity
+LimitRSS=infinity
+LimitCORE=infinity
+LimitNICE=-15 
 LimitNOFILE=65536
 User=dbns
 Group=dbns
 Restart=always
 RestartSec=3
-Nice=-15
 
 [Install]
 WantedBy=multi-user.target
