@@ -162,7 +162,7 @@ A weak ESF trainee is exercising here, preparing for another round of combat.
 ~
 ~
 3 0 0 C
-250
+300
 1 0 100 1d20+0 2d5+0
 -1 5000
 112 112 1
@@ -185,7 +185,7 @@ An ESF trainee is pumping iron here.
 ~
 ~
 3 0 0 C
-300
+350
 1 0 100 1d20+0 2d5+0
 -1 15000
 112 112 1
@@ -208,7 +208,7 @@ A stronger ESF trainee shadowboxes here in the arena.
 ~
 ~
 3 0 0 C
-350
+400
 1 0 100 1d20+0 2d5+0
 -1 50000
 112 112 1
@@ -231,7 +231,7 @@ An impressive ESF trainee sits here in deep meditation.
 ~
 ~
 3 0 0 C
-375
+450
 1 0 100 1d20+0 2d5+0
 -1 150000
 112 112 1
@@ -254,7 +254,7 @@ An advanced ESF combatant stands here, ever at the ready for a new challenger.
 ~
 ~
 3 0 0 C
-700
+600
 1 0 100 1d20+0 2d5+0
 -1 500000
 112 112 1
