@@ -4394,7 +4394,7 @@ void do_train(CHAR_DATA *ch, char *argument)
 		return;
 	}
 
-	if (*permTstat >= 32000 && *tAbility >= 999 && ch->pcdata->xTrain < 1)
+	if (*permTstat >= 500000 && *tAbility >= 999 && ch->pcdata->xTrain < 1)
 	{
 		act(AT_RED, "Your $T is already at maximum.", ch, NULL, pOutput, TO_CHAR);
 		ch->pcdata->tStat = 0;
@@ -4570,7 +4570,7 @@ void do_train(CHAR_DATA *ch, char *argument)
 	ch->pcdata->tStat = 0;
 	ch->pcdata->tRounds = 0;
 
-	if (*permTstat >= 32000 && ch->pcdata->xTrain < 1 && *tAbility >= 999)
+	if (*permTstat >= 500000 && ch->pcdata->xTrain < 1 && *tAbility >= 999)
 	{
 		act(AT_SKILL, "Your $T has reached it's peak for now.", ch, NULL, pOutput, TO_CHAR);
 		*tAbility = 999;
@@ -4580,7 +4580,7 @@ void do_train(CHAR_DATA *ch, char *argument)
 
 	if (checkLearn)
 	{
-		if (*permTstat < 32000)
+		if (*permTstat < 500000)
 		{
 			*tAbility = 0;
 			*pAbility += 1;

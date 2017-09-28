@@ -1811,6 +1811,7 @@ do_powerup(CHAR_DATA * ch, char *argument)
 	double 	pl_mult = 1;
 	int 	auraColor = AT_YELLOW;
 	int		kicontrol = 0;
+	int		kistat = 0;
 
 	if (IS_AFFECTED(ch, AFF_BIOJR) && IS_NPC(ch))
 		return;
@@ -1848,6 +1849,8 @@ do_powerup(CHAR_DATA * ch, char *argument)
 	}
 	/* Variable Powerup */
 	kicontrol = get_curr_int(ch);
+	kistat = (kicontrol / 10);
+	
 
 	if (!IS_NPC(ch) && ch->pcdata->auraColorPowerUp > 0)
 		auraColor = ch->pcdata->auraColorPowerUp;
@@ -1874,56 +1877,70 @@ do_powerup(CHAR_DATA * ch, char *argument)
 			ch->powerup = 1;
 			pl_mult = (double) kicontrol * 10 / 1600 + 1;
 
-			if (pl_mult > 1.5)
-				pl_mult = 1.5;
+			if (pl_mult > 1.2) {
+				pl_mult = 1.2;
+				transStatApply(ch, kistat, kistat, kistat, kistat);
+			}
 		}
 		else if (kicontrol >= 20 && kicontrol <= 29)
 		{
 			ch->powerup = 2;
 			pl_mult = (double) kicontrol * 10 / 1500 + 1;
 
-			if (pl_mult > 2)
-				pl_mult = 2;
+			if (pl_mult > 1.5) {
+				pl_mult = 1.5;
+				transStatApply(ch, kistat, kistat, kistat, kistat);
+			}
 		}
 		else if (kicontrol >= 30 && kicontrol <= 39)
 		{
 			ch->powerup = 3;
 			pl_mult = (double) kicontrol * 10 / 1400 + 1;
 
-			if (pl_mult > 4)
-				pl_mult = 4;
+			if (pl_mult > 2) {
+				pl_mult = 2;
+				transStatApply(ch, kistat, kistat, kistat, kistat);
+			}
 		}
 		else if (kicontrol >= 40 && kicontrol <= 49)
 		{
 			ch->powerup = 4;
 			pl_mult = (double) kicontrol * 10 / 1300 + 1;
 
-			if (pl_mult > 8)
-				pl_mult = 8;
+			if (pl_mult > 4) {
+				pl_mult = 4;
+				transStatApply(ch, kistat, kistat, kistat, kistat);
+			}
 		}
 		else if (kicontrol >= 50 && kicontrol <= 59)
 		{
 			ch->powerup = 5;
 			pl_mult = (double) kicontrol * 10 / 1200 + 1;
 
-			if (pl_mult > 12)
-				pl_mult = 12;
+			if (pl_mult > 8) {
+				pl_mult = 8;
+				transStatApply(ch, kistat, kistat, kistat, kistat);
+			}
 		}
 		else if (kicontrol >= 60 && kicontrol <= 69)
 		{
 			ch->powerup = 6;
 			pl_mult = (double) kicontrol * 10 / 1100 + 1;
 
-			if (pl_mult > 16)
+			if (pl_mult > 16) {
 				pl_mult = 16;
+				transStatApply(ch, kistat, kistat, kistat, kistat);
+			}
 		}
 		else if (kicontrol >= 70)
 		{
 			ch->powerup = 7;
 			pl_mult = (double) kicontrol * 10 / 1000 + 1;
 
-			if (pl_mult > 20)
+			if (pl_mult > 20) {
 				pl_mult = 20;
+				transStatApply(ch, kistat, kistat, kistat, kistat);
+			}
 		}
 
 		if (xIS_SET((ch)->affected_by, AFF_HEART))
@@ -1952,6 +1969,7 @@ do_powerup(CHAR_DATA * ch, char *argument)
 			xREMOVE_BIT(ch->affected_by, AFF_HEART);
 		ch->powerup = 0;
 		ch->pl = ch->exp;
+		transStatApply(ch, kistat, kistat, kistat, kistat);
 		heart_calc(ch, "");
 		if (is_splitformed(ch)) {
 			for (och = first_char; och; och = och_next) {
@@ -1985,11 +2003,12 @@ do_powerup(CHAR_DATA * ch, char *argument)
 		}
 		ch->powerup = 1;
 		pl_mult = (double) kicontrol * 10 / 1600 + 1;
-		if (pl_mult > 1.5)
-			pl_mult = 1.5;
+		if (pl_mult > 1.2)
+			pl_mult = 1.2;
 		if (xIS_SET((ch)->affected_by, AFF_HEART))
 			xREMOVE_BIT(ch->affected_by, AFF_HEART);
 		ch->pl = ch->exp * pl_mult;
+		transStatApply(ch, kistat, kistat, kistat, kistat);
 		heart_calc(ch, "");
 		if (is_splitformed(ch)) {
 			for (och = first_char; och; och = och_next) {
@@ -2017,16 +2036,17 @@ do_powerup(CHAR_DATA * ch, char *argument)
 				"You clench your hands tightly into fists, doubling forward as every muscle tenses.",
 				ch, NULL, NULL, TO_CHAR);
 			act(auraColor,
-				"$n clenches &s hands and doubles forward, &s power sharply increasing.",
+				"$n clenches $s hands and doubles forward, $s power sharply increasing.",
 				ch, NULL, NULL, TO_NOTVICT);
 		}
 		ch->powerup = 2;
 		pl_mult = (double) kicontrol * 10 / 1500 + 1;
-		if (pl_mult > 2)
-			pl_mult = 2;
+		if (pl_mult > 1.5)
+			pl_mult = 1.5;
 		if (xIS_SET((ch)->affected_by, AFF_HEART))
 			xREMOVE_BIT(ch->affected_by, AFF_HEART);
 		ch->pl = ch->exp * pl_mult;
+		transStatApply(ch, kistat, kistat, kistat, kistat);
 		heart_calc(ch, "");
 		if (is_splitformed(ch)) {
 			for (och = first_char; och; och = och_next) {
@@ -2059,11 +2079,12 @@ do_powerup(CHAR_DATA * ch, char *argument)
 		}
 		ch->powerup = 3;
 		pl_mult = (double) kicontrol * 10 / 1400 + 1;
-		if (pl_mult > 4)
-			pl_mult = 4;
+		if (pl_mult > 2)
+			pl_mult = 2;
 		if (xIS_SET((ch)->affected_by, AFF_HEART))
 			xREMOVE_BIT(ch->affected_by, AFF_HEART);
 		ch->pl = ch->exp * pl_mult;
+		transStatApply(ch, kistat, kistat, kistat, kistat);
 		heart_calc(ch, "");
 		if (is_splitformed(ch)) {
 			for (och = first_char; och; och = och_next) {
@@ -2096,11 +2117,12 @@ do_powerup(CHAR_DATA * ch, char *argument)
 		}
 		ch->powerup = 4;
 		pl_mult = (double) kicontrol * 10 / 1300 + 1;
-		if (pl_mult > 8)
-			pl_mult = 8;
+		if (pl_mult > 4)
+			pl_mult = 4;
 		if (xIS_SET((ch)->affected_by, AFF_HEART))
 			xREMOVE_BIT(ch->affected_by, AFF_HEART);
 		ch->pl = ch->exp * pl_mult;
+		transStatApply(ch, kistat, kistat, kistat, kistat);
 		heart_calc(ch, "");
 		if (is_splitformed(ch)) {
 			for (och = first_char; och; och = och_next) {
@@ -2133,11 +2155,12 @@ do_powerup(CHAR_DATA * ch, char *argument)
 		}
 		ch->powerup = 5;
 		pl_mult = (double) kicontrol * 10 / 1200 + 1;
-		if (pl_mult > 12)
-			pl_mult = 12;
+		if (pl_mult > 8)
+			pl_mult = 8;
 		if (xIS_SET((ch)->affected_by, AFF_HEART))
 			xREMOVE_BIT(ch->affected_by, AFF_HEART);
 		ch->pl = ch->exp * pl_mult;
+		transStatApply(ch, kistat, kistat, kistat, kistat);
 		heart_calc(ch, "");
 		if (is_splitformed(ch)) {
 			for (och = first_char; och; och = och_next) {
@@ -2175,6 +2198,7 @@ do_powerup(CHAR_DATA * ch, char *argument)
 		if (xIS_SET((ch)->affected_by, AFF_HEART))
 			xREMOVE_BIT(ch->affected_by, AFF_HEART);
 		ch->pl = ch->exp * pl_mult;
+		transStatApply(ch, kistat, kistat, kistat, kistat);
 		heart_calc(ch, "");
 		if (is_splitformed(ch)) {
 			for (och = first_char; och; och = och_next) {
@@ -2202,7 +2226,7 @@ do_powerup(CHAR_DATA * ch, char *argument)
 				"You unleash the depths of your potential with an incredible shockwave of energy.",
 				ch, NULL, NULL, TO_CHAR);
 			act(auraColor,
-				"You unleash the depths of your potential with an incredible shockwave of energy.",
+				"$n unleashes the depths of $s potential with an incredible shockwave of energy.",
 				ch, NULL, NULL, TO_NOTVICT);
 		}
 		ch->powerup = 7;
@@ -2212,6 +2236,7 @@ do_powerup(CHAR_DATA * ch, char *argument)
 		if (xIS_SET((ch)->affected_by, AFF_HEART))
 			xREMOVE_BIT(ch->affected_by, AFF_HEART);
 		ch->pl = ch->exp * pl_mult;
+		transStatApply(ch, kistat, kistat, kistat, kistat);
 		heart_calc(ch, "");
 		if (is_splitformed(ch)) {
 			for (och = first_char; och; och = och_next) {
@@ -3378,7 +3403,9 @@ do_ssj(CHAR_DATA * ch, char *argument)
 			ch, NULL, NULL, TO_NOTVICT);
 		xSET_BIT((ch)->affected_by, AFF_SSJ);
 		ch->pl = ch->exp * 50;
-		transStatApply(ch, 12, 7, 5, 7);
+		kistat = 0;
+		kistat = (get_curr_int(ch) / 8);
+		transStatApply(ch, kistat, kistat, kistat, kistat);
 		learn_from_success(ch, gsn_ssj);
 		if (!IS_NPC(ch)) {
 			ch->pcdata->eyes = 0;
@@ -3467,7 +3494,9 @@ do_ssj2(CHAR_DATA * ch, char *argument)
 			xREMOVE_BIT((ch)->affected_by, AFF_SSJ4);
 		}
 		ch->pl = ch->exp * 50;
-		transStatApply(ch, 12, 7, 5, 7);
+		kistat = 0;
+		kistat = (get_curr_int(ch) / 8);
+		transStatApply(ch, kistat, kistat, kistat, kistat);
 		if (!IS_NPC(ch)) {
 			ch->pcdata->eyes = 0;
 			ch->pcdata->haircolor = 3;
@@ -3500,7 +3529,9 @@ do_ssj2(CHAR_DATA * ch, char *argument)
 			xSET_BIT((ch)->affected_by, AFF_SSJ);
 			xSET_BIT((ch)->affected_by, AFF_SSJ2);
 			ch->pl = ch->exp * 225;
-			transStatApply(ch, 20, 12, 8, 12);
+			kistat = 0;
+			kistat = (get_curr_int(ch) / 7);
+			transStatApply(ch, kistat, kistat, kistat, kistat);
 			learn_from_success(ch, gsn_ssj2);
 			if (!IS_NPC(ch)) {
 				ch->pcdata->eyes = 0;
@@ -3554,7 +3585,9 @@ do_ssj2(CHAR_DATA * ch, char *argument)
 			"electricity arcs around $m.", ch, NULL, NULL, TO_NOTVICT);
 		xSET_BIT((ch)->affected_by, AFF_SSJ2);
 		ch->pl = ch->exp * 225;
-		transStatApply(ch, 20, 12, 8, 12);
+		kistat = 0;
+		kistat = (get_curr_int(ch) / 7);
+		transStatApply(ch, kistat, kistat, kistat, kistat);
 		learn_from_success(ch, gsn_ssj2);
 		if (!IS_NPC(ch)) {
 			ch->pcdata->eyes = 0;
@@ -3636,7 +3669,9 @@ do_ssj3(CHAR_DATA * ch, char *argument)
 			xREMOVE_BIT((ch)->affected_by, AFF_SSJ4);
 		}
 		ch->pl = ch->exp * 225;
-		transStatApply(ch, 20, 12, 8, 12);
+		kistat = 0;
+		kistat = (get_curr_int(ch) / 7);
+		transStatApply(ch, kistat, kistat, kistat, kistat);
 		if (!IS_NPC(ch)) {
 			ch->pcdata->eyes = 0;
 			ch->pcdata->haircolor = 3;
@@ -3668,7 +3703,9 @@ do_ssj3(CHAR_DATA * ch, char *argument)
 			xSET_BIT((ch)->affected_by, AFF_SSJ2);
 			xSET_BIT((ch)->affected_by, AFF_SSJ3);
 			ch->pl = ch->exp * 325;
-			transStatApply(ch, 30, 18, 14, 18);
+			kistat = 0;
+			kistat = (get_curr_int(ch) / 6);
+			transStatApply(ch, kistat, kistat, kistat, kistat);
 			learn_from_success(ch, gsn_ssj3);
 			if (!IS_NPC(ch)) {
 				ch->pcdata->eyes = 0;
@@ -3730,7 +3767,9 @@ do_ssj3(CHAR_DATA * ch, char *argument)
 			"aura flashes a bright gold.", ch, NULL, NULL, TO_NOTVICT);
 		xSET_BIT((ch)->affected_by, AFF_SSJ3);
 		ch->pl = ch->exp * 325;
-		transStatApply(ch, 30, 18, 14, 18);
+		kistat = 0;
+		kistat = (get_curr_int(ch) / 6);
+		transStatApply(ch, kistat, kistat, kistat, kistat);
 		learn_from_success(ch, gsn_ssj3);
 		if (!IS_NPC(ch)) {
 			ch->pcdata->eyes = 0;
@@ -3822,7 +3861,9 @@ do_ssj4(CHAR_DATA * ch, char *argument)
 		send_to_char("You power down to super Saiyan 3.\n\r", ch);
 		xREMOVE_BIT((ch)->affected_by, AFF_SSJ4);
 		ch->pl = ch->exp * 325;
-		transStatApply(ch, 30, 18, 14, 18);
+		kistat = 0;
+		kistat = (get_curr_int(ch) / 7);
+		transStatApply(ch, kistat, kistat, kistat, kistat);
 		if (!IS_NPC(ch)) {
 			ch->pcdata->eyes = 0;
 			ch->pcdata->haircolor = 3;
@@ -3855,7 +3896,9 @@ do_ssj4(CHAR_DATA * ch, char *argument)
 			xSET_BIT((ch)->affected_by, AFF_SSJ3);
 			xSET_BIT((ch)->affected_by, AFF_SSJ4);
 			ch->pl = ch->exp * 425;
-			transStatApply(ch, 35, 20, 13, 20);
+			kistat = 0;
+			kistat = (get_curr_int(ch) / 6);
+			transStatApply(ch, kistat, kistat, kistat, kistat);
 			learn_from_success(ch, gsn_ssj4);
 			if (!IS_NPC(ch)) {
 				ch->pcdata->eyes = 4;
@@ -3927,7 +3970,9 @@ do_ssj4(CHAR_DATA * ch, char *argument)
 			"to sprout all over $s body.", ch, NULL, NULL, TO_NOTVICT);
 		xSET_BIT((ch)->affected_by, AFF_SSJ4);
 		ch->pl = ch->exp * 425;
-		transStatApply(ch, 35, 20, 13, 20);
+		kistat = 0;
+		kistat = (get_curr_int(ch) / 6);
+		transStatApply(ch, kistat, kistat, kistat, kistat);
 		learn_from_success(ch, gsn_ssj4);
 		if (!IS_NPC(ch)) {
 			ch->pcdata->eyes = 4;
@@ -4020,7 +4065,9 @@ do_sgod(CHAR_DATA * ch, char *argument)
 		send_to_char("You power down to super Saiyan 4.\n\r", ch);
 		xREMOVE_BIT((ch)->affected_by, AFF_SGOD);
 		ch->pl = ch->exp * 425;
-		transStatApply(ch, 35, 20, 13, 20);
+		kistat = 0;
+		kistat = (get_curr_int(ch) / 6);
+		transStatApply(ch, kistat, kistat, kistat, kistat);
 		if (!IS_NPC(ch)) {
 			ch->pcdata->eyes = 4;
 			ch->pcdata->haircolor = 9;
@@ -4054,7 +4101,9 @@ do_sgod(CHAR_DATA * ch, char *argument)
 			xSET_BIT((ch)->affected_by, AFF_SSJ4);
 			xSET_BIT((ch)->affected_by, AFF_SGOD);
 			ch->pl = ch->exp * 500;
-			transStatApply(ch, 40, 25, 18, 23);
+			kistat = 0;
+			kistat = (get_curr_int(ch) / 5);
+			transStatApply(ch, kistat, kistat, kistat, kistat);
 			learn_from_success(ch, gsn_sgod);
 			if (!IS_NPC(ch)) {
 				ch->pcdata->eyes = 4;
@@ -4124,7 +4173,9 @@ do_sgod(CHAR_DATA * ch, char *argument)
 			ch, NULL, NULL, TO_NOTVICT);
 		xSET_BIT((ch)->affected_by, AFF_SGOD);
 		ch->pl = ch->exp * 500;
-		transStatApply(ch, 40, 25, 18, 23);
+		kistat = 0;
+		kistat = (get_curr_int(ch) / 5);
+		transStatApply(ch, kistat, kistat, kistat, kistat);
 		learn_from_success(ch, gsn_sgod);
 		if (!IS_NPC(ch)) {
 			ch->pcdata->eyes = 4;
@@ -4270,16 +4321,9 @@ do_super_namek(CHAR_DATA * ch, char *argument)
 		xSET_BIT((ch)->affected_by, AFF_SNAMEK);
 
 		ch->pl = ch->exp * pl_mult;
-		if (affGrowth) {
-			transStatApply(ch, pl_mult / 4 + sizeStr,
-				pl_mult / 2 + sizeSpd, pl_mult + sizeInt,
-				pl_mult / 4 + sizeCon);
-		}
-		else {
-			transStatApply(ch, pl_mult / 4, pl_mult / 2, pl_mult,
-				pl_mult / 4);
-		}
-
+		kistat = 0;
+		kistat = (get_curr_int(ch) / 5);
+		transStatApply(ch, kistat, kistat, kistat, kistat);
 		learn_from_success(ch, gsn_snamek);
 	}
 	else {
@@ -4352,7 +4396,9 @@ do_icer_transform_2(CHAR_DATA * ch, char *argument)
 			ch, NULL, NULL, TO_NOTVICT);
 		xSET_BIT((ch)->affected_by, AFF_ICER2);
 		ch->pl = ch->exp * 4;
-		transStatApply(ch, 4, 4, 2, 7);
+		kistat = 0;
+		kistat = (get_curr_int(ch) / 9);
+		transStatApply(ch, kistat, kistat, kistat, kistat);
 		learn_from_success(ch, gsn_icer2);
 	}
 	else {
@@ -4415,7 +4461,9 @@ do_icer_transform_3(CHAR_DATA * ch, char *argument)
 		if (!xIS_SET((ch)->affected_by, AFF_ICER2))
 			xSET_BIT((ch)->affected_by, AFF_ICER2);
 		ch->pl = ch->exp * 4;
-		transStatApply(ch, 4, 4, 2, 7);
+		kistat = 0;
+		kistat = (get_curr_int(ch) / 9);
+		transStatApply(ch, kistat, kistat, kistat, kistat);
 		return;
 	}
 	if (ch->mana < skill_table[gsn_icer3]->min_mana) {
@@ -4439,7 +4487,9 @@ do_icer_transform_3(CHAR_DATA * ch, char *argument)
 		xSET_BIT((ch)->affected_by, AFF_ICER3);
 		xREMOVE_BIT((ch)->affected_by, AFF_ICER2);
 		ch->pl = ch->exp * 12;
-		transStatApply(ch, 7, 7, 4, 14);
+		kistat = 0;
+		kistat = (get_curr_int(ch) / 8);
+		transStatApply(ch, kistat, kistat, kistat, kistat);
 		learn_from_success(ch, gsn_icer3);
 	}
 	else {
@@ -4500,7 +4550,9 @@ do_icer_transform_4(CHAR_DATA * ch, char *argument)
 		if (!xIS_SET((ch)->affected_by, AFF_ICER3))
 			xSET_BIT((ch)->affected_by, AFF_ICER3);
 		ch->pl = ch->exp * 12;
-		transStatApply(ch, 7, 7, 4, 14);
+		kistat = 0;
+		kistat = (get_curr_int(ch) / 8);
+		transStatApply(ch, kistat, kistat, kistat, kistat);
 		return;
 	}
 	if (ch->mana < skill_table[gsn_icer4]->min_mana) {
@@ -4526,7 +4578,9 @@ do_icer_transform_4(CHAR_DATA * ch, char *argument)
 		xSET_BIT((ch)->affected_by, AFF_ICER4);
 		xREMOVE_BIT((ch)->affected_by, AFF_ICER3);
 		ch->pl = ch->exp * 50;
-		transStatApply(ch, 10, 10, 5, 20);
+		kistat = 0;
+		kistat = (get_curr_int(ch) / 7);
+		transStatApply(ch, kistat, kistat, kistat, kistat);
 		learn_from_success(ch, gsn_icer4);
 	}
 	else {
@@ -4584,7 +4638,9 @@ do_icer_transform_5(CHAR_DATA * ch, char *argument)
 		if (!xIS_SET((ch)->affected_by, AFF_ICER4))
 			xSET_BIT((ch)->affected_by, AFF_ICER4);
 		ch->pl = ch->exp * 50;
-		transStatApply(ch, 10, 10, 5, 20);
+		kistat = 0;
+		kistat = (get_curr_int(ch) / 7);
+		transStatApply(ch, kistat, kistat, kistat, kistat);
 		return;
 	}
 	if (ch->mana < skill_table[gsn_icer5]->min_mana) {
@@ -4610,7 +4666,9 @@ do_icer_transform_5(CHAR_DATA * ch, char *argument)
 		xSET_BIT((ch)->affected_by, AFF_ICER5);
 		xREMOVE_BIT((ch)->affected_by, AFF_ICER4);
 		ch->pl = ch->exp * 150;
-		transStatApply(ch, 17, 17, 12, 30);
+		kistat = 0;
+		kistat = (get_curr_int(ch) / 6);
+		transStatApply(ch, kistat, kistat, kistat, kistat);
 		learn_from_success(ch, gsn_icer5);
 	}
 	else {
@@ -4685,7 +4743,9 @@ do_icer_transform_golden_form(CHAR_DATA * ch, char *argument)
 		if (!xIS_SET((ch)->affected_by, AFF_ICER5))
 			xSET_BIT((ch)->affected_by, AFF_ICER5);
 		ch->pl = ch->exp * 150;
-		transStatApply(ch, 17, 17, 12, 30);
+		kistat = 0;
+		kistat = (get_curr_int(ch) / 6);
+		transStatApply(ch, kistat, kistat, kistat, kistat);
 		return;
 	}
 	if (ch->mana < skill_table[gsn_goldenform]->min_mana) {
@@ -4711,7 +4771,9 @@ do_icer_transform_golden_form(CHAR_DATA * ch, char *argument)
 		xREMOVE_BIT((ch)->affected_by, AFF_ICER5);
 		pl_mult = (double)kicontrol / 100 + 380;
 		ch->pl = ch->exp * pl_mult;
-		transStatApply(ch, 21, 21, 15, 35);
+		kistat = 0;
+		kistat = (get_curr_int(ch) / 5);
+		transStatApply(ch, kistat, kistat, kistat, kistat);
 		learn_from_success(ch, gsn_goldenform);
 	}
 	else {
@@ -5750,12 +5812,12 @@ do_sense(CHAR_DATA * ch, char *argument)
 
 		if (diff < 1)
 			msg =
-			    "$N has power... to sense? LOL! That's a good one!";
+			    "Compared to yourself, you sense no power from $N.";
 		else if (diff <= 1)
 			msg =
-			    "That fly buzzing around would be more challenging.";
+			    "The flies buzzing around $N would prove more challenging.";
 		else if (diff <= 2)
-			msg = "Now where did that chicken go?";
+			msg = "You sense a child's power coming from $N.";
 		else if (diff <= 3)
 			msg = "You sense a feeble power coming from $N.";
 		else if (diff <= 4)
@@ -5788,19 +5850,8 @@ do_sense(CHAR_DATA * ch, char *argument)
 		else if (diff <= 80)
 			msg = "You sense a horrifying power coming from $N.";
 		else if (diff <= 90)
-			msg = "Do you feel lucky, punk?";
-		else if (diff <= 100)
-			msg = "Some times, talking is the best answer...";
-		else if (diff <= 250)
-			msg = "Just walk away...";
-		else if (diff <= 500)
-			msg = "Are you mad!?";
-		else if (diff <= 750)
-			msg = "You ARE mad!";
-		else if (diff <= 1000)
-			msg = "Why don't you dig a grave for yourself first?";
-		else
-			msg = "What do you want on your tombstone?";
+			msg = "$N's power is too monstrous for you to even comprehend.";
+			
 		act(AT_CONSIDER, msg, ch, NULL, victim, TO_CHAR);
 		learn_from_success(ch, gsn_sense);
 	} else {
@@ -6354,7 +6405,9 @@ do_hyper(CHAR_DATA * ch, char *argument)
 		if (xIS_SET((ch)->affected_by, AFF_HEART))
 			xREMOVE_BIT(ch->affected_by, AFF_HEART);
 		ch->pl = ch->exp * 50;
-		transStatApply(ch, 18, 12, 6, 24);
+		kistat = 0;
+		kistat = (get_curr_int(ch) / 8);
+		transStatApply(ch, kistat, kistat, kistat, kistat);
 		heart_calc(ch, "");
 		learn_from_success(ch, gsn_hyper);
 	}
@@ -10315,7 +10368,9 @@ do_mystic(CHAR_DATA * ch, char *argument)
 
 		ch->pl = ch->exp * pl_mult;
 
-		transStatApply(ch, 20, 20, 20, 20);
+		kistat = 0;
+		kistat = (get_curr_int(ch) / 5);
+		transStatApply(ch, kistat, kistat, kistat, kistat);
 
 		learn_from_success(ch, gsn_mystic);
 	}
@@ -11007,7 +11062,9 @@ do_ussj(CHAR_DATA * ch, char *argument)
 		xREMOVE_BIT((ch)->affected_by, AFF_USSJ);
 		transStatRemove(ch);
 		ch->pl = ch->exp * 50;
-		transStatApply(ch, 10, 5, 3, 5);
+		kistat = 0;
+		kistat = (get_curr_int(ch) / 8);
+		transStatApply(ch, kistat, kistat, kistat, kistat);
 		return;
 	}
 	else if (xIS_SET((ch)->affected_by, AFF_SSJ2)
@@ -11051,7 +11108,9 @@ do_ussj(CHAR_DATA * ch, char *argument)
 			"turns slightly spikier.", ch, NULL, NULL, TO_NOTVICT);
 		xSET_BIT((ch)->affected_by, AFF_USSJ);
 		ch->pl = ch->exp * 75;
-		transStatApply(ch, 16, 5, 3, 5);
+		kistat = 0;
+		kistat = (get_curr_int(ch) / 8);
+		transStatApply(ch, kistat, kistat, kistat, kistat);
 		learn_from_success(ch, gsn_ussj);
 	}
 	else {
@@ -11109,7 +11168,9 @@ do_ussj2(CHAR_DATA * ch, char *argument)
 		xREMOVE_BIT((ch)->affected_by, AFF_USSJ2);
 		transStatRemove(ch);
 		ch->pl = ch->exp * 75;
-		transStatApply(ch, 16, 5, 3, 5);
+		kistat = 0;
+		kistat = (get_curr_int(ch) / 8);
+		transStatApply(ch, kistat, kistat, kistat, kistat);
 		return;
 	}
 	else if (xIS_SET((ch)->affected_by, AFF_SSJ2)
@@ -11156,7 +11217,9 @@ do_ussj2(CHAR_DATA * ch, char *argument)
 			ch, NULL, NULL, TO_NOTVICT);
 		xSET_BIT((ch)->affected_by, AFF_USSJ2);
 		ch->pl = ch->exp * 150;
-		transStatApply(ch, 24, -15, 5, 8);
+		kistat = 0;
+		kistat = (get_curr_int(ch) / 7);
+		transStatApply(ch, kistat, kistat, kistat, kistat);
 		learn_from_success(ch, gsn_ussj2);
 	}
 	else {
@@ -11271,7 +11334,9 @@ do_extreme(CHAR_DATA * ch, char *argument)
 		xSET_BIT((ch)->affected_by, AFF_EXTREME);
 		pl_mult = (double)kicontrol / 50 + 125;
 		ch->pl = ch->exp * pl_mult;
-		transStatApply(ch, 12, 12, 6, 25);
+		kistat = 0;
+		kistat = (get_curr_int(ch) / 5);
+		transStatApply(ch, kistat, kistat, kistat, kistat);
 		learn_from_success(ch, gsn_extreme);
 	}
 	else {
