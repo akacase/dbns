@@ -434,7 +434,7 @@ Particles of light have solidified here to create a translucent, holographic war
 ~
 ~
 3 0 0 C
-1100
+1000
 1 0 100 1d20+0 2d5+0
 -1 50000000
 112 112 0
@@ -457,7 +457,7 @@ A fully solidified hologram stands here with a vaguely human facade.
 ~
 ~
 3 0 0 C
-1500
+1200
 1 0 100 1d20+0 2d5+0
 -1 150000000
 112 112 0
@@ -480,7 +480,7 @@ A fully-formed human hologram stands here, prepared to execute its programming.
 ~
 ~
 3 0 0 C
-2000
+1400
 1 0 100 1d20+0 2d5+0
 -1 500000000
 112 112 0
