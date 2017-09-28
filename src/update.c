@@ -451,7 +451,7 @@ gain_exp(CHAR_DATA * ch, long double gain)
 	}
 	update_plHiscore(ch);
 
-	if (rank != get_rank_number(ch)) {
+	if (rank != get_rank_number(ch) && !IS_HC(ch)) {
 		sprintf(buf, "%s's rank has changed to %s", ch->name,
 		    get_rank_color(ch));
 		do_info(ch, buf);
