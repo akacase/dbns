@@ -2420,7 +2420,7 @@ damage(CHAR_DATA * ch, CHAR_DATA * victim, int dam, int dt)
 						    gsn_dodge);
                         // train speed stat on dodge success
 						if(!IS_NPC(victim)){
-						  stat_train(victim, "spd", 0);
+						  stat_train(victim, "spd", 5);
 						}
 						
 					} else
@@ -2441,7 +2441,7 @@ damage(CHAR_DATA * ch, CHAR_DATA * victim, int dam, int dt)
 						    gsn_block);
 					  // train speed stat on block success
 					  if (!IS_NPC(victim)) {
-					    stat_train(victim, "spd", 0);
+					    stat_train(victim, "con", 5);
 					  }
 						
 					} else {

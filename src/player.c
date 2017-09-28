@@ -297,7 +297,7 @@ do_score(CHAR_DATA * ch, char *argument)
 	 * &W%-12s&C               Items: &W%3d&C  (&wmax %3d&C)\n\r", buf,
 	 * ch->carry_number, can_carry_n(ch)); else
 	 */
-	pager_printf(ch, "                     Align: &W%+4.4d, %-12s&C      Items: &W%3d&C  (&wmax %3d&C)\n\r",
+	pager_printf(ch, "                      Align: &W%+4.4d, %-12s&C      Items: &W%3d&C  (&wmax %3d&C)\n\r",
 	    ch->alignment, buf, ch->carry_number, can_carry_n(ch));
 
 	switch (ch->position) {
@@ -345,7 +345,7 @@ do_score(CHAR_DATA * ch, char *argument)
 		sprintf(buf, "sitting");
 		break;
 	}
-	pager_printf(ch, "Rpp: %3d/%-3d         Pos'n: &W%s&C               Weight: &W%3d&C  (&wmax %3d&C)\n\r",
+	pager_printf(ch, "Rpp: %3d/%-3d          Pos'n: &W%s&C               Weight: &W%3d&C  (&wmax %3d&C)\n\r",
 	    ch->pcdata->quest_curr, ch->pcdata->quest_accum, buf, ch->carry_weight, can_carry_w(ch));
 
 	switch (ch->style) {
@@ -366,7 +366,7 @@ do_score(CHAR_DATA * ch, char *argument)
 		break;
 	}
 
-	pager_printf(ch, "                     Wimpy: &R%-5d&C                  Style: &W%-10.10s&C\n\r",
+	pager_printf(ch, "                      Wimpy: &R%-5d&C                  Style: &W%-10.10s&C\n\r",
 	    ch->wimpy, buf);
 
 	pager_printf(ch, "&b-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=&C\n\r");
