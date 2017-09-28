@@ -231,22 +231,22 @@ do_score(CHAR_DATA * ch, char *argument)
 	    get_newage(ch), ctime(&ch->pcdata->creation_date));
 
 	if (get_curr_str(ch) >= 100 || ch->perm_str >= 100)
-		pager_printf(ch, "STR  : &W%-3d&C(&w%3d.%2.2d&C)  DAM+: &R%-2d&C                Log in: &w%s\r&C",
+		pager_printf(ch, "STR  : &W%-3d&C(&w%3d.%2.2d&C)  DAM+: &R%-2d&C               Log in: &w%s\r&C",
 		    get_curr_str(ch), ch->perm_str, ch->pcdata->tStr, get_damroll(ch), ctime(&ch->logon));
 	else
-		pager_printf(ch, "STR  : &W%-2d&C(&w%2d.%2.2d&C)    DAM+: &R%-2d&C                Log in: &w%s\r&C",
+		pager_printf(ch, "STR  : &W%-2d&C(&w%2d.%2.2d&C)    DAM+: &R%-2d&C               Log in: &w%s\r&C",
 		    get_curr_str(ch), ch->perm_str, ch->pcdata->tStr, get_damroll(ch), ctime(&ch->logon));
 	if (get_curr_dex(ch) >= 100 || ch->perm_dex >= 100)
-		pager_printf(ch, "SPD  : &W%-3d&C(&w%3d.%2.2d&C)  pDEF: &R%-2d&C            Last Saved: &w%s\r&C",
+		pager_printf(ch, "SPD  : &W%-3d&C(&w%3d.%2.2d&C)  pDEF: &R%-2d&C           Last Saved: &w%s\r&C",
 		    get_curr_dex(ch), ch->perm_dex, ch->pcdata->tSpd, (get_strDef(ch) + get_conDef(ch)), ch->save_time ? ctime(&ch->save_time) : "no save this session\n");
 	else
-		pager_printf(ch, "SPD  : &W%-2d&C(&w%2d.%2.2d&C)    pDEF: &R%-2d&C            Last Saved: &w%s\r&C",
+		pager_printf(ch, "SPD  : &W%-2d&C(&w%2d.%2.2d&C)    pDEF: &R%-2d&C           Last Saved: &w%s\r&C",
 		    get_curr_dex(ch), ch->perm_dex, ch->pcdata->tSpd, (get_strDef(ch) + get_conDef(ch)), ch->save_time ? ctime(&ch->save_time) : "no save this session\n");
 	if (get_curr_int(ch) >= 100 || ch->perm_int >= 100)
-		pager_printf(ch, "INT  : &W%-3d&C(&w%3d.%2.2d&C)  eDEF: &R%-2d&C              CurrTime: &w%s\r&C",
+		pager_printf(ch, "INT  : &W%-3d&C(&w%3d.%2.2d&C)  eDEF: &R%-2d&C             CurrTime: &w%s\r&C",
 		    get_curr_int(ch), ch->perm_int, ch->pcdata->tInt, get_conDef(ch), ctime(&current_time));
 	else
-		pager_printf(ch, "INT  : &W%-2d&C(&w%2d.%2.2d&C)    eDEF: &R%-2d&C              CurrTime: &w%s\r&C",
+		pager_printf(ch, "INT  : &W%-2d&C(&w%2d.%2.2d&C)    eDEF: &R%-2d&C             CurrTime: &w%s\r&C",
 		    get_curr_int(ch), ch->perm_int, ch->pcdata->tInt, get_conDef(ch), ctime(&current_time));
 
 	if (get_armor(ch) < 0)
@@ -267,7 +267,7 @@ do_score(CHAR_DATA * ch, char *argument)
 		sprintf(buf, "&WERROR: Please report&C");
 
 	if (get_curr_con(ch) >= 100 || ch->perm_con >= 100)
-		pager_printf(ch, "CON  : &W%-3d&C(&w%3d.%2.2d&C) Armor: &W%d, %s\n\r",
+		pager_printf(ch, "CON  : &W%-3d&C(&w%3d.%2.2d&C)   Armor: &W%d, %s\n\r",
 		    get_curr_con(ch), ch->perm_con, ch->pcdata->tCon, get_armor(ch), buf);
 	else
 		pager_printf(ch, "CON  : &W%-2d&C(&w%2d.%2.2d&C)   Armor: &W%d, %s\n\r",
@@ -297,7 +297,7 @@ do_score(CHAR_DATA * ch, char *argument)
 	 * &W%-12s&C               Items: &W%3d&C  (&wmax %3d&C)\n\r", buf,
 	 * ch->carry_number, can_carry_n(ch)); else
 	 */
-	pager_printf(ch, "                   Align: &W%+4.4d, %-12s&C        Items: &W%3d&C  (&wmax %3d&C)\n\r",
+	pager_printf(ch, "                     Align: &W%+4.4d, %-12s&C      Items: &W%3d&C  (&wmax %3d&C)\n\r",
 	    ch->alignment, buf, ch->carry_number, can_carry_n(ch));
 
 	switch (ch->position) {
@@ -345,7 +345,7 @@ do_score(CHAR_DATA * ch, char *argument)
 		sprintf(buf, "sitting");
 		break;
 	}
-	pager_printf(ch, "Rpp: %3d/%-3d       Pos'n: &W%s&C                Weight: &W%3d&C  (&wmax %3d&C)\n\r",
+	pager_printf(ch, "Rpp: %3d/%-3d         Pos'n: &W%s&C               Weight: &W%3d&C  (&wmax %3d&C)\n\r",
 	    ch->pcdata->quest_curr, ch->pcdata->quest_accum, buf, ch->carry_weight, can_carry_w(ch));
 
 	switch (ch->style) {
@@ -366,7 +366,7 @@ do_score(CHAR_DATA * ch, char *argument)
 		break;
 	}
 
-	pager_printf(ch, "                   Wimpy: &R%-5d&C                    Style: &W%-10.10s&C\n\r",
+	pager_printf(ch, "                     Wimpy: &R%-5d&C                  Style: &W%-10.10s&C\n\r",
 	    ch->wimpy, buf);
 
 	pager_printf(ch, "&b-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=&C\n\r");
@@ -377,7 +377,7 @@ do_score(CHAR_DATA * ch, char *argument)
 		    xIS_SET(ch->act, PLR_AUTO_COMPASS) ? 'X' : ' ',
 		    xIS_SET(ch->act, PLR_AUTOGOLD) ? 'X' : ' ');
 	} else {
-		pager_printf_color(ch, "TRAIN: &G%-3d&C     &YLifeforce&C: [&Y%3d &C/ &Y%3d&C]              AutoCompass: (&W%c&C) AutoZeni: (&W%c&C)\n\r",
+		pager_printf_color(ch, "&YLifeforce&C: [&Y%3d &C/ &Y%3d&C]         AutoCompass: (&W%c&C) AutoZeni: (&W%c&C)\n\r",
 				   ch->train, ch->hit, ch->max_hit,
 		    xIS_SET(ch->act, PLR_AUTO_COMPASS) ? 'X' : ' ',
 		    xIS_SET(ch->act, PLR_AUTOGOLD) ? 'X' : ' ');
@@ -388,27 +388,27 @@ do_score(CHAR_DATA * ch, char *argument)
 
 	if (is_android(ch)) {
 		if (ch->max_mana < 1000)
-			pager_printf_color(ch, "                  &YEnergy&C: [&Y%3s&C/&Y%-3s&C]              AutoExit: (&W%c&C) AutoLoot: (&W%c&C)\n\r",
+			pager_printf_color(ch, "&YEnergy&C: [&Y%3s&C/&Y%-3s&C]              AutoExit: (&W%c&C) AutoLoot: (&W%c&C)\n\r",
 			    buf, buf2, xIS_SET(ch->act, PLR_AUTOEXIT) ? 'X' : ' ', xIS_SET(ch->act, PLR_AUTOLOOT) ? 'X' : ' ');
 		else if (ch->max_mana < 10000)
-			pager_printf_color(ch, "                  &YEnergy&C: [&Y%5s&C/&Y%-5s&C]          AutoExit: (&W%c&C) AutoLoot: (&W%c&C)\n\r",
+			pager_printf_color(ch, "&YEnergy&C: [&Y%5s&C/&Y%-5s&C]          AutoExit: (&W%c&C) AutoLoot: (&W%c&C)\n\r",
 			    buf, buf2, xIS_SET(ch->act, PLR_AUTOEXIT) ? 'X' : ' ', xIS_SET(ch->act, PLR_AUTOLOOT) ? 'X' : ' ');
 		else
-			pager_printf_color(ch, "                  &YEnergy&C: [&Y%6s&C/&Y%-6s&C]        AutoExit: (&W%c&C) AutoLoot: (&W%c&C)\n\r",
+			pager_printf_color(ch, "&YEnergy&C: [&Y%6s&C/&Y%-6s&C]        AutoExit: (&W%c&C) AutoLoot: (&W%c&C)\n\r",
 			    buf, buf2, xIS_SET(ch->act, PLR_AUTOEXIT) ? 'X' : ' ', xIS_SET(ch->act, PLR_AUTOLOOT) ? 'X' : ' ');
 	} else {
 		if (ch->max_mana < 1000)
-			pager_printf_color(ch, "                  &YEnergy&C: [&Y%3s&C/&Y%-3s&C]              AutoExit: (&W%c&C) AutoLoot: (&W%c&C)\n\r",
+			pager_printf_color(ch, "&YEnergy&C: [&Y%3s&C/&Y%-3s&C]              AutoExit: (&W%c&C) AutoLoot: (&W%c&C)\n\r",
 			    buf, buf2, xIS_SET(ch->act, PLR_AUTOEXIT) ? 'X' : ' ', xIS_SET(ch->act, PLR_AUTOLOOT) ? 'X' : ' ');
 		else if (ch->max_mana < 10000)
-			pager_printf_color(ch, "                  &YEnergy&C: [&Y%5s&C/&Y%-5s&C]          AutoExit: (&W%c&C) AutoLoot: (&W%c&C)\n\r",
+			pager_printf_color(ch, "&YEnergy&C: [&Y%5s&C/&Y%-5s&C]          AutoExit: (&W%c&C) AutoLoot: (&W%c&C)\n\r",
 			    buf, buf2, xIS_SET(ch->act, PLR_AUTOEXIT) ? 'X' : ' ', xIS_SET(ch->act, PLR_AUTOLOOT) ? 'X' : ' ');
 		else
-			pager_printf_color(ch, "                  &YEnergy&C: [&Y%6s&C/&Y%-6s&C]        AutoExit: (&W%c&C) AutoLoot: (&W%c&C)\n\r",
+			pager_printf_color(ch, "&YEnergy&C: [&Y%6s&C/&Y%-6s&C]        AutoExit: (&W%c&C) AutoLoot: (&W%c&C)\n\r",
 			    buf, buf2, xIS_SET(ch->act, PLR_AUTOEXIT) ? 'X' : ' ', xIS_SET(ch->act, PLR_AUTOLOOT) ? 'X' : ' ');
 	}
 
-	pager_printf_color(ch, "ZENI : &Y%-13s&C                                            AutoSac: (&W%c&C)\n\r",
+	pager_printf_color(ch, "ZENI : &Y%-13s&C           AutoSac: (&W%c&C)\n\r",
 	    num_punct(ch->gold), xIS_SET(ch->act, PLR_AUTOSAC) ? 'X' : ' ');
 
 	if (is_android(ch) || is_superandroid(ch)) {

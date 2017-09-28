@@ -4736,8 +4736,6 @@ do_practice(CHAR_DATA * ch, char *argument)
 		send_to_pager_color
 		    (" -----------------------------------------------------------------------------\n\r",
 		    ch);
-		pager_printf(ch, "You have %d training sessions left.\n\r",
-		    ch->train);
 	} else {
 		CHAR_DATA *mob;
 		int adept;
