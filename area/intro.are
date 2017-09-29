@@ -495,7 +495,7 @@ This room allows you to increase your stats and gain powerlevel by
 training in increased gravity.  To begin, type 'gravtrain <stat> <minutes'.
 One game minute is roughly equal to one second of real time. 
 ~
-0 268435460 0
+0 4 0
 D0
 ~
 ~
@@ -881,7 +881,7 @@ This room allows you to increase your stats and gain powerlevel by
 training in increased gravity.  To begin, type 'gravtrain <stat> <minutes'.
 One game minute is roughly equal to one second of real time. 
 ~
-0 268435456 0
+0 0 0
 D1
 ~
 ~
@@ -897,7 +897,7 @@ This room allows you to increase your stats and gain powerlevel by
 training in increased gravity.  To begin, type 'gravtrain <stat> <minutes'.
 One game minute is roughly equal to one second of real time. 
 ~
-0 268435456 0
+0 0 0
 D1
 ~
 ~
@@ -913,7 +913,7 @@ This room allows you to increase your stats and gain powerlevel by
 training in increased gravity.  To begin, type 'gravtrain <stat> <minutes'.
 One game minute is roughly equal to one second of real time. 
 ~
-0 268435456 0
+0 0 0
 D1
 ~
 ~
