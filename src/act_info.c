@@ -4136,7 +4136,7 @@ void do_train(CHAR_DATA *ch, char *argument)
 		return;
 	}
 
-	if (!str_cmp(argument, "pushup") {
+	if (!str_cmp(argument, "pushup")) {
 
 		if (xIS_SET((ch)->affected_by, AFF_PUSHUPS) || xIS_SET((ch)->affected_by, AFF_SHADOWBOXING)
 		|| xIS_SET((ch)->affected_by, AFF_ENDURING) || xIS_SET((ch)->affected_by, AFF_MEDITATION)) {
@@ -4150,7 +4150,7 @@ void do_train(CHAR_DATA *ch, char *argument)
 			return;
 		}
 	}
-	if (!str_cmp(argument, "shadowbox") {
+	if (!str_cmp(argument, "shadowbox")) {
 
 		if (xIS_SET((ch)->affected_by, AFF_PUSHUPS) || xIS_SET((ch)->affected_by, AFF_SHADOWBOXING)
 		|| xIS_SET((ch)->affected_by, AFF_ENDURING) || xIS_SET((ch)->affected_by, AFF_MEDITATION)) {
@@ -4164,7 +4164,7 @@ void do_train(CHAR_DATA *ch, char *argument)
 			return;
 		}
 	}
-	if (!str_cmp(argument, "endure") {
+	if (!str_cmp(argument, "endure")) {
 
 		if (xIS_SET((ch)->affected_by, AFF_PUSHUPS) || xIS_SET((ch)->affected_by, AFF_SHADOWBOXING)
 		|| xIS_SET((ch)->affected_by, AFF_ENDURING) || xIS_SET((ch)->affected_by, AFF_MEDITATION)) {
@@ -4178,7 +4178,7 @@ void do_train(CHAR_DATA *ch, char *argument)
 			return;
 		}
 	}
-	if (!str_cmp(argument, "meditate") {
+	if (!str_cmp(argument, "meditate")) {
 
 		if (xIS_SET((ch)->affected_by, AFF_PUSHUPS) || xIS_SET((ch)->affected_by, AFF_SHADOWBOXING)
 		|| xIS_SET((ch)->affected_by, AFF_ENDURING) || xIS_SET((ch)->affected_by, AFF_MEDITATION)) {
@@ -4192,7 +4192,7 @@ void do_train(CHAR_DATA *ch, char *argument)
 			return;
 		}
 	}
-	if (!str_cmp(argument, "stop") {
+	if (!str_cmp(argument, "stop")) {
 		if (xIS_SET((ch)->affected_by, AFF_PUSHUPS)) {
 			xREMOVE_BIT((ch)->affected_by, AFF_PUSHUPS);
 			act(AT_WHITE, "You take a break and stop training.", ch, NULL, NULL, TO_CHAR);
@@ -6724,9 +6724,10 @@ do_analyze(CHAR_DATA * ch, char *argument)
 	ch_printf(ch, "&zSpecial properties: &C%s\n\r",
 	    extra_bit_name(&obj->extra_flags));
 
-	if (obj->item_type != ITEM_LIGHT && obj->wear_flags - 1 > 0)
+	if (obj->item_type != ITEM_LIGHT && obj->wear_flags - 1 > 0) {
 		ch_printf(ch, "&zItem's wear location: &C%s&C\n\r",
 		    flag_string(obj->wear_flags - 1, w_flags));
+	}
 
 	ch_printf(ch, "\n\r");
 
@@ -6801,9 +6802,11 @@ do_analyze(CHAR_DATA * ch, char *argument)
 
 	ch_printf(ch, "\n\r");
 
-	for (paf = obj->pIndexData->first_affect; paf; paf = paf->next)
+	for (paf = obj->pIndexData->first_affect; paf; paf = paf->next) {
 		showaffect(ch, paf);
+	}
 
-	for (paf = obj->first_affect; paf; paf = paf->next)
+	for (paf = obj->first_affect; paf; paf = paf->next) {
 		showaffect(ch, paf);
+	}
 }
