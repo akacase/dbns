@@ -4123,7 +4123,9 @@ do_consider(CHAR_DATA * ch, char *argument)
 
 void do_train(CHAR_DATA *ch, char *argument)
 {
-	
+        char arg[MAX_INPUT_LENGTH];
+
+	one_argument(argument, arg);
 	
 	if (IS_NPC(ch))
 		return;
@@ -4131,12 +4133,11 @@ void do_train(CHAR_DATA *ch, char *argument)
 		send_to_char("This doesn't appear to be a gravity chamber...\n\r", ch);
 		return;
 	}
-	else {
+	else if (arg[0] == '\0') {
 		send_to_char("Gravtrain which activity? Activities are: pushup, shadowbox, endure, meditate.\n\r", ch);
-		return;
 	}
 
-	if (!str_cmp(argument, "pushup")) {
+	if (!str_cmp(arg, "pushup")) {
 
 		if (xIS_SET((ch)->affected_by, AFF_PUSHUPS) || xIS_SET((ch)->affected_by, AFF_SHADOWBOXING)
 		|| xIS_SET((ch)->affected_by, AFF_ENDURING) || xIS_SET((ch)->affected_by, AFF_MEDITATION)) {
@@ -4150,7 +4151,7 @@ void do_train(CHAR_DATA *ch, char *argument)
 			return;
 		}
 	}
-	if (!str_cmp(argument, "shadowbox")) {
+	if (!str_cmp(arg, "shadowbox")) {
 
 		if (xIS_SET((ch)->affected_by, AFF_PUSHUPS) || xIS_SET((ch)->affected_by, AFF_SHADOWBOXING)
 		|| xIS_SET((ch)->affected_by, AFF_ENDURING) || xIS_SET((ch)->affected_by, AFF_MEDITATION)) {
@@ -4164,7 +4165,7 @@ void do_train(CHAR_DATA *ch, char *argument)
 			return;
 		}
 	}
-	if (!str_cmp(argument, "endure")) {
+	if (!str_cmp(arg, "endure")) {
 
 		if (xIS_SET((ch)->affected_by, AFF_PUSHUPS) || xIS_SET((ch)->affected_by, AFF_SHADOWBOXING)
 		|| xIS_SET((ch)->affected_by, AFF_ENDURING) || xIS_SET((ch)->affected_by, AFF_MEDITATION)) {
@@ -4178,7 +4179,7 @@ void do_train(CHAR_DATA *ch, char *argument)
 			return;
 		}
 	}
-	if (!str_cmp(argument, "meditate")) {
+	if (!str_cmp(arg, "meditate")) {
 
 		if (xIS_SET((ch)->affected_by, AFF_PUSHUPS) || xIS_SET((ch)->affected_by, AFF_SHADOWBOXING)
 		|| xIS_SET((ch)->affected_by, AFF_ENDURING) || xIS_SET((ch)->affected_by, AFF_MEDITATION)) {
@@ -4192,7 +4193,7 @@ void do_train(CHAR_DATA *ch, char *argument)
 			return;
 		}
 	}
-	if (!str_cmp(argument, "stop")) {
+	if (!str_cmp(arg, "stop")) {
 		if (xIS_SET((ch)->affected_by, AFF_PUSHUPS)) {
 			xREMOVE_BIT((ch)->affected_by, AFF_PUSHUPS);
 			act(AT_WHITE, "You take a break and stop training.", ch, NULL, NULL, TO_CHAR);
