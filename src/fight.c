@@ -531,7 +531,186 @@ violence_update(void)
 				affect_remove(ch, paf);
 			}
 		}
-
+		/* New Gravity Training */
+		if (xIS_SET((ch)->affected_by, AFF_PUSHUPS) && !xIS_SET((ch)->in_room->room_flags, ROOM_GRAV)) {
+			
+			xREMOVE_BIT((ch)->affected_by, AFF_PUSHUPS);
+			send_to_char("Your training is cut short.\n\r", ch);
+		}
+		if (xIS_SET((ch)->affected_by, AFF_SHADOWBOXING) && !xIS_SET((ch)->in_room->room_flags, ROOM_GRAV)) {
+			
+			xREMOVE_BIT((ch)->affected_by, AFF_SHADOWBOXING);
+			send_to_char("Your training is cut short.\n\r", ch);
+		}
+		if (xIS_SET((ch)->affected_by, AFF_ENDURING) && !xIS_SET((ch)->in_room->room_flags, ROOM_GRAV)) {
+			
+			xREMOVE_BIT((ch)->affected_by, AFF_ENDURING);
+			send_to_char("Your training is cut short.\n\r", ch);
+		}
+		if (xIS_SET((ch)->affected_by, AFF_MEDITATION) && !xIS_SET((ch)->in_room->room_flags, ROOM_GRAV)) {
+			
+			xREMOVE_BIT((ch)->affected_by, AFF_MEDITATION);
+			send_to_char("Your training is cut short.\n\r", ch);
+		}
+		if (xIS_SET((ch)->affected_by, AFF_PUSHUPS) && xIS_SET((ch)->in_room->room_flags, ROOM_GRAV)) {
+		
+			int trainmessage = 0;
+			long double xp_train = 0;
+			int gravLevel = 0;
+			int minLF;
+			
+			gravLevel = ((get_curr_str(ch) + get_curr_dex(ch) + get_curr_int(ch) + get_curr_con(ch)) - 39);
+			trainmessage = number_range(1, 100);
+			minLF = 5;
+			
+			if (ch->hit <= minLF) {
+				
+				xREMOVE_BIT((ch)->affected_by, AFF_PUSHUPS);
+				act(AT_WHITE, "You almost pass out from training too hard.", ch, NULL, NULL, TO_CHAR);
+				act(AT_WHITE, "$n almost passes out from training too hard.", ch, NULL, NULL, TO_NOTVICT);
+			}
+			
+			if (trainmessage < 75) {
+				
+				xp_train = (long double)2 / 100 * gravLevel;
+				ch->hit--;
+				ch->mana -= URANGE(0, ch->mana * 0.005, ch->mana);
+				pager_printf(ch, "&GYou perform a pushup in %d times gravity, your strength steadily building.\n\r", gravLevel);
+				gain_exp(ch, xp_train);
+				stat_train(ch, "str", 15);
+				
+			}
+			if (trainmessage >= 75) {
+				
+				xp_train = (long double)2 / 100 * gravLevel;
+				ch->hit--;
+				ch->mana -= URANGE(0, ch->mana * 0.005, ch->mana);
+				pager_printf(ch, "&GYou do a set of pushups as quickly as you can, your strength steadily building.\n\r", gravLevel);
+				act(AT_WHITE, "$n does a set up pushups in rapid-fire succession.", ch, NULL, NULL, TO_NOTVICT);
+				gain_exp(ch, xp_train);
+				stat_train(ch, "str", 15);
+				
+			}
+		}
+		if (xIS_SET((ch)->affected_by, AFF_SHADOWBOXING) && xIS_SET((ch)->in_room->room_flags, ROOM_GRAV)) {
+		
+			int trainmessage = 0;
+			long double xp_train = 0;
+			int gravLevel = 0;
+			int minLF;
+			
+			gravLevel = ((get_curr_str(ch) + get_curr_dex(ch) + get_curr_int(ch) + get_curr_con(ch)) - 39);
+			trainmessage = number_range(1, 100);
+			minLF = 5;
+			
+			if (ch->hit <= minLF) {
+				
+				xREMOVE_BIT((ch)->affected_by, AFF_SHADOWBOXING);
+				act(AT_WHITE, "You almost pass out from training too hard.", ch, NULL, NULL, TO_CHAR);
+				act(AT_WHITE, "$n almost passes out from training too hard.", ch, NULL, NULL, TO_NOTVICT);
+			}
+			
+			if (trainmessage < 75) {
+				
+				xp_train = (long double)2 / 100 * gravLevel;
+				ch->hit--;
+				ch->mana -= URANGE(0, ch->mana * 0.005, ch->mana);
+				pager_printf(ch, "&GYou throw a punch in %d times gravity, skillfully dodging left and right.\n\r", gravLevel);
+				gain_exp(ch, xp_train);
+				stat_train(ch, "spd", 15);
+				
+			}
+			if (trainmessage >= 75) {
+				
+				xp_train = (long double)2 / 100 * gravLevel;
+				ch->hit--;
+				ch->mana -= URANGE(0, ch->mana * 0.005, ch->mana);
+				pager_printf(ch, "&GYou throw a punch in %d times gravity, skillfully dodging left and right.\n\r", gravLevel);
+				act(AT_WHITE, "$n throws a punch at the air, bouncing light on $s feet.", ch, NULL, NULL, TO_NOTVICT);
+				gain_exp(ch, xp_train);
+				stat_train(ch, "spd", 15);
+				
+			}
+		}
+		if (xIS_SET((ch)->affected_by, AFF_ENDURING) && xIS_SET((ch)->in_room->room_flags, ROOM_GRAV)) {
+		
+			int trainmessage = 0;
+			long double xp_train = 0;
+			int gravLevel = 0;
+			int minLF;
+			
+			gravLevel = ((get_curr_str(ch) + get_curr_dex(ch) + get_curr_int(ch) + get_curr_con(ch)) - 39);
+			trainmessage = number_range(1, 100);
+			minLF = 5;
+			
+			if (ch->hit <= minLF) {
+				
+				xREMOVE_BIT((ch)->affected_by, AFF_ENDURING);
+				act(AT_WHITE, "You almost pass out from training too hard.", ch, NULL, NULL, TO_CHAR);
+				act(AT_WHITE, "$n almost passes out from training too hard.", ch, NULL, NULL, TO_NOTVICT);
+			}
+			
+			if (trainmessage < 75) {
+				
+				xp_train = (long double)2 / 100 * gravLevel;
+				ch->hit--;
+				ch->mana -= URANGE(0, ch->mana * 0.005, ch->mana);
+				pager_printf(ch, "&GYou crank up the dial well beyond %d times gravity, fighting just to stay on your feet.\n\r", gravLevel);
+				gain_exp(ch, xp_train);
+				stat_train(ch, "con", 15);
+				
+			}
+			if (trainmessage >= 75) {
+				
+				xp_train = (long double)2 / 100 * gravLevel;
+				ch->mana -= URANGE(0, ch->mana * 0.005, ch->mana);
+				pager_printf(ch, "&GYou crank up the dial well beyond %d times gravity, fighting just to stay on your feet.\n\r", gravLevel);
+				act(AT_WHITE, "$n endures a level of gravity far beyond their normal limits, fighting just to stay afoot.", ch, NULL, NULL, TO_NOTVICT);
+				gain_exp(ch, xp_train);
+				stat_train(ch, "con", 15);
+				
+			}
+		}
+		if (xIS_SET((ch)->affected_by, AFF_MEDITATION) && xIS_SET((ch)->in_room->room_flags, ROOM_GRAV)) {
+		
+			int trainmessage = 0;
+			long double xp_train = 0;
+			int gravLevel = 0;
+			int minLF;
+			
+			gravLevel = ((get_curr_str(ch) + get_curr_dex(ch) + get_curr_int(ch) + get_curr_con(ch)) - 39);
+			trainmessage = number_range(1, 100);
+			minLF = 5;
+			
+			if (ch->hit <= minLF) {
+				
+				xREMOVE_BIT((ch)->affected_by, AFF_MEDITATION);
+				act(AT_WHITE, "You almost pass out from training too hard.", ch, NULL, NULL, TO_CHAR);
+				act(AT_WHITE, "$n almost passes out from training too hard.", ch, NULL, NULL, TO_NOTVICT);
+			}
+			
+			if (trainmessage < 75) {
+				
+				xp_train = (long double)2 / 100 * gravLevel;
+				ch->hit--;
+				ch->mana -= URANGE(0, ch->mana * 0.005, ch->mana);
+				pager_printf(ch, "&GYou focus your mind's eye in %d times gravity, shutting all else out with extreme calm.\n\r", gravLevel);
+				gain_exp(ch, xp_train);
+				stat_train(ch, "int", 15);
+				
+			}
+			if (trainmessage >= 75) {
+				
+				xp_train = (long double)2 / 100 * gravLevel;
+				ch->hit--;
+				ch->mana -= URANGE(0, ch->mana * 0.005, ch->mana);
+				pager_printf(ch, "&GYou focus your mind's eye in %d times gravity, shutting all else out with extreme calm.\n\r", gravLevel);
+				act(AT_WHITE, "$n sits in peaceful meditation, radiating an aura of calm.", ch, NULL, NULL, TO_NOTVICT);
+				gain_exp(ch, xp_train);
+				stat_train(ch, "int", 15);
+				
+			}
+		}
 		/* Kaioken drain */
 		if (xIS_SET((ch)->affected_by, AFF_KAIOKEN) && !IS_NPC(ch)
 		    && ch->desc) {

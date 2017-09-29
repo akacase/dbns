@@ -10310,25 +10310,25 @@ do_mystic(CHAR_DATA * ch, char *argument)
 	}
 	if (kicontrol < 1000)
 		pl_mult = 50;
-	else if (kicontrol < 1500)
+	else if (kicontrol > 1500)
 		pl_mult = 75;
-	else if (kicontrol < 2000)
+	else if (kicontrol > 2000)
 		pl_mult = 100;
-	else if (kicontrol < 2500)
+	else if (kicontrol > 2500)
 		pl_mult = 125;
-	else if (kicontrol < 3000)
+	else if (kicontrol > 3000)
 		pl_mult = 150;
-	else if (kicontrol < 3500)
+	else if (kicontrol > 3500)
 		pl_mult = 175;
-	else if (kicontrol < 4000)
+	else if (kicontrol > 4000)
 		pl_mult = 200;
-	else if (kicontrol < 4500)
+	else if (kicontrol > 4500)
 		pl_mult = 225;
-	else if (kicontrol < 5000)
+	else if (kicontrol > 5000)
 		pl_mult = 250;
-	else if (kicontrol < 5500)
+	else if (kicontrol > 5500)
 		pl_mult = 275;
-	else if (kicontrol < 6000)
+	else if (kicontrol > 6000)
 		pl_mult = 300;
 
 	if (arg > pl_mult)
