@@ -12,7 +12,7 @@ $
 #PLANET 1
 
 #FLAGS
-0
+0 1
 
 #CLIMATE 2 2 2
 
@@ -492,8 +492,8 @@ S
 #108
 Gravity Chamber 01~
 This room allows you to increase your stats and gain powerlevel by
-training in increased gravity.  To begin, type 'gravtrain <stat> <minutes'.
-One game minute is roughly equal to one second of real time. 
+training in increased gravity. To begin, type 'gravtrain' to see an output
+with what sorts of commands you may enter. 
 ~
 0 268435460 0
 D0
@@ -878,8 +878,8 @@ S
 #126
 Gravity Chamber 02~
 This room allows you to increase your stats and gain powerlevel by
-training in increased gravity.  To begin, type 'gravtrain <stat> <minutes'.
-One game minute is roughly equal to one second of real time. 
+training in increased gravity.  To begin, type 'gravtrain' to see an output
+with what sorts of commands you may enter.  
 ~
 0 268435456 0
 D1
@@ -894,8 +894,8 @@ S
 #127
 Gravity Chamber 03~
 This room allows you to increase your stats and gain powerlevel by
-training in increased gravity.  To begin, type 'gravtrain <stat> <minutes'.
-One game minute is roughly equal to one second of real time. 
+training in increased gravity. To begin, type 'gravtrain' to see an output
+with what sorts of commands you may enter. 
 ~
 0 268435456 0
 D1
@@ -910,8 +910,8 @@ S
 #128
 Gravity Chamber 04~
 This room allows you to increase your stats and gain powerlevel by
-training in increased gravity.  To begin, type 'gravtrain <stat> <minutes'.
-One game minute is roughly equal to one second of real time. 
+training in increased gravity. To begin, type 'gravtrain' to see an output
+with what sorts of commands you may enter. 
 ~
 0 268435456 0
 D1
