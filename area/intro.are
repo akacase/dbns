@@ -247,6 +247,9 @@ say You may feel yourself not increasing in power at first, but this is normal.
 say Keep at it, and I'm certain your meatbag body will positively FLOW with power.
 endif
 ~
+> rand_prog 5~
+mpecho &cThe gravity Serv-O-Bot drones monotonously.&d
+~
 |
 #199
 last mob~
