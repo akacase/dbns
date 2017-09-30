@@ -554,8 +554,9 @@ violence_update(void)
 		}
 		if (xIS_SET((ch)->affected_by, AFF_PUSHUPS) && xIS_SET((ch)->in_room->room_flags, ROOM_GRAV)) {
 		
+            char buf[MAX_STRING_LENGTH];
 			int trainmessage = 0;
-			long double xp_train = 0;
+			long double xp_gain = 0;
 			int gravLevel = 0;
 			int minLF;
 			
@@ -572,30 +573,33 @@ violence_update(void)
 			
 			if (trainmessage < 75) {
 				
-				xp_train = (long double)2 / 100 * gravLevel;
+				xp_gain = (long double)2 / 100 * gravLevel;
 				ch->hit--;
 				ch->mana -= URANGE(0, ch->mana * 0.005, ch->mana);
 				pager_printf(ch, "&GYou perform a pushup in %d times gravity, your strength steadily building.\n\r", gravLevel);
-				gain_exp(ch, xp_train);
+				gain_exp(ch, xp_gain);
+                sprintf(buf, "Your power level increases by %s points.", num_punct(xp_gain));
 				stat_train(ch, "str", 15);
 				
 			}
 			if (trainmessage >= 75) {
 				
-				xp_train = (long double)2 / 100 * gravLevel;
+				xp_gain = (long double)2 / 100 * gravLevel;
 				ch->hit--;
 				ch->mana -= URANGE(0, ch->mana * 0.005, ch->mana);
 				pager_printf(ch, "&GYou do a set of pushups as quickly as you can, your strength steadily building.\n\r", gravLevel);
 				act(AT_WHITE, "$n does a set up pushups in rapid-fire succession.", ch, NULL, NULL, TO_NOTVICT);
-				gain_exp(ch, xp_train);
+				gain_exp(ch, xp_gain);
+                sprintf(buf, "Your power level increases by %s points.", num_punct(xp_gain));
 				stat_train(ch, "str", 15);
 				
 			}
 		}
 		if (xIS_SET((ch)->affected_by, AFF_SHADOWBOXING) && xIS_SET((ch)->in_room->room_flags, ROOM_GRAV)) {
 		
+            char buf[MAX_STRING_LENGTH];
 			int trainmessage = 0;
-			long double xp_train = 0;
+			long double xp_gain = 0;
 			int gravLevel = 0;
 			int minLF;
 			
@@ -612,30 +616,33 @@ violence_update(void)
 			
 			if (trainmessage < 75) {
 				
-				xp_train = (long double)2 / 100 * gravLevel;
+				xp_gain = (long double)2 / 100 * gravLevel;
 				ch->hit--;
 				ch->mana -= URANGE(0, ch->mana * 0.005, ch->mana);
 				pager_printf(ch, "&GYou throw a punch in %d times gravity, skillfully dodging left and right.\n\r", gravLevel);
-				gain_exp(ch, xp_train);
+				gain_exp(ch, xp_gain);
+                sprintf(buf, "Your power level increases by %s points.", num_punct(xp_gain));
 				stat_train(ch, "spd", 15);
 				
 			}
 			if (trainmessage >= 75) {
 				
-				xp_train = (long double)2 / 100 * gravLevel;
+				xp_gain = (long double)2 / 100 * gravLevel;
 				ch->hit--;
 				ch->mana -= URANGE(0, ch->mana * 0.005, ch->mana);
 				pager_printf(ch, "&GYou throw a punch in %d times gravity, skillfully dodging left and right.\n\r", gravLevel);
 				act(AT_WHITE, "$n throws a punch at the air, bouncing light on $s feet.", ch, NULL, NULL, TO_NOTVICT);
-				gain_exp(ch, xp_train);
+				gain_exp(ch, xp_gain);
+                sprintf(buf, "Your power level increases by %s points.", num_punct(xp_gain));
 				stat_train(ch, "spd", 15);
 				
 			}
 		}
 		if (xIS_SET((ch)->affected_by, AFF_ENDURING) && xIS_SET((ch)->in_room->room_flags, ROOM_GRAV)) {
 		
+            char buf[MAX_STRING_LENGTH];
 			int trainmessage = 0;
-			long double xp_train = 0;
+			long double xp_gain = 0;
 			int gravLevel = 0;
 			int minLF;
 			
@@ -652,29 +659,32 @@ violence_update(void)
 			
 			if (trainmessage < 75) {
 				
-				xp_train = (long double)2 / 100 * gravLevel;
+				xp_gain = (long double)2 / 100 * gravLevel;
 				ch->hit--;
 				ch->mana -= URANGE(0, ch->mana * 0.005, ch->mana);
 				pager_printf(ch, "&GYou crank up the dial well beyond %d times gravity, fighting just to stay on your feet.\n\r", gravLevel);
-				gain_exp(ch, xp_train);
+				gain_exp(ch, xp_gain);
+                sprintf(buf, "Your power level increases by %s points.", num_punct(xp_gain));
 				stat_train(ch, "con", 15);
 				
 			}
 			if (trainmessage >= 75) {
 				
-				xp_train = (long double)2 / 100 * gravLevel;
+				xp_gain = (long double)2 / 100 * gravLevel;
 				ch->mana -= URANGE(0, ch->mana * 0.005, ch->mana);
 				pager_printf(ch, "&GYou crank up the dial well beyond %d times gravity, fighting just to stay on your feet.\n\r", gravLevel);
 				act(AT_WHITE, "$n endures a level of gravity far beyond their normal limits, fighting just to stay afoot.", ch, NULL, NULL, TO_NOTVICT);
-				gain_exp(ch, xp_train);
+				gain_exp(ch, xp_gain);
+                sprintf(buf, "Your power level increases by %s points.", num_punct(xp_gain));
 				stat_train(ch, "con", 15);
 				
 			}
 		}
 		if (xIS_SET((ch)->affected_by, AFF_MEDITATION) && xIS_SET((ch)->in_room->room_flags, ROOM_GRAV)) {
 		
+            char buf[MAX_STRING_LENGTH];
 			int trainmessage = 0;
-			long double xp_train = 0;
+			long double xp_gain = 0;
 			int gravLevel = 0;
 			int minLF;
 			
@@ -691,22 +701,24 @@ violence_update(void)
 			
 			if (trainmessage < 75) {
 				
-				xp_train = (long double)2 / 100 * gravLevel;
+				xp_gain = (long double)2 / 100 * gravLevel;
 				ch->hit--;
 				ch->mana -= URANGE(0, ch->mana * 0.005, ch->mana);
 				pager_printf(ch, "&GYou focus your mind's eye in %d times gravity, shutting all else out with extreme calm.\n\r", gravLevel);
-				gain_exp(ch, xp_train);
+				gain_exp(ch, xp_gain);
+                sprintf(buf, "Your power level increases by %s points.", num_punct(xp_gain));
 				stat_train(ch, "int", 15);
 				
 			}
 			if (trainmessage >= 75) {
 				
-				xp_train = (long double)2 / 100 * gravLevel;
+				xp_gain = (long double)2 / 100 * gravLevel;
 				ch->hit--;
 				ch->mana -= URANGE(0, ch->mana * 0.005, ch->mana);
 				pager_printf(ch, "&GYou focus your mind's eye in %d times gravity, shutting all else out with extreme calm.\n\r", gravLevel);
 				act(AT_WHITE, "$n sits in peaceful meditation, radiating an aura of calm.", ch, NULL, NULL, TO_NOTVICT);
-				gain_exp(ch, xp_train);
+				gain_exp(ch, xp_gain);
+                sprintf(buf, "Your power level increases by %s points.", num_punct(xp_gain));
 				stat_train(ch, "int", 15);
 				
 			}
