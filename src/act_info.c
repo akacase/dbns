@@ -4150,8 +4150,7 @@ void do_train(CHAR_DATA *ch, char *argument)
 			act(AT_WHITE, "$n flips on the machine and drops down into a neutral pushup position.", ch, NULL, NULL, TO_NOTVICT);
 			return;
 		}
-	}
-	if (!str_cmp(arg, "shadowbox")) {
+	} else if (!str_cmp(arg, "shadowbox")) {
 
 		if (xIS_SET((ch)->affected_by, AFF_PUSHUPS) || xIS_SET((ch)->affected_by, AFF_SHADOWBOXING)
 		|| xIS_SET((ch)->affected_by, AFF_ENDURING) || xIS_SET((ch)->affected_by, AFF_MEDITATION)) {
@@ -4164,8 +4163,7 @@ void do_train(CHAR_DATA *ch, char *argument)
 			act(AT_WHITE, "$n flips on the machine and gets ready to shadowbox.", ch, NULL, NULL, TO_NOTVICT);
 			return;
 		}
-	}
-	if (!str_cmp(arg, "endure")) {
+	} else if (!str_cmp(arg, "endure")) {
 
 		if (xIS_SET((ch)->affected_by, AFF_PUSHUPS) || xIS_SET((ch)->affected_by, AFF_SHADOWBOXING)
 		|| xIS_SET((ch)->affected_by, AFF_ENDURING) || xIS_SET((ch)->affected_by, AFF_MEDITATION)) {
@@ -4178,8 +4176,7 @@ void do_train(CHAR_DATA *ch, char *argument)
 			act(AT_WHITE, "$n flips on the machine and prepares to endure intense gravity.", ch, NULL, NULL, TO_NOTVICT);
 			return;
 		}
-	}
-	if (!str_cmp(arg, "meditate")) {
+	} else if (!str_cmp(arg, "meditate")) {
 
 		if (xIS_SET((ch)->affected_by, AFF_PUSHUPS) || xIS_SET((ch)->affected_by, AFF_SHADOWBOXING)
 		|| xIS_SET((ch)->affected_by, AFF_ENDURING) || xIS_SET((ch)->affected_by, AFF_MEDITATION)) {
@@ -4192,8 +4189,7 @@ void do_train(CHAR_DATA *ch, char *argument)
 		act(AT_WHITE, "$n flips on the machine and relaxes, steeling $s mind against outside distractions.", ch, NULL, NULL, TO_NOTVICT);
 			return;
 		}
-	}
-	if (!str_cmp(arg, "stop")) {
+	} else if (!str_cmp(arg, "stop")) {
 		if (xIS_SET((ch)->affected_by, AFF_PUSHUPS)) {
 			xREMOVE_BIT((ch)->affected_by, AFF_PUSHUPS);
 			act(AT_WHITE, "You take a break and stop training.", ch, NULL, NULL, TO_CHAR);
@@ -4222,6 +4218,9 @@ void do_train(CHAR_DATA *ch, char *argument)
 			send_to_char("Stop what? You're not doing anything.\n\r", ch);
 			return;
 		}
+	} else {
+	    send_to_char("Gravtrain which activity? Activities are: pushup, shadowbox, endure, meditate.\n\r", ch);
+	    return;
 	}
 }
 
