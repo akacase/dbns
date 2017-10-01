@@ -2362,7 +2362,7 @@ reconnect(DESCRIPTOR_DATA * d, char *name)
 			write_to_buffer(d, "Already playing... Kicking off old connection.\n\r", 0);
 			write_to_buffer(d_old, "Kicking off old connection... bye!\n\r", 0);
 			log_string("preparing to close socket at comm.c:2824\n");
-			close_socket(d_old, false, true);
+			close_socket(d_old, true, false);
 			d->character = ch;
 			ch->desc = d;
 			ch->timer = 0;
