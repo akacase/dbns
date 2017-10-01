@@ -1265,7 +1265,7 @@ nanny(DESCRIPTOR_DATA * d, char *argument)
 		return;
 	case CON_GET_NAME:
 		if (argument[0] == '\0') {
-			close_socket(d, false, false);
+			close_socket(d, true, false);
 			return;
 		}
 		*argument = capitalize_string(argument);
@@ -1337,14 +1337,14 @@ nanny(DESCRIPTOR_DATA * d, char *argument)
 		write_to_buffer(d, "\n\r", 2);
 		if (str_cmp(sha256_crypt(argument), ch->pcdata->pwd)) {
 			write_to_buffer(d, "Wrong password, disconnecting.\n\r", 0);
-			close_socket(d, false, true);
+			close_socket(d, true, true);
 			return;
 		}
 		write_to_buffer(d, echo_on_str, 0);
 		if (check_playing(d, ch->pcdata->filename)) {
 			if (!(reconnect(d, ch->pcdata->filename))) {
 				write_to_buffer(d, "error, disconnecting.\n\r", 0);
-				close_socket(d, false, true);
+				close_socket(d, true, true);
 				return;
 			}
 			break;
@@ -2362,7 +2362,7 @@ reconnect(DESCRIPTOR_DATA * d, char *name)
 			write_to_buffer(d, "Already playing... Kicking off old connection.\n\r", 0);
 			write_to_buffer(d_old, "Kicking off old connection... bye!\n\r", 0);
 			log_string("preparing to close socket at comm.c:2824\n");
-			close_socket(d_old, false, false);
+			close_socket(d_old, true, false);
 			d->character = ch;
 			ch->desc = d;
 			ch->timer = 0;
@@ -4083,7 +4083,7 @@ check_pfile(DESCRIPTOR_DATA * d) {
 		sprintf(log_buf, "Bad player file %s", d->user);
 		log_string(log_buf);
 		send_to_desc_color("Your playerfile is corrupt... please notify case@capsulecorp.org\n\r", d);
-		close_socket(d, false, false);
+		close_socket(d, true, false);
 		return (false);
 	} else {
 		return(true);
