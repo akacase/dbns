@@ -1513,6 +1513,29 @@ Some god abandoned a newly created sandan monk here.
 0 0 0 0 0
 0 0 0 0 1 1 0
 0 0 0 0 0 0 0 0
+#308004
+legendary redactyl~
+The Legendary Redactyl~
+The Legendary Redactyl stomps around with its wings spread apart, a series of black, inky... bars(?) lining its entire body.
+~
+~
+1 0 0 C
+0
+1 0 100 1d20+0 2d5+0
+-1 100000000
+112 112 0
+5000 5000 5000 5000 0
+0 0 0 0 0
+0 0 0 0 0 0 4
+0 0 0 0 0 0 0 0
+> fight_prog 10~
+mpecho &RThe Legendary Redactyl rears back and opens its mouth wide, channeling a massive ball of energy!&d
+mpechoat $n &RThe terrifying monster bellows, &C"[REDACTED]"&R, engulfing you in a massive blast! &W[100]&d
+mpechoaround $n &RThe terrifying monster bellows, &C"[REDACTED]"&R, engulfing $n in a massive blast! &W[100]&d
+mpechoat $n &YTHAT REALLY HURT! &W[100]&d
+cackle
+~
+|
 #308900
 last mob~
 a newly created last mob~
