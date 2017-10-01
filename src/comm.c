@@ -4083,7 +4083,7 @@ check_pfile(DESCRIPTOR_DATA * d) {
 		sprintf(log_buf, "Bad player file %s", d->user);
 		log_string(log_buf);
 		send_to_desc_color("Your playerfile is corrupt... please notify case@capsulecorp.org\n\r", d);
-		close_socket(d, false, true);
+		close_socket(d, true, false);
 		return (false);
 	} else {
 		return(true);
