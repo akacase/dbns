@@ -1608,6 +1608,12 @@ do_powerdown(CHAR_DATA * ch, char *argument)
 				ch->pcdata->eyes = ch->pcdata->orignaleyes;
 			}
 		}
+		if (xIS_SET((ch)->affected_by, AFF_POWERCHANNEL)
+			xREMOVE_BIT((ch)->affected_by, AFF_POWERCHANNEL);
+		if (xIS_SET((ch)->affected_by, AFF_OVERCHANNEL)
+			xREMOVE_BIT((ch)->affected_by, AFF_OVERCHANNEL);
+		if (xIS_SET((ch)->affected_by, AFF_SAFEMAX))
+			xREMOVE_BIT((ch)->affected_by, AFF_SAFEMAX);
 		if (xIS_SET((ch)->affected_by, AFF_USSJ))
 			xREMOVE_BIT((ch)->affected_by, AFF_USSJ);
 		if (xIS_SET((ch)->affected_by, AFF_USSJ2))
@@ -1737,6 +1743,8 @@ do_powerdown(CHAR_DATA * ch, char *argument)
 			xREMOVE_BIT((ch)->affected_by, AFF_SSJ3);
 		if (xIS_SET((ch)->affected_by, AFF_SSJ4))
 			xREMOVE_BIT((ch)->affected_by, AFF_SSJ4);
+		if (xIS_SET((ch)->affected_by, AFF_SGOD))
+			xREMOVE_BIT((ch)->affected_by, AFF_SGOD);
 		if (xIS_SET((ch)->affected_by, AFF_KAIOKEN))
 			xREMOVE_BIT((ch)->affected_by, AFF_KAIOKEN);
 		if (xIS_SET((ch)->affected_by, AFF_SNAMEK))
@@ -1749,6 +1757,8 @@ do_powerdown(CHAR_DATA * ch, char *argument)
 			xREMOVE_BIT((ch)->affected_by, AFF_ICER4);
 		if (xIS_SET((ch)->affected_by, AFF_ICER5))
 			xREMOVE_BIT((ch)->affected_by, AFF_ICER5);
+		if (xIS_SET((ch)->affected_by, AFF_GOLDENFORM))
+			xREMOVE_BIT((ch)->affected_by, AFF_GOLDENFORM);
 		if (xIS_SET((ch)->affected_by, AFF_HYPER))
 			xREMOVE_BIT(ch->affected_by, AFF_HYPER);
 		if (xIS_SET((ch)->affected_by, AFF_EXTREME))
@@ -5469,7 +5479,6 @@ do_suppress(CHAR_DATA * ch, char *argument)
 			ch->pl = ch->master->pcdata->suppress;
 		}
 
-		transStatRemove(ch);
 		heart_calc(ch, "");
 		if (!IS_NPC(ch)) {
 			learn_from_success(ch, gsn_suppress);
@@ -5503,6 +5512,7 @@ do_suppress(CHAR_DATA * ch, char *argument)
 	}
 
 	ch->mana -= skill_table[gsn_suppress]->min_mana;
+	transStatRemove(ch);
 	return;
 
 }

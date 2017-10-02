@@ -531,6 +531,147 @@ violence_update(void)
 				affect_remove(ch, paf);
 			}
 		}
+		/* New Time-based Powerup */
+		if (xIS_SET((ch)->affected_by, AFF_POWERCHANNEL)) {
+			double safemaximum = 0;
+			int	kicontrol = 0;
+			int kistat = 0;
+			safemaximum = ((get_curr_con(ch) * 0.03) + (get_curr_int(ch) * 0.06));
+			kicontrol = get_curr_int(ch);
+			kistat = (kicontrol / 10);
+			if (ch->position < POS_STANDING) {
+				xREMOVE_BIT((ch)->affected_by, AFF_POWERCHANNEL);
+				send_to_char("DEBUG: CAN'T POWERUP IF YOU'RE NOT STANDING, YA DINGIS\n\r", ch);
+			}
+			if (ch->powerup < safemaximum) {
+				if (xIS_SET((ch)->affected_by, AFF_SSJ)
+					|| xIS_SET((ch)->affected_by, AFF_SSJ2)
+					|| xIS_SET((ch)->affected_by, AFF_SSJ3)
+					|| xIS_SET((ch)->affected_by, AFF_SSJ4)
+					|| xIS_SET((ch)->affected_by, AFF_SGOD)
+					|| xIS_SET((ch)->affected_by, AFF_KAIOKEN)
+					|| xIS_SET((ch)->affected_by, AFF_HYPER)
+					|| xIS_SET((ch)->affected_by, AFF_SNAMEK)
+					|| xIS_SET((ch)->affected_by, AFF_ICER2)
+					|| xIS_SET((ch)->affected_by, AFF_ICER3)
+					|| xIS_SET((ch)->affected_by, AFF_ICER4)
+					|| xIS_SET((ch)->affected_by, AFF_ICER5)
+					|| xIS_SET((ch)->affected_by, AFF_GOLDENFORM)
+					|| xIS_SET((ch)->affected_by, AFF_SEMIPERFECT)
+					|| xIS_SET((ch)->affected_by, AFF_PERFECT)
+					|| xIS_SET((ch)->affected_by, AFF_ULTRAPERFECT)
+					|| xIS_SET((ch)->affected_by, AFF_OOZARU)
+					|| xIS_SET((ch)->affected_by, AFF_GOLDEN_OOZARU)
+					|| xIS_SET((ch)->affected_by, AFF_EXTREME)
+					|| xIS_SET((ch)->affected_by, AFF_MYSTIC)
+					|| xIS_SET((ch)->affected_by, AFF_SUPERANDROID)
+					|| xIS_SET((ch)->affected_by, AFF_MAKEOSTAR)
+					|| xIS_SET((ch)->affected_by, AFF_EVILBOOST)
+					|| xIS_SET((ch)->affected_by, AFF_EVILSURGE)
+					|| xIS_SET((ch)->affected_by, AFF_EVILOVERLOAD)) {
+					ch->pl *= 1.01;
+					ch->powerup += 1;
+					send_to_char("DEBUG: TRANSFORMATION PL UP 1%\n\r", ch);
+				}
+				else {
+					ch->pl *= 1.05;
+					ch->powerup += 1;
+					transStatApply(ch, kistat, kistat, kistat, kistat);
+					send_to_char("DEBUG: PL UP 5%\n\r", ch);
+				}
+			}
+			else {
+				send_to_char("DEBUG: SAFEMAX REACHED\n\r", ch);
+				xREMOVE_BIT((ch)->affected_by, AFF_POWERCHANNEL);
+				xSET_BIT((ch)->affected_by, AFF_SAFEMAX);
+			}
+		}
+		if (xIS_SET((ch)->affected_by, AFF_OVERCHANNEL)) {
+			double safemaximum = 0;
+			int danger = 0;
+			
+			safemaximum = ((get_curr_con(ch) * 0.03) + (get_curr_int(ch) * 0.06));
+			danger = ((ch->powerup - safemaximum) * (ch->powerup / 2);
+			
+			if (ch->position < POS_STANDING) {
+				xREMOVE_BIT((ch)->affected_by, AFF_OVERCHANNEL);
+				send_to_char("DEBUG: CAN'T POWERUP IF YOU'RE NOT STANDING, YA DINGIS\n\r", ch);
+			}
+			if (xIS_SET((ch)->affected_by, AFF_SSJ)
+				|| xIS_SET((ch)->affected_by, AFF_SSJ2)
+				|| xIS_SET((ch)->affected_by, AFF_SSJ3)
+				|| xIS_SET((ch)->affected_by, AFF_SSJ4)
+				|| xIS_SET((ch)->affected_by, AFF_SGOD)
+				|| xIS_SET((ch)->affected_by, AFF_KAIOKEN)
+				|| xIS_SET((ch)->affected_by, AFF_HYPER)
+				|| xIS_SET((ch)->affected_by, AFF_SNAMEK)
+				|| xIS_SET((ch)->affected_by, AFF_ICER2)
+				|| xIS_SET((ch)->affected_by, AFF_ICER3)
+				|| xIS_SET((ch)->affected_by, AFF_ICER4)
+				|| xIS_SET((ch)->affected_by, AFF_ICER5)
+				|| xIS_SET((ch)->affected_by, AFF_GOLDENFORM)
+				|| xIS_SET((ch)->affected_by, AFF_SEMIPERFECT)
+				|| xIS_SET((ch)->affected_by, AFF_PERFECT)
+				|| xIS_SET((ch)->affected_by, AFF_ULTRAPERFECT)
+				|| xIS_SET((ch)->affected_by, AFF_OOZARU)
+				|| xIS_SET((ch)->affected_by, AFF_GOLDEN_OOZARU)
+				|| xIS_SET((ch)->affected_by, AFF_EXTREME)
+				|| xIS_SET((ch)->affected_by, AFF_MYSTIC)
+				|| xIS_SET((ch)->affected_by, AFF_SUPERANDROID)
+				|| xIS_SET((ch)->affected_by, AFF_MAKEOSTAR)
+				|| xIS_SET((ch)->affected_by, AFF_EVILBOOST)
+				|| xIS_SET((ch)->affected_by, AFF_EVILSURGE)
+				|| xIS_SET((ch)->affected_by, AFF_EVILOVERLOAD)) {
+				ch->pl *= 1.01;
+				ch->powerup += 1;
+				send_to_char("DEBUG: TRANSFORMATION OVERLIMIT PL UP 1%\n\r", ch);
+				if (ch->mana - danger < 0)
+					ch->mana = 0;
+					
+				else
+					ch->mana -= danger;
+				
+				if (danger != 0 && ch->mana == 0) {
+					ch->hit -= (danger / 10);
+					if (ch->hit - (danger / 10) < 0) {
+						ch->hit -= (danger / 10);
+						update_pos(ch);
+						if ( ch->position == POS_DEAD) {
+							act( AT_RED, "Your body gives out under the intense strain. All must succumb to their limits in the end.", ch, NULL, NULL, TO_CHAR );
+							act( AT_RED, "$n collapses, DEAD, $s body completely spent.", ch, NULL, NULL, TO_NOTVICT );
+							sprintf( buf, "%s withers away, succumbing to their limits", ch->name );
+							do_info(ch, buf);
+							raw_kill(ch, ch);
+						}
+					}
+				}
+			}
+			else {
+				ch->pl *= 1.05;
+				ch->powerup += 1;
+				send_to_char("DEBUG: OVERLIMIT PL UP 5%\n\r", ch);
+				if (ch->mana - danger < 0)
+					ch->mana = 0;
+					
+				else
+					ch->mana -= danger;
+				
+				if (danger != 0 && ch->mana == 0) {
+					ch->hit -= (danger / 10);
+					if (ch->hit - (danger / 10) < 0) {
+						ch->hit -= (danger / 10);
+						update_pos(ch);
+						if ( ch->position == POS_DEAD) {
+							act( AT_RED, "Your body gives out under the intense strain. All must succumb to their limits in the end.", ch, NULL, NULL, TO_CHAR );
+							act( AT_RED, "$n collapses, DEAD, $s body completely spent.", ch, NULL, NULL, TO_NOTVICT );
+							sprintf( buf, "%s withers away, succumbing to their limits", ch->name );
+							do_info(ch, buf);
+							raw_kill(ch, ch);
+						}
+					}
+				}
+			}
+		}
 		/* New Gravity Training */
 		if (xIS_SET((ch)->affected_by, AFF_PUSHUPS) && !xIS_SET((ch)->in_room->room_flags, ROOM_GRAV)) {
 			

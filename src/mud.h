@@ -1729,6 +1729,7 @@ typedef enum {
 	AFF_NO_GLOBAL_DROP, AFF_MAKEOSTAR, AFF_EVILBOOST, AFF_EVILSURGE,
 	AFF_EVILOVERLOAD, AFF_BIOJR, AFF_GOLDEN_OOZARU,
 	AFF_PUSHUPS, AFF_SHADOWBOXING, AFF_ENDURING, AFF_MEDITATION,
+	AFF_POWERCHANNEL, AFF_OVERCHANNEL, AFF_SAFEMAX
 
 	MAX_AFFECTED_BY
 } 	affected_by_types;
@@ -2654,7 +2655,7 @@ struct char_data {
 	sh_int 	max_move;
 	sh_int 	practice;
 	sh_int 	max_prac;
-	sh_int 	powerup;
+	int 	powerup;
 	sh_int 	train;
 	sh_int 	max_train;
 	sh_int 	numattacks;
