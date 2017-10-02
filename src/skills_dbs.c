@@ -1812,446 +1812,69 @@ do_powerdown(CHAR_DATA * ch, char *argument)
 	return;
 }
 
-void
-do_powerup(CHAR_DATA * ch, char *argument)
+void do_powerup(CHAR_DATA *ch, char *argument)
 {
-	CHAR_DATA *och;
-	CHAR_DATA *och_next;
+        char arg[MAX_INPUT_LENGTH];
 
-	double 	pl_mult = 1;
-	int 	auraColor = AT_YELLOW;
-	int		kicontrol = 0;
-	int		kistat = 0;
-
-	if (IS_AFFECTED(ch, AFF_BIOJR) && IS_NPC(ch))
-		return;
-
-	if (wearing_chip(ch)) {
-		ch_printf(ch, "You can't while you have a chip installed.\n\r");
-		return;
-	}
-	if (xIS_SET((ch)->affected_by, AFF_SSJ)
-		|| xIS_SET((ch)->affected_by, AFF_SSJ2)
-		|| xIS_SET((ch)->affected_by, AFF_SSJ3)
-		|| xIS_SET((ch)->affected_by, AFF_SSJ4)
-		|| xIS_SET((ch)->affected_by, AFF_KAIOKEN)
-		|| xIS_SET((ch)->affected_by, AFF_HYPER)
-		|| xIS_SET((ch)->affected_by, AFF_SNAMEK)
-		|| xIS_SET((ch)->affected_by, AFF_ICER2)
-		|| xIS_SET((ch)->affected_by, AFF_ICER3)
-		|| xIS_SET((ch)->affected_by, AFF_ICER4)
-		|| xIS_SET((ch)->affected_by, AFF_ICER5)
-		|| xIS_SET((ch)->affected_by, AFF_SEMIPERFECT)
-		|| xIS_SET((ch)->affected_by, AFF_PERFECT)
-		|| xIS_SET((ch)->affected_by, AFF_ULTRAPERFECT)
-		|| xIS_SET((ch)->affected_by, AFF_OOZARU)
-		|| xIS_SET((ch)->affected_by, AFF_GOLDEN_OOZARU)
-		|| xIS_SET((ch)->affected_by, AFF_EXTREME)
-		|| xIS_SET((ch)->affected_by, AFF_MYSTIC)
-		|| xIS_SET((ch)->affected_by, AFF_SUPERANDROID)
-		|| xIS_SET((ch)->affected_by, AFF_MAKEOSTAR)
-		|| xIS_SET((ch)->affected_by, AFF_EVILBOOST)
-		|| xIS_SET((ch)->affected_by, AFF_EVILSURGE)
-		|| xIS_SET((ch)->affected_by, AFF_EVILOVERLOAD)) {
-		send_to_pager_color
-		("&BYour ki is too uncontrollable in this form.\n\r", ch);
-		return;
-	}
-	/* Variable Powerup */
-	kicontrol = get_curr_int(ch);
-	kistat = (kicontrol / 10);
+	one_argument(argument, arg);
 	
-
-	if (!IS_NPC(ch) && ch->pcdata->auraColorPowerUp > 0)
-		auraColor = ch->pcdata->auraColorPowerUp;
-
-	if (!str_cmp(argument, "max")) {
-		if (is_android(ch) || is_superandroid(ch))
-		{
-			act(auraColor,
-				"With a bright flash and a deafening boom that fills the air with a static charge you power up to your maximum.",
-				ch, NULL, NULL, TO_CHAR);
-			act(auraColor,
-				"With a bright flash and a deafening boom that fills the air with a static charge $n powers up to $s maximum.",
-				ch, NULL, NULL, TO_NOTVICT);
-		}
-
-		else
-		{
-			act(auraColor, "With a blinding flash you power up to your maximum.", ch, NULL, NULL, TO_CHAR);
-			act(auraColor, "With a blinding flash $n powers up to $s maximum.", ch, NULL, NULL, TO_NOTVICT);
-		}
-
-		if (kicontrol >= 10 && kicontrol <= 19)
-		{
-			ch->powerup = 1;
-			pl_mult = (double) kicontrol * 10 / 1600 + 1;
-
-			if (pl_mult > 1.2)
-				pl_mult = 1.2;
-		}
-		else if (kicontrol >= 20 && kicontrol <= 29)
-		{
-			ch->powerup = 2;
-			pl_mult = (double) kicontrol * 10 / 1500 + 1;
-
-			if (pl_mult > 1.5)
-				pl_mult = 1.5;
-		}
-		else if (kicontrol >= 30 && kicontrol <= 39)
-		{
-			ch->powerup = 3;
-			pl_mult = (double) kicontrol * 10 / 1400 + 1;
-
-			if (pl_mult > 2)
-				pl_mult = 2;
-		}
-		else if (kicontrol >= 40 && kicontrol <= 49)
-		{
-			ch->powerup = 4;
-			pl_mult = (double) kicontrol * 10 / 1300 + 1;
-
-			if (pl_mult > 4)
-				pl_mult = 4;
-		}
-		else if (kicontrol >= 50 && kicontrol <= 59)
-		{
-			ch->powerup = 5;
-			pl_mult = (double) kicontrol * 10 / 1200 + 1;
-
-			if (pl_mult > 8)
-				pl_mult = 8;
-		}
-		else if (kicontrol >= 60 && kicontrol <= 69)
-		{
-			ch->powerup = 6;
-			pl_mult = (double) kicontrol * 10 / 1100 + 1;
-
-			if (pl_mult > 16)
-				pl_mult = 16;
-		}
-		else if (kicontrol >= 70)
-		{
-			ch->powerup = 7;
-			pl_mult = (double) kicontrol * 10 / 1000 + 1;
-
-			if (pl_mult > 20)
-				pl_mult = 20;
-		}
-
-		if (xIS_SET((ch)->affected_by, AFF_HEART))
-			xREMOVE_BIT(ch->affected_by, AFF_HEART);
-		ch->pl = ch->exp * pl_mult;
-		transStatApply(ch, kistat, kistat, kistat, kistat);
-		heart_calc(ch, "");
-		if (is_splitformed(ch)) {
-			for (och = first_char; och; och = och_next) {
-				och_next = och->next;
-
-				if (!IS_NPC(och))
-					continue;
-
-				if (is_split(och) && och->master == ch)
-					do_powerup(och, argument);
-			}
-		}
+	if (IS_NPC(ch))
 		return;
+	if (arg[0] == '\0') {
+		send_to_char("Powerup how? Commands are: 'begin', 'push', and 'stop'.\n\r", ch);
+		send_to_char("'powerup push' is dangerous and can only be used after first powering up to maximum.\n\r", ch);
 	}
-	if (ch->pl < ch->exp) {
-		act(auraColor, "You power up to your base.", ch, NULL, NULL,
-			TO_CHAR);
-		act(auraColor, "$n powers up to $s base.", ch, NULL, NULL,
-			TO_NOTVICT);
-		if (xIS_SET((ch)->affected_by, AFF_HEART))
-			xREMOVE_BIT(ch->affected_by, AFF_HEART);
-		ch->powerup = 0;
-		ch->pl = ch->exp;
-		transStatApply(ch, kistat, kistat, kistat, kistat);
-		heart_calc(ch, "");
-		if (is_splitformed(ch)) {
-			for (och = first_char; och; och = och_next) {
-				och_next = och->next;
 
-				if (!IS_NPC(och))
-					continue;
+	if (!str_cmp(arg, "begin")) {
 
-				if (is_split(och) && och->master == ch)
-					do_powerup(och, argument);
-			}
-		}
-		return;
-	}
-	if (ch->powerup == 0) {
-		if (is_android(ch) || is_superandroid(ch)) {
-			act(auraColor,
-				"A soft hum begins to fill the air as you power up for the first time.",
-				ch, NULL, NULL, TO_CHAR);
-			act(auraColor,
-				"A soft hum begins to fill the air as $n powers up for the first time.",
-				ch, NULL, NULL, TO_NOTVICT);
+		if (xIS_SET((ch)->affected_by, AFF_POWERCHANNEL || xIS_SET((ch)->affected_by, AFF_OVERCHANNEL) {
+			send_to_char("You're already powering up!\n\r", ch);
+			return;
 		}
 		else {
-			act(auraColor,
-				"You let out a mighty shout, reaching deep inside yourself to increase your power.",
-				ch, NULL, NULL, TO_CHAR);
-			act(auraColor,
-				"$n lets out a mighty shout.",
-				ch, NULL, NULL, TO_NOTVICT);
+			xSET_BIT((ch)->affected_by, AFF_POWERCHANNEL);
+			act(AT_WHITE, "You ball your hands into fists and begin raising your power.", ch, NULL, NULL, TO_CHAR);
+			act(AT_WHITE, "$n balls $s hands into fists and begins raising $s power.", ch, NULL, NULL, TO_NOTVICT);
+			return;
 		}
-		ch->powerup = 1;
-		pl_mult = (double) kicontrol * 10 / 1600 + 1;
-		if (pl_mult > 1.2)
-			pl_mult = 1.2;
-		if (xIS_SET((ch)->affected_by, AFF_HEART))
-			xREMOVE_BIT(ch->affected_by, AFF_HEART);
-		ch->pl = ch->exp * pl_mult;
-		transStatApply(ch, kistat, kistat, kistat, kistat);
-		heart_calc(ch, "");
-		if (is_splitformed(ch)) {
-			for (och = first_char; och; och = och_next) {
-				och_next = och->next;
+	} else if (!str_cmp(arg, "push")  ) {
 
-				if (!IS_NPC(och))
-					continue;
-
-				if (is_split(och) && och->master == ch)
-					do_powerup(och, argument);
-			}
+		if (!xIS_SET((ch)->affected_by, AFF_SAFEMAX)) {
+			send_to_char("You have no reason to tear your body apart like that!\n\r", ch);
+			return;
 		}
-	}
-	else if (ch->powerup == 1 && kicontrol >= 20) {
-		if (is_android(ch) || is_superandroid(ch)) {
-			act(auraColor,
-				"The soft hum coming from you is joined by whirring and grinding noises as you power up for the second time.",
-				ch, NULL, NULL, TO_CHAR);
-			act(auraColor,
-				"The soft hum coming from $n is joined by whirring and grinding noises as $e powers up for the second time.",
-				ch, NULL, NULL, TO_NOTVICT);
+		if (xIS_SET((ch)->affected_by, AFF_OVERCHANNEL)) {
+			send_to_char("You're already pushing beyond your limits!\n\r", ch);
+			return;
 		}
 		else {
-			act(auraColor,
-				"You clench your hands tightly into fists, doubling forward as every muscle tenses.",
-				ch, NULL, NULL, TO_CHAR);
-			act(auraColor,
-				"$n clenches $s hands and doubles forward, $s power sharply increasing.",
-				ch, NULL, NULL, TO_NOTVICT);
+			xSET_BIT((ch)->affected_by, AFF_OVERCHANNEL);
+			act(AT_WHITE, "You push beyond your body's normal limits, risking life and limb to increase your power.", ch, NULL, NULL, TO_CHAR);
+			act(AT_WHITE, "$n pushes beyond $s body's normal limits.", ch, NULL, NULL, TO_NOTVICT);
+			return;
 		}
-		ch->powerup = 2;
-		pl_mult = (double) kicontrol * 10 / 1500 + 1;
-		if (pl_mult > 1.5)
-			pl_mult = 1.5;
-		if (xIS_SET((ch)->affected_by, AFF_HEART))
-			xREMOVE_BIT(ch->affected_by, AFF_HEART);
-		ch->pl = ch->exp * pl_mult;
-		transStatApply(ch, kistat, kistat, kistat, kistat);
-		heart_calc(ch, "");
-		if (is_splitformed(ch)) {
-			for (och = first_char; och; och = och_next) {
-				och_next = och->next;
-
-				if (!IS_NPC(och))
-					continue;
-
-				if (is_split(och) && och->master == ch)
-					do_powerup(och, argument);
-			}
+	} else if (!str_cmp(arg, "stop")) {
+		if (xIS_SET((ch)->affected_by, AFF_POWERCHANNEL)) {
+			xREMOVE_BIT((ch)->affected_by, AFF_POWERCHANNEL);
+			act(AT_WHITE, "You cut your display short.", ch, NULL, NULL, TO_CHAR);
+			act(AT_WHITE, "$n cuts $s display short.", ch, NULL, NULL, TO_NOTVICT);
+			return;
 		}
-	}
-	else if (ch->powerup == 2 && kicontrol >= 30) {
-		if (is_android(ch) || is_superandroid(ch)) {
-			act(auraColor,
-				"The air around you gains a static charge as you power up for the third time.",
-				ch, NULL, NULL, TO_CHAR);
-			act(auraColor,
-				"The air around $n gains a static charge as $e powers up for the third time.",
-				ch, NULL, NULL, TO_NOTVICT);
+		if (xIS_SET((ch)->affected_by, AFF_OVERCHANNEL)) {
+			xREMOVE_BIT((ch)->affected_by, AFF_OVERCHANNEL);
+			act(AT_WHITE, "You stop pushing your limits and collapse to your knees.", ch, NULL, NULL, TO_CHAR);
+			act(AT_WHITE, "$n stops pushing $s limits and collapses to $s knees.", ch, NULL, NULL, TO_NOTVICT);
+			return;
 		}
 		else {
-			act(auraColor,
-				"The air sways gently around you as you focus on increasing your ki.",
-				ch, NULL, NULL, TO_CHAR);
-			act(auraColor,
-				"The air sways gently around $n as $e focuses $s ki.",
-				ch, NULL, NULL, TO_NOTVICT);
+			send_to_char("Stop what? You're not doing anything.\n\r", ch);
+			return;
 		}
-		ch->powerup = 3;
-		pl_mult = (double) kicontrol * 10 / 1400 + 1;
-		if (pl_mult > 2)
-			pl_mult = 2;
-		if (xIS_SET((ch)->affected_by, AFF_HEART))
-			xREMOVE_BIT(ch->affected_by, AFF_HEART);
-		ch->pl = ch->exp * pl_mult;
-		transStatApply(ch, kistat, kistat, kistat, kistat);
-		heart_calc(ch, "");
-		if (is_splitformed(ch)) {
-			for (och = first_char; och; och = och_next) {
-				och_next = och->next;
-
-				if (!IS_NPC(och))
-					continue;
-
-				if (is_split(och) && och->master == ch)
-					do_powerup(och, argument);
-			}
-		}
+	} else {
+		send_to_char("Powerup how? Commands are: 'begin', 'push', and 'stop'.\n\r", ch);
+		send_to_char("'powerup push' is dangerous and can only be used after first powering up to maximum.\n\r", ch);
+	    return;
 	}
-	else if (ch->powerup == 3 && kicontrol >= 40) {
-		if (is_android(ch) || is_superandroid(ch)) {
-			act(auraColor,
-				"An internal engine roars to life, the ground shaking softly, as you power up for the fourth time.",
-				ch, NULL, NULL, TO_CHAR);
-			act(auraColor,
-				"An internal engine roars to life, the ground shaking softly, as $e powers up for the fourth time.",
-				ch, NULL, NULL, TO_NOTVICT);
-		}
-		else {
-			act(auraColor,
-				"Your entire body glows with building energy.",
-				ch, NULL, NULL, TO_CHAR);
-			act(auraColor,
-				"$n's entire body begins to glow with energy.'",
-				ch, NULL, NULL, TO_NOTVICT);
-		}
-		ch->powerup = 4;
-		pl_mult = (double) kicontrol * 10 / 1300 + 1;
-		if (pl_mult > 4)
-			pl_mult = 4;
-		if (xIS_SET((ch)->affected_by, AFF_HEART))
-			xREMOVE_BIT(ch->affected_by, AFF_HEART);
-		ch->pl = ch->exp * pl_mult;
-		transStatApply(ch, kistat, kistat, kistat, kistat);
-		heart_calc(ch, "");
-		if (is_splitformed(ch)) {
-			for (och = first_char; och; och = och_next) {
-				och_next = och->next;
-
-				if (!IS_NPC(och))
-					continue;
-
-				if (is_split(och) && och->master == ch)
-					do_powerup(och, argument);
-			}
-		}
-	}
-	else if (ch->powerup == 4 && kicontrol >= 50) {
-		if (is_android(ch) || is_superandroid(ch)) {
-			act(auraColor,
-				"A high-pitched whine comes from your body, cracks appearing under your feet, as you power up for the fifth time.",
-				ch, NULL, NULL, TO_CHAR);
-			act(auraColor,
-				"A high-pithced whine comes from $n's body, cracks appearing under $s feet, as $e powers up for the fifth time.",
-				ch, NULL, NULL, TO_NOTVICT);
-		}
-		else {
-			act(auraColor,
-				"The ground trembles violently, your power growing even greater.",
-				ch, NULL, NULL, TO_CHAR);
-			act(auraColor,
-				"The ground trembles violently as $n continues to power up.",
-				ch, NULL, NULL, TO_NOTVICT);
-		}
-		ch->powerup = 5;
-		pl_mult = (double) kicontrol * 10 / 1200 + 1;
-		if (pl_mult > 8)
-			pl_mult = 8;
-		if (xIS_SET((ch)->affected_by, AFF_HEART))
-			xREMOVE_BIT(ch->affected_by, AFF_HEART);
-		ch->pl = ch->exp * pl_mult;
-		transStatApply(ch, kistat, kistat, kistat, kistat);
-		heart_calc(ch, "");
-		if (is_splitformed(ch)) {
-			for (och = first_char; och; och = och_next) {
-				och_next = och->next;
-
-				if (!IS_NPC(och))
-					continue;
-
-				if (is_split(och) && och->master == ch)
-					do_powerup(och, argument);
-			}
-		}
-	}
-	else if (ch->powerup == 5 && kicontrol >= 60) {
-		if (is_android(ch) || is_superandroid(ch)) {
-			act(auraColor,
-				"Engine roaring loudly and electricity crackling through the air, you power up for the sixth time.",
-				ch, NULL, NULL, TO_CHAR);
-			act(auraColor,
-				"Engine roaring loudly and electricity crackling through the air, $n powers up for the sixth time.",
-				ch, NULL, NULL, TO_NOTVICT);
-		}
-		else {
-			act(auraColor,
-				"Chunks of splintering rock erupt near your feet as you reach deeper into your potential.",
-				ch, NULL, NULL, TO_CHAR);
-			act(auraColor,
-				"Chunks of spintering rock erupt everywhere as $n reaches deep into $s potential.",
-				ch, NULL, NULL, TO_NOTVICT);
-		}
-		ch->powerup = 6;
-		pl_mult = (double) kicontrol * 10 / 1100 + 1;
-		if (pl_mult > 16)
-			pl_mult = 16;
-		if (xIS_SET((ch)->affected_by, AFF_HEART))
-			xREMOVE_BIT(ch->affected_by, AFF_HEART);
-		ch->pl = ch->exp * pl_mult;
-		transStatApply(ch, kistat, kistat, kistat, kistat);
-		heart_calc(ch, "");
-		if (is_splitformed(ch)) {
-			for (och = first_char; och; och = och_next) {
-				och_next = och->next;
-
-				if (!IS_NPC(och))
-					continue;
-
-				if (is_split(och) && och->master == ch)
-					do_powerup(och, argument);
-			}
-		}
-	}
-	else if (ch->powerup == 6 && kicontrol >= 70) {
-		if (is_android(ch) || is_superandroid(ch)) {
-			act(auraColor,
-				"The stench of ozone fills the humming air, a deafening boom blasting from you, as you unleash your potential.",
-				ch, NULL, NULL, TO_CHAR);
-			act(auraColor,
-				"The stench of ozone fills the humming air, a deafening boom blasting from $n, as $e swells with newfound potential.",
-				ch, NULL, NULL, TO_NOTVICT);
-		}
-		else {
-			act(auraColor,
-				"You unleash the depths of your potential with an incredible shockwave of energy.",
-				ch, NULL, NULL, TO_CHAR);
-			act(auraColor,
-				"$n unleashes the depths of $s potential with an incredible shockwave of energy.",
-				ch, NULL, NULL, TO_NOTVICT);
-		}
-		ch->powerup = 7;
-		pl_mult = (double) kicontrol * 10 / 1000 + 1;
-		if (pl_mult > 20)
-			pl_mult = 20;
-		if (xIS_SET((ch)->affected_by, AFF_HEART))
-			xREMOVE_BIT(ch->affected_by, AFF_HEART);
-		ch->pl = ch->exp * pl_mult;
-		transStatApply(ch, kistat, kistat, kistat, kistat);
-		heart_calc(ch, "");
-		if (is_splitformed(ch)) {
-			for (och = first_char; och; och = och_next) {
-				och_next = och->next;
-
-				if (!IS_NPC(och))
-					continue;
-
-				if (is_split(och) && och->master == ch)
-					do_powerup(och, argument);
-			}
-		}
-	}
-	else
-		send_to_pager_color
-		("&BYour body cannot contain any more energy like this!\n\r", ch);
-
-	return;
 }
 
 void
