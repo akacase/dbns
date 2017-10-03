@@ -5959,18 +5959,19 @@ do_death_ball(CHAR_DATA * ch, char *argument)
 
     WAIT_STATE(ch, skill_table[gsn_death_ball]->beats);
     if (can_use_skill(ch, number_percent(), gsn_death_ball)) {
-        dam = get_attmod(ch, victim) * (number_range(60, 66) + (get_curr_int(ch) / 20));
+        dam = get_attmod(ch, victim) * (number_range(55, 65) + (get_curr_int(ch) / 20));
         if (ch->charge > 0)
             dam = chargeDamMult(ch, dam);
-        act(AT_YELLOW,
-            "You raise your arm to the heavens, palm open. A swirling vortex of hellish light gathers into a ball, hovering lifelessly above. You point effortlessly at $N, sending them to their impending demise. &W[$t]",
-            ch, NULL, victim, TO_CHAR);
-        act(AT_YELLOW,
+
+        act(AT_ORANGE,
+            "You raise your arm to the heavens, palm open. A swirling vortex of hellish light gathers into a ball, hovering lifelessly above. You point, effortlessly, at $N sending them to their impending demise. &W[$t]",
+            ch, num_punct(dam), victim, TO_CHAR);
+        act(AT_ORANGE,
             "$n raises $m arm to the heavens, palm open. A swirling vortex of hellish light gathers into a ball, hovering lifelessly above. $n points effortlessly, sending you to your impending demise. &W[$t]",
-            ch, NULL, victim, TO_VICT);
-        act(AT_YELLOW,
-            "$n raises $m arm to the heavens, palm open. A swirling vortex of hellish light gathers into a ball, hovering lifelessly above. $n points effortlessly at $N, sending them to their impending demise. &W[$t]",
-            ch, NULL, victim, TO_NOTVICT);
+            ch, num_punct(dam), victim, TO_VICT);
+        act(AT_ORANGE,
+            "$n raises $m arm to the heavens, palm open. A swirling vortex of hellish light gathers into a ball, hovering lifelessly above. $n points effortlessly, at $N sending them to their impending demise. &W[$t]",
+            ch, num_punct(dam), victim, TO_NOTVICT);
         learn_from_success(ch, gsn_death_ball);
         global_retcode = damage(ch, victim, dam, TYPE_HIT);
         if (!IS_NPC(ch)) {
@@ -5978,11 +5979,11 @@ do_death_ball(CHAR_DATA * ch, char *argument)
         }
     }
     else {
-        act(AT_YELLOW, "You missed $N with your death ball.", ch, NULL,
+        act(AT_ORANGE, "You missed $N with your death ball.", ch, NULL,
             victim, TO_CHAR);
-        act(AT_YELLOW, "$n misses you with $s death ball.", ch, NULL,
+        act(AT_ORANGE, "$n misses you with $s death ball.", ch, NULL,
             victim, TO_VICT);
-        act(AT_YELLOW, "$n missed $N with a death ball.", ch, NULL,
+        act(AT_ORANGE, "$n missed $N with a death ball.", ch, NULL,
             victim, TO_NOTVICT);
         learn_from_failure(ch, gsn_death_ball);
         global_retcode = damage(ch, victim, 0, TYPE_HIT);
