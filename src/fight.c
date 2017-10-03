@@ -553,7 +553,11 @@ violence_update(void)
 			send_to_char("Your training is cut short.\n\r", ch);
 		}
 		if (xIS_SET((ch)->affected_by, AFF_PUSHUPS) && xIS_SET((ch)->in_room->room_flags, ROOM_GRAV)) {
-		
+		  // check for sleep or resting
+		  if(ch->position < POS_STANDING) {
+		    xREMOVE_BIT((ch)->affected_by, AFF_PUSHUPS);
+		    send_to_char("You cannot gravity train in such a lax state.\n\r", ch);
+		  }
             char buf[MAX_STRING_LENGTH];
 			int trainmessage = 0;
 			long double xp_gain = 0;
@@ -605,7 +609,11 @@ violence_update(void)
 			}
 		}
 		if (xIS_SET((ch)->affected_by, AFF_SHADOWBOXING) && xIS_SET((ch)->in_room->room_flags, ROOM_GRAV)) {
-		
+		  // check for sleep or resting
+                  if(ch->position < POS_STANDING) {
+                    xREMOVE_BIT((ch)->affected_by, AFF_SHADOWBOXING);
+                    send_to_char("You cannot gravity train in such a lax state.\n\r", ch);
+                  }
             char buf[MAX_STRING_LENGTH];
 			int trainmessage = 0;
 			long double xp_gain = 0;
@@ -657,7 +665,11 @@ violence_update(void)
 			}
 		}
 		if (xIS_SET((ch)->affected_by, AFF_ENDURING) && xIS_SET((ch)->in_room->room_flags, ROOM_GRAV)) {
-		
+		  // check for sleep or resting
+                  if(ch->position < POS_STANDING) {
+                    xREMOVE_BIT((ch)->affected_by, AFF_ENDURING);
+                    send_to_char("You cannot gravity train in such a lax state.\n\r", ch);
+                  }
             char buf[MAX_STRING_LENGTH];
 			int trainmessage = 0;
 			long double xp_gain = 0;
@@ -708,7 +720,11 @@ violence_update(void)
 			}
 		}
 		if (xIS_SET((ch)->affected_by, AFF_MEDITATION) && xIS_SET((ch)->in_room->room_flags, ROOM_GRAV)) {
-		
+		  // check for sleep or resting
+                  if(ch->position < POS_STANDING) {
+                    xREMOVE_BIT((ch)->affected_by, AFF_MEDITATION);
+                    send_to_char("You cannot gravity train in such a lax state.\n\r", ch);
+                  }
             char buf[MAX_STRING_LENGTH];
 			int trainmessage = 0;
 			long double xp_gain = 0;
