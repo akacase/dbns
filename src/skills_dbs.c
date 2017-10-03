@@ -5924,75 +5924,71 @@ do_ddd(CHAR_DATA * ch, char *argument)
 void
 do_death_ball(CHAR_DATA * ch, char *argument)
 {
-	CHAR_DATA *victim;
-	int 	dam = 0;
+    CHAR_DATA *victim;
+    int 	dam = 0;
 
-	if (IS_NPC(ch) && is_split(ch)) {
-		if (!ch->master)
-			return;
-		if (!can_use_skill
-		    (ch->master, number_percent(), gsn_death_ball))
-			return;
-	}
-	if (IS_NPC(ch) && IS_AFFECTED(ch, AFF_CHARM)) {
-		send_to_char("You can't concentrate enough for that.\n\r", ch);
-		return;
-	}
-	if (!IS_NPC(ch)
-	    && ch->exp < skill_table[gsn_death_ball]->skill_level[ch->class]) {
-		send_to_char("You can't do that.\n\r", ch);
-		return;
-	}
-	if ((victim = who_fighting(ch)) == NULL) {
-		send_to_char("You aren't fighting anyone.\n\r", ch);
-		return;
-	}
-	if (ch->mana < skill_table[gsn_death_ball]->min_mana) {
-		send_to_char("You don't have enough energy.\n\r", ch);
-		return;
-	}
-	if (ch->focus < skill_table[gsn_death_ball]->focus) {
-		send_to_char("You need to focus more.\n\r", ch);
-		return;
-	} else
-		ch->focus -= skill_table[gsn_death_ball]->focus;
+    if (IS_NPC(ch) && is_split(ch)) {
+        if (!ch->master)
+            return;
+        if (!can_use_skill(ch->master, number_percent(), gsn_death_ball))
+            return;
+    }
+    if (IS_NPC(ch) && IS_AFFECTED(ch, AFF_CHARM)) {
+        send_to_char("You can't concentrate enough for that.\n\r", ch);
+        return;
+    }
+    if (!IS_NPC(ch)
+        && ch->exp < skill_table[gsn_death_ball]->skill_level[ch->class]) {
+        send_to_char("You can't do that.\n\r", ch);
+        return;
+    }
+    if ((victim = who_fighting(ch)) == NULL) {
+        send_to_char("You aren't fighting anyone.\n\r", ch);
+        return;
+    }
+    if (ch->mana < skill_table[gsn_death_ball]->min_mana) {
+        send_to_char("You don't have enough energy.\n\r", ch);
+        return;
+    }
+    if (ch->focus < skill_table[gsn_death_ball]->focus) {
+        send_to_char("You need to focus more.\n\r", ch);
+        return;
+    }
+    else
+        ch->focus -= skill_table[gsn_death_ball]->focus;
 
-	WAIT_STATE(ch, skill_table[gsn_death_ball]->beats);
-	if (can_use_skill(ch, number_percent(), gsn_death_ball)) {
-			dam = get_attmod(ch, victim) * (number_range(55, 65) + (get_curr_int(ch) / 20));
-			if (ch->charge > 0) {
-			    dam = chargeDamMult(ch, dam);
-
-			    act(AT_ORANGE,
-			    "You raise your arm to the heavens, palm open. A swirling vortex of hellish light gathers into a ball, hovering lifelessly above. You point, effortlessly, at $N sending them to their impending demise. &W[$t]",
-			    ch, num_punct(dam), victim, TO_CHAR);
-
-			    act(AT_ORANGE,
-			    "$n raises $m arm to the heavens, palm open. A swirling vortex of hellish light gathers into a ball, hovering lifelessly above. $n points effortlessly, sending you to your impending demise. &W[$t]",
-			    ch, num_punct(dam), victim, TO_VICT);
-
-			    act(AT_ORANGE,
-			    "$n raises $m arm to the heavens, palm open. A swirling vortex of hellish light gathers into a ball, hovering lifelessly above. $n points effortlessly, at $N sending them to their impending demise. &W[$t]",
-			    ch, num_punct(dam), victim, TO_NOTVICT);
-
-			    learn_from_success(ch, gsn_death_ball);
-			    global_retcode = damage(ch, victim, dam, TYPE_HIT);
-                if (!IS_NPC(ch)) {
-                    stat_train(ch, "int", 12);
-                }
-			}
-	} else {
-		act(AT_ORANGE, "You missed $N with your death ball.", ch, NULL,
-		    victim, TO_CHAR);
-		act(AT_ORANGE, "$n misses you with $s death ball.", ch, NULL,
-		    victim, TO_VICT);
-		act(AT_ORANGE, "$n missed $N with a death ball.", ch, NULL,
-		    victim, TO_NOTVICT);
-		learn_from_failure(ch, gsn_death_ball);
-		global_retcode = damage(ch, victim, 0, TYPE_HIT);
-	}
-	ch->mana -= skill_table[gsn_death_ball]->min_mana;
-	return;
+    WAIT_STATE(ch, skill_table[gsn_death_ball]->beats);
+    if (can_use_skill(ch, number_percent(), gsn_death_ball)) {
+        dam = get_attmod(ch, victim) * (number_range(60, 66) + (get_curr_int(ch) / 20));
+        if (ch->charge > 0)
+            dam = chargeDamMult(ch, dam);
+        act(AT_YELLOW,
+            "You raise your arm to the heavens, palm open. A swirling vortex of hellish light gathers into a ball, hovering lifelessly above. You point effortlessly at $N, sending them to their impending demise. &W[$t]",
+            ch, NULL, victim, TO_CHAR);
+        act(AT_YELLOW,
+            "$n raises $m arm to the heavens, palm open. A swirling vortex of hellish light gathers into a ball, hovering lifelessly above. $n points effortlessly, sending you to your impending demise. &W[$t]",
+            ch, NULL, victim, TO_VICT);
+        act(AT_YELLOW,
+            "$n raises $m arm to the heavens, palm open. A swirling vortex of hellish light gathers into a ball, hovering lifelessly above. $n points effortlessly at $N, sending them to their impending demise. &W[$t]",
+            ch, NULL, victim, TO_NOTVICT);
+        learn_from_success(ch, gsn_death_ball);
+        global_retcode = damage(ch, victim, dam, TYPE_HIT);
+        if (!IS_NPC(ch)) {
+            stat_train(ch, "int", 12);
+        }
+    }
+    else {
+        act(AT_YELLOW, "You missed $N with your death ball.", ch, NULL,
+            victim, TO_CHAR);
+        act(AT_YELLOW, "$n misses you with $s death ball.", ch, NULL,
+            victim, TO_VICT);
+        act(AT_YELLOW, "$n missed $N with a death ball.", ch, NULL,
+            victim, TO_NOTVICT);
+        learn_from_failure(ch, gsn_death_ball);
+        global_retcode = damage(ch, victim, 0, TYPE_HIT);
+    }
+    ch->mana -= skill_table[gsn_death_ball]->min_mana;
+    return;
 }
 
 void
