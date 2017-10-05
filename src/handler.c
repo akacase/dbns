@@ -941,7 +941,7 @@ update_aris(CHAR_DATA * ch)
 	int 	aff_w, aff_x, aff_y, aff_z, aff_aa;
 	int 	aff_ab, aff_ac, aff_ad, aff_ae, aff_af, aff_ag, aff_ah;
 	int 	aff_ai, aff_aj, aff_ak, aff_al, aff_am, aff_an;
-	int		aff_ao, aff_ap, aff_aq, aff_ar, aff_as, aff_at;
+	int		aff_ao, aff_ap, aff_aq, aff_ar, aff_as, aff_at, aff_au;
 
 	if (IS_NPC(ch) || IS_IMMORTAL(ch))
 		return;
@@ -989,13 +989,14 @@ update_aris(CHAR_DATA * ch)
 	aff_ak = IS_AFFECTED(ch, AFF_BIOJR);
 	aff_al = IS_AFFECTED(ch, AFF_SANCTUARY);
 	aff_am = IS_AFFECTED(ch, AFF_GOLDEN_OOZARU);
-	aff_an = IS_AFFECTED(ch, AFF_PUSHUPS);
-	aff_ao = IS_AFFECTED(ch, AFF_SHADOWBOXING);
-	aff_ap = IS_AFFECTED(ch, AFF_ENDURING);
-	aff_aq = IS_AFFECTED(ch, AFF_MEDITATION);
-	aff_ar = IS_AFFECTED(ch, AFF_POWERCHANNEL);
-	aff_as = IS_AFFECTED(ch, AFF_OVERCHANNEL);
-	aff_at = IS_AFFECTED(ch, AFF_SAFEMAX);
+	aff_an = IS_AFFECTED(ch, AFF_SGOD);
+	aff_ao = IS_AFFECTED(ch, AFF_PUSHUPS);
+	aff_ap = IS_AFFECTED(ch, AFF_SHADOWBOXING);
+	aff_aq = IS_AFFECTED(ch, AFF_ENDURING);
+	aff_ar = IS_AFFECTED(ch, AFF_MEDITATION);
+	aff_as = IS_AFFECTED(ch, AFF_POWERCHANNEL);
+	aff_at = IS_AFFECTED(ch, AFF_OVERCHANNEL);
+	aff_au = IS_AFFECTED(ch, AFF_SAFEMAX);
 
 	xCLEAR_BITS(ch->affected_by);
 	ch->resistant = 0;
@@ -3218,6 +3219,8 @@ affect_bit_name(EXT_BV * vector)
 	static char buf[MAX_STRING_LENGTH];
 
 	buf[0] = '\0';
+	if (xIS_SET(*vector, AFF_BLIND))
+		strcat(buf, " blind");
 	if (xIS_SET(*vector, AFF_PUSHUPS))
 		strcat(buf, " pushups");
 	if (xIS_SET(*vector, AFF_SHADOWBOXING))
