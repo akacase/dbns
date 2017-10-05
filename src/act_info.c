@@ -4133,6 +4133,10 @@ void do_train(CHAR_DATA *ch, char *argument)
 		send_to_char("This doesn't appear to be a gravity chamber...\n\r", ch);
 		return;
 	}
+	else if (ch->position < POS_STANDING) {
+	  send_to_char("You can't gravity train in such a lax state.\n\r", ch);
+	  return;
+	}
 	else if (arg[0] == '\0') {
 		send_to_char("Gravtrain which activity? Activities are: pushup, shadowbox, endure, meditate.\n\r", ch);
 	}
