@@ -3218,7 +3218,7 @@ affect_bit_name(EXT_BV * vector)
 	static char buf[MAX_STRING_LENGTH];
 
 	buf[0] = '\0';
-	if (xIS_SET(*vector, AFF_PUSHUPS)
+	if (xIS_SET(*vector, AFF_PUSHUPS))
 		strcat(buf, " pushups");
 	if (xIS_SET(*vector, AFF_SHADOWBOXING))
 		strcat(buf, " shadowboxing");

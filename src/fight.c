@@ -591,7 +591,7 @@ violence_update(void)
 			int danger = 0;
 			
 			safemaximum = ((get_curr_con(ch) * 0.03) + (get_curr_int(ch) * 0.06));
-			danger = ((ch->powerup - safemaximum) * (ch->powerup / 2);
+			danger = ((ch->powerup - safemaximum) * (ch->powerup / 2));
 			
 			if (ch->position < POS_STANDING) {
 				xREMOVE_BIT((ch)->affected_by, AFF_OVERCHANNEL);
@@ -625,9 +625,8 @@ violence_update(void)
 				ch->pl *= 1.01;
 				ch->powerup += 1;
 				send_to_char("DEBUG: TRANSFORMATION OVERLIMIT PL UP 1%\n\r", ch);
-				if (ch->mana - danger < 0)
+				if ((ch->mana - danger) < 0)
 					ch->mana = 0;
-					
 				else
 					ch->mana -= danger;
 				
@@ -650,7 +649,7 @@ violence_update(void)
 				ch->pl *= 1.05;
 				ch->powerup += 1;
 				send_to_char("DEBUG: OVERLIMIT PL UP 5%\n\r", ch);
-				if (ch->mana - danger < 0)
+				if ((ch->mana - danger) < 0)
 					ch->mana = 0;
 					
 				else
