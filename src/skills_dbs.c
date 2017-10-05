@@ -1608,9 +1608,9 @@ do_powerdown(CHAR_DATA * ch, char *argument)
 				ch->pcdata->eyes = ch->pcdata->orignaleyes;
 			}
 		}
-		if (xIS_SET((ch)->affected_by, AFF_POWERCHANNEL)
+		if (xIS_SET((ch)->affected_by, AFF_POWERCHANNEL))
 			xREMOVE_BIT((ch)->affected_by, AFF_POWERCHANNEL);
-		if (xIS_SET((ch)->affected_by, AFF_OVERCHANNEL)
+		if (xIS_SET((ch)->affected_by, AFF_OVERCHANNEL))
 			xREMOVE_BIT((ch)->affected_by, AFF_OVERCHANNEL);
 		if (xIS_SET((ch)->affected_by, AFF_SAFEMAX))
 			xREMOVE_BIT((ch)->affected_by, AFF_SAFEMAX);
@@ -1827,7 +1827,7 @@ void do_powerup(CHAR_DATA *ch, char *argument)
 
 	if (!str_cmp(arg, "begin")) {
 
-		if (xIS_SET((ch)->affected_by, AFF_POWERCHANNEL || xIS_SET((ch)->affected_by, AFF_OVERCHANNEL) {
+		if (xIS_SET((ch)->affected_by, AFF_POWERCHANNEL || xIS_SET((ch)->affected_by, AFF_OVERCHANNEL))) {
 			send_to_char("You're already powering up!\n\r", ch);
 			return;
 		}
