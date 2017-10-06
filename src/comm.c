@@ -1346,8 +1346,11 @@ nanny(DESCRIPTOR_DATA * d, char *argument)
 				write_to_buffer(d, "error, disconnecting.\n\r", 0);
 				close_socket(d, false, true);
 				return;
+			} else {
+				write_to_buffer(d, "cleared old connection, please reconnect.\n\r", 0);
+				close_socket(d, false, true);
+				return;
 			}
-			break;
 		}
 		strncpy(buf, ch->pcdata->filename, MAX_STRING_LENGTH);
 		if (ch->position > POS_SITTING && ch->position < POS_STANDING)
@@ -2357,26 +2360,9 @@ reconnect(DESCRIPTOR_DATA * d, char *name)
 		    && !str_cmp(name, d_old->original
 		    ? d_old->original->pcdata->filename :
 		    d_old->character->pcdata->filename)) {
-			conn_state = d_old->connected;
-			ch = d_old->original ? d_old->original : d_old->character;
-			write_to_buffer(d, "Already playing... Kicking off old connection.\n\r", 0);
-			write_to_buffer(d_old, "Kicking off old connection... bye!\n\r", 0);
 			log_string("preparing to close socket at comm.c:2824\n");
-			close_socket(d_old, true, false);
-			d->character = ch;
-			ch->desc = d;
-			ch->timer = 0;
-			if (ch->switched)
-				do_return(ch->switched, "");
-			ch->switched = NULL;
-			send_to_char("Reconnecting.\n\r", ch);
-			do_look(ch, "auto");
-			act(AT_ACTION, "$n has reconnected, kicking off old link.",
-			    ch, NULL, NULL, TO_CANSEE);
-			sprintf(log_buf, "%s@%s reconnected, kicking off old link.",
-			    ch->pcdata->filename, d->host);
-			log_string_plus(log_buf, LOG_COMM, UMAX(sysdata.log_level, ch->level));
-			d->connected = conn_state;
+			//fquit(d->character);
+			close_socket(d_old, true, true);
 			return (true);
 		}
 	}
