@@ -531,18 +531,282 @@ violence_update(void)
 				affect_remove(ch, paf);
 			}
 		}
+		/* Transformation Update */
+		if (!IS_NPC(ch)
+			&& xIS_SET((ch)->affected_by, AFF_SSJ)
+			&& !xIS_SET((ch)->affected_by, AFF_USSJ)
+			&& !xIS_SET((ch)->affected_by, AFF_USSJ2)
+			&& !xIS_SET((ch)->affected_by, AFF_SSJ2)
+			&& !xIS_SET((ch)->affected_by, AFF_SSJ3)
+			&& !xIS_SET((ch)->affected_by, AFF_SSJ4)
+			&& !xIS_SET((ch)->affected_by, AFF_SGOD)) {
+				int form_drain = 0;
+				int form_mastery = 0;
+				
+				form_mastery = (ch->train / 10000);
+				if (form_mastery < 1) {
+					form_mastery = 1;
+				}
+				form_drain = (100 - (form_mastery * 2));
+				if (form_drain < 1)
+					form_drain = 1;
+				if (ch->mana - form_drain < 0)
+					ch->mana = 0;
+				else {
+					ch->mana -= form_drain;
+					ch->train += 2;
+				}
+				if (ch->mana = 0) {
+					xREMOVE_BIT((ch)->affected_by, AFF_SSJ);
+					ch->pl = ch->exp;
+					ch->powerup = 0;
+					transStatRemove(ch);
+					ch->pcdata->haircolor = ch->pcdata->orignalhaircolor;
+					ch->pcdata->eyes = ch->pcdata->orignaleyes;
+					send_to_char("DEBUG: SSJ REMOVED, NOT ENOUGH KI\n\r", ch);
+				}
+		}
+		if (!IS_NPC(ch)
+			&& xIS_SET((ch)->affected_by, AFF_SSJ)
+			&& xIS_SET((ch)->affected_by, AFF_USSJ)
+			&& !xIS_SET((ch)->affected_by, AFF_USSJ2)
+			&& !xIS_SET((ch)->affected_by, AFF_SSJ2)
+			&& !xIS_SET((ch)->affected_by, AFF_SSJ3)
+			&& !xIS_SET((ch)->affected_by, AFF_SSJ4)
+			&& !xIS_SET((ch)->affected_by, AFF_SGOD)) {
+				int form_drain = 0;
+				int form_mastery = 0;
+				
+				form_mastery = (ch->train / 10000);
+				if (form_mastery < 1) {
+					form_mastery = 1;
+				}
+				form_drain = (150 - (form_mastery * 2));
+				if (form_drain < 1)
+					form_drain = 1;
+				if (ch->mana - form_drain < 0)
+					ch->mana = 0;
+				else {
+					ch->mana -= form_drain;
+					ch->train += 2;
+				}
+				if (ch->mana = 0) {
+					xREMOVE_BIT((ch)->affected_by, AFF_SSJ);
+					xREMOVE_BIT((ch)->affected_by, AFF_USSJ);
+					ch->pl = ch->exp;
+					ch->powerup = 0;
+					transStatRemove(ch);
+					ch->pcdata->haircolor = ch->pcdata->orignalhaircolor;
+					ch->pcdata->eyes = ch->pcdata->orignaleyes;
+					send_to_char("DEBUG: SSJ REMOVED, NOT ENOUGH KI\n\r", ch);
+				}
+		}
+		if (!IS_NPC(ch)
+			&& xIS_SET((ch)->affected_by, AFF_SSJ)
+			&& xIS_SET((ch)->affected_by, AFF_USSJ)
+			&& xIS_SET((ch)->affected_by, AFF_USSJ2)
+			&& !xIS_SET((ch)->affected_by, AFF_SSJ2)
+			&& !xIS_SET((ch)->affected_by, AFF_SSJ3)
+			&& !xIS_SET((ch)->affected_by, AFF_SSJ4)
+			&& !xIS_SET((ch)->affected_by, AFF_SGOD)) {
+				int form_drain = 0;
+				int form_mastery = 0;
+				
+				form_mastery = (ch->train / 10000);
+				if (form_mastery < 1) {
+					form_mastery = 1;
+				}
+				form_drain = (300 - (form_mastery * 2));
+				if (form_drain < 1)
+					form_drain = 1;
+				if (ch->mana - form_drain < 0)
+					ch->mana = 0;
+				else {
+					ch->mana -= form_drain;
+					ch->train += 2;
+				}
+				if (ch->mana = 0) {
+					xREMOVE_BIT((ch)->affected_by, AFF_SSJ);
+					xREMOVE_BIT((ch)->affected_by, AFF_USSJ);
+					xREMOVE_BIT((ch)->affected_by, AFF_USSJ2);
+					ch->pl = ch->exp;
+					ch->powerup = 0;
+					transStatRemove(ch);
+					ch->pcdata->haircolor = ch->pcdata->orignalhaircolor;
+					ch->pcdata->eyes = ch->pcdata->orignaleyes;
+					send_to_char("DEBUG: SSJ REMOVED, NOT ENOUGH KI\n\r", ch);
+				}
+		}
+		if (!IS_NPC(ch)
+			&& xIS_SET((ch)->affected_by, AFF_SSJ)
+			&& xIS_SET((ch)->affected_by, AFF_USSJ)
+			&& xIS_SET((ch)->affected_by, AFF_USSJ2)
+			&& xIS_SET((ch)->affected_by, AFF_SSJ2)
+			&& !xIS_SET((ch)->affected_by, AFF_SSJ3)
+			&& !xIS_SET((ch)->affected_by, AFF_SSJ4)
+			&& !xIS_SET((ch)->affected_by, AFF_SGOD)) {
+				int form_drain = 0;
+				int form_mastery = 0;
+				
+				form_mastery = (ch->train / 10000);
+				if (form_mastery < 1) {
+					form_mastery = 1;
+				}
+				form_drain = (200 - (form_mastery * 2));
+				if (form_drain < 1)
+					form_drain = 1;
+				if (ch->mana - form_drain < 0)
+					ch->mana = 0;
+				else {
+					ch->mana -= form_drain;
+					ch->train += 2;
+				}
+				if (ch->mana = 0) {
+					xREMOVE_BIT((ch)->affected_by, AFF_SSJ);
+					xREMOVE_BIT((ch)->affected_by, AFF_USSJ);
+					xREMOVE_BIT((ch)->affected_by, AFF_USSJ2);
+					xREMOVE_BIT((ch)->affected_by, AFF_SSJ2);
+					ch->pl = ch->exp;
+					ch->powerup = 0;
+					transStatRemove(ch);
+					ch->pcdata->haircolor = ch->pcdata->orignalhaircolor;
+					ch->pcdata->eyes = ch->pcdata->orignaleyes;
+					send_to_char("DEBUG: SSJ REMOVED, NOT ENOUGH KI\n\r", ch);
+				}
+		}
+		if (!IS_NPC(ch)
+			&& xIS_SET((ch)->affected_by, AFF_SSJ)
+			&& xIS_SET((ch)->affected_by, AFF_USSJ)
+			&& xIS_SET((ch)->affected_by, AFF_USSJ2)
+			&& xIS_SET((ch)->affected_by, AFF_SSJ2)
+			&& xIS_SET((ch)->affected_by, AFF_SSJ3)
+			&& !xIS_SET((ch)->affected_by, AFF_SSJ4)
+			&& !xIS_SET((ch)->affected_by, AFF_SGOD)) {
+				int form_drain = 0;
+				int form_mastery = 0;
+				
+				form_mastery = (ch->train / 10000);
+				if (form_mastery < 1) {
+					form_mastery = 1;
+				}
+				form_drain = (300 - (form_mastery * 2));
+				if (form_drain < 1)
+					form_drain = 1;
+				if (ch->mana - form_drain < 0)
+					ch->mana = 0;
+				else {
+					ch->mana -= form_drain;
+					ch->train += 2;
+				}
+				if (ch->mana = 0) {
+					xREMOVE_BIT((ch)->affected_by, AFF_SSJ);
+					xREMOVE_BIT((ch)->affected_by, AFF_USSJ);
+					xREMOVE_BIT((ch)->affected_by, AFF_USSJ2);
+					xREMOVE_BIT((ch)->affected_by, AFF_SSJ2);
+					xREMOVE_BIT((ch)->affected_by, AFF_SSJ3);
+					ch->pl = ch->exp;
+					ch->powerup = 0;
+					transStatRemove(ch);
+					ch->pcdata->haircolor = ch->pcdata->orignalhaircolor;
+					ch->pcdata->eyes = ch->pcdata->orignaleyes;
+					send_to_char("DEBUG: SSJ REMOVED, NOT ENOUGH KI\n\r", ch);
+				}
+		}
+		if (!IS_NPC(ch)
+			&& xIS_SET((ch)->affected_by, AFF_SSJ)
+			&& xIS_SET((ch)->affected_by, AFF_USSJ)
+			&& xIS_SET((ch)->affected_by, AFF_USSJ2)
+			&& xIS_SET((ch)->affected_by, AFF_SSJ2)
+			&& xIS_SET((ch)->affected_by, AFF_SSJ3)
+			&& xIS_SET((ch)->affected_by, AFF_SSJ4)
+			&& !xIS_SET((ch)->affected_by, AFF_SGOD)) {
+				int form_drain = 0;
+				int form_mastery = 0;
+				
+				form_mastery = (ch->train / 10000);
+				if (form_mastery < 1) {
+					form_mastery = 1;
+				}
+				form_drain = (400 - (form_mastery * 2));
+				if (form_drain < 1)
+					form_drain = 1;
+				if (ch->mana - form_drain < 0)
+					ch->mana = 0;
+				else {
+					ch->mana -= form_drain;
+					ch->train += 2;
+				}
+				if (ch->mana = 0) {
+					xREMOVE_BIT((ch)->affected_by, AFF_SSJ);
+					xREMOVE_BIT((ch)->affected_by, AFF_USSJ);
+					xREMOVE_BIT((ch)->affected_by, AFF_USSJ2);
+					xREMOVE_BIT((ch)->affected_by, AFF_SSJ2);
+					xREMOVE_BIT((ch)->affected_by, AFF_SSJ3);
+					xREMOVE_BIT((ch)->affected_by, AFF_SSJ4);
+					ch->pl = ch->exp;
+					ch->powerup = 0;
+					transStatRemove(ch);
+					ch->pcdata->haircolor = ch->pcdata->orignalhaircolor;
+					ch->pcdata->eyes = ch->pcdata->orignaleyes;
+					send_to_char("DEBUG: SSJ REMOVED, NOT ENOUGH KI\n\r", ch);
+				}
+		}
+		if (!IS_NPC(ch)
+			&& xIS_SET((ch)->affected_by, AFF_SSJ)
+			&& xIS_SET((ch)->affected_by, AFF_USSJ)
+			&& xIS_SET((ch)->affected_by, AFF_USSJ2)
+			&& xIS_SET((ch)->affected_by, AFF_SSJ2)
+			&& xIS_SET((ch)->affected_by, AFF_SSJ3)
+			&& xIS_SET((ch)->affected_by, AFF_SSJ4)
+			&& xIS_SET((ch)->affected_by, AFF_SGOD)) {
+				int form_drain = 0;
+				int form_mastery = 0;
+				
+				form_mastery = (ch->train / 10000);
+				if (form_mastery < 1) {
+					form_mastery = 1;
+				}
+				form_drain = (500 - (form_mastery * 2));
+				if (form_drain < 1)
+					form_drain = 1;
+				if (ch->mana - form_drain < 0)
+					ch->mana = 0;
+				else {
+					ch->mana -= form_drain;
+					ch->train += 2;
+				}
+				if (ch->mana = 0) {
+					xREMOVE_BIT((ch)->affected_by, AFF_SSJ);
+					xREMOVE_BIT((ch)->affected_by, AFF_USSJ);
+					xREMOVE_BIT((ch)->affected_by, AFF_USSJ2);
+					xREMOVE_BIT((ch)->affected_by, AFF_SSJ2);
+					xREMOVE_BIT((ch)->affected_by, AFF_SSJ3);
+					xREMOVE_BIT((ch)->affected_by, AFF_SSJ4);
+					xREMOVE_BIT((ch)->affected_by, AFF_SGOD);
+					ch->pl = ch->exp;
+					ch->powerup = 0;
+					transStatRemove(ch);
+					ch->pcdata->haircolor = ch->pcdata->orignalhaircolor;
+					ch->pcdata->eyes = ch->pcdata->orignaleyes;
+					send_to_char("DEBUG: SSJ REMOVED, NOT ENOUGH KI\n\r", ch);
+				}
+		}
 		/* New Time-based Powerup */
-		if (xIS_SET((ch)->affected_by, AFF_POWERCHANNEL && !xIS_SET((ch)->affected_by, AFF_KAIOKEN)) {
+		if (xIS_SET((ch)->affected_by, AFF_POWERCHANNEL)
+			&& !xIS_SET((ch)->affected_by, AFF_KAIOKEN)
+			&& !xIS_SET((ch)->affected_by, AFF_SAFEMAX)) {
 			double safemaximum = 0;
 			int	kicontrol = 0;
 			int kistat = 0;
 			int form_mastery = 0;
-			int masterymod = 0;
 			
 			safemaximum = ((get_curr_int(ch) * 0.03) + 1);
 			kicontrol = get_curr_int(ch);
 			kistat = (kicontrol / 10);
-			form_mastery = ch->train;
+			form_mastery = (ch->train / 10000);
+			if (form_mastery < 1) {
+				form_mastery = 1;
+			}
 			if (ch->position < POS_STANDING) {
 				xREMOVE_BIT((ch)->affected_by, AFF_POWERCHANNEL);
 				send_to_char("DEBUG: CAN'T POWERUP IF YOU'RE NOT STANDING, YA DINGIS\n\r", ch);
@@ -558,14 +822,13 @@ violence_update(void)
 						ch->pl *= 1.15;
 						ch->powerup += 1;
 						transStatApply(ch, kistat, kistat, kistat, kistat);
-						send_to_char("DEBUG: PL UP 5%\n\r", ch);
+						send_to_char("DEBUG: PL UP 15%\n\r", ch);
 						if ((ch->pl >= (ch->exp * 30))
 							&& ch->pcdata->learned[gsn_ssj] > 0) {
 							xSET_BIT((ch)->affected_by, AFF_SSJ);
 							send_to_char("DEBUG: INSERT SPARKLY GOING SSJ EFFECTS HERE, OOoOOoOO\n\r", ch);
-							masterymod = (50 + (form_mastery / 1000));
-							ch->pl = ch->exp * masterymod;
 							ch->powerup = 0;
+							ch->pl = ch->exp * 50;
 							if (!IS_NPC(ch)) {
 								ch->pcdata->eyes = 0;
 								ch->pcdata->haircolor = 3;
@@ -580,16 +843,179 @@ violence_update(void)
 						}
 					}
 					if (ch->powerup >= safemaximum) {
+						ch->powerup = safemaximum;
 						xREMOVE_BIT((ch)->affected_by, AFF_POWERCHANNEL);
 						xSET_BIT((ch)->affected_by, AFF_SAFEMAX);
 						send_to_char("DEBUG: SAFEMAX REACHED%\n\r", ch);
 					}
 				}
-				if (xIS_SET((ch)->affected_by, AFF_SSJ)) {
-					safemaximum = ((get_curr_int(ch) * 0.03) + 1);
+				if (xIS_SET((ch)->affected_by, AFF_SSJ)
+					&& !xIS_SET((ch)->affected_by, AFF_USSJ)
+					&& !xIS_SET((ch)->affected_by, AFF_USSJ2)
+					&& !xIS_SET((ch)->affected_by, AFF_SSJ2)
+					&& !xIS_SET((ch)->affected_by, AFF_SSJ3)
+					&& !xIS_SET((ch)->affected_by, AFF_SSJ4)
+					&& !xIS_SET((ch)->affected_by, AFF_SGOD)) {
+					safemaximum = form_mastery;
 					if (ch->powerup < safemaximum) {
 						ch->pl *= 1.01;
 						ch->powerup += 1;
+						if ((ch->pl / ch->exp) >= 65
+							&& ch->pcdata->learned[gsn_ussj] > 0) {
+							xSET_BIT((ch)->affected_by, AFF_USSJ);
+							send_to_char("DEBUG: INSERT SPARKLY GOING USSJ EFFECTS HERE, OOoOOoOO\n\r", ch);
+							ch->pl = ch->exp * 75;
+						}
+					}
+					if (ch->powerup >= safemaximum) {
+						ch->powerup = safemaximum;
+						xREMOVE_BIT((ch)->affected_by, AFF_POWERCHANNEL);
+						xSET_BIT((ch)->affected_by, AFF_SAFEMAX);
+						send_to_char("DEBUG: SAFEMAX REACHED%\n\r", ch);
+					}
+				}
+				if (xIS_SET((ch)->affected_by, AFF_SSJ)
+					&& xIS_SET((ch)->affected_by, AFF_USSJ)
+					&& !xIS_SET((ch)->affected_by, AFF_USSJ2)
+					&& !xIS_SET((ch)->affected_by, AFF_SSJ2)
+					&& !xIS_SET((ch)->affected_by, AFF_SSJ3)
+					&& !xIS_SET((ch)->affected_by, AFF_SSJ4)
+					&& !xIS_SET((ch)->affected_by, AFF_SGOD)) {
+					safemaximum = form_mastery;
+					if (ch->powerup < safemaximum) {
+						ch->pl *= 1.01;
+						ch->powerup += 1;
+						if ((ch->pl / ch->exp) >= 100
+							&& ch->pcdata->learned[gsn_ussj2] > 0) {
+							xSET_BIT((ch)->affected_by, AFF_USSJ2);
+							send_to_char("DEBUG: INSERT SPARKLY GOING USSJ2 EFFECTS HERE, OOoOOoOO\n\r", ch);
+							ch->pl = ch->exp * 150;
+						}
+					}
+					if (ch->powerup >= safemaximum) {
+						ch->powerup = safemaximum;
+						xREMOVE_BIT((ch)->affected_by, AFF_POWERCHANNEL);
+						xSET_BIT((ch)->affected_by, AFF_SAFEMAX);
+						send_to_char("DEBUG: SAFEMAX REACHED%\n\r", ch);
+					}
+				}
+				if (xIS_SET((ch)->affected_by, AFF_SSJ)
+					&& xIS_SET((ch)->affected_by, AFF_USSJ)
+					&& xIS_SET((ch)->affected_by, AFF_USSJ2)
+					&& !xIS_SET((ch)->affected_by, AFF_SSJ2)
+					&& !xIS_SET((ch)->affected_by, AFF_SSJ3)
+					&& !xIS_SET((ch)->affected_by, AFF_SSJ4)
+					&& !xIS_SET((ch)->affected_by, AFF_SGOD)) {
+					safemaximum = form_mastery;
+					if (ch->powerup < safemaximum) {
+						ch->pl *= 1.01;
+						ch->powerup += 1;
+						if ((ch->pl / ch->exp) >= 200
+							&& ch->pcdata->learned[gsn_ssj2] > 0) {
+							xSET_BIT((ch)->affected_by, AFF_SSJ2);
+							send_to_char("DEBUG: INSERT SPARKLY GOING SSJ2 EFFECTS HERE, OOoOOoOO\n\r", ch);
+							ch->pl = ch->exp * 225;
+						}
+					}
+					if (ch->powerup >= safemaximum) {
+						ch->powerup = safemaximum;
+						xREMOVE_BIT((ch)->affected_by, AFF_POWERCHANNEL);
+						xSET_BIT((ch)->affected_by, AFF_SAFEMAX);
+						send_to_char("DEBUG: SAFEMAX REACHED%\n\r", ch);
+					}
+				}
+				if (xIS_SET((ch)->affected_by, AFF_SSJ)
+					&& xIS_SET((ch)->affected_by, AFF_USSJ)
+					&& xIS_SET((ch)->affected_by, AFF_USSJ2)
+					&& xIS_SET((ch)->affected_by, AFF_SSJ2)
+					&& !xIS_SET((ch)->affected_by, AFF_SSJ3)
+					&& !xIS_SET((ch)->affected_by, AFF_SSJ4)
+					&& !xIS_SET((ch)->affected_by, AFF_SGOD)) {
+					safemaximum = form_mastery;
+					if (ch->powerup < safemaximum) {
+						ch->pl *= 1.01;
+						ch->powerup += 1;
+						if ((ch->pl / ch->exp) >= 275
+							&& ch->pcdata->learned[gsn_ssj3] > 0) {
+							xSET_BIT((ch)->affected_by, AFF_SSJ3);
+							send_to_char("DEBUG: INSERT SPARKLY GOING SSJ3 EFFECTS HERE, OOoOOoOO\n\r", ch);
+							ch->pl = ch->exp * 325;
+						}
+					}
+					if (ch->powerup >= safemaximum) {
+						ch->powerup = safemaximum;
+						xREMOVE_BIT((ch)->affected_by, AFF_POWERCHANNEL);
+						xSET_BIT((ch)->affected_by, AFF_SAFEMAX);
+						send_to_char("DEBUG: SAFEMAX REACHED%\n\r", ch);
+					}
+				}
+				if (xIS_SET((ch)->affected_by, AFF_SSJ)
+					&& xIS_SET((ch)->affected_by, AFF_USSJ)
+					&& xIS_SET((ch)->affected_by, AFF_USSJ2)
+					&& xIS_SET((ch)->affected_by, AFF_SSJ2)
+					&& xIS_SET((ch)->affected_by, AFF_SSJ3)
+					&& !xIS_SET((ch)->affected_by, AFF_SSJ4)
+					&& !xIS_SET((ch)->affected_by, AFF_SGOD)) {
+					safemaximum = form_mastery;
+					if (ch->powerup < safemaximum) {
+						ch->pl *= 1.01;
+						ch->powerup += 1;
+						if ((ch->pl / ch->exp) >= 400
+							&& ch->pcdata->learned[gsn_ssj4] > 0) {
+							xSET_BIT((ch)->affected_by, AFF_SSJ4);
+							send_to_char("DEBUG: INSERT SPARKLY GOING SUPER SAIYAN GOD EFFECTS HERE, OOoOOoOO\n\r", ch);
+							ch->pl = ch->exp * 450;
+						}
+					}
+					if (ch->powerup >= safemaximum) {
+						ch->powerup = safemaximum;
+						xREMOVE_BIT((ch)->affected_by, AFF_POWERCHANNEL);
+						xSET_BIT((ch)->affected_by, AFF_SAFEMAX);
+						send_to_char("DEBUG: SAFEMAX REACHED%\n\r", ch);
+					}
+				}
+				if (xIS_SET((ch)->affected_by, AFF_SSJ)
+					&& xIS_SET((ch)->affected_by, AFF_USSJ)
+					&& xIS_SET((ch)->affected_by, AFF_USSJ2)
+					&& xIS_SET((ch)->affected_by, AFF_SSJ2)
+					&& xIS_SET((ch)->affected_by, AFF_SSJ3)
+					&& xIS_SET((ch)->affected_by, AFF_SSJ4)
+					&& !xIS_SET((ch)->affected_by, AFF_SGOD)) {
+					safemaximum = form_mastery;
+					if (ch->powerup < safemaximum) {
+						ch->pl *= 1.01;
+						ch->powerup += 1;
+						if ((ch->pl / ch->exp) >= 500
+							&& ch->pcdata->learned[gsn_sgod] > 0) {
+							xSET_BIT((ch)->affected_by, AFF_SGOD);
+							send_to_char("DEBUG: INSERT SPARKLY GOING SUPER SAIYAN BLUE EFFECTS HERE, OOoOOoOO\n\r", ch);
+							ch->pl = ch->exp * 600;
+						}
+					}
+					if (ch->powerup >= safemaximum) {
+						ch->powerup = safemaximum;
+						xREMOVE_BIT((ch)->affected_by, AFF_POWERCHANNEL);
+						xSET_BIT((ch)->affected_by, AFF_SAFEMAX);
+						send_to_char("DEBUG: SAFEMAX REACHED%\n\r", ch);
+					}
+				}
+				if (xIS_SET((ch)->affected_by, AFF_SSJ)
+					&& xIS_SET((ch)->affected_by, AFF_USSJ)
+					&& xIS_SET((ch)->affected_by, AFF_USSJ2)
+					&& xIS_SET((ch)->affected_by, AFF_SSJ2)
+					&& xIS_SET((ch)->affected_by, AFF_SSJ3)
+					&& xIS_SET((ch)->affected_by, AFF_SSJ4)
+					&& xIS_SET((ch)->affected_by, AFF_SGOD)) {
+					safemaximum = form_mastery;
+					if (ch->powerup < safemaximum) {
+						ch->pl *= 1.01;
+						ch->powerup += 1;
+					}
+					if (ch->powerup >= safemaximum) {
+						ch->powerup = safemaximum;
+						xREMOVE_BIT((ch)->affected_by, AFF_POWERCHANNEL);
+						xSET_BIT((ch)->affected_by, AFF_SAFEMAX);
+						send_to_char("DEBUG: SAFEMAX REACHED%\n\r", ch);
 					}
 				}
 			}
@@ -605,8 +1031,9 @@ violence_update(void)
 			
 			safemaximum = ((get_curr_int(ch) * 0.03) + 1);
 			resilience = ((get_curr_con(ch) / 5) * 0.00025);
-			if (resilience > 0.90)
+			if (resilience > 0.90) {
 				resilience = 0.90;
+			}
 			danger = ((ch->powerup - safemaximum) * ch->powerup);
 			dangerres = (danger * resilience);
 			danger -= dangerres;
@@ -643,7 +1070,7 @@ violence_update(void)
 				|| xIS_SET((ch)->affected_by, AFF_EVILBOOST)
 				|| xIS_SET((ch)->affected_by, AFF_EVILSURGE)
 				|| xIS_SET((ch)->affected_by, AFF_EVILOVERLOAD)) {
-				ch->pl *= 1.05;
+				ch->pl *= 1.01;
 				ch->powerup += 1;
 				send_to_char("DEBUG: TRANSFORMATION OVERLIMIT PL UP 5%\n\r", ch);
 				if ((ch->mana - danger) < 0)
@@ -2879,7 +3306,7 @@ damage(CHAR_DATA * ch, CHAR_DATA * victim, int dam, int dt)
 
 	if (!is_android_h(victim))
 		victim->mana -=
-		    URANGE(0, ((double)dam / 100 * 0.5 * victim->mana),
+		    URANGE(0, ((double)dam / 1000 * 0.25 * victim->mana),
 		    victim->max_mana);
 
 	heart_calc(victim, "");
