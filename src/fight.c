@@ -532,67 +532,88 @@ violence_update(void)
 			}
 		}
 		/* New Time-based Powerup */
-		if (xIS_SET((ch)->affected_by, AFF_POWERCHANNEL)) {
+		if (xIS_SET((ch)->affected_by, AFF_POWERCHANNEL && !xIS_SET((ch)->affected_by, AFF_KAIOKEN)) {
 			double safemaximum = 0;
 			int	kicontrol = 0;
 			int kistat = 0;
-			safemaximum = ((get_curr_con(ch) * 0.03) + (get_curr_int(ch) * 0.06));
+			int form_mastery = 0;
+			int masterymod = 0;
+			
+			safemaximum = ((get_curr_int(ch) * 0.03) + 1);
 			kicontrol = get_curr_int(ch);
 			kistat = (kicontrol / 10);
+			form_mastery = ch->train;
 			if (ch->position < POS_STANDING) {
 				xREMOVE_BIT((ch)->affected_by, AFF_POWERCHANNEL);
 				send_to_char("DEBUG: CAN'T POWERUP IF YOU'RE NOT STANDING, YA DINGIS\n\r", ch);
 			}
-			if (ch->powerup < safemaximum) {
-				if (xIS_SET((ch)->affected_by, AFF_SSJ)
-					|| xIS_SET((ch)->affected_by, AFF_SSJ2)
-					|| xIS_SET((ch)->affected_by, AFF_SSJ3)
-					|| xIS_SET((ch)->affected_by, AFF_SSJ4)
-					|| xIS_SET((ch)->affected_by, AFF_SGOD)
-					|| xIS_SET((ch)->affected_by, AFF_KAIOKEN)
-					|| xIS_SET((ch)->affected_by, AFF_HYPER)
-					|| xIS_SET((ch)->affected_by, AFF_SNAMEK)
-					|| xIS_SET((ch)->affected_by, AFF_ICER2)
-					|| xIS_SET((ch)->affected_by, AFF_ICER3)
-					|| xIS_SET((ch)->affected_by, AFF_ICER4)
-					|| xIS_SET((ch)->affected_by, AFF_ICER5)
-					|| xIS_SET((ch)->affected_by, AFF_GOLDENFORM)
-					|| xIS_SET((ch)->affected_by, AFF_SEMIPERFECT)
-					|| xIS_SET((ch)->affected_by, AFF_PERFECT)
-					|| xIS_SET((ch)->affected_by, AFF_ULTRAPERFECT)
-					|| xIS_SET((ch)->affected_by, AFF_OOZARU)
-					|| xIS_SET((ch)->affected_by, AFF_GOLDEN_OOZARU)
-					|| xIS_SET((ch)->affected_by, AFF_EXTREME)
-					|| xIS_SET((ch)->affected_by, AFF_MYSTIC)
-					|| xIS_SET((ch)->affected_by, AFF_SUPERANDROID)
-					|| xIS_SET((ch)->affected_by, AFF_MAKEOSTAR)
-					|| xIS_SET((ch)->affected_by, AFF_EVILBOOST)
-					|| xIS_SET((ch)->affected_by, AFF_EVILSURGE)
-					|| xIS_SET((ch)->affected_by, AFF_EVILOVERLOAD)) {
-					ch->pl *= 1.01;
-					ch->powerup += 1;
-					send_to_char("DEBUG: TRANSFORMATION PL UP 1%\n\r", ch);
+			if (!xIS_SET((ch)->affected_by, AFF_KAIOKEN)) {
+				xREMOVE_BIT((ch)->affected_by, AFF_POWERCHANNEL);
+				send_to_char("DEBUG: CAN'T POWERUP IN KAIOKEN\n\r", ch);
+			}
+			if (is_saiyan(ch) || is_hb(ch)) {
+				if (!xIS_SET((ch)->affected_by, AFF_SSJ)) {
+					safemaximum = ((get_curr_int(ch) * 0.03) + 1);
+					if (ch->powerup < safemaximum) {
+						ch->pl *= 1.15;
+						ch->powerup += 1;
+						transStatApply(ch, kistat, kistat, kistat, kistat);
+						send_to_char("DEBUG: PL UP 5%\n\r", ch);
+						if ((ch->pl >= (ch->exp * 30))
+							&& ch->pcdata->learned[gsn_ssj] > 0) {
+							xSET_BIT((ch)->affected_by, AFF_SSJ);
+							send_to_char("DEBUG: INSERT SPARKLY GOING SSJ EFFECTS HERE, OOoOOoOO\n\r", ch);
+							masterymod = (50 + (form_mastery / 1000));
+							ch->pl = ch->exp * masterymod;
+							ch->powerup = 0;
+							if (!IS_NPC(ch)) {
+								ch->pcdata->eyes = 0;
+								ch->pcdata->haircolor = 3;
+							}
+						}
+						if ((ch->pl / ch->exp) >= 30
+							&& ch->pcdata->learned[gsn_ssj] <= 0) {
+							ch->pl = (ch->exp * 30);
+							send_to_char("DEBUG: NO SSJ, NO ENTRAR. 30X MAX\n\r", ch);
+							xREMOVE_BIT((ch)->affected_by, AFF_POWERCHANNEL);
+							xSET_BIT((ch)->affected_by, AFF_SAFEMAX);
+						}
+					}
+					if (ch->powerup >= safemaximum) {
+						xREMOVE_BIT((ch)->affected_by, AFF_POWERCHANNEL);
+						xSET_BIT((ch)->affected_by, AFF_SAFEMAX);
+						send_to_char("DEBUG: SAFEMAX REACHED%\n\r", ch);
+					}
 				}
-				else {
-					ch->pl *= 1.05;
-					ch->powerup += 1;
-					transStatApply(ch, kistat, kistat, kistat, kistat);
-					send_to_char("DEBUG: PL UP 5%\n\r", ch);
+				if (xIS_SET((ch)->affected_by, AFF_SSJ)) {
+					safemaximum = ((get_curr_int(ch) * 0.03) + 1);
+					if (ch->powerup < safemaximum) {
+						ch->pl *= 1.01;
+						ch->powerup += 1;
+					}
 				}
 			}
 			else {
-				send_to_char("DEBUG: SAFEMAX REACHED\n\r", ch);
-				xREMOVE_BIT((ch)->affected_by, AFF_POWERCHANNEL);
-				xSET_BIT((ch)->affected_by, AFF_SAFEMAX);
+				send_to_char("DEBUG: ONLY SAIYAN/HB IS BEING TESTED\n\r", ch);
 			}
 		}
 		if (xIS_SET((ch)->affected_by, AFF_OVERCHANNEL)) {
 			double safemaximum = 0;
 			int danger = 0;
+			double resilience = 0;
+			double dangerres = 0;
 			
-			safemaximum = ((get_curr_con(ch) * 0.03) + (get_curr_int(ch) * 0.06));
-			danger = ((ch->powerup - safemaximum) * (ch->powerup / 2));
-			
+			safemaximum = ((get_curr_int(ch) * 0.03) + 1);
+			resilience = ((get_curr_con(ch) / 5) * 0.00025);
+			if (resilience > 0.90)
+				resilience = 0.90;
+			danger = ((ch->powerup - safemaximum) * ch->powerup);
+			dangerres = (danger * resilience);
+			danger -= dangerres;
+			/* Just in case. */
+			if (danger < 0) {
+				danger = 0;
+			}
 			if (ch->position < POS_STANDING) {
 				xREMOVE_BIT((ch)->affected_by, AFF_OVERCHANNEL);
 				send_to_char("DEBUG: CAN'T POWERUP IF YOU'RE NOT STANDING, YA DINGIS\n\r", ch);
@@ -622,9 +643,9 @@ violence_update(void)
 				|| xIS_SET((ch)->affected_by, AFF_EVILBOOST)
 				|| xIS_SET((ch)->affected_by, AFF_EVILSURGE)
 				|| xIS_SET((ch)->affected_by, AFF_EVILOVERLOAD)) {
-				ch->pl *= 1.01;
+				ch->pl *= 1.05;
 				ch->powerup += 1;
-				send_to_char("DEBUG: TRANSFORMATION OVERLIMIT PL UP 1%\n\r", ch);
+				send_to_char("DEBUG: TRANSFORMATION OVERLIMIT PL UP 5%\n\r", ch);
 				if ((ch->mana - danger) < 0)
 					ch->mana = 0;
 				else

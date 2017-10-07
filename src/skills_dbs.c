@@ -1821,10 +1821,17 @@ void do_powerup(CHAR_DATA *ch, char *argument)
 	if (IS_NPC(ch))
 		return;
 	if (arg[0] == '\0') {
-		send_to_char("Powerup how? Commands are: 'begin', 'push', and 'stop'.\n\r", ch);
-		send_to_char("'powerup push' is dangerous and can only be used after first powering up to maximum.\n\r", ch);
+		if (ch->pl >= ch->exp) {
+			send_to_char("Powerup how? Commands are: 'begin', 'push', and 'stop'.\n\r", ch);
+			send_to_char("'powerup push' is dangerous and can only be used after first powering up to maximum.\n\r", ch);
+			return;
+		}
+		if (ch->pl < ch->exp) {
+			ch->pl = ch->exp;
+			act(AT_WHITE, "You unsuppress your power.", ch, NULL, NULL, TO_CHAR);
+			act(AT_WHITE, "$n unsuppresses $s power.", ch, NULL, NULL, TO_NOTVICT);
+		}
 	}
-
 	if (!str_cmp(arg, "begin")) {
 
 		if (xIS_SET((ch)->affected_by, AFF_POWERCHANNEL || xIS_SET((ch)->affected_by, AFF_OVERCHANNEL))) {

@@ -2654,8 +2654,8 @@ struct char_data {
 	sh_int 	practice;
 	sh_int 	max_prac;
 	int 	powerup;
-	sh_int 	train;
-	sh_int 	max_train;
+	int 	train;
+	int 	max_train;
 	sh_int 	numattacks;
 	int 	gold;
 	long double exp;

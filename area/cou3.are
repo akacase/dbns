@@ -14,7 +14,7 @@ $
 #RESETMSG A low humming noise can be heard.~
 
 #FLAGS
-2
+2 1
 
 #CLIMATE 2 2 2
 
@@ -1029,7 +1029,7 @@ A class IV scouter~
 A small metal object lies here beeping and flashing.~
 ~
 65 0 131073
-0 0 100000 0 0 0
+0 0 100000000 0 0 0
 1 25000 250
  100000
 #6020
@@ -1038,7 +1038,7 @@ A class V scouter~
 A small metal object lies here beeping and flashing.~
 ~
 65 0 131073
-0 0 1000000 0 0 0
+0 0 1000000000 0 0 0
 1 50000 500
  10000000
 #6021

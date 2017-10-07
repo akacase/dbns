@@ -12,7 +12,7 @@ $
 #PLANET 1
 
 #FLAGS
-0
+2 1
 
 #CLIMATE 2 2 2
 
@@ -58,7 +58,7 @@ A better android training partner is prepared to fight you.
 ~
 ~
 3 0 0 C
-100
+150
 1 0 100 1d20+0 2d5+0
 -1 50
 112 112 0
@@ -78,7 +78,7 @@ An advanced android training partner is prepared to fight you.
 ~
 ~
 3 0 0 C
-125
+175
 1 0 100 1d20+0 2d5+0
 -1 150
 112 112 0
@@ -98,7 +98,7 @@ A hyper android training partner is prepared to fight you.
 ~
 ~
 3 0 0 C
-150
+200
 1 0 100 1d20+0 2d5+0
 -1 450
 112 112 0
@@ -118,7 +118,7 @@ A supreme android training partner is prepared to fight you.
 ~
 ~
 3 0 0 C
-175
+225
 1 0 100 1d20+0 2d5+0
 -1 1350
 112 112 0
@@ -138,7 +138,7 @@ An ultimate android training partner is prepared to fight you.
 ~
 ~
 3 0 0 C
-200
+250
 1 0 100 1d20+0 2d5+0
 -1 4050
 112 112 0
@@ -246,6 +246,9 @@ ponder
 say You may feel yourself not increasing in power at first, but this is normal.
 say Keep at it, and I'm certain your meatbag body will positively FLOW with power.
 endif
+~
+> rand_prog 5~
+mpecho &cThe gravity Serv-O-Bot drones monotonously.&d
 ~
 |
 #199
@@ -492,8 +495,8 @@ S
 #108
 Gravity Chamber 01~
 This room allows you to increase your stats and gain powerlevel by
-training in increased gravity.  To begin, type 'gravtrain <stat> <minutes'.
-One game minute is roughly equal to one second of real time. 
+training in increased gravity. To begin, type 'gravtrain' to see an output
+with what sorts of commands you may enter. 
 ~
 0 268435460 0
 D0
@@ -878,8 +881,8 @@ S
 #126
 Gravity Chamber 02~
 This room allows you to increase your stats and gain powerlevel by
-training in increased gravity.  To begin, type 'gravtrain <stat> <minutes'.
-One game minute is roughly equal to one second of real time. 
+training in increased gravity.  To begin, type 'gravtrain' to see an output
+with what sorts of commands you may enter.  
 ~
 0 268435456 0
 D1
@@ -894,8 +897,8 @@ S
 #127
 Gravity Chamber 03~
 This room allows you to increase your stats and gain powerlevel by
-training in increased gravity.  To begin, type 'gravtrain <stat> <minutes'.
-One game minute is roughly equal to one second of real time. 
+training in increased gravity. To begin, type 'gravtrain' to see an output
+with what sorts of commands you may enter. 
 ~
 0 268435456 0
 D1
@@ -910,8 +913,8 @@ S
 #128
 Gravity Chamber 04~
 This room allows you to increase your stats and gain powerlevel by
-training in increased gravity.  To begin, type 'gravtrain <stat> <minutes'.
-One game minute is roughly equal to one second of real time. 
+training in increased gravity. To begin, type 'gravtrain' to see an output
+with what sorts of commands you may enter. 
 ~
 0 268435456 0
 D1
@@ -941,6 +944,9 @@ M 1 106 1 125
 M 1 106 1 115
 M 1 110 1 104
 M 1 111 1 108
+M 1 111 1 126
+M 1 111 1 127
+M 1 111 1 128
 S
 
 
