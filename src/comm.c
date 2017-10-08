@@ -1522,7 +1522,7 @@ nanny(DESCRIPTOR_DATA *d, char *argument)
     case CON_GET_OLD_PASSWORD:
       send_to_desc_color("\n\r", d);
 
-      if (strcmp(crypt(argument, ch->pcdata->pwd), ch->pcdata->pwd))
+      if (strcmp(sha256_crypt(argument), ch->pcdata->pwd))
 	{
 	  send_to_desc_color("&wWrong password.&D\n\r", d);
 	  sprintf(log_buf, "WRONG PASSWORD: %s@%s.", ch->name, d->host);
@@ -1644,7 +1644,7 @@ nanny(DESCRIPTOR_DATA *d, char *argument)
 	  return;
 	}
 
-      pwd_new = crypt(argument, ch->name);
+      pwd_new = sha256_crypt(argument);
       for (p = pwd_new; *p != '\0'; p++)
 	{
 	  if (*p == '~')
@@ -1665,7 +1665,7 @@ nanny(DESCRIPTOR_DATA *d, char *argument)
     case CON_CONFIRM_NEW_PASSWORD:
       send_to_desc_color("\n\r", d);
 
-      if (strcmp(crypt(argument, ch->pcdata->pwd), ch->pcdata->pwd))
+      if (strcmp(sha256_crypt(argument), ch->pcdata->pwd))
 	{
 	  send_to_desc_color("&wPasswords don't match.\n\rRetype password: &D",
 			      d);
