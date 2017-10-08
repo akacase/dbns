@@ -4115,24 +4115,24 @@ number_fuzzy(int number)
 
 /*
  * Generate a random number.
- * Ooops was (arc4random() % to) + from which doesn't work -Shaddai
+ * Ooops was (random() % to) + from which doesn't work -Shaddai
  */
 int
 number_range(int from, int to)
 {
 	if ((to - from) < 1)
 		return from;
-	return ((arc4random() % (to - from + 1)) + from);
+	return ((random() % (to - from + 1)) + from);
 }
 
 /*
  * Generate a percentile roll.
- * arc4random() % 100 only does 0-99, changed to do 1-100 -Shaddai
+ * random() % 100 only does 0-99, changed to do 1-100 -Shaddai
  */
 int
 number_percent(void)
 {
-	return (arc4random() % 100) + 1;
+	return (random() % 100) + 1;
 }
 
 
@@ -4144,7 +4144,7 @@ number_door(void)
 {
 	int 	door;
 
-	while ((door = arc4random() & (16 - 1)) > 9);
+	while ((door = random() & (16 - 1)) > 9);
 
 	return door;
 }
@@ -4154,7 +4154,7 @@ number_door(void)
 int
 number_bits(int width)
 {
-	return arc4random() & ((1 << width) - 1);
+	return random() & ((1 << width) - 1);
 }
 
 /*

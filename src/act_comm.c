@@ -224,7 +224,7 @@ translate(int percent, const char *in, const char *name)
 	for (pbuf = in; *pbuf;) {
 		for (cnv = lng->first_precnv; cnv; cnv = cnv->next) {
 			if (!str_prefix(cnv->old, pbuf)) {
-			  if (percent && (int)(arc4random() % 100) < percent) {
+			  if (percent && (int)(random() % 100) < percent) {
 					strncpy(pbuf2, pbuf, cnv->olen);
 					pbuf2[cnv->olen] = '\0';
 					pbuf2 += cnv->olen;
@@ -237,7 +237,7 @@ translate(int percent, const char *in, const char *name)
 			}
 		}
 		if (!cnv) {
-		  if (isalpha(*pbuf) && (!percent || (int)(arc4random() % 100) > percent)) {
+		  if (isalpha(*pbuf) && (!percent || (int)(random() % 100) > percent)) {
 				*pbuf2 = lng->alphabet[LOWER(*pbuf) - 'a'];
 				if (isupper(*pbuf))
 					*pbuf2 = UPPER(*pbuf2);
