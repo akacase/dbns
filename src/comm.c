@@ -1322,7 +1322,6 @@ show_title(DESCRIPTOR_DATA * d)
 void
 nanny(DESCRIPTOR_DATA *d, char *argument)
 {
-  //2568
   char buf[MAX_STRING_LENGTH];
   char buf2[MAX_STRING_LENGTH];
   char buf3[MAX_STRING_LENGTH];
@@ -1386,10 +1385,10 @@ nanny(DESCRIPTOR_DATA *d, char *argument)
 		  close_socket(d, false);
 		}
 	      sprintf(buf, "\n\r&gChoosing a name is one of the most important parts of this game...\n\r"
-		       "Make sure to pick a name appropriate to the character you are going\n\r"
-		       "to role play, and be sure that it fits into the DragonBall Z world.\n\r"
-		       "Please type '&WHELP&g' to read what restirictions we have for naming your\n\r"
-		       "character.\n\r\n\r&wPlease choose a name for your character: &D");
+		      "Make sure to pick a name appropriate to the character you are going\n\r"
+		      "to role play, and be sure that it fits into the DragonBall Z world.\n\r"
+		      "Please type '&WHELP&g' to read what restirictions we have for naming your\n\r"
+		      "character.\n\r\n\r&wPlease choose a name for your character: &D");
 	      send_to_desc_color(buf, d);
 	      d->newstate++;
 	      d->connected = CON_GET_NAME;
@@ -1556,14 +1555,14 @@ nanny(DESCRIPTOR_DATA *d, char *argument)
       f_old = load_char_obj(d, buf, false);
       ch = d->character;
       if (ch->position ==  POS_FIGHTING
-	   || ch->position ==  POS_EVASIVE
-	   || ch->position ==  POS_DEFENSIVE
-	   || ch->position ==  POS_AGGRESSIVE
-	   || ch->position ==  POS_BERSERK)
+	  || ch->position ==  POS_EVASIVE
+	  || ch->position ==  POS_DEFENSIVE
+	  || ch->position ==  POS_AGGRESSIVE
+	  || ch->position ==  POS_BERSERK)
 	ch->position = POS_STANDING;
 
       sprintf(log_buf, "%s@%s(%s) has connected.", ch->pcdata->filename,
-	       d->host, d->user);
+	      d->host, d->user);
       if (ch->level == 2)
 	{
 	  xSET_BIT(ch->deaf, CHANNEL_FOS);
@@ -1613,8 +1612,8 @@ nanny(DESCRIPTOR_DATA *d, char *argument)
 	{
 	case 'y': case 'Y':
 	  sprintf(buf, "\n\r&wMake sure to use a password that won't be easily guessed by someone else."
-		   "\n\rPick a good password for %s: %s&D",
-		   ch->name, echo_off_str);
+		  "\n\rPick a good password for %s: %s&D",
+		  ch->name, echo_off_str);
 	  send_to_desc_color(buf, d);
 	  xSET_BIT(ch->act, PLR_ANSI);
 	  d->connected = CON_GET_NEW_PASSWORD;
@@ -1668,7 +1667,7 @@ nanny(DESCRIPTOR_DATA *d, char *argument)
       if (strcmp(sha256_crypt(argument), ch->pcdata->pwd))
 	{
 	  send_to_desc_color("&wPasswords don't match.\n\rRetype password: &D",
-			      d);
+			     d);
 	  d->connected = CON_GET_NEW_PASSWORD;
 	  return;
 	}
@@ -1792,10 +1791,10 @@ nanny(DESCRIPTOR_DATA *d, char *argument)
 	{
 	  char letters[11] = "abcdefghij";
 	  if (class_table[i_class]->who_name &&
-	       class_table[i_class]->who_name[0] != '\0')
+	      class_table[i_class]->who_name[0] != '\0')
 	    {
 	      sprintf(buf, "\n\r&w   (&W%d&w)  &c%-12s&w  ('&R%c&w' for help)&D", i,
-		       class_table[i_class]->who_name, letters[i]);
+		      class_table[i_class]->who_name, letters[i]);
 	      send_to_desc_color(buf, d);
 	      i++;
 	    }
@@ -1814,7 +1813,7 @@ nanny(DESCRIPTOR_DATA *d, char *argument)
 	  for (i_class = 0; i_class < MAX_PC_CLASS; i_class++)
 	    {
 	      if (class_table[i_class]->who_name &&
-		   class_table[i_class]->who_name[0] != '\0')
+		  class_table[i_class]->who_name[0] != '\0')
 		{
 		  if (i == i_class)
 		    {
@@ -1843,10 +1842,10 @@ nanny(DESCRIPTOR_DATA *d, char *argument)
 	    {
 	      char letters[11] = "abcdefghij";
 	      if (class_table[i_class]->who_name &&
-		   class_table[i_class]->who_name[0] != '\0')
+		  class_table[i_class]->who_name[0] != '\0')
 		{
 		  sprintf(buf, "\n\r&w   (&W%d&w)  &c%-12s&w  ('&R%c&w' for help)&D", i,
-			   class_table[i_class]->who_name, letters[i]);
+			  class_table[i_class]->who_name, letters[i]);
 		  send_to_desc_color(buf, d);
 		  i++;
 		}
@@ -1859,9 +1858,9 @@ nanny(DESCRIPTOR_DATA *d, char *argument)
 
 
       if (i_class == MAX_PC_CLASS
-	   ||  !class_table[i_class]->who_name
-	   || class_table[i_class]->who_name[0] == '\0'
-	   || !str_cmp(class_table[i_class]->who_name,"unused"))
+	  ||  !class_table[i_class]->who_name
+	  || class_table[i_class]->who_name[0] == '\0'
+	  || !str_cmp(class_table[i_class]->who_name,"unused"))
 	{
 	  send_to_desc_color("&wThat's not a race.\n\rWhat IS your race? &D",d);
 	  return;
@@ -1904,7 +1903,7 @@ nanny(DESCRIPTOR_DATA *d, char *argument)
 	  for (i_class = 0; i_class < (MAX_HAIR - 2); i_class++)
 	    {
 	      if (toupper(arg[0]) == toupper(hair_color[i_class][0])
-		   &&   !str_prefix(arg, hair_color[i_class]))
+		  &&   !str_prefix(arg, hair_color[i_class]))
 		{
 		  ch->pcdata->haircolor = i_class;
 		  ch->pcdata->orignalhaircolor = i_class;
@@ -1998,7 +1997,7 @@ nanny(DESCRIPTOR_DATA *d, char *argument)
 	  for (i_class = (MAX_COMPLEXION - 14); i_class < (MAX_COMPLEXION); i_class++)
 	    {
 	      if (toupper(arg[0]) == toupper(complexion[i_class][0])
-		   &&   !str_prefix(arg, complexion[i_class]))
+		  &&   !str_prefix(arg, complexion[i_class]))
 		{
 		  ch->pcdata->complexion = i_class;
 		  break;
@@ -2026,7 +2025,7 @@ nanny(DESCRIPTOR_DATA *d, char *argument)
 	  for (i_class = (MAX_COMPLEXION - 17); i_class < (MAX_COMPLEXION - 13); i_class++)
 	    {
 	      if (toupper(arg[0]) == toupper(complexion[i_class][0])
-		   &&   !str_prefix(arg, complexion[i_class]))
+		  &&   !str_prefix(arg, complexion[i_class]))
 		{
 		  ch->pcdata->complexion = i_class;
 		  break;
@@ -2054,7 +2053,7 @@ nanny(DESCRIPTOR_DATA *d, char *argument)
 	  for (i_class = 0; i_class < (MAX_COMPLEXION - 17); i_class++)
 	    {
 	      if (toupper(arg[0]) == toupper(complexion[i_class][0])
-		   &&   !str_prefix(arg, complexion[i_class]))
+		  &&   !str_prefix(arg, complexion[i_class]))
 		{
 		  ch->pcdata->complexion = i_class;
 		  break;
@@ -2103,7 +2102,7 @@ nanny(DESCRIPTOR_DATA *d, char *argument)
 	  for (i_class = 0; i_class < (MAX_SECONDARYCOLOR - 1); i_class++)
 	    {
 	      if (toupper(arg[0]) == toupper(secondary_color[i_class][0])
-		   &&   !str_prefix(arg, secondary_color[i_class]))
+		  &&   !str_prefix(arg, secondary_color[i_class]))
 		{
 		  ch->pcdata->secondarycolor = i_class;
 		  break;
@@ -2151,7 +2150,7 @@ nanny(DESCRIPTOR_DATA *d, char *argument)
       for (i_class = 0; i_class < (MAX_EYE - 3); i_class++)
 	{
 	  if (toupper(arg[0]) == toupper(eye_color[i_class][0])
-	       &&   !str_prefix(arg, eye_color[i_class]))
+	      &&   !str_prefix(arg, eye_color[i_class]))
 	    {
 	      ch->pcdata->eyes = i_class;
 	      ch->pcdata->orignaleyes = i_class;
@@ -2201,7 +2200,7 @@ nanny(DESCRIPTOR_DATA *d, char *argument)
       for (i_class = 0; i_class < (MAX_BUILD); i_class++)
 	{
 	  if (toupper(arg[0]) == toupper(build_type[i_class][0])
-	       &&   !str_prefix(arg, build_type[i_class]))
+	      &&   !str_prefix(arg, build_type[i_class]))
 	    {
 	      ch->pcdata->build = i_class;
 	      break;
@@ -2219,8 +2218,8 @@ nanny(DESCRIPTOR_DATA *d, char *argument)
 	}
 
       sprintf(log_buf, "%s@%s new %s %s.", ch->name, d->host,
-	       race_table[ch->race]->race_name,
-	       class_table[ch->class]->who_name);
+	      race_table[ch->race]->race_name,
+	      class_table[ch->class]->who_name);
       log_string_plus(log_buf, LOG_COMM, sysdata.log_level);
       to_channel(log_buf, CHANNEL_MONITOR, "Monitor", LEVEL_IMMORTAL);
       send_to_desc_color("&wPress [&RENTER&w] &D", d);
@@ -2264,227 +2263,218 @@ nanny(DESCRIPTOR_DATA *d, char *argument)
 
     case CON_READ_MOTD:
       {
-	char motdbuf[MAX_STRING_LENGTH];
-
+	char 	motdbuf[MAX_STRING_LENGTH];
 	sprintf(motdbuf, "\n\rWelcome to %s...\n\r", sysdata.mud_name);
 	send_to_desc_color(motdbuf, d);
       }
       add_char(ch);
-      d->connected	= CON_PLAYING;
-      /* hopefully clear up some ansi changing issues	  -Nopey */
+      d->connected = CON_PLAYING;
       set_char_color(AT_DGREEN, ch);
-      if(!xIS_SET(ch->act, PLR_ANSI) && d->ansi == true)
+      if (!xIS_SET(ch->act, PLR_ANSI) && d->ansi == true)
 	d->ansi = false;
-      else if(xIS_SET(ch->act, PLR_ANSI) && d->ansi == false)
+      else if (xIS_SET(ch->act, PLR_ANSI) && d->ansi == false)
 	d->ansi = true;
+      if (ch->level == 0) {
+	int 	i_lang;
 
-      if (ch->level == 0)
-	{
-	  OBJ_DATA *obj;
-	  int iLang;
+	ch->pcdata->upgradeL = CURRENT_UPGRADE_LEVEL;
 
-	  ch->pcdata->upgradeL = CURRENT_UPGRADE_LEVEL;
-
-	  ch->pcdata->clan_name = STRALLOC("");
-	  ch->pcdata->clan	  = NULL;
-	  switch (class_table[ch->class]->attr_prime)
-	    {
-	    case APPLY_STR: ch->perm_str = 10; break;
-	    case APPLY_INT: ch->perm_int = 10; break;
-	    case APPLY_DEX: ch->perm_dex = 10; break;
-	    case APPLY_CON: ch->perm_con = 10; break;
-	    case APPLY_LCK: ch->perm_lck = 10; break;
-	    }
-
-	  ch->perm_str	 += race_table[ch->race]->str_plus;
-	  ch->perm_int	 += race_table[ch->race]->int_plus;
-	  ch->perm_dex	 += race_table[ch->race]->dex_plus;
-	  ch->perm_con	 += race_table[ch->race]->con_plus;
-	  ch->affected_by	  = race_table[ch->race]->affected;
-	  ch->perm_lck	 = number_range(0, 30);
-
-	  ch->pcdata->permTstr = ch->perm_str;
-	  ch->pcdata->permTspd = ch->perm_dex;
-	  ch->pcdata->permTint = ch->perm_int;
-	  ch->pcdata->permTcon = ch->perm_con;
-
-	  ch->armor		 += race_table[ch->race]->ac_plus;
-	  ch->alignment	 += race_table[ch->race]->alignment;
-	  ch->attacks              = race_table[ch->race]->attacks;
-	  ch->defenses             = race_table[ch->race]->defenses;
-	  ch->saving_poison_death  	= race_table[ch->race]->saving_poison_death;
-	  ch->saving_wand  		= race_table[ch->race]->saving_wand;
-	  ch->saving_para_petri  	= race_table[ch->race]->saving_para_petri;
-	  ch->saving_breath  		= race_table[ch->race]->saving_breath;
-	  ch->saving_spell_staff	= race_table[ch->race]->saving_spell_staff;
-
-	  ch->height = number_range(race_table[ch->race]->height *.9, race_table[ch->race]->height *1.1);
-	  ch->weight = number_range(race_table[ch->race]->weight *.9, race_table[ch->race]->weight *1.1);
-
-	  if ((iLang = skill_lookup("common")) < 0)
-	    bug("Nanny: cannot find common language.");
-	  else
-	    ch->pcdata->learned[iLang] = 100;
-
-	  for (iLang = 0; lang_array[iLang] != LANG_UNKNOWN; iLang++)
-	    if (lang_array[iLang] == race_table[ch->race]->language)
-	      break;
-	  if (lang_array[iLang] == LANG_UNKNOWN)
-	    bug("Nanny: invalid racial language.");
-	  else
-	    {
-	      if ((iLang = skill_lookup(lang_names[iLang])) < 0)
-		bug("Nanny: cannot find racial language.");
-	      else
-		ch->pcdata->learned[iLang] = 100;
-	    }
-
-	  name_stamp_stats(ch);
-
-	  ch->level	= 1;
-	  ch->exp	= 100;
-	  ch->pl	= 100;
-	  ch->heart_pl	= 100;
-	  ch->max_hit    += race_table[ch->race]->hit;
-	  ch->max_mana   += race_table[ch->race]->mana;
-	  ch->max_move    = 100;
-	  ch->hit	= UMAX(1,ch->max_hit);
-	  ch->mana	= UMAX(1,ch->max_mana);
-	  ch->move	= UMAX(1,ch->max_move);
-	  ch->train = 5;
-	  ch->max_train = 1;
-	  ch->pcdata->xTrain = 0;
-	  ch->pcdata->total_xTrain = 0;
-	  ch->practice = 0;
-	  ch->max_prac = 0;
-	  ch->max_energy = 1;
-	  ch->pcdata->admintalk = 0;
-	  ch->pcdata->age = 4;
-	  ch->pcdata->sparcount = 0;
-	  if (ch->race == 0 || ch->race == 2 || ch->race == 5 || ch->race == 6)
-	    ch->pcdata->tail = true;
-	  else
-	    ch->pcdata->tail = false;
-	  if (ch->race == 4)
-	    ch->pcdata->natural_ac_max = 500;
-	  if (ch->race == 6)
-	    ch->pcdata->absorb_pl_mod = 6;
-	  sprintf(buf, "the %s",
-		   title_table [ch->class] [ch->level]
-		   [ch->sex == SEX_FEMALE ? 1 : 0]);
-	  set_title(ch, buf);
-	  ch->pcdata->creation_date = current_time;
-
-	  xSET_BIT(ch->act, PLR_AUTOGOLD);
-	  xSET_BIT(ch->act, PLR_AUTOEXIT);
-	  xSET_BIT(ch->act, PLR_AUTO_COMPASS);
-	  xSET_BIT(ch->act, PLR_SPAR);
-	  SET_BIT(ch->pcdata->flags, PCFLAG_DEADLY);
-	  xSET_BIT(ch->deaf, CHANNEL_FOS);
-
-
-	  /* Don't display old notes as 'unread' except for the announcment board */
-	  for (i = 1; i < MAX_BOARD; i++)
-	    {
-	      for (catchup_notes = ch->pcdata->board->note_first; catchup_notes && catchup_notes->next; catchup_notes = catchup_notes->next);
-
-	      if (!catchup_notes)
-		;
-	      else
-		{
-		  ch->pcdata->last_note[i] = catchup_notes->date_stamp;
-		}
-	    }
-
-	  {
-	    OBJ_INDEX_DATA *obj_ind = get_obj_index(10333);
-	    if (obj_ind != NULL)
-	      {
-		obj = create_object(obj_ind, 0);
-		obj_to_char(obj, ch);
-		equip_char(ch, obj, WEAR_HOLD);
-	      }
-	  }
-	  /* Display_prompt interprets blank as default */
-	  ch->pcdata->prompt = STRALLOC("");
+	ch->pcdata->clan_name = STRALLOC("");
+	ch->pcdata->clan = NULL;
+	switch (class_table[ch->class]->attr_prime) {
+	case APPLY_STR:
+	  ch->perm_str = 10;
+	  break;
+	case APPLY_INT:
+	  ch->perm_int = 10;
+	  break;
+	case APPLY_DEX:
+	  ch->perm_dex = 10;
+	  break;
+	case APPLY_CON:
+	  ch->perm_con = 10;
+	  break;
+	case APPLY_LCK:
+	  ch->perm_lck = 10;
+	  break;
 	}
-      else
-	if (!IS_IMMORTAL(ch) && ch->pcdata->release_date > 0 &&
-	     ch->pcdata->release_date > current_time)
-	  {
-	    if (ch->in_room->vnum == 6
-		 ||   ch->in_room->vnum == 8
-		 ||   ch->in_room->vnum == 1206)
-	      char_to_room(ch, ch->in_room);
-	    else
-	      char_to_room(ch, get_room_index(8));
-	  }
+
+	ch->perm_str += race_table[ch->race]->str_plus;
+	ch->perm_int += race_table[ch->race]->int_plus;
+	ch->perm_dex += race_table[ch->race]->dex_plus;
+	ch->perm_con += race_table[ch->race]->con_plus;
+	ch->affected_by = race_table[ch->race]->affected;
+	ch->perm_lck = number_range(0, 30);
+
+	ch->pcdata->permTstr = ch->perm_str;
+	ch->pcdata->permTspd = ch->perm_dex;
+	ch->pcdata->permTint = ch->perm_int;
+	ch->pcdata->permTcon = ch->perm_con;
+
+	ch->armor += race_table[ch->race]->ac_plus;
+	ch->alignment += race_table[ch->race]->alignment;
+	ch->attacks = race_table[ch->race]->attacks;
+	ch->defenses = race_table[ch->race]->defenses;
+	ch->saving_poison_death = race_table[ch->race]->saving_poison_death;
+	ch->saving_wand = race_table[ch->race]->saving_wand;
+	ch->saving_para_petri = race_table[ch->race]->saving_para_petri;
+	ch->saving_breath = race_table[ch->race]->saving_breath;
+	ch->saving_spell_staff = race_table[ch->race]->saving_spell_staff;
+
+	ch->height = number_range(race_table[ch->race]->height * .9, race_table[ch->race]->height * 1.1);
+	ch->weight = number_range(race_table[ch->race]->weight * .9, race_table[ch->race]->weight * 1.1);
+
+	if ((i_lang = skill_lookup("common")) < 0)
+	  bug("Nanny: cannot find common language.");
 	else
-	  if(!IS_IMMORTAL(ch) && ch->in_room
-	      && ch->in_room->vnum == 2060)
-	    {
-	      act(AT_GREEN, "A Strange Force rips you from the Hyperbolic Time Chamber.", ch, NULL, NULL, TO_CHAR);
-	      char_to_room(ch, get_room_index(2059));
-	    }
+	  ch->pcdata->learned[i_lang] = 100;
+
+	for (i_lang = 0; lang_array[i_lang] != LANG_UNKNOWN; i_lang++)
+	  if (lang_array[i_lang] == race_table[ch->race]->language)
+	    break;
+	if (lang_array[i_lang] == LANG_UNKNOWN);
+	else {
+	  if ((i_lang = skill_lookup(lang_names[i_lang])) < 0)
+	    bug("Nanny: cannot find racial language.");
 	  else
-	    if (ch->in_room && (IS_IMMORTAL(ch)
-				  || !xIS_SET(ch->in_room->room_flags, ROOM_PROTOTYPE)))
-	      {
-		char_to_room(ch, ch->in_room);
-	      }
-	    else
-	      if (IS_IMMORTAL(ch))
-		{
-		  char_to_room(ch, get_room_index(ROOM_VNUM_CHAT));
-		}
-	      else
-		{
-		  char_to_room(ch, get_room_index(ROOM_VNUM_TEMPLE));
-		}
+	    ch->pcdata->learned[i_lang] = 100;
+	}
+
+	name_stamp_stats(ch);
+
+	ch->level = 1;
+	ch->exp = 5;
+	ch->pl = 5;
+	ch->heart_pl = 5;
+	ch->max_hit += race_table[ch->race]->hit;
+	ch->max_mana += race_table[ch->race]->mana;
+	ch->max_move = 100;
+	ch->hit = UMAX(1, ch->max_hit);
+	ch->mana = UMAX(1, ch->max_mana);
+	ch->move = UMAX(1, ch->max_move);
+	ch->train = 5;
+	ch->max_train = 1;
+	ch->pcdata->xTrain = 0;
+	ch->pcdata->total_xTrain = 0;
+	ch->practice = 0;
+	ch->max_prac = 0;
+	ch->max_energy = 1;
+	ch->pcdata->admintalk = 0;
+	ch->pcdata->age = 18;
+	ch->pcdata->sparcount = 0;
+	if (is_saiyan(ch) || is_hb(ch) || is_icer(ch) || is_bio(ch))
+	  ch->pcdata->tail = true;
+	else
+	  ch->pcdata->tail = false;
+	if (is_android(ch))
+	  ch->pcdata->natural_ac_max = 500;
+	if (is_bio(ch))
+	  ch->pcdata->absorb_pl_mod = 6;
+	if (is_saiyan(ch) || is_hb(ch))
+	  ch->pcdata->learned[gsn_monkey_gun] = 95;
+
+	sprintf(buf, "the %s",
+		title_table[ch->class][ch->level]
+		[ch->sex == SEX_FEMALE ? 1 : 0]);
+	set_title(ch, buf);
+	ch->pcdata->creation_date = current_time;
+
+	xSET_BIT(ch->act, PLR_AUTOGOLD);
+	xSET_BIT(ch->act, PLR_AUTOEXIT);
+	xSET_BIT(ch->act, PLR_AUTO_COMPASS);
+	xSET_BIT(ch->act, PLR_SPAR);
+	SET_BIT(ch->pcdata->flags, PCFLAG_DEADLY);
+	xSET_BIT(ch->deaf, CHANNEL_FOS);
+
+	for (i = 1; i < MAX_BOARD; i++) {
+	  for (catchup_notes = ch->pcdata->board->note_first; catchup_notes && catchup_notes->next; catchup_notes = catchup_notes->next);
+
+	  if (!catchup_notes);
+	  else {
+	    ch->pcdata->last_note[i] = catchup_notes->date_stamp;
+	  }
+	}
+
+	char_to_room(ch, get_room_index(ROOM_VNUM_SCHOOL));
+	ch->pcdata->prompt = STRALLOC("");
+      } else if (!IS_IMMORTAL(ch) && ch->pcdata->release_date > 0 &&
+		 ch->pcdata->release_date > current_time) {
+	if (ch->in_room->vnum == 6
+	    || ch->in_room->vnum == 8
+	    || ch->in_room->vnum == 1206)
+	  char_to_room(ch, ch->in_room);
+	else
+	  char_to_room(ch, get_room_index(8));
+      } else if (!IS_IMMORTAL(ch) && ch->in_room
+		 && ch->in_room->vnum == 2060) {
+	act(AT_GREEN, "A Strange Force rips you from the Hyperbolic Time Chamber.", ch, NULL, NULL, TO_CHAR);
+	char_to_room(ch, get_room_index(2059));
+      } else if (ch->in_room && (IS_IMMORTAL(ch)
+				 || !xIS_SET(ch->in_room->room_flags, ROOM_PROTOTYPE))) {
+	char_to_room(ch, ch->in_room);
+      } else if (IS_IMMORTAL(ch)) {
+	char_to_room(ch, get_room_index(ROOM_VNUM_CHAT));
+      } else {
+	char_to_room(ch, get_room_index(ROOM_VNUM_TEMPLE));
+      }
 
       act(AT_ACTION, "$n has entered the game.", ch, NULL, NULL, TO_CANSEE);
-      if (ch->pcdata->pet)
-	{
-	  act(AT_ACTION, "$n returns to $s master from the Void.",
-	       ch->pcdata->pet, NULL, ch, TO_NOTVICT);
-	  act(AT_ACTION, "$N returns with you to the realms.",
-	       ch, NULL, ch->pcdata->pet, TO_CHAR);
-	}
+      if (ch->pcdata->pet) {
+	act(AT_ACTION, "$n returns to $s master from the Void.",
+	    ch->pcdata->pet, NULL, ch, TO_NOTVICT);
+	act(AT_ACTION, "$N returns with you to the realms.",
+	    ch, NULL, ch->pcdata->pet, TO_CHAR);
+      }
+      ch->tmystic = 0;
+      ch->mysticlearn = 0;
+      ch->teaching = NULL;
+      if (is_kaio(ch) && ch->alignment < 0)
+	ch->alignment = 0;
+      if (is_demon(ch) && ch->alignment > 0)
+	ch->alignment = 0;
+
+      remove_member(ch);
+      if (ch->pcdata->clan)
+	update_member(ch);
+
+      /* For the logon pl tracker */
+      ch->logon_start = ch->exp;
       do_global_boards(ch, "");
+
+      ch->dodge = false;
+      ch->block = false;
+      ch->ki_dodge = false;
+      ch->ki_cancel = false;
+      ch->ki_deflect = false;
+
       do_look(ch, "auto");
-      tax_player(ch);  
+      tax_player(ch);
       mccp_interest(ch);
       mail_count(ch);
       check_loginmsg(ch);
 
       if (!ch->was_in_room && ch->in_room == get_room_index(ROOM_VNUM_TEMPLE))
-      	ch->was_in_room = get_room_index(ROOM_VNUM_TEMPLE);
+	ch->was_in_room = get_room_index(ROOM_VNUM_TEMPLE);
       else if (ch->was_in_room == get_room_index(ROOM_VNUM_TEMPLE))
-        ch->was_in_room = get_room_index(ROOM_VNUM_TEMPLE);
+	ch->was_in_room = get_room_index(ROOM_VNUM_TEMPLE);
       else if (!ch->was_in_room)
-    	ch->was_in_room = ch->in_room;
-
+	ch->was_in_room = ch->in_room;
       break;
-
     case CON_NOTE_TO:
       handle_con_note_to (d, argument);
       break;
-
     case CON_NOTE_SUBJECT:
       handle_con_note_subject (d, argument);
       break; /* subject */
-
     case CON_NOTE_EXPIRE:
       handle_con_note_expire (d, argument);
       break;
-
     case CON_NOTE_TEXT:
       handle_con_note_text (d, argument);
       break;
     case CON_NOTE_FINISH:
       handle_con_note_finish (d, argument);
       break;
-
     }
 }
 
