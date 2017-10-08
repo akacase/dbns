@@ -1980,7 +1980,7 @@ extract_char(CHAR_DATA * ch, bool fPull, bool death)
 			bug("Extract_char: char's descriptor points to another char", 0);
 		else {
 			log_string("preparing to close socket at handler.c:1983\n");
-			close_socket(ch->desc, false, false);
+			close_socket(ch->desc, false);
 		}
 	}
 }

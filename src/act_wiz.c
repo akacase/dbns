@@ -450,7 +450,7 @@ do_disconnect(CHAR_DATA * ch, char *argument)
 	for (d = first_descriptor; d; d = d->next) {
 		if (d == victim->desc) {
 			log_string("preparing to close socket at act_wiz.c:854\n");
-			close_socket(d, true, false);
+			close_socket(d, true);
 			send_to_char("Ok.\n\r", ch);
 			return;
 		}
@@ -512,7 +512,7 @@ do_forceclose(CHAR_DATA * ch, char *argument)
 				return;
 			}
 			log_string("preparing to close socket at act_wiz.c:916\n");
-			close_socket(d, true, false);
+			close_socket(d, true);
 			send_to_char("Ok.\n\r", ch);
 			return;
 		}
@@ -5058,7 +5058,7 @@ do_destroy(CHAR_DATA * ch, char *argument)
 				break;
 		if (d)
 			log_string("preparing to close socket at comm.c:5520\n");
-			close_socket(d, true, true);
+		close_socket(d, true);
 	} else {
 		int 	x , y;
 

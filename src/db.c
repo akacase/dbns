@@ -19,7 +19,6 @@
  ****************************************************************************/
 
 #include <sys/types.h>
-#include <bsd/stdlib.h>
 #include <ctype.h>
 #include <stdio.h>
 #include <stdarg.h>

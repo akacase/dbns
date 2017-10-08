@@ -18,7 +18,6 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <sys/wait.h>
-#include <bsd/stdlib.h>
 #include <getopt.h>
 #include <syslog.h>
 #include <ctype.h>
@@ -43,8 +42,13 @@
 #include <arpa/inet.h>
 #include <arpa/telnet.h>
 #include <netdb.h>
+
 #define closesocket close
 #define ENOSR 63
+#define BERR 255
+#define	INVALID	1
+#define	TOOSMALL 2
+#define	TOOLARGE 3
 
 const char echo_off_str[] = {IAC, WILL, TELOPT_ECHO, '\0'};
 const char echo_on_str[] = {IAC, WONT, TELOPT_ECHO, '\0'};
@@ -88,10 +92,11 @@ void 	new_descriptor(int new_desc);
 bool 	read_from_descriptor(DESCRIPTOR_DATA * d);
 bool 	write_to_descriptor(int desc, char *txt, int length);
 bool 	check_parse_name(char *name, bool newchar);
-bool 	check_reconnect(DESCRIPTOR_DATA * d, char *name, bool fConn);
-bool 	check_playing(DESCRIPTOR_DATA * d, char *name);
+bool    check_reconnect(DESCRIPTOR_DATA *d, char *name, bool f_conn);
+bool	check_playing (DESCRIPTOR_DATA *d, char *name, bool kick);
 bool 	reconnect(DESCRIPTOR_DATA * d, char *name);
 int 	main(int argc, char **argv);
+void	stop_idling(CHAR_DATA *ch );
 void 	nanny(DESCRIPTOR_DATA * d, char *argument);
 bool 	flush_buffer(DESCRIPTOR_DATA * d, bool f_prompt);
 void 	read_from_buffer(DESCRIPTOR_DATA * d);
@@ -107,6 +112,8 @@ bool 	check_pfile(DESCRIPTOR_DATA * d);
 void    p_to_fp(char *p, char *fp);
 void    load_from_fp(DESCRIPTOR_DATA * d, bool np);
 void 	usage(void);
+long long strtonum(const char *numstr, long long minval, long long maxval,
+	 const char **errstrp);
 
 /* locals */
 unsigned int port;
@@ -510,172 +517,223 @@ accept_new(int ctrl)
 void
 game_loop()
 {
-	struct timeval last_time;
-	char 	cmdline[MAX_INPUT_LENGTH];
-	DESCRIPTOR_DATA *d;
+  struct timeval last_time;
+  char cmdline[MAX_INPUT_LENGTH];
+  DESCRIPTOR_DATA *d;
 
-	signal(SIGSEGV, seg_vio);
-	signal(SIGKILL, sig_kill);
-	signal(SIGTERM, sig_term);
-	signal(SIGINT, sig_int);
-	signal(SIGHUP, sig_hup);
-	signal(SIGQUIT, sig_quit);
-	signal(SIGPIPE, SIG_IGN);
+  signal(SIGSEGV, seg_vio);
+  signal(SIGKILL, sig_kill);
+  signal(SIGTERM, sig_term);
+  signal(SIGINT, sig_int);
+  signal(SIGHUP, sig_hup);
+  signal(SIGQUIT, sig_quit);
+  signal(SIGPIPE, SIG_IGN);
 
-	gettimeofday(&last_time, NULL);
-	current_time = (time_t) last_time.tv_sec;
+  gettimeofday(&last_time, NULL);
+  current_time = (time_t) last_time.tv_sec;
 
-	/* main loop */
-	while (!mud_down) {
-		accept_new(control);
-		/*
-		 * Kick out descriptors with raised exceptions
-		 */
-		for (d = first_descriptor; d; d = d_next) {
-			if (d == d->next) {
-				bug("descriptor_loop: loop found & fixed");
-				d->next = NULL;
+  /* Main loop */
+  while (!mud_down)
+    {
+      accept_new(control );
+
+      /*
+       * Kick out descriptors with raised exceptions
+       * or have been idle, then check for input.
+       */
+      for (d = first_descriptor; d; d = d_next)
+	{
+	  if (d == d->next)
+	    {
+	      bug("descriptor_loop: loop found & fixed");
+	      d->next = NULL;
+	    }
+	  d_next = d->next;
+
+	  d->idle++;	/* make it so a descriptor can idle out */
+	  if (d->idle > 2)
+	    d->prev_idle = d->idle;
+
+	  if (FD_ISSET(d->descriptor, &exc_set))
+	    {
+	      FD_CLR(d->descriptor, &in_set );
+	      FD_CLR(d->descriptor, &out_set);
+	      if (d->character
+		  && (d->connected == CON_PLAYING
+		      ||   d->connected == CON_EDITING))
+		save_char_obj(d->character);
+	      d->outtop	= 0;
+	      close_socket(d, true);
+	      continue;
+	    }
+	  else
+	    if ((!d->character && d->idle > 480)		  /* 2 mins */
+		||   (d->connected != CON_PLAYING && d->idle > 1200) /* 5 mins */
+		||     d->idle > 28800)				  /* 2 hrs  */
+	      {
+		write_to_descriptor(d->descriptor,
+				    "Idle timeout... disconnecting.\n\r", 0);
+		d->outtop	= 0;
+		close_socket(d, true);
+		continue;
+	      }
+	    else
+	      {
+		d->fcommand	= false;
+
+		if (FD_ISSET(d->descriptor, &in_set))
+		  {
+		    if (d->character)
+		      {
+			d->character->timer = 0;
+			if (d->character->pcdata && d->character->level < 51)
+			  {
+			    if (d->idle >= 180)
+			      {
+				if (d->character->pcdata->i_idle < 0)
+				  d->character->pcdata->i_idle = 0;
+				if (d->character->pcdata->i_idle > 4)
+				  d->character->pcdata->i_idle = 0;
+
+				d->character->pcdata->p_idle[d->character->pcdata->i_idle] = (d->idle / 4);
+				d->character->pcdata->i_idle++;
+			      }
+			  }
+		      }
+		    if (d->prev_idle < 2)
+		      d->psuppress_cmdspam = true;
+		    else
+		      d->psuppress_cmdspam = false;
+
+		    d->psuppress_channel = 0;
+		    d->prev_idle = d->idle;
+		    d->idle = 0;
+
+		    if (!read_from_descriptor(d))
+		      {
+			FD_CLR(d->descriptor, &out_set);
+			if (d->character
+			    && (d->connected == CON_PLAYING
+				||   d->connected == CON_EDITING))
+			  save_char_obj(d->character);
+			d->outtop	= 0;
+			close_socket(d, false);
+			continue;
+		      }
+		  }
+
+		/* check for input from the dns */
+		if((d->connected == CON_PLAYING || d->character != NULL) && d->ifd != -1 && FD_ISSET(d->ifd, &in_set))
+		  process_dns(d);
+
+		if (d->character && d->character->wait > 0)
+		  {
+		    --d->character->wait;
+		    continue;
+		  }
+
+		read_from_buffer(d);
+		if (d->incomm[0] != '\0')
+		  {
+		    d->fcommand	= true;
+		    stop_idling(d->character);
+
+		    strcpy(cmdline, d->incomm);
+		    d->incomm[0] = '\0';
+
+		    if (d->character)
+		      set_cur_char(d->character);
+
+		      switch(d->connected)
+			{
+			default:
+			  nanny(d, cmdline);
+			  break;
+			case CON_PLAYING:
+			  interpret(d->character, cmdline);
+			  break;
+			case CON_EDITING:
+			  edit_buffer(d->character, cmdline);
+			  break;
 			}
-			d_next = d->next;
-			if (FD_ISSET(d->descriptor, &exc_set)) {
-				FD_CLR(d->descriptor, &in_set);
-				FD_CLR(d->descriptor, &out_set);
-				/* exceptional state, fquit */
-				if (d->character) {
-					log_string("preparing to fquit comm.c:652\n");
-					close_socket(d, true, true);
-					continue;
-				}
-				d->outtop = 0;
-				log_string("preparing to close socket at comm.c:657\n");
-				close_socket(d, true, true);
-				continue;
-			} else {
-				d->fcommand = false;
-				if (FD_ISSET(d->descriptor, &in_set)) {
-					if (!read_from_descriptor(d)) {
-						FD_CLR(d->descriptor, &out_set);
-						if (d->character
-						    && (d->connected == CON_PLAYING
-						    || d->connected == CON_EDITING)) {
-							log_string("preparing to fquit comm.c:668\n");
-							fquit(d->character);
-							continue;
-						}
-						/* new creation EOF catch */
-						if (d->character) {
-							log_string("preparing to close socket at comm.c:647\n");
-							close_socket(d, true, true);
-							continue;
-							/*
-							 * odd state, no
-							 * character but
-							 * descriptor
-							 * remains
-							 */
-						} else {
-							log_string("preparing to close socket at comm.c:652\n");
-							close_socket(d, true, true);
-							continue;
-						}
-						log_string("made it to the end without clearing EOF");
-					}
-				}
-				/* check for input from the dns */
-				if ((d->connected == CON_PLAYING
-				    || d->character != NULL)
-				    && d->ifd != -1
-				    && FD_ISSET(d->ifd, &in_set))
-					process_dns(d);
-				if (d->character && d->character->wait > 0) {
-					--d->character->wait;
-					continue;
-				}
-				read_from_buffer(d);
-				if (d->incomm[0] != '\0') {
-					d->fcommand = true;
-					utf8cpy(cmdline, d->incomm);
-					d->incomm[0] = '\0';
-
-					if (d->character)
-						set_cur_char(d->character);
-					switch (d->connected) {
-					case CON_PLAYING:
-						interpret(d->character, cmdline);
-						break;
-					case CON_EDITING:
-						edit_buffer(d->character, cmdline);
-						break;
-					default:
-						nanny(d, cmdline);
-						break;
-					}
-				}
-			}
-			if (d == last_descriptor)
-				break;
-		}
-		/* autonomous game motion */
-		update_handler();
-
-		/* check REQUESTS pipe */
-		check_requests();
-
-		/* output */
-		for (d = first_descriptor; d; d = d_next) {
-			d_next = d->next;
-			if ((d->fcommand || d->outtop > 0)
-			    && FD_ISSET(d->descriptor, &out_set)) {
-				/*
-				 * ignore ret value, runtime will clear out
-				 * EPIPE or EOF
-				 */
-				if (!flush_buffer(d, true)) {
-					d->outtop = 0;
-				}
-			}
-			if (d == last_descriptor)
-				break;
-		}
-
-		/*
-		 * Synchronize to a clock.
-		 * sleep(last_time + 1/PULSE_PER_SECOND - now).
-		 */
-		struct timeval now_time;
-		long 	sec_delta;
-		long 	usec_delta;
-
-		gettimeofday(&now_time, NULL);
-		usec_delta = ((int) last_time.tv_usec) - ((int) now_time.tv_usec)
-		    + 1000000 / PULSE_PER_SECOND;
-		sec_delta = ((int) last_time.tv_sec) - ((int) now_time.tv_sec);
-		while (usec_delta < 0) {
-			usec_delta += 1000000;
-			sec_delta -= 1;
-		}
-
-		while (usec_delta >= 1000000) {
-			usec_delta -= 1000000;
-			sec_delta += 1;
-		}
-
-		if (sec_delta > 0 || (sec_delta == 0 && usec_delta > 0)) {
-			struct timeval stall_time;
-
-			stall_time.tv_usec = usec_delta;
-			stall_time.tv_sec = sec_delta;
-			if (select(0, NULL, NULL, NULL, &stall_time) < 0 && errno != EINTR) {
-				perror("game_loop: select: stall");
-				exit(1);
-			}
-		}
-		gettimeofday(&last_time, NULL);
-		current_time = (time_t) last_time.tv_sec;
+		  }
+	      }
+	  if (d == last_descriptor)
+	    break;
 	}
+      /*
+       * Autonomous game motion.
+       */
+      update_handler();
 
-	/* make sure strerr is flushed */
-	fflush(stderr);
+      /*
+       * Check REQUESTS pipe
+       */
+      check_requests();
+
+      /*
+       * Output.
+       */
+      for (d = first_descriptor; d; d = d_next)
+	{
+	  d_next = d->next;
+
+	  if ((d->fcommand || d->outtop > 0)
+	      &&   FD_ISSET(d->descriptor, &out_set))
+	    {
+	      if (!flush_buffer(d, true))
+		{
+		  if (d->character
+		      && (d->connected == CON_PLAYING
+			  ||   d->connected == CON_EDITING))
+		    save_char_obj(d->character);
+		  d->outtop	= 0;
+		  close_socket(d, false);
+		}
+	    }
+	  if (d == last_descriptor)
+	    break;
+	}
+      {
+	struct timeval now_time;
+	long secDelta;
+	long usecDelta;
+
+	gettimeofday(&now_time, NULL);
+	usecDelta	= ((int) last_time.tv_usec) - ((int) now_time.tv_usec)
+	  + 1000000 / PULSE_PER_SECOND;
+	secDelta	= ((int) last_time.tv_sec) - ((int) now_time.tv_sec);
+	while (usecDelta < 0)
+	  {
+	    usecDelta += 1000000;
+	    secDelta  -= 1;
+	  }
+
+	while (usecDelta >= 1000000)
+	  {
+	    usecDelta -= 1000000;
+	    secDelta  += 1;
+	  }
+
+	if (secDelta > 0 || (secDelta == 0 && usecDelta > 0))
+	  {
+	    struct timeval stall_time;
+
+	    stall_time.tv_usec = usecDelta;
+	    stall_time.tv_sec  = secDelta;
+	    if (select(0, NULL, NULL, NULL, &stall_time) < 0 && errno != EINTR)
+	      {
+		perror("game_loop: select: stall");
+		exit(1);
+	      }
+	  }
+      }
+
+      gettimeofday(&last_time, NULL);
+      current_time = (time_t) last_time.tv_sec;
+    }
+  /* make sure strerr is flushed */
+  fflush(stderr);	
 }
 
 
@@ -798,120 +856,148 @@ free_desc(DESCRIPTOR_DATA * d)
 }
 
 void
-close_socket(DESCRIPTOR_DATA * dclose, bool force, bool clear)
+close_socket(DESCRIPTOR_DATA *dclose, bool force)
 {
-	CHAR_DATA *ch;
-	DESCRIPTOR_DATA *d;
-	bool 	do_not_unlink = false;
+  CHAR_DATA *ch;
+  DESCRIPTOR_DATA *d;
+  bool do_not_unlink = false;
 
-	if (!dclose) {
-		return;
-	}
-	if (dclose->ipid != -1) {
-		int 	status;
+  if(dclose->ipid != -1)
+    {
+      int status;
 
-		kill(dclose->ipid, SIGKILL);
-		waitpid(dclose->ipid, &status, 0);
-	}
-	if (dclose->ifd != -1)
-		close(dclose->ifd);
-	/* flush outbuf */
-	if (!force && dclose->outtop > 0)
-		flush_buffer(dclose, false);
-	/* say bye to whoever's snooping this descriptor */
-	if (dclose->snoop_by)
-		write_to_buffer(dclose->snoop_by,
-		    "Your victim has left the game.\n\r", 0);
-	/* stop snooping everyone else */
-	for (d = first_descriptor; d; d = d->next)
-		if (d->snoop_by == dclose)
-			d->snoop_by = NULL;
-	/* check for switched people who go link-dead */
-	if (dclose->original) {
-		if ((ch = dclose->character) != NULL)
-			do_return(ch, "");
-		else {
-			bug("Close_socket: dclose->original without character %s",
-			    (dclose->original->name ? dclose->original->name : "unknown"));
-			dclose->character = dclose->original;
-			dclose->original = NULL;
-		}
-	}
-	ch = dclose->character;
-	/* sanity check :( */
-	if (!dclose->prev && dclose != first_descriptor) {
-		DESCRIPTOR_DATA *dp, *dn;
+      kill(dclose->ipid, SIGKILL);
+      waitpid(dclose->ipid, &status, 0);
+    }
 
-		bug("Close_socket: %s desc:%p != first_desc:%p and desc->prev = NULL!",
-		    ch ? ch->name : d->host, dclose, first_descriptor);
-		dp = NULL;
-		for (d = first_descriptor; d; d = dn) {
-			dn = d->next;
-			if (d == dclose) {
-				bug("Close_socket: %s desc:%p found, prev should be:%p, fixing.",
-				    ch ? ch->name : d->host, dclose, dp);
-				dclose->prev = dp;
-				break;
-			}
-			dp = d;
-		}
-		if (!dclose->prev) {
-			bug("Close_socket: %s desc:%p could not be found!.",
-			    ch ? ch->name : dclose->host, dclose);
-			do_not_unlink = true;
-		}
-	}
-	if (!dclose->next && dclose != last_descriptor) {
-		DESCRIPTOR_DATA *dp, *dn;
+  if(dclose->ifd != -1)
+    close(dclose->ifd);
 
-		bug("Close_socket: %s desc:%p != last_desc:%p and desc->next = NULL!",
-		    ch ? ch->name : d->host, dclose, last_descriptor);
-		dn = NULL;
-		for (d = last_descriptor; d; d = dp) {
-			dp = d->prev;
-			if (d == dclose) {
-				bug("Close_socket: %s desc:%p found, next should be:%p, fixing.",
-				    ch ? ch->name : d->host, dclose, dn);
-				dclose->next = dn;
-				break;
-			}
-			dn = d;
-		}
-		if (!dclose->next) {
-			bug("Close_socket: %s desc:%p could not be found!.",
-			    ch ? ch->name : dclose->host, dclose);
-			do_not_unlink = true;
-		}
+  /* flush outbuf */
+  if (!force && dclose->outtop > 0)
+    flush_buffer(dclose, false);
+
+  /* say bye to whoever's snooping this descriptor */
+  if (dclose->snoop_by)
+    write_to_buffer(dclose->snoop_by,
+		     "Your victim has left the game.\n\r", 0);
+
+  /* stop snooping everyone else */
+  for (d = first_descriptor; d; d = d->next)
+    if (d->snoop_by == dclose)
+      d->snoop_by = NULL;
+
+  /* Check for switched people who go link-dead. -- Altrag */
+  if (dclose->original)
+    {
+      if ((ch = dclose->character) != NULL)
+	do_return(ch, "");
+      else
+	{
+	  bug("Close_socket: dclose->original without character %s",
+	       (dclose->original->name ? dclose->original->name : "unknown"));
+	  dclose->character = dclose->original;
+	  dclose->original = NULL;
 	}
-	if (clear) {
-		/* sanity check */
-		if (ch) {
-			dclose->character->desc = NULL;
-			free_char(dclose->character);
-		} else {
-			log_string("bug: calling func thought char descriptor was free");
-		}
-	} else {
-		/*
-		 * don't clear, extract_char will take care of it for us,
-		 * NULL out the descriptor
-		 */
-		if (dclose->character) {
-			if (dclose->character->desc) {
-				dclose->character->desc = NULL;
-			}
-		}
+    }
+
+  ch = dclose->character;
+
+  /* sanity check :(*/
+  if (!dclose->prev && dclose != first_descriptor)
+    {
+      DESCRIPTOR_DATA *dp, *dn;
+      bug("Close_socket: %s desc:%p != first_desc:%p and desc->prev = NULL!",
+	   ch ? ch->name : d->host, dclose, first_descriptor);
+      dp = NULL;
+      for (d = first_descriptor; d; d = dn)
+	{
+	  dn = d->next;
+	  if (d == dclose)
+	    {
+	      bug("Close_socket: %s desc:%p found, prev should be:%p, fixing.",
+		   ch ? ch->name : d->host, dclose, dp);
+	      dclose->prev = dp;
+	      break;
+	    }
+	  dp = d;
 	}
-	if (!do_not_unlink) {
-		/* make sure loop doesn't get messed up */
-		if (d_next == dclose)
-			d_next = d_next->next;
-		UNLINK(dclose, first_descriptor, last_descriptor, next, prev);
+      if (!dclose->prev)
+	{
+	  bug("Close_socket: %s desc:%p could not be found!.",
+	       ch ? ch->name : dclose->host, dclose);
+	  do_not_unlink = true;
 	}
-	if (dclose->descriptor == maxdesc)
-		--maxdesc;
-	free_desc(dclose);
-	--num_descriptors;
+    }
+  if (!dclose->next && dclose != last_descriptor)
+    {
+      DESCRIPTOR_DATA *dp, *dn;
+      bug("Close_socket: %s desc:%p != last_desc:%p and desc->next = NULL!",
+	   ch ? ch->name : d->host, dclose, last_descriptor);
+      dn = NULL;
+      for (d = last_descriptor; d; d = dp)
+	{
+	  dp = d->prev;
+	  if (d == dclose)
+	    {
+	      bug("Close_socket: %s desc:%p found, next should be:%p, fixing.",
+		   ch ? ch->name : d->host, dclose, dn);
+	      dclose->next = dn;
+	      break;
+	    }
+	  dn = d;
+	}
+      if (!dclose->next)
+	{
+	  bug("Close_socket: %s desc:%p could not be found!.",
+	       ch ? ch->name : dclose->host, dclose);
+	  do_not_unlink = true;
+	}
+    }
+
+  if (dclose->character)
+    {
+      sprintf(log_buf, "Closing link to %s.", ch->pcdata->filename);
+      log_string_plus(log_buf, LOG_COMM, UMAX(sysdata.log_level, ch->level));
+
+      if ((dclose->connected == CON_PLAYING
+	    || dclose->connected == CON_EDITING)
+	   ||(dclose->connected >= CON_NOTE_TO
+	      && dclose->connected <= CON_NOTE_FINISH))
+	{
+	  char ldbuf[MAX_STRING_LENGTH];
+	  act(AT_ACTION, "$n has lost $s link.", ch, NULL, NULL, TO_CANSEE);
+
+	  sprintf(ldbuf, "%s has gone linkdead", ch->name);
+	  if(!IS_IMMORTAL(ch))
+	    do_info(ch, ldbuf);
+	  else
+	    do_ainfo(ch, ldbuf);
+
+	  ch->desc = NULL;
+	}
+      else
+	{
+	  /* clear descriptor pointer to get rid of bug message in log */
+	  dclose->character->desc = NULL;
+	  free_char(dclose->character);
+	}
+    }
+
+
+  if (!do_not_unlink)
+    {
+      /* make sure loop doesn't get messed up */
+      if (d_next == dclose)
+	d_next = d_next->next;
+      UNLINK(dclose, first_descriptor, last_descriptor, next, prev);
+    }
+
+  if (dclose->descriptor == maxdesc)
+    --maxdesc;
+
+  free_desc(dclose);
+  --num_descriptors;
 }
 
 
@@ -1171,7 +1257,7 @@ write_to_buffer(DESCRIPTOR_DATA * d, const char *txt, int length)
 			d->outtop = 0;
 			bug("Buffer overflow. Closing (%s).", d->character ? d->character->name : "???");
 			log_string("preparing to close socket at comm.c:1248\n");
-			close_socket(d, true, true);
+			close_socket(d, true);
 			return;
 		}
 		d->outsize *= 2;
@@ -1234,1041 +1320,1172 @@ show_title(DESCRIPTOR_DATA * d)
 }
 
 void
-nanny(DESCRIPTOR_DATA * d, char *argument)
+nanny(DESCRIPTOR_DATA *d, char *argument)
 {
-	char 	buf[MAX_STRING_LENGTH];
-	char 	buf2[MAX_STRING_LENGTH];
-	char 	buf3[MAX_STRING_LENGTH];
-	char 	buf4[MAX_STRING_LENGTH];
-	char 	arg[MAX_STRING_LENGTH];
-	CHAR_DATA *ch;
-	char   *pwdnew;
-	char   *p;
-	int 	b = 0;
-	int 	i_class;
-	bool    p_exists = false;
-	bool 	blocked = false;
-	NOTE_DATA *catchup_notes;
-	int 	i = 0;
+  //2568
+  char buf[MAX_STRING_LENGTH];
+  char buf2[MAX_STRING_LENGTH];
+  char buf3[MAX_STRING_LENGTH];
+  char buf4[MAX_STRING_LENGTH];
+  char arg[MAX_STRING_LENGTH];
+  CHAR_DATA *ch;
+  char *pwd_new;
+  char *p;
+  int b = 0;
+  int i_class;
+  bool f_old, chk;
+  NOTE_DATA *catchup_notes;
+  int i = 0;
 
-	if (d->connected != CON_NOTE_TEXT) {
-		while (isspace(*argument))
-			argument++;
+  if(d->connected != CON_NOTE_TEXT)
+    {
+      while (isspace(*argument))
+	argument++;
+    }
+
+  ch = d->character;
+
+  switch (d->connected)
+    {
+
+    default:
+      bug("nanny: bad d->connected %d.", d->connected);
+      close_socket(d, true);
+      return;
+
+    case CON_GET_NAME:
+      if (argument[0] == '\0')
+	{
+	  close_socket(d, false);
+	  return;
 	}
-	ch = d->character;
 
-	switch (d->connected) {
+      *argument = capitalize_string(argument);
+
+      /* Old players can keep their characters. -- Alty */
+      if (!check_parse_name(argument, (d->newstate != 0)))
+	{
+	  send_to_desc_color("&wIllegal name, try another.\n\rName: &D", d);
+	  return;
+	}
+
+      if (!str_cmp(argument, "New"))
+	{
+	  if (d->newstate == 0)
+	    {
+	      /* New player */
+	      /* Don't allow new players if DENY_NEW_PLAYERS is true */
+	      if (sysdata.DENY_NEW_PLAYERS == true)
+		{
+		  sprintf(buf, "The mud is currently preparing for a reboot.\n\r");
+		  send_to_desc_color(buf, d);
+		  sprintf(buf, "New players are not accepted during this time.\n\r");
+		  send_to_desc_color(buf, d);
+		  sprintf(buf, "Please try again in a few minutes.\n\r");
+		  send_to_desc_color(buf, d);
+		  close_socket(d, false);
+		}
+	      sprintf(buf, "\n\r&gChoosing a name is one of the most important parts of this game...\n\r"
+		       "Make sure to pick a name appropriate to the character you are going\n\r"
+		       "to role play, and be sure that it fits into the DragonBall Z world.\n\r"
+		       "Please type '&WHELP&g' to read what restirictions we have for naming your\n\r"
+		       "character.\n\r\n\r&wPlease choose a name for your character: &D");
+	      send_to_desc_color(buf, d);
+	      d->newstate++;
+	      d->connected = CON_GET_NAME;
+	      return;
+	    }
+	  else
+	    {
+	      send_to_desc_color("&wIllegal name, try another.\n\rName: &D", d);
+	      return;
+	    }
+	}
+
+      if (!str_cmp(argument, "help"))
+	{
+	  HELP_DATA *pHelp;
+
+	  for (pHelp = first_help; pHelp; pHelp = pHelp->next)
+	    {
+	      if (!str_cmp(pHelp->keyword, "dbznames"))
+		break;
+	    }
+	  if (!pHelp)
+	    {
+	      send_to_desc_color("No help on that word.\n\rName: ", d);
+	      return;
+	    }
+	  send_to_desc_color("\n\r", d);
+	  send_to_desc_color(pHelp->text, d);
+	  send_to_desc_color("\n\r\n\r&wName: ", d);
+	  return;
+	}
+
+      if (check_playing(d, argument, false) == BERR)
+	{
+	  write_to_buffer(d, "Name: ", 0);
+	  return;
+	}
+
+      f_old = load_char_obj(d, argument, true);
+      if (!d->character)
+	{
+	  sprintf(log_buf, "Bad player file %s@%s.", argument, d->host);
+	  log_string(log_buf);
+	  send_to_desc_color("Your playerfile is corrupt...Please notify GokuDBS@hotmail.com.\n\r", d);
+	  close_socket(d, false);
+	  return;
+	}
+      ch   = d->character;
+      if (xIS_SET(ch->act, PLR_DENY))
+	{
+	  sprintf(log_buf, "Denying access to %s@%s.", argument, d->host);
+	  log_string_plus(log_buf, LOG_COMM, sysdata.log_level);
+	  if (d->newstate != 0)
+	    {
+	      send_to_desc_color("That name is already taken.  Please choose another: ", d);
+	      d->connected = CON_GET_NAME;
+	      d->character->desc = NULL;
+	      free_char(d->character); /* Big Memory Leak before --Shaddai */
+	      d->character = NULL;
+	      return;
+	    }
+	  send_to_desc_color("You are denied access.\n\r", d);
+	  close_socket(d, false);
+	  return;
+	}
+      if (check_total_ip(d))
+	{
+	  send_to_desc_color (
+			      "Your maximum amount of players you can have online has been reached.\n\r", d);
+	  close_socket(d, false);
+	  return;
+	}
+
+      chk = check_reconnect(d, argument, false);
+      if (chk == BERR)
+	return;
+
+      if (chk)
+	{
+	  f_old = true;
+	}
+      else
+	{
+	  if (wizlock && !IS_IMMORTAL(ch))
+	    {
+	      send_to_desc_color("The game is wizlocked.  Only immortals can connect now.\n\r", d);
+	      send_to_desc_color("Please try back later.\n\r", d);
+	      close_socket(d, false);
+	      return;
+	    }
+	}
+
+      if (f_old)
+	{
+	  if (d->newstate != 0)
+	    {
+	      send_to_desc_color("&wThat name is already taken.  Please choose another: &D", d);
+	      d->connected = CON_GET_NAME;
+	      d->character->desc = NULL;
+	      free_char(d->character); /* Big Memory Leak before --Shaddai */
+	      d->character = NULL;
+	      return;
+	    }
+	  /* Old player */
+	  send_to_desc_color("&wPassword: &D", d);
+	  write_to_buffer(d, echo_off_str, 0);
+	  d->connected = CON_GET_OLD_PASSWORD;
+	  return;
+	}
+      else
+	{
+	  if (d->newstate == 0)
+	    {
+	      /* No such player */
+	      send_to_desc_color("\n\r&wNo such player exists.\n\rPlease check your spelling, or type new to start a new player.\n\r\n\rName: &D", d);
+	      d->connected = CON_GET_NAME;
+	      d->character->desc = NULL;
+	      free_char(d->character); /* Big Memory Leak before --Shaddai */
+	      d->character = NULL;
+	      return;
+	    }
+
+	  sprintf(buf, "&wDid I get that right, %s (&WY&w/&WN&w)? &D", argument);
+	  send_to_desc_color(buf, d);
+	  d->connected = CON_CONFIRM_NEW_NAME;
+	  return;
+	}
+      break;
+
+    case CON_GET_OLD_PASSWORD:
+      send_to_desc_color("\n\r", d);
+
+      if (strcmp(crypt(argument, ch->pcdata->pwd), ch->pcdata->pwd))
+	{
+	  send_to_desc_color("&wWrong password.&D\n\r", d);
+	  sprintf(log_buf, "WRONG PASSWORD: %s@%s.", ch->name, d->host);
+	  log_string(log_buf);
+	  /* clear descriptor pointer to get rid of bug message in log */
+	  d->character->desc = NULL;
+	  close_socket(d, false);
+	  return;
+	}
+
+      write_to_buffer(d, echo_on_str, 0);
+
+      if (check_playing(d, ch->pcdata->filename, true))
+	return;
+
+      chk = check_reconnect(d, ch->pcdata->filename, true);
+      if (chk == BERR)
+	{
+	  if (d->character && d->character->desc)
+	    d->character->desc = NULL;
+	  close_socket(d, false);
+	  return;
+	}
+      if (chk == true)
+	return;
+
+      sprintf(buf, ch->pcdata->filename);
+      d->character->desc = NULL;
+      free_char(d->character);
+      d->character = NULL;
+      f_old = load_char_obj(d, buf, false);
+      ch = d->character;
+      if (ch->position ==  POS_FIGHTING
+	   || ch->position ==  POS_EVASIVE
+	   || ch->position ==  POS_DEFENSIVE
+	   || ch->position ==  POS_AGGRESSIVE
+	   || ch->position ==  POS_BERSERK)
+	ch->position = POS_STANDING;
+
+      sprintf(log_buf, "%s@%s(%s) has connected.", ch->pcdata->filename,
+	       d->host, d->user);
+      if (ch->level == 2)
+	{
+	  xSET_BIT(ch->deaf, CHANNEL_FOS);
+	  ch->level = 1;
+	}
+      sprintf(buf3, "%s has logged on", ch->name);
+      if (!IS_IMMORTAL(ch))
+	do_info(ch, buf3);
+      else
+	do_ainfo(ch, buf3);
+
+      if (!IS_IMMORTAL(ch) && IS_AFFECTED(ch, AFF_DEAD))
+	{
+	  sprintf(buf4, "%s has a halo", ch->name);
+	  log_string_plus(buf4, LOG_HIGH, LEVEL_LESSER);
+	}
+      /* player data update checks */
+
+      pager_printf(ch, "Checking for player data updates...\n\r");
+      if (upgrade_player(ch))
+	pager_printf(ch, "Updated player data successfully.\n\r");
+      else
+	pager_printf(ch, "No updates to make.\n\r");
+
+      adjust_hiscore("pkill", ch, ch->pcdata->pkills); /* cronel hiscore */
+      adjust_hiscore("sparwins", ch, ch->pcdata->spar_wins);
+      adjust_hiscore("sparloss", ch, ch->pcdata->spar_loss);
+      adjust_hiscore("mkills", ch, ch->pcdata->mkills);
+      adjust_hiscore("deaths", ch, (ch->pcdata->pdeaths + ch->pcdata->mdeaths));
+      update_plHiscore(ch);
+      adjust_hiscore("played", ch, ((get_age(ch) - 4) * 2));
+      adjust_hiscore("zeni", ch, ch->gold);
+      adjust_hiscore("bounty", ch, ch->pcdata->bkills);
+      update_member(ch);
+
+      if (ch->level < LEVEL_DEMI)
+	{
+	  log_string_plus(log_buf, LOG_COMM, sysdata.log_level);
+	}
+      else
+	log_string_plus(log_buf, LOG_COMM, ch->level);
+      show_title(d);
+      break;
+
+    case CON_CONFIRM_NEW_NAME:
+      switch (*argument)
+	{
+	case 'y': case 'Y':
+	  sprintf(buf, "\n\r&wMake sure to use a password that won't be easily guessed by someone else."
+		   "\n\rPick a good password for %s: %s&D",
+		   ch->name, echo_off_str);
+	  send_to_desc_color(buf, d);
+	  xSET_BIT(ch->act, PLR_ANSI);
+	  d->connected = CON_GET_NEW_PASSWORD;
+	  break;
+
+	case 'n': case 'N':
+	  send_to_desc_color("&wOk, what IS it, then? &D", d);
+	  /* clear descriptor pointer to get rid of bug message in log */
+	  d->character->desc = NULL;
+	  free_char(d->character);
+	  d->character = NULL;
+	  d->connected = CON_GET_NAME;
+	  break;
+
 	default:
-		bug("Nanny: bad d->connected %d.", d->connected);
-		log_string("preparing to close socket at comm.c:1340\n");
-		close_socket(d, true, true);
-		return;
-	case CON_GET_NAME:
-		if (argument[0] == '\0') {
-			close_socket(d, false, true);
-			return;
-		}
-		*argument = capitalize_string(argument);
+	  send_to_desc_color("&wPlease type &WY&wes or &WN&wo. &D", d);
+	  break;
+	}
+      break;
 
-		if (!check_parse_name(argument, (d->newstate != 0))) {
-			send_to_desc_color("&wIllegal name, try another.\n\rName: &D", d);
-			return;
-		}
-		if (!str_cmp(argument, "New") && !blocked) {
-			if (d->newstate == 0) {
-				/* new player */
-				sprintf(buf, "\n\r&wPlease choose a name for your character: &D");
-				send_to_desc_color(buf, d);
-				d->newstate++;
-				d->connected = CON_GET_NAME;
-				return;
-			} else {
-				send_to_desc_color("&wIllegal name, try another.\n\rName: &D", d);
-				return;
-			}
-		}
-		if (!str_cmp(argument, "help")) {
-			HELP_DATA *p_help;
+    case CON_GET_NEW_PASSWORD:
+      send_to_desc_color("\n\r", d);
 
-			for (p_help = first_help; p_help; p_help = p_help->next) {
-				if (!str_cmp(p_help->keyword, "dbznames"))
-					break;
-			}
-			if (!p_help) {
-				send_to_desc_color("No help on that word.\n\rName: ", d);
-				return;
-			}
-			send_to_desc_color("\n\r", d);
-			send_to_desc_color(p_help->text, d);
-			send_to_desc_color("\n\r\n\r&wName: ", d);
-			return;
-		}
-		p_exists  = char_exists(argument);
-		if (p_exists && d->newstate == 0) {
-			d->user = STRALLOC(argument);
-			send_to_desc_color("&wPassword: &D", d);
-			write_to_buffer(d, echo_off_str, 0);
-			d->connected = CON_GET_OLD_PASSWORD;
-			return;
-		} else if (p_exists && d->newstate != 0) {
-			send_to_desc_color("&wThat name is already taken. Please choose another: &D", d);
-			d->connected = CON_GET_NAME;
-			return;
-		} else if (d->newstate == 0) {
-			/* no such player */
-			send_to_desc_color("\n\r&wNo such player exists.\n\rPlease check your spelling, or type new to start a new player.\n\r\n\rName: &D", d);
-			d->connected = CON_GET_NAME;
-			return;
-		} else {
-			d->user = STRALLOC(argument);
-			sprintf(buf, "&wDid I get that right, %s (&WY&w/&WN&w)? &D", argument);
-			send_to_desc_color(buf, d);
-			d->connected = CON_CONFIRM_NEW_NAME;
-			return;
-		}
+      if (strlen(argument) < 5)
+	{
+	  send_to_desc_color("&wPassword must be at least five characters long.\n\rPassword: &D", d);
+	  return;
+	}
+
+      pwd_new = crypt(argument, ch->name);
+      for (p = pwd_new; *p != '\0'; p++)
+	{
+	  if (*p == '~')
+	    {
+	      send_to_desc_color(
+				 "&wNew password not acceptable, try again.\n\rPassword: &D",
+				 d);
+	      return;
+	    }
+	}
+
+      DISPOSE(ch->pcdata->pwd);
+      ch->pcdata->pwd = str_dup(pwd_new);
+      send_to_desc_color("\n\r&wPlease retype the password to confirm: &D", d);
+      d->connected = CON_CONFIRM_NEW_PASSWORD;
+      break;
+
+    case CON_CONFIRM_NEW_PASSWORD:
+      send_to_desc_color("\n\r", d);
+
+      if (strcmp(crypt(argument, ch->pcdata->pwd), ch->pcdata->pwd))
+	{
+	  send_to_desc_color("&wPasswords don't match.\n\rRetype password: &D",
+			      d);
+	  d->connected = CON_GET_NEW_PASSWORD;
+	  return;
+	}
+
+      write_to_buffer(d, echo_on_str, 0);
+      send_to_desc_color("\n\r&wWhat do you want your last name to be? [press enter for none] &D\n\r", d);
+      d->connected = CON_GET_LAST_NAME;
+      break;
+
+    case CON_GET_LAST_NAME:
+      if (argument[0] == '\0')
+	{
+	  write_to_buffer(d, echo_on_str, 0);
+	  send_to_desc_color("\n\rDo you wish to be a &RHARDCORE&w character? (&WY&w/&WN&w)\n\rType &WHELP&w for more information.", d);
+	  d->connected = CON_GET_HC;
+	  return;
+	}
+
+      *argument = capitalize_string(argument);
+      /* Old players can keep their characters. -- Alty */
+      if (!check_parse_name(argument, true))
+	{
+	  send_to_desc_color("&wIllegal name, try another.\n\rLast name: &D", d);
+	  return;
+	}
+
+      sprintf(buf, "&wDid I get that right, %s (&WY&w/&WN&w)? &D", argument);
+      send_to_desc_color(buf, d);
+      DISPOSE(ch->pcdata->last_name);
+      ch->pcdata->last_name = str_dup("");
+      buf[0] = ' ';
+      strcpy(buf+1, argument);
+      ch->pcdata->last_name = strdup(buf);
+      d->connected = CON_CONFIRM_LAST_NAME;
+      return;
+      break;
+
+    case CON_CONFIRM_LAST_NAME:
+      switch (*argument)
+	{
+	case 'y': case 'Y':
+	  write_to_buffer(d, echo_on_str, 0);
+	  send_to_desc_color("\n\rDo you wish to be a &RHARDCORE&w character? (&WY&w/&WN&w)\n\rType &WHELP&w for more information.", d);
+	  d->connected = CON_GET_HC;
+	  break;
+
+	case 'n': case 'N':
+	  send_to_desc_color("&wOk, what IS it, then? &D", d);
+	  d->connected = CON_GET_LAST_NAME;
+	  break;
+
+	default:
+	  send_to_desc_color("&wPlease type &WY&wes or &WN&wo. &D", d);
+	  break;
+	}
+      break;
+
+
+    case CON_GET_HC:
+      if (!str_cmp(argument, "help"))
+	{
+	  HELP_DATA *pHelp;
+
+	  for (pHelp = first_help; pHelp; pHelp = pHelp->next)
+	    {
+	      if (!str_cmp(pHelp->keyword, "HC HARDCORE UNKNOWN"))
 		break;
-	case CON_GET_OLD_PASSWORD:
-		/* player exists, load in character */
-		load_from_fp(d, false);
-		ch = d->character;
-		if (!check_pfile(d)) {
-			return;
-		}
-		write_to_buffer(d, "\n\r", 2);
-		if (str_cmp(sha256_crypt(argument), ch->pcdata->pwd)) {
-			write_to_buffer(d, "Wrong password, disconnecting.\n\r", 0);
-			close_socket(d, false, true);
-			return;
-		}
-		write_to_buffer(d, echo_on_str, 0);
-		if (check_playing(d, ch->pcdata->filename)) {
-			if (!(reconnect(d, ch->pcdata->filename))) {
-			  write_to_buffer(d, "error, disconnecting.\n\r", 0);
-			  close_socket(d, false, true);
-			  return;
-			} else {
-			  write_to_buffer(d, "cleared old connection, please reconnect.\n\r", 0);
-			  close_socket(d, false, true);
-			  return;
-			}
-		}
-		strncpy(buf, ch->pcdata->filename, MAX_STRING_LENGTH);
-		if (ch->position > POS_SITTING && ch->position < POS_STANDING)
-			ch->position = POS_STANDING;
-		sprintf(log_buf, "%s@%s(%s) has connected.", ch->pcdata->filename, d->host, d->user);
+	    }
+	  if (!pHelp)
+	    {
+	      send_to_desc_color("No help on that word.\n\rDo you wish to be a &RHARDCORE&w character? (&WY&w/&WN&w): ", d);
+	      return;
+	    }
+	  send_to_desc_color("\n\r", d);
+	  send_to_desc_color(pHelp->text, d);
+	  send_to_desc_color("&wDo you wish to be a &RHARDCORE&w character? (&WY&w/&WN&w): ", d);
+	  return;
+	}
+      switch (*argument)
+	{
+	case 'y': case 'Y':
+	  sprintf(buf, "\n\r&wOkay, you are now &RHARDCORE&w!&D");
+	  send_to_desc_color(buf, d);
+	  xSET_BIT(ch->act, PLR_HC);
+	  write_to_buffer(d, echo_on_str, 0);
+	  break;
 
-		log_string_plus(log_buf, LOG_COMM, sysdata.log_level);
-		if (ch->level == 2) {
-			xSET_BIT(ch->deaf, CHANNEL_FOS);
-			ch->level = 1;
-		}
-		sprintf(buf3, "%s has logged on", ch->name);
-		if (!IS_IMMORTAL(ch))
-			do_info(ch, buf3);
-		else
-			do_ainfo(ch, buf3);
+	case 'n': case 'N':
+	  send_to_desc_color("\n\r&wOkay, you are a normal character.&D", d);
+	  write_to_buffer(d, echo_on_str, 0);
+	  break;
 
-		if (!IS_IMMORTAL(ch) && IS_AFFECTED(ch, AFF_DEAD)) {
-			sprintf(buf4, "%s has a halo", ch->name);
-			log_string_plus(buf4, LOG_HIGH, LEVEL_LESSER);
-		}
-		/* player data update checks */
-		pager_printf(ch, "Checking for player data updates...\n\r");
+	default:
+	  send_to_desc_color("&wPlease type Yes or No. &D", d);
+	  return;
+	}
+      send_to_desc_color("\n\r&wWhat is your sex (&CM&w/&PF&w/&WN&w)? &D", d);
+      d->connected = CON_GET_NEW_SEX;
+      break;
 
-		if (ch->pcdata->upgradeL > CURRENT_UPGRADE_LEVEL)
-			ch->pcdata->upgradeL = CURRENT_UPGRADE_LEVEL - 1;
+    case CON_GET_NEW_SEX:
+      switch (argument[0])
+	{
+	case 'm': case 'M': ch->sex = SEX_MALE;    break;
+	case 'f': case 'F': ch->sex = SEX_FEMALE;  break;
+	case 'n': case 'N': ch->sex = SEX_NEUTRAL; break;
+	default:
+	  send_to_desc_color("&wThat's not a sex.\n\rWhat IS your sex? &D", d);
+	  return;
+	}
 
-		if (upgrade_player(ch))
-			pager_printf(ch, "Updated player data successfully.\n\r");
-		else
-			pager_printf(ch, "No updates to make.\n\r");
-		adjust_hiscore("pkill", ch, ch->pcdata->pkills);
-		adjust_hiscore("sparwins", ch, ch->pcdata->spar_wins);
-		adjust_hiscore("sparloss", ch, ch->pcdata->spar_loss);
-		adjust_hiscore("mkills", ch, ch->pcdata->mkills);
-		adjust_hiscore("deaths", ch, (ch->pcdata->pdeaths + ch->pcdata->mdeaths));
-		update_plHiscore(ch);
-		adjust_hiscore("played", ch, ((get_age(ch) - 4) * 2));
-		adjust_hiscore("zeni", ch, ch->gold);
-		adjust_hiscore("bounty", ch, ch->pcdata->bkills);
-		update_member(ch);
-		show_title(d);
-		break;
-	case CON_CONFIRM_NEW_NAME:
-		switch (*argument) {
-		case 'y':
-		case 'Y':
-			load_from_fp(d, true);
-			ch = d->character;
-			sprintf(buf, "\n\r&wMake sure to use a password that won't be easily guessed by someone else."
-			    "\n\rPick a good password for %s: %s&D",
-			    ch->name, echo_off_str);
-			send_to_desc_color(buf, d);
-			xSET_BIT(ch->act, PLR_ANSI);
-			d->connected = CON_GET_NEW_PASSWORD;
-			break;
-		case 'n':
-		case 'N':
-			send_to_desc_color("&wOk, what IS it, then? &D", d);
-			d->connected = CON_GET_NAME;
-			break;
-		default:
-			send_to_desc_color("&wPlease type &WY&wes or &WN&wo. &D", d);
-			break;
-		}
-		break;
-	case CON_GET_NEW_PASSWORD:
-		send_to_desc_color("\n\r", d);
-		if (utf8len(argument) < 5) {
-			send_to_desc_color("&wPassword must be at least five characters long.\n\rPassword: &D", d);
-			return;
-		}
-		pwdnew = sha256_crypt(argument);
-		for (p = pwdnew; *p != '\0'; p++) {
-			if (*p == '~') {
-				send_to_desc_color("&wNew password not acceptable, try again.\n\rPassword: &D", d);
-				return;
-			}
-		}
-		DISPOSE(ch->pcdata->pwd);
-		ch->pcdata->pwd = str_dup(pwdnew);
-		send_to_desc_color("\n\r&wPlease retype the password to confirm: &D", d);
-		d->connected = CON_CONFIRM_NEW_PASSWORD;
-		break;
-	case CON_CONFIRM_NEW_PASSWORD:
-		send_to_desc_color("\n\r", d);
-		if (str_cmp(sha256_crypt(argument), ch->pcdata->pwd)) {
-			write_to_buffer(d, "Passwords don't match.\n\rRetype password: ", 0);
-			d->connected = CON_GET_NEW_PASSWORD;
-			return;
-		}
-		write_to_buffer(d, echo_on_str, 0);
-		send_to_desc_color("\n\r&wWhat do you want your last name to be? [press enter for none] &D\n\r", d);
-		d->connected = CON_GET_LAST_NAME;
-		break;
-	case CON_GET_LAST_NAME:
-		if (argument[0] == '\0') {
-			write_to_buffer(d, echo_on_str, 0);
-			send_to_desc_color("\n\rDo you wish to be a &RHARDCORE&w character? (&WY&w/&WN&w)\n\rType &WHELP&w for more information.", d);
-			d->connected = CON_GET_HC;
-			return;
-		}
-		argument[0] = UPPER(argument[0]);
-		*argument = capitalize_string(argument);
-		if (!check_parse_name(argument, true)) {
-			send_to_desc_color("&wIllegal name, try another.\n\rLast name: &D", d);
-			return;
-		}
-		sprintf(buf, "&wDid I get that right, %s (&WY&w/&WN&w)? &D", argument);
-		send_to_desc_color(buf, d);
-		DISPOSE(ch->pcdata->last_name);
-		ch->pcdata->last_name = str_dup("");
-		buf[0] = ' ';
-		utf8cpy(buf + 1, argument);
-		ch->pcdata->last_name = strdup(buf);
-		d->connected = CON_CONFIRM_LAST_NAME;
-		return;
-		break;
-	case CON_CONFIRM_LAST_NAME:
-		switch (*argument) {
-		case 'y':
-		case 'Y':
-			write_to_buffer(d, echo_on_str, 0);
-			send_to_desc_color("\n\rDo you wish to be a &RHARDCORE&w character? (&WY&w/&WN&w)\n\rType &WHELP&w for more information.", d);
-			d->connected = CON_GET_HC;
-			break;
+      send_to_desc_color("\n\r&wThe following Races are Available to You:&D\n\r", d);
+      send_to_desc_color("&c==============================================================================&D",d);
+      buf[0] = '\0';
 
-		case 'n':
-		case 'N':
-			send_to_desc_color("&wOk, what IS it, then? &D", d);
-			d->connected = CON_GET_LAST_NAME;
-			break;
+      /*
+       * Take this out SHADDAI
+       */
+      i=0;
+      for (i_class = 0; i_class < MAX_PC_CLASS; i_class++)
+	{
+	  char letters[11] = "abcdefghij";
+	  if (class_table[i_class]->who_name &&
+	       class_table[i_class]->who_name[0] != '\0')
+	    {
+	      sprintf(buf, "\n\r&w   (&W%d&w)  &c%-12s&w  ('&R%c&w' for help)&D", i,
+		       class_table[i_class]->who_name, letters[i]);
+	      send_to_desc_color(buf, d);
+	      i++;
+	    }
+	}
+      send_to_desc_color("&c==============================================================================&D",d);
+      sprintf(buf, "\n\r&wChoose the number of your race: &D");
+      send_to_desc_color(buf, d);
+      d->connected = CON_GET_NEW_CLASS;
+      break;
 
-		default:
-			send_to_desc_color("&wPlease type &WY&wes or &WN&wo. &D", d);
-			break;
-		}
-		break;
-	case CON_GET_HC:
-		if (!str_cmp(argument, "help")) {
-			HELP_DATA *p_help;
-
-			for (p_help = first_help; p_help; p_help = p_help->next) {
-				if (!str_cmp(p_help->keyword, "HC HARDCORE UNKNOWN"))
-					break;
-			}
-			if (!p_help) {
-				send_to_desc_color("No help on that word.\n\rDo you wish to be a &RHARDCORE&w character? (&WY&w/&WN&w): ", d);
-				return;
-			}
-			send_to_desc_color("\n\r", d);
-			send_to_desc_color(p_help->text, d);
-			send_to_desc_color("&wDo you wish to be a &RHARDCORE&w character? (&WY&w/&WN&w): ", d);
-			return;
-		}
-		switch (*argument) {
-		case 'y':
-		case 'Y':
-			sprintf(buf, "\n\r&wOkay, you are now &RHARDCORE&w!&D");
-			send_to_desc_color(buf, d);
-			xSET_BIT(ch->act, PLR_HC);
-			write_to_buffer(d, echo_on_str, 0);
-			break;
-
-		case 'n':
-		case 'N':
-			send_to_desc_color("\n\r&wOkay, you are a normal character.&D", d);
-			write_to_buffer(d, echo_on_str, 0);
-			break;
-
-		default:
-			send_to_desc_color("&wPlease type Yes or No. &D", d);
-			return;
-		}
-		send_to_desc_color("\n\r&wWhat is your sex (&CM&w/&PF&w/&WN&w)? &D", d);
-		d->connected = CON_GET_NEW_SEX;
-		break;
-	case CON_GET_NEW_SEX:
-		switch (argument[0]) {
-		case 'm':
-		case 'M':
-			ch->sex = SEX_MALE;
-			break;
-		case 'f':
-		case 'F':
-			ch->sex = SEX_FEMALE;
-			break;
-		case 'n':
-		case 'N':
-			ch->sex = SEX_NEUTRAL;
-			break;
-		default:
-			send_to_desc_color("&wThat's not a sex.\n\rWhat IS your sex? &D", d);
-			return;
-		}
-
-		send_to_desc_color("\n\r&wThe following Races are Available to You:&D\n\r", d);
-		send_to_desc_color("&c==============================================================================&D", d);
-		buf[0] = '\0';
-
-		/* Take this out SHADDAI */
-		i = 0;
-		send_to_desc_color("\n\r", d);
-		for (i_class = 0; i_class < 31; i_class++) {
-			if (i_class == 4) {
-				continue;
-			}
-			if (i_class > 8 && i_class < 28)
-				continue;
-			char 	letters[14] = "abcdefghijklmn";
-
-			if (class_table[i_class]->who_name &&
-			    class_table[i_class]->who_name[0] != '\0') {
-				sprintf(buf, "&w   (&W%2d&w)  &c%-12s&w  ('&R%c&w' for help)&D\n\r",
-				    i, class_table[i_class]->who_name, letters[i]);
-				send_to_desc_color(buf, d);
-				i++;
-			}
-		}
-		send_to_desc_color("&c==============================================================================&D", d);
-		sprintf(buf, "\n\r&wChoose the number of your race: &D");
-		send_to_desc_color(buf, d);
-		d->connected = CON_GET_NEW_CLASS;
-		break;
-	case CON_GET_NEW_CLASS:
-		/* 1 - saiyan, 2 - human, 3 - halfie, 4 - namek, 5 - icer, 
-		 * 6 - bio, 7 - kaio, 8 - demon, 9 - android-h, 
-		 * 10 - android-e, 11 - android-fm
-		 */
-		argument = one_argument(argument, arg);
-		if (is_number(arg)) {
-			i = atoi(arg);
-			int 	c = 0;
-
-			if (i == 0)
-				c = 0;
-			if (i == 1)
-				c = 1;
-			if (i == 2)
-				c = 2;
-			if (i == 3)
-				c = 3;
-			if (i == 4)
-				c = 5;
-			if (i == 5)
-				c = 6;
-			if (i == 6)
-				c = 7;
-			if (i == 7)
-				c = 8;
-			if (i == 8)
-				c = 28;
-			if (i == 9)
-				c = 29;
-			if (i == 10)
-				c = 30;
-			for (i_class = 0; i_class < 31; i_class++) {
-				if (i_class > 8 && i_class < 28)
-					continue;
-				if (class_table[i_class]->who_name &&
-				    class_table[i_class]->who_name[0] != '\0') {
-					if (c == i_class) {
-						ch->class = i_class;
-						ch->race = i_class;
-						break;
-					}
-				}
-			}
-		} else {
-			char 	letters[14] = "abcdefghijklmn";
-			for (i = 0; i < 14; i++) {
-				if (arg[0] == letters[i]) {
-					int 	c = i;
-
-					if (i == 0)
-						c = 0;
-					//saian
-					if (i == 1)
-						c = 1;
-					//human
-					if (i == 2)
-						c = 2;
-					//halfbreed
-					if (i == 3)
-						c = 3;
-					//namek
-					if (i == 4)
-						c = 5;
-					//icer
-					if (i == 5)
-						c = 6;
-					//bio
-					if (i == 6)
-						c = 7;
-					//kaio
-					if (i == 7)
-						c = 8;
-					//demon
-					if (i == 8)
-						c = 28;
-					//android - h
-					if (i == 9)
-						c = 29;
-					//android - e
-					if (i == 10)
-						c = 30;
-					//android - fm
-					if (!str_cmp(class_table[c]->who_name, "android-h"))
-						sprintf(buf, "androidh");
-					else if (!str_cmp(class_table[c]->who_name, "android-e"))
-						sprintf(buf, "androide");
-					else if (!str_cmp(class_table[c]->who_name, "android-fm"))
-						sprintf(buf, "androidfm");
-					else
-						sprintf(buf, "%s", class_table[c]->who_name);
-					do_help(ch, buf);
-					return;
-				}
-			}
-			i = 0;
-			send_to_desc_color("\n\r&c==============================================================================&D", d);
-			for (i_class = 0; i_class < 31; i_class++) {
-				if (i_class == 4) {
-					continue;
-				}
-				if (i_class > 8 && i_class < 28)
-					continue;
-				char 	letters[14] = "abcdefghijklmn";
-
-				if (class_table[i_class]->who_name &&
-				    class_table[i_class]->who_name[0] != '\0') {
-					sprintf(buf, "\n\r&w   (&W%2d&w)  &c%-12s&w  ('&R%c&w' for help)&D",
-					    i,
-					    class_table[i_class]->who_name, letters[i]);
-					send_to_desc_color(buf, d);
-					i++;
-				}
-			}
-			send_to_desc_color("\n\r&c==============================================================================&D", d);
-			sprintf(buf, "\n\r&wChoose the number of your race: &D");
-			send_to_desc_color(buf, d);
-			return;
-		}
-
-		if (i_class != 28 && i_class != 29 && i_class != 30) {
-		    if (i_class > 8
-		      || !class_table[i_class]->who_name
-		      || class_table[i_class]->who_name[0] == '\0'
-		      || !str_cmp(class_table[i_class]->who_name, "unused")) {
-			send_to_desc_color("&wThat's not a race.\n\rWhat IS your race? &D", d);
-			return;
+    case CON_GET_NEW_CLASS:
+      argument = one_argument(argument, arg);
+      if (is_number(arg))
+	{
+	  i = atoi(arg);
+	  for (i_class = 0; i_class < MAX_PC_CLASS; i_class++)
+	    {
+	      if (class_table[i_class]->who_name &&
+		   class_table[i_class]->who_name[0] != '\0')
+		{
+		  if (i == i_class)
+		    {
+		      ch->class =  i_class;
+		      ch->race  =  i_class;
+		      break;
 		    }
 		}
-		if (!str_cmp(class_table[i_class]->who_name, "bio-android")
-		  || !str_cmp(class_table[i_class]->who_name, "demon")
-		  || !str_cmp(class_table[i_class]->who_name, "android-e")
-		  || !str_cmp(class_table[i_class]->who_name, "android-h")
-		  || !str_cmp(class_table[i_class]->who_name, "android-fm")) {
-		    send_to_desc_color("&wThat race is currently disabled.\n\rPlease select a different race. &D", d);
-                    return;
-		}
-		if (ch->race == 3 || ch->race == 5 || ch->race == 6) {
-			ch->pcdata->haircolor = 24;
-			ch->pcdata->orignalhaircolor = 24;
-		} else {
-			send_to_desc_color("\n\r&wPlease choose a hair color from the following list:&D\n\r", d);
-			buf[0] = '\0';
-
-			for (i_class = 0; i_class < (MAX_HAIR - 2); i_class++) {
-				sprintf(buf2, "&w[&W%2d&w] &g%-18.18s  ", i_class, hair_color[i_class]);
-				b++;
-				strcat(buf, buf2);
-				if ((b % 3) == 0)
-					strcat(buf, "&D\n\r");
-			}
-			strcat(buf, "\n\r: ");
-			strcat(buf, "\r\r");
-			send_to_desc_color(buf, d);
-			d->connected = CON_GET_NEW_HAIR;
-			break;
-		}
-	case CON_GET_NEW_HAIR:
-		argument = one_argument(argument, arg);
-		if (ch->race != 3 && ch->race != 5 && ch->race != 6) {
-			if (!str_cmp(arg, "help")) {
-				do_help(ch, argument);
-				send_to_desc_color("&wPlease choose a hair color: &D", d);
-				return;
-			}
-			for (i_class = 0; i_class < (MAX_HAIR - 2); i_class++) {
-				if (toupper(arg[0]) == toupper(hair_color[i_class][0])
-				    && !str_prefix(arg, hair_color[i_class])) {
-					ch->pcdata->haircolor = i_class;
-					ch->pcdata->orignalhaircolor = i_class;
-					break;
-				}
-				if (is_number(arg) && atoi(arg) == i_class) {
-					ch->pcdata->haircolor = i_class;
-					ch->pcdata->orignalhaircolor = i_class;
-					break;
-				}
-			}
-			if (i_class == (MAX_HAIR - 2) || !hair_color[i_class] || hair_color[i_class][0] == '\0') {
-				send_to_desc_color("&wThat's not a hair color.\n\rWhat IS it going to be? &D", d);
-				return;
-			}
-		}
-		if (ch->race == 3 || ch->race == 6) {
-			send_to_desc_color("\n\r&wPlease choose a main body color from the following list:&D\n\r", d);
-			buf[0] = '\0';
-			buf2[0] = '\0';
-			b = 0;
-			for (i_class = (MAX_COMPLEXION - 17); i_class < (MAX_COMPLEXION - 14); i_class++) {
-				sprintf(buf2, "&w[&W%2d&W] &g%-15s&D", i_class, complexion[i_class]);
-				b++;
-				strcat(buf, buf2);
-				if ((b % 4) == 0)
-					strcat(buf, "\n\r");
-			}
-			strcat(buf, "\n\r: ");
-			strcat(buf, "\r\r\r\r");
-			send_to_desc_color(buf, d);
-			d->connected = CON_GET_NEW_COMPLEXION;
-			break;
-		} else if (ch->race == 5) {
-			send_to_desc_color("\n\r&wPlease choose a main body color from the following list:&D\n\r", d);
-			buf[0] = '\0';
-			buf2[0] = '\0';
-			b = 0;
-			for (i_class = (MAX_COMPLEXION - 14); i_class < (MAX_COMPLEXION); i_class++) {
-				sprintf(buf2, "&w[&W%2d&w] &g%-15s&D", i_class, complexion[i_class]);
-				b++;
-				strcat(buf, buf2);
-				if ((b % 4) == 0)
-					strcat(buf, "\n\r");
-			}
-			strcat(buf, "\n\r: ");
-			strcat(buf, "\r\r\r\r");
-			send_to_desc_color(buf, d);
-			d->connected = CON_GET_NEW_COMPLEXION;
-			break;
-		} else {
-			send_to_desc_color("\n\r&wPlease choose a complexion from the following list:&D\n\r", d);
-			buf[0] = '\0';
-			buf2[0] = '\0';
-			b = 0;
-			for (i_class = 0; i_class < (MAX_COMPLEXION - 17); i_class++) {
-				sprintf(buf2, "&w[&W%2d&w] &g%-15s&D", i_class, complexion[i_class]);
-				b++;
-				strcat(buf, buf2);
-				if ((b % 4) == 0)
-					strcat(buf, "\n\r");
-			}
-			strcat(buf, "\n\r: ");
-			strcat(buf, "\r\r\r\r");
-			send_to_desc_color(buf, d);
-			d->connected = CON_GET_NEW_COMPLEXION;
-			break;
-		}
-	case CON_GET_NEW_COMPLEXION:
-		argument = one_argument(argument, arg);
-		if (ch->race == 5) {
-			if (!str_cmp(arg, "help")) {
-				do_help(ch, argument);
-				send_to_desc_color("&wPlease choose a main body color: &D", d);
-				return;
-			}
-			for (i_class = (MAX_COMPLEXION - 14); i_class < (MAX_COMPLEXION); i_class++) {
-				if (toupper(arg[0]) == toupper(complexion[i_class][0])
-				    && !str_prefix(arg, complexion[i_class])) {
-					ch->pcdata->complexion = i_class;
-					break;
-				}
-				if (is_number(arg) && atoi(arg) == i_class) {
-					ch->pcdata->complexion = i_class;
-					break;
-				}
-			}
-			if (i_class == (MAX_COMPLEXION) || !complexion[i_class] || complexion[i_class][0] == '\0') {
-				send_to_desc_color("&wThat's not a choice.\n\rWhat IS it going to be? &D", d);
-				return;
-			}
-		} else if (ch->race == 3 || ch->race == 6) {
-			if (!str_cmp(arg, "help")) {
-				do_help(ch, argument);
-				send_to_desc_color("&wPlease choose a main body color: &D", d);
-				return;
-			}
-			for (i_class = (MAX_COMPLEXION - 17); i_class < (MAX_COMPLEXION - 13); i_class++) {
-				if (toupper(arg[0]) == toupper(complexion[i_class][0])
-				    && !str_prefix(arg, complexion[i_class])) {
-					ch->pcdata->complexion = i_class;
-					break;
-				}
-				if (is_number(arg) && atoi(arg) == i_class) {
-					ch->pcdata->complexion = i_class;
-					break;
-				}
-			}
-			if (i_class == (MAX_COMPLEXION - 14) || !complexion[i_class] || complexion[i_class][0] == '\0') {
-				send_to_desc_color("&wThat's not a choice.\n\rWhat IS it going to be? &D", d);
-				return;
-			}
-		} else {
-			if (!str_cmp(arg, "help")) {
-				do_help(ch, argument);
-				send_to_desc_color("&wPlease choose complexion: &D", d);
-				return;
-			}
-			for (i_class = 0; i_class < (MAX_COMPLEXION - 17); i_class++) {
-				if (toupper(arg[0]) == toupper(complexion[i_class][0])
-				    && !str_prefix(arg, complexion[i_class])) {
-					ch->pcdata->complexion = i_class;
-					break;
-				}
-				if (is_number(arg) && atoi(arg) == i_class) {
-					ch->pcdata->complexion = i_class;
-					break;
-				}
-			}
-			if (i_class == (MAX_COMPLEXION - 17) || !complexion[i_class] || complexion[i_class][0] == '\0') {
-				send_to_desc_color("&wThat's not a complexion.\n\rWhat IS it going to be? &D", d);
-				return;
-			}
-		}
-		if (ch->race == 5) {
-			send_to_desc_color("\n\r&wPlease choose a secondary body color from the following list:&D\n\r", d);
-			buf[0] = '\0';
-			buf2[0] = '\0';
-			b = 0;
-			for (i_class = 0; i_class < (MAX_SECONDARYCOLOR - 1); i_class++) {
-				sprintf(buf2, "&w[&W%2d&w] &g%-15s&D", i_class, secondary_color[i_class]);
-				b++;
-				strcat(buf, buf2);
-				if ((b % 4) == 0)
-					strcat(buf, "\n\r");
-			}
-			strcat(buf, "\n\r: ");
-			strcat(buf, "\r\r\r\r");
-			send_to_desc_color(buf, d);
-			d->connected = CON_GET_NEW_SECONDARYCOLOR;
-			break;
-
-		case CON_GET_NEW_SECONDARYCOLOR:
-			/*
-			 * Black, Brown, Red, Blonde, Strawberry Blonde,
-			 * Argent, Golden Blonde, Platinum Blonde, Light
-			 * Brown
-			 */
-			argument = one_argument(argument, arg);
-			if (!str_cmp(arg, "help")) {
-				do_help(ch, argument);
-				send_to_desc_color("&wPlease choose a secondary body color: &D", d);
-				return;
-			}
-			for (i_class = 0; i_class < (MAX_SECONDARYCOLOR - 1); i_class++) {
-				if (toupper(arg[0]) == toupper(secondary_color[i_class][0])
-				    && !str_prefix(arg, secondary_color[i_class])) {
-					ch->pcdata->secondarycolor = i_class;
-					break;
-				}
-				if (is_number(arg) && atoi(arg) == i_class) {
-					ch->pcdata->secondarycolor = i_class;
-					break;
-				}
-			}
-			if (i_class == (MAX_SECONDARYCOLOR - 1) || !secondary_color[i_class] || secondary_color[i_class][0] == '\0') {
-				send_to_desc_color("&wThat's not a choice.\n\rWhat IS it going to be? &D", d);
-				return;
-			}
-		}
-		send_to_desc_color("\n\r&wPlease choose a eye color from the following list:&D\n\r", d);
-		buf[0] = '\0';
-		buf2[0] = '\0';
-		b = 0;
-
-		for (i_class = 0; i_class < (MAX_EYE - 3); i_class++) {
-			sprintf(buf2, "&w[&W%2d&w] &g%-15s&D", i_class, eye_color[i_class]);
-			b++;
-			strcat(buf, buf2);
-			if ((b % 4) == 0)
-				strcat(buf, "\n\r");
-		}
-		strcat(buf, "\n\r: ");
-		strcat(buf, "\r\r\r\r");
-		send_to_desc_color(buf, d);
-		d->connected = CON_GET_NEW_EYE;
-
-		break;
-	case CON_GET_NEW_EYE:
-		/*
-		 * Black, Brown, Red, Blonde, Strawberry Blonde, Argent,
-		 * Golden Blonde, Platinum Blonde, Light Brown
-		 */
-		argument = one_argument(argument, arg);
-		if (!str_cmp(arg, "help")) {
-			do_help(ch, argument);
-			send_to_desc_color("&wPlease choose a hair color: &D", d);
-			return;
-		}
-		for (i_class = 0; i_class < (MAX_EYE - 3); i_class++) {
-			if (toupper(arg[0]) == toupper(eye_color[i_class][0])
-			    && !str_prefix(arg, eye_color[i_class])) {
-				ch->pcdata->eyes = i_class;
-				ch->pcdata->orignaleyes = i_class;
-				break;
-			}
-			if (is_number(arg) && atoi(arg) == i_class) {
-				ch->pcdata->eyes = i_class;
-				ch->pcdata->orignaleyes = i_class;
-				break;
-			}
-		}
-		if (i_class == (MAX_EYE - 3) || !eye_color[i_class] || eye_color[i_class][0] == '\0') {
-			send_to_desc_color("&wThat's not a eye color.\n\rWhat IS it going to be? &D", d);
-			return;
-		}
-		send_to_desc_color("\n\r&wPlease choose a build type from the following list:&D\n\r", d);
-		buf[0] = '\0';
-		buf2[0] = '\0';
-		b = 0;
-
-		for (i_class = 0; i_class < (MAX_BUILD); i_class++) {
-			sprintf(buf2, "&w[&W%2d&w] &g%-15s&D", i_class, build_type[i_class]);
-			b++;
-			strcat(buf, buf2);
-			if ((b % 4) == 0)
-				strcat(buf, "\n\r");
-		}
-		strcat(buf, "\n\r: ");
-		strcat(buf, "\r\r\r\r");
-		send_to_desc_color(buf, d);
-		d->connected = CON_GET_NEW_BUILD;
-
-		break;
-	case CON_GET_NEW_BUILD:
-		argument = one_argument(argument, arg);
-		if (!str_cmp(arg, "help")) {
-			do_help(ch, argument);
-			send_to_desc_color("&wPlease choose a build type: &D", d);
-			return;
-		}
-		for (i_class = 0; i_class < (MAX_BUILD); i_class++) {
-			if (toupper(arg[0]) == toupper(build_type[i_class][0])
-			    && !str_prefix(arg, build_type[i_class])) {
-				ch->pcdata->build = i_class;
-				break;
-			}
-			if (is_number(arg) && atoi(arg) == i_class) {
-				ch->pcdata->build = i_class;
-				break;
-			}
-		}
-		if (i_class == (MAX_BUILD) || !build_type[i_class] || build_type[i_class][0] == '\0') {
-			send_to_desc_color("&wThat's not a build type.\n\rWhat IS it going to be? &D", d);
-			return;
-		}
-		sprintf(log_buf, "%s@%s new %s %s.", ch->name, d->host,
-		    race_table[ch->race]->race_name,
-		    class_table[ch->class]->who_name);
-		log_string_plus(log_buf, LOG_COMM, sysdata.log_level);
-		to_channel(log_buf, CHANNEL_MONITOR, "Monitor", LEVEL_IMMORTAL);
-		send_to_desc_color("&wPress [&RENTER&w] &D", d);
-		show_title(d);
-		ch->level = 0;
-		ch->position = POS_STANDING;
-		d->connected = CON_PRESS_ENTER;
-		set_pager_color(AT_PLAIN, ch);
-		adjust_hiscore("pkill", ch, ch->pcdata->pkills);	/* cronel hiscore */
-		adjust_hiscore("sparwins", ch, ch->pcdata->spar_wins);
-		adjust_hiscore("sparloss", ch, ch->pcdata->spar_loss);
-		adjust_hiscore("mkills", ch, ch->pcdata->mkills);
-		adjust_hiscore("deaths", ch, (ch->pcdata->pdeaths + ch->pcdata->mdeaths));
-		update_plHiscore(ch);
-		adjust_hiscore("played", ch, ((get_age(ch) - 4) * 2));
-		adjust_hiscore("zeni", ch, ch->gold);
-		return;
-		break;
-	case CON_PRESS_ENTER:
-		/* todo: remove this */
-		REMOVE_BIT(ch->pcdata->flags, PCFLAG_WATCH);
-		if (ch->position == POS_MOUNTED)
-			ch->position = POS_STANDING;
-		set_pager_color(AT_PLAIN, ch);
-		if (xIS_SET(ch->act, PLR_RIP))
-			send_rip_screen(ch);
-		if (xIS_SET(ch->act, PLR_ANSI))
-			send_to_pager("\033[2J", ch);
-		else
-			send_to_pager("\014", ch);
-		if (IS_IMMORTAL(ch))
-			do_help(ch, "imotd");
-		if (ch->level == 50)
-			do_help(ch, "amotd");
-		if (ch->level < 50 && ch->level > 0)
-			do_help(ch, "motd");
-		if (ch->level == 0)
-			do_help(ch, "nmotd");
-		send_to_pager("\n\rPress [ENTER] ", ch);
-		d->connected = CON_READ_MOTD;
-		break;
-	case CON_READ_MOTD:
+	    }
+	}
+      else
+	{
+	  char letters[11] = "abcdefghij";
+	  for (i=0;i<10;i++)
+	    {
+	      if (arg[0] == letters[i])
 		{
-			char 	motdbuf[MAX_STRING_LENGTH];
-			sprintf(motdbuf, "\n\rWelcome to %s...\n\r", sysdata.mud_name);
-			send_to_desc_color(motdbuf, d);
+		  sprintf(buf, "%s", class_table[i]->who_name);
+		  do_help(ch, buf);
+		  return;
 		}
-		add_char(ch);
-		d->connected = CON_PLAYING;
-		set_char_color(AT_DGREEN, ch);
-		if (!xIS_SET(ch->act, PLR_ANSI) && d->ansi == true)
-			d->ansi = false;
-		else if (xIS_SET(ch->act, PLR_ANSI) && d->ansi == false)
-			d->ansi = true;
-		if (ch->level == 0) {
-			int 	i_lang;
-
-			ch->pcdata->upgradeL = CURRENT_UPGRADE_LEVEL;
-
-			ch->pcdata->clan_name = STRALLOC("");
-			ch->pcdata->clan = NULL;
-			switch (class_table[ch->class]->attr_prime) {
-			case APPLY_STR:
-				ch->perm_str = 10;
-				break;
-			case APPLY_INT:
-				ch->perm_int = 10;
-				break;
-			case APPLY_DEX:
-				ch->perm_dex = 10;
-				break;
-			case APPLY_CON:
-				ch->perm_con = 10;
-				break;
-			case APPLY_LCK:
-				ch->perm_lck = 10;
-				break;
-			}
-
-			ch->perm_str += race_table[ch->race]->str_plus;
-			ch->perm_int += race_table[ch->race]->int_plus;
-			ch->perm_dex += race_table[ch->race]->dex_plus;
-			ch->perm_con += race_table[ch->race]->con_plus;
-			ch->affected_by = race_table[ch->race]->affected;
-			ch->perm_lck = number_range(0, 30);
-
-			ch->pcdata->permTstr = ch->perm_str;
-			ch->pcdata->permTspd = ch->perm_dex;
-			ch->pcdata->permTint = ch->perm_int;
-			ch->pcdata->permTcon = ch->perm_con;
-
-			ch->armor += race_table[ch->race]->ac_plus;
-			ch->alignment += race_table[ch->race]->alignment;
-			ch->attacks = race_table[ch->race]->attacks;
-			ch->defenses = race_table[ch->race]->defenses;
-			ch->saving_poison_death = race_table[ch->race]->saving_poison_death;
-			ch->saving_wand = race_table[ch->race]->saving_wand;
-			ch->saving_para_petri = race_table[ch->race]->saving_para_petri;
-			ch->saving_breath = race_table[ch->race]->saving_breath;
-			ch->saving_spell_staff = race_table[ch->race]->saving_spell_staff;
-
-			ch->height = number_range(race_table[ch->race]->height * .9, race_table[ch->race]->height * 1.1);
-			ch->weight = number_range(race_table[ch->race]->weight * .9, race_table[ch->race]->weight * 1.1);
-
-			if ((i_lang = skill_lookup("common")) < 0)
-				bug("Nanny: cannot find common language.");
-			else
-				ch->pcdata->learned[i_lang] = 100;
-
-			for (i_lang = 0; lang_array[i_lang] != LANG_UNKNOWN; i_lang++)
-				if (lang_array[i_lang] == race_table[ch->race]->language)
-					break;
-			if (lang_array[i_lang] == LANG_UNKNOWN);
-			else {
-				if ((i_lang = skill_lookup(lang_names[i_lang])) < 0)
-					bug("Nanny: cannot find racial language.");
-				else
-					ch->pcdata->learned[i_lang] = 100;
-			}
-
-			name_stamp_stats(ch);
-
-			ch->level = 1;
-			ch->exp = 5;
-			ch->pl = 5;
-			ch->heart_pl = 5;
-			ch->max_hit += race_table[ch->race]->hit;
-			ch->max_mana += race_table[ch->race]->mana;
-			ch->max_move = 100;
-			ch->hit = UMAX(1, ch->max_hit);
-			ch->mana = UMAX(1, ch->max_mana);
-			ch->move = UMAX(1, ch->max_move);
-			ch->train = 5;
-			ch->max_train = 1;
-			ch->pcdata->xTrain = 0;
-			ch->pcdata->total_xTrain = 0;
-			ch->practice = 0;
-			ch->max_prac = 0;
-			ch->max_energy = 1;
-			ch->pcdata->admintalk = 0;
-			ch->pcdata->age = 18;
-			ch->pcdata->sparcount = 0;
-			if (is_saiyan(ch) || is_hb(ch) || is_icer(ch) || is_bio(ch))
-				ch->pcdata->tail = true;
-			else
-				ch->pcdata->tail = false;
-			if (is_android(ch))
-				ch->pcdata->natural_ac_max = 500;
-			if (is_bio(ch))
-				ch->pcdata->absorb_pl_mod = 6;
-			if (is_saiyan(ch) || is_hb(ch))
-				ch->pcdata->learned[gsn_monkey_gun] = 95;
-
-			sprintf(buf, "the %s",
-			    title_table[ch->class][ch->level]
-			    [ch->sex == SEX_FEMALE ? 1 : 0]);
-			set_title(ch, buf);
-			ch->pcdata->creation_date = current_time;
-
-			xSET_BIT(ch->act, PLR_AUTOGOLD);
-			xSET_BIT(ch->act, PLR_AUTOEXIT);
-			xSET_BIT(ch->act, PLR_AUTO_COMPASS);
-			xSET_BIT(ch->act, PLR_SPAR);
-			SET_BIT(ch->pcdata->flags, PCFLAG_DEADLY);
-			xSET_BIT(ch->deaf, CHANNEL_FOS);
-
-			for (i = 1; i < MAX_BOARD; i++) {
-				for (catchup_notes = ch->pcdata->board->note_first; catchup_notes && catchup_notes->next; catchup_notes = catchup_notes->next);
-
-				if (!catchup_notes);
-				else {
-					ch->pcdata->last_note[i] = catchup_notes->date_stamp;
-				}
-			}
-
-			char_to_room(ch, get_room_index(ROOM_VNUM_SCHOOL));
-			ch->pcdata->prompt = STRALLOC("");
-		} else if (!IS_IMMORTAL(ch) && ch->pcdata->release_date > 0 &&
-		    ch->pcdata->release_date > current_time) {
-			if (ch->in_room->vnum == 6
-			    || ch->in_room->vnum == 8
-			    || ch->in_room->vnum == 1206)
-				char_to_room(ch, ch->in_room);
-			else
-				char_to_room(ch, get_room_index(8));
-		} else if (!IS_IMMORTAL(ch) && ch->in_room
-		    && ch->in_room->vnum == 2060) {
-			act(AT_GREEN, "A Strange Force rips you from the Hyperbolic Time Chamber.", ch, NULL, NULL, TO_CHAR);
-			char_to_room(ch, get_room_index(2059));
-		} else if (ch->in_room && (IS_IMMORTAL(ch)
-		    || !xIS_SET(ch->in_room->room_flags, ROOM_PROTOTYPE))) {
-			char_to_room(ch, ch->in_room);
-		} else if (IS_IMMORTAL(ch)) {
-			char_to_room(ch, get_room_index(ROOM_VNUM_CHAT));
-		} else {
-			char_to_room(ch, get_room_index(ROOM_VNUM_TEMPLE));
+	    }
+	  i=0;
+	  send_to_desc_color("\n\r&c==============================================================================&D",d);
+	  for (i_class = 0; i_class < MAX_PC_CLASS; i_class++)
+	    {
+	      char letters[11] = "abcdefghij";
+	      if (class_table[i_class]->who_name &&
+		   class_table[i_class]->who_name[0] != '\0')
+		{
+		  sprintf(buf, "\n\r&w   (&W%d&w)  &c%-12s&w  ('&R%c&w' for help)&D", i,
+			   class_table[i_class]->who_name, letters[i]);
+		  send_to_desc_color(buf, d);
+		  i++;
 		}
-
-		act(AT_ACTION, "$n has entered the game.", ch, NULL, NULL, TO_CANSEE);
-		if (ch->pcdata->pet) {
-			act(AT_ACTION, "$n returns to $s master from the Void.",
-			    ch->pcdata->pet, NULL, ch, TO_NOTVICT);
-			act(AT_ACTION, "$N returns with you to the realms.",
-			    ch, NULL, ch->pcdata->pet, TO_CHAR);
-		}
-		ch->tmystic = 0;
-		ch->mysticlearn = 0;
-		ch->teaching = NULL;
-		if (is_kaio(ch) && ch->alignment < 0)
-			ch->alignment = 0;
-		if (is_demon(ch) && ch->alignment > 0)
-			ch->alignment = 0;
-
-		remove_member(ch);
-		if (ch->pcdata->clan)
-			update_member(ch);
-
-		/* For the logon pl tracker */
-		ch->logon_start = ch->exp;
-		do_global_boards(ch, "");
-
-		ch->dodge = false;
-		ch->block = false;
-		ch->ki_dodge = false;
-		ch->ki_cancel = false;
-		ch->ki_deflect = false;
-
-		do_look(ch, "auto");
-		tax_player(ch);
-		mccp_interest(ch);
-		mail_count(ch);
-		check_loginmsg(ch);
-
-		if (!ch->was_in_room && ch->in_room == get_room_index(ROOM_VNUM_TEMPLE))
-			ch->was_in_room = get_room_index(ROOM_VNUM_TEMPLE);
-		else if (ch->was_in_room == get_room_index(ROOM_VNUM_TEMPLE))
-			ch->was_in_room = get_room_index(ROOM_VNUM_TEMPLE);
-		else if (!ch->was_in_room)
-			ch->was_in_room = ch->in_room;
-		break;
-	case CON_NOTE_TO:
-		handle_con_note_to(d, argument);
-		break;
-	case CON_NOTE_SUBJECT:
-		handle_con_note_subject(d, argument);
-		break;			
-	case CON_NOTE_EXPIRE:
-		handle_con_note_expire(d, argument);
-		break;
-	case CON_NOTE_TEXT:
-		handle_con_note_text(d, argument);
-		break;
-	case CON_NOTE_FINISH:
-		handle_con_note_finish(d, argument);
-		break;
+	    }
+	  send_to_desc_color("\n\r&c==============================================================================&D",d);
+	  sprintf(buf, "\n\r&wChoose the number of your race: &D");
+	  send_to_desc_color(buf, d);
+	  return;
 	}
 
-	return;
+
+      if (i_class == MAX_PC_CLASS
+	   ||  !class_table[i_class]->who_name
+	   || class_table[i_class]->who_name[0] == '\0'
+	   || !str_cmp(class_table[i_class]->who_name,"unused"))
+	{
+	  send_to_desc_color("&wThat's not a race.\n\rWhat IS your race? &D",d);
+	  return;
+	}
+
+      if (ch->race == 3 || ch->race == 5 || ch->race == 6)
+	{
+	  ch->pcdata->haircolor = 24;
+	  ch->pcdata->orignalhaircolor = 24;
+	}
+      else
+	{
+	  send_to_desc_color("\n\r&wPlease choose a hair color from the following list:&D\n\r", d);
+	  buf[0] = '\0';
+
+	  for (i_class = 0; i_class < (MAX_HAIR - 2); i_class++)
+	    {
+	      sprintf(buf2, "&w[&W%2d&w] &g%-18.18s  ", i_class, hair_color[i_class]);
+	      b++;
+	      strcat(buf,buf2);
+	      if ((b % 3) == 0)
+		strcat(buf, "&D\n\r");
+	    }
+	  strcat(buf, "\n\r: ");
+	  strcat(buf, "\r\r");
+	  send_to_desc_color(buf, d);
+	  d->connected = CON_GET_NEW_HAIR;
+	  break;
+	}
+    case CON_GET_NEW_HAIR:
+      argument = one_argument(argument, arg);
+      if (ch->race != 3 && ch->race != 5 && ch->race != 6)
+	{
+	  if (!str_cmp(arg, "help"))
+	    {
+	      do_help(ch, argument);
+	      send_to_desc_color("&wPlease choose a hair color: &D", d);
+	      return;
+	    }
+	  for (i_class = 0; i_class < (MAX_HAIR - 2); i_class++)
+	    {
+	      if (toupper(arg[0]) == toupper(hair_color[i_class][0])
+		   &&   !str_prefix(arg, hair_color[i_class]))
+		{
+		  ch->pcdata->haircolor = i_class;
+		  ch->pcdata->orignalhaircolor = i_class;
+		  break;
+		}
+	      if (is_number(arg) && atoi(arg) == i_class)
+		{
+		  ch->pcdata->haircolor = i_class;
+		  ch->pcdata->orignalhaircolor = i_class;
+		  break;
+		}
+	    }
+	  if (i_class == (MAX_HAIR - 2) || !hair_color[i_class] || hair_color[i_class][0] == '\0')
+	    {
+	      send_to_desc_color("&wThat's not a hair color.\n\rWhat IS it going to be? &D", d);
+	      return;
+	    }
+	}
+      if (ch->race == 3 || ch->race == 6)
+	{
+	  send_to_desc_color("\n\r&wPlease choose a main body color from the following list:&D\n\r", d);
+	  buf[0] = '\0';
+	  buf2[0] = '\0';
+	  b = 0;
+	  for (i_class = (MAX_COMPLEXION - 17); i_class < (MAX_COMPLEXION - 14); i_class++)
+	    {
+	      sprintf(buf2, "&w[&W%2d&W] &g%-15s&D", i_class, complexion[i_class]);
+	      b++;
+	      strcat(buf,buf2);
+	      if ((b % 4) == 0)
+		strcat(buf, "\n\r");
+	    }
+	  strcat(buf, "\n\r: ");
+	  strcat(buf, "\r\r\r\r");
+	  send_to_desc_color(buf, d);
+	  d->connected = CON_GET_NEW_COMPLEXION;
+	  break;
+	}
+
+      else if (ch->race == 5)
+	{
+	  send_to_desc_color("\n\r&wPlease choose a main body color from the following list:&D\n\r", d);
+	  buf[0] = '\0';
+	  buf2[0] = '\0';
+	  b = 0;
+	  for (i_class = (MAX_COMPLEXION - 14); i_class < (MAX_COMPLEXION); i_class++)
+	    {
+	      sprintf(buf2, "&w[&W%2d&w] &g%-15s&D", i_class, complexion[i_class]);
+	      b++;
+	      strcat(buf,buf2);
+	      if ((b % 4) == 0)
+		strcat(buf, "\n\r");
+	    }
+	  strcat(buf, "\n\r: ");
+	  strcat(buf, "\r\r\r\r");
+	  send_to_desc_color(buf, d);
+	  d->connected = CON_GET_NEW_COMPLEXION;
+	  break;
+	}
+      else
+	{
+	  send_to_desc_color("\n\r&wPlease choose a complexion from the following list:&D\n\r", d);
+	  buf[0] = '\0';
+	  buf2[0] = '\0';
+	  b = 0;
+	  for (i_class = 0; i_class < (MAX_COMPLEXION - 17); i_class++)
+	    {
+	      sprintf(buf2, "&w[&W%2d&w] &g%-15s&D", i_class, complexion[i_class]);
+	      b++;
+	      strcat(buf,buf2);
+	      if ((b % 4) == 0)
+		strcat(buf, "\n\r");
+	    }
+	  strcat(buf, "\n\r: ");
+	  strcat(buf, "\r\r\r\r");
+	  send_to_desc_color(buf, d);
+	  d->connected = CON_GET_NEW_COMPLEXION;
+	  break;
+	}
+    case CON_GET_NEW_COMPLEXION:
+
+      argument = one_argument(argument, arg);
+      if (ch->race == 5)
+	{
+	  if (!str_cmp(arg, "help"))
+	    {
+	      do_help(ch, argument);
+	      send_to_desc_color("&wPlease choose a main body color: &D", d);
+	      return;
+	    }
+	  for (i_class = (MAX_COMPLEXION - 14); i_class < (MAX_COMPLEXION); i_class++)
+	    {
+	      if (toupper(arg[0]) == toupper(complexion[i_class][0])
+		   &&   !str_prefix(arg, complexion[i_class]))
+		{
+		  ch->pcdata->complexion = i_class;
+		  break;
+		}
+	      if (is_number(arg) && atoi(arg) == i_class)
+		{
+		  ch->pcdata->complexion = i_class;
+		  break;
+		}
+	    }
+	  if (i_class == (MAX_COMPLEXION) || !complexion[i_class] || complexion[i_class][0] == '\0')
+	    {
+	      send_to_desc_color("&wThat's not a choice.\n\rWhat IS it going to be? &D", d);
+	      return;
+	    }
+	}
+      else if (ch->race == 3 || ch->race == 6)
+	{
+	  if (!str_cmp(arg, "help"))
+	    {
+	      do_help(ch, argument);
+	      send_to_desc_color("&wPlease choose a main body color: &D", d);
+	      return;
+	    }
+	  for (i_class = (MAX_COMPLEXION - 17); i_class < (MAX_COMPLEXION - 13); i_class++)
+	    {
+	      if (toupper(arg[0]) == toupper(complexion[i_class][0])
+		   &&   !str_prefix(arg, complexion[i_class]))
+		{
+		  ch->pcdata->complexion = i_class;
+		  break;
+		}
+	      if (is_number(arg) && atoi(arg) == i_class)
+		{
+		  ch->pcdata->complexion = i_class;
+		  break;
+		}
+	    }
+	  if (i_class == (MAX_COMPLEXION - 14) || !complexion[i_class] || complexion[i_class][0] == '\0')
+	    {
+	      send_to_desc_color("&wThat's not a choice.\n\rWhat IS it going to be? &D", d);
+	      return;
+	    }
+	}
+      else
+	{
+	  if (!str_cmp(arg, "help"))
+	    {
+	      do_help(ch, argument);
+	      send_to_desc_color("&wPlease choose complexion: &D", d);
+	      return;
+	    }
+	  for (i_class = 0; i_class < (MAX_COMPLEXION - 17); i_class++)
+	    {
+	      if (toupper(arg[0]) == toupper(complexion[i_class][0])
+		   &&   !str_prefix(arg, complexion[i_class]))
+		{
+		  ch->pcdata->complexion = i_class;
+		  break;
+		}
+	      if (is_number(arg) && atoi(arg) == i_class)
+		{
+		  ch->pcdata->complexion = i_class;
+		  break;
+		}
+	    }
+	  if (i_class == (MAX_COMPLEXION - 17) || !complexion[i_class] || complexion[i_class][0] == '\0')
+	    {
+	      send_to_desc_color("&wThat's not a complexion.\n\rWhat IS it going to be? &D", d);
+	      return;
+	    }
+	}
+      if (ch->race == 5)
+	{
+	  send_to_desc_color("\n\r&wPlease choose a secondary body color from the following list:&D\n\r", d);
+	  buf[0] = '\0';
+	  buf2[0] = '\0';
+	  b = 0;
+	  for (i_class = 0; i_class < (MAX_SECONDARYCOLOR - 1); i_class++)
+	    {
+	      sprintf(buf2, "&w[&W%2d&w] &g%-15s&D", i_class, secondary_color[i_class]);
+	      b++;
+	      strcat(buf,buf2);
+	      if ((b % 4) == 0)
+		strcat(buf, "\n\r");
+	    }
+	  strcat(buf, "\n\r: ");
+	  strcat(buf, "\r\r\r\r");
+	  send_to_desc_color(buf, d);
+	  d->connected = CON_GET_NEW_SECONDARYCOLOR;
+	  break;
+
+	case CON_GET_NEW_SECONDARYCOLOR:
+	  /* Black, Brown, Red, Blonde, Strawberry Blonde, Argent, Golden Blonde, Platinum Blonde, Light Brown*/
+	  argument = one_argument(argument, arg);
+	  if (!str_cmp(arg, "help"))
+	    {
+	      do_help(ch, argument);
+	      send_to_desc_color("&wPlease choose a secondary body color: &D", d);
+	      return;
+	    }
+	  for (i_class = 0; i_class < (MAX_SECONDARYCOLOR - 1); i_class++)
+	    {
+	      if (toupper(arg[0]) == toupper(secondary_color[i_class][0])
+		   &&   !str_prefix(arg, secondary_color[i_class]))
+		{
+		  ch->pcdata->secondarycolor = i_class;
+		  break;
+		}
+	      if (is_number(arg) && atoi(arg) == i_class)
+		{
+		  ch->pcdata->secondarycolor = i_class;
+		  break;
+		}
+	    }
+	  if (i_class == (MAX_SECONDARYCOLOR - 1) || !secondary_color[i_class] || secondary_color[i_class][0] == '\0')
+	    {
+	      send_to_desc_color("&wThat's not a choice.\n\rWhat IS it going to be? &D", d);
+	      return;
+	    }
+	}
+      send_to_desc_color("\n\r&wPlease choose a eye color from the following list:&D\n\r", d);
+      buf[0] = '\0';
+      buf2[0] = '\0';
+      b = 0;
+
+      for (i_class = 0; i_class < (MAX_EYE - 3); i_class++)
+	{
+	  sprintf(buf2, "&w[&W%2d&w] &g%-15s&D", i_class, eye_color[i_class]);
+	  b++;
+	  strcat(buf,buf2);
+	  if ((b % 4) == 0)
+	    strcat(buf, "\n\r");
+	}
+      strcat(buf, "\n\r: ");
+      strcat(buf, "\r\r\r\r");
+      send_to_desc_color(buf, d);
+      d->connected = CON_GET_NEW_EYE;
+
+      break;
+    case CON_GET_NEW_EYE:
+      /* Black, Brown, Red, Blonde, Strawberry Blonde, Argent, Golden Blonde, Platinum Blonde, Light Brown*/
+      argument = one_argument(argument, arg);
+      if (!str_cmp(arg, "help"))
+	{
+	  do_help(ch, argument);
+	  send_to_desc_color("&wPlease choose a hair color: &D", d);
+	  return;
+	}
+      for (i_class = 0; i_class < (MAX_EYE - 3); i_class++)
+	{
+	  if (toupper(arg[0]) == toupper(eye_color[i_class][0])
+	       &&   !str_prefix(arg, eye_color[i_class]))
+	    {
+	      ch->pcdata->eyes = i_class;
+	      ch->pcdata->orignaleyes = i_class;
+	      break;
+	    }
+	  if (is_number(arg) && atoi(arg) == i_class)
+	    {
+	      ch->pcdata->eyes = i_class;
+	      ch->pcdata->orignaleyes = i_class;
+	      break;
+	    }
+	}
+      if (i_class == (MAX_EYE - 3) || !eye_color[i_class] || eye_color[i_class][0] == '\0')
+	{
+	  send_to_desc_color("&wThat's not a eye color.\n\rWhat IS it going to be? &D", d);
+	  return;
+	}
+
+      send_to_desc_color("\n\r&wPlease choose a build type from the following list:&D\n\r", d);
+      buf[0] = '\0';
+      buf2[0] = '\0';
+      b = 0;
+
+      for (i_class = 0; i_class < (MAX_BUILD); i_class++)
+	{
+	  sprintf(buf2, "&w[&W%2d&w] &g%-15s&D", i_class, build_type[i_class]);
+	  b++;
+	  strcat(buf,buf2);
+	  if ((b % 4) == 0)
+	    strcat(buf, "\n\r");
+	}
+      strcat(buf, "\n\r: ");
+      strcat(buf, "\r\r\r\r");
+      send_to_desc_color(buf, d);
+      d->connected = CON_GET_NEW_BUILD;
+
+      break;
+    case CON_GET_NEW_BUILD:
+      /* Black, Brown, Red, Blonde, Strawberry Blonde, Argent, Golden Blonde, Platinum Blonde, Light Brown*/
+      argument = one_argument(argument, arg);
+      if (!str_cmp(arg, "help"))
+	{
+	  do_help(ch, argument);
+	  send_to_desc_color("&wPlease choose a build type: &D", d);
+	  return;
+	}
+      for (i_class = 0; i_class < (MAX_BUILD); i_class++)
+	{
+	  if (toupper(arg[0]) == toupper(build_type[i_class][0])
+	       &&   !str_prefix(arg, build_type[i_class]))
+	    {
+	      ch->pcdata->build = i_class;
+	      break;
+	    }
+	  if (is_number(arg) && atoi(arg) == i_class)
+	    {
+	      ch->pcdata->build = i_class;
+	      break;
+	    }
+	}
+      if (i_class == (MAX_BUILD) || !build_type[i_class] || build_type[i_class][0] == '\0')
+	{
+	  send_to_desc_color("&wThat's not a build type.\n\rWhat IS it going to be? &D", d);
+	  return;
+	}
+
+      sprintf(log_buf, "%s@%s new %s %s.", ch->name, d->host,
+	       race_table[ch->race]->race_name,
+	       class_table[ch->class]->who_name);
+      log_string_plus(log_buf, LOG_COMM, sysdata.log_level);
+      to_channel(log_buf, CHANNEL_MONITOR, "Monitor", LEVEL_IMMORTAL);
+      send_to_desc_color("&wPress [&RENTER&w] &D", d);
+      show_title(d);
+      ch->level = 0;
+      ch->position = POS_STANDING;
+      d->connected = CON_PRESS_ENTER;
+      set_pager_color(AT_PLAIN, ch);
+      adjust_hiscore("pkill", ch, ch->pcdata->pkills); /* cronel hiscore */
+      adjust_hiscore("sparwins", ch, ch->pcdata->spar_wins);
+      adjust_hiscore("sparloss", ch, ch->pcdata->spar_loss);
+      adjust_hiscore("mkills", ch, ch->pcdata->mkills);
+      adjust_hiscore("deaths", ch, (ch->pcdata->pdeaths + ch->pcdata->mdeaths));
+      update_plHiscore(ch);
+      adjust_hiscore("played", ch, ((get_age(ch) - 4) * 2));
+      adjust_hiscore("zeni", ch, ch->gold);
+      return;
+      break;
+
+    case CON_PRESS_ENTER:
+      if (ch->position == POS_MOUNTED)
+	ch->position = POS_STANDING;
+      set_pager_color(AT_PLAIN, ch);
+      if (xIS_SET(ch->act, PLR_RIP))
+	send_rip_screen(ch);
+      if (xIS_SET(ch->act, PLR_ANSI))
+	send_to_pager("\033[2J", ch);
+      else
+	send_to_pager("\014", ch);
+      if (IS_IMMORTAL(ch))
+	do_help(ch, "imotd");
+      if (ch->level == 50)
+	do_help(ch, "amotd");
+      if (ch->level < 50 && ch->level > 0)
+	do_help(ch, "motd");
+      if (ch->level == 0)
+	do_help(ch, "nmotd");
+      send_to_pager("\n\rPress [ENTER] ", ch);
+      d->connected = CON_READ_MOTD;
+      break;
+
+    case CON_READ_MOTD:
+      {
+	char motdbuf[MAX_STRING_LENGTH];
+
+	sprintf(motdbuf, "\n\rWelcome to %s...\n\r", sysdata.mud_name);
+	send_to_desc_color(motdbuf, d);
+      }
+      add_char(ch);
+      d->connected	= CON_PLAYING;
+      /* hopefully clear up some ansi changing issues	  -Nopey */
+      set_char_color(AT_DGREEN, ch);
+      if(!xIS_SET(ch->act, PLR_ANSI) && d->ansi == true)
+	d->ansi = false;
+      else if(xIS_SET(ch->act, PLR_ANSI) && d->ansi == false)
+	d->ansi = true;
+
+      if (ch->level == 0)
+	{
+	  OBJ_DATA *obj;
+	  int iLang;
+
+	  ch->pcdata->upgradeL = CURRENT_UPGRADE_LEVEL;
+
+	  ch->pcdata->clan_name = STRALLOC("");
+	  ch->pcdata->clan	  = NULL;
+	  switch (class_table[ch->class]->attr_prime)
+	    {
+	    case APPLY_STR: ch->perm_str = 10; break;
+	    case APPLY_INT: ch->perm_int = 10; break;
+	    case APPLY_DEX: ch->perm_dex = 10; break;
+	    case APPLY_CON: ch->perm_con = 10; break;
+	    case APPLY_LCK: ch->perm_lck = 10; break;
+	    }
+
+	  ch->perm_str	 += race_table[ch->race]->str_plus;
+	  ch->perm_int	 += race_table[ch->race]->int_plus;
+	  ch->perm_dex	 += race_table[ch->race]->dex_plus;
+	  ch->perm_con	 += race_table[ch->race]->con_plus;
+	  ch->affected_by	  = race_table[ch->race]->affected;
+	  ch->perm_lck	 = number_range(0, 30);
+
+	  ch->pcdata->permTstr = ch->perm_str;
+	  ch->pcdata->permTspd = ch->perm_dex;
+	  ch->pcdata->permTint = ch->perm_int;
+	  ch->pcdata->permTcon = ch->perm_con;
+
+	  ch->armor		 += race_table[ch->race]->ac_plus;
+	  ch->alignment	 += race_table[ch->race]->alignment;
+	  ch->attacks              = race_table[ch->race]->attacks;
+	  ch->defenses             = race_table[ch->race]->defenses;
+	  ch->saving_poison_death  	= race_table[ch->race]->saving_poison_death;
+	  ch->saving_wand  		= race_table[ch->race]->saving_wand;
+	  ch->saving_para_petri  	= race_table[ch->race]->saving_para_petri;
+	  ch->saving_breath  		= race_table[ch->race]->saving_breath;
+	  ch->saving_spell_staff	= race_table[ch->race]->saving_spell_staff;
+
+	  ch->height = number_range(race_table[ch->race]->height *.9, race_table[ch->race]->height *1.1);
+	  ch->weight = number_range(race_table[ch->race]->weight *.9, race_table[ch->race]->weight *1.1);
+
+	  if ((iLang = skill_lookup("common")) < 0)
+	    bug("Nanny: cannot find common language.");
+	  else
+	    ch->pcdata->learned[iLang] = 100;
+
+	  for (iLang = 0; lang_array[iLang] != LANG_UNKNOWN; iLang++)
+	    if (lang_array[iLang] == race_table[ch->race]->language)
+	      break;
+	  if (lang_array[iLang] == LANG_UNKNOWN)
+	    bug("Nanny: invalid racial language.");
+	  else
+	    {
+	      if ((iLang = skill_lookup(lang_names[iLang])) < 0)
+		bug("Nanny: cannot find racial language.");
+	      else
+		ch->pcdata->learned[iLang] = 100;
+	    }
+
+	  name_stamp_stats(ch);
+
+	  ch->level	= 1;
+	  ch->exp	= 100;
+	  ch->pl	= 100;
+	  ch->heart_pl	= 100;
+	  ch->max_hit    += race_table[ch->race]->hit;
+	  ch->max_mana   += race_table[ch->race]->mana;
+	  ch->max_move    = 100;
+	  ch->hit	= UMAX(1,ch->max_hit);
+	  ch->mana	= UMAX(1,ch->max_mana);
+	  ch->move	= UMAX(1,ch->max_move);
+	  ch->train = 5;
+	  ch->max_train = 1;
+	  ch->pcdata->xTrain = 0;
+	  ch->pcdata->total_xTrain = 0;
+	  ch->practice = 0;
+	  ch->max_prac = 0;
+	  ch->max_energy = 1;
+	  ch->pcdata->admintalk = 0;
+	  ch->pcdata->age = 4;
+	  ch->pcdata->sparcount = 0;
+	  if (ch->race == 0 || ch->race == 2 || ch->race == 5 || ch->race == 6)
+	    ch->pcdata->tail = true;
+	  else
+	    ch->pcdata->tail = false;
+	  if (ch->race == 4)
+	    ch->pcdata->natural_ac_max = 500;
+	  if (ch->race == 6)
+	    ch->pcdata->absorb_pl_mod = 6;
+	  sprintf(buf, "the %s",
+		   title_table [ch->class] [ch->level]
+		   [ch->sex == SEX_FEMALE ? 1 : 0]);
+	  set_title(ch, buf);
+	  ch->pcdata->creation_date = current_time;
+
+	  xSET_BIT(ch->act, PLR_AUTOGOLD);
+	  xSET_BIT(ch->act, PLR_AUTOEXIT);
+	  xSET_BIT(ch->act, PLR_AUTO_COMPASS);
+	  xSET_BIT(ch->act, PLR_SPAR);
+	  SET_BIT(ch->pcdata->flags, PCFLAG_DEADLY);
+	  xSET_BIT(ch->deaf, CHANNEL_FOS);
+
+
+	  /* Don't display old notes as 'unread' except for the announcment board */
+	  for (i = 1; i < MAX_BOARD; i++)
+	    {
+	      for (catchup_notes = ch->pcdata->board->note_first; catchup_notes && catchup_notes->next; catchup_notes = catchup_notes->next);
+
+	      if (!catchup_notes)
+		;
+	      else
+		{
+		  ch->pcdata->last_note[i] = catchup_notes->date_stamp;
+		}
+	    }
+
+	  {
+	    OBJ_INDEX_DATA *obj_ind = get_obj_index(10333);
+	    if (obj_ind != NULL)
+	      {
+		obj = create_object(obj_ind, 0);
+		obj_to_char(obj, ch);
+		equip_char(ch, obj, WEAR_HOLD);
+	      }
+	  }
+	  /* Display_prompt interprets blank as default */
+	  ch->pcdata->prompt = STRALLOC("");
+	}
+      else
+	if (!IS_IMMORTAL(ch) && ch->pcdata->release_date > 0 &&
+	     ch->pcdata->release_date > current_time)
+	  {
+	    if (ch->in_room->vnum == 6
+		 ||   ch->in_room->vnum == 8
+		 ||   ch->in_room->vnum == 1206)
+	      char_to_room(ch, ch->in_room);
+	    else
+	      char_to_room(ch, get_room_index(8));
+	  }
+	else
+	  if(!IS_IMMORTAL(ch) && ch->in_room
+	      && ch->in_room->vnum == 2060)
+	    {
+	      act(AT_GREEN, "A Strange Force rips you from the Hyperbolic Time Chamber.", ch, NULL, NULL, TO_CHAR);
+	      char_to_room(ch, get_room_index(2059));
+	    }
+	  else
+	    if (ch->in_room && (IS_IMMORTAL(ch)
+				  || !xIS_SET(ch->in_room->room_flags, ROOM_PROTOTYPE)))
+	      {
+		char_to_room(ch, ch->in_room);
+	      }
+	    else
+	      if (IS_IMMORTAL(ch))
+		{
+		  char_to_room(ch, get_room_index(ROOM_VNUM_CHAT));
+		}
+	      else
+		{
+		  char_to_room(ch, get_room_index(ROOM_VNUM_TEMPLE));
+		}
+
+      act(AT_ACTION, "$n has entered the game.", ch, NULL, NULL, TO_CANSEE);
+      if (ch->pcdata->pet)
+	{
+	  act(AT_ACTION, "$n returns to $s master from the Void.",
+	       ch->pcdata->pet, NULL, ch, TO_NOTVICT);
+	  act(AT_ACTION, "$N returns with you to the realms.",
+	       ch, NULL, ch->pcdata->pet, TO_CHAR);
+	}
+      do_global_boards(ch, "");
+      do_look(ch, "auto");
+      tax_player(ch);  
+      mccp_interest(ch);
+      mail_count(ch);
+      check_loginmsg(ch);
+
+      if (!ch->was_in_room && ch->in_room == get_room_index(ROOM_VNUM_TEMPLE))
+      	ch->was_in_room = get_room_index(ROOM_VNUM_TEMPLE);
+      else if (ch->was_in_room == get_room_index(ROOM_VNUM_TEMPLE))
+        ch->was_in_room = get_room_index(ROOM_VNUM_TEMPLE);
+      else if (!ch->was_in_room)
+    	ch->was_in_room = ch->in_room;
+
+      break;
+
+    case CON_NOTE_TO:
+      handle_con_note_to (d, argument);
+      break;
+
+    case CON_NOTE_SUBJECT:
+      handle_con_note_subject (d, argument);
+      break; /* subject */
+
+    case CON_NOTE_EXPIRE:
+      handle_con_note_expire (d, argument);
+      break;
+
+    case CON_NOTE_TEXT:
+      handle_con_note_text (d, argument);
+      break;
+    case CON_NOTE_FINISH:
+      handle_con_note_finish (d, argument);
+      break;
+
+    }
 }
 
 bool
@@ -2329,45 +2546,138 @@ check_parse_name(char *name, bool newchar)
 	return (true);
 }
 
-bool
-check_playing(DESCRIPTOR_DATA * d, char *name)
+/*
+ * Look for link-dead player to reconnect.
+ */
+bool check_reconnect(DESCRIPTOR_DATA *d, char *name, bool f_conn)
 {
-	DESCRIPTOR_DATA *d_old;
+  CHAR_DATA *ch;
 
-	for (d_old = first_descriptor; d_old; d_old = d_old->next) {
-		if (d_old != d
-		    && (d_old->character || d_old->original)
-		    && !str_cmp(name, d_old->original
-		    ? d_old->original->pcdata->filename :
-		    d_old->character->pcdata->filename)) {
-			return (true);
+  for (ch = first_char; ch; ch = ch->next)
+    {
+      if (!IS_NPC(ch)
+	  && (!f_conn || !ch->desc)
+	  &&    ch->pcdata->filename
+	  &&   !str_cmp(name, ch->pcdata->filename))
+	{
+	  if (f_conn && ch->switched)
+	    {
+	      write_to_buffer(d, "Already playing.\n\rName: ", 0);
+	      d->connected = CON_GET_NAME;
+	      if (d->character)
+		{
+		  /* clear descriptor pointer to get rid of bug message in log */
+		  d->character->desc = NULL;
+		  free_char(d->character);
+		  d->character = NULL;
 		}
-	}
+	      return BERR;
+	    }
+	  if (f_conn == false)
+	    {
+	      DISPOSE(d->character->pcdata->pwd);
+	      d->character->pcdata->pwd = str_dup(ch->pcdata->pwd);
+	    }
+	  else
+	    {
+	      /* clear descriptor pointer to get rid of bug message in log */
+	      d->character->desc = NULL;
+	      free_char(d->character);
+	      d->character = ch;
+	      ch->desc	 = d;
+	      ch->timer	 = 0;
+	      send_to_char("Reconnecting.\n\r", ch);
+	      do_look(ch, "auto");
+	      act(AT_ACTION, "$n has reconnected.", ch, NULL, NULL, TO_CANSEE);
+	      sprintf(log_buf, "%s@%s(%s) reconnected.",
+		      ch->pcdata->filename, d->host, d->user);
+	      log_string_plus(log_buf, LOG_COMM, UMAX(sysdata.log_level, ch->level));
+	      d->connected = CON_PLAYING;
+	      if (ch->pcdata->in_progress)
+		send_to_char ("You have a note in progress. Type \"note write\" to continue it.\n\r",ch);
 
-	return (false);
+	    }
+	  return true;
+	}
+    }
+
+  return false;
 }
 
 bool
-reconnect(DESCRIPTOR_DATA * d, char *name)
+check_playing(DESCRIPTOR_DATA *d, char *name, bool kick)
 {
-	CHAR_DATA *ch;
-	DESCRIPTOR_DATA *d_old;
-	int 	conn_state;
+  CHAR_DATA *ch;
 
-	for (d_old = first_descriptor; d_old; d_old = d_old->next) {
-		if (d_old != d
-		    && (d_old->character || d_old->original)
-		    && !str_cmp(name, d_old->original
-		    ? d_old->original->pcdata->filename :
-		    d_old->character->pcdata->filename)) {
-			log_string("preparing to close socket at comm.c:2824\n");
-			//fquit(d->character);
-			close_socket(d_old, true, true);
-			return (true);
-		}
+  DESCRIPTOR_DATA *dold;
+  int	cstate;
+
+  for (dold = first_descriptor; dold; dold = dold->next)
+    {
+      if (dold != d
+	   && ( dold->character || dold->original)
+	   &&   !str_cmp(name, dold->original
+			  ? dold->original->pcdata->filename :
+			  dold->character->pcdata->filename))
+	{
+	  cstate = dold->connected;
+	  ch = dold->original ? dold->original : dold->character;
+	  if (!ch->name
+	       || (cstate != CON_PLAYING && cstate != CON_EDITING))
+	    {
+	      write_to_buffer(d, "Already connected - try again.\n\r", 0);
+	      sprintf(log_buf, "%s already connected.",
+		       ch->pcdata->filename);
+	      log_string_plus(log_buf, LOG_COMM, sysdata.log_level);
+	      return BERR;
+	    }
+	  if (!kick)
+	    return true;
+	  write_to_buffer(d, "Already playing... Kicking off old connection.\n\r", 0);
+	  write_to_buffer(dold, "Kicking off old connection... bye!\n\r", 0);
+	  close_socket(dold, false);
+	  /* clear descriptor pointer to get rid of bug message in log */
+	  d->character->desc = NULL;
+	  free_char(d->character);
+	  d->character = ch;
+	  ch->desc	 = d;
+	  ch->timer	 = 0;
+	  if (ch->switched)
+	    do_return(ch->switched, "");
+	  ch->switched = NULL;
+	  send_to_char("Reconnecting.\n\r", ch);
+	  do_look(ch, "auto");
+	  act(AT_ACTION, "$n has reconnected, kicking off old link.",
+	       ch, NULL, NULL, TO_CANSEE);
+	  sprintf(log_buf, "%s@%s reconnected, kicking off old link.",
+		   ch->pcdata->filename, d->host);
+	  log_string_plus(log_buf, LOG_COMM, UMAX(sysdata.log_level, ch->level));
+	  d->connected = cstate;
+	  return true;
 	}
+    }
 
-	return (false);
+  return false;
+}
+
+void
+stop_idling(CHAR_DATA *ch)
+{
+  ROOM_INDEX_DATA *was_in_room;
+
+  if (!ch
+       ||   !ch->desc
+       ||   ch->desc->connected != CON_PLAYING
+       ||   !IS_IDLE(ch))
+    return;
+
+  ch->timer = 0;
+  was_in_room = ch->was_in_room;
+  char_from_room(ch);
+  char_to_room(ch, was_in_room);
+  ch->was_in_room = ch->in_room;
+  REMOVE_BIT(ch->pcdata->flags, PCFLAG_IDLE);
+  act(AT_ACTION, "$n has returned from the void.", ch, NULL, NULL, TO_ROOM);
 }
 
 void
@@ -4069,7 +4379,7 @@ check_pfile(DESCRIPTOR_DATA * d) {
 		sprintf(log_buf, "Bad player file %s", d->user);
 		log_string(log_buf);
 		send_to_desc_color("Your playerfile is corrupt... please notify case@capsulecorp.org\n\r", d);
-		close_socket(d, true, false);
+		close_socket(d, true);
 		return (false);
 	} else {
 		return(true);
@@ -4087,4 +4397,44 @@ load_from_fp(DESCRIPTOR_DATA * d, bool np) {
 	    load_char_obj(d, d->user, true);
 	else
 	    load_char_obj(d, d->user, false);
+}
+
+
+long long
+strtonum(const char *numstr, long long minval, long long maxval,
+    const char **errstrp)
+{
+	long long ll = 0;
+	int error = 0;
+	char *ep;
+	struct errval {
+		const char *errstr;
+		int err;
+	} ev[4] = {
+		{ NULL,		0 },
+		{ "invalid",	EINVAL },
+		{ "too small",	ERANGE },
+		{ "too large",	ERANGE },
+	};
+
+	ev[0].err = errno;
+	errno = 0;
+	if (minval > maxval) {
+		error = INVALID;
+	} else {
+		ll = strtoll(numstr, &ep, 10);
+		if (numstr == ep || *ep != '\0')
+			error = INVALID;
+		else if ((ll == LLONG_MIN && errno == ERANGE) || ll < minval)
+			error = TOOSMALL;
+		else if ((ll == LLONG_MAX && errno == ERANGE) || ll > maxval)
+			error = TOOLARGE;
+	}
+	if (errstrp != NULL)
+		*errstrp = ev[error].errstr;
+	errno = ev[error].err;
+	if (error)
+		ll = 0;
+
+	return (ll);
 }
