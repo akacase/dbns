@@ -272,48 +272,62 @@ main(int argc, char **argv)
 int
 init_socket(int port)
 {
-	char 	hostname[64];
-	struct sockaddr_in sa;
-	struct linger ld;
-	int 	x = 1;
-	int 	fd;
+  char hostname[64];
+  struct sockaddr_in sa;
+  int x = 1;
+  int fd;
 
-	gethostname(hostname, sizeof(hostname));
+  gethostname(hostname, sizeof(hostname));
 
-	if ((fd = socket(AF_INET, SOCK_STREAM, 0)) < 0) {
-		perror("init_socket: socket");
-		exit(1);
-	}
-	if (setsockopt(fd, SOL_SOCKET, SO_REUSEADDR,
-	    (void *) &x, sizeof(x)) < 0) {
-		perror("init_socket: SO_REUSEADDR");
-		closesocket(fd);
-		exit(1);
-	}
-	ld.l_onoff = 1;
-	ld.l_linger = 1000;
 
-	if (setsockopt(fd, SOL_SOCKET, SO_LINGER,
-	    (void *) &ld, sizeof(ld)) < 0) {
-		perror("init_socket: SO_DONTLINGER");
-		closesocket(fd);
-		exit(1);
-	}
-	memset(&sa, '\0', sizeof(sa));
-	sa.sin_family = AF_INET;
-	sa.sin_port = htons(port);
+  if ((fd = socket(AF_INET, SOCK_STREAM, 0)) < 0)
+    {
+      perror("Init_socket: socket");
+      exit(1);
+    }
 
-	if (bind(fd, (struct sockaddr *) & sa, sizeof(sa)) == -1) {
-		perror("init_socket: bind");
-		closesocket(fd);
-		exit(1);
-	}
-	if (listen(fd, 50) < 0) {
-		perror("init_socket: listen");
-		closesocket(fd);
-		exit(1);
-	}
-	return (fd);
+  if (setsockopt(fd, SOL_SOCKET, SO_REUSEADDR,
+		 (void *) &x, sizeof(x)) < 0)
+    {
+      perror("Init_socket: SO_REUSEADDR");
+      closesocket(fd);
+      exit(1);
+    }
+
+#if defined(SO_DONTLINGER)
+  struct linger ld;
+
+  ld.l_onoff  = 1;
+  ld.l_linger = 1000;
+
+  if (setsockopt(fd, SOL_SOCKET, SO_DONTLINGER,
+		 (void *) &ld, sizeof(ld)) < 0)
+    {
+      perror("Init_socket: SO_DONTLINGER");
+      closesocket(fd);
+      exit(1);
+    }
+#endif
+
+  memset(&sa, '\0', sizeof(sa));
+  sa.sin_family   = AF_INET;
+  sa.sin_port	    = htons(port);
+
+  if (bind(fd, (struct sockaddr *) &sa, sizeof(sa)) == -1)
+    {
+      perror("Init_socket: bind");
+      closesocket(fd);
+      exit(1);
+    }
+
+  if (listen(fd, 50) < 0)
+    {
+      perror("Init_socket: listen");
+      closesocket(fd);
+      exit(1);
+    }
+
+  return fd;
 }
 
 static void
@@ -473,45 +487,53 @@ check_bad_desc(int desc)
 void
 accept_new(int ctrl)
 {
-	static struct timeval null_time;
-	DESCRIPTOR_DATA *d;
+  static struct timeval null_time;
+  DESCRIPTOR_DATA *d;
 
-	/*
-	 * Poll all active descriptors.
-	 */
-	FD_ZERO(&in_set);
-	FD_ZERO(&out_set);
-	FD_ZERO(&exc_set);
-	FD_SET(ctrl, &in_set);
+  /*
+   * Poll all active descriptors.
+   */
+  FD_ZERO(&in_set );
+  FD_ZERO(&out_set);
+  FD_ZERO(&exc_set);
+  FD_SET(ctrl, &in_set);
 
-	maxdesc = ctrl;
-	newdesc = 0;
-	for (d = first_descriptor; d; d = d->next) {
-		maxdesc = UMAX(maxdesc, d->descriptor);
-		FD_SET(d->descriptor, &in_set);
-		FD_SET(d->descriptor, &out_set);
-		FD_SET(d->descriptor, &exc_set);
-		if (d->ifd != -1 && d->ipid != -1) {
-			maxdesc = UMAX(maxdesc, d->ifd);
-			FD_SET(d->ifd, &in_set);
-		}
-		if (d == last_descriptor)
-			break;
+  maxdesc = ctrl;
+  newdesc = 0;
+  for (d = first_descriptor; d; d = d->next)
+    {
+      maxdesc = UMAX(maxdesc, d->descriptor);
+      FD_SET(d->descriptor, &in_set );
+      FD_SET(d->descriptor, &out_set);
+      FD_SET(d->descriptor, &exc_set);
+      if(d->ifd != -1 && d->ipid != -1)
+	{
+	  maxdesc = UMAX(maxdesc, d->ifd);
+	  FD_SET(d->ifd, &in_set);
 	}
-	if (select(maxdesc + 1, &in_set, &out_set, &exc_set, &null_time) < 0) {
-		perror("accept_new: select: poll");
-		exit(1);
-	}
-	if (FD_ISSET(ctrl, &exc_set)) {
-		bug("Exception raise on controlling descriptor %d", ctrl);
-		FD_CLR(ctrl, &in_set);
-		FD_CLR(ctrl, &out_set);
-	} else {
-		if (FD_ISSET(ctrl, &in_set)) {
-			newdesc = ctrl;
-			new_descriptor(newdesc);
-		}
-	}
+      if (d == last_descriptor)
+	break;
+    }
+
+  if (select(maxdesc+1, &in_set, &out_set, &exc_set, &null_time) < 0)
+    {
+      perror("accept_new: select: poll");
+      exit(1);
+    }
+
+
+  if (FD_ISSET(ctrl, &exc_set))
+    {
+      bug("Exception raise on controlling descriptor %d", ctrl);
+      FD_CLR(ctrl, &in_set);
+      FD_CLR(ctrl, &out_set);
+    }
+  else
+    if (FD_ISSET(ctrl, &in_set))
+      {
+	newdesc = ctrl;
+	new_descriptor(newdesc);
+      }
 }
 
 void
@@ -983,7 +1005,6 @@ close_socket(DESCRIPTOR_DATA *dclose, bool force)
 	  free_char(dclose->character);
 	}
     }
-
 
   if (!do_not_unlink)
     {
@@ -2539,7 +2560,8 @@ check_parse_name(char *name, bool newchar)
 /*
  * Look for link-dead player to reconnect.
  */
-bool check_reconnect(DESCRIPTOR_DATA *d, char *name, bool f_conn)
+bool
+check_reconnect(DESCRIPTOR_DATA *d, char *name, bool f_conn)
 {
   CHAR_DATA *ch;
 
