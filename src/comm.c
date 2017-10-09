@@ -1787,9 +1787,14 @@ nanny(DESCRIPTOR_DATA *d, char *argument)
        * Take this out SHADDAI
        */
       i=0;
-      for (i_class = 0; i_class < MAX_PC_CLASS; i_class++)
+      for (i_class = 0; i_class < 31; i_class++)
 	{
-	  char letters[11] = "abcdefghij";
+	  if(i_class == 4) {
+	    continue;
+	  }
+	  if(i_class > 8 && i_class < 28)
+	    continue;
+	  char letters[14] = "abcdefghijklmn";
 	  if (class_table[i_class]->who_name &&
 	      class_table[i_class]->who_name[0] != '\0')
 	    {
@@ -1810,12 +1815,41 @@ nanny(DESCRIPTOR_DATA *d, char *argument)
       if (is_number(arg))
 	{
 	  i = atoi(arg);
-	  for (i_class = 0; i_class < MAX_PC_CLASS; i_class++)
+
+	  // map the argument to the actual race IDs
+	  int 	c = 0;
+	  if (i == 0)
+	    c = 0; // saiyan
+	  if (i == 1)
+	    c = 1; // human
+	  if (i == 2)
+	    c = 2; // halfbreed
+	  if (i == 3)
+	    c = 3; // namek
+	  if (i == 4)
+	    c = 5; // icer
+	  if (i == 5)
+	    c = 6; // bio-android
+	  if (i == 6)
+	    c = 7; // kaio
+	  if (i == 7)
+	    c = 8; // demon
+	  if (i == 8)
+	    c = 28; // android-h
+	  if (i == 9)
+	    c = 29; // android-e
+	  if (i == 10)
+	    c = 30; // android-fm
+	  for (i_class = 0; i_class < 31; i_class++)
 	    {
+	      if(i_class > 8 && i_class < 28)
+		{
+		  continue;
+		}
 	      if (class_table[i_class]->who_name &&
 		  class_table[i_class]->who_name[0] != '\0')
 		{
-		  if (i == i_class)
+		  if (c == i_class)
 		    {
 		      ch->class =  i_class;
 		      ch->race  =  i_class;
@@ -1826,21 +1860,66 @@ nanny(DESCRIPTOR_DATA *d, char *argument)
 	}
       else
 	{
-	  char letters[11] = "abcdefghij";
-	  for (i=0;i<10;i++)
+	  char letters[14] = "abcdefghijklmn";
+	  for (i = 0; i < 14; i++)
 	    {
 	      if (arg[0] == letters[i])
 		{
-		  sprintf(buf, "%s", class_table[i]->who_name);
+		  // map the argument to the actual race IDs
+		  int 	c = i;
+		  if (i == 0)
+		    c = 0; // saiyan
+		  if (i == 1)
+		    c = 1; // human
+		  if (i == 2)
+		    c = 2; // halfbreed
+		  if (i == 3)
+		    c = 3; // namek
+		  if (i == 4)
+		    c = 5; // icer
+		  if (i == 5)
+		    c = 6; // bio-android
+		  if (i == 6)
+		    c = 7; // kaio
+		  if (i == 7)
+		    c = 8; // demon
+		  if (i == 8)
+		    c = 28; // android-h
+		  if (i == 9)
+		    c = 29; // android-e
+		  if (i == 10)
+		    c = 30; // android-fm
+		  if (!str_cmp(class_table[c]->who_name, "android-h"))
+		    {
+		      sprintf(buf, "androidh");
+		    }
+		  else if (!str_cmp(class_table[c]->who_name, "android-e"))
+		    {
+		      sprintf(buf, "androide");
+		    }
+		  else if (!str_cmp(class_table[c]->who_name, "android-fm"))
+		    {
+		      sprintf(buf, "androidfm");
+		    }
+		  else
+		    {
+		      sprintf(buf, "%s", class_table[c]->who_name);
+		    }
 		  do_help(ch, buf);
 		  return;
 		}
 	    }
 	  i=0;
 	  send_to_desc_color("\n\r&c==============================================================================&D",d);
-	  for (i_class = 0; i_class < MAX_PC_CLASS; i_class++)
+	  for (i_class = 0; i_class < 31; i_class++)
 	    {
-	      char letters[11] = "abcdefghij";
+	      if(i_class == 4)
+		{
+		  continue;
+		}
+	      if(i_class > 8 && i_class < 28)
+		continue;
+	      char letters[14] = "abcdefghijklmn";
 	      if (class_table[i_class]->who_name &&
 		  class_table[i_class]->who_name[0] != '\0')
 		{
@@ -1855,14 +1934,26 @@ nanny(DESCRIPTOR_DATA *d, char *argument)
 	  send_to_desc_color(buf, d);
 	  return;
 	}
-
-
-      if (i_class == MAX_PC_CLASS
-	  ||  !class_table[i_class]->who_name
-	  || class_table[i_class]->who_name[0] == '\0'
-	  || !str_cmp(class_table[i_class]->who_name,"unused"))
+      
+      if (i_class != 28 && i_class != 29 && i_class != 30)
 	{
-	  send_to_desc_color("&wThat's not a race.\n\rWhat IS your race? &D",d);
+	  if (i_class > 8
+	      || !class_table[i_class]->who_name
+	      || class_table[i_class]->who_name[0] == '\0'
+	      || !str_cmp(class_table[i_class]->who_name, "unused"))
+	    {
+	      send_to_desc_color("&wThat's not a race.\n\rWhat IS your race? &D", d);
+	      return;
+	    }
+	}
+
+      if (!str_cmp(class_table[i_class]->who_name, "bio-android")
+	  || !str_cmp(class_table[i_class]->who_name, "demon")
+	  || !str_cmp(class_table[i_class]->who_name, "android-e")
+	  || !str_cmp(class_table[i_class]->who_name, "android-h")
+	  || !str_cmp(class_table[i_class]->who_name, "android-fm"))
+        {
+	  send_to_desc_color("&wThat race is currently disabled.\n\rPlease select a different race. &D", d);
 	  return;
 	}
 
