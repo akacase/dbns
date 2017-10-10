@@ -1754,9 +1754,9 @@ char_update(void)
 			    && IS_AFFECTED(ch, AFF_SSJ3)
 			    && IS_AFFECTED(ch, AFF_SSJ4)
 			    && IS_AFFECTED(ch, AFF_SGOD)) {
-				act(AT_BLUE, "The earth trembles around you.",
+				act(AT_BLUE, "The earth trembles around you, your blue aura churning silently.",
 				    ch, NULL, NULL, TO_CHAR);
-				act(AT_BLUE, "The earth trembles around $n.",
+				act(AT_BLUE, "The earth trembles around $n, $s blue aura churning silently.",
 				    ch, NULL, NULL, TO_NOTVICT);
 			}
 			if (IS_AFFECTED(ch, AFF_SSJ)
@@ -1795,10 +1795,10 @@ char_update(void)
 			    && IS_AFFECTED(ch, AFF_SSJ3)
 			    && IS_AFFECTED(ch, AFF_SSJ4)) {
 				act(AT_RED,
-				    "Your aura pulses silently, your furry tail swaying through the air.",
+				    "Your aura of God Ki pulses silently.",
 				    ch, NULL, NULL, TO_CHAR);
 				act(AT_RED,
-				    "$n's aura pulses silently, $s furry tail swaying through the air.",
+				    "$n's aura of God Ki pulses silently.",
 				    ch, NULL, NULL, TO_NOTVICT);
 			}
 			if (IS_AFFECTED(ch, AFF_SNAMEK)) {

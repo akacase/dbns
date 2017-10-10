@@ -543,7 +543,7 @@ violence_update(void)
 				int form_drain = 0;
 				int form_mastery = 0;
 				
-				form_mastery = (ch->train / 15000);
+				form_mastery = (ch->train / 45000);
 				if (ch->mana <= 0) {
 					xREMOVE_BIT((ch)->affected_by, AFF_SSJ);
 					ch->pl = ch->exp;
@@ -555,7 +555,7 @@ violence_update(void)
 				}
 				if (form_mastery < 1)
 					form_mastery = 1;
-				form_drain = (100 - (form_mastery * 2));
+				form_drain = (100 - (form_mastery * 6));
 				if (form_drain < 1)
 					form_drain = 1;
 				ch->mana -= form_drain;
@@ -575,7 +575,7 @@ violence_update(void)
 				int form_drain = 0;
 				int form_mastery = 0;
 				
-				form_mastery = (ch->train / 15000);
+				form_mastery = (ch->train / 45000);
 				if (ch->mana <= 0) {
 					xREMOVE_BIT((ch)->affected_by, AFF_SSJ);
 					xREMOVE_BIT((ch)->affected_by, AFF_USSJ);
@@ -588,7 +588,7 @@ violence_update(void)
 				}
 				if (form_mastery < 1)
 					form_mastery = 1;
-				form_drain = (150 - (form_mastery * 2));
+				form_drain = (150 - (form_mastery * 6));
 				if (form_drain < 1)
 					form_drain = 1;
 				ch->mana -= form_drain;
@@ -608,7 +608,7 @@ violence_update(void)
 				int form_drain = 0;
 				int form_mastery = 0;
 				
-				form_mastery = (ch->train / 15000);
+				form_mastery = (ch->train / 45000);
 				if (ch->mana <= 0) {
 					xREMOVE_BIT((ch)->affected_by, AFF_SSJ);
 					xREMOVE_BIT((ch)->affected_by, AFF_USSJ);
@@ -622,7 +622,7 @@ violence_update(void)
 				}
 				if (form_mastery < 1)
 					form_mastery = 1;
-				form_drain = (300 - (form_mastery * 2));
+				form_drain = (300 - (form_mastery * 6));
 				if (form_drain < 1)
 					form_drain = 1;
 				ch->mana -= form_drain;
@@ -642,7 +642,7 @@ violence_update(void)
 				int form_drain = 0;
 				int form_mastery = 0;
 				
-				form_mastery = (ch->train / 15000);
+				form_mastery = (ch->train / 45000);
 				if (ch->mana <= 0) {
 					xREMOVE_BIT((ch)->affected_by, AFF_SSJ);
 					xREMOVE_BIT((ch)->affected_by, AFF_USSJ);
@@ -657,7 +657,7 @@ violence_update(void)
 				}
 				if (form_mastery < 1)
 					form_mastery = 1;
-				form_drain = (275 - (form_mastery * 2));
+				form_drain = (275 - (form_mastery * 6));
 				if (form_drain < 1)
 					form_drain = 1;
 				ch->mana -= form_drain;
@@ -677,7 +677,7 @@ violence_update(void)
 				int form_drain = 0;
 				int form_mastery = 0;
 				
-				form_mastery = (ch->train / 15000);
+				form_mastery = (ch->train / 45000);
 				if (ch->mana <= 0) {
 					xREMOVE_BIT((ch)->affected_by, AFF_SSJ);
 					xREMOVE_BIT((ch)->affected_by, AFF_USSJ);
@@ -693,7 +693,7 @@ violence_update(void)
 				}
 				if (form_mastery < 1)
 					form_mastery = 1;
-				form_drain = (500 - (form_mastery * 2));
+				form_drain = (500 - (form_mastery * 6));
 				if (form_drain < 1)
 					form_drain = 1;
 				ch->mana -= form_drain;
@@ -713,7 +713,7 @@ violence_update(void)
 				int form_drain = 0;
 				int form_mastery = 0;
 				
-				form_mastery = (ch->train / 15000);
+				form_mastery = (ch->train / 45000);
 				if (ch->mana <= 0) {
 					xREMOVE_BIT((ch)->affected_by, AFF_SSJ);
 					xREMOVE_BIT((ch)->affected_by, AFF_USSJ);
@@ -730,7 +730,7 @@ violence_update(void)
 				}
 				if (form_mastery < 1)
 					form_mastery = 1;
-				form_drain = (400 - (form_mastery * 2));
+				form_drain = (400 - (form_mastery * 6));
 				if (form_drain < 1)
 					form_drain = 1;
 				ch->mana -= form_drain;
@@ -750,7 +750,7 @@ violence_update(void)
 				int form_drain = 0;
 				int form_mastery = 0;
 				
-				form_mastery = (ch->train / 15000);
+				form_mastery = (ch->train / 45000);
 				if (ch->mana <= 0) {
 					xREMOVE_BIT((ch)->affected_by, AFF_SSJ);
 					xREMOVE_BIT((ch)->affected_by, AFF_USSJ);
@@ -768,7 +768,7 @@ violence_update(void)
 				}
 				if (form_mastery < 1)
 					form_mastery = 1;
-				form_drain = (500 - (form_mastery * 2));
+				form_drain = (500 - (form_mastery * 6));
 				if (form_drain < 1)
 					form_drain = 1;
 				ch->mana -= form_drain;
@@ -798,7 +798,7 @@ violence_update(void)
 			safemaximum = ((get_curr_int(ch) * 0.03) + 1);
 			kicontrol = get_curr_int(ch);
 			kistat = (kicontrol / 10);
-			form_mastery = (ch->train / 15000);
+			form_mastery = (ch->train / 45000);
 			plmod = (ch->pl / ch->exp);
 			if( !IS_NPC( ch ) && ch->pcdata->auraColorPowerUp > 0 )
 				auraColor = ch->pcdata->auraColorPowerUp;
@@ -897,7 +897,7 @@ violence_update(void)
 					&& !xIS_SET((ch)->affected_by, AFF_SGOD)) {
 					safemaximum = form_mastery;
 					if (ch->powerup < safemaximum) {
-						ch->pl *= 1.01;
+						ch->pl *= 1.03;
 						ch->powerup += 1;
 						act( AT_YELLOW, "Your golden aura churns with scattering rays of light.", ch, NULL, NULL, TO_CHAR );
 						act( AT_YELLOW, "$n's golden aura churns with scattering rays of light.", ch, NULL, NULL, TO_NOTVICT );
@@ -926,7 +926,7 @@ violence_update(void)
 					&& !xIS_SET((ch)->affected_by, AFF_SGOD)) {
 					safemaximum = form_mastery;
 					if (ch->powerup < safemaximum) {
-						ch->pl *= 1.01;
+						ch->pl *= 1.03;
 						ch->powerup += 1;
 						act( AT_YELLOW, "Crackling bolts of energy build in your aura, impure, but powerful as your muscles swell.", ch, NULL, NULL, TO_CHAR );
 						act( AT_YELLOW, "Crackling bolts of impure energy dance in $n's raging aura, $s muscles swelling to incredible sizes.", ch, NULL, NULL, TO_NOTVICT );
@@ -955,7 +955,7 @@ violence_update(void)
 					&& !xIS_SET((ch)->affected_by, AFF_SGOD)) {
 					safemaximum = form_mastery;
 					if (ch->powerup < safemaximum) {
-						ch->pl *= 1.01;
+						ch->pl *= 1.03;
 						ch->powerup += 1;
 						act( AT_YELLOW, "Your giant muscles tremble, emitting waves of tumultuous energy.", ch, NULL, NULL, TO_CHAR );
 						act( AT_YELLOW, "$n's giant muscles tremble, emitting waves of tumultuous energy.", ch, NULL, NULL, TO_NOTVICT );
@@ -986,7 +986,7 @@ violence_update(void)
 					&& !xIS_SET((ch)->affected_by, AFF_SGOD)) {
 					safemaximum = form_mastery;
 					if (ch->powerup < safemaximum) {
-						ch->pl *= 1.01;
+						ch->pl *= 1.03;
 						ch->powerup += 1;
 						act( AT_YELLOW, "You howl with fury as your energy builds, constant strikes of crackling energy suffusing the air.", ch, NULL, NULL, TO_CHAR );
 						act( AT_YELLOW, "$n howls with fury, constant strikes of crackling energy suffusing the air.", ch, NULL, NULL, TO_NOTVICT );
@@ -1017,7 +1017,7 @@ violence_update(void)
 					&& !xIS_SET((ch)->affected_by, AFF_SGOD)) {
 					safemaximum = form_mastery;
 					if (ch->powerup < safemaximum) {
-						ch->pl *= 1.01;
+						ch->pl *= 1.03;
 						ch->powerup += 1;
 						act( AT_YELLOW, "The colours of the world seem to fade away against the brilliant light of your aura.", ch, NULL, NULL, TO_CHAR );
 						act( AT_YELLOW, "The colours of the world seem to fade away against the brilliant light of $n's aura.", ch, NULL, NULL, TO_NOTVICT );
@@ -1049,7 +1049,7 @@ violence_update(void)
 					&& !xIS_SET((ch)->affected_by, AFF_SGOD)) {
 					safemaximum = form_mastery;
 					if (ch->powerup < safemaximum) {
-						ch->pl *= 1.01;
+						ch->pl *= 1.03;
 						ch->powerup += 1;
 						act( AT_RED, "You stand perfectly calm, your power increasing by the second.", ch, NULL, NULL, TO_CHAR );
 						act( AT_RED, "$n stands perfectly calm, and yet with every second $s power grows.", ch, NULL, NULL, TO_NOTVICT );
@@ -1080,7 +1080,7 @@ violence_update(void)
 					&& xIS_SET((ch)->affected_by, AFF_SGOD)) {
 					safemaximum = form_mastery;
 					if (ch->powerup < safemaximum) {
-						ch->pl *= 1.01;
+						ch->pl *= 1.03;
 						ch->powerup += 1;
 						act( AT_LBLUE, "Countless particles of white light merge with your aura, sending scattering rays of energy in all directions.", ch, NULL, NULL, TO_CHAR );
 						act( AT_LBLUE, "Countless particles of white light merge with $n's aura, sending scattering rays of energy in all directions.", ch, NULL, NULL, TO_NOTVICT );

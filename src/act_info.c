@@ -693,7 +693,11 @@ show_visible_affects_to_char(CHAR_DATA * victim, CHAR_DATA * ch)
 	}
 	if (IS_AFFECTED(victim, AFF_SSJ)
 	    && IS_AFFECTED(victim, AFF_USSJ)
-	    && IS_AFFECTED(victim, AFF_USSJ2)) {
+	    && IS_AFFECTED(victim, AFF_USSJ2)
+		&& !IS_AFFECTED(victim, AFF_SSJ2)
+		&& !IS_AFFECTED(victim, AFF_SSJ3)
+		&& !IS_AFFECTED(victim, AFF_SSJ4)
+		&& !IS_AFFECTED(victim, AFF_SGOD)) {
 		pager_printf_color(ch, "  &P*");
 		act(AT_YELLOW, "$N's muscles are grossly oversized.&P", ch,
 		    NULL, victim, TO_CHAR);
