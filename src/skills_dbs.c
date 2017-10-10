@@ -1733,6 +1733,12 @@ do_powerdown(CHAR_DATA * ch, char *argument)
 				ch->pcdata->eyes = ch->pcdata->orignaleyes;
 			}
 		}
+		if (xIS_SET((ch)->affected_by, AFF_POWERCHANNEL))
+			xREMOVE_BIT((ch)->affected_by, AFF_POWERCHANNEL);
+		if (xIS_SET((ch)->affected_by, AFF_OVERCHANNEL))
+			xREMOVE_BIT((ch)->affected_by, AFF_OVERCHANNEL);
+		if (xIS_SET((ch)->affected_by, AFF_SAFEMAX))
+			xREMOVE_BIT((ch)->affected_by, AFF_SAFEMAX);
 		if (xIS_SET((ch)->affected_by, AFF_USSJ))
 			xREMOVE_BIT((ch)->affected_by, AFF_USSJ);
 		if (xIS_SET((ch)->affected_by, AFF_USSJ2))
@@ -1830,10 +1836,14 @@ void do_powerup(CHAR_DATA *ch, char *argument)
 			ch->pl = ch->exp;
 			act(AT_WHITE, "You unsuppress your power.", ch, NULL, NULL, TO_CHAR);
 			act(AT_WHITE, "$n unsuppresses $s power.", ch, NULL, NULL, TO_NOTVICT);
+			return;
 		}
 	}
 	if (!str_cmp(arg, "begin")) {
-
+		if (xIS_SET((ch)->affected_by, AFF_SAFEMAX)) {
+			send_to_char("You'd have to push yourself to go beyond this level.\n\r", ch);
+			return;
+		}
 		if (xIS_SET((ch)->affected_by, AFF_POWERCHANNEL || xIS_SET((ch)->affected_by, AFF_OVERCHANNEL))) {
 			send_to_char("You're already powering up!\n\r", ch);
 			return;
@@ -6986,6 +6996,10 @@ do_split_form(CHAR_DATA * ch, char *argument)
 		send_to_char("NPC's can't do that.\n\r", ch);
 		return;
 	}
+	if (!IS_NPC(ch)) {
+		send_to_char("This ability is currently disabled.\n\r", ch);
+		return;
+	}
 	if (wearing_chip(ch)) {
 		ch_printf(ch, "You can't while you have a chip installed.\n\r");
 		return;
@@ -7080,6 +7094,10 @@ do_tri_form(CHAR_DATA * ch, char *argument)
 
 	if (IS_NPC(ch)) {
 		send_to_char("NPC's can't do that.\n\r", ch);
+		return;
+	}
+	if (!IS_NPC(ch)) {
+		send_to_char("This ability is currently disabled.\n\r", ch);
 		return;
 	}
 	if (wearing_chip(ch)) {
@@ -7184,6 +7202,10 @@ do_multi_form(CHAR_DATA * ch, char *argument)
 
 	if (IS_NPC(ch)) {
 		send_to_char("NPC's can't do that.\n\r", ch);
+		return;
+	}
+	if (!IS_NPC(ch)) {
+		send_to_char("This ability is currently disabled.\n\r", ch);
 		return;
 	}
 	if (wearing_chip(ch)) {
@@ -7385,6 +7407,10 @@ do_clone(CHAR_DATA * ch, char *argument)
 
 	if (IS_NPC(ch)) {
 		send_to_char("NPC's can't do that.\n\r", ch);
+		return;
+	}
+	if (!IS_NPC(ch)) {
+		send_to_char("This ability is currently disabled.\n\r", ch);
 		return;
 	}
 	if (wearing_chip(ch)) {

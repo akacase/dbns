@@ -777,6 +777,13 @@ violence_update(void)
 				else if (form_drain > 1)
 					ch->train += 3;
 		}
+		/* Bug Guard */
+		if (xIS_SET((ch)->affected_by, AFF_POWERCHANNEL)
+			&& xIS_SET((ch)->affected_by, AFF_SAFEMAX)) {
+				xREMOVE_BIT((ch)->affected_by, AFF_POWERCHANNEL);
+				bug( "POWERCHANNEL AND SAFEMAX ACTIVE TOGETHER, REMOVED POWERCHANNEL", 0 );
+				send_to_char("DEBUG: POWERUP AND SAFEMAX CAUGHT TOGETHER, REMOVED POWERCHANNEL\n\r", ch);
+			}
 		/* New Time-based Powerup */
 		if (xIS_SET((ch)->affected_by, AFF_POWERCHANNEL)
 			&& !xIS_SET((ch)->affected_by, AFF_KAIOKEN)
@@ -786,7 +793,6 @@ violence_update(void)
 			int kistat = 0;
 			int form_mastery = 0;
 			double plmod = 0;
-			int powMessage = 0;
 			int auraColor = AT_WHITE;
 			
 			safemaximum = ((get_curr_int(ch) * 0.03) + 1);
@@ -813,136 +819,45 @@ violence_update(void)
 						ch->pl *= 1.15;
 						ch->powerup += 1;
 						transStatApply(ch, kistat, kistat, kistat, kistat);
-						powMessage = number_range(1, 10);
-						if (powMessage = 1) {
-							if (plmod >= 25 && plmod < 29) {
-								act( AT_YELLOW, "Your hair flashes an orange-tinted gold but quickly returns to normal.", ch, NULL, NULL, TO_CHAR );
-								act( auraColor, "$n's hair flashes an orange-tinted gold but quickly returns to normal.", ch, NULL, NULL, TO_NOTVICT );
-							}
-							if (plmod >= 20 && plmod < 25) {
-								act( auraColor, "Your eyes fade to white but quickly return to normal.", ch, NULL, NULL, TO_CHAR );
-								act( auraColor, "$n's eyes fade to white but quickly return to normal.", ch, NULL, NULL, TO_NOTVICT );
-							}
-							if (plmod >= 15 && plmod < 20) {
-								act( auraColor, "The world around you feels like it's shaking apart!", ch, NULL, NULL, TO_CHAR );
-								act( auraColor, "It feels like the world is shaking apart around $n!", ch, NULL, NULL, TO_NOTVICT );
-							}
-							if (plmod >= 10 && plmod < 15) {
-								act( auraColor, "Your inner potential explodes into a display of roaring ki.", ch, NULL, NULL, TO_CHAR );
-								act( auraColor, "$n's inner potential explodes into a display of roaring ki.", ch, NULL, NULL, TO_NOTVICT );
-							}
-							if (plmod >= 5 && plmod < 10) {
-								act( auraColor, "Your aura flickers around you, only faintly visible.", ch, NULL, NULL, TO_CHAR );
-								act( auraColor, "$n's aura flickers around $m, only faintly visible.", ch, NULL, NULL, TO_NOTVICT );
-							}
-							if (plmod > 1 && plmod < 5) {
-								act( auraColor, "Your body glows faintly.", ch, NULL, NULL, TO_CHAR );
-								act( auraColor, "$n's body glows faintly.", ch, NULL, NULL, TO_NOTVICT );
+						if (plmod >= 30
+							&& ch->pcdata->learned[gsn_ssj] > 0) {
+							xSET_BIT((ch)->affected_by, AFF_SSJ);
+							act( AT_YELLOW, "Your eyes turn blue, your hair flashes blonde, and a fiery golden aura erupts around you!", ch, NULL, NULL, TO_CHAR );
+							act( AT_YELLOW, "$n's hair suddenly flashes golden blonde, transcending beyond $s normal limits into a Super Saiyan!", ch, NULL, NULL, TO_NOTVICT );
+							ch->powerup = 0;
+							ch->pl = ch->exp * 50;
+							if (!IS_NPC(ch)) {
+								ch->pcdata->eyes = 0;
+								ch->pcdata->haircolor = 3;
 							}
 						}
-						if (powMessage = 2) {
-							if (plmod >= 25 && plmod < 29) {
-								act( AT_YELLOW, "Your aura briefly flashes gold but quickly returns to normal.", ch, NULL, NULL, TO_CHAR );
-								act( auraColor, "$n's aura briefly flashes gold but quickly returns to normal.", ch, NULL, NULL, TO_NOTVICT );
-							}
-							if (plmod >= 20 && plmod < 25) {
-								act( auraColor, "Every bone and sinew in your body creaks as your muscles expand, only to come back under control.", ch, NULL, NULL, TO_CHAR );
-								act( auraColor, "$n's every bone and sinew creaks as $s muscles expand, only to quickly come back under $s control.", ch, NULL, NULL, TO_NOTVICT );
-							}
-							if (plmod >= 15 && plmod < 20) {
-								act( auraColor, "Your aura spirals upward, nearly licking the clouds.", ch, NULL, NULL, TO_CHAR );
-								act( auraColor, "$n's aura spirals upward, nearly licking the clouds.", ch, NULL, NULL, TO_NOTVICT );
-							}
-							if (plmod >= 10 && plmod < 15) {
-								act( auraColor, "Your aura churns wildly, sending debris scattering in all directions.", ch, NULL, NULL, TO_CHAR );
-								act( auraColor, "$n's aura churns wildly, sending dust and debris whipping past your face.", ch, NULL, NULL, TO_NOTVICT );
-							}
-							if (plmod >= 5 && plmod < 10) {
-								act( auraColor, "Dust and debris float ominously around you.", ch, NULL, NULL, TO_CHAR );
-								act( auraColor, "Dust and debris floats ominously around $n.", ch, NULL, NULL, TO_NOTVICT );
-							}
-							if (plmod > 1 && plmod < 5) {
-								act( auraColor, "A sudden gust of created wind ripples past you.", ch, NULL, NULL, TO_CHAR );
-								act( auraColor, "A sudden gust of created wind rushes past $n.", ch, NULL, NULL, TO_NOTVICT );
-							}
+						if (plmod >= 30
+							&& ch->pcdata->learned[gsn_ssj] <= 0) {
+							ch->pl = (ch->exp * 30);
+							act( auraColor, "The raging torrent of ki fades, but your power remains.", ch, NULL, NULL, TO_CHAR );
+							act( auraColor, "$n's raging torrent of ki fades away, but $s power remains.", ch, NULL, NULL, TO_NOTVICT );
+							xREMOVE_BIT((ch)->affected_by, AFF_POWERCHANNEL);
+							xSET_BIT((ch)->affected_by, AFF_SAFEMAX);
 						}
-						if (powMessage = 3) {
-							if (plmod >= 25 && plmod < 29) {
-								act( auraColor, "A bolt of pure energy rockets upward around you.", ch, NULL, NULL, TO_CHAR );
-								act( auraColor, "A bolt of pure energy rockets upward around $n!", ch, NULL, NULL, TO_NOTVICT );
-							}
-							if (plmod >= 20 && plmod < 25) {
-								act( auraColor, "Giant chunks of rock and debris splinter upward around you.", ch, NULL, NULL, TO_CHAR );
-								act( auraColor, "Giant chunks of rock and debris splinter upward around $n.", ch, NULL, NULL, TO_NOTVICT );
-							}
-							if (plmod >= 15 && plmod < 20) {
-								act( auraColor, "Your body glows with brilliant light.", ch, NULL, NULL, TO_CHAR );
-								act( auraColor, "$n's body glows with brilliant light.", ch, NULL, NULL, TO_NOTVICT );
-							}
-							if (plmod >= 10 && plmod < 15) {
-								act( auraColor, "Every inch of your body flashes with wild energy.", ch, NULL, NULL, TO_CHAR );
-								act( auraColor, "Every inch of $n's body flashes with wild energy.", ch, NULL, NULL, TO_NOTVICT );
-							}
-							if (plmod >= 5 && plmod < 10) {
-								act( auraColor, "Your muscles bulge, coursing with increasing power.", ch, NULL, NULL, TO_CHAR );
-								act( auraColor, "$n's muscles bulge, coursing with increasing power.", ch, NULL, NULL, TO_NOTVICT );
-							}
-							if (plmod > 1 && plmod < 5) {
-								act( auraColor, "Your ki churns gently within you.", ch, NULL, NULL, TO_CHAR );
-								act( auraColor, "$n's ki churns gently within $m.", ch, NULL, NULL, TO_NOTVICT );
-							}
+						if (plmod >= 20 && plmod < 27) {
+							act( auraColor, "Your body is barely visible amidst your vortex of ki.", ch, NULL, NULL, TO_CHAR );
+							act( auraColor, "$n's body is barely visible amidst $s vortex of ki!", ch, NULL, NULL, TO_NOTVICT );
 						}
-						if (powMessage = 4) {
-							if (plmod >= 25 && plmod < 29) {
-								act( auraColor, "You cry out, digging deep inside yourself to unleash your full potential.", ch, NULL, NULL, TO_CHAR );
-								act( auraColor, "$n cries out, digging deep inside $mself to unleash $s full potential.", ch, NULL, NULL, TO_NOTVICT );
-							}
-							if (plmod >= 20 && plmod < 25) {
-								act( auraColor, "The clouds above part from the intense pressure your body emits!", ch, NULL, NULL, TO_CHAR );
-								act( auraColor, "The clouds above part from the intense pressure $n's body emits!", ch, NULL, NULL, TO_NOTVICT );
-							}
-							if (plmod >= 15 && plmod < 20) {
-								act( auraColor, "Intense heat radiates from within you.", ch, NULL, NULL, TO_CHAR );
-								act( auraColor, "Intense heat radiates from within $n.", ch, NULL, NULL, TO_NOTVICT );
-							}
-							if (plmod >= 10 && plmod < 15) {
-								act( auraColor, "Your feet dig in beneath you, sending splintering cracks creeping outward.", ch, NULL, NULL, TO_CHAR );
-								act( auraColor, "$n's feet dig in beneath $m, sending splintering cracks creeping outward.", ch, NULL, NULL, TO_NOTVICT );
-							}
-							if (plmod >= 5 && plmod < 10) {
-								act( auraColor, "The wind howls, bursting upward around you in a whorl of projected energy.", ch, NULL, NULL, TO_CHAR );
-								act( auraColor, "A created wind howls, bursting upward around $n in a whorl of projected energy.", ch, NULL, NULL, TO_NOTVICT );
-							}
-							if (plmod > 1 && plmod < 5) {
-								act( auraColor, "A brief flash of ki dances across your body.", ch, NULL, NULL, TO_CHAR );
-								act( auraColor, "A brief flash of ki dances across $n's body.", ch, NULL, NULL, TO_NOTVICT );
-							}
+						if (plmod >= 15 && plmod < 20) {
+							act( auraColor, "Your aura spirals upward, nearly licking the clouds.", ch, NULL, NULL, TO_CHAR );
+							act( auraColor, "$n's aura spirals upward, nearly licking the clouds.", ch, NULL, NULL, TO_NOTVICT );
 						}
-						if (powMessage = 5) {
-							if (plmod >= 25 && plmod < 29) {
-								act( auraColor, "Your aura expands with incredible force.", ch, NULL, NULL, TO_CHAR );
-								act( auraColor, "$n's aura expands with incredible force!", ch, NULL, NULL, TO_NOTVICT );
-							}
-							if (plmod >= 20 && plmod < 25) {
-								act( auraColor, "Your body is barely visible amidst your vortex of ki.", ch, NULL, NULL, TO_CHAR );
-								act( auraColor, "$n's body is barely visible amidst $s vortex of ki!", ch, NULL, NULL, TO_NOTVICT );
-							}
-							if (plmod >= 15 && plmod < 20) {
-								act( auraColor, "You clench your fists tighter, struggling to maintain control.", ch, NULL, NULL, TO_CHAR );
-								act( auraColor, "$n clenches $s fists tighter, struggling to maintain control.", ch, NULL, NULL, TO_NOTVICT );
-							}
-							if (plmod >= 10 && plmod < 15) {
-								act( auraColor, "Your aura suddenly doubles in size but recedes just as quickly.", ch, NULL, NULL, TO_CHAR );
-								act( auraColor, "$n's aura suddenly doubles in size but recedes just as quickly.", ch, NULL, NULL, TO_NOTVICT );
-							}
-							if (plmod >= 5 && plmod < 10) {
-								act( auraColor, "The area shakes, trembling at your feet.", ch, NULL, NULL, TO_CHAR );
-								act( auraColor, "The area shakes, trembling at $n's feet.", ch, NULL, NULL, TO_NOTVICT );
-							}
-							if (plmod > 1 && plmod < 5) {
-								act( auraColor, "Your ki builds steadily.", ch, NULL, NULL, TO_CHAR );
-								act( auraColor, "$n's ki builds steadily within $m.", ch, NULL, NULL, TO_NOTVICT );
-							}
+						if (plmod >= 10 && plmod < 15) {
+							act( auraColor, "Your inner potential explodes into a display of roaring ki.", ch, NULL, NULL, TO_CHAR );
+							act( auraColor, "$n's inner potential explodes into a display of roaring ki.", ch, NULL, NULL, TO_NOTVICT );
+						}
+						if (plmod >= 5 && plmod < 10) {
+							act( auraColor, "Your aura flickers around you, only faintly visible.", ch, NULL, NULL, TO_CHAR );
+							act( auraColor, "$n's aura flickers around $m, only faintly visible.", ch, NULL, NULL, TO_NOTVICT );
+						}
+						if (plmod > 1 && plmod < 5) {
+							act( auraColor, "Your body glows faintly.", ch, NULL, NULL, TO_CHAR );
+							act( auraColor, "$n's body glows faintly.", ch, NULL, NULL, TO_NOTVICT );
 						}
 						if ((ch->pl >= (ch->exp * 30))
 							&& ch->pcdata->learned[gsn_ssj] > 0) {
@@ -984,15 +899,8 @@ violence_update(void)
 					if (ch->powerup < safemaximum) {
 						ch->pl *= 1.01;
 						ch->powerup += 1;
-						powMessage = number_range(1, 4);
-						if (powMessage = 1) {
-							act( AT_YELLOW, "Your golden aura churns with scattering rays of light.", ch, NULL, NULL, TO_CHAR );
-							act( AT_YELLOW, "$n's golden aura churns with scattering rays of light.", ch, NULL, NULL, TO_NOTVICT );
-						}
-						if (powMessage = 2) {
-							act( AT_YELLOW, "You grit your teeth, struggling to contain a flood of emotion.", ch, NULL, NULL, TO_CHAR );
-							act( AT_YELLOW, "$n grits $s teeth, struggling to contain $s power.", ch, NULL, NULL, TO_NOTVICT );
-						}
+						act( AT_YELLOW, "Your golden aura churns with scattering rays of light.", ch, NULL, NULL, TO_CHAR );
+						act( AT_YELLOW, "$n's golden aura churns with scattering rays of light.", ch, NULL, NULL, TO_NOTVICT );
 						if ((ch->pl / ch->exp) >= 65
 							&& ch->pcdata->learned[gsn_ussj] > 0) {
 							xSET_BIT((ch)->affected_by, AFF_USSJ);
