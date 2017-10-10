@@ -550,7 +550,7 @@ violence_update(void)
 				form_drain = (100 - (form_mastery * 2));
 				if (form_drain < 1)
 					form_drain = 1;
-				if (ch->mana - form_drain < 0)
+				if ((ch->mana - form_drain) < 0)
 					ch->mana = 0;
 				else {
 					ch->mana -= form_drain;

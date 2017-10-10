@@ -9639,12 +9639,12 @@ do_godset(CHAR_DATA * ch, char *argument)
 		send_to_pager_color("&wOk.\n\r", ch);
 		return;
 	}
-	/* Set a PC's train points */
+	/* Set a PC's mastery points */
 	if (!str_cmp(arg2, "train")) {
 		if (!can_mmodify(ch, victim))
 			return;
-		if (value < 0 || value > 360) {
-			send_to_char("Train range is 0 to 360 sessions.\n\r", ch);
+		if (value < 0) {
+			send_to_char("Mastery range must be greater than 0.\n\r", ch);
 			return;
 		}
 		victim->train = value;
@@ -10091,8 +10091,8 @@ do_godstat(CHAR_DATA * ch, char *argument)
 	    "-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n\r");
 
 	pager_printf_color(ch,
-	    "                  &YLifeforce&C: [&Y%3d&C]%c             AutoZeni: (&W%c&C)    AutoExit: (&W%c&C)\n\r",
-	    victim->practice, victim->max_prac, victim->hit, '%',
+	    "                  &YLifeforce&C: [&Y%3d&C]             AutoZeni: (&W%c&C)    AutoExit: (&W%c&C)\n\r",
+	    victim->hit,
 	    xIS_SET(victim->act, PLR_AUTOGOLD) ? 'X' : ' ',
 	    xIS_SET(victim->act, PLR_AUTOEXIT) ? 'X' : ' ');
 
@@ -10102,19 +10102,19 @@ do_godstat(CHAR_DATA * ch, char *argument)
 	if (victim->max_mana < 1000)
 		pager_printf_color(ch,
 		    "MASTERY: &G%2d&C       &YEnergy&C: [&Y%3s&C/&Y%-3s&C]           Sparing: (&W%c&C)    AutoLoot: (&W%c&C)\n\r",
-		    victim->train, victim->max_train, buf, buf2,
+		    victim->train, buf, buf2,
 		    xIS_SET(victim->act, PLR_SPAR) ? 'X' : ' ',
 		    xIS_SET(victim->act, PLR_AUTOLOOT) ? 'X' : ' ');
 	else if (victim->max_mana < 10000)
 		pager_printf_color(ch,
 		    "MASTERY: &G%2d&C       &YEnergy&C: [&Y%5s&C/&Y%-5s&C]       Sparing: (&W%c&C)    AutoLoot: (&W%c&C)\n\r",
-		    victim->train, victim->max_train, buf, buf2,
+		    victim->train, buf, buf2,
 		    xIS_SET(victim->act, PLR_SPAR) ? 'X' : ' ',
 		    xIS_SET(victim->act, PLR_AUTOLOOT) ? 'X' : ' ');
 	else
 		pager_printf_color(ch,
 		    "MASTERY: &G%2d&C       &YEnergy&C: [&Y%6s&C/&Y%-6s&C]     Sparing: (&W%c&C)    AutoLoot: (&W%c&C)\n\r",
-		    victim->train, victim->max_train, buf, buf2,
+		    victim->train, buf, buf2,
 		    xIS_SET(victim->act, PLR_SPAR) ? 'X' : ' ',
 		    xIS_SET(victim->act, PLR_AUTOLOOT) ? 'X' : ' ');
 
