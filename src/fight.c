@@ -544,23 +544,7 @@ violence_update(void)
 				int form_mastery = 0;
 				
 				form_mastery = (ch->train / 15000);
-				if (form_mastery < 1) {
-					form_mastery = 1;
-				}
-				form_drain = (100 - (form_mastery * 2));
-				if (form_drain < 1)
-					form_drain = 1;
-				if ((ch->mana - form_drain) < 0)
-					ch->mana = 0;
-				else {
-					ch->mana -= form_drain;
-				}
-				if (form_drain < 46)
-					ch->train += 1;
-				else {
-					ch->train += 3;
-				}
-				if (ch->mana = 0) {
+				if (ch->mana <= 0) {
 					xREMOVE_BIT((ch)->affected_by, AFF_SSJ);
 					ch->pl = ch->exp;
 					ch->powerup = 0;
@@ -569,6 +553,16 @@ violence_update(void)
 					ch->pcdata->eyes = ch->pcdata->orignaleyes;
 					send_to_char("DEBUG: SSJ REMOVED, NOT ENOUGH KI\n\r", ch);
 				}
+				if (form_mastery < 1)
+					form_mastery = 1;
+				form_drain = (100 - (form_mastery * 2));
+				if (form_drain < 1)
+					form_drain = 1;
+				ch->mana -= form_drain;
+				if (form_drain < 46)
+					ch->train += 1;
+				else if (form_drain > 46)
+					ch->train += 3;
 		}
 		if (!IS_NPC(ch)
 			&& xIS_SET((ch)->affected_by, AFF_SSJ)
@@ -582,23 +576,7 @@ violence_update(void)
 				int form_mastery = 0;
 				
 				form_mastery = (ch->train / 15000);
-				if (form_mastery < 1) {
-					form_mastery = 1;
-				}
-				form_drain = (150 - (form_mastery * 2));
-				if (form_drain < 1)
-					form_drain = 1;
-				if (ch->mana - form_drain < 0)
-					ch->mana = 0;
-				else {
-					ch->mana -= form_drain;
-				}
-				if (form_drain < 38)
-					ch->train += 1;
-				else {
-					ch->train += 3;
-				}
-				if (ch->mana = 0) {
+				if (ch->mana <= 0) {
 					xREMOVE_BIT((ch)->affected_by, AFF_SSJ);
 					xREMOVE_BIT((ch)->affected_by, AFF_USSJ);
 					ch->pl = ch->exp;
@@ -608,6 +586,16 @@ violence_update(void)
 					ch->pcdata->eyes = ch->pcdata->orignaleyes;
 					send_to_char("DEBUG: SSJ REMOVED, NOT ENOUGH KI\n\r", ch);
 				}
+				if (form_mastery < 1)
+					form_mastery = 1;
+				form_drain = (150 - (form_mastery * 2));
+				if (form_drain < 1)
+					form_drain = 1;
+				ch->mana -= form_drain;
+				if (form_drain < 38)
+					ch->train += 1;
+				else if (form_drain > 38)
+					ch->train += 3;
 		}
 		if (!IS_NPC(ch)
 			&& xIS_SET((ch)->affected_by, AFF_SSJ)
@@ -621,23 +609,7 @@ violence_update(void)
 				int form_mastery = 0;
 				
 				form_mastery = (ch->train / 15000);
-				if (form_mastery < 1) {
-					form_mastery = 1;
-				}
-				form_drain = (300 - (form_mastery * 2));
-				if (form_drain < 1)
-					form_drain = 1;
-				if (ch->mana - form_drain < 0)
-					ch->mana = 0;
-				else {
-					ch->mana -= form_drain;
-				}
-				if (form_drain < 130)
-					ch->train += 1;
-				else {
-					ch->train += 3;
-				}
-				if (ch->mana = 0) {
+				if (ch->mana <= 0) {
 					xREMOVE_BIT((ch)->affected_by, AFF_SSJ);
 					xREMOVE_BIT((ch)->affected_by, AFF_USSJ);
 					xREMOVE_BIT((ch)->affected_by, AFF_USSJ2);
@@ -648,6 +620,16 @@ violence_update(void)
 					ch->pcdata->eyes = ch->pcdata->orignaleyes;
 					send_to_char("DEBUG: SSJ REMOVED, NOT ENOUGH KI\n\r", ch);
 				}
+				if (form_mastery < 1)
+					form_mastery = 1;
+				form_drain = (300 - (form_mastery * 2));
+				if (form_drain < 1)
+					form_drain = 1;
+				ch->mana -= form_drain;
+				if (form_drain < 130)
+					ch->train += 1;
+				else if (form_drain > 130)
+					ch->train += 3;
 		}
 		if (!IS_NPC(ch)
 			&& xIS_SET((ch)->affected_by, AFF_SSJ)
@@ -661,23 +643,7 @@ violence_update(void)
 				int form_mastery = 0;
 				
 				form_mastery = (ch->train / 15000);
-				if (form_mastery < 1) {
-					form_mastery = 1;
-				}
-				form_drain = (275 - (form_mastery * 2));
-				if (form_drain < 1)
-					form_drain = 1;
-				if (ch->mana - form_drain < 0)
-					ch->mana = 0;
-				else {
-					ch->mana -= form_drain;
-				}
-				if (form_drain < 63)
-					ch->train += 1;
-				else {
-					ch->train += 3;
-				}
-				if (ch->mana = 0) {
+				if (ch->mana <= 0) {
 					xREMOVE_BIT((ch)->affected_by, AFF_SSJ);
 					xREMOVE_BIT((ch)->affected_by, AFF_USSJ);
 					xREMOVE_BIT((ch)->affected_by, AFF_USSJ2);
@@ -689,6 +655,16 @@ violence_update(void)
 					ch->pcdata->eyes = ch->pcdata->orignaleyes;
 					send_to_char("DEBUG: SSJ REMOVED, NOT ENOUGH KI\n\r", ch);
 				}
+				if (form_mastery < 1)
+					form_mastery = 1;
+				form_drain = (275 - (form_mastery * 2));
+				if (form_drain < 1)
+					form_drain = 1;
+				ch->mana -= form_drain;
+				if (form_drain < 63)
+					ch->train += 1;
+				else if (form_drain > 63)
+					ch->train += 3;
 		}
 		if (!IS_NPC(ch)
 			&& xIS_SET((ch)->affected_by, AFF_SSJ)
@@ -702,23 +678,7 @@ violence_update(void)
 				int form_mastery = 0;
 				
 				form_mastery = (ch->train / 15000);
-				if (form_mastery < 1) {
-					form_mastery = 1;
-				}
-				form_drain = (500 - (form_mastery * 2));
-				if (form_drain < 1)
-					form_drain = 1;
-				if (ch->mana - form_drain < 0)
-					ch->mana = 0;
-				else {
-					ch->mana -= form_drain;
-				}
-				if (form_drain < 246)
-					ch->train += 1;
-				else {
-					ch->train += 3;
-				}
-				if (ch->mana = 0) {
+				if (ch->mana <= 0) {
 					xREMOVE_BIT((ch)->affected_by, AFF_SSJ);
 					xREMOVE_BIT((ch)->affected_by, AFF_USSJ);
 					xREMOVE_BIT((ch)->affected_by, AFF_USSJ2);
@@ -731,6 +691,16 @@ violence_update(void)
 					ch->pcdata->eyes = ch->pcdata->orignaleyes;
 					send_to_char("DEBUG: SSJ REMOVED, NOT ENOUGH KI\n\r", ch);
 				}
+				if (form_mastery < 1)
+					form_mastery = 1;
+				form_drain = (500 - (form_mastery * 2));
+				if (form_drain < 1)
+					form_drain = 1;
+				ch->mana -= form_drain;
+				if (form_drain < 246)
+					ch->train += 1;
+				else if (form_drain > 246)
+					ch->train += 3;
 		}
 		if (!IS_NPC(ch)
 			&& xIS_SET((ch)->affected_by, AFF_SSJ)
@@ -744,23 +714,7 @@ violence_update(void)
 				int form_mastery = 0;
 				
 				form_mastery = (ch->train / 15000);
-				if (form_mastery < 1) {
-					form_mastery = 1;
-				}
-				form_drain = (400 - (form_mastery * 2));
-				if (form_drain < 1)
-					form_drain = 1;
-				if (ch->mana - form_drain < 0)
-					ch->mana = 0;
-				else {
-					ch->mana -= form_drain;
-				}
-				if (form_drain < 124)
-					ch->train += 1;
-				else {
-					ch->train += 3;
-				}
-				if (ch->mana = 0) {
+				if (ch->mana <= 0) {
 					xREMOVE_BIT((ch)->affected_by, AFF_SSJ);
 					xREMOVE_BIT((ch)->affected_by, AFF_USSJ);
 					xREMOVE_BIT((ch)->affected_by, AFF_USSJ2);
@@ -774,6 +728,16 @@ violence_update(void)
 					ch->pcdata->eyes = ch->pcdata->orignaleyes;
 					send_to_char("DEBUG: SSJ REMOVED, NOT ENOUGH KI\n\r", ch);
 				}
+				if (form_mastery < 1)
+					form_mastery = 1;
+				form_drain = (400 - (form_mastery * 2));
+				if (form_drain < 1)
+					form_drain = 1;
+				ch->mana -= form_drain;
+				if (form_drain < 124)
+					ch->train += 1;
+				else if (form_drain > 124)
+					ch->train += 3;
 		}
 		if (!IS_NPC(ch)
 			&& xIS_SET((ch)->affected_by, AFF_SSJ)
@@ -787,23 +751,7 @@ violence_update(void)
 				int form_mastery = 0;
 				
 				form_mastery = (ch->train / 15000);
-				if (form_mastery < 1) {
-					form_mastery = 1;
-				}
-				form_drain = (500 - (form_mastery * 2));
-				if (form_drain < 1)
-					form_drain = 1;
-				if (ch->mana - form_drain < 0)
-					ch->mana = 0;
-				else {
-					ch->mana -= form_drain;
-				}
-				if (form_drain = 1)
-					ch->train += 1;
-				else {
-					ch->train += 3;
-				}
-				if (ch->mana = 0) {
+				if (ch->mana <= 0) {
 					xREMOVE_BIT((ch)->affected_by, AFF_SSJ);
 					xREMOVE_BIT((ch)->affected_by, AFF_USSJ);
 					xREMOVE_BIT((ch)->affected_by, AFF_USSJ2);
@@ -818,6 +766,16 @@ violence_update(void)
 					ch->pcdata->eyes = ch->pcdata->orignaleyes;
 					send_to_char("DEBUG: SSJ REMOVED, NOT ENOUGH KI\n\r", ch);
 				}
+				if (form_mastery < 1)
+					form_mastery = 1;
+				form_drain = (500 - (form_mastery * 2));
+				if (form_drain < 1)
+					form_drain = 1;
+				ch->mana -= form_drain;
+				if (form_drain = 1)
+					ch->train += 1;
+				else if (form_drain > 1)
+					ch->train += 3;
 		}
 		/* New Time-based Powerup */
 		if (xIS_SET((ch)->affected_by, AFF_POWERCHANNEL)
