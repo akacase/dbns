@@ -2813,6 +2813,8 @@ struct pc_data {
 	COUNCIL_DATA *council;
 	AREA_DATA *area;
 	DEITY_DATA *deity;
+	int i_idle;
+	int p_idle[5];
 	char   *homepage;
 	char   *clan_name;
 	char   *council_name;
@@ -5416,7 +5418,8 @@ args((const char *argument, int channel,
 /* comm.c */
 /* logging */
 	void 	logmsg(int, const char *,...);
-	void 	close_socket(DESCRIPTOR_DATA * dclose, bool force, bool clear);
+
+	void close_socket args((DESCRIPTOR_DATA *dclose, bool force));
 	void write_to_buffer args((DESCRIPTOR_DATA * d, const char *txt,
 		int 	length));
 	void send_to_char args((const char *txt, CHAR_DATA * ch));
