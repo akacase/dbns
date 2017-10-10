@@ -543,7 +543,7 @@ violence_update(void)
 				int form_drain = 0;
 				int form_mastery = 0;
 				
-				form_mastery = (ch->train / 10000);
+				form_mastery = (ch->train / 15000);
 				if (form_mastery < 1) {
 					form_mastery = 1;
 				}
@@ -554,7 +554,11 @@ violence_update(void)
 					ch->mana = 0;
 				else {
 					ch->mana -= form_drain;
-					ch->train += 2;
+				}
+				if (form_drain < 46)
+					ch->train += 1;
+				else {
+					ch->train += 3;
 				}
 				if (ch->mana = 0) {
 					xREMOVE_BIT((ch)->affected_by, AFF_SSJ);
@@ -577,7 +581,7 @@ violence_update(void)
 				int form_drain = 0;
 				int form_mastery = 0;
 				
-				form_mastery = (ch->train / 10000);
+				form_mastery = (ch->train / 15000);
 				if (form_mastery < 1) {
 					form_mastery = 1;
 				}
@@ -588,7 +592,11 @@ violence_update(void)
 					ch->mana = 0;
 				else {
 					ch->mana -= form_drain;
-					ch->train += 2;
+				}
+				if (form_drain < 38)
+					ch->train += 1;
+				else {
+					ch->train += 3;
 				}
 				if (ch->mana = 0) {
 					xREMOVE_BIT((ch)->affected_by, AFF_SSJ);
@@ -612,7 +620,7 @@ violence_update(void)
 				int form_drain = 0;
 				int form_mastery = 0;
 				
-				form_mastery = (ch->train / 10000);
+				form_mastery = (ch->train / 15000);
 				if (form_mastery < 1) {
 					form_mastery = 1;
 				}
@@ -623,7 +631,11 @@ violence_update(void)
 					ch->mana = 0;
 				else {
 					ch->mana -= form_drain;
-					ch->train += 2;
+				}
+				if (form_drain < 130)
+					ch->train += 1;
+				else {
+					ch->train += 3;
 				}
 				if (ch->mana = 0) {
 					xREMOVE_BIT((ch)->affected_by, AFF_SSJ);
@@ -648,18 +660,22 @@ violence_update(void)
 				int form_drain = 0;
 				int form_mastery = 0;
 				
-				form_mastery = (ch->train / 10000);
+				form_mastery = (ch->train / 15000);
 				if (form_mastery < 1) {
 					form_mastery = 1;
 				}
-				form_drain = (200 - (form_mastery * 2));
+				form_drain = (275 - (form_mastery * 2));
 				if (form_drain < 1)
 					form_drain = 1;
 				if (ch->mana - form_drain < 0)
 					ch->mana = 0;
 				else {
 					ch->mana -= form_drain;
-					ch->train += 2;
+				}
+				if (form_drain < 63)
+					ch->train += 1;
+				else {
+					ch->train += 3;
 				}
 				if (ch->mana = 0) {
 					xREMOVE_BIT((ch)->affected_by, AFF_SSJ);
@@ -685,18 +701,22 @@ violence_update(void)
 				int form_drain = 0;
 				int form_mastery = 0;
 				
-				form_mastery = (ch->train / 10000);
+				form_mastery = (ch->train / 15000);
 				if (form_mastery < 1) {
 					form_mastery = 1;
 				}
-				form_drain = (300 - (form_mastery * 2));
+				form_drain = (500 - (form_mastery * 2));
 				if (form_drain < 1)
 					form_drain = 1;
 				if (ch->mana - form_drain < 0)
 					ch->mana = 0;
 				else {
 					ch->mana -= form_drain;
-					ch->train += 2;
+				}
+				if (form_drain < 246)
+					ch->train += 1;
+				else {
+					ch->train += 3;
 				}
 				if (ch->mana = 0) {
 					xREMOVE_BIT((ch)->affected_by, AFF_SSJ);
@@ -723,7 +743,7 @@ violence_update(void)
 				int form_drain = 0;
 				int form_mastery = 0;
 				
-				form_mastery = (ch->train / 10000);
+				form_mastery = (ch->train / 15000);
 				if (form_mastery < 1) {
 					form_mastery = 1;
 				}
@@ -734,7 +754,11 @@ violence_update(void)
 					ch->mana = 0;
 				else {
 					ch->mana -= form_drain;
-					ch->train += 2;
+				}
+				if (form_drain < 124)
+					ch->train += 1;
+				else {
+					ch->train += 3;
 				}
 				if (ch->mana = 0) {
 					xREMOVE_BIT((ch)->affected_by, AFF_SSJ);
@@ -762,7 +786,7 @@ violence_update(void)
 				int form_drain = 0;
 				int form_mastery = 0;
 				
-				form_mastery = (ch->train / 10000);
+				form_mastery = (ch->train / 15000);
 				if (form_mastery < 1) {
 					form_mastery = 1;
 				}
@@ -773,7 +797,11 @@ violence_update(void)
 					ch->mana = 0;
 				else {
 					ch->mana -= form_drain;
-					ch->train += 2;
+				}
+				if (form_drain = 1)
+					ch->train += 1;
+				else {
+					ch->train += 3;
 				}
 				if (ch->mana = 0) {
 					xREMOVE_BIT((ch)->affected_by, AFF_SSJ);
@@ -799,21 +827,26 @@ violence_update(void)
 			int	kicontrol = 0;
 			int kistat = 0;
 			int form_mastery = 0;
+			double plmod = 0;
+			int powMessage = 0;
+			int auraColor = AT_WHITE;
 			
 			safemaximum = ((get_curr_int(ch) * 0.03) + 1);
 			kicontrol = get_curr_int(ch);
 			kistat = (kicontrol / 10);
-			form_mastery = (ch->train / 10000);
-			if (form_mastery < 1) {
+			form_mastery = (ch->train / 15000);
+			plmod = (ch->pl / ch->exp);
+			if( !IS_NPC( ch ) && ch->pcdata->auraColorPowerUp > 0 )
+				auraColor = ch->pcdata->auraColorPowerUp;
+			if (form_mastery < 1)
 				form_mastery = 1;
-			}
 			if (ch->position < POS_STANDING) {
 				xREMOVE_BIT((ch)->affected_by, AFF_POWERCHANNEL);
-				send_to_char("DEBUG: CAN'T POWERUP IF YOU'RE NOT STANDING, YA DINGIS\n\r", ch);
+				send_to_char("You must stand if you wish to power up.\n\r", ch);
 			}
 			if (!xIS_SET((ch)->affected_by, AFF_KAIOKEN)) {
 				xREMOVE_BIT((ch)->affected_by, AFF_POWERCHANNEL);
-				send_to_char("DEBUG: CAN'T POWERUP IN KAIOKEN\n\r", ch);
+				send_to_char("Your energy is too unstable while using Kaioken.\n\r", ch);
 			}
 			if (is_saiyan(ch) || is_hb(ch)) {
 				if (!xIS_SET((ch)->affected_by, AFF_SSJ)) {
@@ -822,11 +855,142 @@ violence_update(void)
 						ch->pl *= 1.15;
 						ch->powerup += 1;
 						transStatApply(ch, kistat, kistat, kistat, kistat);
-						send_to_char("DEBUG: PL UP 15%\n\r", ch);
+						powMessage = number_range(1, 10);
+						if (powMessage = 1) {
+							if (plmod >= 25 && plmod < 29) {
+								act( AT_YELLOW, "Your hair flashes an orange-tinted gold but quickly returns to normal.", ch, NULL, NULL, TO_CHAR );
+								act( auraColor, "$n's hair flashes an orange-tinted gold but quickly returns to normal.", ch, NULL, NULL, TO_NOTVICT );
+							}
+							if (plmod >= 20 && plmod < 25) {
+								act( auraColor, "Your eyes fade to white but quickly return to normal.", ch, NULL, NULL, TO_CHAR );
+								act( auraColor, "$n's eyes fade to white but quickly return to normal.", ch, NULL, NULL, TO_NOTVICT );
+							}
+							if (plmod >= 15 && plmod < 20) {
+								act( auraColor, "The world around you feels like it's shaking apart!", ch, NULL, NULL, TO_CHAR );
+								act( auraColor, "It feels like the world is shaking apart around $n!", ch, NULL, NULL, TO_NOTVICT );
+							}
+							if (plmod >= 10 && plmod < 15) {
+								act( auraColor, "Your inner potential explodes into a display of roaring ki.", ch, NULL, NULL, TO_CHAR );
+								act( auraColor, "$n's inner potential explodes into a display of roaring ki.", ch, NULL, NULL, TO_NOTVICT );
+							}
+							if (plmod >= 5 && plmod < 10) {
+								act( auraColor, "Your aura flickers around you, only faintly visible.", ch, NULL, NULL, TO_CHAR );
+								act( auraColor, "$n's aura flickers around $m, only faintly visible.", ch, NULL, NULL, TO_NOTVICT );
+							}
+							if (plmod > 1 && plmod < 5) {
+								act( auraColor, "Your body glows faintly.", ch, NULL, NULL, TO_CHAR );
+								act( auraColor, "$n's body glows faintly.", ch, NULL, NULL, TO_NOTVICT );
+							}
+						}
+						if (powMessage = 2) {
+							if (plmod >= 25 && plmod < 29) {
+								act( AT_YELLOW, "Your aura briefly flashes gold but quickly returns to normal.", ch, NULL, NULL, TO_CHAR );
+								act( auraColor, "$n's aura briefly flashes gold but quickly returns to normal.", ch, NULL, NULL, TO_NOTVICT );
+							}
+							if (plmod >= 20 && plmod < 25) {
+								act( auraColor, "Every bone and sinew in your body creaks as your muscles expand, only to come back under control.", ch, NULL, NULL, TO_CHAR );
+								act( auraColor, "$n's every bone and sinew creaks as $s muscles expand, only to quickly come back under $s control.", ch, NULL, NULL, TO_NOTVICT );
+							}
+							if (plmod >= 15 && plmod < 20) {
+								act( auraColor, "Your aura spirals upward, nearly licking the clouds.", ch, NULL, NULL, TO_CHAR );
+								act( auraColor, "$n's aura spirals upward, nearly licking the clouds.", ch, NULL, NULL, TO_NOTVICT );
+							}
+							if (plmod >= 10 && plmod < 15) {
+								act( auraColor, "Your aura churns wildly, sending debris scattering in all directions.", ch, NULL, NULL, TO_CHAR );
+								act( auraColor, "$n's aura churns wildly, sending dust and debris whipping past your face.", ch, NULL, NULL, TO_NOTVICT );
+							}
+							if (plmod >= 5 && plmod < 10) {
+								act( auraColor, "Dust and debris float ominously around you.", ch, NULL, NULL, TO_CHAR );
+								act( auraColor, "Dust and debris floats ominously around $n.", ch, NULL, NULL, TO_NOTVICT );
+							}
+							if (plmod > 1 && plmod < 5) {
+								act( auraColor, "A sudden gust of created wind ripples past you.", ch, NULL, NULL, TO_CHAR );
+								act( auraColor, "A sudden gust of created wind rushes past $n.", ch, NULL, NULL, TO_NOTVICT );
+							}
+						}
+						if (powMessage = 3) {
+							if (plmod >= 25 && plmod < 29) {
+								act( auraColor, "A bolt of pure energy rockets upward around you.", ch, NULL, NULL, TO_CHAR );
+								act( auraColor, "A bolt of pure energy rockets upward around $n!", ch, NULL, NULL, TO_NOTVICT );
+							}
+							if (plmod >= 20 && plmod < 25) {
+								act( auraColor, "Giant chunks of rock and debris splinter upward around you.", ch, NULL, NULL, TO_CHAR );
+								act( auraColor, "Giant chunks of rock and debris splinter upward around $n.", ch, NULL, NULL, TO_NOTVICT );
+							}
+							if (plmod >= 15 && plmod < 20) {
+								act( auraColor, "Your body glows with brilliant light.", ch, NULL, NULL, TO_CHAR );
+								act( auraColor, "$n's body glows with brilliant light.", ch, NULL, NULL, TO_NOTVICT );
+							}
+							if (plmod >= 10 && plmod < 15) {
+								act( auraColor, "Every inch of your body flashes with wild energy.", ch, NULL, NULL, TO_CHAR );
+								act( auraColor, "Every inch of $n's body flashes with wild energy.", ch, NULL, NULL, TO_NOTVICT );
+							}
+							if (plmod >= 5 && plmod < 10) {
+								act( auraColor, "Your muscles bulge, coursing with increasing power.", ch, NULL, NULL, TO_CHAR );
+								act( auraColor, "$n's muscles bulge, coursing with increasing power.", ch, NULL, NULL, TO_NOTVICT );
+							}
+							if (plmod > 1 && plmod < 5) {
+								act( auraColor, "Your ki churns gently within you.", ch, NULL, NULL, TO_CHAR );
+								act( auraColor, "$n's ki churns gently within $m.", ch, NULL, NULL, TO_NOTVICT );
+							}
+						}
+						if (powMessage = 4) {
+							if (plmod >= 25 && plmod < 29) {
+								act( auraColor, "You cry out, digging deep inside yourself to unleash your full potential.", ch, NULL, NULL, TO_CHAR );
+								act( auraColor, "$n cries out, digging deep inside $mself to unleash $s full potential.", ch, NULL, NULL, TO_NOTVICT );
+							}
+							if (plmod >= 20 && plmod < 25) {
+								act( auraColor, "The clouds above part from the intense pressure your body emits!", ch, NULL, NULL, TO_CHAR );
+								act( auraColor, "The clouds above part from the intense pressure $n's body emits!", ch, NULL, NULL, TO_NOTVICT );
+							}
+							if (plmod >= 15 && plmod < 20) {
+								act( auraColor, "Intense heat radiates from within you.", ch, NULL, NULL, TO_CHAR );
+								act( auraColor, "Intense heat radiates from within $n.", ch, NULL, NULL, TO_NOTVICT );
+							}
+							if (plmod >= 10 && plmod < 15) {
+								act( auraColor, "Your feet dig in beneath you, sending splintering cracks creeping outward.", ch, NULL, NULL, TO_CHAR );
+								act( auraColor, "$n's feet dig in beneath $m, sending splintering cracks creeping outward.", ch, NULL, NULL, TO_NOTVICT );
+							}
+							if (plmod >= 5 && plmod < 10) {
+								act( auraColor, "The wind howls, bursting upward around you in a whorl of projected energy.", ch, NULL, NULL, TO_CHAR );
+								act( auraColor, "A created wind howls, bursting upward around $n in a whorl of projected energy.", ch, NULL, NULL, TO_NOTVICT );
+							}
+							if (plmod > 1 && plmod < 5) {
+								act( auraColor, "A brief flash of ki dances across your body.", ch, NULL, NULL, TO_CHAR );
+								act( auraColor, "A brief flash of ki dances across $n's body.", ch, NULL, NULL, TO_NOTVICT );
+							}
+						}
+						if (powMessage = 5) {
+							if (plmod >= 25 && plmod < 29) {
+								act( auraColor, "Your aura expands with incredible force.", ch, NULL, NULL, TO_CHAR );
+								act( auraColor, "$n's aura expands with incredible force!", ch, NULL, NULL, TO_NOTVICT );
+							}
+							if (plmod >= 20 && plmod < 25) {
+								act( auraColor, "Your body is barely visible amidst your vortex of ki.", ch, NULL, NULL, TO_CHAR );
+								act( auraColor, "$n's body is barely visible amidst $s vortex of ki!", ch, NULL, NULL, TO_NOTVICT );
+							}
+							if (plmod >= 15 && plmod < 20) {
+								act( auraColor, "You clench your fists tighter, struggling to maintain control.", ch, NULL, NULL, TO_CHAR );
+								act( auraColor, "$n clenches $s fists tighter, struggling to maintain control.", ch, NULL, NULL, TO_NOTVICT );
+							}
+							if (plmod >= 10 && plmod < 15) {
+								act( auraColor, "Your aura suddenly doubles in size but recedes just as quickly.", ch, NULL, NULL, TO_CHAR );
+								act( auraColor, "$n's aura suddenly doubles in size but recedes just as quickly.", ch, NULL, NULL, TO_NOTVICT );
+							}
+							if (plmod >= 5 && plmod < 10) {
+								act( auraColor, "The area shakes, trembling at your feet.", ch, NULL, NULL, TO_CHAR );
+								act( auraColor, "The area shakes, trembling at $n's feet.", ch, NULL, NULL, TO_NOTVICT );
+							}
+							if (plmod > 1 && plmod < 5) {
+								act( auraColor, "Your ki builds steadily.", ch, NULL, NULL, TO_CHAR );
+								act( auraColor, "$n's ki builds steadily within $m.", ch, NULL, NULL, TO_NOTVICT );
+							}
+						}
 						if ((ch->pl >= (ch->exp * 30))
 							&& ch->pcdata->learned[gsn_ssj] > 0) {
 							xSET_BIT((ch)->affected_by, AFF_SSJ);
-							send_to_char("DEBUG: INSERT SPARKLY GOING SSJ EFFECTS HERE, OOoOOoOO\n\r", ch);
+							act( AT_YELLOW, "Your eyes turn blue, your hair flashes blonde, and a fiery golden aura erupts around you!", ch, NULL, NULL, TO_CHAR );
+							act( AT_YELLOW, "$n's hair suddenly flashes golden blonde, transcending beyond $s normal limits into a Super Saiyan!", ch, NULL, NULL, TO_NOTVICT );
 							ch->powerup = 0;
 							ch->pl = ch->exp * 50;
 							if (!IS_NPC(ch)) {
@@ -837,7 +1001,8 @@ violence_update(void)
 						if ((ch->pl / ch->exp) >= 30
 							&& ch->pcdata->learned[gsn_ssj] <= 0) {
 							ch->pl = (ch->exp * 30);
-							send_to_char("DEBUG: NO SSJ, NO ENTRAR. 30X MAX\n\r", ch);
+							act( auraColor, "The raging torrent of ki fades, but your power remains.", ch, NULL, NULL, TO_CHAR );
+							act( auraColor, "$n's raging torrent of ki fades away, but $s power remains.", ch, NULL, NULL, TO_NOTVICT );
 							xREMOVE_BIT((ch)->affected_by, AFF_POWERCHANNEL);
 							xSET_BIT((ch)->affected_by, AFF_SAFEMAX);
 						}
@@ -846,7 +1011,8 @@ violence_update(void)
 						ch->powerup = safemaximum;
 						xREMOVE_BIT((ch)->affected_by, AFF_POWERCHANNEL);
 						xSET_BIT((ch)->affected_by, AFF_SAFEMAX);
-						send_to_char("DEBUG: SAFEMAX REACHED%\n\r", ch);
+						act( auraColor, "Having reached your limit, you stop powering up. Going any further would be dangerous.", ch, NULL, NULL, TO_CHAR );
+						act( auraColor, "$n reaches $s limit and stops powering up.", ch, NULL, NULL, TO_NOTVICT );
 					}
 				}
 				if (xIS_SET((ch)->affected_by, AFF_SSJ)
@@ -860,10 +1026,20 @@ violence_update(void)
 					if (ch->powerup < safemaximum) {
 						ch->pl *= 1.01;
 						ch->powerup += 1;
+						powMessage = number_range(1, 4);
+						if (powMessage = 1) {
+							act( AT_YELLOW, "Your golden aura churns with scattering rays of light.", ch, NULL, NULL, TO_CHAR );
+							act( AT_YELLOW, "$n's golden aura churns with scattering rays of light.", ch, NULL, NULL, TO_NOTVICT );
+						}
+						if (powMessage = 2) {
+							act( AT_YELLOW, "You grit your teeth, struggling to contain a flood of emotion.", ch, NULL, NULL, TO_CHAR );
+							act( AT_YELLOW, "$n grits $s teeth, struggling to contain $s power.", ch, NULL, NULL, TO_NOTVICT );
+						}
 						if ((ch->pl / ch->exp) >= 65
 							&& ch->pcdata->learned[gsn_ussj] > 0) {
 							xSET_BIT((ch)->affected_by, AFF_USSJ);
-							send_to_char("DEBUG: INSERT SPARKLY GOING USSJ EFFECTS HERE, OOoOOoOO\n\r", ch);
+							act( AT_YELLOW, "Your muscles bulge, and with a sudden burst of power you ascend beyond the reaches of any mere Super Saiyan.", ch, NULL, NULL, TO_CHAR );
+							act( AT_YELLOW, "$n's muscles bulge, drawing on a power beyond that of any mere Super Saiyan.", ch, NULL, NULL, TO_NOTVICT );
 							ch->pl = ch->exp * 75;
 						}
 					}
@@ -871,7 +1047,8 @@ violence_update(void)
 						ch->powerup = safemaximum;
 						xREMOVE_BIT((ch)->affected_by, AFF_POWERCHANNEL);
 						xSET_BIT((ch)->affected_by, AFF_SAFEMAX);
-						send_to_char("DEBUG: SAFEMAX REACHED%\n\r", ch);
+						act( AT_YELLOW, "Having reached your limit, your burning aura recedes to a gentle blaze.", ch, NULL, NULL, TO_CHAR );
+						act( AT_YELLOW, "$n's burning, golden aura recedes into a gentle blaze.", ch, NULL, NULL, TO_NOTVICT );
 					}
 				}
 				if (xIS_SET((ch)->affected_by, AFF_SSJ)
@@ -885,10 +1062,20 @@ violence_update(void)
 					if (ch->powerup < safemaximum) {
 						ch->pl *= 1.01;
 						ch->powerup += 1;
+						powMessage = number_range(1, 4);
+						if (powMessage = 1) {
+							act( AT_YELLOW, "Crackling bolts of energy build in your aura, impure, but powerful as your muscles swell.", ch, NULL, NULL, TO_CHAR );
+							act( AT_YELLOW, "Crackling bolts of impure energy dance in $n's raging aura, $s muscles swelling to incredible sizes.", ch, NULL, NULL, TO_NOTVICT );
+						}
+						if (powMessage = 2) {
+							act( AT_YELLOW, "The whites of your eyes fade, taken completely by the raging power coursing through you.", ch, NULL, NULL, TO_CHAR );
+							act( AT_YELLOW, "$n's eyes fade to white, taken completely by the raging power coursing through $m.", ch, NULL, NULL, TO_NOTVICT );
+						}
 						if ((ch->pl / ch->exp) >= 100
 							&& ch->pcdata->learned[gsn_ussj2] > 0) {
 							xSET_BIT((ch)->affected_by, AFF_USSJ2);
-							send_to_char("DEBUG: INSERT SPARKLY GOING USSJ2 EFFECTS HERE, OOoOOoOO\n\r", ch);
+							act( AT_YELLOW, "Your muscles expand to inhuman sizes, engorging yourself with energy!", ch, NULL, NULL, TO_CHAR );
+							act( AT_YELLOW, "$n's muscles expand to inhuman sizes, engorging $mself with energy!", ch, NULL, NULL, TO_NOTVICT );
 							ch->pl = ch->exp * 150;
 						}
 					}
@@ -896,7 +1083,8 @@ violence_update(void)
 						ch->powerup = safemaximum;
 						xREMOVE_BIT((ch)->affected_by, AFF_POWERCHANNEL);
 						xSET_BIT((ch)->affected_by, AFF_SAFEMAX);
-						send_to_char("DEBUG: SAFEMAX REACHED%\n\r", ch);
+						act( AT_YELLOW, "You let out a deep breath, your bulging muscles retracting only slightly.", ch, NULL, NULL, TO_CHAR );
+						act( AT_YELLOW, "$n lets out a deep breath, $s bulging muscles retracting only slightly.", ch, NULL, NULL, TO_NOTVICT );
 					}
 				}
 				if (xIS_SET((ch)->affected_by, AFF_SSJ)
@@ -910,10 +1098,22 @@ violence_update(void)
 					if (ch->powerup < safemaximum) {
 						ch->pl *= 1.01;
 						ch->powerup += 1;
+						powMessage = number_range(1, 4);
+						if (powMessage = 1) {
+							act( AT_YELLOW, "Your giant muscles tremble, emitting waves of tumultuous energy.", ch, NULL, NULL, TO_CHAR );
+							act( AT_YELLOW, "$n's giant muscles tremble, emitting waves of tumultuous energy.", ch, NULL, NULL, TO_NOTVICT );
+						}
+						if (powMessage = 2) {
+							act( AT_YELLOW, "You struggle to stay upright, howling with fury as your energy wreaks havoc around you.", ch, NULL, NULL, TO_CHAR );
+							act( AT_YELLOW, "$n struggles to stay upright, howling with fury as $s power wreaks havoc around $m.", ch, NULL, NULL, TO_NOTVICT );
+						}
 						if ((ch->pl / ch->exp) >= 200
 							&& ch->pcdata->learned[gsn_ssj2] > 0) {
 							xSET_BIT((ch)->affected_by, AFF_SSJ2);
-							send_to_char("DEBUG: INSERT SPARKLY GOING SSJ2 EFFECTS HERE, OOoOOoOO\n\r", ch);
+							act( AT_YELLOW, "Your muscles shrink, but in an intense explosion of rage your power grows nonetheless, sending arcing bolts of energy from your body.", ch, NULL, NULL, TO_CHAR );
+							act( AT_YELLOW, "Your hair stands further on end as you ascend to the true next level.", ch, NULL, NULL, TO_CHAR );
+							act( AT_YELLOW, "$n's muscles shrink amidst a storm of golden ki. In a sea of crackling, pure energy, $e truly ascends to the next level.", ch, NULL, NULL, TO_NOTVICT );
+							act( AT_YELLOW, "$n stares straight ahead with absolute confidence.", ch, NULL, NULL, TO_NOTVICT );
 							ch->pl = ch->exp * 225;
 						}
 					}
@@ -921,7 +1121,8 @@ violence_update(void)
 						ch->powerup = safemaximum;
 						xREMOVE_BIT((ch)->affected_by, AFF_POWERCHANNEL);
 						xSET_BIT((ch)->affected_by, AFF_SAFEMAX);
-						send_to_char("DEBUG: SAFEMAX REACHED%\n\r", ch);
+						act( AT_YELLOW, "Your giant muscles tense and flex, but no further power comes from it.", ch, NULL, NULL, TO_CHAR );
+						act( AT_YELLOW, "$n's grossly oversized muscles tense and flex, but $e seems unable to progress any further.", ch, NULL, NULL, TO_NOTVICT );
 					}
 				}
 				if (xIS_SET((ch)->affected_by, AFF_SSJ)
@@ -935,10 +1136,22 @@ violence_update(void)
 					if (ch->powerup < safemaximum) {
 						ch->pl *= 1.01;
 						ch->powerup += 1;
+						powMessage = number_range(1, 4);
+						if (powMessage = 1) {
+							act( AT_YELLOW, "You howl with fury as your energy builds, constant strikes of crackling energy suffusing the air.", ch, NULL, NULL, TO_CHAR );
+							act( AT_YELLOW, "$n howls with fury, constant strikes of crackling energy suffusing the air.", ch, NULL, NULL, TO_NOTVICT );
+						}
+						if (powMessage = 2) {
+							act( AT_YELLOW, "Your golden aura flashes with bursts of electricity, growing greater every moment.", ch, NULL, NULL, TO_CHAR );
+							act( AT_YELLOW, "$n's golden aura flashes with bursts of electricity, growing greater every moment.'", ch, NULL, NULL, TO_NOTVICT );
+						}
 						if ((ch->pl / ch->exp) >= 275
 							&& ch->pcdata->learned[gsn_ssj3] > 0) {
 							xSET_BIT((ch)->affected_by, AFF_SSJ3);
-							send_to_char("DEBUG: INSERT SPARKLY GOING SSJ3 EFFECTS HERE, OOoOOoOO\n\r", ch);
+							act(AT_YELLOW, "An earth-shattering burst of energy expands your aura. Your eyebrows disappear and your hair lengthens, flowing down your back.", ch, NULL, NULL, TO_CHAR);
+							act(AT_YELLOW, "Only the stench of ozone accompanies the countless bolts of energy wreathing your body.", ch, NULL, NULL, TO_CHAR);
+							act(AT_YELLOW, "The world feel as though it could pull apart as $n's aura expands! $s eyebrows disappear slowly and $s hair lengthens, flowing down $s back.", ch, NULL, NULL, TO_NOTVICT);
+							act(AT_YELLOW, "When the bright light fades, $n stands within a wreath of countless bolts of energy, unleashing the primal rage of the Saiyan race.", ch, NULL, NULL, TO_NOTVICT);
 							ch->pl = ch->exp * 325;
 						}
 					}
@@ -946,7 +1159,8 @@ violence_update(void)
 						ch->powerup = safemaximum;
 						xREMOVE_BIT((ch)->affected_by, AFF_POWERCHANNEL);
 						xSET_BIT((ch)->affected_by, AFF_SAFEMAX);
-						send_to_char("DEBUG: SAFEMAX REACHED%\n\r", ch);
+						act( AT_YELLOW, "Your aura shrinks as you relax, only occasional bursts of energy crackling around you.", ch, NULL, NULL, TO_CHAR );
+						act( AT_YELLOW, "$n's aura shrinks as $e relaxes, only occasional bursts of energy crackling around $m.", ch, NULL, NULL, TO_NOTVICT );
 					}
 				}
 				if (xIS_SET((ch)->affected_by, AFF_SSJ)
@@ -960,10 +1174,23 @@ violence_update(void)
 					if (ch->powerup < safemaximum) {
 						ch->pl *= 1.01;
 						ch->powerup += 1;
+						powMessage = number_range(1, 4);
+						if (powMessage = 1) {
+							act( AT_YELLOW, "The colours of the world seem to fade away against the brilliant light of your aura.", ch, NULL, NULL, TO_CHAR );
+							act( AT_YELLOW, "The colours of the world seem to fade away against the brilliant light of $n's aura.", ch, NULL, NULL, TO_NOTVICT );
+						}
+						if (powMessage = 2) {
+							act( AT_YELLOW, "You feel like you're shaking the foundation of the world apart!", ch, NULL, NULL, TO_CHAR );
+							act( AT_YELLOW, "$n's building aura feels as if it could tear apart the very fabric of reality.", ch, NULL, NULL, TO_NOTVICT );
+						}
 						if ((ch->pl / ch->exp) >= 400
 							&& ch->pcdata->learned[gsn_ssj4] > 0) {
 							xSET_BIT((ch)->affected_by, AFF_SSJ4);
-							send_to_char("DEBUG: INSERT SPARKLY GOING SUPER SAIYAN GOD EFFECTS HERE, OOoOOoOO\n\r", ch);
+							act( AT_RED, "Your aura fades and your hair and eyes return to normal. However, in the next instant something inside you changes.", ch, NULL, NULL, TO_CHAR );
+							act( AT_RED, "Godly Ki radiates from deep within, and with a mighty shout that pierces the heavens, a brilliant red and gold aura encompasses you.", ch, NULL, NULL, TO_CHAR );
+							act( AT_RED, "Your hair and eyes flash red, tinted subtly with violet as you ascend beyond your mortal restrictions.", ch, NULL, NULL, TO_CHAR );
+							act( AT_RED, "$n's hair and eyes return to normal. However, in the next instant something feels very different.", ch, NULL, NULL, TO_NOTVICT );
+							act( AT_RED, "$n is encompassed in a massive aura of crimson and gold, $s hair and eyes shifting red with a subtle violet tint.", ch, NULL, NULL, TO_NOTVICT );
 							ch->pl = ch->exp * 450;
 						}
 					}
@@ -971,7 +1198,8 @@ violence_update(void)
 						ch->powerup = safemaximum;
 						xREMOVE_BIT((ch)->affected_by, AFF_POWERCHANNEL);
 						xSET_BIT((ch)->affected_by, AFF_SAFEMAX);
-						send_to_char("DEBUG: SAFEMAX REACHED%\n\r", ch);
+						act( AT_YELLOW, "Your aura shrinks as you establish control over your primal energy, unable to take it any further.", ch, NULL, NULL, TO_CHAR );
+						act( AT_YELLOW, "$n's aura shrinks as $e establishes control over $s primal energy.", ch, NULL, NULL, TO_NOTVICT );
 					}
 				}
 				if (xIS_SET((ch)->affected_by, AFF_SSJ)
@@ -985,10 +1213,18 @@ violence_update(void)
 					if (ch->powerup < safemaximum) {
 						ch->pl *= 1.01;
 						ch->powerup += 1;
+						powMessage = number_range(1, 3);
+						if (powMessage = 1) {
+							act( AT_RED, "You stand perfectly calm, your power increasing by the second.", ch, NULL, NULL, TO_CHAR );
+							act( AT_RED, "$n stands perfectly calm, and yet with every second $s power grows.", ch, NULL, NULL, TO_NOTVICT );
+						}
 						if ((ch->pl / ch->exp) >= 500
 							&& ch->pcdata->learned[gsn_sgod] > 0) {
 							xSET_BIT((ch)->affected_by, AFF_SGOD);
-							send_to_char("DEBUG: INSERT SPARKLY GOING SUPER SAIYAN BLUE EFFECTS HERE, OOoOOoOO\n\r", ch);
+							act( AT_LBLUE, "Harnessing the secrets of your God Ki, you kindle the flame deep within and surge with newfound power.", ch, NULL, NULL, TO_CHAR );
+							act( AT_LBLUE, "Your hair and eyes flash blue, and a brilliant cyan aura erupts around you!", ch, NULL, NULL, TO_CHAR );
+							act( AT_LBLUE, "$n's body is swallowed in an intense blue light. What emerges is no mere Super Saiyan.", ch, NULL, NULL, TO_NOTVICT );
+							act( AT_LBLUE, "$n's hair and eyes shimmer a deep cyan hue, merging fully with a power beyond mortal ki.", ch, NULL, NULL, TO_NOTVICT );
 							ch->pl = ch->exp * 600;
 						}
 					}
@@ -996,7 +1232,8 @@ violence_update(void)
 						ch->powerup = safemaximum;
 						xREMOVE_BIT((ch)->affected_by, AFF_POWERCHANNEL);
 						xSET_BIT((ch)->affected_by, AFF_SAFEMAX);
-						send_to_char("DEBUG: SAFEMAX REACHED%\n\r", ch);
+						act( AT_YELLOW, "You shut your eyes, your whole body relaxing.", ch, NULL, NULL, TO_CHAR );
+						act( AT_YELLOW, "$n relaxes further, emitting subtle pulses of God Ki.", ch, NULL, NULL, TO_NOTVICT );
 					}
 				}
 				if (xIS_SET((ch)->affected_by, AFF_SSJ)
@@ -1010,12 +1247,22 @@ violence_update(void)
 					if (ch->powerup < safemaximum) {
 						ch->pl *= 1.01;
 						ch->powerup += 1;
+						powMessage = number_range(1, 4);
+						if (powMessage = 1) {
+							act( AT_LBLUE, "Countless particles of white light merge with your aura, sending scattering rays of energy in all directions.", ch, NULL, NULL, TO_CHAR );
+							act( AT_LBLUE, "Countless particles of white light merge with $n's aura, sending scattering rays of energy in all directions.", ch, NULL, NULL, TO_NOTVICT );
+						}
+						if (powMessage = 2) {
+							act( AT_LBLUE, "The light from your body burns like a beacon, felt by all across the universe.", ch, NULL, NULL, TO_CHAR );
+							act( AT_LBLUE, "The light from $n's body burns like a beacon, drowning out all else before you.", ch, NULL, NULL, TO_NOTVICT );
+						}
 					}
 					if (ch->powerup >= safemaximum) {
 						ch->powerup = safemaximum;
 						xREMOVE_BIT((ch)->affected_by, AFF_POWERCHANNEL);
 						xSET_BIT((ch)->affected_by, AFF_SAFEMAX);
-						send_to_char("DEBUG: SAFEMAX REACHED%\n\r", ch);
+						act( AT_LBLUE, "Your blue aura of God Ki recedes but your incredible power remains, waiting just beneath the surface.", ch, NULL, NULL, TO_CHAR );
+						act( AT_LBLUE, "$n's intense God Ki recedes.", ch, NULL, NULL, TO_NOTVICT );
 					}
 				}
 			}
