@@ -928,15 +928,8 @@ violence_update(void)
 					if (ch->powerup < safemaximum) {
 						ch->pl *= 1.01;
 						ch->powerup += 1;
-						powMessage = number_range(1, 4);
-						if (powMessage = 1) {
-							act( AT_YELLOW, "Crackling bolts of energy build in your aura, impure, but powerful as your muscles swell.", ch, NULL, NULL, TO_CHAR );
-							act( AT_YELLOW, "Crackling bolts of impure energy dance in $n's raging aura, $s muscles swelling to incredible sizes.", ch, NULL, NULL, TO_NOTVICT );
-						}
-						if (powMessage = 2) {
-							act( AT_YELLOW, "The whites of your eyes fade, taken completely by the raging power coursing through you.", ch, NULL, NULL, TO_CHAR );
-							act( AT_YELLOW, "$n's eyes fade to white, taken completely by the raging power coursing through $m.", ch, NULL, NULL, TO_NOTVICT );
-						}
+						act( AT_YELLOW, "Crackling bolts of energy build in your aura, impure, but powerful as your muscles swell.", ch, NULL, NULL, TO_CHAR );
+						act( AT_YELLOW, "Crackling bolts of impure energy dance in $n's raging aura, $s muscles swelling to incredible sizes.", ch, NULL, NULL, TO_NOTVICT );
 						if ((ch->pl / ch->exp) >= 100
 							&& ch->pcdata->learned[gsn_ussj2] > 0) {
 							xSET_BIT((ch)->affected_by, AFF_USSJ2);
@@ -964,15 +957,8 @@ violence_update(void)
 					if (ch->powerup < safemaximum) {
 						ch->pl *= 1.01;
 						ch->powerup += 1;
-						powMessage = number_range(1, 4);
-						if (powMessage = 1) {
-							act( AT_YELLOW, "Your giant muscles tremble, emitting waves of tumultuous energy.", ch, NULL, NULL, TO_CHAR );
-							act( AT_YELLOW, "$n's giant muscles tremble, emitting waves of tumultuous energy.", ch, NULL, NULL, TO_NOTVICT );
-						}
-						if (powMessage = 2) {
-							act( AT_YELLOW, "You struggle to stay upright, howling with fury as your energy wreaks havoc around you.", ch, NULL, NULL, TO_CHAR );
-							act( AT_YELLOW, "$n struggles to stay upright, howling with fury as $s power wreaks havoc around $m.", ch, NULL, NULL, TO_NOTVICT );
-						}
+						act( AT_YELLOW, "Your giant muscles tremble, emitting waves of tumultuous energy.", ch, NULL, NULL, TO_CHAR );
+						act( AT_YELLOW, "$n's giant muscles tremble, emitting waves of tumultuous energy.", ch, NULL, NULL, TO_NOTVICT );
 						if ((ch->pl / ch->exp) >= 200
 							&& ch->pcdata->learned[gsn_ssj2] > 0) {
 							xSET_BIT((ch)->affected_by, AFF_SSJ2);
@@ -1002,15 +988,8 @@ violence_update(void)
 					if (ch->powerup < safemaximum) {
 						ch->pl *= 1.01;
 						ch->powerup += 1;
-						powMessage = number_range(1, 4);
-						if (powMessage = 1) {
-							act( AT_YELLOW, "You howl with fury as your energy builds, constant strikes of crackling energy suffusing the air.", ch, NULL, NULL, TO_CHAR );
-							act( AT_YELLOW, "$n howls with fury, constant strikes of crackling energy suffusing the air.", ch, NULL, NULL, TO_NOTVICT );
-						}
-						if (powMessage = 2) {
-							act( AT_YELLOW, "Your golden aura flashes with bursts of electricity, growing greater every moment.", ch, NULL, NULL, TO_CHAR );
-							act( AT_YELLOW, "$n's golden aura flashes with bursts of electricity, growing greater every moment.'", ch, NULL, NULL, TO_NOTVICT );
-						}
+						act( AT_YELLOW, "You howl with fury as your energy builds, constant strikes of crackling energy suffusing the air.", ch, NULL, NULL, TO_CHAR );
+						act( AT_YELLOW, "$n howls with fury, constant strikes of crackling energy suffusing the air.", ch, NULL, NULL, TO_NOTVICT );
 						if ((ch->pl / ch->exp) >= 275
 							&& ch->pcdata->learned[gsn_ssj3] > 0) {
 							xSET_BIT((ch)->affected_by, AFF_SSJ3);
@@ -1040,15 +1019,8 @@ violence_update(void)
 					if (ch->powerup < safemaximum) {
 						ch->pl *= 1.01;
 						ch->powerup += 1;
-						powMessage = number_range(1, 4);
-						if (powMessage = 1) {
-							act( AT_YELLOW, "The colours of the world seem to fade away against the brilliant light of your aura.", ch, NULL, NULL, TO_CHAR );
-							act( AT_YELLOW, "The colours of the world seem to fade away against the brilliant light of $n's aura.", ch, NULL, NULL, TO_NOTVICT );
-						}
-						if (powMessage = 2) {
-							act( AT_YELLOW, "You feel like you're shaking the foundation of the world apart!", ch, NULL, NULL, TO_CHAR );
-							act( AT_YELLOW, "$n's building aura feels as if it could tear apart the very fabric of reality.", ch, NULL, NULL, TO_NOTVICT );
-						}
+						act( AT_YELLOW, "The colours of the world seem to fade away against the brilliant light of your aura.", ch, NULL, NULL, TO_CHAR );
+						act( AT_YELLOW, "The colours of the world seem to fade away against the brilliant light of $n's aura.", ch, NULL, NULL, TO_NOTVICT );
 						if ((ch->pl / ch->exp) >= 400
 							&& ch->pcdata->learned[gsn_ssj4] > 0) {
 							xSET_BIT((ch)->affected_by, AFF_SSJ4);
@@ -1079,11 +1051,8 @@ violence_update(void)
 					if (ch->powerup < safemaximum) {
 						ch->pl *= 1.01;
 						ch->powerup += 1;
-						powMessage = number_range(1, 3);
-						if (powMessage = 1) {
-							act( AT_RED, "You stand perfectly calm, your power increasing by the second.", ch, NULL, NULL, TO_CHAR );
-							act( AT_RED, "$n stands perfectly calm, and yet with every second $s power grows.", ch, NULL, NULL, TO_NOTVICT );
-						}
+						act( AT_RED, "You stand perfectly calm, your power increasing by the second.", ch, NULL, NULL, TO_CHAR );
+						act( AT_RED, "$n stands perfectly calm, and yet with every second $s power grows.", ch, NULL, NULL, TO_NOTVICT );
 						if ((ch->pl / ch->exp) >= 500
 							&& ch->pcdata->learned[gsn_sgod] > 0) {
 							xSET_BIT((ch)->affected_by, AFF_SGOD);
@@ -1113,15 +1082,8 @@ violence_update(void)
 					if (ch->powerup < safemaximum) {
 						ch->pl *= 1.01;
 						ch->powerup += 1;
-						powMessage = number_range(1, 4);
-						if (powMessage = 1) {
-							act( AT_LBLUE, "Countless particles of white light merge with your aura, sending scattering rays of energy in all directions.", ch, NULL, NULL, TO_CHAR );
-							act( AT_LBLUE, "Countless particles of white light merge with $n's aura, sending scattering rays of energy in all directions.", ch, NULL, NULL, TO_NOTVICT );
-						}
-						if (powMessage = 2) {
-							act( AT_LBLUE, "The light from your body burns like a beacon, felt by all across the universe.", ch, NULL, NULL, TO_CHAR );
-							act( AT_LBLUE, "The light from $n's body burns like a beacon, drowning out all else before you.", ch, NULL, NULL, TO_NOTVICT );
-						}
+						act( AT_LBLUE, "Countless particles of white light merge with your aura, sending scattering rays of energy in all directions.", ch, NULL, NULL, TO_CHAR );
+						act( AT_LBLUE, "Countless particles of white light merge with $n's aura, sending scattering rays of energy in all directions.", ch, NULL, NULL, TO_NOTVICT );
 					}
 					if (ch->powerup >= safemaximum) {
 						ch->powerup = safemaximum;
