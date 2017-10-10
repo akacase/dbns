@@ -1597,6 +1597,12 @@ do_powerdown(CHAR_DATA * ch, char *argument)
 		ch_printf(ch, "You can't while you have a chip installed.\n\r");
 		return;
 	}
+	if (xIS_SET((ch)->affected_by, AFF_POWERCHANNEL))
+			xREMOVE_BIT((ch)->affected_by, AFF_POWERCHANNEL);
+	if (xIS_SET((ch)->affected_by, AFF_OVERCHANNEL))
+			xREMOVE_BIT((ch)->affected_by, AFF_OVERCHANNEL);
+	if (xIS_SET((ch)->affected_by, AFF_SAFEMAX))
+			xREMOVE_BIT((ch)->affected_by, AFF_SAFEMAX);
 	if (ch->pl <= ch->exp) {
 		send_to_char("You are already powered down.\n\r", ch);
 		ch->powerup = 0;
