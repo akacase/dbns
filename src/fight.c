@@ -844,7 +844,7 @@ violence_update(void)
 				xREMOVE_BIT((ch)->affected_by, AFF_POWERCHANNEL);
 				send_to_char("You must stand if you wish to power up.\n\r", ch);
 			}
-			if (!xIS_SET((ch)->affected_by, AFF_KAIOKEN)) {
+			if (xIS_SET((ch)->affected_by, AFF_KAIOKEN)) {
 				xREMOVE_BIT((ch)->affected_by, AFF_POWERCHANNEL);
 				send_to_char("Your energy is too unstable while using Kaioken.\n\r", ch);
 			}
