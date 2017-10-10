@@ -1072,7 +1072,7 @@ violence_update(void)
 				|| xIS_SET((ch)->affected_by, AFF_EVILOVERLOAD)) {
 				ch->pl *= 1.01;
 				ch->powerup += 1;
-				send_to_char("DEBUG: TRANSFORMATION OVERLIMIT PL UP 5%\n\r", ch);
+				send_to_char("DEBUG: TRANSFORMATION OVERLIMIT PL UP 1%\n\r", ch);
 				if ((ch->mana - danger) < 0)
 					ch->mana = 0;
 				else
@@ -1108,7 +1108,7 @@ violence_update(void)
 					if (ch->hit - (danger / 10) < 0) {
 						ch->hit -= (danger / 10);
 						update_pos(ch);
-						if ( ch->position == POS_DEAD) {
+						if (ch->position == POS_DEAD) {
 							act( AT_RED, "Your body gives out under the intense strain. All must succumb to their limits in the end.", ch, NULL, NULL, TO_CHAR );
 							act( AT_RED, "$n collapses, DEAD, $s body completely spent.", ch, NULL, NULL, TO_NOTVICT );
 							sprintf( buf, "%s withers away, succumbing to their limits", ch->name );
