@@ -546,6 +546,12 @@ violence_update(void)
 				form_mastery = (ch->train / 45000);
 				if (ch->mana <= 0) {
 					xREMOVE_BIT((ch)->affected_by, AFF_SSJ);
+				if (xIS_SET((ch)->affected_by, AFF_POWERCHANNEL))
+					xREMOVE_BIT((ch)->affected_by, AFF_POWERCHANNEL);
+				if (xIS_SET((ch)->affected_by, AFF_OVERCHANNEL))
+					xREMOVE_BIT((ch)->affected_by, AFF_OVERCHANNEL);
+				if (xIS_SET((ch)->affected_by, AFF_SAFEMAX))
+					xREMOVE_BIT((ch)->affected_by, AFF_SAFEMAX);
 					ch->pl = ch->exp;
 					ch->powerup = 0;
 					transStatRemove(ch);
@@ -553,7 +559,6 @@ violence_update(void)
 					ch->pcdata->eyes = ch->pcdata->orignaleyes;
 					act( AT_YELLOW, "You lose control of your ki and return to normal!", ch, NULL, NULL, TO_CHAR );
 					act( AT_YELLOW, "$n loses control of $s ki and returns to normal!", ch, NULL, NULL, TO_NOTVICT );
-					ch->mana = 0;
 				}
 				if (form_mastery < 1)
 					form_mastery = 1;
@@ -581,6 +586,12 @@ violence_update(void)
 				if (ch->mana <= 0) {
 					xREMOVE_BIT((ch)->affected_by, AFF_SSJ);
 					xREMOVE_BIT((ch)->affected_by, AFF_USSJ);
+				if (xIS_SET((ch)->affected_by, AFF_POWERCHANNEL))
+					xREMOVE_BIT((ch)->affected_by, AFF_POWERCHANNEL);
+				if (xIS_SET((ch)->affected_by, AFF_OVERCHANNEL))
+					xREMOVE_BIT((ch)->affected_by, AFF_OVERCHANNEL);
+				if (xIS_SET((ch)->affected_by, AFF_SAFEMAX))
+					xREMOVE_BIT((ch)->affected_by, AFF_SAFEMAX);
 					ch->pl = ch->exp;
 					ch->powerup = 0;
 					transStatRemove(ch);
@@ -588,7 +599,6 @@ violence_update(void)
 					ch->pcdata->eyes = ch->pcdata->orignaleyes;
 					act( AT_YELLOW, "You lose control of your ki and return to normal!", ch, NULL, NULL, TO_CHAR );
 					act( AT_YELLOW, "$n loses control of $s ki and returns to normal!", ch, NULL, NULL, TO_NOTVICT );
-					ch->mana = 0;
 				}
 				if (form_mastery < 1)
 					form_mastery = 1;
@@ -617,6 +627,12 @@ violence_update(void)
 					xREMOVE_BIT((ch)->affected_by, AFF_SSJ);
 					xREMOVE_BIT((ch)->affected_by, AFF_USSJ);
 					xREMOVE_BIT((ch)->affected_by, AFF_USSJ2);
+				if (xIS_SET((ch)->affected_by, AFF_POWERCHANNEL))
+					xREMOVE_BIT((ch)->affected_by, AFF_POWERCHANNEL);
+				if (xIS_SET((ch)->affected_by, AFF_OVERCHANNEL))
+					xREMOVE_BIT((ch)->affected_by, AFF_OVERCHANNEL);
+				if (xIS_SET((ch)->affected_by, AFF_SAFEMAX))
+					xREMOVE_BIT((ch)->affected_by, AFF_SAFEMAX);
 					ch->pl = ch->exp;
 					ch->powerup = 0;
 					transStatRemove(ch);
@@ -624,7 +640,6 @@ violence_update(void)
 					ch->pcdata->eyes = ch->pcdata->orignaleyes;
 					act( AT_YELLOW, "You lose control of your ki and return to normal!", ch, NULL, NULL, TO_CHAR );
 					act( AT_YELLOW, "$n loses control of $s ki and returns to normal!", ch, NULL, NULL, TO_NOTVICT );
-					ch->mana = 0;
 				}
 				if (form_mastery < 1)
 					form_mastery = 1;
@@ -654,6 +669,12 @@ violence_update(void)
 					xREMOVE_BIT((ch)->affected_by, AFF_USSJ);
 					xREMOVE_BIT((ch)->affected_by, AFF_USSJ2);
 					xREMOVE_BIT((ch)->affected_by, AFF_SSJ2);
+				if (xIS_SET((ch)->affected_by, AFF_POWERCHANNEL))
+					xREMOVE_BIT((ch)->affected_by, AFF_POWERCHANNEL);
+				if (xIS_SET((ch)->affected_by, AFF_OVERCHANNEL))
+					xREMOVE_BIT((ch)->affected_by, AFF_OVERCHANNEL);
+				if (xIS_SET((ch)->affected_by, AFF_SAFEMAX))
+					xREMOVE_BIT((ch)->affected_by, AFF_SAFEMAX);
 					ch->pl = ch->exp;
 					ch->powerup = 0;
 					transStatRemove(ch);
@@ -661,7 +682,6 @@ violence_update(void)
 					ch->pcdata->eyes = ch->pcdata->orignaleyes;
 					act( AT_YELLOW, "You lose control of your ki and return to normal!", ch, NULL, NULL, TO_CHAR );
 					act( AT_YELLOW, "$n loses control of $s ki and returns to normal!", ch, NULL, NULL, TO_NOTVICT );
-					ch->mana = 0;
 				}
 				if (form_mastery < 1)
 					form_mastery = 1;
@@ -692,6 +712,12 @@ violence_update(void)
 					xREMOVE_BIT((ch)->affected_by, AFF_USSJ2);
 					xREMOVE_BIT((ch)->affected_by, AFF_SSJ2);
 					xREMOVE_BIT((ch)->affected_by, AFF_SSJ3);
+				if (xIS_SET((ch)->affected_by, AFF_POWERCHANNEL))
+					xREMOVE_BIT((ch)->affected_by, AFF_POWERCHANNEL);
+				if (xIS_SET((ch)->affected_by, AFF_OVERCHANNEL))
+					xREMOVE_BIT((ch)->affected_by, AFF_OVERCHANNEL);
+				if (xIS_SET((ch)->affected_by, AFF_SAFEMAX))
+					xREMOVE_BIT((ch)->affected_by, AFF_SAFEMAX);
 					ch->pl = ch->exp;
 					ch->powerup = 0;
 					transStatRemove(ch);
@@ -699,7 +725,6 @@ violence_update(void)
 					ch->pcdata->eyes = ch->pcdata->orignaleyes;
 					act( AT_YELLOW, "You lose control of your ki and return to normal!", ch, NULL, NULL, TO_CHAR );
 					act( AT_YELLOW, "$n loses control of $s ki and returns to normal!", ch, NULL, NULL, TO_NOTVICT );
-					ch->mana = 0;
 				}
 				if (form_mastery < 1)
 					form_mastery = 1;
@@ -731,6 +756,12 @@ violence_update(void)
 					xREMOVE_BIT((ch)->affected_by, AFF_SSJ2);
 					xREMOVE_BIT((ch)->affected_by, AFF_SSJ3);
 					xREMOVE_BIT((ch)->affected_by, AFF_SSJ4);
+				if (xIS_SET((ch)->affected_by, AFF_POWERCHANNEL))
+					xREMOVE_BIT((ch)->affected_by, AFF_POWERCHANNEL);
+				if (xIS_SET((ch)->affected_by, AFF_OVERCHANNEL))
+					xREMOVE_BIT((ch)->affected_by, AFF_OVERCHANNEL);
+				if (xIS_SET((ch)->affected_by, AFF_SAFEMAX))
+					xREMOVE_BIT((ch)->affected_by, AFF_SAFEMAX);
 					ch->pl = ch->exp;
 					ch->powerup = 0;
 					transStatRemove(ch);
@@ -738,7 +769,6 @@ violence_update(void)
 					ch->pcdata->eyes = ch->pcdata->orignaleyes;
 					act( AT_RED, "You lose control of your God Ki and return to normal!", ch, NULL, NULL, TO_CHAR );
 					act( AT_RED, "$n loses control of $s God Ki and returns to normal!", ch, NULL, NULL, TO_NOTVICT );
-					ch->mana = 0;
 				}
 				if (form_mastery < 1)
 					form_mastery = 1;
@@ -771,6 +801,12 @@ violence_update(void)
 					xREMOVE_BIT((ch)->affected_by, AFF_SSJ3);
 					xREMOVE_BIT((ch)->affected_by, AFF_SSJ4);
 					xREMOVE_BIT((ch)->affected_by, AFF_SGOD);
+				if (xIS_SET((ch)->affected_by, AFF_POWERCHANNEL))
+					xREMOVE_BIT((ch)->affected_by, AFF_POWERCHANNEL);
+				if (xIS_SET((ch)->affected_by, AFF_OVERCHANNEL))
+					xREMOVE_BIT((ch)->affected_by, AFF_OVERCHANNEL);
+				if (xIS_SET((ch)->affected_by, AFF_SAFEMAX))
+					xREMOVE_BIT((ch)->affected_by, AFF_SAFEMAX);
 					ch->pl = ch->exp;
 					ch->powerup = 0;
 					transStatRemove(ch);
@@ -778,7 +814,6 @@ violence_update(void)
 					ch->pcdata->eyes = ch->pcdata->orignaleyes;
 					act( AT_LBLUE, "You lose control of your God Ki and return to normal!", ch, NULL, NULL, TO_CHAR );
 					act( AT_LBLUE, "$n loses control of $s God Ki and returns to normal!", ch, NULL, NULL, TO_NOTVICT );
-					ch->mana = 0;
 				}
 				if (form_mastery < 1)
 					form_mastery = 1;
