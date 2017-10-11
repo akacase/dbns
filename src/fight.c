@@ -1325,7 +1325,7 @@ violence_update(void)
 						act( auraColor, "$n reaches $s limit and stops powering up, the tiny fractures in $s body closing.", ch, NULL, NULL, TO_NOTVICT );
 					}
 				}
-				if (xIS_SET((ch)->affected_by, AFF_ICER2) {
+				if (xIS_SET((ch)->affected_by, AFF_ICER2)) {
 					safemaximum = form_mastery;
 					if (ch->powerup < safemaximum) {
 						ch->pl *= 1.15;
@@ -1442,7 +1442,7 @@ violence_update(void)
 							act( AT_YELLOW, "The air roils, an intense pressure building from your glorious golden sheen.", ch, NULL, NULL, TO_CHAR );
 							act( AT_YELLOW, "The air roils, an intense pressure building from $n's glorious golden sheen.", ch, NULL, NULL, TO_NOTVICT );
 						}
-						if (plmod) >= 500) {
+						if (plmod >= 500) {
 							xREMOVE_BIT((ch)->affected_by, AFF_POWERCHANNEL);
 							act( AT_YELLOW, "Your golden aura doubles in size, mixing with countless flecks of glimmering light.", ch, NULL, NULL, TO_CHAR );
 							act( AT_YELLOW, "$n's golden aura doubles in size, mixing with countless flecks of glimmering light.", ch, NULL, NULL, TO_NOTVICT );
