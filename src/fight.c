@@ -581,7 +581,7 @@ violence_update(void)
 					form_mastery = 1;
 				if (form_mastery >= 20)
 					ch->train += 1;
-				else if (form_drain < 20)
+				else if (form_mastery < 20)
 					ch->train += 15;
 		}
 		if (!IS_NPC(ch)
@@ -636,7 +636,7 @@ violence_update(void)
 				if (form_drain < 1)
 					form_drain = 1;
 				ch->mana -= form_drain;
-				if (form_masdtery >= 64)
+				if (form_mastery >= 64)
 					ch->train += 1;
 				else if (form_mastery < 64)
 					ch->train += 3;
