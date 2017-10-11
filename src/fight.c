@@ -553,6 +553,7 @@ violence_update(void)
 					ch->pcdata->eyes = ch->pcdata->orignaleyes;
 					act( AT_YELLOW, "You lose control of your ki and return to normal!", ch, NULL, NULL, TO_CHAR );
 					act( AT_YELLOW, "$n loses control of $s ki and returns to normal!", ch, NULL, NULL, TO_NOTVICT );
+					ch->mana = 0;
 				}
 				if (form_mastery < 1)
 					form_mastery = 1;
@@ -587,6 +588,7 @@ violence_update(void)
 					ch->pcdata->eyes = ch->pcdata->orignaleyes;
 					act( AT_YELLOW, "You lose control of your ki and return to normal!", ch, NULL, NULL, TO_CHAR );
 					act( AT_YELLOW, "$n loses control of $s ki and returns to normal!", ch, NULL, NULL, TO_NOTVICT );
+					ch->mana = 0;
 				}
 				if (form_mastery < 1)
 					form_mastery = 1;
@@ -622,6 +624,7 @@ violence_update(void)
 					ch->pcdata->eyes = ch->pcdata->orignaleyes;
 					act( AT_YELLOW, "You lose control of your ki and return to normal!", ch, NULL, NULL, TO_CHAR );
 					act( AT_YELLOW, "$n loses control of $s ki and returns to normal!", ch, NULL, NULL, TO_NOTVICT );
+					ch->mana = 0;
 				}
 				if (form_mastery < 1)
 					form_mastery = 1;
@@ -658,6 +661,7 @@ violence_update(void)
 					ch->pcdata->eyes = ch->pcdata->orignaleyes;
 					act( AT_YELLOW, "You lose control of your ki and return to normal!", ch, NULL, NULL, TO_CHAR );
 					act( AT_YELLOW, "$n loses control of $s ki and returns to normal!", ch, NULL, NULL, TO_NOTVICT );
+					ch->mana = 0;
 				}
 				if (form_mastery < 1)
 					form_mastery = 1;
@@ -695,6 +699,7 @@ violence_update(void)
 					ch->pcdata->eyes = ch->pcdata->orignaleyes;
 					act( AT_YELLOW, "You lose control of your ki and return to normal!", ch, NULL, NULL, TO_CHAR );
 					act( AT_YELLOW, "$n loses control of $s ki and returns to normal!", ch, NULL, NULL, TO_NOTVICT );
+					ch->mana = 0;
 				}
 				if (form_mastery < 1)
 					form_mastery = 1;
@@ -733,6 +738,7 @@ violence_update(void)
 					ch->pcdata->eyes = ch->pcdata->orignaleyes;
 					act( AT_RED, "You lose control of your God Ki and return to normal!", ch, NULL, NULL, TO_CHAR );
 					act( AT_RED, "$n loses control of $s God Ki and returns to normal!", ch, NULL, NULL, TO_NOTVICT );
+					ch->mana = 0;
 				}
 				if (form_mastery < 1)
 					form_mastery = 1;
@@ -772,6 +778,7 @@ violence_update(void)
 					ch->pcdata->eyes = ch->pcdata->orignaleyes;
 					act( AT_LBLUE, "You lose control of your God Ki and return to normal!", ch, NULL, NULL, TO_CHAR );
 					act( AT_LBLUE, "$n loses control of $s God Ki and returns to normal!", ch, NULL, NULL, TO_NOTVICT );
+					ch->mana = 0;
 				}
 				if (form_mastery < 1)
 					form_mastery = 1;
@@ -868,19 +875,6 @@ violence_update(void)
 							act( auraColor, "Your body glows faintly.", ch, NULL, NULL, TO_CHAR );
 							act( auraColor, "$n's body glows faintly.", ch, NULL, NULL, TO_NOTVICT );
 						}
-						if ((ch->pl >= (ch->exp * 30))
-							&& ch->pcdata->learned[gsn_ssj] > 0) {
-							xSET_BIT((ch)->affected_by, AFF_SSJ);
-							xREMOVE_BIT((ch)->affected_by, AFF_POWERCHANNEL);
-							act( AT_YELLOW, "Your eyes turn blue, your hair flashes blonde, and a fiery golden aura erupts around you!", ch, NULL, NULL, TO_CHAR );
-							act( AT_YELLOW, "$n's hair suddenly flashes golden blonde, transcending beyond $s normal limits into a Super Saiyan!", ch, NULL, NULL, TO_NOTVICT );
-							ch->powerup = 0;
-							ch->pl = ch->exp * 50;
-							if (!IS_NPC(ch)) {
-								ch->pcdata->eyes = 0;
-								ch->pcdata->haircolor = 3;
-							}
-						}
 						if ((ch->pl / ch->exp) >= 30
 							&& ch->pcdata->learned[gsn_ssj] <= 0) {
 							ch->pl = (ch->exp * 30);
@@ -909,8 +903,10 @@ violence_update(void)
 					if (ch->powerup < safemaximum) {
 						ch->pl *= 1.03;
 						ch->powerup += 1;
-						act( AT_YELLOW, "Your golden aura churns with scattering rays of light.", ch, NULL, NULL, TO_CHAR );
-						act( AT_YELLOW, "$n's golden aura churns with scattering rays of light.", ch, NULL, NULL, TO_NOTVICT );
+						if (plmod > 52) {
+							act( AT_YELLOW, "Your golden aura churns with scattering rays of light.", ch, NULL, NULL, TO_CHAR );
+							act( AT_YELLOW, "$n's golden aura churns with scattering rays of light.", ch, NULL, NULL, TO_NOTVICT );
+						}
 						if ((ch->pl / ch->exp) >= 65
 							&& ch->pcdata->learned[gsn_ussj] > 0) {
 							xSET_BIT((ch)->affected_by, AFF_USSJ);
@@ -939,8 +935,10 @@ violence_update(void)
 					if (ch->powerup < safemaximum) {
 						ch->pl *= 1.03;
 						ch->powerup += 1;
-						act( AT_YELLOW, "Crackling bolts of energy build in your aura, impure, but powerful as your muscles swell.", ch, NULL, NULL, TO_CHAR );
-						act( AT_YELLOW, "Crackling bolts of impure energy dance in $n's raging aura, $s muscles swelling to incredible sizes.", ch, NULL, NULL, TO_NOTVICT );
+						if (plmod > 78) {
+							act( AT_YELLOW, "Crackling bolts of energy build in your aura, impure, but powerful as your muscles swell.", ch, NULL, NULL, TO_CHAR );
+							act( AT_YELLOW, "Crackling bolts of impure energy dance in $n's raging aura, $s muscles swelling to incredible sizes.", ch, NULL, NULL, TO_NOTVICT );
+						}
 						if ((ch->pl / ch->exp) >= 100
 							&& ch->pcdata->learned[gsn_ussj2] > 0) {
 							xSET_BIT((ch)->affected_by, AFF_USSJ2);
@@ -969,8 +967,10 @@ violence_update(void)
 					if (ch->powerup < safemaximum) {
 						ch->pl *= 1.03;
 						ch->powerup += 1;
-						act( AT_YELLOW, "Your giant muscles tremble, emitting waves of tumultuous energy.", ch, NULL, NULL, TO_CHAR );
-						act( AT_YELLOW, "$n's giant muscles tremble, emitting waves of tumultuous energy.", ch, NULL, NULL, TO_NOTVICT );
+						if (plmod > 156) {
+							act( AT_YELLOW, "Your giant muscles tremble, emitting waves of tumultuous energy.", ch, NULL, NULL, TO_CHAR );
+							act( AT_YELLOW, "$n's giant muscles tremble, emitting waves of tumultuous energy.", ch, NULL, NULL, TO_NOTVICT );
+						}
 						if ((ch->pl / ch->exp) >= 200
 							&& ch->pcdata->learned[gsn_ssj2] > 0) {
 							xSET_BIT((ch)->affected_by, AFF_SSJ2);
@@ -1001,8 +1001,10 @@ violence_update(void)
 					if (ch->powerup < safemaximum) {
 						ch->pl *= 1.03;
 						ch->powerup += 1;
-						act( AT_YELLOW, "You howl with fury as your energy builds, constant strikes of crackling energy suffusing the air.", ch, NULL, NULL, TO_CHAR );
-						act( AT_YELLOW, "$n howls with fury, constant strikes of crackling energy suffusing the air.", ch, NULL, NULL, TO_NOTVICT );
+						if (plmod > 234) {
+							act( AT_YELLOW, "You howl with fury as your energy builds, constant strikes of crackling energy suffusing the air.", ch, NULL, NULL, TO_CHAR );
+							act( AT_YELLOW, "$n howls with fury, constant strikes of crackling energy suffusing the air.", ch, NULL, NULL, TO_NOTVICT );
+						}
 						if ((ch->pl / ch->exp) >= 275
 							&& ch->pcdata->learned[gsn_ssj3] > 0) {
 							xSET_BIT((ch)->affected_by, AFF_SSJ3);
@@ -1033,8 +1035,10 @@ violence_update(void)
 					if (ch->powerup < safemaximum) {
 						ch->pl *= 1.03;
 						ch->powerup += 1;
-						act( AT_YELLOW, "The colours of the world seem to fade away against the brilliant light of your aura.", ch, NULL, NULL, TO_CHAR );
-						act( AT_YELLOW, "The colours of the world seem to fade away against the brilliant light of $n's aura.", ch, NULL, NULL, TO_NOTVICT );
+						if (plmod > 338) {
+							act( AT_YELLOW, "The colours of the world seem to fade away against the brilliant light of your aura.", ch, NULL, NULL, TO_CHAR );
+							act( AT_YELLOW, "The colours of the world seem to fade away against the brilliant light of $n's aura.", ch, NULL, NULL, TO_NOTVICT );
+						}
 						if ((ch->pl / ch->exp) >= 400
 							&& ch->pcdata->learned[gsn_ssj4] > 0) {
 							xSET_BIT((ch)->affected_by, AFF_SSJ4);
@@ -1066,8 +1070,10 @@ violence_update(void)
 					if (ch->powerup < safemaximum) {
 						ch->pl *= 1.03;
 						ch->powerup += 1;
-						act( AT_RED, "You stand perfectly calm, your power increasing by the second.", ch, NULL, NULL, TO_CHAR );
-						act( AT_RED, "$n stands perfectly calm, and yet with every second $s power grows.", ch, NULL, NULL, TO_NOTVICT );
+						if (plmod > 468) {
+							act( AT_RED, "You stand perfectly calm, your power increasing by the second.", ch, NULL, NULL, TO_CHAR );
+							act( AT_RED, "$n stands perfectly calm, and yet with every second $s power grows.", ch, NULL, NULL, TO_NOTVICT );
+						}
 						if ((ch->pl / ch->exp) >= 500
 							&& ch->pcdata->learned[gsn_sgod] > 0) {
 							xSET_BIT((ch)->affected_by, AFF_SGOD);
@@ -1098,8 +1104,10 @@ violence_update(void)
 					if (ch->powerup < safemaximum) {
 						ch->pl *= 1.03;
 						ch->powerup += 1;
-						act( AT_LBLUE, "Countless particles of white light merge with your aura, sending scattering rays of energy in all directions.", ch, NULL, NULL, TO_CHAR );
-						act( AT_LBLUE, "Countless particles of white light merge with $n's aura, sending scattering rays of energy in all directions.", ch, NULL, NULL, TO_NOTVICT );
+						if (plmod > 624) {
+							act( AT_LBLUE, "Countless particles of white light merge with your aura, sending scattering rays of energy in all directions.", ch, NULL, NULL, TO_CHAR );
+							act( AT_LBLUE, "Countless particles of white light merge with $n's aura, sending scattering rays of energy in all directions.", ch, NULL, NULL, TO_NOTVICT );
+						}
 					}
 					if (ch->powerup >= safemaximum) {
 						ch->powerup = safemaximum;
