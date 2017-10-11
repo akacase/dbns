@@ -1832,6 +1832,10 @@ void do_powerup(CHAR_DATA *ch, char *argument)
 	
 	if (IS_NPC(ch))
 		return;
+	if (ch->position < POS_STANDING) {
+		send_to_char("You must be standing to do that.\n\r", ch);
+		return;
+	}
 	if (arg[0] == '\0') {
 		if (ch->pl >= ch->exp) {
 			send_to_char("Powerup how? Commands are: 'begin', 'push', and 'stop'.\n\r", ch);

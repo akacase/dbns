@@ -551,7 +551,8 @@ violence_update(void)
 					transStatRemove(ch);
 					ch->pcdata->haircolor = ch->pcdata->orignalhaircolor;
 					ch->pcdata->eyes = ch->pcdata->orignaleyes;
-					send_to_char("DEBUG: SSJ REMOVED, NOT ENOUGH KI\n\r", ch);
+					act( AT_YELLOW, "You lose control of your ki and return to normal!", ch, NULL, NULL, TO_CHAR );
+					act( AT_YELLOW, "$n loses control of $s ki and returns to normal!", ch, NULL, NULL, TO_NOTVICT );
 				}
 				if (form_mastery < 1)
 					form_mastery = 1;
@@ -584,7 +585,8 @@ violence_update(void)
 					transStatRemove(ch);
 					ch->pcdata->haircolor = ch->pcdata->orignalhaircolor;
 					ch->pcdata->eyes = ch->pcdata->orignaleyes;
-					send_to_char("DEBUG: SSJ REMOVED, NOT ENOUGH KI\n\r", ch);
+					act( AT_YELLOW, "You lose control of your ki and return to normal!", ch, NULL, NULL, TO_CHAR );
+					act( AT_YELLOW, "$n loses control of $s ki and returns to normal!", ch, NULL, NULL, TO_NOTVICT );
 				}
 				if (form_mastery < 1)
 					form_mastery = 1;
@@ -618,7 +620,8 @@ violence_update(void)
 					transStatRemove(ch);
 					ch->pcdata->haircolor = ch->pcdata->orignalhaircolor;
 					ch->pcdata->eyes = ch->pcdata->orignaleyes;
-					send_to_char("DEBUG: SSJ REMOVED, NOT ENOUGH KI\n\r", ch);
+					act( AT_YELLOW, "You lose control of your ki and return to normal!", ch, NULL, NULL, TO_CHAR );
+					act( AT_YELLOW, "$n loses control of $s ki and returns to normal!", ch, NULL, NULL, TO_NOTVICT );
 				}
 				if (form_mastery < 1)
 					form_mastery = 1;
@@ -653,7 +656,8 @@ violence_update(void)
 					transStatRemove(ch);
 					ch->pcdata->haircolor = ch->pcdata->orignalhaircolor;
 					ch->pcdata->eyes = ch->pcdata->orignaleyes;
-					send_to_char("DEBUG: SSJ REMOVED, NOT ENOUGH KI\n\r", ch);
+					act( AT_YELLOW, "You lose control of your ki and return to normal!", ch, NULL, NULL, TO_CHAR );
+					act( AT_YELLOW, "$n loses control of $s ki and returns to normal!", ch, NULL, NULL, TO_NOTVICT );
 				}
 				if (form_mastery < 1)
 					form_mastery = 1;
@@ -689,7 +693,8 @@ violence_update(void)
 					transStatRemove(ch);
 					ch->pcdata->haircolor = ch->pcdata->orignalhaircolor;
 					ch->pcdata->eyes = ch->pcdata->orignaleyes;
-					send_to_char("DEBUG: SSJ REMOVED, NOT ENOUGH KI\n\r", ch);
+					act( AT_YELLOW, "You lose control of your ki and return to normal!", ch, NULL, NULL, TO_CHAR );
+					act( AT_YELLOW, "$n loses control of $s ki and returns to normal!", ch, NULL, NULL, TO_NOTVICT );
 				}
 				if (form_mastery < 1)
 					form_mastery = 1;
@@ -726,7 +731,8 @@ violence_update(void)
 					transStatRemove(ch);
 					ch->pcdata->haircolor = ch->pcdata->orignalhaircolor;
 					ch->pcdata->eyes = ch->pcdata->orignaleyes;
-					send_to_char("DEBUG: SSJ REMOVED, NOT ENOUGH KI\n\r", ch);
+					act( AT_RED, "You lose control of your God Ki and return to normal!", ch, NULL, NULL, TO_CHAR );
+					act( AT_RED, "$n loses control of $s God Ki and returns to normal!", ch, NULL, NULL, TO_NOTVICT );
 				}
 				if (form_mastery < 1)
 					form_mastery = 1;
@@ -764,7 +770,8 @@ violence_update(void)
 					transStatRemove(ch);
 					ch->pcdata->haircolor = ch->pcdata->orignalhaircolor;
 					ch->pcdata->eyes = ch->pcdata->orignaleyes;
-					send_to_char("DEBUG: SSJ REMOVED, NOT ENOUGH KI\n\r", ch);
+					act( AT_LBLUE, "You lose control of your God Ki and return to normal!", ch, NULL, NULL, TO_CHAR );
+					act( AT_LBLUE, "$n loses control of $s God Ki and returns to normal!", ch, NULL, NULL, TO_NOTVICT );
 				}
 				if (form_mastery < 1)
 					form_mastery = 1;
@@ -787,7 +794,8 @@ violence_update(void)
 		/* New Time-based Powerup */
 		if (xIS_SET((ch)->affected_by, AFF_POWERCHANNEL)
 			&& !xIS_SET((ch)->affected_by, AFF_KAIOKEN)
-			&& !xIS_SET((ch)->affected_by, AFF_SAFEMAX)) {
+			&& !xIS_SET((ch)->affected_by, AFF_SAFEMAX)
+			&& ch->position >= POS_STANDING) {
 			double safemaximum = 0;
 			int	kicontrol = 0;
 			int kistat = 0;
@@ -822,6 +830,7 @@ violence_update(void)
 						if (plmod >= 30
 							&& ch->pcdata->learned[gsn_ssj] > 0) {
 							xSET_BIT((ch)->affected_by, AFF_SSJ);
+							xREMOVE_BIT((ch)->affected_by, AFF_POWERCHANNEL);
 							act( AT_YELLOW, "Your eyes turn blue, your hair flashes blonde, and a fiery golden aura erupts around you!", ch, NULL, NULL, TO_CHAR );
 							act( AT_YELLOW, "$n's hair suddenly flashes golden blonde, transcending beyond $s normal limits into a Super Saiyan!", ch, NULL, NULL, TO_NOTVICT );
 							ch->powerup = 0;
@@ -862,6 +871,7 @@ violence_update(void)
 						if ((ch->pl >= (ch->exp * 30))
 							&& ch->pcdata->learned[gsn_ssj] > 0) {
 							xSET_BIT((ch)->affected_by, AFF_SSJ);
+							xREMOVE_BIT((ch)->affected_by, AFF_POWERCHANNEL);
 							act( AT_YELLOW, "Your eyes turn blue, your hair flashes blonde, and a fiery golden aura erupts around you!", ch, NULL, NULL, TO_CHAR );
 							act( AT_YELLOW, "$n's hair suddenly flashes golden blonde, transcending beyond $s normal limits into a Super Saiyan!", ch, NULL, NULL, TO_NOTVICT );
 							ch->powerup = 0;
@@ -904,6 +914,7 @@ violence_update(void)
 						if ((ch->pl / ch->exp) >= 65
 							&& ch->pcdata->learned[gsn_ussj] > 0) {
 							xSET_BIT((ch)->affected_by, AFF_USSJ);
+							xREMOVE_BIT((ch)->affected_by, AFF_POWERCHANNEL);
 							act( AT_YELLOW, "Your muscles bulge, and with a sudden burst of power you ascend beyond the reaches of any mere Super Saiyan.", ch, NULL, NULL, TO_CHAR );
 							act( AT_YELLOW, "$n's muscles bulge, drawing on a power beyond that of any mere Super Saiyan.", ch, NULL, NULL, TO_NOTVICT );
 							ch->pl = ch->exp * 75;
@@ -933,6 +944,7 @@ violence_update(void)
 						if ((ch->pl / ch->exp) >= 100
 							&& ch->pcdata->learned[gsn_ussj2] > 0) {
 							xSET_BIT((ch)->affected_by, AFF_USSJ2);
+							xREMOVE_BIT((ch)->affected_by, AFF_POWERCHANNEL);
 							act( AT_YELLOW, "Your muscles expand to inhuman sizes, engorging yourself with energy!", ch, NULL, NULL, TO_CHAR );
 							act( AT_YELLOW, "$n's muscles expand to inhuman sizes, engorging $mself with energy!", ch, NULL, NULL, TO_NOTVICT );
 							ch->pl = ch->exp * 150;
@@ -962,6 +974,7 @@ violence_update(void)
 						if ((ch->pl / ch->exp) >= 200
 							&& ch->pcdata->learned[gsn_ssj2] > 0) {
 							xSET_BIT((ch)->affected_by, AFF_SSJ2);
+							xREMOVE_BIT((ch)->affected_by, AFF_POWERCHANNEL);
 							act( AT_YELLOW, "Your muscles shrink, but in an intense explosion of rage your power grows nonetheless, sending arcing bolts of energy from your body.", ch, NULL, NULL, TO_CHAR );
 							act( AT_YELLOW, "Your hair stands further on end as you ascend to the true next level.", ch, NULL, NULL, TO_CHAR );
 							act( AT_YELLOW, "$n's muscles shrink amidst a storm of golden ki. In a sea of crackling, pure energy, $e truly ascends to the next level.", ch, NULL, NULL, TO_NOTVICT );
@@ -993,6 +1006,7 @@ violence_update(void)
 						if ((ch->pl / ch->exp) >= 275
 							&& ch->pcdata->learned[gsn_ssj3] > 0) {
 							xSET_BIT((ch)->affected_by, AFF_SSJ3);
+							xREMOVE_BIT((ch)->affected_by, AFF_POWERCHANNEL);
 							act(AT_YELLOW, "An earth-shattering burst of energy expands your aura. Your eyebrows disappear and your hair lengthens, flowing down your back.", ch, NULL, NULL, TO_CHAR);
 							act(AT_YELLOW, "Only the stench of ozone accompanies the countless bolts of energy wreathing your body.", ch, NULL, NULL, TO_CHAR);
 							act(AT_YELLOW, "The world feel as though it could pull apart as $n's aura expands! $s eyebrows disappear slowly and $s hair lengthens, flowing down $s back.", ch, NULL, NULL, TO_NOTVICT);
@@ -1024,6 +1038,7 @@ violence_update(void)
 						if ((ch->pl / ch->exp) >= 400
 							&& ch->pcdata->learned[gsn_ssj4] > 0) {
 							xSET_BIT((ch)->affected_by, AFF_SSJ4);
+							xREMOVE_BIT((ch)->affected_by, AFF_POWERCHANNEL);
 							act( AT_RED, "Your aura fades and your hair and eyes return to normal. However, in the next instant something inside you changes.", ch, NULL, NULL, TO_CHAR );
 							act( AT_RED, "Godly Ki radiates from deep within, and with a mighty shout that pierces the heavens, a brilliant red and gold aura encompasses you.", ch, NULL, NULL, TO_CHAR );
 							act( AT_RED, "Your hair and eyes flash red, tinted subtly with violet as you ascend beyond your mortal restrictions.", ch, NULL, NULL, TO_CHAR );
@@ -1056,6 +1071,7 @@ violence_update(void)
 						if ((ch->pl / ch->exp) >= 500
 							&& ch->pcdata->learned[gsn_sgod] > 0) {
 							xSET_BIT((ch)->affected_by, AFF_SGOD);
+							xREMOVE_BIT((ch)->affected_by, AFF_POWERCHANNEL);
 							act( AT_LBLUE, "Harnessing the secrets of your God Ki, you kindle the flame deep within and surge with newfound power.", ch, NULL, NULL, TO_CHAR );
 							act( AT_LBLUE, "Your hair and eyes flash blue, and a brilliant cyan aura erupts around you!", ch, NULL, NULL, TO_CHAR );
 							act( AT_LBLUE, "$n's body is swallowed in an intense blue light. What emerges is no mere Super Saiyan.", ch, NULL, NULL, TO_NOTVICT );
