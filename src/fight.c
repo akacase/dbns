@@ -1634,7 +1634,7 @@ violence_update(void)
 						if (plmod > 600) {
 							act( auraColor, "Radiant light suffuses your entire body, cloaking you entirely.", ch, NULL, NULL, TO_CHAR );
 							act( auraColor, "Radiant light suffuses $n's entire body, cloaking $m completely.", ch, NULL, NULL, TO_NOTVICT );
-							transStatApply(ch, (ch->perm_str * 1.20), (ch->perm_dex * 1.20), (ch->perm_int * 1.30), (ch->perm_con * 1.25);
+							transStatApply(ch, (ch->perm_str * 1.20), (ch->perm_dex * 1.20), (ch->perm_int * 1.30), (ch->perm_con * 1.25));
 						}
 						else if (plmod > 500) {
 							act( auraColor, "Pulses of God Ki emanate deep from within your core!", ch, NULL, NULL, TO_CHAR );
@@ -1817,7 +1817,7 @@ violence_update(void)
 			safemaximum = ((get_curr_int(ch) * 0.03) + 1);
 			if (form_mastery < 1)
 				form_mastery = 1;
-			resilience = (ch->perm_con / 5) * 0.00025);
+			resilience = (ch->perm_con / 5) * 0.00025;
 			if (resilience > 0.90) {
 				resilience = 0.90;
 			}
