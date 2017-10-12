@@ -1388,7 +1388,7 @@ violence_update(void)
 							act( AT_RED, "$n's hair and eyes return to normal. However, in the next instant something feels very different.", ch, NULL, NULL, TO_NOTVICT );
 							act( AT_RED, "$n is encompassed in a massive aura of crimson and gold, $s hair and eyes shifting red with a subtle violet tint.", ch, NULL, NULL, TO_NOTVICT );
 							ch->pl = ch->exp * 500;
-							transStatApply(ch, sixstr, sixspd, sixint, sixcon;
+							transStatApply(ch, sixstr, sixspd, sixint, sixcon);
 						}
 					}
 					if (ch->powerup >= safemaximum) {
@@ -1720,7 +1720,7 @@ violence_update(void)
 				fiveint = ch->perm_int * 0.70;
 				sixint = ch->perm_int * 1.10;
 				sevenint = ch->perm_int * 1.30;
-				onecon = ch->perm_con * 0..15;
+				onecon = ch->perm_con * 0.15;
 				twocon = ch->perm_con * 0.20;
 				threecon = ch->perm_con * 0.20;
 				fourcon = ch->perm_con * 0.40;
@@ -1795,7 +1795,7 @@ violence_update(void)
 						ch->powerup += 1;
 						if (plmod > 600) {
 							act( auraColor, "Radiant light suffuses your entire body, cloaking you entirely.", ch, NULL, NULL, TO_CHAR );
-							act( auraColor, "Radiant light suffuses $n's entire body, cloaking $m completely.", ch, NULL, NULL, TO_NOTVICT ););
+							act( auraColor, "Radiant light suffuses $n's entire body, cloaking $m completely.", ch, NULL, NULL, TO_NOTVICT );
 						}
 						else if (plmod > 500) {
 							act( auraColor, "Pulses of God Ki emanate deep from within your core!", ch, NULL, NULL, TO_CHAR );
@@ -1892,7 +1892,7 @@ violence_update(void)
 				fiveint = ch->perm_int;
 				sixint = ch->perm_int * 1.25;
 				sevenint = ch->perm_int * 1.75;
-				onecon = ch->perm_con * 0..15;
+				onecon = ch->perm_con * 0.15;
 				twocon = ch->perm_con * 0.15;
 				threecon = ch->perm_con * 0.25;
 				fourcon = ch->perm_con * 0.35;
