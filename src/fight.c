@@ -2063,7 +2063,7 @@ violence_update(void)
 				if (danger < 1) {
 					danger = 1;
 				}
-				ch->pl *= 1.005;
+				ch->pl *= 1.01;
 				ch->powerup += 1;
 				if ((ch->mana - danger) < 0)
 					ch->mana = 0;
@@ -2099,7 +2099,7 @@ violence_update(void)
 				if (danger < 1) {
 					danger = 1;
 				}
-				ch->pl *= 1.005;
+				ch->pl *= 1.01;
 				ch->powerup += 1;
 				if ((ch->mana - danger) < 0)
 					ch->mana = 0;
