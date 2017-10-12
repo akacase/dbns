@@ -2024,7 +2024,6 @@ violence_update(void)
 			&& xIS_SET((ch)->affected_by, AFF_SAFEMAX)) {
 			double safemaximum = 0;
 			int danger = 0;
-			double resilience = 0;
 			int form_mastery = 0;
 			
 			if (ch->position < POS_STANDING && ch->position > POS_DEAD) {
@@ -2032,18 +2031,6 @@ violence_update(void)
 				send_to_char("You must stand if you wish to power up.\n\r", ch);
 			}
 			form_mastery = (ch->train / 45000);
-			safemaximum = ((get_curr_int(ch) * 0.03) + 1);
-			if (form_mastery < 1)
-				form_mastery = 1;
-			resilience = (ch->perm_con / 5) * 0.00025;
-			if (resilience > 0.90) {
-				resilience = 0.90;
-			}
-			danger = ((ch->powerup - safemaximum) * (ch->powerup * 100));
-			/* Just in case. */
-			if (danger < 1) {
-				danger = 1;
-			}
 			if (xIS_SET((ch)->affected_by, AFF_SSJ)
 				|| xIS_SET((ch)->affected_by, AFF_SSJ2)
 				|| xIS_SET((ch)->affected_by, AFF_SSJ3)
@@ -2069,6 +2056,13 @@ violence_update(void)
 				|| xIS_SET((ch)->affected_by, AFF_EVILSURGE)
 				|| xIS_SET((ch)->affected_by, AFF_EVILOVERLOAD)) {
 				safemaximum = form_mastery;
+				if (form_mastery < 1)
+					form_mastery = 1;
+				danger = ((ch->powerup - safemaximum) * (ch->powerup * 100));
+				/* Just in case. */
+				if (danger < 1) {
+					danger = 1;
+				}
 				ch->pl *= 1.005;
 				ch->powerup += 1;
 				if ((ch->mana - danger) < 0)
@@ -2099,6 +2093,12 @@ violence_update(void)
 				}
 			}
 			else {
+				safemaximum = ((get_curr_int(ch) * 0.03) + 1);
+				danger = ((ch->powerup - safemaximum) * (ch->powerup * 100));
+				/* Just in case. */
+				if (danger < 1) {
+					danger = 1;
+				}
 				ch->pl *= 1.005;
 				ch->powerup += 1;
 				if ((ch->mana - danger) < 0)
