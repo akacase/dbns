@@ -2025,7 +2025,6 @@ violence_update(void)
 			double safemaximum = 0;
 			int danger = 0;
 			double resilience = 0;
-			double dangerres = 0;
 			int form_mastery = 0;
 			
 			if (ch->position < POS_STANDING && ch->position > POS_DEAD) {
@@ -2041,8 +2040,6 @@ violence_update(void)
 				resilience = 0.90;
 			}
 			danger = ((ch->powerup - safemaximum) * (ch->powerup * 100));
-			dangerres = (danger * resilience);
-			danger -= dangerres;
 			/* Just in case. */
 			if (danger < 1) {
 				danger = 1;
