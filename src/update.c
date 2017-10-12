@@ -1818,6 +1818,14 @@ char_update(void)
 				    "$n's icy aura sends a freezing cold breeze through the room.",
 				    ch, NULL, NULL, TO_NOTVICT);
 			}
+			if (IS_AFFECTED(ch, AFF_GOLDENFORM)) {
+				act(AT_YELLOW,
+					"A radiant amber gold glow courses upward through you.",
+					ch, NULL, NULL, TO_CHAR);
+				act(AT_YELLOW
+					"Radiant amber gold energy courses upward through $n's body."
+					ch, NULL, NULL, TO_NOTVICT);
+			}
 			if (IS_AFFECTED(ch, AFF_KAIOKEN)) {
 				act(AT_RED,
 				    "A hum fills the room as the mystical flames around you tingle your senses.",

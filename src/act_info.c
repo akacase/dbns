@@ -768,14 +768,11 @@ show_visible_affects_to_char(CHAR_DATA * victim, CHAR_DATA * ch)
 	    && !IS_AFFECTED(victim, AFF_ICER5)
 	    &&  IS_AFFECTED(victim, AFF_GOLDENFORM)) {
 		pager_printf_color(ch, "  &P*");
-		act(AT_PURPLE,
-		    "$N has armored plating and cruel spikes protecting $S giant, "
-		    "muscle-bound form.&P", ch, NULL, victim, TO_CHAR);
+		act(AT_YELLOW,
+		    "$N's sleek, reflective body radiates an intense gold-amber glow.",
+			ch, NULL, victim, TO_CHAR);
 		pager_printf_color(ch,
-		    "  &P*&P%s is covered in dark, icy purple flames.&P\n\r",
-		    name);
-		pager_printf_color(ch,
-		    "  &Y*&Y%s is shimmering in a deep, golden aura.&P\n\r",
+		    "  &Y*&Y%s is covered in a massive golden aura.&P\n\r",
 		    name);
 	}
 	if (IS_AFFECTED(victim, AFF_HYPER)) {
