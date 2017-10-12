@@ -2021,15 +2021,14 @@ violence_update(void)
 		}
 		if (xIS_SET((ch)->affected_by, AFF_OVERCHANNEL)
 			&& !xIS_SET((ch)->affected_by, AFF_KAIOKEN)
-			&& xIS_SET((ch)->affected_by, AFF_SAFEMAX)
-			&& ch->position >= POS_STANDING) {
+			&& xIS_SET((ch)->affected_by, AFF_SAFEMAX)) {
 			double safemaximum = 0;
 			int danger = 0;
 			double resilience = 0;
 			double dangerres = 0;
 			int form_mastery = 0;
 			
-			if (ch->position < POS_STANDING) {
+			if (ch->position < POS_STANDING && ch->position > POS_DEAD) {
 				xREMOVE_BIT((ch)->affected_by, AFF_OVERCHANNEL);
 				send_to_char("You must stand if you wish to power up.\n\r", ch);
 			}
