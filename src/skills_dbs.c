@@ -463,16 +463,10 @@ rage(CHAR_DATA * ch, CHAR_DATA * victim)
 		if (ch->rage < 500)
 			return;
 			
-		if (get_curr_str(ch) < 500 )
-			return;
+		int saiyanTotal = 0;
+		saiyanTotal = ((ch->perm_str * 2) + (ch->perm_dex * 2) + (ch->perm_int) + (ch->perm_con * 2));
 			
-		if (get_curr_dex(ch) < 100 )
-			return;
-			
-		if (get_curr_int(ch) < 500 )
-			return;
-			
-		if (get_curr_con(ch) < 500 )
+		if (saiyanTotal < 4000)
 			return;
 			
 
@@ -708,19 +702,7 @@ rage2(CHAR_DATA * ch, CHAR_DATA * victim)
 		if (ch->rage < 800)
 			return;
 			
-		if (get_curr_str(ch) < 1000 )
-			return;
-			
-		if (get_curr_dex(ch) < 500 )
-			return;
-			
-		if (get_curr_int(ch) < 1000 )
-			return;
-			
-		if (get_curr_con(ch) < 1000 )
-			return;
-
-		if (ch->pcdata->learned[gsn_ssj2] > 0)
+		if (ch->train < 1305000)
 			return;
 
 		switch (number_range(1, 5)) {
@@ -941,16 +923,7 @@ rage3(CHAR_DATA * ch, CHAR_DATA * victim)
 		if (ch->rage < 1000)
 			return;
 			
-		if (get_curr_str(ch) < 2000 )
-			return;
-			
-		if (get_curr_dex(ch) < 1000 )
-			return;
-			
-		if (get_curr_int(ch) < 2000 )
-			return;
-			
-		if (get_curr_con(ch) < 2000 )
+		if (ch->train < 1755000)
 			return;
 
 		if (ch->pcdata->learned[gsn_ssj3] > 0)
@@ -1125,22 +1098,13 @@ rage4(CHAR_DATA * ch, CHAR_DATA * victim)
 		return;
 		
 	if (ch->delay <= 0) {
-		if (!is_saiyan(ch))
+		if (!is_saiyan(ch) && !is_hb(ch))
 			return;
 
 		if (ch->rage < 1500)
 			return;
 			
-		if (get_curr_str(ch) < 4000 )
-			return;
-			
-		if (get_curr_dex(ch) < 2000 )
-			return;
-			
-		if (get_curr_int(ch) < 4000 )
-			return;
-			
-		if (get_curr_con(ch) < 4000 )
+		if (ch->train < 2340000)
 			return;
 
 		if (ch->pcdata->learned[gsn_ssj4] > 0)
@@ -1201,11 +1165,11 @@ rage4(CHAR_DATA * ch, CHAR_DATA * victim)
 		act(AT_YELLOW, "=-", ch, NULL, victim, TO_CHAR);
 		act(AT_YELLOW, "=-", ch, NULL, victim, TO_VICT);
 		act(AT_YELLOW, "=-", ch, NULL, victim, TO_NOTVICT);
-		act(AT_RED, "Red fur begins to sprout all over your body.", ch,
+		act(AT_RED, "Your eyes flash red momentarily.", ch,
 		    NULL, victim, TO_CHAR);
-		act(AT_RED, "Red fur begins to sprout all over $n's body.", ch,
+		act(AT_RED, "$n's eyes flash red.", ch,
 		    NULL, victim, TO_VICT);
-		act(AT_RED, "Red fur begins to sprout all over $n's body.", ch,
+		act(AT_RED, "$n's eyes flash red.", ch,
 		    NULL, victim, TO_NOTVICT);
 		act(AT_YELLOW, "=-", ch, NULL, victim, TO_CHAR);
 		act(AT_YELLOW, "=-", ch, NULL, victim, TO_VICT);
@@ -1218,11 +1182,11 @@ rage4(CHAR_DATA * ch, CHAR_DATA * victim)
 		act(AT_RED, "=-", ch, NULL, victim, TO_CHAR);
 		act(AT_RED, "=-", ch, NULL, victim, TO_VICT);
 		act(AT_RED, "=-", ch, NULL, victim, TO_NOTVICT);
-		act(AT_YELLOW, "Your hair flashes black.", ch, NULL, victim,
+		act(AT_YELLOW, "Your hair flashes red.", ch, NULL, victim,
 		    TO_CHAR);
-		act(AT_YELLOW, "$n's hair flashes black.", ch, NULL, victim,
+		act(AT_YELLOW, "$n's hair flashes red.", ch, NULL, victim,
 		    TO_VICT);
-		act(AT_YELLOW, "$n's hair flashes black.", ch, NULL, victim,
+		act(AT_YELLOW, "$n's hair flashes red.", ch, NULL, victim,
 		    TO_NOTVICT);
 		act(AT_RED, "=-", ch, NULL, victim, TO_CHAR);
 		act(AT_RED, "=-", ch, NULL, victim, TO_VICT);
@@ -1236,13 +1200,13 @@ rage4(CHAR_DATA * ch, CHAR_DATA * victim)
 		act(AT_YELLOW, "=-", ch, NULL, victim, TO_VICT);
 		act(AT_YELLOW, "=-", ch, NULL, victim, TO_NOTVICT);
 		act(AT_RED,
-		    "Your voice bellows out through the area, with a deep angry howl.",
+		    "Your voice bellows out through the area with a deep angry howl.",
 		    ch, NULL, victim, TO_CHAR);
 		act(AT_RED,
-		    "$n's voice bellows out through the area, with a deep angry howl.",
+		    "$n's voice bellows out through the area with a deep angry howl.",
 		    ch, NULL, victim, TO_VICT);
 		act(AT_RED,
-		    "$n's voice bellows out through the area, with a deep angry howl.",
+		    "$n's voice bellows out through the area with a deep angry howl.",
 		    ch, NULL, victim, TO_NOTVICT);
 		do_yell(ch, "rrrrrRRRRRRRRAAAAAAAAAAAAHHHHHHHHHH!!!");
 		act(AT_YELLOW, "=-", ch, NULL, victim, TO_CHAR);
@@ -1257,31 +1221,31 @@ rage4(CHAR_DATA * ch, CHAR_DATA * victim)
 		act(AT_RED, "=-", ch, NULL, victim, TO_VICT);
 		act(AT_RED, "=-", ch, NULL, victim, TO_NOTVICT);
 		act(AT_RED,
-		    "You howl with anger as your hair turns black again and grow",
+		    "You howl with anger as your hair turns red. A giant golden",
 		    ch, NULL, NULL, TO_CHAR);
 		act(AT_RED,
-		    "thick red fur all over your body, finally you sprout a",
+		    "aura envelopes you, intertwined with a menacing crimson hue.",
 		    ch, NULL, NULL, TO_CHAR);
 		act(AT_RED,
-		    "tail and look up with glaring eyes inset within a red outline.",
+		    "You've tasted what it truly means to become a God.",
 		    ch, NULL, NULL, TO_CHAR);
 		act(AT_RED,
-		    "$n howls with anger as $s hair turns black again and grows",
+		    "$n howls with anger as $s hair turns red. A giant golden",
 		    ch, NULL, NULL, TO_NOTVICT);
 		act(AT_RED,
-		    "thick red fur all over $s body, finally $e sprouts a", ch,
+		    "aura envelopes $m, intertwined with a menacing crimson hue.", ch,
 		    NULL, NULL, TO_NOTVICT);
 		act(AT_RED,
-		    "tail and looks up at you with glaring eyes inset within a red outline.",
+		    "$n has tasted what it truly means to become a God...",
 		    ch, NULL, NULL, TO_NOTVICT);
 		act(AT_RED,
-		    "You look up at $N, with rage filled eyes, ready to kill...",
+		    "You look up at $N with rage filled eyes, ready to kill...",
 		    ch, NULL, victim, TO_CHAR);
 		act(AT_RED,
-		    "$n looks up at you, with rage filled eyes, ready to kill...",
+		    "$n looks up at you with rage filled eyes, ready to kill...",
 		    ch, NULL, victim, TO_VICT);
 		act(AT_RED,
-		    "$n looks up at $N, with rage filled eyes, ready to kill...",
+		    "$n looks up at $N with rage filled eyes, ready to kill...",
 		    ch, NULL, victim, TO_NOTVICT);
 		act(AT_RED, "=-", ch, NULL, victim, TO_CHAR);
 		act(AT_RED, "=-", ch, NULL, victim, TO_VICT);
@@ -1335,22 +1299,13 @@ rage5(CHAR_DATA * ch, CHAR_DATA * victim)
 		return;
 
 	if (ch->delay <= 0) {
-		if (!is_saiyan(ch))
+		if (!is_saiyan(ch) && !is_hb(ch))
 			return;
 
 		if (ch->rage < 1500)
 			return;
 			
-		if (get_curr_str(ch) < 16000 )
-			return;
-			
-		if (get_curr_dex(ch) < 8000 )
-			return;
-			
-		if (get_curr_int(ch) < 16000 )
-			return;
-			
-		if (get_curr_con(ch) < 16000 )
+		if (ch->train < 2790000)
 			return;
 
 		if (ch->pcdata->learned[gsn_sgod] > 0)
@@ -1394,11 +1349,11 @@ rage5(CHAR_DATA * ch, CHAR_DATA * victim)
 		act(AT_YELLOW, "=-", ch, NULL, victim, TO_CHAR);
 		act(AT_YELLOW, "=-", ch, NULL, victim, TO_VICT);
 		act(AT_YELLOW, "=-", ch, NULL, victim, TO_NOTVICT);
-		act(AT_RED, "Electricity violently arcs around your body.", ch,
+		act(AT_LBLUE, "Countless white flecks begin to gather around you.", ch,
 		    NULL, victim, TO_CHAR);
-		act(AT_RED, "Electricity violently arcs around $n's body.", ch,
+		act(AT_LBLUE, "Countless white flecks begin to gather around $n's body.", ch,
 		    NULL, victim, TO_VICT);
-		act(AT_RED, "Electricity violently arcs around $n's body.", ch,
+		act(AT_LBLUE, "Countless white flecks begin to gather around $n's body.", ch,
 		    NULL, victim, TO_NOTVICT);
 		act(AT_YELLOW, "=-", ch, NULL, victim, TO_CHAR);
 		act(AT_YELLOW, "=-", ch, NULL, victim, TO_VICT);
@@ -1428,11 +1383,11 @@ rage5(CHAR_DATA * ch, CHAR_DATA * victim)
 		act(AT_RED, "=-", ch, NULL, victim, TO_CHAR);
 		act(AT_RED, "=-", ch, NULL, victim, TO_VICT);
 		act(AT_RED, "=-", ch, NULL, victim, TO_NOTVICT);
-		act(AT_YELLOW, "Your hair flashes purple.", ch, NULL, victim,
+		act(AT_LBLUE, "Your hair flashes blue.", ch, NULL, victim,
 		    TO_CHAR);
-		act(AT_YELLOW, "$n's hair flashes purple.", ch, NULL, victim,
+		act(AT_LBLUE, "$n's hair flashes blue.", ch, NULL, victim,
 		    TO_VICT);
-		act(AT_YELLOW, "$n's hair flashes purple.", ch, NULL, victim,
+		act(AT_LBLUE, "$n's hair flashes blue.", ch, NULL, victim,
 		    TO_NOTVICT);
 		act(AT_RED, "=-", ch, NULL, victim, TO_CHAR);
 		act(AT_RED, "=-", ch, NULL, victim, TO_VICT);
@@ -1446,13 +1401,13 @@ rage5(CHAR_DATA * ch, CHAR_DATA * victim)
 		act(AT_YELLOW, "=-", ch, NULL, victim, TO_VICT);
 		act(AT_YELLOW, "=-", ch, NULL, victim, TO_NOTVICT);
 		act(AT_RED,
-		    "Your voice bellows out through the area, with a deep angry howl.",
+		    "Your voice bellows out through the area with a deep angry howl.",
 		    ch, NULL, victim, TO_CHAR);
 		act(AT_RED,
-		    "$n's voice bellows out through the area, with a deep angry howl.",
+		    "$n's voice bellows out through the area with a deep angry howl.",
 		    ch, NULL, victim, TO_VICT);
 		act(AT_RED,
-		    "$n's voice bellows out through the area, with a deep angry howl.",
+		    "$n's voice bellows out through the area with a deep angry howl.",
 		    ch, NULL, victim, TO_NOTVICT);
 		do_yell(ch, "rrrrrRRRRRRRRAAAAAAAAAAAAHHHHHHHHHH!!!");
 		act(AT_YELLOW, "=-", ch, NULL, victim, TO_CHAR);
@@ -1463,37 +1418,37 @@ rage5(CHAR_DATA * ch, CHAR_DATA * victim)
 		add_timer(victim, TIMER_ASUPRESSED, 4, NULL, 1);
 		break;
 	case 1:
-		act(AT_PURPLE, "=-", ch, NULL, victim, TO_CHAR);
-		act(AT_PURPLE, "=-", ch, NULL, victim, TO_VICT);
-		act(AT_PURPLE, "=-", ch, NULL, victim, TO_NOTVICT);
-		act(AT_PURPLE,
-		    "Your golden aura envelopes you.", ch, NULL, NULL, TO_CHAR);
-		act(AT_PURPLE,
-		    "Your hair and eyes turn purple", ch, NULL, NULL, TO_CHAR);
-		act(AT_PURPLE,
+		act(AT_LBLUE, "=-", ch, NULL, victim, TO_CHAR);
+		act(AT_LBLUE, "=-", ch, NULL, victim, TO_VICT);
+		act(AT_LBLUE, "=-", ch, NULL, victim, TO_NOTVICT);
+		act(AT_LBLUE,
+		    "A blue aura of God Ki envelopes you.", ch, NULL, NULL, TO_CHAR);
+		act(AT_LBLUE,
+		    "Your hair and eyes turn blue", ch, NULL, NULL, TO_CHAR);
+		act(AT_LBLUE,
 		    "The ground shakes around you, the skies move.",
 		    ch, NULL, NULL, TO_CHAR);
-		act(AT_PURPLE,
-		    "$n's hair turns purple and the ground around you shakes.",
+		act(AT_LBLUE,
+		    "$n's hair turns blue and the ground around you shakes.",
 		    ch, NULL, NULL, TO_NOTVICT);
-		act(AT_PURPLE,
+		act(AT_LBLUE,
 		    "$n's power is moving the sky around you.", ch,
 		    NULL, NULL, TO_NOTVICT);
-		act(AT_PURPLE,
-		    "$n's pwoer is no longer sensed.",
+		act(AT_LBLUE,
+		    "$n's power is no longer sensed.",
 		    ch, NULL, NULL, TO_NOTVICT);
-		act(AT_PURPLE,
-		    "You look up at $N, all doubts dissapear. You are a God.",
+		act(AT_LBLUE,
+		    "You look up at $N and all doubts disappear. You've ascended beyond even a God.",
 		    ch, NULL, victim, TO_CHAR);
-		act(AT_PURPLE,
-		    "$n looks up at you, you can't sense their power.",
+		act(AT_LBLUE,
+		    "$n looks up at you, but you can't sense their power.",
 		    ch, NULL, victim, TO_VICT);
-		act(AT_PURPLE,
+		act(AT_LBLUE,
 		    "$n looks up at $N, ready for battle.",
 		    ch, NULL, victim, TO_NOTVICT);
-		act(AT_PURPLE, "=-", ch, NULL, victim, TO_CHAR);
-		act(AT_PURPLE, "=-", ch, NULL, victim, TO_VICT);
-		act(AT_PURPLE, "=-", ch, NULL, victim, TO_NOTVICT);
+		act(AT_LBLUE, "=-", ch, NULL, victim, TO_CHAR);
+		act(AT_LBLUE, "=-", ch, NULL, victim, TO_VICT);
+		act(AT_LBLUE, "=-", ch, NULL, victim, TO_NOTVICT);
 
 		ch->pcdata->learned[gsn_sgod] = 10;
 		if (xIS_SET((ch)->affected_by, AFF_KAIOKEN))
@@ -1511,7 +1466,7 @@ rage5(CHAR_DATA * ch, CHAR_DATA * victim)
 		if (!xIS_SET(ch->affected_by, AFF_SSJ4))
 			xSET_BIT((ch)->affected_by, AFF_SSJ4);
 		xSET_BIT((ch)->affected_by, AFF_SGOD);
-		ch->pl = ch->exp * 500;
+		ch->pl = ch->exp * 600;
 		transStatApply(ch, 50, 25, 15, 20);
 		ch->delay = 0;
 		ch->rage = 0;
@@ -1630,6 +1585,8 @@ do_powerdown(CHAR_DATA * ch, char *argument)
 			xREMOVE_BIT((ch)->affected_by, AFF_SSJ3);
 		if (xIS_SET((ch)->affected_by, AFF_SSJ4))
 			xREMOVE_BIT((ch)->affected_by, AFF_SSJ4);
+		if (xIS_SET((ch)->affected_by, AFF_SGOD))
+			xREMOVE_BIT((ch)->affected_by, AFF_SGOD);
 		if (xIS_SET((ch)->affected_by, AFF_KAIOKEN))
 			xREMOVE_BIT((ch)->affected_by, AFF_KAIOKEN);
 		if (xIS_SET((ch)->affected_by, AFF_SNAMEK))
@@ -1642,6 +1599,8 @@ do_powerdown(CHAR_DATA * ch, char *argument)
 			xREMOVE_BIT((ch)->affected_by, AFF_ICER4);
 		if (xIS_SET((ch)->affected_by, AFF_ICER5))
 			xREMOVE_BIT((ch)->affected_by, AFF_ICER5);
+		if (xIS_SET((ch)->affected_by, AFF_GOLDENFORM))
+			xREMOVE_BIT((ch)->affected_by, AFF_GOLDENFORM);
 		if (xIS_SET((ch)->affected_by, AFF_HEART))
 			xREMOVE_BIT(ch->affected_by, AFF_HEART);
 		if (xIS_SET((ch)->affected_by, AFF_HYPER))
@@ -1710,6 +1669,7 @@ do_powerdown(CHAR_DATA * ch, char *argument)
 	    || xIS_SET((ch)->affected_by, AFF_SSJ2)
 	    || xIS_SET((ch)->affected_by, AFF_SSJ3)
 	    || xIS_SET((ch)->affected_by, AFF_SSJ4)
+		|| xIS_SET((ch)->affected_by, AFF_SGOD)
 	    || xIS_SET((ch)->affected_by, AFF_KAIOKEN)
 	    || xIS_SET((ch)->affected_by, AFF_HYPER)
 	    || xIS_SET((ch)->affected_by, AFF_EXTREME)
@@ -1718,6 +1678,7 @@ do_powerdown(CHAR_DATA * ch, char *argument)
 	    || xIS_SET((ch)->affected_by, AFF_ICER3)
 	    || xIS_SET((ch)->affected_by, AFF_ICER4)
 	    || xIS_SET((ch)->affected_by, AFF_ICER5)
+		|| xIS_SET((ch)->affected_by, AFF_GOLDENFORM)
 	    || xIS_SET((ch)->affected_by, AFF_SEMIPERFECT)
 	    || xIS_SET((ch)->affected_by, AFF_PERFECT)
 	    || xIS_SET((ch)->affected_by, AFF_ULTRAPERFECT)
@@ -2981,7 +2942,10 @@ do_kaioken(CHAR_DATA * ch, char *argument)
 void
 do_ssj(CHAR_DATA * ch, char *argument)
 {
-
+	if (!IS_NPC(ch)) {
+		send_to_char("Temporarily disabled. Try 'powerup' instead.", ch);
+		return;
+	}
 	if (IS_NPC(ch) && is_split(ch)) {
 		if (!ch->master)
 			return;
@@ -3100,7 +3064,10 @@ do_ssj(CHAR_DATA * ch, char *argument)
 void
 do_ssj2(CHAR_DATA * ch, char *argument)
 {
-
+	if (!IS_NPC(ch)) {
+		send_to_char("Temporarily disabled. Try 'powerup' instead.", ch);
+		return;
+	}
 	if (IS_NPC(ch) && is_split(ch)) {
 		if (!ch->master)
 			return;
@@ -3278,7 +3245,10 @@ do_ssj2(CHAR_DATA * ch, char *argument)
 void
 do_ssj3(CHAR_DATA * ch, char *argument)
 {
-
+	if (!IS_NPC(ch)) {
+		send_to_char("Temporarily disabled. Try 'powerup' instead.", ch);
+		return;
+	}
 	if (IS_NPC(ch) && is_split(ch)) {
 		if (!ch->master)
 			return;
@@ -3468,6 +3438,10 @@ do_ssj3(CHAR_DATA * ch, char *argument)
 void
 do_ssj4(CHAR_DATA * ch, char *argument)
 {
+	if (!IS_NPC(ch)) {
+		send_to_char("Temporarily disabled. Try 'powerup' instead.", ch);
+		return;
+	}
 	if (IS_NPC(ch) && is_split(ch)) {
 		if (!ch->master)
 			return;
@@ -3679,6 +3653,10 @@ do_ssj4(CHAR_DATA * ch, char *argument)
 void
 do_sgod(CHAR_DATA * ch, char *argument)
 {
+	if (!IS_NPC(ch)) {
+		send_to_char("Temporarily disabled. Try 'powerup' instead.", ch);
+		return;
+	}
 	if (IS_NPC(ch) && is_split(ch)) {
 		if (!ch->master)
 			return;
@@ -3882,7 +3860,10 @@ do_sgod(CHAR_DATA * ch, char *argument)
 void
 do_super_namek(CHAR_DATA * ch, char *argument)
 {
-
+	if (!IS_NPC(ch)) {
+		send_to_char("Temporarily disabled. Try 'powerup' instead.", ch);
+		return;
+	}
 	if (IS_NPC(ch) && is_split(ch)) {
 		if (!ch->master)
 			return;
@@ -3990,7 +3971,10 @@ do_super_namek(CHAR_DATA * ch, char *argument)
 void
 do_icer_transform_2(CHAR_DATA * ch, char *argument)
 {
-
+	if (!IS_NPC(ch)) {
+		send_to_char("Temporarily disabled. Try 'powerup' instead.", ch);
+		return;
+	}
 	if (IS_NPC(ch) && is_split(ch)) {
 		if (!ch->master)
 			return;
@@ -4071,6 +4055,10 @@ do_icer_transform_2(CHAR_DATA * ch, char *argument)
 void
 do_icer_transform_3(CHAR_DATA * ch, char *argument)
 {
+	if (!IS_NPC(ch)) {
+		send_to_char("Temporarily disabled. Try 'powerup' instead.", ch);
+		return;
+	}
 	if (IS_NPC(ch) && is_split(ch)) {
 		if (!ch->master)
 			return;
@@ -4160,7 +4148,10 @@ do_icer_transform_3(CHAR_DATA * ch, char *argument)
 void
 do_icer_transform_4(CHAR_DATA * ch, char *argument)
 {
-
+	if (!IS_NPC(ch)) {
+		send_to_char("Temporarily disabled. Try 'powerup' instead.", ch);
+		return;
+	}
 	if (IS_NPC(ch) && is_split(ch)) {
 		if (!ch->master)
 			return;
@@ -4249,7 +4240,10 @@ do_icer_transform_4(CHAR_DATA * ch, char *argument)
 void
 do_icer_transform_5(CHAR_DATA * ch, char *argument)
 {
-
+	if (!IS_NPC(ch)) {
+		send_to_char("Temporarily disabled. Try 'powerup' instead.", ch);
+		return;
+	}
 	if (IS_NPC(ch) && is_split(ch)) {
 		if (!ch->master)
 			return;
@@ -4335,6 +4329,10 @@ do_icer_transform_5(CHAR_DATA * ch, char *argument)
 void
 do_icer_transform_golden_form(CHAR_DATA * ch, char *argument)
 {
+	if (IS_NPC(ch)) {
+		send_to_char("Temporarily disabled. Try 'powerup' instead.", ch);
+		return;
+	}
 	double pl_mult = 0;
 	int kicontrol = 0;
 
@@ -5981,7 +5979,13 @@ do_solar_flare(CHAR_DATA * ch, char *argument)
 void
 do_hyper(CHAR_DATA * ch, char *argument)
 {
-
+	if (!IS_NPC(ch)) {
+		send_to_char("Temporarily disabled. Try 'powerup' instead.", ch);
+		return;
+	}
+	if (IS_NPC(ch)) {
+		send_to_char("Temporarily disabled. Try 'powerup' instead.", ch);
+	}
 	if (IS_NPC(ch) && is_split(ch)) {
 		if (!ch->master)
 			return;
@@ -9934,6 +9938,10 @@ do_banish(CHAR_DATA * ch, char *argument)
 void
 do_mystic(CHAR_DATA * ch, char *argument)
 {
+	if (!IS_NPC(ch)) {
+		send_to_char("Temporarily disabled. Try 'powerup' instead.", ch);
+		return;
+	}
 	int kicontrol = 0;
 	
 	kicontrol = get_curr_int(ch);
@@ -10692,7 +10700,10 @@ do_spirit_bomb(CHAR_DATA * ch, char *arg)
 void
 do_ussj(CHAR_DATA * ch, char *argument)
 {
-
+	if (!IS_NPC(ch)) {
+		send_to_char("Temporarily disabled. Try 'powerup' instead.", ch);
+		return;
+	}
 	if (IS_NPC(ch) && is_split(ch)) {
 		if (!ch->master)
 			return;
@@ -10797,7 +10808,10 @@ do_ussj(CHAR_DATA * ch, char *argument)
 void
 do_ussj2(CHAR_DATA * ch, char *argument)
 {
-
+	if (!IS_NPC(ch)) {
+		send_to_char("Temporarily disabled. Try 'powerup' instead.", ch);
+		return;
+	}
 	if (IS_NPC(ch) && is_split(ch)) {
 		if (!ch->master)
 			return;
@@ -10906,6 +10920,10 @@ do_ussj2(CHAR_DATA * ch, char *argument)
 void
 do_extreme(CHAR_DATA * ch, char *argument)
 {
+	if (!IS_NPC(ch)) {
+		send_to_char("Temporarily disabled. Try 'powerup' instead.", ch);
+		return;
+	}
 	double pl_mult;
 	int kicontrol = 0;
 

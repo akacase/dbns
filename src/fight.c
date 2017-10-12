@@ -533,6 +533,55 @@ violence_update(void)
 		}
 		/* Transformation Update */
 		if (!IS_NPC(ch)
+			&& xIS_SET((ch)->affected_by, AFF_SNAMEK)) {
+				int form_drain = 0;
+				int form_mastery = 0;
+				double plmod = 0;
+				
+				form_mastery = (ch->train / 45000);
+				plmod = (ch->pl / ch->exp);
+				if (ch->mana <= 0) {
+					xREMOVE_BIT((ch)->affected_by, AFF_SNAMEK);
+					if (xIS_SET((ch)->affected_by, AFF_POWERCHANNEL))
+						xREMOVE_BIT((ch)->affected_by, AFF_POWERCHANNEL);
+					if (xIS_SET((ch)->affected_by, AFF_OVERCHANNEL))
+						xREMOVE_BIT((ch)->affected_by, AFF_OVERCHANNEL);
+					if (xIS_SET((ch)->affected_by, AFF_SAFEMAX))
+						xREMOVE_BIT((ch)->affected_by, AFF_SAFEMAX);
+					ch->pl = ch->exp;
+					ch->powerup = 0;
+					ch->mana = 0;
+					transStatRemove(ch);
+					act( AT_WHITE, "You lose control of your ki and return to normal!", ch, NULL, NULL, TO_CHAR );
+					act( AT_WHITE, "$n loses control of $s ki and returns to normal!", ch, NULL, NULL, TO_NOTVICT );
+				}
+				if (form_mastery < 1)
+					form_mastery = 1;
+				if (plmod > 600)
+					form_drain = (800 - (form_mastery * 6));
+				else if (plmod > 500)
+					form_drain = (400 - (form_mastery * 6));
+				else if (plmod > 350)
+					form_drain = (400 - (form_mastery * 6));
+				else if (plmod > 250)
+					form_drain = (275 - (form_mastery * 6));
+				else if (plmod > 150)
+					form_drain = (200 - (form_mastery * 6));
+				else if (plmod > 75)
+					form_drain = (150 - (form_mastery * 6));
+				else if (plmod > 50)
+					form_drain = (100 - (form_mastery * 6));
+				else if (plmod > 35)
+					form_drain = (75 - (form_mastery * 6));
+				if (form_drain < 1)
+					form_drain = 1;
+				ch->mana -= form_drain;
+				if (form_drain <= 1)
+					ch->train += 1;
+				else if (form_drain > 1)
+					ch->train += 3;
+		}
+		if (!IS_NPC(ch)
 			&& xIS_SET((ch)->affected_by, AFF_MYSTIC)) {
 				int form_drain = 0;
 				int form_mastery = 0;
@@ -1027,15 +1076,11 @@ violence_update(void)
 			&& !xIS_SET((ch)->affected_by, AFF_SAFEMAX)
 			&& ch->position >= POS_STANDING) {
 			double safemaximum = 0;
-			int	kicontrol = 0;
-			int kistat = 0;
 			int form_mastery = 0;
 			double plmod = 0;
 			int auraColor = AT_WHITE;
 			
 			safemaximum = ((get_curr_int(ch) * 0.03) + 1);
-			kicontrol = get_curr_int(ch);
-			kistat = (kicontrol / 10);
 			form_mastery = (ch->train / 45000);
 			plmod = (ch->pl / ch->exp);
 			if( !IS_NPC( ch ) && ch->pcdata->auraColorPowerUp > 0 )
@@ -1052,19 +1097,23 @@ violence_update(void)
 			}
 			if (is_saiyan(ch) || is_hb(ch)) {
 				if (!xIS_SET((ch)->affected_by, AFF_SSJ)) {
+					int ussj2penalty = 0;
+					
+					ussj2penalty = (ch->perm_dex / 2);
 					safemaximum = ((get_curr_int(ch) * 0.03) + 1);
 					if (ch->powerup < safemaximum) {
 						ch->pl *= 1.15;
 						ch->powerup += 1;
-						transStatApply(ch, kistat, kistat, kistat, kistat);
+						transStatApply(ch, (ch->perm_str * 0.05), (ch->perm_dex * 0.05), (ch->perm_int * 0.05), (ch->perm_con * 0.05));
 						if (plmod >= 30
 							&& ch->pcdata->learned[gsn_ssj] > 0) {
 							xSET_BIT((ch)->affected_by, AFF_SSJ);
 							xREMOVE_BIT((ch)->affected_by, AFF_POWERCHANNEL);
-							act( AT_YELLOW, "Your eyes turn blue, your hair flashes blonde, and a fiery golden aura erupts around you!", ch, NULL, NULL, TO_CHAR );
-							act( AT_YELLOW, "$n's hair suddenly flashes golden blonde, transcending beyond $s normal limits into a Super Saiyan!", ch, NULL, NULL, TO_NOTVICT );
+							act( AT_YELLOW, "Your eyes turn blue, your hair flashes blonde and a fiery golden aura erupts around you!", ch, NULL, NULL, TO_CHAR );
+							act( AT_YELLOW, "$n's hair suddenly flashes blonde, transcending beyond $s normal limits in a fiery display of golden ki!", ch, NULL, NULL, TO_NOTVICT );
 							ch->powerup = 0;
 							ch->pl = ch->exp * 50;
+							transStatApply(ch, (ch->perm_str * 0.20), (ch->perm_dex * 0.20), (ch->perm_int * 0.10), (ch->perm_con * 0.20));
 							if (!IS_NPC(ch)) {
 								ch->pcdata->eyes = 0;
 								ch->pcdata->haircolor = 3;
@@ -1073,9 +1122,10 @@ violence_update(void)
 						if (plmod >= 30
 							&& ch->pcdata->learned[gsn_ssj] <= 0) {
 							ch->pl = (ch->exp * 30);
-							act( auraColor, "The raging torrent of ki fades, but your power remains.", ch, NULL, NULL, TO_CHAR );
-							act( auraColor, "$n's raging torrent of ki fades away, but $s power remains.", ch, NULL, NULL, TO_NOTVICT );
+							act( auraColor, "The raging torrent of ki fades but your power remains.", ch, NULL, NULL, TO_CHAR );
+							act( auraColor, "$n's raging torrent of ki fades away but $s power remains.", ch, NULL, NULL, TO_NOTVICT );
 							xREMOVE_BIT((ch)->affected_by, AFF_POWERCHANNEL);
+							ch->powerup = safemaximum;
 							xSET_BIT((ch)->affected_by, AFF_SAFEMAX);
 						}
 						if (plmod >= 20 && plmod < 27) {
@@ -1130,13 +1180,13 @@ violence_update(void)
 							act( AT_YELLOW, "Your golden aura churns with scattering rays of light.", ch, NULL, NULL, TO_CHAR );
 							act( AT_YELLOW, "$n's golden aura churns with scattering rays of light.", ch, NULL, NULL, TO_NOTVICT );
 						}
-						if ((ch->pl / ch->exp) >= 65
-							&& ch->pcdata->learned[gsn_ussj] > 0) {
+						if ((ch->pl / ch->exp) >= 65) {
 							xSET_BIT((ch)->affected_by, AFF_USSJ);
 							xREMOVE_BIT((ch)->affected_by, AFF_POWERCHANNEL);
 							act( AT_YELLOW, "Your muscles bulge, and with a sudden burst of power you ascend beyond the reaches of any mere Super Saiyan.", ch, NULL, NULL, TO_CHAR );
 							act( AT_YELLOW, "$n's muscles bulge, drawing on a power beyond that of any mere Super Saiyan.", ch, NULL, NULL, TO_NOTVICT );
 							ch->pl = ch->exp * 75;
+							transStatApply(ch, (ch->perm_str * 0.30), (ch->perm_dex * 0.25), (ch->perm_int * 0.10), (ch->perm_con * 0.30));
 						}
 					}
 					if (ch->powerup >= safemaximum) {
@@ -1162,13 +1212,13 @@ violence_update(void)
 							act( AT_YELLOW, "Crackling bolts of energy build in your aura, impure, but powerful as your muscles swell.", ch, NULL, NULL, TO_CHAR );
 							act( AT_YELLOW, "Crackling bolts of impure energy dance in $n's raging aura, $s muscles swelling to incredible sizes.", ch, NULL, NULL, TO_NOTVICT );
 						}
-						if ((ch->pl / ch->exp) >= 100
-							&& ch->pcdata->learned[gsn_ussj2] > 0) {
+						if ((ch->pl / ch->exp) >= 100) {
 							xSET_BIT((ch)->affected_by, AFF_USSJ2);
 							xREMOVE_BIT((ch)->affected_by, AFF_POWERCHANNEL);
 							act( AT_YELLOW, "Your muscles expand to inhuman sizes, engorging yourself with energy!", ch, NULL, NULL, TO_CHAR );
 							act( AT_YELLOW, "$n's muscles expand to inhuman sizes, engorging $mself with energy!", ch, NULL, NULL, TO_NOTVICT );
 							ch->pl = ch->exp * 150;
+							transStatApply(ch, (ch->perm_str * 0.50), -250, (ch->perm_int * 0.10), (ch->perm_con * 0.50));
 						}
 					}
 					if (ch->powerup >= safemaximum) {
@@ -1203,6 +1253,7 @@ violence_update(void)
 							act( AT_YELLOW, "$n's muscles shrink amidst a storm of golden ki. In a sea of crackling, pure energy, $e truly ascends to the next level.", ch, NULL, NULL, TO_NOTVICT );
 							act( AT_YELLOW, "$n stares straight ahead with absolute confidence.", ch, NULL, NULL, TO_NOTVICT );
 							ch->pl = ch->exp * 225;
+							transStatApply(ch, (ch->perm_str * 0.50), (ch->perm_dex * 0.50), (ch->perm_int * 0.25), (ch->perm_con * 0.40));
 						}
 					}
 					if (ch->powerup >= safemaximum) {
@@ -1237,6 +1288,7 @@ violence_update(void)
 							act(AT_YELLOW, "The world feel as though it could pull apart as $n's aura expands! $s eyebrows disappear slowly and $s hair lengthens, flowing down $s back.", ch, NULL, NULL, TO_NOTVICT);
 							act(AT_YELLOW, "When the bright light fades, $n stands within a wreath of countless bolts of energy, unleashing the primal rage of the Saiyan race.", ch, NULL, NULL, TO_NOTVICT);
 							ch->pl = ch->exp * 350;
+							transStatApply(ch, (ch->perm_str * 0.60), (ch->perm_dex * 0.60), (ch->perm_int * 0.30), (ch->perm_con * 0.50));
 						}
 					}
 					if (ch->powerup >= safemaximum) {
@@ -1272,6 +1324,7 @@ violence_update(void)
 							act( AT_RED, "$n's hair and eyes return to normal. However, in the next instant something feels very different.", ch, NULL, NULL, TO_NOTVICT );
 							act( AT_RED, "$n is encompassed in a massive aura of crimson and gold, $s hair and eyes shifting red with a subtle violet tint.", ch, NULL, NULL, TO_NOTVICT );
 							ch->pl = ch->exp * 500;
+							transStatApply(ch, ch->perm_str, ch->perm_dex, (ch->perm_int * 0.50), ch->perm_con);
 						}
 					}
 					if (ch->powerup >= safemaximum) {
@@ -1306,6 +1359,7 @@ violence_update(void)
 							act( AT_LBLUE, "$n's body is swallowed in an intense blue light. What emerges is no mere Super Saiyan.", ch, NULL, NULL, TO_NOTVICT );
 							act( AT_LBLUE, "$n's hair and eyes shimmer a deep cyan hue, merging fully with a power beyond mortal ki.", ch, NULL, NULL, TO_NOTVICT );
 							ch->pl = ch->exp * 625;
+							transStatApply(ch, (ch->perm_str * 1.25), (ch->perm_dex * 1.25), ch->perm_int, (ch->perm_con * 1.25));
 						}
 					}
 					if (ch->powerup >= safemaximum) {
@@ -1351,7 +1405,7 @@ violence_update(void)
 					if (ch->powerup < safemaximum) {
 						ch->pl *= 1.15;
 						ch->powerup += 1;
-						transStatApply(ch, kistat, kistat, kistat, kistat);
+						transStatApply(ch, (ch->perm_str * 0.05), (ch->perm_dex * 0.05), (ch->perm_int * 0.05), (ch->perm_con * 0.05));
 						if (plmod >= 2) {
 							xSET_BIT((ch)->affected_by, AFF_ICER2);
 							xREMOVE_BIT((ch)->affected_by, AFF_POWERCHANNEL);
@@ -1359,6 +1413,7 @@ violence_update(void)
 							act( AT_PURPLE, "$n's entire body expands monstrously in size, wicked horns sprouting from $s head!", ch, NULL, NULL, TO_NOTVICT );
 							ch->powerup = 0;
 							ch->pl = ch->exp * 4;
+							transStatApply(ch, (ch->perm_str * 0.10), (ch->perm_dex * 0.10), (ch->perm_int * 0.10), (ch->perm_con * 0.15));
 						}
 						if (plmod > 1 && plmod < 2) {
 							act( auraColor, "You glow brightly, hairline fractures appearing across your body.", ch, NULL, NULL, TO_CHAR );
@@ -1390,6 +1445,7 @@ violence_update(void)
 							act( AT_PURPLE, "Spikes protrude from your back and shoulders as your head elongates, transforming you into a deformed monstrosity!", ch, NULL, NULL, TO_CHAR );
 							act( AT_PURPLE, "$n doubles forward, chitinous chunks stripping away from $m as $e transforms into a deformed monstrosity!", ch, NULL, NULL, TO_NOTVICT );
 							ch->pl = ch->exp * 12;
+							transStatApply(ch, (ch->perm_str * 0.15), (ch->perm_dex * 0.15), (ch->perm_int * 0.10), (ch->perm_con * 0.20));
 						}
 					}
 					if (ch->powerup >= safemaximum) {
@@ -1417,6 +1473,7 @@ violence_update(void)
 							act( AT_PURPLE, "Your body shrinks to normal size, wicked spikes replaced with smooth skin and patches as reflective as glass.", ch, NULL, NULL, TO_CHAR );
 							act( AT_PURPLE, "$n emerges from an explosion of ki, $s body shrinking into a sleek, smooth form.", ch, NULL, NULL, TO_NOTVICT );
 							ch->pl = ch->exp * 50;
+							transStatApply(ch, (ch->perm_str * 0.20), (ch->perm_dex * 0.20), (ch->perm_int * 0.15), (ch->perm_con * 0.30));
 						}
 					}
 					if (ch->powerup >= safemaximum) {
@@ -1443,6 +1500,7 @@ violence_update(void)
 							act( AT_PURPLE, "Your muscles expand massively in size, swelling with incredible energy!", ch, NULL, NULL, TO_CHAR );
 							act( AT_PURPLE, "$n's muscles expand massively in size, swelling with incredible energy!", ch, NULL, NULL, TO_NOTVICT );
 							ch->pl = ch->exp * 150;
+							transStatApply(ch, (ch->perm_str * 0.50), (ch->perm_dex * 0.50), (ch->perm_int * 0.25), (ch->perm_con * 0.75));
 						}
 					}
 					if (ch->powerup >= safemaximum) {
@@ -1471,6 +1529,7 @@ violence_update(void)
 							act(AT_YELLOW, "A brilliant golden light overtakes $n, traveling up the length of $s body.", ch, NULL, NULL, TO_NOTVICT);
 							act(AT_YELLOW, "$s skin takes on a reflective golden sheen as $e ascends into the realm of God Ki!", ch, NULL, NULL, TO_NOTVICT);
 							ch->pl = ch->exp * 380;
+							transStatApply(ch, ch->perm_str, ch->perm_dex, ch->perm_int, (ch->perm_con * 1.50));
 						}
 					}
 					if (ch->powerup >= safemaximum) {
@@ -1484,7 +1543,12 @@ violence_update(void)
 				if (xIS_SET((ch)->affected_by, AFF_GOLDENFORM)) {
 					safemaximum = form_mastery;
 					if (ch->powerup < safemaximum) {
-						ch->pl *= 1.04;
+						if (plmod >= 600) {
+							ch->pl *= 1.03;
+						}
+						else {
+							ch->pl *= 1.04;
+						}
 						ch->powerup += 1;
 						if (plmod > 395) {
 							act( AT_YELLOW, "The air roils, an intense pressure building from your glorious golden sheen.", ch, NULL, NULL, TO_CHAR );
@@ -1502,26 +1566,30 @@ violence_update(void)
 			}
 			if (is_kaio(ch) || is_human(ch)) {
 				if (!xIS_SET((ch)->affected_by, AFF_MYSTIC)) {
+					int mysticTotal = 0;
+					
+					mysticTotal = ((ch->perm_str + ch->perm_dex) + (ch->perm_int * 2) + (ch->perm_con * 3));
 					safemaximum = ((get_curr_int(ch) * 0.03) + 1);
 					if (ch->powerup < safemaximum) {
 						ch->pl *= 1.15;
 						ch->powerup += 1;
-						transStatApply(ch, kistat, kistat, kistat, kistat);
+						transStatApply(ch, (ch->perm_str * 0.05), (ch->perm_dex * 0.05), (ch->perm_int * 0.05), (ch->perm_con * 0.05));
 						if (plmod >= 30
-							&& ch->perm_int >= 1000) {
+							&& mysticTotal >= 4000) {
 							xSET_BIT((ch)->affected_by, AFF_MYSTIC);
 							xREMOVE_BIT((ch)->affected_by, AFF_POWERCHANNEL);
 							act( auraColor, "You cry out as your aura expands, pushing beyond your latent potential!", ch, NULL, NULL, TO_CHAR );
 							act( auraColor, "$n cries out, $s inner potential exploding to the surface!", ch, NULL, NULL, TO_NOTVICT );
 							ch->powerup = 0;
 							ch->pl = ch->exp * 35;
+							transStatApply(ch, (ch->perm_str * 0.10), (ch->perm_dex * 0.10), (ch->perm_int * 0.15), (ch->perm_con * 0.15));
 						}
-						if (plmod >= 30
-							&& ch->perm_int < 1000) {
+						if (plmod >= 30 && mysticTotal < 4000) {
 							ch->pl = (ch->exp * 30);
-							act( auraColor, "You stop abruptly, unable to tap further in your potential.", ch, NULL, NULL, TO_CHAR );
-							act( auraColor, "$n stops abruptly, unable to further tap into $s potential.", ch, NULL, NULL, TO_NOTVICT );
+							act( auraColor, "Having reached your limit, you stop powering up. Going any further would be dangerous.", ch, NULL, NULL, TO_CHAR );
+							act( auraColor, "$n reaches $s limit and stops powering up.", ch, NULL, NULL, TO_NOTVICT );
 							xREMOVE_BIT((ch)->affected_by, AFF_POWERCHANNEL);
+							ch->powerup = safemaximum;
 							xSET_BIT((ch)->affected_by, AFF_SAFEMAX);
 						}
 						if (plmod >= 20 && plmod < 27) {
@@ -1543,14 +1611,6 @@ violence_update(void)
 						if (plmod > 1 && plmod < 5) {
 							act( auraColor, "Your body glows faintly.", ch, NULL, NULL, TO_CHAR );
 							act( auraColor, "$n's body glows faintly.", ch, NULL, NULL, TO_NOTVICT );
-						}
-						if ((ch->pl / ch->exp) >= 30
-							&& ch->pcdata->learned[gsn_ssj] <= 0) {
-							ch->pl = (ch->exp * 30);
-							act( auraColor, "The raging torrent of ki fades, but your power remains.", ch, NULL, NULL, TO_CHAR );
-							act( auraColor, "$n's raging torrent of ki fades away, but $s power remains.", ch, NULL, NULL, TO_NOTVICT );
-							xREMOVE_BIT((ch)->affected_by, AFF_POWERCHANNEL);
-							xSET_BIT((ch)->affected_by, AFF_SAFEMAX);
 						}
 					}
 					if (ch->powerup >= safemaximum) {
@@ -1574,30 +1634,37 @@ violence_update(void)
 						if (plmod > 600) {
 							act( auraColor, "Radiant light suffuses your entire body, cloaking you entirely.", ch, NULL, NULL, TO_CHAR );
 							act( auraColor, "Radiant light suffuses $n's entire body, cloaking $m completely.", ch, NULL, NULL, TO_NOTVICT );
+							transStatApply(ch, (ch->perm_str * 1.20), (ch->perm_dex * 1.20), (ch->perm_int * 1.30), (ch->perm_con * 1.25);
 						}
 						else if (plmod > 500) {
 							act( auraColor, "Pulses of God Ki emanate deep from within your core!", ch, NULL, NULL, TO_CHAR );
 							act( auraColor, "Pulses of God Ki emanate deep from within $n's core!", ch, NULL, NULL, TO_NOTVICT );
+							transStatApply(ch, ch->perm_str, ch->perm_dex, (ch->perm_int * 1.10), ch->perm_con);
 						}
 						else if (plmod > 350) {
 							act( auraColor, "Your aura churns violently, a mysterious ki building deep within.", ch, NULL, NULL, TO_CHAR );
 							act( auraColor, "$n's aura engulfs $m, churning violently while a mysterious ki seeps from within.", ch, NULL, NULL, TO_NOTVICT );
+							transStatApply(ch, (ch->perm_str * 0.60), (ch->perm_dex * 0.70), (ch->perm_int * 0.70), (ch->perm_con * 0.60));
 						}
 						else if (plmod > 250) {
 							act( auraColor, "Bolts of pure white energy crackle through your body, striking random locations.", ch, NULL, NULL, TO_CHAR );
 							act( auraColor, "Bolts of pure white energy crackle through $n's body, striking random locations.", ch, NULL, NULL, TO_NOTVICT );
+							transStatApply(ch, (ch->perm_str * 0.50), (ch->perm_dex * 0.60), (ch->perm_int * 0.60), (ch->perm_con * 0.50));
 						}
 						else if (plmod > 150) {
 							act( auraColor, "Your muscles swell with energy, containing power without growing in size.", ch, NULL, NULL, TO_CHAR );
 							act( auraColor, "$n's muscles swell with energy, containing power without growing in size.", ch, NULL, NULL, TO_NOTVICT );
+							transStatApply(ch, (ch->perm_str * 0.30), (ch->perm_dex * 0.30), (ch->perm_int * 0.40), (ch->perm_con * 0.40));
 						}
 						else if (plmod > 75) {
-							act( auraColor, "Dust and debris swirl ominously around you.", ch, NULL, NULL, TO_CHAR );
-							act( auraColor, "Dust and debris swirl ominously around $n.", ch, NULL, NULL, TO_NOTVICT );
+							act( auraColor, "Your aura swells to twice its normal size but quickly dies back down.", ch, NULL, NULL, TO_CHAR );
+							act( auraColor, "$n's aura swells to twice its normal size but quickly dies back down.", ch, NULL, NULL, TO_NOTVICT );
+							transStatApply(ch, (ch->perm_str * 0.15), (ch->perm_dex * 0.15), (ch->perm_int * 0.20), (ch->perm_con * 0.20));
 						}
 						else if (plmod > 50) {
 							act( auraColor, "Massive chunks of rock and debris crumble beneath your aura.", ch, NULL, NULL, TO_CHAR );
 							act( auraColor, "Massive chunks of rock and debris crumble beneath $n's aura.", ch, NULL, NULL, TO_NOTVICT );
+							transStatApply(ch, (ch->perm_str * 0.15), (ch->perm_dex * 0.15), (ch->perm_int * 0.20), (ch->perm_con * 0.20));
 						}
 						else if (plmod > 37) {
 							act( auraColor, "Dust and debris swirl ominously around you.", ch, NULL, NULL, TO_CHAR );
@@ -1613,38 +1680,159 @@ violence_update(void)
 					}
 				}
 			}
+			if (is_namek(ch)) {
+				if (!xIS_SET((ch)->affected_by, AFF_SNAMEK)) {
+					int namekTotal = 0;
+					
+					namekTotal = ((ch->perm_str + ch->perm_dex) + (ch->perm_int * 3) + (ch->perm_con * 2));
+					safemaximum = ((get_curr_int(ch) * 0.03) + 1);
+					if (ch->powerup < safemaximum) {
+						ch->pl *= 1.15;
+						ch->powerup += 1;
+						transStatApply(ch, (ch->perm_str * 0.05), (ch->perm_dex * 0.05), (ch->perm_int * 0.05), (ch->perm_con * 0.05));
+						if (plmod >= 40
+							&& namekTotal >= 5000) {
+							xSET_BIT((ch)->affected_by, AFF_SNAMEK);
+							xREMOVE_BIT((ch)->affected_by, AFF_POWERCHANNEL);
+							act( AT_WHITE, "Your mind opens to the secrets of the ancient Namekians, flooding you with incredible power.", ch, NULL, NULL, TO_CHAR );
+							act( AT_WHITE, "$n's mind opens to the secrets of the ancient Namekians, flooding $m with incredible power.'", ch, NULL, NULL, TO_NOTVICT );
+							ch->powerup = 0;
+							ch->pl = ch->exp * 50;
+							transStatApply(ch, (ch->perm_str * 0.10), (ch->perm_dex * 0.10), (ch->perm_int * 0.15), (ch->perm_con * 0.15));
+						}
+						if (plmod >= 40
+							&& namekTotal < 4000) {
+							ch->pl = (ch->exp * 40);
+							act( auraColor, "You stop abruptly, unable to concentrate any further.", ch, NULL, NULL, TO_CHAR );
+							act( auraColor, "$n stops abruptly, unable to concentrate any further.", ch, NULL, NULL, TO_NOTVICT );
+							xREMOVE_BIT((ch)->affected_by, AFF_POWERCHANNEL);
+							ch->powerup = safemaximum;
+							xSET_BIT((ch)->affected_by, AFF_SAFEMAX);
+						}
+						if (plmod >= 20 && plmod < 27) {
+							act( auraColor, "Your body is barely visible amidst your vortex of ki.", ch, NULL, NULL, TO_CHAR );
+							act( auraColor, "$n's body is barely visible amidst $s vortex of ki!", ch, NULL, NULL, TO_NOTVICT );
+						}
+						if (plmod >= 15 && plmod < 20) {
+							act( auraColor, "Your aura spirals upward, nearly licking the clouds.", ch, NULL, NULL, TO_CHAR );
+							act( auraColor, "$n's aura spirals upward, nearly licking the clouds.", ch, NULL, NULL, TO_NOTVICT );
+						}
+						if (plmod >= 10 && plmod < 15) {
+							act( auraColor, "Your gentle aura explodes into a display of roaring ki.", ch, NULL, NULL, TO_CHAR );
+							act( auraColor, "$n's gentle aura explodes into a display of roaring ki.", ch, NULL, NULL, TO_NOTVICT );
+						}
+						if (plmod >= 5 && plmod < 10) {
+							act( auraColor, "Your aura flickers around you, only faintly visible.", ch, NULL, NULL, TO_CHAR );
+							act( auraColor, "$n's aura flickers around $m, only faintly visible.", ch, NULL, NULL, TO_NOTVICT );
+						}
+						if (plmod > 1 && plmod < 5) {
+							act( auraColor, "Your body glows faintly.", ch, NULL, NULL, TO_CHAR );
+							act( auraColor, "$n's body glows faintly.", ch, NULL, NULL, TO_NOTVICT );
+						}
+					}
+					if (ch->powerup >= safemaximum) {
+						ch->powerup = safemaximum;
+						xREMOVE_BIT((ch)->affected_by, AFF_POWERCHANNEL);
+						xSET_BIT((ch)->affected_by, AFF_SAFEMAX);
+						act( auraColor, "Having reached your limit, you stop powering up. Going any further would be dangerous.", ch, NULL, NULL, TO_CHAR );
+						act( auraColor, "$n reaches $s limit and stops powering up.", ch, NULL, NULL, TO_NOTVICT );
+					}
+				}
+				if (xIS_SET((ch)->affected_by, AFF_SNAMEK)) {
+					safemaximum = form_mastery;
+					if (ch->powerup < safemaximum) {
+						if (plmod >= 600) {
+							ch->pl *= 1.03;
+						}
+						else if (plmod >= 400) {
+							ch->pl *= 1.02;
+						}
+						else if (plmod < 400) {
+							ch->pl *= 1.06;
+						}
+						ch->powerup += 1;
+						if (plmod > 600) {
+							act( AT_WHITE, "Vague images of your ancestors flash before you, conjured by your brilliant divine aura.", ch, NULL, NULL, TO_CHAR );
+							act( AT_WHITE, "Vague images of $n's ancestors flash randomly within $s blinding God Ki.", ch, NULL, NULL, TO_NOTVICT );
+							transStatApply(ch, (ch->perm_str * 0.75), ch->perm_dex, (ch->perm_int * 1.75), ch->perm_con);
+						}
+						else if (plmod > 500) {
+							act( AT_WHITE, "A burst of God Ki erupts from deep within your body.", ch, NULL, NULL, TO_CHAR );
+							act( AT_WHITE, "A burst of God Ki erupts from deep within $n's body.", ch, NULL, NULL, TO_NOTVICT );
+							transStatApply(ch, (ch->perm_str * 0.60), (ch->perm_dex * 0.80), (ch->perm_int * 1.25), (ch->perm_con * 0.80));
+						}
+						else if (plmod > 350) {
+							act( AT_WHITE, "The heavens shake and the earth trembles at your feet.", ch, NULL, NULL, TO_CHAR );
+							act( AT_WHITE, "The heavens shake and the earth trembles at $n's feet.", ch, NULL, NULL, TO_NOTVICT );
+							transStatApply(ch, (ch->perm_str * 0.50), (ch->perm_dex * 0.60), ch->perm_int, (ch->perm_con * 0.60));
+						}
+						else if (plmod > 250) {
+							act( AT_WHITE, "Bolts of energy crackle through your blinding aura.", ch, NULL, NULL, TO_CHAR );
+							act( AT_WHITE, "Bolts of energy crackle through $n's blinding aura.", ch, NULL, NULL, TO_NOTVICT );
+							transStatApply(ch, (ch->perm_str * 0.30), (ch->perm_dex * 0.35), (ch->perm_int * 0.75), (ch->perm_con * 0.35));
+						}
+						else if (plmod > 150) {
+							act( AT_WHITE, "Your aura swirls, constant beams of light radiating from within.", ch, NULL, NULL, TO_CHAR );
+							act( AT_WHITE, "$n's aura swirls with constant beams of echoing light.", ch, NULL, NULL, TO_NOTVICT );
+							transStatApply(ch, (ch->perm_str * 0.20), (ch->perm_dex * 0.25), (ch->perm_int * 0.50), (ch->perm_con * 0.25));
+						}
+						else if (plmod > 75) {
+							act( AT_WHITE, "Blinding flashes escape your body, echoing through the air.", ch, NULL, NULL, TO_CHAR );
+							act( AT_WHITE, "Blinding flashes escape $n's body, echoing through the air.", ch, NULL, NULL, TO_NOTVICT );
+							transStatApply(ch, (ch->perm_str * 0.15), (ch->perm_dex * 0.15), (ch->perm_int * 0.25), (ch->perm_con * 0.15));
+						}
+						else if (plmod > 50) {
+							act( AT_WHITE, "Brilliant white light shrouds the contours of your body.", ch, NULL, NULL, TO_CHAR );
+							act( AT_WHITE, "Brilliant white light shrouds the contours of $n's body.", ch, NULL, NULL, TO_NOTVICT );
+						}
+					}
+					if (ch->powerup >= safemaximum) {
+						ch->powerup = safemaximum;
+						xREMOVE_BIT((ch)->affected_by, AFF_POWERCHANNEL);
+						xSET_BIT((ch)->affected_by, AFF_SAFEMAX);
+						act( AT_WHITE, "Having reached your limits, your ancestors can afford you no more power.", ch, NULL, NULL, TO_CHAR );
+						act( AT_WHITE, "Having reached $s limits, $n takes a deep breath and stops channeling his ancestors' wisdom.", ch, NULL, NULL, TO_NOTVICT );
+					}
+				}
+			}
 			else {
-				send_to_char("DEBUG: ONLY SAIYAN/HB/ICER IS BEING TESTED\n\r", ch);
+				send_to_char("DEBUG: You should only be testing the non-locked races.\n\r", ch);
 			}
 		}
-		if (xIS_SET((ch)->affected_by, AFF_OVERCHANNEL)) {
+		if (xIS_SET((ch)->affected_by, AFF_OVERCHANNEL)
+			&& !xIS_SET((ch)->affected_by, AFF_KAIOKEN)
+			&& xIS_SET((ch)->affected_by, AFF_SAFEMAX)
+			&& ch->position >= POS_STANDING) {
 			double safemaximum = 0;
 			int danger = 0;
 			double resilience = 0;
 			double dangerres = 0;
+			int form_mastery = 0;
 			
+			if (ch->position < POS_STANDING) {
+				xREMOVE_BIT((ch)->affected_by, AFF_OVERCHANNEL);
+				send_to_char("You must stand if you wish to power up.\n\r", ch);
+			}
+			form_mastery = (ch->train / 45000);
 			safemaximum = ((get_curr_int(ch) * 0.03) + 1);
-			resilience = ((get_curr_con(ch) / 5) * 0.00025);
+			if (form_mastery < 1)
+				form_mastery = 1;
+			resilience = (ch->perm_con / 5) * 0.00025);
 			if (resilience > 0.90) {
 				resilience = 0.90;
 			}
-			danger = ((ch->powerup - safemaximum) * ch->powerup);
+			danger = ((ch->powerup - safemaximum) * (ch->powerup * 3));
 			dangerres = (danger * resilience);
 			danger -= dangerres;
 			/* Just in case. */
-			if (danger < 0) {
-				danger = 0;
-			}
-			if (ch->position < POS_STANDING) {
-				xREMOVE_BIT((ch)->affected_by, AFF_OVERCHANNEL);
-				send_to_char("DEBUG: CAN'T POWERUP IF YOU'RE NOT STANDING, YA DINGIS\n\r", ch);
+			if (danger < 1) {
+				danger = 1;
 			}
 			if (xIS_SET((ch)->affected_by, AFF_SSJ)
 				|| xIS_SET((ch)->affected_by, AFF_SSJ2)
 				|| xIS_SET((ch)->affected_by, AFF_SSJ3)
 				|| xIS_SET((ch)->affected_by, AFF_SSJ4)
 				|| xIS_SET((ch)->affected_by, AFF_SGOD)
-				|| xIS_SET((ch)->affected_by, AFF_KAIOKEN)
 				|| xIS_SET((ch)->affected_by, AFF_HYPER)
 				|| xIS_SET((ch)->affected_by, AFF_SNAMEK)
 				|| xIS_SET((ch)->affected_by, AFF_ICER2)
@@ -1664,16 +1852,19 @@ violence_update(void)
 				|| xIS_SET((ch)->affected_by, AFF_EVILBOOST)
 				|| xIS_SET((ch)->affected_by, AFF_EVILSURGE)
 				|| xIS_SET((ch)->affected_by, AFF_EVILOVERLOAD)) {
+				safemaximum = form_mastery;
 				ch->pl *= 1.01;
 				ch->powerup += 1;
-				send_to_char("DEBUG: TRANSFORMATION OVERLIMIT PL UP 1%\n\r", ch);
 				if ((ch->mana - danger) < 0)
 					ch->mana = 0;
-				else
+				else {
 					ch->mana -= danger;
+				}
 				
 				if (danger != 0 && ch->mana == 0) {
 					ch->hit -= (danger / 10);
+					act( AT_RED, "Your body is ripping itself apart!", ch, NULL, NULL, TO_CHAR );
+					act( AT_RED, "$n's body is ripping itself apart!'", ch, NULL, NULL, TO_NOTVICT );
 					if (ch->hit - (danger / 10) < 0) {
 						ch->hit -= (danger / 10);
 						update_pos(ch);
@@ -1686,11 +1877,14 @@ violence_update(void)
 						}
 					}
 				}
+				else {
+					act( AT_YELLOW, "You struggle against the will of your own body, increasing your power at incredible risk.", ch, NULL, NULL, TO_CHAR );
+					act( AT_YELLOW, "$n struggles against the will of $s own body, increasing $s power at incredible risk.", ch, NULL, NULL, TO_NOTVICT );
+				}
 			}
 			else {
-				ch->pl *= 1.05;
+				ch->pl *= 1.01;
 				ch->powerup += 1;
-				send_to_char("DEBUG: OVERLIMIT PL UP 5%\n\r", ch);
 				if ((ch->mana - danger) < 0)
 					ch->mana = 0;
 					
@@ -1699,6 +1893,8 @@ violence_update(void)
 				
 				if (danger != 0 && ch->mana == 0) {
 					ch->hit -= (danger / 10);
+					act( AT_RED, "Your body is ripping itself apart!", ch, NULL, NULL, TO_CHAR );
+					act( AT_RED, "$n's body is ripping itself apart!'", ch, NULL, NULL, TO_NOTVICT );
 					if (ch->hit - (danger / 10) < 0) {
 						ch->hit -= (danger / 10);
 						update_pos(ch);
@@ -1710,6 +1906,10 @@ violence_update(void)
 							raw_kill(ch, ch);
 						}
 					}
+				}
+				else {
+					act( AT_YELLOW, "You struggle against the will of your own body, increasing your power at incredible risk.", ch, NULL, NULL, TO_CHAR );
+					act( AT_YELLOW, "$n struggles against the will of $s own body, increasing $s power at incredible risk.", ch, NULL, NULL, TO_NOTVICT );
 				}
 			}
 		}

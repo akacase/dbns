@@ -757,7 +757,7 @@ show_visible_affects_to_char(CHAR_DATA * victim, CHAR_DATA * ch)
 	    && IS_AFFECTED(victim, AFF_ICER5)) {
 		pager_printf_color(ch, "  &P*");
 		act(AT_PURPLE,
-		    "$N has armored plating and cruel spikes protecting $S giant, "
+		    "$N's once sleek body is swollen with energy, taking on a giant, "
 		    "muscle-bound form.&P", ch, NULL, victim, TO_CHAR);
 		pager_printf_color(ch,
 		    "  &P*&P%s is covered in dark, icy purple flames.&P\n\r",
@@ -779,6 +779,18 @@ show_visible_affects_to_char(CHAR_DATA * victim, CHAR_DATA * ch)
 		pager_printf_color(ch, "  &P*");
 		act(z, "$N is covered in bright energy flames.", ch,
 		    NULL, victim, TO_CHAR);
+	}
+	if (IS_AFFECTED(victim, AFF_MYSTIC)) {
+		if ((ch->pl / ch->exp) >= 600) {
+			pager_printf_color(ch, "  &P*");
+			act(z, "$N's body radiates an intense God Ki from within.", ch,
+				NULL, victim, TO_CHAR);
+		}
+		else {
+			pager_printf_color(ch, "  &P*");
+			act(z, "$N appears normal, if not for an unsettling power lurking within.", ch,
+				NULL, victim, TO_CHAR);
+		}
 	}
 	if (IS_AFFECTED(victim, AFF_EXTREME)) {
 		pager_printf_color(ch, "  &P*");
