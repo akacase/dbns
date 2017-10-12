@@ -1822,8 +1822,8 @@ char_update(void)
 				act(AT_YELLOW,
 					"A radiant amber gold glow courses upward through you.",
 					ch, NULL, NULL, TO_CHAR);
-				act(AT_YELLOW
-					"Radiant amber gold energy courses upward through $n's body."
+				act(AT_YELLOW,
+				        "Radiant amber gold energy courses upward through $n's body.",
 					ch, NULL, NULL, TO_NOTVICT);
 			}
 			if (IS_AFFECTED(ch, AFF_KAIOKEN)) {
