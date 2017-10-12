@@ -1079,6 +1079,10 @@ violence_update(void)
 			int form_mastery = 0;
 			double plmod = 0;
 			int auraColor = AT_WHITE;
+			int powerupstr = ch->perm_str * 0.05;
+			int powerupspd = ch->perm_dex * 0.05;
+			int powerupint = ch->perm_int * 0.05;
+			int powerupcon = ch->perm_con * 0.05;
 			
 			safemaximum = ((get_curr_int(ch) * 0.03) + 1);
 			form_mastery = (ch->train / 45000);
@@ -1097,14 +1101,41 @@ violence_update(void)
 			}
 			if (is_saiyan(ch) || is_hb(ch)) {
 				if (!xIS_SET((ch)->affected_by, AFF_SSJ)) {
-					int ussj2penalty = 0;
+					int onestr = ch->perm_str * 0.20; 
+					int twostr = ch->perm_str * 0.30;
+					int threestr = ch->perm_str * 0.50;
+					int fourstr = ch->perm_str * 0.50;
+					int fivestr = ch->perm_str * 0.60;
+					int sixstr = ch->perm_str;
+					int sevenstr = ch->perm_str * 1.25;
+					int onespd = ch->perm_dex * 0.20;
+					int twospd = ch->perm_dex * 0.25;
+					int threespd = -250;
+					int fourspd = ch->perm_dex * 0.50;
+					int fivespd = ch->perm_dex * 0.60;
+					int sixspd = ch->perm_dex;
+					int sevenspd = ch->perm_dex * 1.25;
+					int oneint = ch->perm_int * 0.10;
+					int twoint = ch->perm_int * 0.10;
+					int threeint = ch->perm_int * 0.10;
+					int fourint = ch->perm_int * 0.25;
+					int fiveint = ch->perm_int * 0.30;
+					int sixint = ch->perm_int * 0.50;
+					int sevenint = ch->perm_int;
+					int onecon = ch->perm_con * 0.20;
+					int twocon = ch->perm_con * 0.30;
+					int threecon = ch->perm_con * 0.50;
+					int fourcon = ch->perm_con * 0.40;
+					int fivecon = ch->perm_con * 0.50;
+					int sixcon = ch->perm_con;
+					int sevencon = ch->perm_con * 1.25;
 					
-					ussj2penalty = (ch->perm_dex / 2);
 					safemaximum = ((get_curr_int(ch) * 0.03) + 1);
 					if (ch->powerup < safemaximum) {
+						
 						ch->pl *= 1.15;
 						ch->powerup += 1;
-						transStatApply(ch, (ch->perm_str * 0.05), (ch->perm_dex * 0.05), (ch->perm_int * 0.05), (ch->perm_con * 0.05));
+						transStatApply(ch, powerupstr, powerupspd, powerupint, powerupcon);
 						if (plmod >= 30
 							&& ch->pcdata->learned[gsn_ssj] > 0) {
 							xSET_BIT((ch)->affected_by, AFF_SSJ);
@@ -1113,7 +1144,7 @@ violence_update(void)
 							act( AT_YELLOW, "$n's hair suddenly flashes blonde, transcending beyond $s normal limits in a fiery display of golden ki!", ch, NULL, NULL, TO_NOTVICT );
 							ch->powerup = 0;
 							ch->pl = ch->exp * 50;
-							transStatApply(ch, (ch->perm_str * 0.20), (ch->perm_dex * 0.20), (ch->perm_int * 0.10), (ch->perm_con * 0.20));
+							transStatApply(ch, onestr, onespd, oneint, onecon);
 							if (!IS_NPC(ch)) {
 								ch->pcdata->eyes = 0;
 								ch->pcdata->haircolor = 3;
@@ -1186,7 +1217,7 @@ violence_update(void)
 							act( AT_YELLOW, "Your muscles bulge, and with a sudden burst of power you ascend beyond the reaches of any mere Super Saiyan.", ch, NULL, NULL, TO_CHAR );
 							act( AT_YELLOW, "$n's muscles bulge, drawing on a power beyond that of any mere Super Saiyan.", ch, NULL, NULL, TO_NOTVICT );
 							ch->pl = ch->exp * 75;
-							transStatApply(ch, (ch->perm_str * 0.30), (ch->perm_dex * 0.25), (ch->perm_int * 0.10), (ch->perm_con * 0.30));
+							transStatApply(ch, twostr, twospd, twoint, twocon);
 						}
 					}
 					if (ch->powerup >= safemaximum) {
@@ -1218,7 +1249,7 @@ violence_update(void)
 							act( AT_YELLOW, "Your muscles expand to inhuman sizes, engorging yourself with energy!", ch, NULL, NULL, TO_CHAR );
 							act( AT_YELLOW, "$n's muscles expand to inhuman sizes, engorging $mself with energy!", ch, NULL, NULL, TO_NOTVICT );
 							ch->pl = ch->exp * 150;
-							transStatApply(ch, (ch->perm_str * 0.50), -250, (ch->perm_int * 0.10), (ch->perm_con * 0.50));
+							transStatApply(ch, threestr, threespd, threeint, threecon);
 						}
 					}
 					if (ch->powerup >= safemaximum) {
@@ -1253,7 +1284,7 @@ violence_update(void)
 							act( AT_YELLOW, "$n's muscles shrink amidst a storm of golden ki. In a sea of crackling, pure energy, $e truly ascends to the next level.", ch, NULL, NULL, TO_NOTVICT );
 							act( AT_YELLOW, "$n stares straight ahead with absolute confidence.", ch, NULL, NULL, TO_NOTVICT );
 							ch->pl = ch->exp * 225;
-							transStatApply(ch, (ch->perm_str * 0.50), (ch->perm_dex * 0.50), (ch->perm_int * 0.25), (ch->perm_con * 0.40));
+							transStatApply(ch, fourstr, fourspd, fourint, fourcon);
 						}
 					}
 					if (ch->powerup >= safemaximum) {
@@ -1288,7 +1319,7 @@ violence_update(void)
 							act(AT_YELLOW, "The world feel as though it could pull apart as $n's aura expands! $s eyebrows disappear slowly and $s hair lengthens, flowing down $s back.", ch, NULL, NULL, TO_NOTVICT);
 							act(AT_YELLOW, "When the bright light fades, $n stands within a wreath of countless bolts of energy, unleashing the primal rage of the Saiyan race.", ch, NULL, NULL, TO_NOTVICT);
 							ch->pl = ch->exp * 350;
-							transStatApply(ch, (ch->perm_str * 0.60), (ch->perm_dex * 0.60), (ch->perm_int * 0.30), (ch->perm_con * 0.50));
+							transStatApply(ch, fivestr, fivespd, fiveint, fivecon);
 						}
 					}
 					if (ch->powerup >= safemaximum) {
@@ -1324,7 +1355,7 @@ violence_update(void)
 							act( AT_RED, "$n's hair and eyes return to normal. However, in the next instant something feels very different.", ch, NULL, NULL, TO_NOTVICT );
 							act( AT_RED, "$n is encompassed in a massive aura of crimson and gold, $s hair and eyes shifting red with a subtle violet tint.", ch, NULL, NULL, TO_NOTVICT );
 							ch->pl = ch->exp * 500;
-							transStatApply(ch, ch->perm_str, ch->perm_dex, (ch->perm_int * 0.50), ch->perm_con);
+							transStatApply(ch, sixstr, sixspd, sixint, sixcon;
 						}
 					}
 					if (ch->powerup >= safemaximum) {
@@ -1359,7 +1390,7 @@ violence_update(void)
 							act( AT_LBLUE, "$n's body is swallowed in an intense blue light. What emerges is no mere Super Saiyan.", ch, NULL, NULL, TO_NOTVICT );
 							act( AT_LBLUE, "$n's hair and eyes shimmer a deep cyan hue, merging fully with a power beyond mortal ki.", ch, NULL, NULL, TO_NOTVICT );
 							ch->pl = ch->exp * 625;
-							transStatApply(ch, (ch->perm_str * 1.25), (ch->perm_dex * 1.25), ch->perm_int, (ch->perm_con * 1.25));
+							transStatApply(ch, sevenstr, sevenspd, sevenint, sevencon);
 						}
 					}
 					if (ch->powerup >= safemaximum) {
