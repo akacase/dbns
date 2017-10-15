@@ -414,7 +414,7 @@ do_score(CHAR_DATA * ch, char *argument)
 	int form_mastery = (ch->train / 45000);
 
 	if(form_mastery < 1) {
-	  form_mastery -= 1;
+	  form_mastery = 1;
 	}
 	
 	if (is_android(ch) || is_superandroid(ch)) {
