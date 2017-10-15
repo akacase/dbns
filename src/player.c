@@ -411,6 +411,12 @@ do_score(CHAR_DATA * ch, char *argument)
 	pager_printf_color(ch, "ZENI : &Y%-13s&C           AutoSac: (&W%c&C)\n\r",
 	    num_punct(ch->gold), xIS_SET(ch->act, PLR_AUTOSAC) ? 'X' : ' ');
 
+	int form_mastery = (ch->train / 45000);
+
+	if(form_mastery < 1) {
+	  form_mastery -= 1;
+	}
+	
 	if (is_android(ch) || is_superandroid(ch)) {
 		pager_printf(ch, "BASE TECHLEVEL: %-16s\n\r", num_punct_ld(ch->exp));
 
@@ -420,11 +426,13 @@ do_score(CHAR_DATA * ch, char *argument)
 			pager_printf(ch, "CURR TECHLEVEL: %-16s\n\r", num_punct_ld(ch->pl));
 	} else {
 		pager_printf(ch, "BASE POWERLEVEL: %-16s\n\r", num_punct_ld(ch->exp));
-
+		
 		if (ch->pl != ch->exp) {
 			pager_printf(ch, "&YCURR POWERLEVEL: %-16s&C\n\r", num_punct_ld(ch->pl));
-		} else
+		} else {
 			pager_printf(ch, "CURR POWERLEVEL: %-16s\n\r", num_punct_ld(ch->pl));
+		}
+		pager_printf_color(ch, "&GFORM MASTERY: &Y%-3d\n\r", form_mastery);
 	}
 	long double pltrack = 0;
 
