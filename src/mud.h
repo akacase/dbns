@@ -2646,6 +2646,8 @@ struct char_data {
 	int 	hit;
 	int 	max_hit;
 	long long int     worth;
+	int		gravSetting;
+	int		gravAcc;
 	int 	mana;
 	int 	max_mana;
 	sh_int 	max_energy;

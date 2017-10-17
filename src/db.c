@@ -3124,6 +3124,8 @@ clear_char(CHAR_DATA * ch)
 	ch->practice = 2;
 	ch->max_prac = 2;
 	ch->worth = 1;
+	ch->gravSetting = 1;
+	ch->gravAcc = 1;
 	ch->train = 4;
 	ch->max_train = 4;
 	ch->hit = 100;

@@ -316,6 +316,8 @@ fwrite_char (CHAR_DATA * ch, FILE * fp)
        (ch->in_room == get_room_index (ROOM_VNUM_LIMBO)
 	 && ch->was_in_room) ? ch->was_in_room->vnum : ch->in_room->vnum);
      fprintf (fp, "Worth           %lld\n", ch->worth);
+	 fprintf (fp, "Gravitysetting           %d\n", ch->gravSetting);
+	 fprintf (fp, "Gravityacclimation           %d\n", ch->gravAcc);
      fprintf (fp, "HpManaMove     %d %d %d %d %d %d\n",
        ch->hit, ch->max_hit, ch->mana, ch->max_mana, ch->move,
        ch->max_move);
@@ -1592,6 +1594,8 @@ fread_char (CHAR_DATA * ch, FILE * fp, bool preload)
 	       KEY ("Glory", ch->pcdata->quest_curr, fread_number (fp));
 	       KEY ("Gold", ch->gold, fread_number (fp));
 	       KEY ("Gohome", ch->pcdata->gohometimer, fread_number (fp));
+		   KEY ("Gravityacclimation", ch->gravAcc, fread_number (fp));
+		   KEY ("Gravitysetting", ch->gravSetting, fread_number (fp));
 	       /* temporary measure */
 	       if (!strcmp (word, "Guild")) {
 		    ch->pcdata->clan_name = fread_string (fp);
