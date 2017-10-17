@@ -4137,8 +4137,11 @@ do_consider(CHAR_DATA * ch, char *argument)
 void do_train(CHAR_DATA *ch, char *argument)
 {
         char arg[MAX_INPUT_LENGTH];
+		char arg2[MAX_INPUT_LENGTH];
+		int gravset = 1;
 
 	one_argument(argument, arg);
+	one_argument(argument, arg2);
 	
 	if (IS_NPC(ch))
 		return;
@@ -4151,10 +4154,36 @@ void do_train(CHAR_DATA *ch, char *argument)
 	  return;
 	}
 	else if (arg[0] == '\0') {
-		send_to_char("Gravtrain which activity? Activities are: pushup, shadowbox, endure, meditate.\n\r", ch);
+		send_to_char("Choose your desired gravity with 'gravtrain set <#>'.\n\r", ch);
+		send_to_char("Afterward, activities are: gravtrain pushup, shadowbox, endure, meditate.\n\r", ch);
 	}
+	if (!str_cmp(arg, "set")) {
 
-	if (!str_cmp(arg, "pushup")) {
+		if (arg2[0] == '\0') {
+			send_to_char("Set the machine to which level of gravity?\n\r", ch);
+			return;
+		}
+		if (is_number(arg2)) {
+			gravset = atoi(arg2);
+			if (gravset < 1) {
+				send_to_char("This is a gravity chamber, not an anti-gravity chamber!\n\r", ch);
+				return;
+			}
+			else if (gravset > 500000) {
+				send_to_char("This is a gravity chamber, not a black hole!\n\r", ch);
+				return;
+			}
+			else {
+				pager_printf(ch, "&GYou set the machine to %d times gravity.\n\r", gravset);
+				ch->gravSetting = gravset;
+				return;
+			}
+		}
+		else {
+			send_to_char("That's not a number.\n\r", ch);
+			return;
+		}
+	} else if (!str_cmp(arg, "pushup")) {
 
 		if (xIS_SET((ch)->affected_by, AFF_PUSHUPS) || xIS_SET((ch)->affected_by, AFF_SHADOWBOXING)
 		|| xIS_SET((ch)->affected_by, AFF_ENDURING) || xIS_SET((ch)->affected_by, AFF_MEDITATION)) {

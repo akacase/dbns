@@ -2165,7 +2165,7 @@ violence_update(void)
             
 		  increase = number_range(1, 3);
 			
-		  gravLevel = ((get_curr_str(ch) + get_curr_dex(ch) + get_curr_int(ch) + get_curr_con(ch)) - 39);
+		  gravLevel = ch->gravSetting;
 		  trainmessage = number_range(1, 100);
 		  minLF = 5;
 			
@@ -2221,7 +2221,7 @@ violence_update(void)
 
 		  increase = number_range(1, 3);
 			
-		  gravLevel = ((get_curr_str(ch) + get_curr_dex(ch) + get_curr_int(ch) + get_curr_con(ch)) - 39);
+		  gravLevel = ch->gravSetting;
 		  trainmessage = number_range(1, 100);
 		  minLF = 5;
 			
@@ -2277,7 +2277,7 @@ violence_update(void)
 
 		  increase = number_range(1, 3);
 			
-		  gravLevel = ((get_curr_str(ch) + get_curr_dex(ch) + get_curr_int(ch) + get_curr_con(ch)) - 39);
+		  gravLevel = ch->gravSetting;
 		  trainmessage = number_range(1, 100);
 		  minLF = 5;
 			
@@ -2332,7 +2332,7 @@ violence_update(void)
 
 		  increase = number_range(1, 3);
 			
-		  gravLevel = ((get_curr_str(ch) + get_curr_dex(ch) + get_curr_int(ch) + get_curr_con(ch)) - 39);
+		  gravLevel = ch->gravSetting;
 		  trainmessage = number_range(1, 100);
 		  minLF = 5;
 			
