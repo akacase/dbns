@@ -2691,7 +2691,7 @@ struct char_data {
 	sh_int 	mobthac0;
 	sh_int 	hitroll;
 	sh_int 	damroll;
-	sh_int 	hitplus;
+	int 	hitplus;
 	sh_int 	damplus;
 	sh_int 	position;
 	sh_int 	defposition;
