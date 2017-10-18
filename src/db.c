@@ -2654,9 +2654,13 @@ create_mobile(MOB_INDEX_DATA * pMobIndex)
 		mob->armor = pMobIndex->ac;
 	else
 		mob->armor = 100;
+		
+	mob->hitplus = pMobIndex->hitplus;
 
-	if (!pMobIndex->hitnodice)
-		mob->max_hit = (mob->perm_con + 100);
+	if (mob->hitplus < 1)
+		mob->hitplus = 1;
+		
+	mob->max_hit = mob->hitplus;
 	mob->hit = mob->max_hit;
 	/* lets put things back the way they used to be! -Thoric */
 	mob->gold = pMobIndex->gold;
@@ -2718,7 +2722,6 @@ create_mobile(MOB_INDEX_DATA * pMobIndex)
 	mob->barenumdie = pMobIndex->damnodice;
 	mob->baresizedie = pMobIndex->damsizedice;
 	mob->mobthac0 = pMobIndex->mobthac0;
-	mob->hitplus = pMobIndex->hitplus;
 	mob->damplus = pMobIndex->damplus;
 
 	mob->perm_str = pMobIndex->perm_str;
