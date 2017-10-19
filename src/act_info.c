@@ -4180,7 +4180,7 @@ void do_train(CHAR_DATA *ch, char *argument)
 				return;
 			}
 		}
-		else (!is_number(arg2)) {
+		else if (!is_number(arg2)) {
 			send_to_char("That's not a number.\n\r", ch);
 			return;
 		}
