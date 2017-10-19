@@ -4164,8 +4164,12 @@ void do_train(CHAR_DATA *ch, char *argument)
 			send_to_char("Set the machine to which level of gravity?\n\r", ch);
 			return;
 		}
-		if (is_number(arg2)) {
+		else {
 			gravset = atoi(arg2);
+			if (!is_number(gravset)) {
+				send_to_char("That's not a number.\n\r", ch);
+				return;
+			}
 			if (gravset < 1) {
 				send_to_char("This is a gravity chamber, not an anti-gravity chamber!\n\r", ch);
 				return;
@@ -4179,10 +4183,6 @@ void do_train(CHAR_DATA *ch, char *argument)
 				ch->gravSetting = gravset;
 				return;
 			}
-		}
-		else if (!is_number(arg2)) {
-			send_to_char("That's not a number.\n\r", ch);
-			return;
 		}
 	} else if (!str_cmp(arg, "pushup")) {
 
