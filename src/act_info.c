@@ -4156,6 +4156,7 @@ void do_train(CHAR_DATA *ch, char *argument)
 	else if (arg[0] == '\0') {
 		send_to_char("Choose your desired gravity with 'gravtrain set <#>'.\n\r", ch);
 		send_to_char("Afterward, activities are: gravtrain pushup, shadowbox, endure, meditate.\n\r", ch);
+		return;
 	}
 	if (!str_cmp(arg, "set")) {
 
@@ -4179,7 +4180,7 @@ void do_train(CHAR_DATA *ch, char *argument)
 				return;
 			}
 		}
-		else {
+		else (!is_number(arg2)) {
 			send_to_char("That's not a number.\n\r", ch);
 			return;
 		}
