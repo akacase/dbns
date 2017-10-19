@@ -4137,11 +4137,9 @@ do_consider(CHAR_DATA * ch, char *argument)
 void do_train(CHAR_DATA *ch, char *argument)
 {
         char arg[MAX_INPUT_LENGTH];
-		char arg2[MAX_INPUT_LENGTH];
 		int gravset = 1;
 
 	one_argument(argument, arg);
-	one_argument(argument, arg2);
 	
 	if (IS_NPC(ch))
 		return;
