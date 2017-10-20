@@ -4140,6 +4140,7 @@ void do_train(CHAR_DATA *ch, char *argument)
 		int gravset = 1;
 
 	one_argument(argument, arg);
+	gravset = atoi(argument);
 	
 	if (IS_NPC(ch))
 		return;
@@ -4157,11 +4158,19 @@ void do_train(CHAR_DATA *ch, char *argument)
 		return;
 	}
 	if (!str_cmp(arg, "set")) {
-		gravset = 10;
-		ch->gravSetting = gravset;
-		send_to_char("DEBUG: gravSetting set to 10\n\r", ch);
-		return;
-		
+			if (gravset < 1) {
+				send_to_char("This is a gravity chamber, not an anti-gravity chamber!\n\r", ch);
+				return;
+			}
+			else if (gravset > 500000) {
+				send_to_char("This is a gravity chamber, not a black hole!\n\r", ch);
+				return;
+			}
+			else {
+				pager_printf(ch, "&GYou set the machine to %d times gravity.\n\r", gravset);
+				ch->gravSetting = gravset;
+				return;
+			}
 	} else if (!str_cmp(arg, "pushup")) {
 
 		if (xIS_SET((ch)->affected_by, AFF_PUSHUPS) || xIS_SET((ch)->affected_by, AFF_SHADOWBOXING)
