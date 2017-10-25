@@ -5624,7 +5624,6 @@ args((const char *argument, int channel,
 	void clan_auto_kick args((CHAR_DATA * ch));
 	void clan_auto_align args((CHAR_DATA * ch, CLAN_DATA * clan));
 	void clan_auto_align_kick args((CLAN_DATA * clan));
-	void damage_armor args((CHAR_DATA * ch, int dam));
 	int dam_armor_recalc args((CHAR_DATA * ch, int dam));
 	void sort_censor args((CENSOR_DATA * pRes));
 	void do_info args((CHAR_DATA * ch, char *argument));
