@@ -2654,14 +2654,13 @@ create_mobile(MOB_INDEX_DATA * pMobIndex)
 		mob->armor = pMobIndex->ac;
 	else
 		mob->armor = 100;
-		
-	mob->hitplus = pMobIndex->hitplus;
 
+	mob->hitplus = pMobIndex->hitplus;
+	
 	if (mob->hitplus < 1)
-		mob->hitplus = 1;
-		
+	  mob->hitplus = 1;
+	
 	mob->max_hit = mob->hitplus;
-	mob->hit = mob->max_hit;
 	/* lets put things back the way they used to be! -Thoric */
 	mob->gold = pMobIndex->gold;
 	if (mob->gold > -1)
@@ -3127,8 +3126,6 @@ clear_char(CHAR_DATA * ch)
 	ch->practice = 2;
 	ch->max_prac = 2;
 	ch->worth = 1;
-	ch->gravSetting = 1;
-	ch->gravAcc = 1;
 	ch->train = 4;
 	ch->max_train = 4;
 	ch->hit = 100;
