@@ -2455,7 +2455,7 @@ nanny(DESCRIPTOR_DATA *d, char *argument)
 	name_stamp_stats(ch);
 
 	ch->level = 1;
-	ch->exp = 5;
+	ch->exp = 50;
 	ch->pl = 50;
 	ch->heart_pl = 5;
 	ch->max_hit += race_table[ch->race]->hit;
