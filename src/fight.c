@@ -2258,7 +2258,7 @@ violence_update(void)
 		    stat_train(ch, "str", 15);
 		  }
 		  if (trainmessage >= 65 && trainmessage < 99) {
-		    xp_gain = (long double)increase / 100 * gravLevel;
+		    xp_gain = (long double)increase / 1000 * gravLevel;
 		    ch->hit--;
 		    ch->mana -= URANGE(0, ch->mana * 0.005, ch->mana);
 		    pager_printf(ch, "&GYou perform a push-up in %d times gravity, your strength steadily building.\n\r", gravLevel);
@@ -2274,7 +2274,7 @@ violence_update(void)
 		    stat_train(ch, "str", 15);
 		  }
 		  if (trainmessage >= 99) {
-		    xp_gain = (long double)increase / 50 * gravLevel;
+		    xp_gain = (long double)increase / 500 * gravLevel;
 		    ch->hit--;
 		    ch->mana -= URANGE(0, ch->mana * 0.010, ch->mana);
 		    pager_printf(ch, "&GPushing past your normal limits, you perform a series of one-armed push-ups!\n\r", gravLevel);
@@ -2314,7 +2314,7 @@ violence_update(void)
 		  }
 
 		  if (trainmessage < 65) {
-		    xp_gain = (long double)increase / 100 * gravLevel;
+		    xp_gain = (long double)increase / 1000 * gravLevel;
 		    ch->hit--;
 		    ch->mana -= URANGE(0, ch->mana * 0.005, ch->mana);
 		    gain_exp(ch, xp_gain);
@@ -2329,7 +2329,7 @@ violence_update(void)
 		    stat_train(ch, "spd", 15);
 		  }
 		  if (trainmessage >= 65 && trainmessage < 99) {
-		    xp_gain = (long double)increase / 100 * gravLevel;
+		    xp_gain = (long double)increase / 1000 * gravLevel;
 		    ch->hit--;
 		    ch->mana -= URANGE(0, ch->mana * 0.005, ch->mana);
 		    pager_printf(ch, "&GYou perform a combo in %d times gravity while skillfully dodging from side to side.\n\r", gravLevel);
@@ -2345,7 +2345,7 @@ violence_update(void)
 		    stat_train(ch, "spd", 15);
 		  }
 		  if (trainmessage >= 99) {
-		    xp_gain = (long double)increase / 50 * gravLevel;
+		    xp_gain = (long double)increase / 500 * gravLevel;
 		    ch->hit--;
 		    ch->mana -= URANGE(0, ch->mana * 0.010, ch->mana);
 		    pager_printf(ch, "&GBreathing deeply, you throw all of your energy into a vicious jab-cross-hook-knee combination!\n\r", gravLevel);
@@ -2385,7 +2385,7 @@ violence_update(void)
 		  }
 
 		  if (trainmessage < 65) {
-		    xp_gain = (long double)increase / 100 * gravLevel;
+		    xp_gain = (long double)increase / 1000 * gravLevel;
 		    ch->hit--;
 		    ch->mana -= URANGE(0, ch->mana * 0.005, ch->mana);
 		    gain_exp(ch, xp_gain);
@@ -2400,7 +2400,7 @@ violence_update(void)
 		    stat_train(ch, "con", 15);
 		  }
 		  if (trainmessage >= 65 && trainmessage < 99) {
-		    xp_gain = (long double)increase / 100 * gravLevel;
+		    xp_gain = (long double)increase / 1000 * gravLevel;
 		    ch->hit--;
 		    ch->mana -= URANGE(0, ch->mana * 0.005, ch->mana);
 		    pager_printf(ch, "&GYou crank up the dial well beyond %d times gravity, fighting just to stay on your feet.\n\r", gravLevel);
@@ -2416,7 +2416,7 @@ violence_update(void)
 		    stat_train(ch, "con", 15);
 		  }
 		  if (trainmessage >= 99) {
-		    xp_gain = (long double)increase / 50 * gravLevel;
+		    xp_gain = (long double)increase / 500 * gravLevel;
 		    ch->mana -= URANGE(0, ch->mana * 0.010, ch->mana);
 		    pager_printf(ch, "&GYou push the dial even further, gritting your teeth and nearly crushing your body to the floor!\n\r", gravLevel);
 		    act(AT_WHITE, "$n endures a level of gravity far beyond their normal limits, fighting just to stay alive!", ch, NULL, NULL, TO_NOTVICT);
@@ -2454,7 +2454,7 @@ violence_update(void)
 		    act(AT_WHITE, "$n almost passes out from training too hard.", ch, NULL, NULL, TO_NOTVICT);
 		  }
 		  if (trainmessage < 65) {
-		    xp_gain = (long double)increase / 100 * gravLevel;
+		    xp_gain = (long double)increase / 1000 * gravLevel;
 		    ch->hit--;
 		    ch->mana -= URANGE(0, ch->mana * 0.005, ch->mana);
 		    gain_exp(ch, xp_gain);
@@ -2469,7 +2469,7 @@ violence_update(void)
 		    stat_train(ch, "int", 15);
 		  }			
 		  if (trainmessage >= 65 && trainmessage < 99) {
-		    xp_gain = (long double)increase / 100 * gravLevel;
+		    xp_gain = (long double)increase / 1000 * gravLevel;
 		    ch->hit--;
 		    ch->mana -= URANGE(0, ch->mana * 0.005, ch->mana);
 		    pager_printf(ch, "&GYou focus your mind's eye in %d times gravity, shutting all else out with extreme calm.\n\r", gravLevel);
@@ -2485,7 +2485,7 @@ violence_update(void)
 		    stat_train(ch, "int", 15);
 		  }
 		  if (trainmessage >= 99) {
-		    xp_gain = (long double)increase / 50 * gravLevel;
+		    xp_gain = (long double)increase / 500 * gravLevel;
 		    ch->hit--;
 		    ch->mana -= URANGE(0, ch->mana * 0.010, ch->mana);
 		    pager_printf(ch, "&GYour mind clears completely and you momentarily achieve an overwhelming sense of inner peace.\n\r", gravLevel);
