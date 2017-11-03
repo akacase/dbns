@@ -8,7 +8,7 @@ DATA_FOLDERS = ../area ../clans ../classes ../councils ../deity ../doc ../gods \
 	../houses ../planets ../races ../space ../system
 
 C_FLAGS = -O2 -g3 -Wall -std=c99 ${DBUGFLG} ${TIME} ${REG}
-L_FLAGS = ${MATH_LINK} -lz -lbsd
+L_FLAGS = ${MATH_LINK} -lz
 
 O_FILES = act_comm.o act_info.o act_move.o act_obj.o act_wiz.o \
           board.o boards.o bounty.o build.o clans.o colorize.o comm.o \

@@ -941,6 +941,8 @@ update_aris(CHAR_DATA * ch)
 	int 	aff_w, aff_x, aff_y, aff_z, aff_aa;
 	int 	aff_ab, aff_ac, aff_ad, aff_ae, aff_af, aff_ag, aff_ah;
 	int 	aff_ai, aff_aj, aff_ak, aff_al, aff_am, aff_an;
+	int		aff_ao, aff_ap, aff_aq, aff_ar, aff_as, aff_at, aff_au;
+	int		aff_av;
 
 	if (IS_NPC(ch) || IS_IMMORTAL(ch))
 		return;
@@ -989,6 +991,14 @@ update_aris(CHAR_DATA * ch)
 	aff_al = IS_AFFECTED(ch, AFF_SANCTUARY);
 	aff_am = IS_AFFECTED(ch, AFF_GOLDEN_OOZARU);
 	aff_an = IS_AFFECTED(ch, AFF_SGOD);
+	aff_ao = IS_AFFECTED(ch, AFF_PUSHUPS);
+	aff_ap = IS_AFFECTED(ch, AFF_SHADOWBOXING);
+	aff_aq = IS_AFFECTED(ch, AFF_ENDURING);
+	aff_ar = IS_AFFECTED(ch, AFF_MEDITATION);
+	aff_as = IS_AFFECTED(ch, AFF_POWERCHANNEL);
+	aff_at = IS_AFFECTED(ch, AFF_OVERCHANNEL);
+	aff_au = IS_AFFECTED(ch, AFF_SAFEMAX);
+	aff_av = IS_AFFECTED(ch, AFF_GOLDENFORM);
 
 	xCLEAR_BITS(ch->affected_by);
 	ch->resistant = 0;
@@ -1063,8 +1073,6 @@ update_aris(CHAR_DATA * ch)
 		xSET_BIT(ch->affected_by, AFF_SSJ3);
 	if (aff_e)
 		xSET_BIT(ch->affected_by, AFF_SSJ4);
-	if (aff_an)
-		xSET_BIT(ch->affected_by, AFF_SGOD);
 	if (aff_f)
 		xSET_BIT(ch->affected_by, AFF_SNAMEK);
 	if (aff_g)
@@ -1133,6 +1141,24 @@ update_aris(CHAR_DATA * ch)
 		xSET_BIT(ch->affected_by, AFF_SANCTUARY);
 	if (aff_am)
 		xSET_BIT(ch->affected_by, AFF_GOLDEN_OOZARU);
+	if (aff_an)
+		xSET_BIT(ch->affected_by, AFF_SGOD);
+	if (aff_ao)
+		xSET_BIT(ch->affected_by, AFF_PUSHUPS);
+	if (aff_ap)
+		xSET_BIT(ch->affected_by, AFF_SHADOWBOXING);
+	if (aff_aq)
+		xSET_BIT(ch->affected_by, AFF_ENDURING);
+	if (aff_ar)
+		xSET_BIT(ch->affected_by, AFF_MEDITATION);
+	if (aff_as)
+		xSET_BIT(ch->affected_by, AFF_POWERCHANNEL);
+	if (aff_at)
+		xSET_BIT(ch->affected_by, AFF_OVERCHANNEL);
+	if (aff_au)
+		xSET_BIT(ch->affected_by, AFF_SAFEMAX);
+	if (aff_av)
+		xSET_BIT(ch->affected_by, AFF_GOLDENFORM);
 	return;
 }
 
@@ -1980,7 +2006,7 @@ extract_char(CHAR_DATA * ch, bool fPull, bool death)
 			bug("Extract_char: char's descriptor points to another char", 0);
 		else {
 			log_string("preparing to close socket at handler.c:1983\n");
-			close_socket(ch->desc, false, false);
+			close_socket(ch->desc, false);
 		}
 	}
 }
@@ -3213,6 +3239,20 @@ affect_bit_name(EXT_BV * vector)
 	buf[0] = '\0';
 	if (xIS_SET(*vector, AFF_BLIND))
 		strcat(buf, " blind");
+	if (xIS_SET(*vector, AFF_PUSHUPS))
+		strcat(buf, " pushups");
+	if (xIS_SET(*vector, AFF_SHADOWBOXING))
+		strcat(buf, " shadowboxing");
+	if (xIS_SET(*vector, AFF_ENDURING))
+		strcat(buf, " enduring");
+	if (xIS_SET(*vector, AFF_MEDITATION))
+		strcat(buf, " meditation");
+	if (xIS_SET(*vector, AFF_POWERCHANNEL))
+		strcat(buf, " powerchannel");
+	if (xIS_SET(*vector, AFF_SAFEMAX))
+		strcat(buf, " safemax");
+	if (xIS_SET(*vector, AFF_OVERCHANNEL))
+		strcat(buf, " overchannel");
 	if (xIS_SET(*vector, AFF_INVISIBLE))
 		strcat(buf, " invisible");
 	if (xIS_SET(*vector, AFF_DETECT_EVIL))

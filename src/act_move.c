@@ -1906,6 +1906,15 @@ do_sit(CHAR_DATA * ch, char *argument)
 void 
 do_rest(CHAR_DATA * ch, char *argument)
 {
+	if (xIS_SET((ch)->affected_by, AFF_PUSHUPS)
+		|| xIS_SET((ch)->affected_by, AFF_SHADOWBOXING)
+		|| xIS_SET((ch)->affected_by, AFF_ENDURING)
+		|| xIS_SET((ch)->affected_by, AFF_MEDITATION)
+		|| xIS_SET((ch)->affected_by, AFF_POWERCHANNEL)
+		|| xIS_SET((ch)->affected_by, AFF_OVERCHANNEL)) {
+			send_to_char("You're a little too busy to do that.\n\r", ch);
+			return;
+		}
 	switch (ch->position) {
 	case POS_SLEEPING:
 		if (IS_AFFECTED(ch, AFF_SLEEP)) {

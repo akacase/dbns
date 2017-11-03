@@ -531,6 +531,1604 @@ violence_update(void)
 				affect_remove(ch, paf);
 			}
 		}
+		/* Transformation Update */
+		if (!IS_NPC(ch)
+			&& xIS_SET((ch)->affected_by, AFF_SNAMEK)) {
+				int form_drain = 0;
+				int form_mastery = 0;
+				double plmod = 0;
+				
+				form_mastery = (ch->train / 45000);
+				plmod = (ch->pl / ch->exp);
+				if (ch->mana <= 0) {
+					xREMOVE_BIT((ch)->affected_by, AFF_SNAMEK);
+					if (xIS_SET((ch)->affected_by, AFF_POWERCHANNEL))
+						xREMOVE_BIT((ch)->affected_by, AFF_POWERCHANNEL);
+					if (xIS_SET((ch)->affected_by, AFF_OVERCHANNEL))
+						xREMOVE_BIT((ch)->affected_by, AFF_OVERCHANNEL);
+					if (xIS_SET((ch)->affected_by, AFF_SAFEMAX))
+						xREMOVE_BIT((ch)->affected_by, AFF_SAFEMAX);
+					ch->pl = ch->exp;
+					ch->powerup = 0;
+					ch->mana = 0;
+					transStatRemove(ch);
+					act( AT_WHITE, "You lose control of your ki and return to normal!", ch, NULL, NULL, TO_CHAR );
+					act( AT_WHITE, "$n loses control of $s ki and returns to normal!", ch, NULL, NULL, TO_NOTVICT );
+				}
+				if (form_mastery < 1)
+					form_mastery = 1;
+				if (plmod > 600)
+					form_drain = (800 - (form_mastery * 6));
+				else if (plmod > 500)
+					form_drain = (400 - (form_mastery * 6));
+				else if (plmod > 350)
+					form_drain = (400 - (form_mastery * 6));
+				else if (plmod > 250)
+					form_drain = (275 - (form_mastery * 6));
+				else if (plmod > 150)
+					form_drain = (200 - (form_mastery * 6));
+				else if (plmod > 75)
+					form_drain = (150 - (form_mastery * 6));
+				else if (plmod > 50)
+					form_drain = (100 - (form_mastery * 6));
+				else if (plmod > 35)
+					form_drain = (75 - (form_mastery * 6));
+				if (form_drain < 1)
+					form_drain = 1;
+				ch->mana -= form_drain;
+				if (form_drain <= 1)
+					ch->train += 1;
+				else if (form_drain > 1)
+					ch->train += 3;
+		}
+		if (!IS_NPC(ch)
+			&& xIS_SET((ch)->affected_by, AFF_MYSTIC)) {
+				int form_drain = 0;
+				int form_mastery = 0;
+				double plmod = 0;
+				
+				form_mastery = (ch->train / 45000);
+				plmod = (ch->pl / ch->exp);
+				if (ch->mana <= 0) {
+					xREMOVE_BIT((ch)->affected_by, AFF_MYSTIC);
+					if (xIS_SET((ch)->affected_by, AFF_POWERCHANNEL))
+						xREMOVE_BIT((ch)->affected_by, AFF_POWERCHANNEL);
+					if (xIS_SET((ch)->affected_by, AFF_OVERCHANNEL))
+						xREMOVE_BIT((ch)->affected_by, AFF_OVERCHANNEL);
+					if (xIS_SET((ch)->affected_by, AFF_SAFEMAX))
+						xREMOVE_BIT((ch)->affected_by, AFF_SAFEMAX);
+					ch->pl = ch->exp;
+					ch->powerup = 0;
+					transStatRemove(ch);
+					act( AT_WHITE, "You lose control of your ki and return to normal!", ch, NULL, NULL, TO_CHAR );
+					act( AT_WHITE, "$n loses control of $s ki and returns to normal!", ch, NULL, NULL, TO_NOTVICT );
+				}
+				if (form_mastery < 1)
+					form_mastery = 1;
+				if (plmod > 600)
+					form_drain = (800 - (form_mastery * 6));
+				else if (plmod > 500)
+					form_drain = (400 - (form_mastery * 6));
+				else if (plmod > 350)
+					form_drain = (400 - (form_mastery * 6));
+				else if (plmod > 250)
+					form_drain = (275 - (form_mastery * 6));
+				else if (plmod > 150)
+					form_drain = (200 - (form_mastery * 6));
+				else if (plmod > 75)
+					form_drain = (150 - (form_mastery * 6));
+				else if (plmod > 50)
+					form_drain = (100 - (form_mastery * 6));
+				else if (plmod > 35)
+					form_drain = (75 - (form_mastery * 6));
+				if (form_drain < 1)
+					form_drain = 1;
+				ch->mana -= form_drain;
+				if (form_drain <= 1)
+					ch->train += 1;
+				else if (form_drain > 1)
+					ch->train += 3;
+		}
+		if (!IS_NPC(ch)
+			&& xIS_SET((ch)->affected_by, AFF_ICER2)) {
+				int form_mastery = 0;
+				
+				form_mastery = (ch->train / 45000);
+				if (ch->mana <= 0) {
+					xREMOVE_BIT((ch)->affected_by, AFF_ICER2);
+					if (xIS_SET((ch)->affected_by, AFF_POWERCHANNEL))
+						xREMOVE_BIT((ch)->affected_by, AFF_POWERCHANNEL);
+					if (xIS_SET((ch)->affected_by, AFF_OVERCHANNEL))
+						xREMOVE_BIT((ch)->affected_by, AFF_OVERCHANNEL);
+					if (xIS_SET((ch)->affected_by, AFF_SAFEMAX))
+						xREMOVE_BIT((ch)->affected_by, AFF_SAFEMAX);
+					ch->pl = ch->exp;
+					ch->powerup = 0;
+					transStatRemove(ch);
+					act( AT_PURPLE, "You lose control of your ki and return to normal!", ch, NULL, NULL, TO_CHAR );
+					act( AT_PURPLE, "$n loses control of $s ki and returns to normal!", ch, NULL, NULL, TO_NOTVICT );
+				}
+				if (form_mastery < 1)
+					form_mastery = 1;
+				if (form_mastery >= 6)
+					ch->train += 1;
+				else if (form_mastery < 6)
+					ch->train += 15;
+		}
+		if (!IS_NPC(ch)
+			&& xIS_SET((ch)->affected_by, AFF_ICER3)) {
+				int form_mastery = 0;
+				
+				form_mastery = (ch->train / 45000);
+				if (ch->mana <= 0) {
+					xREMOVE_BIT((ch)->affected_by, AFF_ICER3);
+					if (xIS_SET((ch)->affected_by, AFF_POWERCHANNEL))
+						xREMOVE_BIT((ch)->affected_by, AFF_POWERCHANNEL);
+					if (xIS_SET((ch)->affected_by, AFF_OVERCHANNEL))
+						xREMOVE_BIT((ch)->affected_by, AFF_OVERCHANNEL);
+					if (xIS_SET((ch)->affected_by, AFF_SAFEMAX))
+						xREMOVE_BIT((ch)->affected_by, AFF_SAFEMAX);
+					ch->pl = ch->exp;
+					ch->powerup = 0;
+					transStatRemove(ch);
+					act( AT_PURPLE, "You lose control of your ki and return to normal!", ch, NULL, NULL, TO_CHAR );
+					act( AT_PURPLE, "$n loses control of $s ki and returns to normal!", ch, NULL, NULL, TO_NOTVICT );
+				}
+				if (form_mastery < 1)
+					form_mastery = 1;
+				if (form_mastery >= 20)
+					ch->train += 1;
+				else if (form_mastery < 20)
+					ch->train += 15;
+		}
+		if (!IS_NPC(ch)
+			&& xIS_SET((ch)->affected_by, AFF_ICER4)) {
+				int form_mastery = 0;
+				
+				form_mastery = (ch->train / 45000);
+				if (ch->mana <= 0) {
+					xREMOVE_BIT((ch)->affected_by, AFF_ICER4);
+					if (xIS_SET((ch)->affected_by, AFF_POWERCHANNEL))
+						xREMOVE_BIT((ch)->affected_by, AFF_POWERCHANNEL);
+					if (xIS_SET((ch)->affected_by, AFF_OVERCHANNEL))
+						xREMOVE_BIT((ch)->affected_by, AFF_OVERCHANNEL);
+					if (xIS_SET((ch)->affected_by, AFF_SAFEMAX))
+						xREMOVE_BIT((ch)->affected_by, AFF_SAFEMAX);
+					ch->pl = ch->exp;
+					ch->powerup = 0;
+					transStatRemove(ch);
+					act( AT_PURPLE, "You lose control of your ki and return to normal!", ch, NULL, NULL, TO_CHAR );
+					act( AT_PURPLE, "$n loses control of $s ki and returns to normal!", ch, NULL, NULL, TO_NOTVICT );
+				}
+				if (form_mastery < 1)
+					form_mastery = 1;
+				if (form_mastery >= 44)
+					ch->train += 1;
+				else if (form_mastery < 44)
+					ch->train += 3;
+		}
+		if (!IS_NPC(ch)
+			&& xIS_SET((ch)->affected_by, AFF_ICER5)) {
+				int form_drain = 0;
+				int form_mastery = 0;
+				
+				form_mastery = (ch->train / 45000);
+				if (ch->mana <= 0) {
+					xREMOVE_BIT((ch)->affected_by, AFF_ICER5);
+					if (xIS_SET((ch)->affected_by, AFF_POWERCHANNEL))
+						xREMOVE_BIT((ch)->affected_by, AFF_POWERCHANNEL);
+					if (xIS_SET((ch)->affected_by, AFF_OVERCHANNEL))
+						xREMOVE_BIT((ch)->affected_by, AFF_OVERCHANNEL);
+					if (xIS_SET((ch)->affected_by, AFF_SAFEMAX))
+						xREMOVE_BIT((ch)->affected_by, AFF_SAFEMAX);
+					ch->pl = ch->exp;
+					ch->powerup = 0;
+					transStatRemove(ch);
+					act( AT_PURPLE, "You lose control of your ki and return to normal!", ch, NULL, NULL, TO_CHAR );
+					act( AT_PURPLE, "$n loses control of $s ki and returns to normal!", ch, NULL, NULL, TO_NOTVICT );
+				}
+				if (form_mastery < 1)
+					form_mastery = 1;
+				form_drain = (600 - (form_mastery * 6));
+				if (form_drain < 1)
+					form_drain = 1;
+				ch->mana -= form_drain;
+				if (form_mastery >= 64)
+					ch->train += 1;
+				else if (form_mastery < 64)
+					ch->train += 3;
+		}
+		if (!IS_NPC(ch)
+			&& xIS_SET((ch)->affected_by, AFF_GOLDENFORM)) {
+				int form_drain = 0;
+				int form_mastery = 0;
+				
+				form_mastery = (ch->train / 45000);
+				if (ch->mana <= 0) {
+					xREMOVE_BIT((ch)->affected_by, AFF_GOLDENFORM);
+					if (xIS_SET((ch)->affected_by, AFF_POWERCHANNEL))
+						xREMOVE_BIT((ch)->affected_by, AFF_POWERCHANNEL);
+					if (xIS_SET((ch)->affected_by, AFF_OVERCHANNEL))
+						xREMOVE_BIT((ch)->affected_by, AFF_OVERCHANNEL);
+					if (xIS_SET((ch)->affected_by, AFF_SAFEMAX))
+						xREMOVE_BIT((ch)->affected_by, AFF_SAFEMAX);
+					ch->pl = ch->exp;
+					ch->powerup = 0;
+					transStatRemove(ch);
+					act( AT_PURPLE, "You lose control of your ki and return to normal!", ch, NULL, NULL, TO_CHAR );
+					act( AT_PURPLE, "$n loses control of $s ki and returns to normal!", ch, NULL, NULL, TO_NOTVICT );
+				}
+				if (form_mastery < 1)
+					form_mastery = 1;
+				form_drain = (800 - (form_mastery * 6));
+				if (form_drain < 400)
+					form_drain = 400;
+				ch->mana -= form_drain;
+				if (form_drain > 400)
+					ch->train += 3;
+				else if (form_drain <= 400)
+					ch->train += 1;
+		}
+		if (!IS_NPC(ch)
+			&& xIS_SET((ch)->affected_by, AFF_SSJ)
+			&& !xIS_SET((ch)->affected_by, AFF_USSJ)
+			&& !xIS_SET((ch)->affected_by, AFF_USSJ2)
+			&& !xIS_SET((ch)->affected_by, AFF_SSJ2)
+			&& !xIS_SET((ch)->affected_by, AFF_SSJ3)
+			&& !xIS_SET((ch)->affected_by, AFF_SSJ4)
+			&& !xIS_SET((ch)->affected_by, AFF_SGOD)) {
+				int form_drain = 0;
+				int form_mastery = 0;
+				
+				form_mastery = (ch->train / 45000);
+				if (ch->mana <= 0) {
+					xREMOVE_BIT((ch)->affected_by, AFF_SSJ);
+					if (xIS_SET((ch)->affected_by, AFF_POWERCHANNEL))
+						xREMOVE_BIT((ch)->affected_by, AFF_POWERCHANNEL);
+					if (xIS_SET((ch)->affected_by, AFF_OVERCHANNEL))
+						xREMOVE_BIT((ch)->affected_by, AFF_OVERCHANNEL);
+					if (xIS_SET((ch)->affected_by, AFF_SAFEMAX))
+						xREMOVE_BIT((ch)->affected_by, AFF_SAFEMAX);
+					ch->pl = ch->exp;
+					ch->powerup = 0;
+					transStatRemove(ch);
+					ch->pcdata->haircolor = ch->pcdata->orignalhaircolor;
+					ch->pcdata->eyes = ch->pcdata->orignaleyes;
+					act( AT_YELLOW, "You lose control of your ki and return to normal!", ch, NULL, NULL, TO_CHAR );
+					act( AT_YELLOW, "$n loses control of $s ki and returns to normal!", ch, NULL, NULL, TO_NOTVICT );
+				}
+				if (form_mastery < 1)
+					form_mastery = 1;
+				form_drain = (100 - (form_mastery * 6));
+				if (form_drain < 1)
+					form_drain = 1;
+				ch->mana -= form_drain;
+				if (form_mastery >= 9)
+					ch->train += 1;
+				else if (form_mastery < 9)
+					ch->train += 3;
+		}
+		if (!IS_NPC(ch)
+			&& xIS_SET((ch)->affected_by, AFF_SSJ)
+			&& xIS_SET((ch)->affected_by, AFF_USSJ)
+			&& !xIS_SET((ch)->affected_by, AFF_USSJ2)
+			&& !xIS_SET((ch)->affected_by, AFF_SSJ2)
+			&& !xIS_SET((ch)->affected_by, AFF_SSJ3)
+			&& !xIS_SET((ch)->affected_by, AFF_SSJ4)
+			&& !xIS_SET((ch)->affected_by, AFF_SGOD)) {
+				int form_drain = 0;
+				int form_mastery = 0;
+				
+				form_mastery = (ch->train / 45000);
+				if (ch->mana <= 0) {
+					xREMOVE_BIT((ch)->affected_by, AFF_SSJ);
+					xREMOVE_BIT((ch)->affected_by, AFF_USSJ);
+					if (xIS_SET((ch)->affected_by, AFF_POWERCHANNEL))
+						xREMOVE_BIT((ch)->affected_by, AFF_POWERCHANNEL);
+					if (xIS_SET((ch)->affected_by, AFF_OVERCHANNEL))
+						xREMOVE_BIT((ch)->affected_by, AFF_OVERCHANNEL);
+					if (xIS_SET((ch)->affected_by, AFF_SAFEMAX))
+						xREMOVE_BIT((ch)->affected_by, AFF_SAFEMAX);
+					ch->pl = ch->exp;
+					ch->powerup = 0;
+					transStatRemove(ch);
+					ch->pcdata->haircolor = ch->pcdata->orignalhaircolor;
+					ch->pcdata->eyes = ch->pcdata->orignaleyes;
+					act( AT_YELLOW, "You lose control of your ki and return to normal!", ch, NULL, NULL, TO_CHAR );
+					act( AT_YELLOW, "$n loses control of $s ki and returns to normal!", ch, NULL, NULL, TO_NOTVICT );
+				}
+				if (form_mastery < 1)
+					form_mastery = 1;
+				form_drain = (150 - (form_mastery * 6));
+				if (form_drain < 1)
+					form_drain = 1;
+				ch->mana -= form_drain;
+				if (form_mastery >= 19)
+					ch->train += 1;
+				else if (form_mastery < 19)
+					ch->train += 3;
+		}
+		if (!IS_NPC(ch)
+			&& xIS_SET((ch)->affected_by, AFF_SSJ)
+			&& xIS_SET((ch)->affected_by, AFF_USSJ)
+			&& xIS_SET((ch)->affected_by, AFF_USSJ2)
+			&& !xIS_SET((ch)->affected_by, AFF_SSJ2)
+			&& !xIS_SET((ch)->affected_by, AFF_SSJ3)
+			&& !xIS_SET((ch)->affected_by, AFF_SSJ4)
+			&& !xIS_SET((ch)->affected_by, AFF_SGOD)) {
+				int form_drain = 0;
+				int form_mastery = 0;
+				
+				form_mastery = (ch->train / 45000);
+				if (ch->mana <= 0) {
+					xREMOVE_BIT((ch)->affected_by, AFF_SSJ);
+					xREMOVE_BIT((ch)->affected_by, AFF_USSJ);
+					xREMOVE_BIT((ch)->affected_by, AFF_USSJ2);
+					if (xIS_SET((ch)->affected_by, AFF_POWERCHANNEL))
+						xREMOVE_BIT((ch)->affected_by, AFF_POWERCHANNEL);
+					if (xIS_SET((ch)->affected_by, AFF_OVERCHANNEL))
+						xREMOVE_BIT((ch)->affected_by, AFF_OVERCHANNEL);
+					if (xIS_SET((ch)->affected_by, AFF_SAFEMAX))
+						xREMOVE_BIT((ch)->affected_by, AFF_SAFEMAX);
+					ch->pl = ch->exp;
+					ch->powerup = 0;
+					transStatRemove(ch);
+					ch->pcdata->haircolor = ch->pcdata->orignalhaircolor;
+					ch->pcdata->eyes = ch->pcdata->orignaleyes;
+					act( AT_YELLOW, "You lose control of your ki and return to normal!", ch, NULL, NULL, TO_CHAR );
+					act( AT_YELLOW, "$n loses control of $s ki and returns to normal!", ch, NULL, NULL, TO_NOTVICT );
+				}
+				if (form_mastery < 1)
+					form_mastery = 1;
+				form_drain = (300 - (form_mastery * 6));
+				if (form_drain < 1)
+					form_drain = 1;
+				ch->mana -= form_drain;
+				if (form_mastery >= 29)
+					ch->train += 1;
+				else if (form_mastery < 29)
+					ch->train += 3;
+		}
+		if (!IS_NPC(ch)
+			&& xIS_SET((ch)->affected_by, AFF_SSJ)
+			&& xIS_SET((ch)->affected_by, AFF_USSJ)
+			&& xIS_SET((ch)->affected_by, AFF_USSJ2)
+			&& xIS_SET((ch)->affected_by, AFF_SSJ2)
+			&& !xIS_SET((ch)->affected_by, AFF_SSJ3)
+			&& !xIS_SET((ch)->affected_by, AFF_SSJ4)
+			&& !xIS_SET((ch)->affected_by, AFF_SGOD)) {
+				int form_drain = 0;
+				int form_mastery = 0;
+				
+				form_mastery = (ch->train / 45000);
+				if (ch->mana <= 0) {
+					xREMOVE_BIT((ch)->affected_by, AFF_SSJ);
+					xREMOVE_BIT((ch)->affected_by, AFF_USSJ);
+					xREMOVE_BIT((ch)->affected_by, AFF_USSJ2);
+					xREMOVE_BIT((ch)->affected_by, AFF_SSJ2);
+					if (xIS_SET((ch)->affected_by, AFF_POWERCHANNEL))
+						xREMOVE_BIT((ch)->affected_by, AFF_POWERCHANNEL);
+					if (xIS_SET((ch)->affected_by, AFF_OVERCHANNEL))
+						xREMOVE_BIT((ch)->affected_by, AFF_OVERCHANNEL);
+					if (xIS_SET((ch)->affected_by, AFF_SAFEMAX))
+						xREMOVE_BIT((ch)->affected_by, AFF_SAFEMAX);
+					ch->pl = ch->exp;
+					ch->powerup = 0;
+					transStatRemove(ch);
+					ch->pcdata->haircolor = ch->pcdata->orignalhaircolor;
+					ch->pcdata->eyes = ch->pcdata->orignaleyes;
+					act( AT_YELLOW, "You lose control of your ki and return to normal!", ch, NULL, NULL, TO_CHAR );
+					act( AT_YELLOW, "$n loses control of $s ki and returns to normal!", ch, NULL, NULL, TO_NOTVICT );
+				}
+				if (form_mastery < 1)
+					form_mastery = 1;
+				form_drain = (275 - (form_mastery * 6));
+				if (form_drain < 1)
+					form_drain = 1;
+				ch->mana -= form_drain;
+				if (form_drain >= 39)
+					ch->train += 1;
+				else if (form_drain < 39)
+					ch->train += 3;
+		}
+		if (!IS_NPC(ch)
+			&& xIS_SET((ch)->affected_by, AFF_SSJ)
+			&& xIS_SET((ch)->affected_by, AFF_USSJ)
+			&& xIS_SET((ch)->affected_by, AFF_USSJ2)
+			&& xIS_SET((ch)->affected_by, AFF_SSJ2)
+			&& xIS_SET((ch)->affected_by, AFF_SSJ3)
+			&& !xIS_SET((ch)->affected_by, AFF_SSJ4)
+			&& !xIS_SET((ch)->affected_by, AFF_SGOD)) {
+				int form_drain = 0;
+				int form_mastery = 0;
+				
+				form_mastery = (ch->train / 45000);
+				if (ch->mana <= 0) {
+					xREMOVE_BIT((ch)->affected_by, AFF_SSJ);
+					xREMOVE_BIT((ch)->affected_by, AFF_USSJ);
+					xREMOVE_BIT((ch)->affected_by, AFF_USSJ2);
+					xREMOVE_BIT((ch)->affected_by, AFF_SSJ2);
+					xREMOVE_BIT((ch)->affected_by, AFF_SSJ3);
+					if (xIS_SET((ch)->affected_by, AFF_POWERCHANNEL))
+						xREMOVE_BIT((ch)->affected_by, AFF_POWERCHANNEL);
+					if (xIS_SET((ch)->affected_by, AFF_OVERCHANNEL))
+						xREMOVE_BIT((ch)->affected_by, AFF_OVERCHANNEL);
+					if (xIS_SET((ch)->affected_by, AFF_SAFEMAX))
+						xREMOVE_BIT((ch)->affected_by, AFF_SAFEMAX);
+					ch->pl = ch->exp;
+					ch->powerup = 0;
+					transStatRemove(ch);
+					ch->pcdata->haircolor = ch->pcdata->orignalhaircolor;
+					ch->pcdata->eyes = ch->pcdata->orignaleyes;
+					act( AT_YELLOW, "You lose control of your ki and return to normal!", ch, NULL, NULL, TO_CHAR );
+					act( AT_YELLOW, "$n loses control of $s ki and returns to normal!", ch, NULL, NULL, TO_NOTVICT );
+				}
+				if (form_mastery < 1)
+					form_mastery = 1;
+				form_drain = (500 - (form_mastery * 6));
+				if (form_drain < 1)
+					form_drain = 1;
+				ch->mana -= form_drain;
+				if (form_mastery >= 52)
+					ch->train += 1;
+				else if (form_mastery < 52)
+					ch->train += 3;
+		}
+		if (!IS_NPC(ch)
+			&& xIS_SET((ch)->affected_by, AFF_SSJ)
+			&& xIS_SET((ch)->affected_by, AFF_USSJ)
+			&& xIS_SET((ch)->affected_by, AFF_USSJ2)
+			&& xIS_SET((ch)->affected_by, AFF_SSJ2)
+			&& xIS_SET((ch)->affected_by, AFF_SSJ3)
+			&& xIS_SET((ch)->affected_by, AFF_SSJ4)
+			&& !xIS_SET((ch)->affected_by, AFF_SGOD)) {
+				int form_drain = 0;
+				int form_mastery = 0;
+				
+				form_mastery = (ch->train / 45000);
+				if (ch->mana <= 0) {
+					xREMOVE_BIT((ch)->affected_by, AFF_SSJ);
+					xREMOVE_BIT((ch)->affected_by, AFF_USSJ);
+					xREMOVE_BIT((ch)->affected_by, AFF_USSJ2);
+					xREMOVE_BIT((ch)->affected_by, AFF_SSJ2);
+					xREMOVE_BIT((ch)->affected_by, AFF_SSJ3);
+					xREMOVE_BIT((ch)->affected_by, AFF_SSJ4);
+					if (xIS_SET((ch)->affected_by, AFF_POWERCHANNEL))
+						xREMOVE_BIT((ch)->affected_by, AFF_POWERCHANNEL);
+					if (xIS_SET((ch)->affected_by, AFF_OVERCHANNEL))
+						xREMOVE_BIT((ch)->affected_by, AFF_OVERCHANNEL);
+					if (xIS_SET((ch)->affected_by, AFF_SAFEMAX))
+						xREMOVE_BIT((ch)->affected_by, AFF_SAFEMAX);
+					ch->pl = ch->exp;
+					ch->powerup = 0;
+					transStatRemove(ch);
+					ch->pcdata->haircolor = ch->pcdata->orignalhaircolor;
+					ch->pcdata->eyes = ch->pcdata->orignaleyes;
+					act( AT_RED, "You lose control of your God Ki and return to normal!", ch, NULL, NULL, TO_CHAR );
+					act( AT_RED, "$n loses control of $s God Ki and returns to normal!", ch, NULL, NULL, TO_NOTVICT );
+				}
+				if (form_mastery < 1)
+					form_mastery = 1;
+				form_drain = (400 - (form_mastery * 6));
+				if (form_drain < 1)
+					form_drain = 1;
+				ch->mana -= form_drain;
+				if (form_mastery >= 62)
+					ch->train += 1;
+				else if (form_mastery < 62)
+					ch->train += 3;
+		}
+		if (!IS_NPC(ch)
+			&& xIS_SET((ch)->affected_by, AFF_SSJ)
+			&& xIS_SET((ch)->affected_by, AFF_USSJ)
+			&& xIS_SET((ch)->affected_by, AFF_USSJ2)
+			&& xIS_SET((ch)->affected_by, AFF_SSJ2)
+			&& xIS_SET((ch)->affected_by, AFF_SSJ3)
+			&& xIS_SET((ch)->affected_by, AFF_SSJ4)
+			&& xIS_SET((ch)->affected_by, AFF_SGOD)) {
+				int form_drain = 0;
+				int form_mastery = 0;
+				
+				form_mastery = (ch->train / 45000);
+				if (ch->mana <= 0) {
+					xREMOVE_BIT((ch)->affected_by, AFF_SSJ);
+					xREMOVE_BIT((ch)->affected_by, AFF_USSJ);
+					xREMOVE_BIT((ch)->affected_by, AFF_USSJ2);
+					xREMOVE_BIT((ch)->affected_by, AFF_SSJ2);
+					xREMOVE_BIT((ch)->affected_by, AFF_SSJ3);
+					xREMOVE_BIT((ch)->affected_by, AFF_SSJ4);
+					xREMOVE_BIT((ch)->affected_by, AFF_SGOD);
+					if (xIS_SET((ch)->affected_by, AFF_POWERCHANNEL))
+						xREMOVE_BIT((ch)->affected_by, AFF_POWERCHANNEL);
+					if (xIS_SET((ch)->affected_by, AFF_OVERCHANNEL))
+						xREMOVE_BIT((ch)->affected_by, AFF_OVERCHANNEL);
+					if (xIS_SET((ch)->affected_by, AFF_SAFEMAX))
+						xREMOVE_BIT((ch)->affected_by, AFF_SAFEMAX);
+					ch->pl = ch->exp;
+					ch->powerup = 0;
+					transStatRemove(ch);
+					ch->pcdata->haircolor = ch->pcdata->orignalhaircolor;
+					ch->pcdata->eyes = ch->pcdata->orignaleyes;
+					act( AT_LBLUE, "You lose control of your God Ki and return to normal!", ch, NULL, NULL, TO_CHAR );
+					act( AT_LBLUE, "$n loses control of $s God Ki and returns to normal!", ch, NULL, NULL, TO_NOTVICT );
+				}
+				if (form_mastery < 1)
+					form_mastery = 1;
+				form_drain = (500 - (form_mastery * 6));
+				if (form_drain < 250)
+					form_drain = 250;
+				ch->mana -= form_drain;
+				if (form_drain <= 250)
+					ch->train += 1;
+				else if (form_drain > 250)
+					ch->train += 3;
+		}
+		/* Bug Guard */
+		if (xIS_SET((ch)->affected_by, AFF_POWERCHANNEL)
+			&& xIS_SET((ch)->affected_by, AFF_SAFEMAX)) {
+				xREMOVE_BIT((ch)->affected_by, AFF_POWERCHANNEL);
+				bug( "POWERCHANNEL AND SAFEMAX ACTIVE TOGETHER, REMOVED POWERCHANNEL", 0 );
+				send_to_char("DEBUG: POWERUP AND SAFEMAX CAUGHT TOGETHER, REMOVED POWERCHANNEL\n\r", ch);
+			}
+		/* New Time-based Powerup */
+		if (xIS_SET((ch)->affected_by, AFF_POWERCHANNEL)
+			&& !xIS_SET((ch)->affected_by, AFF_KAIOKEN)
+			&& !xIS_SET((ch)->affected_by, AFF_SAFEMAX)
+			&& ch->position >= POS_STANDING) {
+			double safemaximum = 0;
+			int form_mastery = 0;
+			double plmod = 0;
+			int auraColor = AT_WHITE;
+			int powerupstr = 0;
+			int powerupspd = 0;
+			int powerupint = 0;
+			int powerupcon = 0;
+			
+			powerupstr = ch->perm_str * 0.05;
+			powerupspd = ch->perm_dex * 0.05;
+			powerupint = ch->perm_int * 0.05;
+			powerupcon = ch->perm_con * 0.05;
+			
+			safemaximum = ((get_curr_int(ch) * 0.03) + 1);
+			form_mastery = (ch->train / 45000);
+			plmod = (ch->pl / ch->exp);
+			if( !IS_NPC( ch ) && ch->pcdata->auraColorPowerUp > 0 )
+				auraColor = ch->pcdata->auraColorPowerUp;
+			if (form_mastery < 1)
+				form_mastery = 1;
+			if (ch->position < POS_STANDING) {
+				xREMOVE_BIT((ch)->affected_by, AFF_POWERCHANNEL);
+				send_to_char("You must stand if you wish to power up.\n\r", ch);
+			}
+			if (xIS_SET((ch)->affected_by, AFF_KAIOKEN)) {
+				xREMOVE_BIT((ch)->affected_by, AFF_POWERCHANNEL);
+				send_to_char("Your energy is too unstable while using Kaioken.\n\r", ch);
+			}
+			if (is_saiyan(ch) || is_hb(ch)) {
+				int onestr = 0; 
+				int twostr = 0;
+				int threestr = 0;
+				int fourstr = 0;
+				int fivestr = 0;
+				int sixstr = 0;
+				int sevenstr = 0;
+				int onespd = 0;
+				int twospd = 0;
+				int threespd = 0;
+				int fourspd = 0;
+				int fivespd = 0;
+				int sixspd = 0;
+				int sevenspd = 0;
+				int oneint = 0;
+				int twoint = 0;
+				int threeint = 0;
+				int fourint = 0;
+				int fiveint = 0;
+				int sixint = 0;
+				int sevenint = 0;
+				int onecon = 0;
+				int twocon = 0;
+				int threecon = 0;
+				int fourcon = 0;
+				int fivecon = 0;
+				int sixcon = 0;
+				int sevencon = 0;
+					
+				onestr = ch->perm_str * 0.20; 
+				twostr = ch->perm_str * 0.30;
+				threestr = ch->perm_str * 0.50;
+				fourstr = ch->perm_str * 0.50;
+				fivestr = ch->perm_str * 0.60;
+				sixstr = ch->perm_str;
+				sevenstr = ch->perm_str * 1.25;
+				onespd = ch->perm_dex * 0.20;
+				twospd = ch->perm_dex * 0.25;
+				threespd = -250;
+				fourspd = ch->perm_dex * 0.50;
+				fivespd = ch->perm_dex * 0.60;
+				sixspd = ch->perm_dex;
+				sevenspd = ch->perm_dex * 1.25;
+				oneint = ch->perm_int * 0.10;
+				twoint = ch->perm_int * 0.10;
+				threeint = ch->perm_int * 0.10;
+				fourint = ch->perm_int * 0.25;
+				fiveint = ch->perm_int * 0.30;
+				sixint = ch->perm_int * 0.50;
+				sevenint = ch->perm_int;
+				onecon = ch->perm_con * 0.20;
+				twocon = ch->perm_con * 0.30;
+				threecon = ch->perm_con * 0.50;
+				fourcon = ch->perm_con * 0.40;
+				fivecon = ch->perm_con * 0.50;
+				sixcon = ch->perm_con;
+				sevencon = ch->perm_con * 1.25;
+				if (!xIS_SET((ch)->affected_by, AFF_SSJ)) {
+					safemaximum = ((get_curr_int(ch) * 0.03) + 1);
+					if (ch->powerup < safemaximum) {
+						
+						ch->pl *= 1.15;
+						ch->powerup += 1;
+						transStatApply(ch, powerupstr, powerupspd, powerupint, powerupcon);
+						if (plmod >= 30
+							&& ch->pcdata->learned[gsn_ssj] > 0) {
+							xSET_BIT((ch)->affected_by, AFF_SSJ);
+							xREMOVE_BIT((ch)->affected_by, AFF_POWERCHANNEL);
+							act( AT_YELLOW, "Your eyes turn blue, your hair flashes blonde and a fiery golden aura erupts around you!", ch, NULL, NULL, TO_CHAR );
+							act( AT_YELLOW, "$n's hair suddenly flashes blonde, transcending beyond $s normal limits in a fiery display of golden ki!", ch, NULL, NULL, TO_NOTVICT );
+							ch->powerup = 0;
+							ch->pl = ch->exp * 50;
+							transStatApply(ch, onestr, onespd, oneint, onecon);
+							if (!IS_NPC(ch)) {
+								ch->pcdata->eyes = 0;
+								ch->pcdata->haircolor = 3;
+							}
+						}
+						if (plmod >= 30
+							&& ch->pcdata->learned[gsn_ssj] <= 0) {
+							ch->pl = (ch->exp * 30);
+							act( auraColor, "The raging torrent of ki fades but your power remains.", ch, NULL, NULL, TO_CHAR );
+							act( auraColor, "$n's raging torrent of ki fades away but $s power remains.", ch, NULL, NULL, TO_NOTVICT );
+							xREMOVE_BIT((ch)->affected_by, AFF_POWERCHANNEL);
+							ch->powerup = safemaximum;
+							xSET_BIT((ch)->affected_by, AFF_SAFEMAX);
+						}
+						if (plmod >= 20 && plmod < 27) {
+							act( auraColor, "Your body is barely visible amidst your vortex of ki.", ch, NULL, NULL, TO_CHAR );
+							act( auraColor, "$n's body is barely visible amidst $s vortex of ki!", ch, NULL, NULL, TO_NOTVICT );
+						}
+						if (plmod >= 15 && plmod < 20) {
+							act( auraColor, "Your aura spirals upward, nearly licking the clouds.", ch, NULL, NULL, TO_CHAR );
+							act( auraColor, "$n's aura spirals upward, nearly licking the clouds.", ch, NULL, NULL, TO_NOTVICT );
+						}
+						if (plmod >= 10 && plmod < 15) {
+							act( auraColor, "Your inner potential explodes into a display of roaring ki.", ch, NULL, NULL, TO_CHAR );
+							act( auraColor, "$n's inner potential explodes into a display of roaring ki.", ch, NULL, NULL, TO_NOTVICT );
+						}
+						if (plmod >= 5 && plmod < 10) {
+							act( auraColor, "Your aura flickers around you, only faintly visible.", ch, NULL, NULL, TO_CHAR );
+							act( auraColor, "$n's aura flickers around $m, only faintly visible.", ch, NULL, NULL, TO_NOTVICT );
+						}
+						if (plmod > 1 && plmod < 5) {
+							act( auraColor, "Your body glows faintly.", ch, NULL, NULL, TO_CHAR );
+							act( auraColor, "$n's body glows faintly.", ch, NULL, NULL, TO_NOTVICT );
+						}
+						if ((ch->pl / ch->exp) >= 30
+							&& ch->pcdata->learned[gsn_ssj] <= 0) {
+							ch->pl = (ch->exp * 30);
+							act( auraColor, "The raging torrent of ki fades, but your power remains.", ch, NULL, NULL, TO_CHAR );
+							act( auraColor, "$n's raging torrent of ki fades away, but $s power remains.", ch, NULL, NULL, TO_NOTVICT );
+							xREMOVE_BIT((ch)->affected_by, AFF_POWERCHANNEL);
+							xSET_BIT((ch)->affected_by, AFF_SAFEMAX);
+						}
+					}
+					if (ch->powerup >= safemaximum) {
+						ch->powerup = safemaximum;
+						xREMOVE_BIT((ch)->affected_by, AFF_POWERCHANNEL);
+						xSET_BIT((ch)->affected_by, AFF_SAFEMAX);
+						act( auraColor, "Having reached your limit, you stop powering up. Going any further would be dangerous.", ch, NULL, NULL, TO_CHAR );
+						act( auraColor, "$n reaches $s limit and stops powering up.", ch, NULL, NULL, TO_NOTVICT );
+					}
+				}
+				if (xIS_SET((ch)->affected_by, AFF_SSJ)
+					&& !xIS_SET((ch)->affected_by, AFF_USSJ)
+					&& !xIS_SET((ch)->affected_by, AFF_USSJ2)
+					&& !xIS_SET((ch)->affected_by, AFF_SSJ2)
+					&& !xIS_SET((ch)->affected_by, AFF_SSJ3)
+					&& !xIS_SET((ch)->affected_by, AFF_SSJ4)
+					&& !xIS_SET((ch)->affected_by, AFF_SGOD)) {
+					safemaximum = form_mastery;
+					if (ch->powerup < safemaximum) {
+						ch->pl *= 1.03;
+						ch->powerup += 1;
+						if (plmod > 52) {
+							act( AT_YELLOW, "Your golden aura churns with scattering rays of light.", ch, NULL, NULL, TO_CHAR );
+							act( AT_YELLOW, "$n's golden aura churns with scattering rays of light.", ch, NULL, NULL, TO_NOTVICT );
+						}
+						if ((ch->pl / ch->exp) >= 65) {
+							xSET_BIT((ch)->affected_by, AFF_USSJ);
+							xREMOVE_BIT((ch)->affected_by, AFF_POWERCHANNEL);
+							act( AT_YELLOW, "Your muscles bulge, and with a sudden burst of power you ascend beyond the reaches of any mere Super Saiyan.", ch, NULL, NULL, TO_CHAR );
+							act( AT_YELLOW, "$n's muscles bulge, drawing on a power beyond that of any mere Super Saiyan.", ch, NULL, NULL, TO_NOTVICT );
+							ch->pl = ch->exp * 75;
+							transStatApply(ch, twostr, twospd, twoint, twocon);
+						}
+					}
+					if (ch->powerup >= safemaximum) {
+						ch->powerup = safemaximum;
+						xREMOVE_BIT((ch)->affected_by, AFF_POWERCHANNEL);
+						xSET_BIT((ch)->affected_by, AFF_SAFEMAX);
+						act( AT_YELLOW, "Having reached your limit, your burning aura recedes to a gentle blaze.", ch, NULL, NULL, TO_CHAR );
+						act( AT_YELLOW, "$n's burning, golden aura recedes into a gentle blaze.", ch, NULL, NULL, TO_NOTVICT );
+					}
+				}
+				if (xIS_SET((ch)->affected_by, AFF_SSJ)
+					&& xIS_SET((ch)->affected_by, AFF_USSJ)
+					&& !xIS_SET((ch)->affected_by, AFF_USSJ2)
+					&& !xIS_SET((ch)->affected_by, AFF_SSJ2)
+					&& !xIS_SET((ch)->affected_by, AFF_SSJ3)
+					&& !xIS_SET((ch)->affected_by, AFF_SSJ4)
+					&& !xIS_SET((ch)->affected_by, AFF_SGOD)) {
+					safemaximum = form_mastery;
+					if (ch->powerup < safemaximum) {
+						ch->pl *= 1.03;
+						ch->powerup += 1;
+						if (plmod > 78) {
+							act( AT_YELLOW, "Crackling bolts of energy build in your aura, impure, but powerful as your muscles swell.", ch, NULL, NULL, TO_CHAR );
+							act( AT_YELLOW, "Crackling bolts of impure energy dance in $n's raging aura, $s muscles swelling to incredible sizes.", ch, NULL, NULL, TO_NOTVICT );
+						}
+						if ((ch->pl / ch->exp) >= 100) {
+							xSET_BIT((ch)->affected_by, AFF_USSJ2);
+							xREMOVE_BIT((ch)->affected_by, AFF_POWERCHANNEL);
+							act( AT_YELLOW, "Your muscles expand to inhuman sizes, engorging yourself with energy!", ch, NULL, NULL, TO_CHAR );
+							act( AT_YELLOW, "$n's muscles expand to inhuman sizes, engorging $mself with energy!", ch, NULL, NULL, TO_NOTVICT );
+							ch->pl = ch->exp * 150;
+							transStatApply(ch, threestr, threespd, threeint, threecon);
+						}
+					}
+					if (ch->powerup >= safemaximum) {
+						ch->powerup = safemaximum;
+						xREMOVE_BIT((ch)->affected_by, AFF_POWERCHANNEL);
+						xSET_BIT((ch)->affected_by, AFF_SAFEMAX);
+						act( AT_YELLOW, "You let out a deep breath, your bulging muscles retracting only slightly.", ch, NULL, NULL, TO_CHAR );
+						act( AT_YELLOW, "$n lets out a deep breath, $s bulging muscles retracting only slightly.", ch, NULL, NULL, TO_NOTVICT );
+					}
+				}
+				if (xIS_SET((ch)->affected_by, AFF_SSJ)
+					&& xIS_SET((ch)->affected_by, AFF_USSJ)
+					&& xIS_SET((ch)->affected_by, AFF_USSJ2)
+					&& !xIS_SET((ch)->affected_by, AFF_SSJ2)
+					&& !xIS_SET((ch)->affected_by, AFF_SSJ3)
+					&& !xIS_SET((ch)->affected_by, AFF_SSJ4)
+					&& !xIS_SET((ch)->affected_by, AFF_SGOD)) {
+					safemaximum = form_mastery;
+					if (ch->powerup < safemaximum) {
+						ch->pl *= 1.03;
+						ch->powerup += 1;
+						if (plmod > 156) {
+							act( AT_YELLOW, "Your giant muscles tremble, emitting waves of tumultuous energy.", ch, NULL, NULL, TO_CHAR );
+							act( AT_YELLOW, "$n's giant muscles tremble, emitting waves of tumultuous energy.", ch, NULL, NULL, TO_NOTVICT );
+						}
+						if ((ch->pl / ch->exp) >= 200
+							&& ch->pcdata->learned[gsn_ssj2] > 0) {
+							xSET_BIT((ch)->affected_by, AFF_SSJ2);
+							xREMOVE_BIT((ch)->affected_by, AFF_POWERCHANNEL);
+							act( AT_YELLOW, "Your muscles shrink, but in an intense explosion of rage your power grows nonetheless, sending arcing bolts of energy from your body.", ch, NULL, NULL, TO_CHAR );
+							act( AT_YELLOW, "Your hair stands further on end as you ascend to the true next level.", ch, NULL, NULL, TO_CHAR );
+							act( AT_YELLOW, "$n's muscles shrink amidst a storm of golden ki. In a sea of crackling, pure energy, $e truly ascends to the next level.", ch, NULL, NULL, TO_NOTVICT );
+							act( AT_YELLOW, "$n stares straight ahead with absolute confidence.", ch, NULL, NULL, TO_NOTVICT );
+							ch->pl = ch->exp * 225;
+							transStatApply(ch, fourstr, fourspd, fourint, fourcon);
+						}
+					}
+					if (ch->powerup >= safemaximum) {
+						ch->powerup = safemaximum;
+						xREMOVE_BIT((ch)->affected_by, AFF_POWERCHANNEL);
+						xSET_BIT((ch)->affected_by, AFF_SAFEMAX);
+						act( AT_YELLOW, "Your giant muscles tense and flex, but no further power comes from it.", ch, NULL, NULL, TO_CHAR );
+						act( AT_YELLOW, "$n's grossly oversized muscles tense and flex, but $e seems unable to progress any further.", ch, NULL, NULL, TO_NOTVICT );
+					}
+				}
+				if (xIS_SET((ch)->affected_by, AFF_SSJ)
+					&& xIS_SET((ch)->affected_by, AFF_USSJ)
+					&& xIS_SET((ch)->affected_by, AFF_USSJ2)
+					&& xIS_SET((ch)->affected_by, AFF_SSJ2)
+					&& !xIS_SET((ch)->affected_by, AFF_SSJ3)
+					&& !xIS_SET((ch)->affected_by, AFF_SSJ4)
+					&& !xIS_SET((ch)->affected_by, AFF_SGOD)) {
+					safemaximum = form_mastery;
+					if (ch->powerup < safemaximum) {
+						ch->pl *= 1.03;
+						ch->powerup += 1;
+						if (plmod > 234) {
+							act( AT_YELLOW, "You howl with fury as your energy builds, constant strikes of crackling energy suffusing the air.", ch, NULL, NULL, TO_CHAR );
+							act( AT_YELLOW, "$n howls with fury, constant strikes of crackling energy suffusing the air.", ch, NULL, NULL, TO_NOTVICT );
+						}
+						if ((ch->pl / ch->exp) >= 300
+							&& ch->pcdata->learned[gsn_ssj3] > 0) {
+							xSET_BIT((ch)->affected_by, AFF_SSJ3);
+							xREMOVE_BIT((ch)->affected_by, AFF_POWERCHANNEL);
+							act(AT_YELLOW, "An earth-shattering burst of energy expands your aura. Your eyebrows disappear and your hair lengthens, flowing down your back.", ch, NULL, NULL, TO_CHAR);
+							act(AT_YELLOW, "Only the stench of ozone accompanies the countless bolts of energy wreathing your body.", ch, NULL, NULL, TO_CHAR);
+							act(AT_YELLOW, "The world feel as though it could pull apart as $n's aura expands! $s eyebrows disappear slowly and $s hair lengthens, flowing down $s back.", ch, NULL, NULL, TO_NOTVICT);
+							act(AT_YELLOW, "When the bright light fades, $n stands within a wreath of countless bolts of energy, unleashing the primal rage of the Saiyan race.", ch, NULL, NULL, TO_NOTVICT);
+							ch->pl = ch->exp * 350;
+							transStatApply(ch, fivestr, fivespd, fiveint, fivecon);
+						}
+					}
+					if (ch->powerup >= safemaximum) {
+						ch->powerup = safemaximum;
+						xREMOVE_BIT((ch)->affected_by, AFF_POWERCHANNEL);
+						xSET_BIT((ch)->affected_by, AFF_SAFEMAX);
+						act( AT_YELLOW, "Your aura shrinks as you relax, only occasional bursts of energy crackling around you.", ch, NULL, NULL, TO_CHAR );
+						act( AT_YELLOW, "$n's aura shrinks as $e relaxes, only occasional bursts of energy crackling around $m.", ch, NULL, NULL, TO_NOTVICT );
+					}
+				}
+				if (xIS_SET((ch)->affected_by, AFF_SSJ)
+					&& xIS_SET((ch)->affected_by, AFF_USSJ)
+					&& xIS_SET((ch)->affected_by, AFF_USSJ2)
+					&& xIS_SET((ch)->affected_by, AFF_SSJ2)
+					&& xIS_SET((ch)->affected_by, AFF_SSJ3)
+					&& !xIS_SET((ch)->affected_by, AFF_SSJ4)
+					&& !xIS_SET((ch)->affected_by, AFF_SGOD)) {
+					safemaximum = form_mastery;
+					if (ch->powerup < safemaximum) {
+						ch->pl *= 1.02;
+						ch->powerup += 1;
+						if (plmod > 358) {
+							act( AT_YELLOW, "The colours of the world seem to fade away against the brilliant light of your aura.", ch, NULL, NULL, TO_CHAR );
+							act( AT_YELLOW, "The colours of the world seem to fade away against the brilliant light of $n's aura.", ch, NULL, NULL, TO_NOTVICT );
+						}
+						if ((ch->pl / ch->exp) >= 450
+							&& ch->pcdata->learned[gsn_ssj4] > 0) {
+							xSET_BIT((ch)->affected_by, AFF_SSJ4);
+							xREMOVE_BIT((ch)->affected_by, AFF_POWERCHANNEL);
+							act( AT_RED, "Your aura fades and your hair and eyes return to normal. However, in the next instant something inside you changes.", ch, NULL, NULL, TO_CHAR );
+							act( AT_RED, "Godly Ki radiates from deep within, and with a mighty shout that pierces the heavens, a brilliant red and gold aura encompasses you.", ch, NULL, NULL, TO_CHAR );
+							act( AT_RED, "Your hair and eyes flash red, tinted subtly with violet as you ascend beyond your mortal restrictions.", ch, NULL, NULL, TO_CHAR );
+							act( AT_RED, "$n's hair and eyes return to normal. However, in the next instant something feels very different.", ch, NULL, NULL, TO_NOTVICT );
+							act( AT_RED, "$n is encompassed in a massive aura of crimson and gold, $s hair and eyes shifting red with a subtle violet tint.", ch, NULL, NULL, TO_NOTVICT );
+							ch->pl = ch->exp * 500;
+							transStatApply(ch, sixstr, sixspd, sixint, sixcon);
+						}
+					}
+					if (ch->powerup >= safemaximum) {
+						ch->powerup = safemaximum;
+						xREMOVE_BIT((ch)->affected_by, AFF_POWERCHANNEL);
+						xSET_BIT((ch)->affected_by, AFF_SAFEMAX);
+						act( AT_YELLOW, "Your aura shrinks as you establish control over your primal energy, unable to take it any further.", ch, NULL, NULL, TO_CHAR );
+						act( AT_YELLOW, "$n's aura shrinks as $e establishes control over $s primal energy.", ch, NULL, NULL, TO_NOTVICT );
+					}
+				}
+				if (xIS_SET((ch)->affected_by, AFF_SSJ)
+					&& xIS_SET((ch)->affected_by, AFF_USSJ)
+					&& xIS_SET((ch)->affected_by, AFF_USSJ2)
+					&& xIS_SET((ch)->affected_by, AFF_SSJ2)
+					&& xIS_SET((ch)->affected_by, AFF_SSJ3)
+					&& xIS_SET((ch)->affected_by, AFF_SSJ4)
+					&& !xIS_SET((ch)->affected_by, AFF_SGOD)) {
+					safemaximum = form_mastery;
+					if (ch->powerup < safemaximum) {
+						ch->pl *= 1.02;
+						ch->powerup += 1;
+						if (plmod > 511) {
+							act( AT_RED, "You stand perfectly calm, your power increasing by the second.", ch, NULL, NULL, TO_CHAR );
+							act( AT_RED, "$n stands perfectly calm, and yet with every second $s power grows.", ch, NULL, NULL, TO_NOTVICT );
+						}
+						if (plmod >= 600
+							&& ch->pcdata->learned[gsn_sgod] > 0) {
+							xSET_BIT((ch)->affected_by, AFF_SGOD);
+							xREMOVE_BIT((ch)->affected_by, AFF_POWERCHANNEL);
+							act( AT_LBLUE, "Harnessing the secrets of your God Ki, you kindle the flame deep within and surge with newfound power.", ch, NULL, NULL, TO_CHAR );
+							act( AT_LBLUE, "Your hair and eyes flash blue, and a brilliant cyan aura erupts around you!", ch, NULL, NULL, TO_CHAR );
+							act( AT_LBLUE, "$n's body is swallowed in an intense blue light. What emerges is no mere Super Saiyan.", ch, NULL, NULL, TO_NOTVICT );
+							act( AT_LBLUE, "$n's hair and eyes shimmer a deep cyan hue, merging fully with a power beyond mortal ki.", ch, NULL, NULL, TO_NOTVICT );
+							ch->pl = ch->exp * 625;
+							transStatApply(ch, sevenstr, sevenspd, sevenint, sevencon);
+						}
+					}
+					if (ch->powerup >= safemaximum) {
+						ch->powerup = safemaximum;
+						xREMOVE_BIT((ch)->affected_by, AFF_POWERCHANNEL);
+						xSET_BIT((ch)->affected_by, AFF_SAFEMAX);
+						act( AT_YELLOW, "You shut your eyes, your whole body relaxing.", ch, NULL, NULL, TO_CHAR );
+						act( AT_YELLOW, "$n relaxes further, emitting subtle pulses of God Ki.", ch, NULL, NULL, TO_NOTVICT );
+					}
+				}
+				if (xIS_SET((ch)->affected_by, AFF_SSJ)
+					&& xIS_SET((ch)->affected_by, AFF_USSJ)
+					&& xIS_SET((ch)->affected_by, AFF_USSJ2)
+					&& xIS_SET((ch)->affected_by, AFF_SSJ2)
+					&& xIS_SET((ch)->affected_by, AFF_SSJ3)
+					&& xIS_SET((ch)->affected_by, AFF_SSJ4)
+					&& xIS_SET((ch)->affected_by, AFF_SGOD)) {
+					safemaximum = form_mastery;
+					if (ch->powerup < safemaximum) {
+						ch->pl *= 1.03;
+						ch->powerup += 1;
+						if (plmod > 644) {
+							act( AT_LBLUE, "Countless particles of white light merge with your aura, sending scattering rays of energy in all directions.", ch, NULL, NULL, TO_CHAR );
+							act( AT_LBLUE, "Countless particles of white light merge with $n's aura, sending scattering rays of energy in all directions.", ch, NULL, NULL, TO_NOTVICT );
+						}
+					}
+					if (ch->powerup >= safemaximum) {
+						ch->powerup = safemaximum;
+						xREMOVE_BIT((ch)->affected_by, AFF_POWERCHANNEL);
+						xSET_BIT((ch)->affected_by, AFF_SAFEMAX);
+						act( AT_LBLUE, "Your blue aura of God Ki recedes but your incredible power remains, waiting just beneath the surface.", ch, NULL, NULL, TO_CHAR );
+						act( AT_LBLUE, "$n's intense God Ki recedes.", ch, NULL, NULL, TO_NOTVICT );
+					}
+				}
+			}
+			else if (is_icer(ch)) {
+				int onestr = 0; 
+				int twostr = 0;
+				int threestr = 0;
+				int fourstr = 0;
+				int fivestr = 0;
+				int onespd = 0;
+				int twospd = 0;
+				int threespd = 0;
+				int fourspd = 0;
+				int fivespd = 0;
+				int oneint = 0;
+				int twoint = 0;
+				int threeint = 0;
+				int fourint = 0;
+				int fiveint = 0;
+				int onecon = 0;
+				int twocon = 0;
+				int threecon = 0;
+				int fourcon = 0;
+				int fivecon = 0;
+					
+				onestr = ch->perm_str * 0.10; 
+				twostr = ch->perm_str * 0.15;
+				threestr = ch->perm_str * 0.20;
+				fourstr = ch->perm_str * 0.50;
+				fivestr = ch->perm_str;
+				onespd = ch->perm_dex * 0.10;
+				twospd = ch->perm_dex * 0.15;
+				threespd = ch->perm_dex * 0.20;
+				fourspd = ch->perm_dex * 0.50;
+				fivespd = ch->perm_dex;
+				oneint = ch->perm_int * 0.10;
+				twoint = ch->perm_int * 0.10;
+				threeint = ch->perm_int * 0.15;
+				fourint = ch->perm_int * 0.25;
+				fiveint = ch->perm_int;
+				onecon = ch->perm_con * 0.15;
+				twocon = ch->perm_con * 0.20;
+				threecon = ch->perm_con * 0.30;
+				fourcon = ch->perm_con * 0.75;
+				fivecon = ch->perm_con * 1.50;
+				if (!xIS_SET((ch)->affected_by, AFF_ICER2)
+					&& !xIS_SET((ch)->affected_by, AFF_ICER3)
+					&& !xIS_SET((ch)->affected_by, AFF_ICER4)
+					&& !xIS_SET((ch)->affected_by, AFF_ICER5)
+					&& !xIS_SET((ch)->affected_by, AFF_GOLDENFORM)) {
+					safemaximum = ((get_curr_int(ch) * 0.03) + 1);
+					if (ch->powerup < safemaximum) {
+						ch->pl *= 1.15;
+						ch->powerup += 1;
+						transStatApply(ch, powerupstr, powerupspd, powerupint, powerupcon);
+						if (plmod >= 2) {
+							xSET_BIT((ch)->affected_by, AFF_ICER2);
+							xREMOVE_BIT((ch)->affected_by, AFF_POWERCHANNEL);
+							act( AT_PURPLE, "Your entire body expands monstrously in size, wicked horns sprouting from your head!", ch, NULL, NULL, TO_CHAR );
+							act( AT_PURPLE, "$n's entire body expands monstrously in size, wicked horns sprouting from $s head!", ch, NULL, NULL, TO_NOTVICT );
+							ch->powerup = 0;
+							ch->pl = ch->exp * 4;
+							transStatApply(ch, onestr, onespd, oneint, onecon);
+						}
+						if (plmod > 1 && plmod < 2) {
+							act( auraColor, "You glow brightly, hairline fractures appearing across your body.", ch, NULL, NULL, TO_CHAR );
+							act( auraColor, "$n glows brightly, hairline fractures appearing across $s body.", ch, NULL, NULL, TO_NOTVICT );
+						}
+					}
+					if (ch->powerup >= safemaximum) {
+						ch->powerup = safemaximum;
+						xREMOVE_BIT((ch)->affected_by, AFF_POWERCHANNEL);
+						xSET_BIT((ch)->affected_by, AFF_SAFEMAX);
+						act( auraColor, "The tiny fractures in your body seal as you stop powering up. Going any further would be dangerous.", ch, NULL, NULL, TO_CHAR );
+						act( auraColor, "$n reaches $s limit and stops powering up, the tiny fractures in $s body closing.", ch, NULL, NULL, TO_NOTVICT );
+					}
+				}
+				if (xIS_SET((ch)->affected_by, AFF_ICER2)) {
+					safemaximum = form_mastery;
+					if (ch->powerup < safemaximum) {
+						ch->pl *= 1.15;
+						ch->powerup += 1;
+						if (plmod > 4.8) {
+							act( AT_PURPLE, "Your giant body glows brilliantly, debris scattering in all directions.", ch, NULL, NULL, TO_CHAR );
+							act( AT_PURPLE, "$n's giant body glows brilliantly, debris flying past you.", ch, NULL, NULL, TO_NOTVICT );
+						}
+						if (plmod >= 8) {
+							xREMOVE_BIT((ch)->affected_by, AFF_ICER2);
+							xSET_BIT((ch)->affected_by, AFF_ICER3);
+							xREMOVE_BIT((ch)->affected_by, AFF_POWERCHANNEL);
+							act( AT_PURPLE, "You double forward, chitinous chunks stripping away.", ch, NULL, NULL, TO_CHAR );
+							act( AT_PURPLE, "Spikes protrude from your back and shoulders as your head elongates, transforming you into a deformed monstrosity!", ch, NULL, NULL, TO_CHAR );
+							act( AT_PURPLE, "$n doubles forward, chitinous chunks stripping away from $m as $e transforms into a deformed monstrosity!", ch, NULL, NULL, TO_NOTVICT );
+							ch->pl = ch->exp * 12;
+							transStatApply(ch, twostr, twospd, twoint, twocon);
+						}
+					}
+					if (ch->powerup >= safemaximum) {
+						ch->powerup = safemaximum;
+						xREMOVE_BIT((ch)->affected_by, AFF_POWERCHANNEL);
+						xSET_BIT((ch)->affected_by, AFF_SAFEMAX);
+						act( AT_PURPLE, "You relax, your prehensile tail coiling nonchalantly behind you.", ch, NULL, NULL, TO_CHAR );
+						act( AT_PURPLE, "$n relaxes, his tail coiling nonchalantly behind $m.", ch, NULL, NULL, TO_NOTVICT );
+					}
+				}
+				if (xIS_SET((ch)->affected_by, AFF_ICER3)) {
+					safemaximum = form_mastery;
+					if (ch->powerup < safemaximum) {
+						ch->pl *= 1.15;
+						ch->powerup += 1;
+						if (plmod > 14) {
+							act( AT_PURPLE, "Your chitinous body creaks ominously beneath your raging aura.", ch, NULL, NULL, TO_CHAR );
+							act( AT_PURPLE, "$n's chitinous body creaks ominously beneath $s raging aura.", ch, NULL, NULL, TO_NOTVICT );
+						}
+						if (plmod >= 30) {
+							xREMOVE_BIT((ch)->affected_by, AFF_ICER3);
+							xSET_BIT((ch)->affected_by, AFF_ICER4);
+							xREMOVE_BIT((ch)->affected_by, AFF_POWERCHANNEL);
+							act( AT_PURPLE, "In an explosion of ki your body fades away, emerging from the dust in a new form!", ch, NULL, NULL, TO_CHAR );
+							act( AT_PURPLE, "Your body shrinks to normal size, wicked spikes replaced with smooth skin and patches as reflective as glass.", ch, NULL, NULL, TO_CHAR );
+							act( AT_PURPLE, "$n emerges from an explosion of ki, $s body shrinking into a sleek, smooth form.", ch, NULL, NULL, TO_NOTVICT );
+							ch->pl = ch->exp * 50;
+							transStatApply(ch, threestr, threespd, threeint, threecon);
+						}
+					}
+					if (ch->powerup >= safemaximum) {
+						ch->powerup = safemaximum;
+						xREMOVE_BIT((ch)->affected_by, AFF_POWERCHANNEL);
+						xSET_BIT((ch)->affected_by, AFF_SAFEMAX);
+						act( AT_PURPLE, "You hunch forward, unable to increase your power any further.", ch, NULL, NULL, TO_CHAR );
+						act( AT_PURPLE, "$n hunches forward, unable to increase $s power further.", ch, NULL, NULL, TO_NOTVICT );
+					}
+				}
+				if (xIS_SET((ch)->affected_by, AFF_ICER4)) {
+					safemaximum = form_mastery;
+					if (ch->powerup < safemaximum) {
+						ch->pl *= 1.03;
+						ch->powerup += 1;
+						if (plmod > 52) {
+							act( AT_PURPLE, "Your arms extend at your sides, a vicious purple aura courses around you.", ch, NULL, NULL, TO_CHAR );
+							act( AT_PURPLE, "$n extends $s arms to the side, a vicious purple aura coursing around $m.", ch, NULL, NULL, TO_NOTVICT );
+						}
+						if (plmod >= 100) {
+							xREMOVE_BIT((ch)->affected_by, AFF_ICER4);
+							xSET_BIT((ch)->affected_by, AFF_ICER5);
+							xREMOVE_BIT((ch)->affected_by, AFF_POWERCHANNEL);
+							act( AT_PURPLE, "Your muscles expand massively in size, swelling with incredible energy!", ch, NULL, NULL, TO_CHAR );
+							act( AT_PURPLE, "$n's muscles expand massively in size, swelling with incredible energy!", ch, NULL, NULL, TO_NOTVICT );
+							ch->pl = ch->exp * 150;
+							transStatApply(ch, fourstr, fourspd, fourint, fourcon);
+						}
+					}
+					if (ch->powerup >= safemaximum) {
+						ch->powerup = safemaximum;
+						xREMOVE_BIT((ch)->affected_by, AFF_POWERCHANNEL);
+						xSET_BIT((ch)->affected_by, AFF_SAFEMAX);
+						act( AT_PURPLE, "Chunks of landscape fall back into place as you stop powering up.", ch, NULL, NULL, TO_CHAR );
+						act( AT_PURPLE, "Chunks of landscape fall back into place as $n stops powering up.", ch, NULL, NULL, TO_NOTVICT );
+					}
+				}
+				if (xIS_SET((ch)->affected_by, AFF_ICER5)) {
+					safemaximum = form_mastery;
+					if (ch->powerup < safemaximum) {
+						ch->pl *= 1.03;
+						ch->powerup += 1;
+						if (plmod > 156) {
+							act( AT_PURPLE, "Your vicious aura rages uncontrolled, devastating the landscape.", ch, NULL, NULL, TO_CHAR );
+							act( AT_PURPLE, "$n's vicious aura rages out of control, devastating the landscape.", ch, NULL, NULL, TO_NOTVICT );
+						}
+						if (plmod >= 275) {
+							xREMOVE_BIT((ch)->affected_by, AFF_ICER5);
+							xSET_BIT((ch)->affected_by, AFF_GOLDENFORM);
+							xREMOVE_BIT((ch)->affected_by, AFF_POWERCHANNEL);
+							act(AT_YELLOW, "A brilliant golden light overtakes you, traveling up the length of your body.", ch, NULL, NULL, TO_CHAR);
+							act(AT_YELLOW, "Your skin takes on a reflective golden sheen as you ascend into the realm of God Ki.", ch, NULL, NULL, TO_CHAR);
+							act(AT_YELLOW, "A brilliant golden light overtakes $n, traveling up the length of $s body.", ch, NULL, NULL, TO_NOTVICT);
+							act(AT_YELLOW, "$s skin takes on a reflective golden sheen as $e ascends into the realm of God Ki!", ch, NULL, NULL, TO_NOTVICT);
+							ch->pl = ch->exp * 380;
+							transStatApply(ch, fivestr, fivespd, fiveint, fivecon);
+						}
+					}
+					if (ch->powerup >= safemaximum) {
+						ch->powerup = safemaximum;
+						xREMOVE_BIT((ch)->affected_by, AFF_POWERCHANNEL);
+						xSET_BIT((ch)->affected_by, AFF_SAFEMAX);
+						act( AT_YELLOW, "You try to relax, but your bulging muscles ignore the command.", ch, NULL, NULL, TO_CHAR );
+						act( AT_YELLOW, "$n tries to relax, but $s bulging muscles ignore the command.", ch, NULL, NULL, TO_NOTVICT );
+					}
+				}
+				if (xIS_SET((ch)->affected_by, AFF_GOLDENFORM)) {
+					safemaximum = form_mastery;
+					if (ch->powerup < safemaximum) {
+						if (plmod >= 600) {
+							ch->pl *= 1.03;
+						}
+						else {
+							ch->pl *= 1.04;
+						}
+						ch->powerup += 1;
+						if (plmod > 395) {
+							act( AT_YELLOW, "The air roils, an intense pressure building from your glorious golden sheen.", ch, NULL, NULL, TO_CHAR );
+							act( AT_YELLOW, "The air roils, an intense pressure building from $n's glorious golden sheen.", ch, NULL, NULL, TO_NOTVICT );
+						}
+					}
+					if (ch->powerup >= safemaximum) {
+						ch->powerup = safemaximum;
+						xREMOVE_BIT((ch)->affected_by, AFF_POWERCHANNEL);
+						xSET_BIT((ch)->affected_by, AFF_SAFEMAX);
+						act( AT_YELLOW, "Your massive golden aura recedes into your body, leaving only a lustrous glow.", ch, NULL, NULL, TO_CHAR );
+						act( AT_YELLOW, "$n's massive golden aura recedes into $s body, leaving only a lustrous glow.", ch, NULL, NULL, TO_NOTVICT );
+					}
+				}
+			}
+			if (is_kaio(ch) || is_human(ch)) {
+				int onestr = 0; 
+				int twostr = 0;
+				int threestr = 0;
+				int fourstr = 0;
+				int fivestr = 0;
+				int sixstr = 0;
+				int sevenstr = 0;
+				int onespd = 0;
+				int twospd = 0;
+				int threespd = 0;
+				int fourspd = 0;
+				int fivespd = 0;
+				int sixspd = 0;
+				int sevenspd = 0;
+				int oneint = 0;
+				int twoint = 0;
+				int threeint = 0;
+				int fourint = 0;
+				int fiveint = 0;
+				int sixint = 0;
+				int sevenint = 0;
+				int onecon = 0;
+				int twocon = 0;
+				int threecon = 0;
+				int fourcon = 0;
+				int fivecon = 0;
+				int sixcon = 0;
+				int sevencon = 0;
+					
+				onestr = ch->perm_str * 0.10; 
+				twostr = ch->perm_str * 0.15;
+				threestr = ch->perm_str * 0.15;
+				fourstr = ch->perm_str * 0.30;
+				fivestr = ch->perm_str * 0.60;
+				sixstr = ch->perm_str;
+				sevenstr = ch->perm_str * 1.20;
+				onespd = ch->perm_dex * 0.10;
+				twospd = ch->perm_dex * 0.15;
+				threespd = ch->perm_dex * 0.15;
+				fourspd = ch->perm_dex * 0.30;
+				fivespd = ch->perm_dex * 0.70;
+				sixspd = ch->perm_dex;
+				sevenspd = ch->perm_dex * 1.20;
+				oneint = ch->perm_int * 0.15;
+				twoint = ch->perm_int * 0.20;
+				threeint = ch->perm_int * 0.20;
+				fourint = ch->perm_int * 0.40;
+				fiveint = ch->perm_int * 0.70;
+				sixint = ch->perm_int * 1.10;
+				sevenint = ch->perm_int * 1.30;
+				onecon = ch->perm_con * 0.15;
+				twocon = ch->perm_con * 0.20;
+				threecon = ch->perm_con * 0.20;
+				fourcon = ch->perm_con * 0.40;
+				fivecon = ch->perm_con * 0.60;
+				sixcon = ch->perm_con;
+				sevencon = ch->perm_con * 1.25;
+				if (!xIS_SET((ch)->affected_by, AFF_MYSTIC)) {
+					int mysticTotal = 0;
+					
+					mysticTotal = ((ch->perm_str + ch->perm_dex) + (ch->perm_int * 2) + (ch->perm_con * 3));
+					safemaximum = ((get_curr_int(ch) * 0.03) + 1);
+					if (ch->powerup < safemaximum) {
+						ch->pl *= 1.15;
+						ch->powerup += 1;
+						transStatApply(ch, powerupstr, powerupspd, powerupint, powerupcon);
+						if (plmod >= 30
+							&& mysticTotal >= 4000) {
+							xSET_BIT((ch)->affected_by, AFF_MYSTIC);
+							xREMOVE_BIT((ch)->affected_by, AFF_POWERCHANNEL);
+							act( auraColor, "You cry out as your aura expands, pushing beyond your latent potential!", ch, NULL, NULL, TO_CHAR );
+							act( auraColor, "$n cries out, $s inner potential exploding to the surface!", ch, NULL, NULL, TO_NOTVICT );
+							ch->powerup = 0;
+							ch->pl = ch->exp * 35;
+							transStatApply(ch, onestr, onespd, oneint, onecon);
+						}
+						if (plmod >= 30 && mysticTotal < 4000) {
+							ch->pl = (ch->exp * 30);
+							act( auraColor, "Having reached your limit, you stop powering up. Going any further would be dangerous.", ch, NULL, NULL, TO_CHAR );
+							act( auraColor, "$n reaches $s limit and stops powering up.", ch, NULL, NULL, TO_NOTVICT );
+							xREMOVE_BIT((ch)->affected_by, AFF_POWERCHANNEL);
+							ch->powerup = safemaximum;
+							xSET_BIT((ch)->affected_by, AFF_SAFEMAX);
+						}
+						if (plmod >= 20 && plmod < 27) {
+							act( auraColor, "Your body is barely visible amidst your vortex of ki.", ch, NULL, NULL, TO_CHAR );
+							act( auraColor, "$n's body is barely visible amidst $s vortex of ki!", ch, NULL, NULL, TO_NOTVICT );
+						}
+						if (plmod >= 15 && plmod < 20) {
+							act( auraColor, "Your aura spirals upward, nearly licking the clouds.", ch, NULL, NULL, TO_CHAR );
+							act( auraColor, "$n's aura spirals upward, nearly licking the clouds.", ch, NULL, NULL, TO_NOTVICT );
+						}
+						if (plmod >= 10 && plmod < 15) {
+							act( auraColor, "Your gentle aura explodes into a display of roaring ki.", ch, NULL, NULL, TO_CHAR );
+							act( auraColor, "$n's gentle aura explodes into a display of roaring ki.", ch, NULL, NULL, TO_NOTVICT );
+						}
+						if (plmod >= 5 && plmod < 10) {
+							act( auraColor, "Your aura flickers around you, only faintly visible.", ch, NULL, NULL, TO_CHAR );
+							act( auraColor, "$n's aura flickers around $m, only faintly visible.", ch, NULL, NULL, TO_NOTVICT );
+						}
+						if (plmod > 1 && plmod < 5) {
+							act( auraColor, "Your body glows faintly.", ch, NULL, NULL, TO_CHAR );
+							act( auraColor, "$n's body glows faintly.", ch, NULL, NULL, TO_NOTVICT );
+						}
+					}
+					if (ch->powerup >= safemaximum) {
+						ch->powerup = safemaximum;
+						xREMOVE_BIT((ch)->affected_by, AFF_POWERCHANNEL);
+						xSET_BIT((ch)->affected_by, AFF_SAFEMAX);
+						act( auraColor, "Having reached your limit, you stop powering up. Going any further would be dangerous.", ch, NULL, NULL, TO_CHAR );
+						act( auraColor, "$n reaches $s limit and stops powering up.", ch, NULL, NULL, TO_NOTVICT );
+					}
+				}
+				if (xIS_SET((ch)->affected_by, AFF_MYSTIC)) {
+					safemaximum = form_mastery;
+					if (ch->powerup < safemaximum) {
+						if (plmod < 600) {
+							ch->pl *= 1.05;
+						}
+						else if (plmod >= 600) {
+							ch->pl *= 1.03;
+						}
+						ch->powerup += 1;
+						if (plmod > 600) {
+							act( auraColor, "Radiant light suffuses your entire body, cloaking you entirely.", ch, NULL, NULL, TO_CHAR );
+							act( auraColor, "Radiant light suffuses $n's entire body, cloaking $m completely.", ch, NULL, NULL, TO_NOTVICT );
+						}
+						else if (plmod > 500) {
+							act( auraColor, "Pulses of God Ki emanate deep from within your core!", ch, NULL, NULL, TO_CHAR );
+							act( auraColor, "Pulses of God Ki emanate deep from within $n's core!", ch, NULL, NULL, TO_NOTVICT );
+							transStatApply(ch, sevenstr, sevenspd, sevenint, sevencon);
+						}
+						else if (plmod > 350) {
+							act( auraColor, "Your aura churns violently, a mysterious ki building deep within.", ch, NULL, NULL, TO_CHAR );
+							act( auraColor, "$n's aura engulfs $m, churning violently while a mysterious ki seeps from within.", ch, NULL, NULL, TO_NOTVICT );
+							transStatApply(ch, sixstr, sixspd, sixint, sixcon);
+						}
+						else if (plmod > 250) {
+							act( auraColor, "Bolts of pure white energy crackle through your body, striking random locations.", ch, NULL, NULL, TO_CHAR );
+							act( auraColor, "Bolts of pure white energy crackle through $n's body, striking random locations.", ch, NULL, NULL, TO_NOTVICT );
+							transStatApply(ch, fivestr, fivespd, fiveint, fivecon);
+						}
+						else if (plmod > 150) {
+							act( auraColor, "Your muscles swell with energy, containing power without growing in size.", ch, NULL, NULL, TO_CHAR );
+							act( auraColor, "$n's muscles swell with energy, containing power without growing in size.", ch, NULL, NULL, TO_NOTVICT );
+							transStatApply(ch, fourstr, fourspd, fourint, fourcon);
+						}
+						else if (plmod > 75) {
+							act( auraColor, "Your aura swells to twice its normal size but quickly dies back down.", ch, NULL, NULL, TO_CHAR );
+							act( auraColor, "$n's aura swells to twice its normal size but quickly dies back down.", ch, NULL, NULL, TO_NOTVICT );
+							transStatApply(ch, threestr, threespd, threeint, threecon);
+						}
+						else if (plmod > 50) {
+							act( auraColor, "Massive chunks of rock and debris crumble beneath your aura.", ch, NULL, NULL, TO_CHAR );
+							act( auraColor, "Massive chunks of rock and debris crumble beneath $n's aura.", ch, NULL, NULL, TO_NOTVICT );
+							transStatApply(ch, twostr, twospd, twoint, twocon);
+						}
+						else if (plmod > 37) {
+							act( auraColor, "Dust and debris swirl ominously around you.", ch, NULL, NULL, TO_CHAR );
+							act( auraColor, "Dust and debris swirl ominously around $n.", ch, NULL, NULL, TO_NOTVICT );
+						}
+					}
+					if (ch->powerup >= safemaximum) {
+						ch->powerup = safemaximum;
+						xREMOVE_BIT((ch)->affected_by, AFF_POWERCHANNEL);
+						xSET_BIT((ch)->affected_by, AFF_SAFEMAX);
+						act( auraColor, "You reach your limit, tiny bolts of energy dancing between your fingertips.", ch, NULL, NULL, TO_CHAR );
+						act( auraColor, "$n reaches the limits of $s potential, tiny bolts of energy dancing between $s fingertips.", ch, NULL, NULL, TO_NOTVICT );
+					}
+				}
+			}
+			if (is_namek(ch)) {
+				int onestr = 0; 
+				int twostr = 0;
+				int threestr = 0;
+				int fourstr = 0;
+				int fivestr = 0;
+				int sixstr = 0;
+				int sevenstr = 0;
+				int onespd = 0;
+				int twospd = 0;
+				int threespd = 0;
+				int fourspd = 0;
+				int fivespd = 0;
+				int sixspd = 0;
+				int sevenspd = 0;
+				int oneint = 0;
+				int twoint = 0;
+				int threeint = 0;
+				int fourint = 0;
+				int fiveint = 0;
+				int sixint = 0;
+				int sevenint = 0;
+				int onecon = 0;
+				int twocon = 0;
+				int threecon = 0;
+				int fourcon = 0;
+				int fivecon = 0;
+				int sixcon = 0;
+				int sevencon = 0;
+					
+				onestr = ch->perm_str * 0.10; 
+				twostr = ch->perm_str * 0.15;
+				threestr = ch->perm_str * 0.20;
+				fourstr = ch->perm_str * 0.30;
+				fivestr = ch->perm_str * 0.50;
+				sixstr = ch->perm_str * 0.60;
+				sevenstr = ch->perm_str * 0.75;
+				onespd = ch->perm_dex * 0.10;
+				twospd = ch->perm_dex * 0.15;
+				threespd = ch->perm_dex * 0.25;
+				fourspd = ch->perm_dex * 0.35;
+				fivespd = ch->perm_dex * 0.60;
+				sixspd = ch->perm_dex * 0.80;
+				sevenspd = ch->perm_dex;
+				oneint = ch->perm_int * 0.15;
+				twoint = ch->perm_int * 0.25;
+				threeint = ch->perm_int * 0.50;
+				fourint = ch->perm_int * 0.75;
+				fiveint = ch->perm_int;
+				sixint = ch->perm_int * 1.25;
+				sevenint = ch->perm_int * 1.75;
+				onecon = ch->perm_con * 0.15;
+				twocon = ch->perm_con * 0.15;
+				threecon = ch->perm_con * 0.25;
+				fourcon = ch->perm_con * 0.35;
+				fivecon = ch->perm_con * 0.60;
+				sixcon = ch->perm_con * 0.80;
+				sevencon = ch->perm_con * 1.10;
+				if (!xIS_SET((ch)->affected_by, AFF_SNAMEK)) {
+					int namekTotal = 0;
+					
+					namekTotal = ((ch->perm_str + ch->perm_dex) + (ch->perm_int * 3) + (ch->perm_con * 2));
+					safemaximum = ((get_curr_int(ch) * 0.03) + 1);
+					if (ch->powerup < safemaximum) {
+						ch->pl *= 1.15;
+						ch->powerup += 1;
+						transStatApply(ch, powerupstr, powerupspd, powerupint, powerupcon);
+						if (plmod >= 40
+							&& namekTotal >= 5000) {
+							xSET_BIT((ch)->affected_by, AFF_SNAMEK);
+							xREMOVE_BIT((ch)->affected_by, AFF_POWERCHANNEL);
+							act( AT_WHITE, "Your mind opens to the secrets of the ancient Namekians, flooding you with incredible power.", ch, NULL, NULL, TO_CHAR );
+							act( AT_WHITE, "$n's mind opens to the secrets of the ancient Namekians, flooding $m with incredible power.'", ch, NULL, NULL, TO_NOTVICT );
+							ch->powerup = 0;
+							ch->pl = ch->exp * 50;
+							transStatApply(ch, onestr, onespd, oneint, onecon);
+						}
+						if (plmod >= 40
+							&& namekTotal < 4000) {
+							ch->pl = (ch->exp * 40);
+							act( auraColor, "You stop abruptly, unable to concentrate any further.", ch, NULL, NULL, TO_CHAR );
+							act( auraColor, "$n stops abruptly, unable to concentrate any further.", ch, NULL, NULL, TO_NOTVICT );
+							xREMOVE_BIT((ch)->affected_by, AFF_POWERCHANNEL);
+							ch->powerup = safemaximum;
+							xSET_BIT((ch)->affected_by, AFF_SAFEMAX);
+						}
+						if (plmod >= 20 && plmod < 27) {
+							act( auraColor, "Your body is barely visible amidst your vortex of ki.", ch, NULL, NULL, TO_CHAR );
+							act( auraColor, "$n's body is barely visible amidst $s vortex of ki!", ch, NULL, NULL, TO_NOTVICT );
+						}
+						if (plmod >= 15 && plmod < 20) {
+							act( auraColor, "Your aura spirals upward, nearly licking the clouds.", ch, NULL, NULL, TO_CHAR );
+							act( auraColor, "$n's aura spirals upward, nearly licking the clouds.", ch, NULL, NULL, TO_NOTVICT );
+						}
+						if (plmod >= 10 && plmod < 15) {
+							act( auraColor, "Your gentle aura explodes into a display of roaring ki.", ch, NULL, NULL, TO_CHAR );
+							act( auraColor, "$n's gentle aura explodes into a display of roaring ki.", ch, NULL, NULL, TO_NOTVICT );
+						}
+						if (plmod >= 5 && plmod < 10) {
+							act( auraColor, "Your aura flickers around you, only faintly visible.", ch, NULL, NULL, TO_CHAR );
+							act( auraColor, "$n's aura flickers around $m, only faintly visible.", ch, NULL, NULL, TO_NOTVICT );
+						}
+						if (plmod > 1 && plmod < 5) {
+							act( auraColor, "Your body glows faintly.", ch, NULL, NULL, TO_CHAR );
+							act( auraColor, "$n's body glows faintly.", ch, NULL, NULL, TO_NOTVICT );
+						}
+					}
+					if (ch->powerup >= safemaximum) {
+						ch->powerup = safemaximum;
+						xREMOVE_BIT((ch)->affected_by, AFF_POWERCHANNEL);
+						xSET_BIT((ch)->affected_by, AFF_SAFEMAX);
+						act( auraColor, "Having reached your limit, you stop powering up. Going any further would be dangerous.", ch, NULL, NULL, TO_CHAR );
+						act( auraColor, "$n reaches $s limit and stops powering up.", ch, NULL, NULL, TO_NOTVICT );
+					}
+				}
+				if (xIS_SET((ch)->affected_by, AFF_SNAMEK)) {
+					safemaximum = form_mastery;
+					if (ch->powerup < safemaximum) {
+						if (plmod >= 600) {
+							ch->pl *= 1.03;
+						}
+						else if (plmod >= 400) {
+							ch->pl *= 1.02;
+						}
+						else if (plmod < 400) {
+							ch->pl *= 1.06;
+						}
+						ch->powerup += 1;
+						if (plmod > 600) {
+							act( AT_WHITE, "Vague images of your ancestors flash before you, conjured by your brilliant divine aura.", ch, NULL, NULL, TO_CHAR );
+							act( AT_WHITE, "Vague images of $n's ancestors flash randomly within $s blinding God Ki.", ch, NULL, NULL, TO_NOTVICT );
+							transStatApply(ch, sevenstr, sevenspd, sevenint, sevencon);
+						}
+						else if (plmod > 500) {
+							act( AT_WHITE, "A burst of God Ki erupts from deep within your body.", ch, NULL, NULL, TO_CHAR );
+							act( AT_WHITE, "A burst of God Ki erupts from deep within $n's body.", ch, NULL, NULL, TO_NOTVICT );
+							transStatApply(ch, sixstr, sixspd, sixint, sixcon);
+						}
+						else if (plmod > 350) {
+							act( AT_WHITE, "The heavens shake and the earth trembles at your feet.", ch, NULL, NULL, TO_CHAR );
+							act( AT_WHITE, "The heavens shake and the earth trembles at $n's feet.", ch, NULL, NULL, TO_NOTVICT );
+							transStatApply(ch, fivestr, fivespd, fiveint, fivecon);
+						}
+						else if (plmod > 250) {
+							act( AT_WHITE, "Bolts of energy crackle through your blinding aura.", ch, NULL, NULL, TO_CHAR );
+							act( AT_WHITE, "Bolts of energy crackle through $n's blinding aura.", ch, NULL, NULL, TO_NOTVICT );
+							transStatApply(ch, fourstr, fourspd, fourint, fourcon);
+						}
+						else if (plmod > 150) {
+							act( AT_WHITE, "Your aura swirls, constant beams of light radiating from within.", ch, NULL, NULL, TO_CHAR );
+							act( AT_WHITE, "$n's aura swirls with constant beams of echoing light.", ch, NULL, NULL, TO_NOTVICT );
+							transStatApply(ch, threestr, threespd, threeint, threecon);
+						}
+						else if (plmod > 75) {
+							act( AT_WHITE, "Blinding flashes escape your body, echoing through the air.", ch, NULL, NULL, TO_CHAR );
+							act( AT_WHITE, "Blinding flashes escape $n's body, echoing through the air.", ch, NULL, NULL, TO_NOTVICT );
+							transStatApply(ch, twostr, twospd, twoint, twocon);
+						}
+						else if (plmod > 50) {
+							act( AT_WHITE, "Brilliant white light shrouds the contours of your body.", ch, NULL, NULL, TO_CHAR );
+							act( AT_WHITE, "Brilliant white light shrouds the contours of $n's body.", ch, NULL, NULL, TO_NOTVICT );
+						}
+					}
+					if (ch->powerup >= safemaximum) {
+						ch->powerup = safemaximum;
+						xREMOVE_BIT((ch)->affected_by, AFF_POWERCHANNEL);
+						xSET_BIT((ch)->affected_by, AFF_SAFEMAX);
+						act( AT_WHITE, "Having reached your limits, your ancestors can afford you no more power.", ch, NULL, NULL, TO_CHAR );
+						act( AT_WHITE, "Having reached $s limits, $n takes a deep breath and stops channeling his ancestors' wisdom.", ch, NULL, NULL, TO_NOTVICT );
+					}
+				}
+			}
+			if (!is_saiyan(ch) && !is_hb(ch)
+				&& !is_icer(ch) && !is_namek(ch)
+				&& !is_human(ch) && !is_kaio(ch)) {
+				send_to_char("DEBUG: You should only be testing the non-locked races.\n\r", ch);
+			}
+		}
+		if (xIS_SET((ch)->affected_by, AFF_OVERCHANNEL)
+			&& !xIS_SET((ch)->affected_by, AFF_KAIOKEN)
+			&& xIS_SET((ch)->affected_by, AFF_SAFEMAX)) {
+			double safemaximum = 0;
+			int danger = 0;
+			int form_mastery = 0;
+			
+			if (ch->position < POS_STANDING && ch->position > POS_DEAD) {
+				xREMOVE_BIT((ch)->affected_by, AFF_OVERCHANNEL);
+				send_to_char("You must stand if you wish to power up.\n\r", ch);
+			}
+			form_mastery = (ch->train / 45000);
+			if (xIS_SET((ch)->affected_by, AFF_SSJ)
+				|| xIS_SET((ch)->affected_by, AFF_SSJ2)
+				|| xIS_SET((ch)->affected_by, AFF_SSJ3)
+				|| xIS_SET((ch)->affected_by, AFF_SSJ4)
+				|| xIS_SET((ch)->affected_by, AFF_SGOD)
+				|| xIS_SET((ch)->affected_by, AFF_HYPER)
+				|| xIS_SET((ch)->affected_by, AFF_SNAMEK)
+				|| xIS_SET((ch)->affected_by, AFF_ICER2)
+				|| xIS_SET((ch)->affected_by, AFF_ICER3)
+				|| xIS_SET((ch)->affected_by, AFF_ICER4)
+				|| xIS_SET((ch)->affected_by, AFF_ICER5)
+				|| xIS_SET((ch)->affected_by, AFF_GOLDENFORM)
+				|| xIS_SET((ch)->affected_by, AFF_SEMIPERFECT)
+				|| xIS_SET((ch)->affected_by, AFF_PERFECT)
+				|| xIS_SET((ch)->affected_by, AFF_ULTRAPERFECT)
+				|| xIS_SET((ch)->affected_by, AFF_OOZARU)
+				|| xIS_SET((ch)->affected_by, AFF_GOLDEN_OOZARU)
+				|| xIS_SET((ch)->affected_by, AFF_EXTREME)
+				|| xIS_SET((ch)->affected_by, AFF_MYSTIC)
+				|| xIS_SET((ch)->affected_by, AFF_SUPERANDROID)
+				|| xIS_SET((ch)->affected_by, AFF_MAKEOSTAR)
+				|| xIS_SET((ch)->affected_by, AFF_EVILBOOST)
+				|| xIS_SET((ch)->affected_by, AFF_EVILSURGE)
+				|| xIS_SET((ch)->affected_by, AFF_EVILOVERLOAD)) {
+				safemaximum = form_mastery;
+				if (form_mastery < 1)
+					form_mastery = 1;
+				danger = ((ch->powerup - safemaximum) * (ch->powerup * 100));
+				/* Just in case. */
+				if (danger < 1) {
+					danger = 1;
+				}
+				ch->pl *= 1.01;
+				ch->powerup += 1;
+				if ((ch->mana - danger) < 0)
+					ch->mana = 0;
+				else {
+					ch->mana -= danger;
+				}
+				
+				if (danger != 0 && ch->mana == 0) {
+					ch->hit -= (danger / 10);
+					act( AT_RED, "Your body is ripping itself apart!", ch, NULL, NULL, TO_CHAR );
+					act( AT_RED, "$n's body is ripping itself apart!'", ch, NULL, NULL, TO_NOTVICT );
+					if (ch->hit - (danger / 10) < 0) {
+						ch->hit -= (danger / 10);
+						update_pos(ch);
+						if ( ch->position == POS_DEAD) {
+							act( AT_RED, "Your body gives out under the intense strain. All must succumb to their limits in the end.", ch, NULL, NULL, TO_CHAR );
+							act( AT_RED, "$n collapses, DEAD, $s body completely spent.", ch, NULL, NULL, TO_NOTVICT );
+							sprintf( buf, "%s withers away, succumbing to their limits", ch->name );
+							do_info(ch, buf);
+							raw_kill(ch, ch);
+						}
+					}
+				}
+				else {
+					act( AT_YELLOW, "You struggle against the will of your own body, increasing your power at incredible risk.", ch, NULL, NULL, TO_CHAR );
+					act( AT_YELLOW, "$n struggles against the will of $s own body, increasing $s power at incredible risk.", ch, NULL, NULL, TO_NOTVICT );
+				}
+			}
+			else {
+				safemaximum = ((get_curr_int(ch) * 0.03) + 1);
+				danger = ((ch->powerup - safemaximum) * (ch->powerup * 100));
+				/* Just in case. */
+				if (danger < 1) {
+					danger = 1;
+				}
+				ch->pl *= 1.01;
+				ch->powerup += 1;
+				if ((ch->mana - danger) < 0)
+					ch->mana = 0;
+					
+				else
+					ch->mana -= danger;
+				
+				if (danger != 0 && ch->mana == 0) {
+					ch->hit -= (danger / 10);
+					act( AT_RED, "Your body is ripping itself apart!", ch, NULL, NULL, TO_CHAR );
+					act( AT_RED, "$n's body is ripping itself apart!'", ch, NULL, NULL, TO_NOTVICT );
+					if (ch->hit - (danger / 10) < 0) {
+						ch->hit -= (danger / 10);
+						update_pos(ch);
+						if (ch->position == POS_DEAD) {
+							act( AT_RED, "Your body gives out under the intense strain. All must succumb to their limits in the end.", ch, NULL, NULL, TO_CHAR );
+							act( AT_RED, "$n collapses, DEAD, $s body completely spent.", ch, NULL, NULL, TO_NOTVICT );
+							sprintf( buf, "%s withers away, succumbing to their limits", ch->name );
+							do_info(ch, buf);
+							raw_kill(ch, ch);
+						}
+					}
+				}
+				else {
+					act( AT_YELLOW, "You struggle against the will of your own body, increasing your power at incredible risk.", ch, NULL, NULL, TO_CHAR );
+					act( AT_YELLOW, "$n struggles against the will of $s own body, increasing $s power at incredible risk.", ch, NULL, NULL, TO_NOTVICT );
+				}
+			}
+		}
 		/* New Gravity Training */
 		if (xIS_SET((ch)->affected_by, AFF_PUSHUPS) && !xIS_SET((ch)->in_room->room_flags, ROOM_GRAV)) {
 			
@@ -2718,7 +4316,7 @@ damage(CHAR_DATA * ch, CHAR_DATA * victim, int dam, int dt)
 
 	if (!is_android_h(victim))
 		victim->mana -=
-		    URANGE(0, ((double)dam / 100 * 0.5 * victim->mana),
+		    URANGE(0, ((double)dam / 1000 * 0.25 * victim->mana),
 		    victim->max_mana);
 
 	heart_calc(victim, "");

@@ -1729,8 +1729,7 @@ typedef enum {
 	AFF_NO_GLOBAL_DROP, AFF_MAKEOSTAR, AFF_EVILBOOST, AFF_EVILSURGE,
 	AFF_EVILOVERLOAD, AFF_BIOJR, AFF_GOLDEN_OOZARU,
 	AFF_PUSHUPS, AFF_SHADOWBOXING, AFF_ENDURING, AFF_MEDITATION,
-
-	MAX_AFFECTED_BY
+	AFF_POWERCHANNEL, AFF_OVERCHANNEL, AFF_SAFEMAX, MAX_AFFECTED_BY
 } 	affected_by_types;
 
 /*
@@ -2654,9 +2653,9 @@ struct char_data {
 	sh_int 	max_move;
 	sh_int 	practice;
 	sh_int 	max_prac;
-	sh_int 	powerup;
-	sh_int 	train;
-	sh_int 	max_train;
+	int 	powerup;
+	int 	train;
+	int 	max_train;
 	sh_int 	numattacks;
 	int 	gold;
 	long double exp;
@@ -2690,7 +2689,7 @@ struct char_data {
 	sh_int 	mobthac0;
 	sh_int 	hitroll;
 	sh_int 	damroll;
-	sh_int 	hitplus;
+	int 	hitplus;
 	sh_int 	damplus;
 	sh_int 	position;
 	sh_int 	defposition;
@@ -2814,6 +2813,8 @@ struct pc_data {
 	COUNCIL_DATA *council;
 	AREA_DATA *area;
 	DEITY_DATA *deity;
+	int i_idle;
+	int p_idle[5];
 	char   *homepage;
 	char   *clan_name;
 	char   *council_name;
@@ -5417,7 +5418,8 @@ args((const char *argument, int channel,
 /* comm.c */
 /* logging */
 	void 	logmsg(int, const char *,...);
-	void 	close_socket(DESCRIPTOR_DATA * dclose, bool force, bool clear);
+
+	void close_socket args((DESCRIPTOR_DATA *dclose, bool force));
 	void write_to_buffer args((DESCRIPTOR_DATA * d, const char *txt,
 		int 	length));
 	void send_to_char args((const char *txt, CHAR_DATA * ch));

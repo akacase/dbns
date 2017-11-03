@@ -664,11 +664,11 @@ show_visible_affects_to_char(CHAR_DATA * victim, CHAR_DATA * ch)
 	    && IS_AFFECTED(victim, AFF_SSJ4)
 	    && !IS_AFFECTED(victim, AFF_SGOD)) {
 		pager_printf_color(ch, "  &P*");
-		act(AT_RED, "$N's body is covered in thick, red fur.&P",
+		act(AT_RED, "$N's body is emitting an indescribable ki.&P",
 		    ch, NULL, victim, TO_CHAR);
 		pager_printf_color(ch, "  &P*");
 		act(AT_RED,
-		    "$N is surrounded by a menacing aura of fiery red.&P", ch,
+		    "$N is engulfed in a blaze of crimson and gold God Ki.&P", ch,
 		    NULL, victim, TO_CHAR);
 	}
 	if (IS_AFFECTED(victim, AFF_SSJ)
@@ -677,11 +677,11 @@ show_visible_affects_to_char(CHAR_DATA * victim, CHAR_DATA * ch)
 	    && IS_AFFECTED(victim, AFF_SSJ4)
 	    && IS_AFFECTED(victim, AFF_SGOD)) {
 		pager_printf_color(ch, "  &P*");
-		act(AT_PURPLE, "$N's hair and eyes are a shade of purple.&P",
+		act(AT_LBLUE, "$N's hair and eyes are a light shade of blue.&P",
 		    ch, NULL, victim, TO_CHAR);
 		pager_printf_color(ch, "  &P*");
-		act(AT_RED,
-		    "$N is surrounded by a menacing aura of translucent fire.&P", ch,
+		act(AT_LBLUE,
+		    "$N is surrounded by a whorl of raging blue God Ki.&P", ch,
 		    NULL, victim, TO_CHAR);
 	}
 	if (IS_AFFECTED(victim, AFF_SSJ)
@@ -693,7 +693,11 @@ show_visible_affects_to_char(CHAR_DATA * victim, CHAR_DATA * ch)
 	}
 	if (IS_AFFECTED(victim, AFF_SSJ)
 	    && IS_AFFECTED(victim, AFF_USSJ)
-	    && IS_AFFECTED(victim, AFF_USSJ2)) {
+	    && IS_AFFECTED(victim, AFF_USSJ2)
+		&& !IS_AFFECTED(victim, AFF_SSJ2)
+		&& !IS_AFFECTED(victim, AFF_SSJ3)
+		&& !IS_AFFECTED(victim, AFF_SSJ4)
+		&& !IS_AFFECTED(victim, AFF_SGOD)) {
 		pager_printf_color(ch, "  &P*");
 		act(AT_YELLOW, "$N's muscles are grossly oversized.&P", ch,
 		    NULL, victim, TO_CHAR);
@@ -753,7 +757,7 @@ show_visible_affects_to_char(CHAR_DATA * victim, CHAR_DATA * ch)
 	    && IS_AFFECTED(victim, AFF_ICER5)) {
 		pager_printf_color(ch, "  &P*");
 		act(AT_PURPLE,
-		    "$N has armored plating and cruel spikes protecting $S giant, "
+		    "$N's once sleek body is swollen with energy, taking on a giant, "
 		    "muscle-bound form.&P", ch, NULL, victim, TO_CHAR);
 		pager_printf_color(ch,
 		    "  &P*&P%s is covered in dark, icy purple flames.&P\n\r",
@@ -764,20 +768,29 @@ show_visible_affects_to_char(CHAR_DATA * victim, CHAR_DATA * ch)
 	    && !IS_AFFECTED(victim, AFF_ICER5)
 	    &&  IS_AFFECTED(victim, AFF_GOLDENFORM)) {
 		pager_printf_color(ch, "  &P*");
-		act(AT_PURPLE,
-		    "$N has armored plating and cruel spikes protecting $S giant, "
-		    "muscle-bound form.&P", ch, NULL, victim, TO_CHAR);
+		act(AT_YELLOW,
+		    "$N's sleek, reflective body radiates an intense gold-amber glow.",
+			ch, NULL, victim, TO_CHAR);
 		pager_printf_color(ch,
-		    "  &P*&P%s is covered in dark, icy purple flames.&P\n\r",
-		    name);
-		pager_printf_color(ch,
-		    "  &Y*&Y%s is shimmering in deep, golden aura.&P\n\r",
+		    "  &Y*&Y%s is covered in a massive golden aura.&P\n\r",
 		    name);
 	}
 	if (IS_AFFECTED(victim, AFF_HYPER)) {
 		pager_printf_color(ch, "  &P*");
 		act(z, "$N is covered in bright energy flames.", ch,
 		    NULL, victim, TO_CHAR);
+	}
+	if (IS_AFFECTED(victim, AFF_MYSTIC)) {
+		if ((ch->pl / ch->exp) >= 600) {
+			pager_printf_color(ch, "  &P*");
+			act(z, "$N's body radiates an intense God Ki from within.", ch,
+				NULL, victim, TO_CHAR);
+		}
+		else {
+			pager_printf_color(ch, "  &P*");
+			act(z, "$N appears normal, if not for an unsettling power lurking within.", ch,
+				NULL, victim, TO_CHAR);
+		}
 	}
 	if (IS_AFFECTED(victim, AFF_EXTREME)) {
 		pager_printf_color(ch, "  &P*");

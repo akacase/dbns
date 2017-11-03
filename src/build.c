@@ -176,7 +176,8 @@ char   *const a_flags[] =
 	"perfect", "ultraperfect", "growth", "giant", "splitform", "triform",	/*- Temp fix --Krillin*/
 	"multiform", "ussj", "ussj2", "extreme", "thin", "super", "kid", "mystic",
 	"superandroid", "noglobaldrop", "makeostar", "evilboost", "evilsurge",
-	"eviloverload", "biojr", "goldenoozaru"
+	"eviloverload", "biojr", "goldenoozaru", "pushups", "shadowboxing", "enduring",
+	"meditation", "powerchannel", "overchannel", "safemax"
 };
 
 char   *const act_flags[] =

@@ -957,6 +957,13 @@ load_char_obj (DESCRIPTOR_DATA * d, char *name, bool preload)
      ch->pcdata->absorb_sn = 0;
      ch->pcdata->absorb_learn = 0;
 
+    ch->pcdata->p_idle[0] = 0;
+    ch->pcdata->p_idle[1] = 0;
+    ch->pcdata->p_idle[2] = 0;
+    ch->pcdata->p_idle[3] = 0;
+    ch->pcdata->p_idle[4] = 0;
+    ch->pcdata->i_idle = 0;
+
      ch->pcdata->tStr = 0;
      ch->pcdata->tInt = 0;
      ch->pcdata->tSpd = 0;
