@@ -487,11 +487,11 @@ gain_exp(CHAR_DATA * ch, long double gain)
 	}
 
 	/*  Check to gain more HP on gaining pl */
-	if (ch->max_hit != (ch->perm_con + 90))
-		ch->max_hit = (ch->perm_con + 90);
+	if (ch->max_hit != (ch->perm_con * 10))
+		ch->max_hit = (ch->perm_con * 10);
 	/* Check to gain more ki on gaining pl */
-	if (ch->max_mana != ((ch->perm_int * 12) + (ch->perm_con * 4) + (ch->perm_dex * 2) + (ch->perm_str * 2)))
-		ch->max_mana = ((ch->perm_int * 12) + (ch->perm_con * 4) + (ch->perm_dex * 2) + (ch->perm_str * 2));
+	if (ch->max_mana != ((ch->perm_int * 12) + (ch->perm_con * 8) + (ch->perm_dex * 6) + (ch->perm_str * 6)))
+		ch->max_mana = ((ch->perm_int * 12) + (ch->perm_con * 8) + (ch->perm_dex * 6) + (ch->perm_str * 6));
 }
 
 /*
@@ -538,9 +538,9 @@ hit_gain(CHAR_DATA * ch)
 		gain *= 2;
 
 	if (ch->race == 3)
-		gain += get_curr_con(ch) / 10;
+		gain += get_curr_con(ch);
 	else
-		gain += get_curr_con(ch) / 15;
+		gain += get_curr_con(ch) / 1.5;
 
 	return UMIN(gain, ch->max_hit - ch->hit);
 }
@@ -591,6 +591,9 @@ mana_gain(CHAR_DATA * ch)
 		gain += get_curr_con(ch) / 15;
 
 	gain = (double) gain / 200 * ch->max_mana;
+	
+	if (gain > 10000)
+		gain = 10000;
 
 	return UMIN(gain, ch->max_mana - ch->mana);
 }

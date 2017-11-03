@@ -53,15 +53,15 @@ args((CHAR_DATA * ch, CHAR_DATA * victim, int dam,
 	if (IS_NPC(ch) || IS_NPC(victim))
 		return true;
 
-	if (ch->exp <= 100000) {
+	if (ch->exp <= 5000) {
 		send_to_char
-		    ("You can not fight other players until you are a 'Skilled Fighter'.\n\r",
+		    ("You can not fight other players until you're out of training'.\n\r",
 		    ch);
 		return false;
 	}
-	if (victim->exp <= 100000) {
+	if (victim->exp <= 5000) {
 		send_to_char
-		    ("You can not fight other players until they are a 'Skilled Fighter'.\n\r",
+		    ("You can not fight other players until they're out of training.\n\r",
 		    ch);
 		return false;
 	}
@@ -531,6 +531,42 @@ violence_update(void)
 				affect_remove(ch, paf);
 			}
 		}
+		/* In-combat bonuses */
+		if (!IS_NPC(ch)) {
+			if (ch->position == POS_FIGHTING) {
+				stat_train(ch, "str", 5);
+				stat_train(ch, "spd", 5);
+				stat_train(ch, "con", 5);
+				stat_train(ch, "int", 5);
+				ch->train += 3;
+			}
+			if (ch->position == POS_AGGRESSIVE) {
+				stat_train(ch, "str", 6);
+				stat_train(ch, "spd", 5);
+				stat_train(ch, "con", 5);
+				stat_train(ch, "int", 4);
+				ch->train += 3;
+			}
+			if (ch->position == POS_BERSERK) {
+				stat_train(ch, "str", 10);
+				stat_train(ch, "spd", 5);
+				stat_train(ch, "con", 5);
+				ch->train += 3;
+			}
+			if (ch->position == POS_DEFENSIVE) {
+				stat_train(ch, "str", 2);
+				stat_train(ch, "spd", 5);
+				stat_train(ch, "con", 8);
+				stat_train(ch, "int", 5);
+				ch->train += 3;
+			}
+			if (ch->position == POS_EVASIVE) {
+				stat_train(ch, "spd", 7);
+				stat_train(ch, "con", 5);
+				stat_train(ch, "int", 8);
+				ch->train += 3;
+			}
+		} 
 		/* Transformation Update */
 		if (!IS_NPC(ch)
 			&& xIS_SET((ch)->affected_by, AFF_SNAMEK)) {
@@ -576,10 +612,12 @@ violence_update(void)
 				if (form_drain < 1)
 					form_drain = 1;
 				ch->mana -= form_drain;
-				if (form_drain <= 1)
-					ch->train += 1;
-				else if (form_drain > 1)
-					ch->train += 3;
+				if (ch->desc) {
+					if (form_drain <= 1)
+						ch->train += 1;
+					else if (form_drain > 1)
+						ch->train += 3;
+				}
 		}
 		if (!IS_NPC(ch)
 			&& xIS_SET((ch)->affected_by, AFF_MYSTIC)) {
@@ -624,10 +662,12 @@ violence_update(void)
 				if (form_drain < 1)
 					form_drain = 1;
 				ch->mana -= form_drain;
-				if (form_drain <= 1)
-					ch->train += 1;
-				else if (form_drain > 1)
-					ch->train += 3;
+				if (ch->desc) {
+					if (form_drain <= 1)
+						ch->train += 1;
+					else if (form_drain > 1)
+						ch->train += 3;
+				}
 		}
 		if (!IS_NPC(ch)
 			&& xIS_SET((ch)->affected_by, AFF_ICER2)) {
@@ -648,12 +688,14 @@ violence_update(void)
 					act( AT_PURPLE, "You lose control of your ki and return to normal!", ch, NULL, NULL, TO_CHAR );
 					act( AT_PURPLE, "$n loses control of $s ki and returns to normal!", ch, NULL, NULL, TO_NOTVICT );
 				}
-				if (form_mastery < 1)
-					form_mastery = 1;
-				if (form_mastery >= 6)
-					ch->train += 1;
-				else if (form_mastery < 6)
-					ch->train += 15;
+				if (ch->desc) {
+					if (form_mastery < 1)
+						form_mastery = 1;
+					if (form_mastery >= 6)
+						ch->train += 1;
+					else if (form_mastery < 6)
+						ch->train += 15;
+				}
 		}
 		if (!IS_NPC(ch)
 			&& xIS_SET((ch)->affected_by, AFF_ICER3)) {
@@ -674,12 +716,14 @@ violence_update(void)
 					act( AT_PURPLE, "You lose control of your ki and return to normal!", ch, NULL, NULL, TO_CHAR );
 					act( AT_PURPLE, "$n loses control of $s ki and returns to normal!", ch, NULL, NULL, TO_NOTVICT );
 				}
-				if (form_mastery < 1)
-					form_mastery = 1;
-				if (form_mastery >= 20)
-					ch->train += 1;
-				else if (form_mastery < 20)
-					ch->train += 15;
+				if (ch->desc) {
+					if (form_mastery < 1)
+						form_mastery = 1;
+					if (form_mastery >= 20)
+						ch->train += 1;
+					else if (form_mastery < 20)
+						ch->train += 15;
+				}
 		}
 		if (!IS_NPC(ch)
 			&& xIS_SET((ch)->affected_by, AFF_ICER4)) {
@@ -700,12 +744,14 @@ violence_update(void)
 					act( AT_PURPLE, "You lose control of your ki and return to normal!", ch, NULL, NULL, TO_CHAR );
 					act( AT_PURPLE, "$n loses control of $s ki and returns to normal!", ch, NULL, NULL, TO_NOTVICT );
 				}
-				if (form_mastery < 1)
-					form_mastery = 1;
-				if (form_mastery >= 44)
-					ch->train += 1;
-				else if (form_mastery < 44)
-					ch->train += 3;
+				if (ch->desc) {
+					if (form_mastery < 1)
+						form_mastery = 1;
+					if (form_mastery >= 44)
+						ch->train += 1;
+					else if (form_mastery < 44)
+						ch->train += 3;
+				}
 		}
 		if (!IS_NPC(ch)
 			&& xIS_SET((ch)->affected_by, AFF_ICER5)) {
@@ -733,10 +779,12 @@ violence_update(void)
 				if (form_drain < 1)
 					form_drain = 1;
 				ch->mana -= form_drain;
-				if (form_mastery >= 64)
-					ch->train += 1;
-				else if (form_mastery < 64)
-					ch->train += 3;
+				if (ch->desc) {
+					if (form_mastery >= 64)
+						ch->train += 1;
+					else if (form_mastery < 64)
+						ch->train += 3;
+				}
 		}
 		if (!IS_NPC(ch)
 			&& xIS_SET((ch)->affected_by, AFF_GOLDENFORM)) {
@@ -764,10 +812,12 @@ violence_update(void)
 				if (form_drain < 400)
 					form_drain = 400;
 				ch->mana -= form_drain;
-				if (form_drain > 400)
-					ch->train += 3;
-				else if (form_drain <= 400)
-					ch->train += 1;
+				if (ch->desc) {
+					if (form_drain > 400)
+						ch->train += 3;
+					else if (form_drain <= 400)
+						ch->train += 1;
+				}
 		}
 		if (!IS_NPC(ch)
 			&& xIS_SET((ch)->affected_by, AFF_SSJ)
@@ -803,10 +853,12 @@ violence_update(void)
 				if (form_drain < 1)
 					form_drain = 1;
 				ch->mana -= form_drain;
-				if (form_mastery >= 9)
-					ch->train += 1;
-				else if (form_mastery < 9)
-					ch->train += 3;
+				if (ch->desc) {
+					if (form_mastery >= 9)
+						ch->train += 1;
+					else if (form_mastery < 9)
+						ch->train += 3;
+				}
 		}
 		if (!IS_NPC(ch)
 			&& xIS_SET((ch)->affected_by, AFF_SSJ)
@@ -843,10 +895,12 @@ violence_update(void)
 				if (form_drain < 1)
 					form_drain = 1;
 				ch->mana -= form_drain;
-				if (form_mastery >= 19)
-					ch->train += 1;
-				else if (form_mastery < 19)
-					ch->train += 3;
+				if (ch->desc) {
+					if (form_mastery >= 19)
+						ch->train += 1;
+					else if (form_mastery < 19)
+						ch->train += 3;
+				}
 		}
 		if (!IS_NPC(ch)
 			&& xIS_SET((ch)->affected_by, AFF_SSJ)
@@ -884,10 +938,12 @@ violence_update(void)
 				if (form_drain < 1)
 					form_drain = 1;
 				ch->mana -= form_drain;
-				if (form_mastery >= 29)
-					ch->train += 1;
-				else if (form_mastery < 29)
-					ch->train += 3;
+				if (ch->desc) {
+					if (form_mastery >= 29)
+						ch->train += 1;
+					else if (form_mastery < 29)
+						ch->train += 3;
+				}
 		}
 		if (!IS_NPC(ch)
 			&& xIS_SET((ch)->affected_by, AFF_SSJ)
@@ -926,10 +982,12 @@ violence_update(void)
 				if (form_drain < 1)
 					form_drain = 1;
 				ch->mana -= form_drain;
-				if (form_drain >= 39)
-					ch->train += 1;
-				else if (form_drain < 39)
-					ch->train += 3;
+				if (ch->desc) {
+					if (form_drain >= 39)
+						ch->train += 1;
+					else if (form_drain < 39)
+						ch->train += 3;
+				}
 		}
 		if (!IS_NPC(ch)
 			&& xIS_SET((ch)->affected_by, AFF_SSJ)
@@ -969,10 +1027,12 @@ violence_update(void)
 				if (form_drain < 1)
 					form_drain = 1;
 				ch->mana -= form_drain;
-				if (form_mastery >= 52)
-					ch->train += 1;
-				else if (form_mastery < 52)
-					ch->train += 3;
+				if (ch->desc) {
+					if (form_mastery >= 52)
+						ch->train += 1;
+					else if (form_mastery < 52)
+						ch->train += 3;
+				}
 		}
 		if (!IS_NPC(ch)
 			&& xIS_SET((ch)->affected_by, AFF_SSJ)
@@ -1013,10 +1073,12 @@ violence_update(void)
 				if (form_drain < 1)
 					form_drain = 1;
 				ch->mana -= form_drain;
-				if (form_mastery >= 62)
-					ch->train += 1;
-				else if (form_mastery < 62)
-					ch->train += 3;
+				if (ch->desc) {
+					if (form_mastery >= 62)
+						ch->train += 1;
+					else if (form_mastery < 62)
+						ch->train += 3;
+				}
 		}
 		if (!IS_NPC(ch)
 			&& xIS_SET((ch)->affected_by, AFF_SSJ)
@@ -1058,10 +1120,12 @@ violence_update(void)
 				if (form_drain < 250)
 					form_drain = 250;
 				ch->mana -= form_drain;
-				if (form_drain <= 250)
-					ch->train += 1;
-				else if (form_drain > 250)
-					ch->train += 3;
+				if (ch->desc) {
+					if (form_drain <= 250)
+						ch->train += 1;
+					else if (form_drain > 250)
+						ch->train += 3;
+				}
 		}
 		/* Bug Guard */
 		if (xIS_SET((ch)->affected_by, AFF_POWERCHANNEL)
@@ -2156,6 +2220,9 @@ violence_update(void)
 		    xREMOVE_BIT((ch)->affected_by, AFF_PUSHUPS);
 		    send_to_char("You cannot gravity train in such a lax state.\n\r", ch);
 		  }
+		  if(!ch->desc)
+			xREMOVE_BIT((ch)->affected_by, AFF_PUSHUPS);
+			
 		  char buf[MAX_STRING_LENGTH];
 		  int trainmessage = 0;
 		  long double xp_gain = 0;
@@ -2176,12 +2243,18 @@ violence_update(void)
 		  }
 
 		  if (trainmessage < 65) {
-		    xp_gain = (long double)increase / 100 * gravLevel;
+		    xp_gain = (long double)increase / 1000 * gravLevel;
 		    ch->hit--;
 		    ch->mana -= URANGE(0, ch->mana * 0.005, ch->mana);
 		    gain_exp(ch, xp_gain);
-		    sprintf(buf, "Your power level increases by %s points.", num_punct(xp_gain));
-		    act(AT_HIT, buf, ch, NULL, NULL, TO_CHAR);
+			if (xp_gain > 1) {
+				sprintf(buf, "Your power level increases by %s points.", num_punct(xp_gain));
+				act(AT_HIT, buf, ch, NULL, NULL, TO_CHAR);
+			}
+			else {
+				sprintf(buf, "Your power level increases very slightly.", NULL);
+				act(AT_HIT, buf, ch, NULL, NULL, TO_CHAR);
+			}
 		    stat_train(ch, "str", 15);
 		  }
 		  if (trainmessage >= 65 && trainmessage < 99) {
@@ -2190,8 +2263,14 @@ violence_update(void)
 		    ch->mana -= URANGE(0, ch->mana * 0.005, ch->mana);
 		    pager_printf(ch, "&GYou perform a push-up in %d times gravity, your strength steadily building.\n\r", gravLevel);
 		    gain_exp(ch, xp_gain);
-		    sprintf(buf, "Your power level increases by %s points.", num_punct(xp_gain));
-		    act(AT_HIT, buf, ch, NULL, NULL, TO_CHAR);
+			if (xp_gain > 1) {
+				sprintf(buf, "Your power level increases by %s points.", num_punct(xp_gain));
+				act(AT_HIT, buf, ch, NULL, NULL, TO_CHAR);
+			}
+			else {
+				sprintf(buf, "Your power level increases very slightly.", NULL);
+				act(AT_HIT, buf, ch, NULL, NULL, TO_CHAR);
+			}
 		    stat_train(ch, "str", 15);
 		  }
 		  if (trainmessage >= 99) {
@@ -2201,7 +2280,7 @@ violence_update(void)
 		    pager_printf(ch, "&GPushing past your normal limits, you perform a series of one-armed push-ups!\n\r", gravLevel);
 		    act(AT_WHITE, "$n does a set of one-armed pushups in rapid-fire succession.", ch, NULL, NULL, TO_NOTVICT);
 		    gain_exp(ch, xp_gain);
-		    sprintf(buf, "Your power level suddenly increases by %s points.", num_punct(xp_gain));
+			sprintf(buf, "Your power level suddenly increases by %s points.", num_punct(xp_gain));
 		    act(AT_HIT, buf, ch, NULL, NULL, TO_CHAR);
 		    stat_train(ch, "str", 30);
 		  }
@@ -2212,6 +2291,9 @@ violence_update(void)
                     xREMOVE_BIT((ch)->affected_by, AFF_SHADOWBOXING);
                     send_to_char("You cannot gravity train in such a lax state.\n\r", ch);
                   }
+		  if(!ch->desc)
+			xREMOVE_BIT((ch)->affected_by, AFF_SHADOWBOXING);
+			
 		  char buf[MAX_STRING_LENGTH];
 		  int trainmessage = 0;
 		  long double xp_gain = 0;
@@ -2268,6 +2350,9 @@ violence_update(void)
                     xREMOVE_BIT((ch)->affected_by, AFF_ENDURING);
                     send_to_char("You cannot gravity train in such a lax state.\n\r", ch);
                   }
+		  if(!ch->desc)
+			xREMOVE_BIT((ch)->affected_by, AFF_ENDURING);
+			
 		  char buf[MAX_STRING_LENGTH];
 		  int trainmessage = 0;
 		  long double xp_gain = 0;
@@ -2323,6 +2408,9 @@ violence_update(void)
                     xREMOVE_BIT((ch)->affected_by, AFF_MEDITATION);
                     send_to_char("You cannot gravity train in such a lax state.\n\r", ch);
                   }
+		  if(!ch->desc)
+			xREMOVE_BIT((ch)->affected_by, AFF_MEDITATION);
+			
 		  char buf[MAX_STRING_LENGTH];
 		  int trainmessage = 0;
 		  long double xp_gain = 0;
@@ -4529,7 +4617,8 @@ damage(CHAR_DATA * ch, CHAR_DATA * victim, int dam, int dt)
 		gain_exp(ch, xp_gain);
 
 		/* fight training for strength */
-		stat_train(ch, "str", 0);
+		stat_train(ch, "str", 3);
+		ch->train += 1;
 	}
 	if (!IS_NPC(victim) && victim->level >= LEVEL_IMMORTAL
 	    && victim->hit < 1) {

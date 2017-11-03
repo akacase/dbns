@@ -2456,7 +2456,7 @@ nanny(DESCRIPTOR_DATA *d, char *argument)
 
 	ch->level = 1;
 	ch->exp = 5;
-	ch->pl = 5;
+	ch->pl = 50;
 	ch->heart_pl = 5;
 	ch->max_hit += race_table[ch->race]->hit;
 	ch->max_mana += race_table[ch->race]->mana;

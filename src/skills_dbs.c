@@ -4532,6 +4532,7 @@ do_energy_ball(CHAR_DATA * ch, char *argument)
 		global_retcode = damage(ch, victim, dam, TYPE_HIT);
         if (!IS_NPC(ch)) {
             stat_train(ch, "int", 5);
+			ch->train += 1;
         }
 	} else {
 		act(z, "You missed $N with your energy ball.", ch, NULL, victim,
@@ -4614,6 +4615,7 @@ do_kamehameha(CHAR_DATA * ch, char *argument)
 		global_retcode = damage(ch, victim, dam, TYPE_HIT);
         if (!IS_NPC(ch)) {
             stat_train(ch, "int", 8);
+			ch->train += 2;
         }
 	} else {
 		act(AT_LBLUE, "You missed $N with your kamehameha.", ch, NULL,
@@ -4693,6 +4695,7 @@ do_masenko(CHAR_DATA * ch, char *argument)
 		global_retcode = damage(ch, victim, dam, TYPE_HIT);
         if (!IS_NPC(ch)) {
             stat_train(ch, "int", 6);
+			ch->train += 2;
         }
 	} else {
 		act(AT_YELLOW, "You missed $N with your masenko blast.", ch,
@@ -4775,6 +4778,7 @@ do_sbc(CHAR_DATA * ch, char *argument)
 		global_retcode = damage(ch, victim, dam, TYPE_HIT);
         if (!IS_NPC(ch)) {
             stat_train(ch, "int", 8);
+			ch->train += 2;
         }
 	} else {
 		act(AT_YELLOW, "You missed $N with your special beam cannon.",
@@ -4856,6 +4860,7 @@ do_dd(CHAR_DATA * ch, char *argument)
 		global_retcode = damage(ch, victim, dam, TYPE_HIT);
         if (!IS_NPC(ch)) {
             stat_train(ch, "int", 6);
+			ch->train += 2;
         }
 	} else {
 		act(AT_YELLOW, "You missed $N with your destructo disk.", ch,
@@ -4934,6 +4939,7 @@ do_ff(CHAR_DATA * ch, char *argument)
 		global_retcode = damage(ch, victim, dam, TYPE_HIT);
         if (!IS_NPC(ch)) {
             stat_train(ch, "int", 12);
+			ch->train += 3;
         }
 	} else {
 		act(AT_YELLOW, "You missed $N with your final flash.", ch, NULL,
@@ -5395,6 +5401,7 @@ do_scatter_shot(CHAR_DATA * ch, char *arg)
 		learn_from_success(ch, gsn_scatter_shot);
         if (!IS_NPC(ch)) {
             stat_train(ch, "int", 6);
+			ch->train += 2;
         }
 		global_retcode =
 		    damage(ch, victim,
@@ -5570,6 +5577,7 @@ do_ddd(CHAR_DATA * ch, char *argument)
 			global_retcode = damage(ch, victim, dam, TYPE_HIT);
             if (!IS_NPC(ch)) {
                 stat_train(ch, "int", 8);
+				ch->train += 2;
             }
 		}
 	else {
@@ -5641,6 +5649,7 @@ do_death_ball(CHAR_DATA * ch, char *argument)
         global_retcode = damage(ch, victim, dam, TYPE_HIT);
         if (!IS_NPC(ch)) {
             stat_train(ch, "int", 12);
+			ch->train += 3;
         }
     }
     else {
@@ -5714,6 +5723,7 @@ do_eye_beam(CHAR_DATA * ch, char *argument)
 		global_retcode = damage(ch, victim, dam, TYPE_HIT);
         if (!IS_NPC(ch)) {
             stat_train(ch, "int", 6);
+			ch->train += 2;
         }
 	} else {
 		act(z, "You missed $N with your eye beam.", ch, NULL, victim,
@@ -5789,6 +5799,7 @@ do_finger_beam(CHAR_DATA * ch, char *argument)
 		global_retcode = damage(ch, victim, dam, TYPE_HIT);
         if (!IS_NPC(ch)) {
             stat_train(ch, "int", 8);
+			ch->train += 2;
         }
 	} else {
 		act(z, "You missed $N with your finger beam.", ch, NULL, victim,
@@ -5878,6 +5889,7 @@ do_tribeam(CHAR_DATA * ch, char *argument)
 		global_retcode = damage(ch, victim, dam, TYPE_HIT);
         if (!IS_NPC(ch)) {
             stat_train(ch, "int", 12);
+			ch->train += 3;
         }
 	} else {
 		act(AT_YELLOW, "You missed $N with your tri-beam attack.", ch,
@@ -5941,6 +5953,8 @@ do_solar_flare(CHAR_DATA * ch, char *argument)
 		    ch, NULL, NULL, TO_NOTVICT);
 
 		learn_from_success(ch, gsn_solar_flare);
+		if (!IS_NPC(ch))
+			ch->train += 2;
 		for (vch = ch->in_room->first_person; vch; vch = vch_next) {
 
 			vch_next = vch->next_in_room;
@@ -6825,6 +6839,7 @@ do_ki_heal(CHAR_DATA * ch, char *argument)
 			victim->hit = victim->max_hit;
 		}
 		learn_from_success(ch, gsn_ki_heal);
+		ch->train += 6;
 		ch->mana -= (healTo * skill_table[gsn_ki_heal]->min_mana);
 	} else {
 		act(AT_YELLOW,
@@ -7694,6 +7709,7 @@ do_destructive_wave(CHAR_DATA * ch, char *argument)
 		global_retcode = damage(ch, victim, dam, TYPE_HIT);
         if (!IS_NPC(ch)) {
             stat_train(ch, "int", 8);
+			ch->train += 2;
         }
 	} else {
 		act(z, "You missed $N with your destructive wave attack.", ch,
@@ -7776,6 +7792,7 @@ do_dodon_ray(CHAR_DATA * ch, char *argument)
 		global_retcode = damage(ch, victim, dam, TYPE_HIT);
         if (!IS_NPC(ch)) {
             stat_train(ch, "int", 8);
+			ch->train += 2;
         }
 	} else {
 		act(z, "You missed $N with your dodon ray attack.", ch, NULL,
@@ -7856,6 +7873,7 @@ do_spirit_ball(CHAR_DATA * ch, char *argument)
 		global_retcode = damage(ch, victim, dam, TYPE_HIT);
         if (!IS_NPC(ch)) {
             stat_train(ch, "int", 8);
+			ch->train += 2;
         }
 	} else {
 		act(AT_YELLOW, "You missed $N with your spirit ball attack.",
@@ -7937,6 +7955,7 @@ do_shockwave(CHAR_DATA * ch, char *argument)
 		global_retcode = damage(ch, victim, dam, TYPE_HIT);
         if (!IS_NPC(ch)) {
             stat_train(ch, "int", 8);
+			ch->train += 2;
         }
 	} else {
 		act(z, "You missed $N with your shockwave.", ch, NULL, victim,
@@ -8010,6 +8029,7 @@ do_psiblast(CHAR_DATA * ch, char *argument)
 		global_retcode = damage(ch, victim, dam, TYPE_HIT);
         if (!IS_NPC(ch)) {
             stat_train(ch, "int", 10);
+			ch->train += 2;
         }
 	} else {
 		act(z, "You missed $N with your psionic blast.", ch, NULL,
@@ -8090,6 +8110,7 @@ do_divinewrath(CHAR_DATA * ch, char *argument)
 		global_retcode = damage(ch, victim, dam, TYPE_HIT);
         if (!IS_NPC(ch)) {
             stat_train(ch, "int", 12);
+			ch->train += 3;
         }
 	} else {
 		act(AT_RED, "You missed $N with your divine wrath.", ch, NULL,
@@ -8170,6 +8191,7 @@ do_big_bang(CHAR_DATA * ch, char *argument)
 		global_retcode = damage(ch, victim, dam, TYPE_HIT);
         if (!IS_NPC(ch)) {
             stat_train(ch, "int", 10);
+			ch->train += 2;
         }
 	} else {
 		act(AT_BLUE, "You missed $N with your big bang attack.", ch,
@@ -8251,6 +8273,7 @@ do_gallic_gun(CHAR_DATA * ch, char *argument)
 		global_retcode = damage(ch, victim, dam, TYPE_HIT);
         if (!IS_NPC(ch)) {
             stat_train(ch, "int", 8);
+			ch->train += 2;
         }
 	} else {
 		act(AT_PURPLE, "You missed $N with your gallic gun attack.", ch,
@@ -8332,6 +8355,7 @@ do_burning_attack(CHAR_DATA * ch, char *argument)
 		global_retcode = damage(ch, victim, dam, TYPE_HIT);
         if (!IS_NPC(ch)) {
             stat_train(ch, "int", 8);
+			ch->train += 2;
         }
 	} else {
 		act(AT_YELLOW, "You missed $N with your burning attack.", ch,
@@ -8413,6 +8437,7 @@ do_finishing_buster(CHAR_DATA * ch, char *argument)
 		global_retcode = damage(ch, victim, dam, TYPE_HIT);
         if (!IS_NPC(ch)) {
             stat_train(ch, "int", 12);
+			ch->train += 2;
         }
 	} else {
 		act(AT_BLUE, "You missed $N with your finishing buster attack.",
@@ -8494,6 +8519,7 @@ do_heaven_splitter_cannon(CHAR_DATA * ch, char *argument)
 		global_retcode = damage(ch, victim, dam, TYPE_HIT);
         if (!IS_NPC(ch)) {
             stat_train(ch, "int", 12);
+			ch->train += 3;
         }
 	} else {
 		act(AT_YELLOW,
@@ -8713,6 +8739,7 @@ do_makosen(CHAR_DATA * ch, char *argument)
 		global_retcode = damage(ch, victim, dam, TYPE_HIT);
         if (!IS_NPC(ch)) {
             stat_train(ch, "int", 8);
+			ch->train += 2;
         }
 	} else {
 		act(AT_YELLOW, "You missed $N with your makosen attack.", ch,
@@ -8801,6 +8828,7 @@ do_trap_ball(CHAR_DATA * ch, char *argument)
 		global_retcode = damage(ch, victim, dam, TYPE_HIT);
         if (!IS_NPC(ch)) {
             stat_train(ch, "int", 10);
+			ch->train += 2;
         }
 	} else {
 		act(AT_YELLOW, "You missed $N with your trap ball attack.", ch,
