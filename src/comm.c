@@ -3324,7 +3324,7 @@ default_fprompt(CHAR_DATA * ch)
 				if (IS_NPC(ch) || IS_IMMORTAL(ch))
 					strcat(buf, " %i%R");
 			}
-			strcat(buf, "\n\r<Enemy(&R%y&w) Focus(&C%f&w) Armor(&c%z&w)> ");
+			strcat(buf, "\n\r<Enemy(&R%y&w) Focus(&C%f&w)> ");
 			break;
 		case 1:
 			if (is_android(ch)) {
@@ -3376,7 +3376,7 @@ default_fprompt(CHAR_DATA * ch)
 				if (IS_NPC(ch) || IS_IMMORTAL(ch))
 					strcat(buf, " %i%R");
 			}
-			strcat(buf, "\n\r<Enemy(&R%y&w) Focus(&C%f&w) Armor(&c%z&w)> ");
+			strcat(buf, "\n\r<Enemy(&R%y&w) Focus(&C%f&w)> ");
 			break;
 		case 3:
 			if (is_android(ch)) {
@@ -3429,7 +3429,7 @@ default_fprompt(CHAR_DATA * ch)
 			if (IS_NPC(ch) || IS_IMMORTAL(ch))
 				strcat(buf, " %i%R");
 		}
-		strcat(buf, "\n\r<Enemy(&R%y&w) Focus(&C%f&w) Armor(&c%z&w)> ");
+		strcat(buf, "\n\r<Enemy(&R%y&w) Focus(&C%f&w)> ");
 	}
 
 	return (buf);

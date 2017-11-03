@@ -222,32 +222,32 @@ do_score(CHAR_DATA * ch, char *argument)
 
 	send_to_pager("&c----------------------------------------------------------------------------&C\n\r", ch);
 
-	pager_printf(ch, "RACE : &W%-16.16s&C    SEX: &W%-7s&C     Played: &w%d hours&C\n\r",
+	pager_printf(ch, "RACE : &W%-16.16s&C    SEX: &W%-7s&C Played: &w%d hours&C\n\r",
 	    capitalize(get_race(ch)),
 	    ch->sex == SEX_MALE ? "Male" :
 	    ch->sex == SEX_FEMALE ? "Female" : "Neutral",
 	    (get_age(ch) - 4) * 2);
-	pager_printf(ch, "YEARS: &W%-6d&C                              Created: &w%s\r&C",
+	pager_printf(ch, "YEARS: &W%-6d&C                           Created: &w%s\r&C",
 	    get_newage(ch), ctime(&ch->pcdata->creation_date));
 
 	if (get_curr_str(ch) >= 100 || ch->perm_str >= 100)
-		pager_printf(ch, "STR  : &W%-3d&C(&w%3d.%2.2d&C)  DAM+: &R%-2d&C               Log in: &w%s\r&C",
+		pager_printf(ch, "STR  : &W%-3d&C(&w%3d.%2.2d&C)  DAM+: &R%-2d&C        Log in: &w%s\r&C",
 		    get_curr_str(ch), ch->perm_str, ch->pcdata->tStr, get_damroll(ch), ctime(&ch->logon));
 	else
-		pager_printf(ch, "STR  : &W%-2d&C(&w%2d.%2.2d&C)    DAM+: &R%-2d&C               Log in: &w%s\r&C",
+		pager_printf(ch, "STR  : &W%-2d&C(&w%2d.%2.2d&C)    DAM+: &R%-2d&C        Log in: &w%s\r&C",
 		    get_curr_str(ch), ch->perm_str, ch->pcdata->tStr, get_damroll(ch), ctime(&ch->logon));
 	if (get_curr_dex(ch) >= 100 || ch->perm_dex >= 100)
-		pager_printf(ch, "SPD  : &W%-3d&C(&w%3d.%2.2d&C)  pDEF: &R%-2d&C           Last Saved: &w%s\r&C",
-		    get_curr_dex(ch), ch->perm_dex, ch->pcdata->tSpd, (get_strDef(ch) + get_conDef(ch)), ch->save_time ? ctime(&ch->save_time) : "no save this session\n");
+		pager_printf(ch, "SPD  : &W%-3d&C(&w%3d.%2.2d&C)                   Last Saved: &w%s\r&C",
+		    get_curr_dex(ch), ch->perm_dex, ch->pcdata->tSpd, ch->save_time ? ctime(&ch->save_time) : "no save this session\n");
 	else
-		pager_printf(ch, "SPD  : &W%-2d&C(&w%2d.%2.2d&C)    pDEF: &R%-2d&C           Last Saved: &w%s\r&C",
-		    get_curr_dex(ch), ch->perm_dex, ch->pcdata->tSpd, (get_strDef(ch) + get_conDef(ch)), ch->save_time ? ctime(&ch->save_time) : "no save this session\n");
+		pager_printf(ch, "SPD  : &W%-2d&C(&w%2d.%2.2d&C)                     Last Saved: &w%s\r&C",
+		    get_curr_dex(ch), ch->perm_dex, ch->pcdata->tSpd, ch->save_time ? ctime(&ch->save_time) : "no save this session\n");
 	if (get_curr_int(ch) >= 100 || ch->perm_int >= 100)
-		pager_printf(ch, "INT  : &W%-3d&C(&w%3d.%2.2d&C)  eDEF: &R%-2d&C             CurrTime: &w%s\r&C",
-		    get_curr_int(ch), ch->perm_int, ch->pcdata->tInt, get_conDef(ch), ctime(&current_time));
+		pager_printf(ch, "INT  : &W%-3d&C(&w%3d.%2.2d&C)                   CurrTime: &w%s\r&C",
+		    get_curr_int(ch), ch->perm_int, ch->pcdata->tInt, ctime(&current_time));
 	else
-		pager_printf(ch, "INT  : &W%-2d&C(&w%2d.%2.2d&C)    eDEF: &R%-2d&C             CurrTime: &w%s\r&C",
-		    get_curr_int(ch), ch->perm_int, ch->pcdata->tInt, get_conDef(ch), ctime(&current_time));
+		pager_printf(ch, "INT  : &W%-2d&C(&w%2d.%2.2d&C)                     CurrTime: &w%s\r&C",
+		    get_curr_int(ch), ch->perm_int, ch->pcdata->tInt, ctime(&current_time));
 
 	if (get_armor(ch) < 0)
 		sprintf(buf, "&Wthe rags of a beggar&C");
@@ -267,11 +267,11 @@ do_score(CHAR_DATA * ch, char *argument)
 		sprintf(buf, "&WERROR: Please report&C");
 
 	if (get_curr_con(ch) >= 100 || ch->perm_con >= 100)
-		pager_printf(ch, "CON  : &W%-3d&C(&w%3d.%2.2d&C)  Armor: &W%d, %s\n\r",
-		    get_curr_con(ch), ch->perm_con, ch->pcdata->tCon, get_armor(ch), buf);
+		pager_printf(ch, "CON  : &W%-3d&C(&w%3d.%2.2d&C)  DAM-: &W%d%\n\r",
+			     get_curr_con(ch), ch->perm_con, ch->pcdata->tCon, (get_armor(ch) / 100));
 	else
-		pager_printf(ch, "CON  : &W%-2d&C(&w%2d.%2.2d&C)   Armor: &W%d, %s\n\r",
-		    get_curr_con(ch), ch->perm_con, ch->pcdata->tCon, get_armor(ch), buf);
+		pager_printf(ch, "CON  : &W%-2d&C(&w%2d.%2.2d&C)   DAM-: &W%d%\n\r",
+			     get_curr_con(ch), ch->perm_con, ch->pcdata->tCon, (get_armor(ch) / 100));
 
 	if (ch->alignment > 900)
 		sprintf(buf, "&Ydevout");
@@ -297,7 +297,7 @@ do_score(CHAR_DATA * ch, char *argument)
 	 * &W%-12s&C               Items: &W%3d&C  (&wmax %3d&C)\n\r", buf,
 	 * ch->carry_number, can_carry_n(ch)); else
 	 */
-	pager_printf(ch, "                      Align: &W%+4.4d, %-12s&C      Items: &W%3d&C  (&wmax %3d&C)\n\r",
+	pager_printf(ch, "                       Align: &W%+4.4d, %-12s&C     Items: &W%3d&C  (&wmax %3d&C)\n\r",
 	    ch->alignment, buf, ch->carry_number, can_carry_n(ch));
 
 	switch (ch->position) {
@@ -345,7 +345,7 @@ do_score(CHAR_DATA * ch, char *argument)
 		sprintf(buf, "sitting");
 		break;
 	}
-	pager_printf(ch, "Rpp: %3d/%-3d          Pos'n: &W%s&C               Weight: &W%3d&C  (&wmax %3d&C)\n\r",
+	pager_printf(ch, "Rpp: %3d/%-3d           Pos'n: &W%s&C              Weight: &W%3d&C  (&wmax %3d&C)\n\r",
 	    ch->pcdata->quest_curr, ch->pcdata->quest_accum, buf, ch->carry_weight, can_carry_w(ch));
 
 	switch (ch->style) {
@@ -366,7 +366,7 @@ do_score(CHAR_DATA * ch, char *argument)
 		break;
 	}
 
-	pager_printf(ch, "                      Wimpy: &R%-5d&C                  Style: &W%-10.10s&C\n\r",
+	pager_printf(ch, "                       Wimpy: &R%-5d&C                 Style: &W%-10.10s&C\n\r",
 	    ch->wimpy, buf);
 
 	pager_printf(ch, "&b-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=&C\n\r");
@@ -432,7 +432,8 @@ do_score(CHAR_DATA * ch, char *argument)
 		} else {
 			pager_printf(ch, "CURR POWERLEVEL: %-16s\n\r", num_punct_ld(ch->pl));
 		}
-		pager_printf_color(ch, "&GFORM MASTERY: &Y%-3d\n\r", form_mastery);
+		pager_printf_color(ch, "&GKI CONTROL: &Y%-3d\n\r", ch->train);
+		pager_printf_color(ch, "&GFORM MASTERY LEVEL: &Y%-3d\n\r", form_mastery);
 	}
 	long double pltrack = 0;
 
@@ -670,7 +671,7 @@ do_score(CHAR_DATA * ch, char *argument)
 					send_to_pager("\n\r", ch);
 			}
 		}
-		send_to_pager("&c----------------------------------------------------------------------------\n\r", ch);
+		send_to_pager("\n\r&c----------------------------------------------------------------------------\n\r", ch);
 	}
 	send_to_pager("&w&D\n\r", ch);
 	sysdata.outBytesFlag = LOGBOUTNORM;
