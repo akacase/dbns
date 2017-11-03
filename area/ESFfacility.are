@@ -11,10 +11,10 @@ $
 
 #PLANET 3
 
-#RESETMSG &cThe lights lining the halls flicker and dim under the exertions of some massive power.&d~
+#RESETMSG &cA tiny fracture in spacetime dances before your eyes.&d~
 
 #FLAGS
-2 1
+2 5
 
 #CLIMATE 2 2 2
 
@@ -107,9 +107,14 @@ A miniature spherical android hovers above the computer terminal here.
 4 4 0 0 1 1 0
 0 0 0 0 0 0 0 0
 > greet_prog 100~
+if wearingvnum($n) 305011
+say Oh, it's -you-. Doctor Emalia has permitted access to her lab on &RB2&C.
+say You may still ask for &Rhelp&C for other information.&d
+else
 say Oh, it's -you- again.
 mpecho &YA much smaller FRED groans.&d
 say I don't suppose you need my &Rhelp&C again.
+endif
 ~
 > speech_prog help~
 mer $n &YWithout saying a word, Mini FRED presents $n with a holographic display of the building's layout.&d
@@ -122,6 +127,7 @@ mea $n &Y2: Intermediate Facility
 mea $n &Y3: Advanced Facility & Armory
 mea $n &Y4: Basic Training & Healing Tanks
 mea $n &Y5: Access Stairwell
+mea $n &YB1: Anomaly Research Facility
 mea $n &Y----------------------------------------------------------
 ~
 > speech_prog 1~
@@ -154,6 +160,11 @@ mea $n &YThe turbolift whirs into motion, whisking you away to your chosen floor
 mer $n &YThe turbolift whirs into motion, dropping $n off at their chosen floor.&d
 mptransfer $n 303911
 ~
+> speech_prog 'B1'~
+mea $n &YThe turbolift whirs into motion, whisking you away to your chosen floor.&d
+mer $n &YThe turbolift whirs into motion, dropping $n off at their chosen floor.&d
+mptransfer $n 305002
+~
 |
 #303904
 weak ESF trainee~
@@ -163,7 +174,7 @@ A weak ESF trainee is exercising here, preparing for another round of combat.
 ~
 3 0 0 C
 300
-1 0 100 1d20+0 2d5+0
+1 0 100 1d20+200 2d5+0
 -1 5000
 112 112 1
 100 10 20 10 20
@@ -177,6 +188,15 @@ mpmload 303904
 > fight_prog 5~
 'energy ball'
 ~
+> act_prog ready~
+if isfight($i)
+slap $n
+mpechoat $n You can't do that while the mob is in combat.
+else
+mprestore self 30000
+nod $n
+endif
+~
 |
 #303905
 ESF trainee~
@@ -186,7 +206,7 @@ An ESF trainee is pumping iron here.
 ~
 3 0 0 C
 350
-1 0 100 1d20+0 2d5+0
+1 0 100 1d20+250 2d5+0
 -1 15000
 112 112 1
 140 15 40 15 0
@@ -200,6 +220,15 @@ mpmload 303905
 > fight_prog 5~
 'energy ball'
 ~
+> act_prog ready~
+if isfight($i)
+slap $n
+mpechoat $n You can't do that while the mob is in combat.
+else
+mprestore self 30000
+nod $n
+endif
+~
 |
 #303906
 strong ESF trainee~
@@ -209,12 +238,12 @@ A stronger ESF trainee shadowboxes here in the arena.
 ~
 3 0 0 C
 400
-1 0 100 1d20+0 2d5+0
+1 0 100 1d20+300 2d5+0
 -1 50000
 112 112 1
 160 20 60 20 0
 0 0 0 0 0
-1 1 0 0 1 1 1
+1 1 0 0 1 1 2
 0 0 0 0 0 0 0 0
 > death_prog 100~
 mpecho &YThey collapse to the floor but quickly scramble to their feet, prepared for another round.&d
@@ -222,6 +251,15 @@ mpmload 303906
 ~
 > fight_prog 5~
 'energy ball'
+~
+> act_prog ready~
+if isfight($i)
+slap $n
+mpechoat $n You can't do that while the mob is in combat.
+else
+mprestore self 30000
+nod $n
+endif
 ~
 |
 #303907
@@ -232,12 +270,12 @@ An impressive ESF trainee sits here in deep meditation.
 ~
 3 0 0 C
 450
-1 0 100 1d20+0 2d5+0
+1 0 100 1d20+350 2d5+0
 -1 150000
 112 112 1
 180 25 80 25 0
 0 0 0 0 0
-1 1 0 0 1 1 1
+1 1 0 0 1 1 3
 0 0 0 0 0 0 0 0
 > death_prog 100~
 mpecho &YThey collapse to the floor but quickly scramble to their feet, prepared for another round.&d
@@ -245,6 +283,15 @@ mpmload 303907
 ~
 > fight_prog 5~
 kame
+~
+> act_prog ready~
+if isfight($i)
+slap $n
+mpechoat $n You can't do that while the mob is in combat.
+else
+mprestore self 30000
+nod $n
+endif
 ~
 |
 #303908
@@ -255,12 +302,12 @@ An advanced ESF combatant stands here, ever at the ready for a new challenger.
 ~
 3 0 0 C
 600
-1 0 100 1d20+0 2d5+0
+1 0 100 1d20+400 2d5+0
 -1 500000
 112 112 1
 500 30 100 30 0
 0 0 0 0 0
-1 1 0 0 1 1 2
+1 1 0 0 1 1 3
 0 0 0 0 0 0 0 0
 > death_prog 100~
 mpecho &YThey collapse to the floor but quickly scramble to their feet, prepared for another round.&d
@@ -268,6 +315,15 @@ mpmload 303908
 ~
 > fight_prog 5~
 kame
+~
+> act_prog ready~
+if isfight($i)
+slap $n
+mpechoat $n You can't do that while the mob is in combat.
+else
+mprestore self 30000
+nod $n
+endif
 ~
 |
 #303909
@@ -278,12 +334,12 @@ An elite member of the ESF stands here with arms crossed, a promising grin sprea
 ~
 16777219 0 0 C
 800
-1 0 100 1d20+0 2d5+0
+1 0 100 1d20+1000 2d5+0
 -1 1500000
 112 112 1
 600 35 120 500 0
 0 0 0 0 0
-1 1 0 0 1 1 2
+1 1 0 0 1 1 3
 0 0 0 0 0 0 0 0
 > death_prog 100~
 mpecho &YThey collapse to the floor but quickly scramble to their feet, prepared for another round.&d
@@ -291,6 +347,15 @@ mpmload 303909
 ~
 > fight_prog 5~
 kame
+~
+> act_prog ready~
+if isfight($i)
+slap $n
+mpechoat $n You can't do that while the mob is in combat.
+else
+mprestore self 30000
+nod $n
+endif
 ~
 |
 #303910
@@ -435,12 +500,12 @@ Particles of light have solidified here to create a translucent, holographic war
 ~
 3 0 0 C
 1200
-1 0 100 1d20+0 2d5+0
+1 0 100 1d20+2000 2d5+0
 -1 50000000
 112 112 0
 600 60 150 600 0
 0 0 0 0 0
-4 4 0 0 1 1 3
+0 0 0 0 1 1 3
 0 0 0 0 0 0 0 0
 > death_prog 100~
 mpecho &YThe hologram flickers and disappears, but its program quickly reactivates.&d
@@ -448,6 +513,15 @@ mpmload 303916
 ~
 > fight_prog 5~
 destructive
+~
+> act_prog ready~
+if isfight($i)
+slap $n
+mpechoat $n You can't do that while the mob is in combat.
+else
+mprestore self 30000
+nod $n
+endif
 ~
 |
 #303917
@@ -457,11 +531,11 @@ A fully solidified hologram stands here with a vaguely human facade.
 ~
 ~
 3 0 0 C
-1400
-1 0 100 1d20+0 2d5+0
+1500
+1 0 100 1d20+3000 2d5+0
 -1 150000000
 112 112 0
-800 100 200 700 0
+800 100 500 900 0
 0 0 0 0 0
 4 4 0 0 1 1 3
 0 0 0 0 0 0 0 0
@@ -472,6 +546,15 @@ mpmload 303917
 > fight_prog 5~
 destructive
 ~
+> act_prog ready~
+if isfight($i)
+slap $n
+mpechoat $n You can't do that while the mob is in combat.
+else
+mprestore self 30000
+nod $n
+endif
+~
 |
 #303918
 human hologram~
@@ -480,13 +563,13 @@ A fully-formed human hologram stands here, prepared to execute its programming.
 ~
 ~
 3 0 0 C
-1600
-1 0 100 1d20+0 2d5+0
+1800
+1 0 100 1d20+4000 2d5+0
 -1 500000000
 112 112 0
-1000 100 250 1000 0
+1000 100 250 1200 0
 0 0 0 0 0
-1 1 0 0 1 1 3
+1 1 0 0 1 1 4
 0 0 0 0 0 0 0 0
 > death_prog 100~
 mpecho &YThe hologram flickers and disappears, but its program quickly reactivates.&d
@@ -494,6 +577,15 @@ mpmload 303918
 ~
 > fight_prog 5~
 gallic
+~
+> act_prog ready~
+if isfight($i)
+slap $n
+mpechoat $n You can't do that while the mob is in combat.
+else
+mprestore self 30000
+nod $n
+endif
 ~
 |
 #303919
@@ -504,12 +596,12 @@ A Namekian Hologram flashes repeatedly in and out of existence here.
 ~
 3 0 0 C
 3500
-1 0 100 1d20+0 2d5+0
+1 0 100 1d20+8000 2d5+0
 -1 5000000000
 112 112 0
-2000 100 1000 2000 0
+1500 100 1000 2000 0
 0 0 0 0 0
-3 3 0 0 1 1 3
+3 3 0 0 1 1 4
 0 0 0 0 0 0 0 0
 > death_prog 100~
 mpecho &YThe hologram flickers and disappears, but its program quickly reactivates.&d
@@ -517,6 +609,15 @@ mpmload 303919
 ~
 > fight_prog 5~
 'special beam cannon'
+~
+> act_prog ready~
+if isfight($i)
+slap $n
+mpechoat $n You can't do that while the mob is in combat.
+else
+mprestore self 30000
+nod $n
+endif
 ~
 |
 #303920
@@ -526,11 +627,11 @@ An Icerian hologram crouches low to the floor here, its prehensile tail snaking 
 ~
 ~
 3 0 0 C
-1
-1 0 100 1d20+0 2d5+0
--1 50000000000
+5000
+1 0 100 1d20+10000 2d5+0
+-1 20000000000
 112 112 0
-100 100 100 100 0
+2000 100 1000 4000 0
 0 0 0 0 0
 5 5 0 0 1 1 4
 0 0 0 0 0 0 0 0
@@ -541,6 +642,15 @@ mpmload 303920
 > fight_prog 5~
 'trap ball'
 ~
+> act_prog ready~
+if isfight($i)
+slap $n
+mpechoat $n You can't do that while the mob is in combat.
+else
+mprestore self 30000
+nod $n
+endif
+~
 |
 #303921
 saiyan hologram~
@@ -549,11 +659,11 @@ A mighty saiyan hologram stands here, prepared for its final battle.
 ~
 ~
 3 0 0 C
-1
-1 0 100 1d20+0 2d5+0
--1 500000000000
+6500
+1 0 100 1d20+12000 2d5+0
+-1 100000000000
 112 112 0
-100 100 100 100 0
+2500 1000 1500 5000 0
 0 0 0 0 0
 0 0 0 0 1 1 4
 0 0 0 0 0 0 0 0
@@ -563,6 +673,15 @@ mpmload 303921
 ~
 > fight_prog 5~
 'kamehameha'
+~
+> act_prog ready~
+if isfight($i)
+slap $n
+mpechoat $n You can't do that while the mob is in combat.
+else
+mprestore self 30000
+nod $n
+endif
 ~
 |
 #303922
@@ -586,6 +705,15 @@ mpmload 303922
 ~
 > fight_prog 5~
 'malice ray'
+~
+> act_prog ready~
+if isfight($i)
+slap $n
+mpechoat $n You can't do that while the mob is in combat.
+else
+mprestore self 30000
+nod $n
+endif
 ~
 |
 #303923
@@ -1387,6 +1515,1034 @@ mprestore $i 9000
 mpecho &Y$I grins wickedly, completely unaffected by your attacks.&D
 ~
 |
+#305010
+red ribbon grunt~
+A Red Ribbon Grunt~
+A Red Ribbon grunt eyes you suspiciously.
+~
+~
+3 0 0 C
+17
+1 0 100 1d20+150 2d5+0
+-1 50
+112 112 1
+10 10 10 10 0
+0 0 0 0 0
+1 1 0 0 1 1 1
+0 0 0 0 0 0 0 0
+> act_prog ready~
+if isfight($i)
+slap $n
+mpechoat $n You can't do that while the mob is in combat.
+else
+mprestore self 30000
+nod $n
+endif
+~
+> greet_prog 100~
+if isfight($i)
+salute
+else
+mprestore self 30000
+endif
+~
+|
+#305011
+red ribbon gate officer~
+The Red Ribbon Gate Officer~
+A Red Ribbon officer stands here at attention.
+~
+~
+3 0 0 C
+20
+1 0 100 1d20+200 2d5+0
+-1 60
+112 112 2
+10 10 10 10 0
+0 0 0 0 0
+1 1 0 0 1 1 2
+0 0 0 0 0 0 0 0
+> act_prog ready~
+if isfight($i)
+slap $n
+mpechoat $n You can't do that while the mob is in combat.
+else
+mprestore self 30000
+nod $n
+endif
+~
+|
+#305012
+red ribbon patrol~
+A Red Ribbon Patrol Officer~
+A Red Ribbon patrol officer marches his route.
+~
+~
+33 0 0 C
+25
+1 0 100 1d20+200 2d5+0
+-1 75
+112 112 1
+10 10 10 10 0
+0 0 0 0 0
+1 1 0 0 1 1 1
+0 0 0 0 0 0 0 0
+> act_prog ready~
+if isfight($i)
+slap $n
+mpechoat $n You can't do that while the mob is in combat.
+else
+mprestore self 30000
+nod $n
+endif
+~
+> greet_prog 100~
+if isfight($i)
+salute
+else
+mprestore self 30000
+endif
+~
+|
+#305013
+red ribbon mass android~
+A Red Ribbon Android~
+A mass-produced Red Ribbon android shuffles around without purpose.
+~
+~
+35 0 0 C
+27
+1 0 100 1d20+225 2d5+0
+-1 100
+112 112 0
+20 20 20 20 0
+0 0 0 0 0
+4 4 0 0 1 1 1
+0 0 0 0 0 0 0 0
+> act_prog ready~
+if isfight($i)
+slap $n
+mpechoat $n You can't do that while the mob is in combat.
+else
+mprestore self 30000
+nod $n
+endif
+~
+> greet_prog 100~
+if isfight($i)
+salute
+else
+mprestore self 300
+endif
+~
+|
+#305014
+red ribbon bodyguard~
+A Red Ribbon Bodyguard~
+One of Commander Red's personal bodyguards cracks his knuckles.
+~
+~
+35 0 0 C
+30
+1 0 100 1d20+250 2d5+0
+-1 100
+112 112 1
+20 20 20 20 0
+0 0 0 0 0
+1 1 0 0 1 1 1
+0 0 0 0 0 0 0 0
+> act_prog ready~
+if isfight($i)
+slap $n
+mpechoat $n You can't do that while the mob is in combat.
+else
+mprestore self 30000
+nod $n
+endif
+~
+> greet_prog 100~
+if isfight($i)
+salute
+else
+mprestore self 30000
+endif
+~
+|
+#305015
+commander red~
+Commander Red~
+Commander Red huddles in the corner.
+~
+~
+3 0 0 C
+17
+1 0 100 1d20+100 2d5+0
+-1 100
+112 112 1
+10 10 10 10 0
+0 0 0 0 0
+1 1 0 0 1 1 0
+0 0 0 0 0 0 0 0
+> act_prog ready~
+if isfight($i)
+slap $n
+mpechoat $n You can't do that while the mob is in combat.
+else
+mprestore self 30000
+nod $n
+endif
+~
+> greet_prog 100~
+if isfight($i)
+salute
+else
+mprestore self 30000
+endif
+~
+|
+#305016
+staff officer black~
+Staff Officer Black~
+Staff Officer Black stands here, ready to defend Commander Red.
+~
+~
+3 0 0 C
+50
+1 0 100 1d20+600 2d5+0
+-1 150
+112 112 1
+50 50 20 50 0
+0 0 0 0 0
+1 1 0 0 1 1 2
+0 0 0 0 0 0 0 0
+> act_prog ready~
+if isfight($i)
+slap $n
+mpechoat $n You can't do that while the mob is in combat.
+else
+mprestore self 30000
+nod $n
+endif
+~
+> greet_prog 100~
+if isfight($i)
+salute
+else
+mprestore self 30000
+endif
+~
+|
+#305017
+red ribbon autoturret~
+A Red Ribbon Auto-Turret~
+A Red Ribbon Autoturret aims its sights at you!
+~
+~
+35 0 0 C
+30
+1 0 100 1d20+300 2d5+0
+-1 125
+112 112 0
+20 20 20 20 0
+0 0 0 0 0
+4 4 0 0 1 1 1
+0 0 0 0 0 0 0 0
+> greet_prog 100~
+if isfight($i)
+salute
+else
+mprestore self 30000
+endif
+~
+> act_prog ready~
+if isfight($i)
+slap $n
+mpechoat $n You can't do that while the mob is in combat.
+else
+mprestore self 30000
+nod $n
+endif
+~
+|
+#305018
+colonel violet~
+Colonel Violet~
+Colonel Violet polishes a stockpile of dubious grenades.
+~
+~
+3 0 0 C
+50
+1 0 100 1d20+600 2d5+0
+-1 150
+112 112 2
+50 50 20 50 0
+0 0 0 0 0
+1 1 0 0 1 1 2
+0 0 0 0 0 0 0 0
+> greet_prog 100~
+if isfight($i)
+salute
+else
+mprestore self 30000
+endif
+~
+> act_prog ready~
+if isfight($i)
+slap $n
+mpechoat $n You can't do that while the mob is in combat.
+else
+mprestore self 30000
+nod $n
+endif
+~
+|
+#305019
+General Blue~
+General Blue~
+General Blue stands here haughtily, ordering executions for mundane disruptions.
+~
+~
+3 0 0 C
+60
+1 0 100 1d20+700 2d5+0
+-1 180
+112 112 1
+60 60 25 60 0
+0 0 0 0 0
+1 1 0 0 1 1 2
+0 0 0 0 0 0 0 0
+> act_prog ready~
+if isfight($i)
+slap $n
+mpechoat $n You can't do that while the mob is in combat.
+else
+mprestore self 30000
+nod $n
+endif
+~
+> greet_prog 100~
+if isfight($i)
+salute
+else
+mprestore self 30000
+endif
+~
+|
+#305020
+red ribbon engineer~
+A Red Ribbon Engineer~
+A Red Ribbon engineer is sweating bullets here.
+~
+~
+3 0 0 C
+30
+1 0 100 1d20+250 2d5+0
+-1 100
+112 112 1
+20 20 20 20 0
+0 0 0 0 0
+1 1 0 0 1 1 1
+0 0 0 0 0 0 0 0
+> act_prog ready~
+if isfight($i)
+slap $n
+mpechoat $n You can't do that while the mob is in combat.
+else
+mprestore self 30000
+nod $n
+endif
+~
+> greet_prog 100~
+if isfight($i)
+salute
+else
+mprestore self 30000
+endif
+~
+|
+#305021
+colonel silver~
+Colonel Silver~
+Colonel Silver sits nonchalantly on a discarded plane prop.
+~
+~
+3 0 0 C
+75
+1 0 100 1d20+850 2d5+0
+-1 200
+112 112 1
+80 75 20 75 0
+0 0 0 0 0
+1 1 0 0 1 1 2
+0 0 0 0 0 0 0 0
+> act_prog ready~
+if isfight($i)
+slap $n
+mpechoat $n You can't do that while the mob is in combat.
+else
+mprestore self 30000
+nod $n
+endif
+~
+> greet_prog 100~
+if isfight($i)
+salute
+else
+mprestore self 30000
+endif
+~
+|
+#305022
+red ribbon augmented soldier~
+An Augmented Red Ribbon Soldier~
+An augmented Red Ribbon soldier wanders listlessly, awaiting a target.
+~
+~
+33 0 0 C
+35
+1 0 100 1d20+300 2d5+0
+-1 125
+112 112 0
+20 20 20 20 0
+0 0 0 0 0
+4 4 0 0 1 1 1
+0 0 0 0 0 0 0 0
+> act_prog ready~
+if isfight($i)
+slap $n
+mpechoat $n You can't do that while the mob is in combat.
+else
+mprestore self 30000
+nod $n
+endif
+~
+> greet_prog 100~
+if isfight($i)
+salute
+else
+mprestore self 30000
+endif
+~
+|
+#305023
+esf researcher doctor emalia~
+Doctor Emalia~
+Doctor Emalia stands here in the mist, fiddling with strange technology.
+~
+~
+67108867 0 0 C
+0
+1 0 100 1d20+0 2d5+0
+-1 5
+112 112 2
+10 10 10 10 0
+0 0 0 0 0
+1 1 0 0 1 1 0
+0 0 0 0 0 0 0 0
+> greet_prog 100~
+if wearingvnum($n) 305010
+say Oh, $n! Glad to see my communicator hasn't horribly torn apart your very existence yet.
+smirk
+say I don't have anything new for you quite yet, but you could always &Ragree&C to mop up a few more anomalies at Red Ribbon HQ.
+else
+if wearingvnum($n) 305011
+mea $n &cDoctor Emalia's body flickers in and out of existence, reacting strangely with your Rift Communicator.&d
+mea $n &cThis appears to only be a vision of Doctor Emalia.&d
+mumble
+say I can't believe we've run out of volunteers alrea--
+gasp
+say Oh, $n! I didn't notice you there.
+peer $n
+say You're one of those wanderers through time that washed up here, aren't you? Perhaps I could ask for your &Rhelp&C?
+endif
+endif
+~
+> speech_prog 'help'~
+clap
+say I knew you'd be gullib... I mean, enterprising enough, to grasp such a wonderful opportunity!
+nod
+say The flow of time in our universe is almost entirely fractured. We don't know who or what exactly caused it, but... you can imagine, this is not ideal.
+say I can't repair the damage already caused, but I can at least stabilize it, perhaps enough to acquire some assistance from outside the fracture.
+point $n
+say What I need from you, is for you to head inside and thin the herd of &Ranomalies&C.
+~
+> speech_prog 'anomalies'~
+nod $n
+say Anomalies are... well, technically what you are. No harm, no foul if you wander in there and end up dying, hmm?
+smirk
+say Anomalies are people or things that wound up where they shouldn't be. They're spilling out from the fracture.
+sigh
+say Things from the past, the future... Events that have already transpired are playing over and over, multiplying in loops!
+say It's the least you can do to help clean it up, if you're going to freeload off our brilliant minds. Don't you &Ragree&C?
+~
+> speech_prog 'agree'~
+clap
+say Excellent! I knew you'd be a wonderful patsy. Toodle-oo!
+mea $n &YDoctor Emalia presses a series of buttons on her maintainence pad as the mist from the archway engulfs you!&d
+mer $n &Y$n is engulfed in the mist from the archway!&d
+mptransfer $n 305006
+mpat 305006 mpforce $n look
+mpat 305006 mea $n &cDoctor Emalia smiles impishly and disappears into the fog.&d
+~
+|
+#305024
+android one 1~
+Android 1~
+The discarded upper body of an android lays here in the center of the path.
+~
+~
+3 0 0 C
+0
+1 0 100 1d20+0 2d5+0
+-1 1
+112 112 0
+10 10 10 10 0
+0 0 0 0 0
+4 4 0 0 1 1 0
+0 0 0 0 0 0 0 0
+> greet_prog 100~
+mpecho &cAndroid 1's eyes briefly light up but quickly dim.&d
+say I...n...tru...der...
+~
+|
+#305025
+red ribbon doctor gero~
+Doctor Gero~
+Doctor Gero carefully studies a complicated computer output.
+~
+~
+67108867 0 0 C
+0
+1 0 100 1d20+0 2d5+0
+-1 5
+112 112 1
+10 10 10 10 0
+0 0 0 0 0
+1 1 0 0 1 1 0
+0 0 0 0 0 0 0 0
+> greet_prog 100~
+mpecho &cDoctor Gero looks up from his terminal.&d
+say Curious. How did you wander past all my security? Who are you?
+shake
+say Nevermind. That doesn't matter. You must be incredibly strong to have made your way here.
+say &RIs that correct?&c
+~
+> speech_prog 'yes'~
+grin
+say Then perhaps you could be of assistance. My name is Doctor Gero. I'm a brilliant mind devising the world's greatest technological achievements.
+mpecho &cDoctor Gero rises from his seat to appraise you more closely.&d
+say Someone as strong as you could certainly provide valuable &Rcombat data&c.
+~
+> speech_prog 'combat data'~
+mpecho &cDoctor Gero returns to his seat.&d
+say The androids I build are only as powerful as the information I'm able to obtain. Martial arts, energy regulation, kinetic efficiency...
+mpecho &cDoctor Gero's words trail off.&d
+say With your help, I'm certain I could dramatically improve my creations. I would even overlook the security breach.
+say How about it? Do you &Ragree&C?
+~
+|
+#305026
+combat data android~
+A Combat Data Acquisitor~
+A prototype android shambles aimlessly here.
+~
+~
+16777217 0 0 C
+50
+1 0 100 1d20+350 2d5+0
+-1 500
+112 112 0
+50 25 25 25 0
+0 0 0 0 0
+4 4 0 0 1 1 2
+0 0 0 0 0 0 0 0
+> act_prog ready~
+if isfight($i)
+slap $n
+mpechoat $n You can't do that while the mob is in combat.
+else
+mprestore self 30000
+nod $n
+endif
+~
+> greet_prog 100~
+if isfight($i)
+salute
+else
+mprestore self 30000
+endif
+~
+|
+#305027
+combat data android ii~
+A MK-II Combat Data Acquisitor~
+A more impressive prototype android strikes an imposing figure here.
+~
+~
+16777217 0 0 C
+75
+1 0 100 1d20+300 2d5+0
+-1 1000
+112 112 0
+50 20 20 20 0
+0 0 0 0 0
+4 4 0 0 1 1 2
+0 0 0 0 0 0 0 0
+#305028
+android 10 ten~
+a newly created android 10 ten~
+Some god abandoned a newly created android 10 ten here.
+~
+~
+1073741825 0 0 C
+0
+1 0 100 1d20+0 2d5+0
+-1 1
+112 112 0
+10 10 10 10 10
+0 0 0 0 0
+0 0 0 0 1 1 0
+0 0 0 0 0 0 0 0
+#305029
+android 8 eight~
+Android 8~
+A huge android reminiscient of Frankenstein's monster stands here.
+~
+~
+67108867 0 0 C
+0
+1 0 100 1d20+0 2d5+0
+-1 100
+112 112 0
+10 10 10 10 0
+0 0 0 0 0
+4 4 0 0 1 1 0
+0 0 0 0 0 0 0 0
+> greet_prog 100~
+mpecho &cAndroid 8 holds up his hands.&d
+say Wait! I won't harm you, but if you go any further you'll be in great &Rdanger&C!
+~
+> speech_prog 'danger'~
+nod
+say One of Doctor Gero's experiments is extremely dangerous. It's nothing like the rest of us...
+say Are you sure you want to &Rcontinue&C?
+~
+|
+#305030
+cybaman~
+A Cybaman~
+A cybernetic saibaman stands here menacingly--a 'Cybaman'!
+~
+~
+1 0 0 C
+100
+1 0 100 1d20+1000 2d5+0
+-1 1500
+112 112 0
+80 30 30 60 0
+0 0 0 0 0
+0 0 0 0 1 1 2
+0 0 0 0 0 0 0 0
+> fight_prog 10~
+energy
+~
+> death_prog 100~
+mea $n &YAs the Cybaman dies at your hand, you disappear into a roiling mist!&d
+mer $n &Y$n disappears into a roiling mist.&d
+mptransfer $n 305342
+~
+|
+#305031
+doctor emalia endquestrr~
+Doctor Emalia~
+Doctor Emalia appears fully from the mist surrounding you.
+~
+~
+67108867 0 0 C
+0
+1 0 100 1d20+0 2d5+0
+-1 1
+112 112 2
+10 10 10 10 0
+0 0 0 0 0
+1 1 0 0 1 1 0
+0 0 0 0 0 0 0 0
+> greet_prog 100~
+if wearingvnum($n) 305011
+mea $n &CDoctor Emalia says 'I hope you're having fun messing around while the universe tears itself apart. No pressure.'&d
+mea $n &cYou disappear into the fog, reappearing at the Center of The Universe.&d
+mptransfer $n 6000
+endif
+if wearingvnum($n) 305010
+mea $n &CDoctor Emalia says 'I hope you're having fun messing around while the universe tears itself apart. No pressure.'&d
+mea $n &cYou disappear into the fog, reappearing at the Center of The Universe.&d
+mptransfer $n 6000
+endif
+if inroom($n) == 305343
+mea $n &CDoctor Emalia says 'A Saibaman? What on earth was Doctor Gero doing with one of those?'
+mea $n &cDoctor Emalia gives you a concerned look, but it quickly fades.&d
+mea $n &CDoctor Emalia says 'Well, no matter. That must have been what was causing the anomaly if it pulled you straight out.'
+clap
+mea $n &CDoctor Emalia says 'You did well to survive! Here, take this, and make sure you don't lose it.'
+mpoload 305010
+give rift $n
+mpforce $n wear rift
+mea $n &CDoctor Emalia says 'This is a rift communicator, but it does more than help us stay in contact. Using it, it's even possible to stabilize fractured time.'&d
+mea $n &CDoctor Emalia says 'If you lose it, well... Don't. Without stability, you may have to repeat events you've already lived through, then we're back at square one.'
+mea $n &CDoctor Emalia says 'ALWAYS wear it, $n, unless you want to fade from history. Anyway, let's get out of here.'
+mea $n &cDoctor Emalia points north.&d
+endif
+~
+|
+#305032
+green saibaman~
+A Green Saibaman~
+A tiny green saibaman chitters menacingly.
+~
+~
+1073741857 0 0 C
+50
+1 0 100 1d20+300 2d5+0
+-1 1250
+112 112 0
+40 20 20 20 0
+0 0 0 0 0
+0 0 0 0 1 1 1
+0 0 0 0 0 0 0 0
+> greet_prog 100~
+if ispc($n)
+if isfight($i)
+glower
+else
+mprestore $i 30000
+mpecho &cA Green Saibaman lets out a horrible shriek!&d
+mpkill $n
+endif
+endif
+~
+> entry_prog 100~
+mprestore $i 30000
+~
+|
+#305033
+timewarped saibaman~
+A Time-Warped Saibaman~
+A tiny saibaman lurks here, its body glitching in and out of a strange mist.
+~
+~
+1073741857 0 0 C
+55
+1 0 100 1d20+400 2d5+0
+-1 2500
+112 112 0
+40 40 30 40 0
+0 0 0 0 0
+0 0 0 0 1 1 1
+0 0 0 0 0 0 0 0
+> greet_prog 100~
+if ispc($n)
+if isfight($i)
+glower
+else
+mprestore $i 30000
+mpecho A Green Saibaman lets out a horrible shriek!
+mpkill $n
+endif
+endif
+~
+> entry_prog 100~
+mprestore $i 30000
+~
+|
+#305034
+wounded nappa~
+Nappa~
+A massive wounded man leans wearily against the rocks.
+~
+~
+3 0 0 C
+60
+1 0 100 1d20+100 2d5+0
+-1 4000
+112 112 1
+40 40 40 40 0
+0 0 0 0 0
+0 0 0 0 1 1 2
+0 0 0 0 0 0 0 0
+> greet_prog 100~
+mpecho &cNappa winces in pain.&d
+say Great, another &Rfreak&C shows up. Like I don't have enough problems.
+~
+> speech_prog 'freak'~
+snicker
+say This was supposed to be child's play. Show up, kill Kakarot... obtain immortality.
+say Instead some &Rold man&C in a clown suit beats me into the dirt. What a joke.
+~
+> speech_prog 'old man'~
+say He came after my partner out of nowhere. Said he was looking for Kakarot.
+shrug
+say It doesn't matter. Neither of them are any match for Vegeta.
+~
+|
+#305035
+saiyansaga android 20 gero~
+Android 20~
+An android of striking resemblance to Doctor Gero stands here menacingly.
+~
+~
+1140850689 0 0 C
+0
+1 0 100 1d20+0 2d5+0
+-1 250000
+112 112 0
+10 10 10 10 0
+0 0 0 0 0
+4 4 0 0 1 1 0
+0 0 0 0 0 0 0 0
+> speech_prog 'help'~
+mea $n &cThe android steps forward imposingly, appraising you with flashing red eyes.&d
+mpsleep 15
+mea $n &CAndroid 20 says 'There will no 'help'. Especially not from...'
+mpsleep 15
+mea $n &cAndroid 20 pauses.&d
+mpsleep 15
+mea $n &CAndroid 20 says 'That's strange. You're quite familiar, yet you have no entry in my memory banks.'
+mpsleep 15
+mea $n &cVegeta uses the brief distraction and lunges forward with a blow readied.&d
+mea $n &YGoku yells 'Vegeta, wait!'&d
+mpsleep 15
+mea $n &cVegeta smirks as his fist collides with Android 20's jaw.
+mpsleep 10
+mea $n &CVegeta says 'I wait for nothing, Kakaro--'&d
+mpsleep 15
+mea $n &cAndroid 20, completely unfazed, grasps hold of Vegeta's throat. He lifts him effortlessly into the air despite his struggles.&d
+mpsleep 15
+mea $n &cGoku grunts with frustration. Whatever advantage they might have had from working together, Vegeta squandered it as quickly.&d
+mpsleep 15
+mea $n &CAndroid 20 says 'This is what your folly earns you, Goku. Not you, not your friends, or even your enemies can stand before the might of the new Red Ribbon!'&d
+mpsleep 15
+mea $n &cVegeta's struggles slowly begin to fade.&d
+mpsleep 15
+mea $n &CAndroid 20 says 'How convenient you were all gathered here.'
+mpsleep 10
+mea $n &cVegeta claws fruitlessly at the fingers coiled around his neck.&d
+mpsleep 10
+mea $n &CAndroid 20 says 'If not for that, I might not have gathered so much energy so quickly.'&d
+mpsleep 15
+mea $n &cWithout another word, Android 20 drops Vegeta's lifeless body to the ground. Goku grits his teeth.&d
+mpsleep 15
+mea $n &CGoku says 'How... how could you!'
+mpsleep 15
+mea $n &cAndroid 20 turns back to Goku, no emotion upon his face.&d
+mpsleep 15
+mea $n &CAndroid 20 says 'Very easily, as it turns out.'
+mpsleep 15
+mea $n &cDoctor Emalia's voice echoes over your communicator.&d
+mea $n &CDoctor Emalia says 'This is... bad. Really bad.'
+mpsleep 15
+mea $n &CDoctor Emalia says 'You need to start running--now!'
+mpsleep 15
+mea $n &cBefore you can object, you're engulfed suddenly in roiling mist!&d
+mptransfer $n 305474
+~
+|
+#305036
+saiyansaga vegeta~
+Vegeta~
+Vegeta clutches his shoulder, his face contorted with rage.
+~
+~
+1140850689 0 0 C
+0
+1 0 100 1d20+0 2d5+0
+-1 18000
+112 112 0
+10 10 10 10 10
+0 0 0 0 0
+0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0
+#305037
+saiyansaga goku~
+Goku~
+Goku stands warily between them.
+~
+~
+1140850689 0 0 C
+0
+1 0 100 1d20+0 2d5+0
+-1 9001
+112 112 0
+10 10 10 10 10
+0 0 0 0 0
+0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0
+#305038
+saiyansaga emalia~
+Doctor Emalia~
+An exasperated Doctor Emalia stands here in the mist.
+~
+~
+67108867 0 0 C
+0
+1 0 100 1d20+0 2d5+0
+-1 1
+112 112 0
+5000 10 10 10 0
+0 0 0 0 0
+0 0 0 0 1 1 0
+0 0 0 0 0 0 0 0
+> greet_prog 100~
+mea $n &cDoctor Emalia heaves a heavy sigh of relief.&d
+mea $n &CDoctor Emalia says '... What? Don't give me that look. I didn't really want you to die. This time.'
+mea $n &cDoctor Emalia coughs nervously.
+mea $n &CDoctor Emalia says 'At any rate, it's clear I need to make a few adjustments to your communicator... One moment...'
+mpforce $n remove 305010
+mpforce $n give mki emalia
+mpjunk rift
+mpoload 305011
+mea $n &cDoctor Emalia opens the back of your communicator to do who knows what.&d
+give rift $n
+mpforce $n wear mkii
+mea $n &CDoctor Emalia says 'There. That should hopefully keep you from throwing things out of whack any more than you already have...'&d
+grumble
+mea $n &CDoctor Emalia says 'I blame myself. Mostly. Anyway, get out of here! I'll meet you back at my lab.'&d
+mea $n &cDoctor Emalia shoos you away.&d
+~
+|
+#305039
+timespacelab emalia~
+Doctor Emalia~
+Doctor Emalia stands here with an unsettling smile.
+~
+~
+1140850691 0 0 S
+0
+1 0 100 1d20+0 2d5+0
+-1 1
+112 112 2
+> greet_prog 100~
+if wearingvnum($n) 305011
+say There you are, $n. I hope you understand how monumental of an occasion this is.
+say Not just anyone gets into my lab! You should be honored. Anyway, let's get down to &Rbusiness&C.
+else
+say ... Who are you, again?
+mea $n &YPerhaps you should put your rift communicator back on.&d
+endif
+~
+> speech_prog business~
+if wearingvnum($n) 305011
+say There's no doubt that in your own time you'd be extremely powerful... but no one can measure up against all of history.
+grin
+say Doctor Gero is using the inconsistencies in spacetime to his advantage. Well, so can we.
+mpecho &cDoctor Emalia turns around and spreads open her arms to the transparent wall behind her.&d
+say Behind this wall is a space I've created. A hyperbolic chamber that compresses time, never before seen in any universe!
+mpecho &cThere's a very awkward moment of silence.&d
+say I'm sure you're absolutely amazed. So, how about it? Care to use it to &Rtrain&C?
+else
+say Get out of here, you bum!
+mea $n &YPerhaps you should put your rift communicator back on...&d
+endif
+~
+> speech_prog train~
+if wearingvnum($n) 305011
+mpecho &cA mysterious white light floods the room as Doctor Emalia opens a passage into the room behind her.&d
+say Be careful in there, $n. Don't get too carried away.
+mptransfer $n 305492
+mpat 305492 mpforce $n look
+mpat 305492 mea $n &cDoctor Emalia waves and disappears into the light.&d
+else
+slap $n
+endif
+~
+|
+#305040
+timespace apparition~
+A Timespace Apparition~
+An apparition of discarded energy meanders without purpose.
+~
+~
+1 0 0 C
+60
+1 0 100 1d20+400 2d5+0
+-1 5000
+112 112 0
+40 40 40 40 0
+0 0 0 0 0
+0 0 0 0 0 0 2
+0 0 0 0 0 0 0 0
+> greet_prog 100~
+if ispc($n)
+if isfight($i)
+mea $n &cA Timespace Apparition flickers in and out of existence.&d
+else
+mprestore $i 30000
+endif
+endif
+~
+> entry_prog 100~
+mprestore $i 30000
+~
+|
+#305041
+unstable energy~
+An Unstable Energy Anomaly~
+A mass of unstable energy vaguely resembling a person lurks through the fissure.
+~
+~
+33 0 0 C
+65
+1 0 100 1d20+400 2d5+0
+-1 7500
+112 112 0
+40 40 40 40 0
+0 0 0 0 0
+0 0 0 0 0 0 2
+0 0 0 0 0 0 0 0
+> greet_prog 100~
+if ispc($n)
+if isfight($i)
+glower
+else
+mprestore $i 30000
+mpecho &cThe unstable energy lunges at you from out of nowhere!&d
+mpkill $n
+endif
+endif
+~
+> entry_prog 100~
+mprestore $i 30000
+~
+|
+#305042
+anomalous self~
+Your Anomalous Self~
+An anomolous copy of you stands here, reflecting countless prisms of light.
+~
+~
+33 0 0 C
+75
+1 0 100 1d20+500 2d5+0
+-1 25000
+112 112 0
+50 50 50 50 0
+0 0 0 0 0
+0 0 0 0 0 0 2
+0 0 0 0 0 0 0 0
+> greet_prog 100~
+if ispc($n)
+if isfight($i)
+glower
+else
+mprestore $i 30000
+mpecho &cYour anomalous self lunges at you!&d
+mpkill $n
+endif
+endif
+~
+> entry_prog 100~
+mprestore $i 30000
+~
+|
 #306032
 gnarly dude~
 a gnarly dude~
@@ -2030,6 +3186,24 @@ A
 2 -100
 A
 4 -100
+#305010
+rift communicator mki~
+&YDr. Emalia's Rift Communicator&d~
+Some god dropped a newly created rift communicator mki here.~
+~
+9 0&260 5
+0 0 0 0 0 0
+1 0 0
+ 0
+#305011
+rift communicator mkii~
+&YDr. Emalia's Rift Communicator MKII&d~
+A rift communicator lays here, somehow.~
+~
+9 0&260 5
+0 0 0 0 0 0
+1 0 0
+ 0
 #308000
 parlor doors~
 The Doors to the Bright Parlor~
@@ -8401,7 +9575,7 @@ all manner of flashing lights and computer terminals.  Occasionally the
 lights focus to a single point, forming a near-humanoid figure before
 fading once more into nothingness.
 
-&YA sign here reads: 50b Powerlevel Holograms&d
+&YA sign here reads: 20b Powerlevel Holograms&d
 ~
 0 4 0
 D1
@@ -20253,124 +21427,410 @@ D0
 0 -1 305000
 S
 #305002
-Floating in a void~
+Ominous Hallway~
+This section of the facility feels different from the others.  The air
+is thick and difficult to breathe, and a strange power suffuses the air. 
+Your only options are moving forward into the ominous haze, or returning
+back to the elevator. 
 ~
-0 4 1
+0 4 0
+D0
+~
+~
+0 -1 305003
+D2
+~
+~
+0 -1 304124
 S
 #305003
-Floating in a void~
+Ominous Hallway~
+This section of the facility feels different from the others.  The air
+is thick and difficult to breathe, and a strange power suffuses the air. 
 ~
-0 4 1
+0 4 0
+D0
+~
+~
+0 -1 305004
+D2
+~
+~
+0 -1 305002
 S
 #305004
-Floating in a void~
+Ominous Hallway~
+This section of the facility feels different from the others.  The air
+is thick and difficult to breathe, and a strange power suffuses the air.  A
+mass of wires surround a mysterious gateway to the north.  
 ~
-0 4 1
+0 4 0
+D0
+~
+~
+0 -1 305005
+D2
+~
+~
+0 -1 305003
 S
 #305005
-Floating in a void~
+A Mysterious Archway~
+All around you the haze grows thicker, pouring out of a machine sitting
+in the center of the room.  It appears ancient, but somehow vaguely modern
+as well, as if it doesn't quite belong anywhere in the flow of time. 
 ~
-0 4 1
+0 4 0
+D2
+~
+~
+0 -1 305004
 S
 #305006
-Floating in a void~
+A Rift in Time~
+The familiar fades into chaos around you.  The 'earth' at your feet
+feels solid, but upon closer inspection is nothing more than roiling mist,
+shifting in and out of existence according to its own whims.  The sky has
+no horizon, only an endless mirrored reflection of your own body. 
 ~
 0 4 1
+D0
+~
+~
+0 -1 305007
+D2
+~
+~
+0 -1 305005
 S
 #305007
-Floating in a void~
+Traveling The Rift~
+The more you move about in this mist the more things feel more alien. 
+Time has no meaning here, nor does even a sense of being alive or dead. 
 ~
 0 4 1
+D0
+~
+~
+0 -1 305008
+D2
+~
+~
+0 -1 305006
 S
 #305008
-Floating in a void~
+Fork Between Dimensions~
+The 'path' here splits.  To the west lies a mass of shadows and
+unfamiliar shapes, but to the east you feel a distinct sense of familiarity
+and calm. 
 ~
 0 4 1
+D1
+~
+~
+0 -1 305012
+D2
+~
+~
+0 -1 305007
+D3
+~
+~
+0 -1 305009
 S
 #305009
-Floating in a void~
+Fractured Hallway~
+This place feels like a nightmare, a cacophony of sound and color
+erupting from each step on your path forward. 
 ~
 0 4 1
+D1
+~
+~
+0 -1 305008
+D3
+~
+~
+0 -1 305010
 S
 #305010
-Floating in a void~
+Fractured Hallway~
+This place feels like a nightmare, a cacophony of sound and color
+erupting from each step on your path forward. 
 ~
 0 4 1
+D1
+~
+~
+0 -1 305009
+D3
+~
+~
+0 -1 305011
 S
 #305011
-Floating in a void~
+Fractured Hallway~
+This place feels like a nightmare, a cacophony of sound and color
+erupting from each step on your path forward.  To the north the chaos
+subsides only slightly, piercing the fractured glass-like sky with visions
+of more concrete objects. 
 ~
 0 4 1
+D0
+~
+~
+0 -1 305016
+D1
+~
+~
+0 -1 305010
 S
 #305012
-Floating in a void~
+A Comforting Hallway~
+Unlike the rest of the chaos that comprises the rift, here the shadows
+form together into solid objects, glittering like gold in a warm, relaxing
+light.  This place seems to evoke pleasant memories of the past. 
 ~
 0 4 1
+D1
+~
+~
+0 -1 305013
+D3
+~
+~
+0 -1 305008
 S
 #305013
-Floating in a void~
+A Comforting Hallway~
+Unlike the rest of the chaos that comprises the rift, here the shadows
+form together into solid objects, glittering like gold in a warm, relaxing
+light. This place seems to evoke pleasant memories of the past.
 ~
 0 4 1
+D1
+~
+~
+0 -1 305014
+D3
+~
+~
+0 -1 305012
 S
 #305014
-Floating in a void~
+A Comforting Hallway~
+Unlike the rest of the chaos that comprises the rift, here the shadows
+form together into solid objects, glittering like gold in a warm, relaxing
+light. This place seems to evoke pleasant memories of the past.
 ~
 0 4 1
+D1
+~
+~
+0 -1 305015
+D3
+~
+~
+0 -1 305013
 S
 #305015
-Floating in a void~
+The Golden Parlor~
+This place evokes a sense of safety and calm, and by simply standing
+here you can feel the weariness of the world fading away.  If you needed to
+recover, this strange parlor seems a better place than any. 
 ~
-0 4 1
+0 536870916 1
+D3
+~
+~
+0 -1 305014
 S
 #305016
-Floating in a void~
+First Vision: Ribbon of Remembrance~
+The ground is truly solid here, paved with concrete and lined with
+countless evergreen trees.  Despite appearing real, you have the sense
+things aren't quite as they appear: this is only a vision of a past once
+experienced by another, twisted from another universe. 
 ~
 0 4 1
+D0
+~
+~
+0 -1 305017
+D2
+~
+~
+0 -1 305011
+> entry_prog 100~
+if wearingvnum($n) 305010
+mea $n &cDoctor Emalia's voice echoes from your rift communicator.&d
+mea $n &CDoctor Emalia says 'Fancy a trip down memory lane? Be careful, even if you've been here before. Or don't--I can still make use of your corpse.'&d
+else
+mea $n &cA vision of Doctor Emalia fleetingly passes through the mist.&d
+mea $n &CDoctor Emalia says 'There's something not quite right up ahead. Not that any of this is quite right, but that's beside the point.'&d
+mea $n &CDoctor Emalia says 'This fracture is the old Red Ribbon Army Headquarters, somehow continuing to exist in our age.'&d
+mea $n &CDoctor Emalia says 'Perhaps you should pay a visit to an old 'friend', a 'Doctor Gero'.'&d
+mea $n &cDoctor Emalia's body fades away.&d
+endif
+~
+|
 S
 #305017
-Floating in a void~
+A Giant Armored Gate~
+A wall made of concrete, brick and steel stretches far overhead, barring
+the way with a massive iron door.  Inside lies the headquarters for the Red
+Ribbon Army, and already you can hear men shouting orders, and winding
+gears of machinery. 
 ~
 0 4 1
+D0
+~
+~
+0 -1 305020
+D1
+~
+~
+0 -1 305019
+D2
+~
+~
+0 -1 305016
+D3
+~
+~
+0 -1 305018
 S
 #305018
-Floating in a void~
+Guard Post~
+This brick room is filled with an array of communications equipment and
+more than one artillery shell of dubious make and design. 
 ~
 0 4 1
+D1
+~
+~
+0 -1 305017
 S
 #305019
-Floating in a void~
+Guard Post~
+This brick room is filled with an array of communications equipment and
+more than one artillery shell of dubious make and design. 
 ~
 0 4 1
+D3
+~
+~
+0 -1 305017
 S
 #305020
-Floating in a void~
+Red Ribbon Army HQ: Entranceway~
+The iron doors swing open as if expecting you, allowing you in or out as
+you please.  In the distance you can make out what appears to be a
+grandiose mansion, with smaller buildings and supply depots dotting the
+soldier-filled streets.  Back south lies the rift. 
 ~
 0 4 1
+D0
+~
+~
+0 -1 305021
+D2
+~
+~
+0 -1 305017
 S
 #305021
-Floating in a void~
+Wartorn Runway~
+What was once a runway for aircraft is lined with rubble and broken
+machinery, barely allowing a human to squeeze through the makeshift
+concrete path.  Gunfire resounds all around you, as if some eternal battle
+were raging just out of sight. 
 ~
-0 4 1
+0 0 1
+D0
+~
+~
+0 -1 305037
+D1
+~
+~
+0 -1 305023
+D2
+~
+~
+0 -1 305020
+D3
+~
+~
+0 -1 305022
 S
 #305022
-Floating in a void~
+Western Supply Building~
+This brick building sees countless low-ranked soldiers filing in and out
+of its rooms and corridors, carrying crates and weapons throughout the
+base. 
 ~
-0 4 1
+0 0 1
+D0
+~
+~
+0 -1 305024
+D1
+~
+~
+0 -1 305021
 S
 #305023
-Floating in a void~
+Eastern Supply Building~
+This brick building sees countless low-ranked soldiers filing in and out
+of its rooms and corridors, carrying crates and weapons throughout the
+base. 
 ~
-0 4 1
+0 0 1
+D0
+~
+~
+0 -1 305031
+D3
+~
+~
+0 -1 305021
 S
 #305024
-Floating in a void~
+Western Supply Building~
+This brick building sees countless low-ranked soldiers filing in and out
+of its rooms and corridors, carrying crates and weapons throughout the
+base. 
 ~
-0 4 1
+0 0 1
+D0
+~
+~
+0 -1 305025
+D2
+~
+~
+0 -1 305022
+D3
+~
+~
+0 -1 305044
 S
 #305025
-Floating in a void~
+Western Supply Building~
+This brick building sees countless low-ranked soldiers filing in and out
+of its rooms and corridors, carrying crates and weapons throughout the
+base. 
 ~
-0 4 1
+0 0 1
+D0
+~
+~
+0 -1 305027
+D2
+~
+~
+0 -1 305024
 S
 #305026
 Floating in a void~
@@ -20378,1589 +21838,5495 @@ Floating in a void~
 0 4 1
 S
 #305027
-Floating in a void~
+Western Supply Building~
+This brick building sees countless low-ranked soldiers filing in and out
+of its rooms and corridors, carrying crates and weapons throughout the
+base. 
 ~
-0 4 1
+0 0 1
+D0
+~
+~
+0 -1 305028
+D2
+~
+~
+0 -1 305025
+D3
+~
+~
+0 -1 305045
 S
 #305028
-Floating in a void~
+Western Supply Building~
+This brick building sees countless low-ranked soldiers filing in and out
+of its rooms and corridors, carrying crates and weapons throughout the
+base. 
 ~
-0 4 1
+0 0 1
+D0
+~
+~
+0 -1 305029
+D2
+~
+~
+0 -1 305027
 S
 #305029
-Floating in a void~
+Western Supply Building~
+This brick building sees countless low-ranked soldiers filing in and out
+of its rooms and corridors, carrying crates and weapons throughout the
+base. 
 ~
-0 4 1
+0 0 1
+D0
+~
+~
+0 -1 305030
+D2
+~
+~
+0 -1 305028
+D3
+~
+~
+0 -1 305043
 S
 #305030
-Floating in a void~
+Western Supply Building~
+This brick building sees countless low-ranked soldiers filing in and out
+of its rooms and corridors, carrying crates and weapons throughout the
+base. 
 ~
-0 4 1
+0 0 1
+D1
+~
+~
+0 -1 305042
+D2
+~
+~
+0 -1 305029
 S
 #305031
-Floating in a void~
+Eastern Supply Building~
+This brick building sees countless low-ranked soldiers filing in and out
+of its rooms and corridors, carrying crates and weapons throughout the
+base. 
 ~
-0 4 1
+0 0 1
+D0
+~
+~
+0 -1 305032
+D1
+~
+~
+0 -1 305046
+D2
+~
+~
+0 -1 305023
 S
 #305032
-Floating in a void~
+Eastern Supply Building~
+This brick building sees countless low-ranked soldiers filing in and out
+of its rooms and corridors, carrying crates and weapons throughout the
+base. 
 ~
-0 4 1
+0 0 1
+D0
+~
+~
+0 -1 305033
+D2
+~
+~
+0 -1 305031
 S
 #305033
-Floating in a void~
+Eastern Supply Building~
+This brick building sees countless low-ranked soldiers filing in and out
+of its rooms and corridors, carrying crates and weapons throughout the
+base. 
 ~
-0 4 1
+0 0 1
+D0
+~
+~
+0 -1 305034
+D1
+~
+~
+0 -1 305047
+D2
+~
+~
+0 -1 305032
 S
 #305034
-Floating in a void~
+Eastern Supply Building~
+This brick building sees countless low-ranked soldiers filing in and out
+of its rooms and corridors, carrying crates and weapons throughout the
+base. 
 ~
-0 4 1
+0 0 1
+D0
+~
+~
+0 -1 305035
+D2
+~
+~
+0 -1 305033
 S
 #305035
-Floating in a void~
+Eastern Supply Building~
+This brick building sees countless low-ranked soldiers filing in and out
+of its rooms and corridors, carrying crates and weapons throughout the
+base. 
 ~
-0 4 1
+0 0 1
+D0
+~
+~
+0 -1 305036
+D1
+~
+~
+0 -1 305048
+D2
+~
+~
+0 -1 305034
 S
 #305036
-Floating in a void~
+Eastern Supply Building~
+This brick building sees countless low-ranked soldiers filing in and out
+of its rooms and corridors, carrying crates and weapons throughout the
+base. 
 ~
-0 4 1
+0 0 1
+D2
+~
+~
+0 -1 305035
+D3
+~
+~
+0 -1 305042
 S
 #305037
-Floating in a void~
+Wartorn Runway~
+What was once a runway for aircraft is lined with rubble and broken
+machinery, barely allowing a human to squeeze through the makeshift
+concrete path.  Gunfire resounds all around you, as if some eternal battle
+were raging just out of sight. 
 ~
-0 4 1
+0 0 1
+D0
+~
+~
+0 -1 305038
+D2
+~
+~
+0 -1 305021
 S
 #305038
-Floating in a void~
+Wartorn Runway~
+What was once a runway for aircraft is lined with rubble and broken
+machinery, barely allowing a human to squeeze through the makeshift
+concrete path.  Gunfire resounds all around you, as if some eternal battle
+were raging just out of sight. 
 ~
-0 4 1
+0 0 1
+D0
+~
+~
+0 -1 305039
+D2
+~
+~
+0 -1 305037
 S
 #305039
-Floating in a void~
+Wartorn Runway~
+What was once a runway for aircraft is lined with rubble and broken
+machinery, barely allowing a human to squeeze through the makeshift
+concrete path.  Gunfire resounds all around you, as if some eternal battle
+were raging just out of sight. 
 ~
-0 4 1
+0 0 1
+D0
+~
+~
+0 -1 305040
+D2
+~
+~
+0 -1 305038
 S
 #305040
-Floating in a void~
+Wartorn Runway~
+What was once a runway for aircraft is lined with rubble and broken
+machinery, barely allowing a human to squeeze through the makeshift
+concrete path.  Gunfire resounds all around you, as if some eternal battle
+were raging just out of sight. 
 ~
-0 4 1
+0 0 1
+D0
+~
+~
+0 -1 305041
+D2
+~
+~
+0 -1 305039
 S
 #305041
-Floating in a void~
+Wartorn Runway~
+What was once a runway for aircraft is lined with rubble and broken
+machinery, barely allowing a human to squeeze through the makeshift
+concrete path.  Gunfire resounds all around you, as if some eternal battle
+were raging just out of sight. 
 ~
-0 4 1
+0 0 1
+D0
+~
+~
+0 -1 305042
+D2
+~
+~
+0 -1 305040
 S
 #305042
-Floating in a void~
+Wartorn Runway~
+What was once a runway for aircraft is lined with rubble and broken
+machinery, barely allowing a human to squeeze through the makeshift
+concrete path.  Gunfire resounds all around you, as if some eternal battle
+were raging just out of sight.  The entrance to a supply depot stands to
+the west and east.  The headquarter's main compound and mansion lie to the
+north. 
 ~
-0 4 1
+0 0 1
+D0
+~
+~
+0 -1 305069
+D1
+~
+~
+0 -1 305036
+D2
+~
+~
+0 -1 305041
+D3
+~
+~
+0 -1 305030
 S
 #305043
-Floating in a void~
+Supply Closet~
+A rather nondescript closet.  A broom and several cleaning materials sit
+here on the shelves, accompanied by the odd case of stray ammunition. 
 ~
-0 4 1
+0 0 1
+D1
+~
+~
+0 -1 305029
 S
 #305044
-Floating in a void~
+Supply Closet~
+A rather nondescript closet.  A broom and several cleaning materials sit
+here on the shelves, accompanied by the odd case of stray ammunition. 
 ~
-0 4 1
+0 0 1
+D1
+~
+~
+0 -1 305024
 S
 #305045
-Floating in a void~
+Depot Hallway~
+The bricks begin to merge with metal plating in these halls, continuing
+through the back of the building.  You can hear the distinct sounds of
+creaking machinery further within. 
 ~
-0 4 1
+0 0 1
+D1
+~
+~
+0 -1 305027
+D3
+~
+~
+0 -1 305059
 S
 #305046
-Floating in a void~
+Supply Closet~
+A rather nondescript closet.  A broom and several cleaning materials sit
+here on the shelves, accompanied by the odd case of stray ammunition. 
 ~
-0 4 1
+0 0 1
+D3
+~
+~
+0 -1 305031
 S
 #305047
-Floating in a void~
+Depot Hallway~
+The bricks begin to merge with metal plating in these halls, continuing
+through the back of the building.  You can hear the distinct sounds of
+creaking machinery further within. 
 ~
-0 4 1
+0 0 1
+D1
+~
+~
+0 -1 305049
+D3
+~
+~
+0 -1 305033
 S
 #305048
-Floating in a void~
+Supply Closet~
+A rather nondescript closet.  A broom and several cleaning materials sit
+here on the shelves, accompanied by the odd case of stray ammunition. 
 ~
-0 4 1
+0 0 1
+D3
+~
+~
+0 -1 305035
 S
 #305049
-Floating in a void~
+Depot Hallway~
+The bricks begin to merge with metal plating in these halls, continuing
+through the back of the building.  You can hear the distinct sounds of
+creaking machinery further within. 
 ~
-0 4 1
+0 0 1
+D1
+~
+~
+0 -1 305050
+D3
+~
+~
+0 -1 305047
 S
 #305050
-Floating in a void~
+Depot Hallway~
+The bricks begin to merge with metal plating in these halls, continuing
+through the back of the building.  You can hear the distinct sounds of
+creaking machinery further within.  Two entirely metal rooms lay to the
+north and south, marked 'Maintainence Bay'. 
 ~
-0 4 1
+0 0 1
+D0
+~
+~
+0 -1 305051
+D2
+~
+~
+0 -1 305054
+D3
+~
+~
+0 -1 305049
 S
 #305051
-Floating in a void~
+Maintainence Bay~
+Half-broken androids and turrets litter the floor here, some still
+whirring to life fruitlessly as you wander past.  An uncomfortable air of
+danger lurks behind each pile of scrap, however. 
 ~
-0 4 1
+0 0 1
+D0
+~
+~
+0 -1 305052
+D1
+~
+~
+0 -1 305058
+D2
+~
+~
+0 -1 305050
 S
 #305052
-Floating in a void~
+Maintainence Bay~
+Half-broken androids and turrets litter the floor here, some still
+whirring to life fruitlessly as you wander past.  An uncomfortable air of
+danger lurks behind each pile of scrap, however. 
 ~
-0 4 1
+0 0 1
+D1
+~
+~
+0 -1 305053
+D2
+~
+~
+0 -1 305051
 S
 #305053
-Floating in a void~
+Maintainence Bay~
+Half-broken androids and turrets litter the floor here, some still
+whirring to life fruitlessly as you wander past.  An uncomfortable air of
+danger lurks behind each pile of scrap, however. 
 ~
-0 4 1
+0 0 1
+D2
+~
+~
+0 -1 305058
+D3
+~
+~
+0 -1 305052
 S
 #305054
-Floating in a void~
+Maintainence Bay~
+Half-broken androids and turrets litter the floor here, some still
+whirring to life fruitlessly as you wander past.  An uncomfortable air of
+danger lurks behind each pile of scrap, however. 
 ~
-0 4 1
+0 0 1
+D0
+~
+~
+0 -1 305050
+D1
+~
+~
+0 -1 305057
+D2
+~
+~
+0 -1 305055
 S
 #305055
-Floating in a void~
+Maintainence Bay~
+Half-broken androids and turrets litter the floor here, some still
+whirring to life fruitlessly as you wander past.  An uncomfortable air of
+danger lurks behind each pile of scrap, however. 
 ~
-0 4 1
+0 0 1
+D0
+~
+~
+0 -1 305054
+D1
+~
+~
+0 -1 305056
 S
 #305056
-Floating in a void~
+Maintainence Bay~
+Half-broken androids and turrets litter the floor here, some still
+whirring to life fruitlessly as you wander past.  An uncomfortable air of
+danger lurks behind each pile of scrap, however. 
 ~
-0 4 1
+0 0 1
+D0
+~
+~
+0 -1 305057
+D3
+~
+~
+0 -1 305055
 S
 #305057
-Floating in a void~
+Maintainence Bay~
+Half-broken androids and turrets litter the floor here, some still
+whirring to life fruitlessly as you wander past.  An uncomfortable air of
+danger lurks behind each pile of scrap, however. 
 ~
-0 4 1
+0 0 1
+D2
+~
+~
+0 -1 305056
+D3
+~
+~
+0 -1 305054
 S
 #305058
-Floating in a void~
+Maintainence Bay~
+Half-broken androids and turrets litter the floor here, some still
+whirring to life fruitlessly as you wander past.  An uncomfortable air of
+danger lurks behind each pile of scrap, however. 
 ~
-0 4 1
+0 0 1
+D0
+~
+~
+0 -1 305053
+D3
+~
+~
+0 -1 305051
 S
 #305059
-Floating in a void~
+Depot Hallway~
+The bricks begin to merge with metal plating in these halls, continuing
+through the back of the building.  You can hear the distinct sounds of
+creaking machinery further within. 
 ~
-0 4 1
+0 0 1
+D1
+~
+~
+0 -1 305045
+D3
+~
+~
+0 -1 305060
 S
 #305060
-Floating in a void~
+Depot Hallway~
+The bricks begin to merge with metal plating in these halls, continuing
+through the back of the building.  You can hear the distinct sounds of
+creaking machinery further within.  Two entirely metal rooms lay to the
+north and south, marked 'Maintainence Bay'. 
 ~
-0 4 1
+0 0 1
+D0
+~
+~
+0 -1 305061
+D1
+~
+~
+0 -1 305059
+D2
+~
+~
+0 -1 305065
 S
 #305061
-Floating in a void~
+Maintainence Bay~
+Half-broken androids and turrets litter the floor here, some still
+whirring to life fruitlessly as you wander past.  An uncomfortable air of
+danger lurks behind each pile of scrap, however. 
 ~
-0 4 1
+0 0 1
+D0
+~
+~
+0 -1 305062
+D2
+~
+~
+0 -1 305060
+D3
+~
+~
+0 -1 305064
 S
 #305062
-Floating in a void~
+Maintainence Bay~
+Half-broken androids and turrets litter the floor here, some still
+whirring to life fruitlessly as you wander past.  An uncomfortable air of
+danger lurks behind each pile of scrap, however. 
 ~
-0 4 1
+0 0 1
+D2
+~
+~
+0 -1 305061
+D3
+~
+~
+0 -1 305063
 S
 #305063
-Floating in a void~
+Maintainence Bay~
+Half-broken androids and turrets litter the floor here, some still
+whirring to life fruitlessly as you wander past.  An uncomfortable air of
+danger lurks behind each pile of scrap, however. 
 ~
-0 4 1
+0 0 1
+D1
+~
+~
+0 -1 305062
+D2
+~
+~
+0 -1 305064
 S
 #305064
-Floating in a void~
+Maintainence Bay~
+Half-broken androids and turrets litter the floor here, some still
+whirring to life fruitlessly as you wander past.  An uncomfortable air of
+danger lurks behind each pile of scrap, however. 
 ~
-0 4 1
+0 0 1
+D0
+~
+~
+0 -1 305063
+D1
+~
+~
+0 -1 305061
 S
 #305065
-Floating in a void~
+Maintainence Bay~
+Half-broken androids and turrets litter the floor here, some still
+whirring to life fruitlessly as you wander past.  An uncomfortable air of
+danger lurks behind each pile of scrap, however. 
 ~
-0 4 1
+0 0 1
+D0
+~
+~
+0 -1 305060
+D2
+~
+~
+0 -1 305068
+D3
+~
+~
+0 -1 305066
 S
 #305066
-Floating in a void~
+Maintainence Bay~
+Half-broken androids and turrets litter the floor here, some still
+whirring to life fruitlessly as you wander past.  An uncomfortable air of
+danger lurks behind each pile of scrap, however. 
 ~
-0 4 1
+0 0 1
+D1
+~
+~
+0 -1 305065
+D2
+~
+~
+0 -1 305067
 S
 #305067
-Floating in a void~
+Maintainence Bay~
+Half-broken androids and turrets litter the floor here, some still
+whirring to life fruitlessly as you wander past.  An uncomfortable air of
+danger lurks behind each pile of scrap, however. 
 ~
-0 4 1
+0 0 1
+D0
+~
+~
+0 -1 305066
+D1
+~
+~
+0 -1 305068
 S
 #305068
-Floating in a void~
+Maintainence Bay~
+Half-broken androids and turrets litter the floor here, some still
+whirring to life fruitlessly as you wander past.  An uncomfortable air of
+danger lurks behind each pile of scrap, however. 
 ~
-0 4 1
+0 0 1
+D0
+~
+~
+0 -1 305065
+D3
+~
+~
+0 -1 305067
 S
 #305069
-Floating in a void~
+Main Compound Entrance~
+The row of supply depots come to an end, replaced instead by the looming
+mansion in the distant north.  Security is here is even greater, with
+soldiers lurking around every corner. 
 ~
 0 4 1
+D0
+~
+~
+0 -1 305070
+D2
+~
+~
+0 -1 305042
 S
 #305070
-Floating in a void~
+Compound Intersection~
+ Paths through the main compound diverge here.  Commander Red's mansion
+lies to the north, a sign to the ammunitions depot directs you east, and to
+the west you can see the runway winding around the rear of the compound. 
 ~
-0 4 1
+0 0 1
+D0
+~
+~
+0 -1 305081
+D1
+~
+~
+0 -1 305076
+D2
+~
+~
+0 -1 305069
+D3
+~
+~
+0 -1 305071
 S
 #305071
-Floating in a void~
+Wartorn Runway~
+What was once a runway for aircraft is lined with rubble and broken
+machinery, barely allowing a human to squeeze through the makeshift
+concrete path.  Gunfire resounds all around you, as if some eternal battle
+were raging just out of sight. 
 ~
-0 4 1
+0 0 1
+D1
+~
+~
+0 -1 305070
+D3
+~
+~
+0 -1 305072
 S
 #305072
-Floating in a void~
+Wartorn Runway~
+What was once a runway for aircraft is lined with rubble and broken
+machinery, barely allowing a human to squeeze through the makeshift
+concrete path.  Gunfire resounds all around you, as if some eternal battle
+were raging just out of sight. 
 ~
-0 4 1
+0 0 1
+D1
+~
+~
+0 -1 305071
+D3
+~
+~
+0 -1 305073
 S
 #305073
-Floating in a void~
+Wartorn Runway~
+What was once a runway for aircraft is lined with rubble and broken
+machinery, barely allowing a human to squeeze through the makeshift
+concrete path.  Gunfire resounds all around you, as if some eternal battle
+were raging just out of sight. 
 ~
-0 4 1
+0 0 1
+D1
+~
+~
+0 -1 305072
+D3
+~
+~
+0 -1 305074
 S
 #305074
-Floating in a void~
+Wartorn Runway~
+What was once a runway for aircraft is lined with rubble and broken
+machinery, barely allowing a human to squeeze through the makeshift
+concrete path.  Gunfire resounds all around you, as if some eternal battle
+were raging just out of sight. 
 ~
-0 4 1
+0 0 1
+D1
+~
+~
+0 -1 305073
+D3
+~
+~
+0 -1 305075
 S
 #305075
-Floating in a void~
+Wartorn Runway~
+What was once a runway for aircraft is lined with rubble and broken
+machinery, barely allowing a human to squeeze through the makeshift
+concrete path.  Gunfire resounds all around you, as if some eternal battle
+were raging just out of sight. 
 ~
-0 4 1
+0 0 1
+D1
+~
+~
+0 -1 305074
+D3
+~
+~
+0 -1 305161
 S
 #305076
-Floating in a void~
+Wartorn Runway~
+What was once a runway for aircraft is lined with rubble and broken
+machinery, barely allowing a human to squeeze through the makeshift
+concrete path.  Gunfire resounds all around you, as if some eternal battle
+were raging just out of sight. 
 ~
-0 4 1
+0 0 1
+D1
+~
+~
+0 -1 305077
+D3
+~
+~
+0 -1 305070
 S
 #305077
-Floating in a void~
+Wartorn Runway~
+What was once a runway for aircraft is lined with rubble and broken
+machinery, barely allowing a human to squeeze through the makeshift
+concrete path.  Gunfire resounds all around you, as if some eternal battle
+were raging just out of sight. 
 ~
-0 4 1
+0 0 1
+D1
+~
+~
+0 -1 305078
+D3
+~
+~
+0 -1 305076
 S
 #305078
-Floating in a void~
+Wartorn Runway~
+What was once a runway for aircraft is lined with rubble and broken
+machinery, barely allowing a human to squeeze through the makeshift
+concrete path.  Gunfire resounds all around you, as if some eternal battle
+were raging just out of sight. 
 ~
-0 4 1
+0 0 1
+D1
+~
+~
+0 -1 305079
+D3
+~
+~
+0 -1 305077
 S
 #305079
-Floating in a void~
+Wartorn Runway~
+What was once a runway for aircraft is lined with rubble and broken
+machinery, barely allowing a human to squeeze through the makeshift
+concrete path.  Gunfire resounds all around you, as if some eternal battle
+were raging just out of sight. 
 ~
-0 4 1
+0 0 1
+D1
+~
+~
+0 -1 305080
+D3
+~
+~
+0 -1 305078
 S
 #305080
-Floating in a void~
+Before The Ammunitions Depot~
+A metal hangar looms overhead, its mounted cameras focusing to observe
+your every move.  It might be wise to prepare before heading inside--it is
+a weapons storage facility, after all. 
 ~
-0 4 1
+0 0 1
+D1
+~
+~
+0 -1 305127
+D3
+~
+~
+0 -1 305079
 S
 #305081
-Floating in a void~
+Before A Glorious Mansion~
+A posh mahogany door leads into the foyer of a magnificent mansion here.
+Where most of the lights in the base are industrial and utilitarian, soft,
+rustic lamps adorn the doorway, welcoming you inside. 
 ~
 0 4 1
+D0
+~
+~
+0 -1 305082
+D2
+~
+~
+0 -1 305070
 S
 #305082
-Floating in a void~
+Mansion Foyer~
+A glittering crystal chandelier dangles high overhead, scattering prisms
+of light across the ornate carpeting.  Posh hallways lead to the east and
+western annexes, and a stairway with gem-encrusted banisters leads upward. 
+Behind the stairway you can make out a lavish parlor to the north. 
 ~
-0 4 1
+0 0 0
+D0
+~
+~
+0 -1 305094
+D1
+~
+~
+0 -1 305084
+D2
+~
+~
+0 -1 305081
+D3
+~
+~
+0 -1 305083
+D4
+~
+~
+0 -1 305091
 S
 #305083
-Floating in a void~
+Mansion Hall~
+Much like the one in the foyer, chandeliers dot the ceiling every few
+steps down this hallway, its designer clearly sparing no expense.  Statues
+of an unusually short man with an eye patch line the walls. 
 ~
-0 4 1
+0 0 0
+D1
+~
+~
+0 -1 305082
+D3
+~
+~
+0 -1 305085
 S
 #305084
-Floating in a void~
+Mansion Hall~
+Much like the one in the foyer, chandeliers dot the ceiling every few
+steps down this hallway, its designer clearly sparing no expense.  Statues
+of an unusually short man with an eye patch line the walls. 
 ~
-0 4 1
+0 0 0
+D1
+~
+~
+0 -1 305088
+D3
+~
+~
+0 -1 305082
 S
 #305085
-Floating in a void~
+Mansion Hall~
+Much like the one in the foyer, chandeliers dot the ceiling every few
+steps down this hallway, its designer clearly sparing no expense.  Statues
+of an unusually short man with an eye patch line the walls. 
 ~
-0 4 1
+0 0 0
+D1
+~
+~
+0 -1 305083
+D3
+~
+~
+0 -1 305086
 S
 #305086
-Floating in a void~
+Mansion Hall~
+Much like the one in the foyer, chandeliers dot the ceiling every few
+steps down this hallway, its designer clearly sparing no expense.  Statues
+of an unusually short man with an eye patch line the walls. 
 ~
-0 4 1
+0 0 0
+D1
+~
+~
+0 -1 305085
+D3
+~
+~
+0 -1 305087
 S
 #305087
-Floating in a void~
+Western Annex~
+A window stretching from the floor to nearly the ceiling calls attention
+to a beautiful garden just outside, lined with topiary animals and
+renditions of Red Ribbon officers. 
 ~
-0 4 1
+0 0 0
+D1
+~
+~
+0 -1 305086
 S
 #305088
-Floating in a void~
+Mansion Hall~
+Much like the one in the foyer, chandeliers dot the ceiling every few
+steps down this hallway, its designer clearly sparing no expense.  Statues
+of an unusually short man with an eye patch line the walls. 
 ~
-0 4 1
+0 0 0
+D1
+~
+~
+0 -1 305089
+D3
+~
+~
+0 -1 305084
 S
 #305089
-Floating in a void~
+Mansion Hall~
+Much like the one in the foyer, chandeliers dot the ceiling every few
+steps down this hallway, its designer clearly sparing no expense.  Statues
+of an unusually short man with an eye patch line the walls. 
 ~
-0 4 1
+0 0 0
+D1
+~
+~
+0 -1 305090
+D3
+~
+~
+0 -1 305088
 S
 #305090
-Floating in a void~
+Eastern Annex~
+A window stretching from the floor to nearly the ceiling calls attention
+to a beautiful garden just outside, lined with topiary animals and
+renditions of Red Ribbon officers. 
 ~
-0 4 1
+0 0 0
+D3
+~
+~
+0 -1 305089
 S
 #305091
-Floating in a void~
+Giant Staircase~
+The stairway winds upward, every inch guarded by grizzled soldiers who
+seem none too pleased by your arrival. 
 ~
-0 4 1
+0 0 0
+D0
+~
+~
+0 -1 305092
+D5
+~
+~
+0 -1 305082
 S
 #305092
-Floating in a void~
+Giant Staircase~
+The stairway winds upward, every inch guarded by grizzled soldiers who
+seem none too pleased by your arrival. 
 ~
-0 4 1
+0 0 0
+D0
+~
+~
+0 -1 305093
+D2
+~
+~
+0 -1 305091
 S
 #305093
-Floating in a void~
+Giant Staircase~
+The stairway winds upward, every inch guarded by grizzled soldiers who
+seem none too pleased by your arrival. 
 ~
-0 4 1
+0 0 0
+D2
+~
+~
+0 -1 305092
+D4
+~
+~
+0 -1 305100
 S
 #305094
-Floating in a void~
+Lavish Parlor~
+An extravagantly long mahogany table sits at the center of this room,
+lined on all corners with appropriate seating.  Paintings and statues of
+the mansion's ower leap out from every angle, speaking to what seems a
+distinct sense of narcissicism. 
 ~
-0 4 1
+0 0 0
+D0
+~
+~
+0 -1 305098
+D1
+~
+~
+0 -1 305096
+D2
+~
+~
+0 -1 305082
+D3
+~
+~
+0 -1 305095
 S
 #305095
-Floating in a void~
+Lavish Parlor~
+An extravagantly long mahogany table sits at the center of this room,
+lined on all corners with appropriate seating.  Paintings and statues of
+the mansion's ower leap out from every angle, speaking to what seems a
+distinct sense of narcissicism. 
 ~
-0 4 1
+0 0 0
+D0
+~
+~
+0 -1 305097
+D1
+~
+~
+0 -1 305094
 S
 #305096
-Floating in a void~
+Lavish Parlor~
+An extravagantly long mahogany table sits at the center of this room,
+lined on all corners with appropriate seating.  Paintings and statues of
+the mansion's ower leap out from every angle, speaking to what seems a
+distinct sense of narcissicism. 
 ~
-0 4 1
+0 0 0
+D0
+~
+~
+0 -1 305099
+D3
+~
+~
+0 -1 305094
 S
 #305097
-Floating in a void~
+Lavish Parlor~
+An extravagantly long mahogany table sits at the center of this room,
+lined on all corners with appropriate seating.  Paintings and statues of
+the mansion's ower leap out from every angle, speaking to what seems a
+distinct sense of narcissicism. 
 ~
-0 4 1
+0 0 0
+D1
+~
+~
+0 -1 305098
+D2
+~
+~
+0 -1 305095
 S
 #305098
-Floating in a void~
+Lavish Parlor~
+An extravagantly long mahogany table sits at the center of this room,
+lined on all corners with appropriate seating.  Paintings and statues of
+the mansion's ower leap out from every angle, speaking to what seems a
+distinct sense of narcissicism. 
 ~
-0 4 1
+0 0 0
+D1
+~
+~
+0 -1 305099
+D2
+~
+~
+0 -1 305094
+D3
+~
+~
+0 -1 305097
 S
 #305099
-Floating in a void~
+Lavish Parlor~
+An extravagantly long mahogany table sits at the center of this room,
+lined on all corners with appropriate seating.  Paintings and statues of
+the mansion's ower leap out from every angle, speaking to what seems a
+distinct sense of narcissicism. 
 ~
-0 4 1
+0 0 0
+D2
+~
+~
+0 -1 305096
+D3
+~
+~
+0 -1 305098
 S
 #305100
-Floating in a void~
+Upper Stairwell~
+The top of the stairs opens into an intersection between studies.  To
+the west and east you can make out smaller rooms, and to the north, through
+a particularly well-guarded hallway, there appears to be a much larger
+control room. 
 ~
-0 4 1
+0 0 0
+D0
+~
+~
+0 -1 305121
+D1
+~
+~
+0 -1 305104
+D3
+~
+~
+0 -1 305101
+D5
+~
+~
+0 -1 305093
 S
 #305101
-Floating in a void~
+Upper Hall~
+The hallway here travels between studies, although with the number of
+soldiers intent on interrupting, studying seems out of the question. 
 ~
-0 4 1
+0 0 0
+D1
+~
+~
+0 -1 305100
+D3
+~
+~
+0 -1 305102
 S
 #305102
-Floating in a void~
+Upper Hall~
+The hallway here travels between studies, although with the number of
+soldiers intent on interrupting, studying seems out of the question. 
 ~
-0 4 1
+0 0 0
+D1
+~
+~
+0 -1 305101
+D3
+~
+~
+0 -1 305103
 S
 #305103
-Floating in a void~
+Upper Hall~
+The hallway here travels between studies, although with the number of
+soldiers intent on interrupting, studying seems out of the question. 
 ~
-0 4 1
+0 0 0
+D0
+~
+~
+0 -1 305107
+D1
+~
+~
+0 -1 305102
 S
 #305104
-Floating in a void~
+Upper Hall~
+The hallway here travels between studies, although with the number of
+soldiers intent on interrupting, studying seems out of the question. 
 ~
-0 4 1
+0 0 0
+D1
+~
+~
+0 -1 305105
+D3
+~
+~
+0 -1 305100
 S
 #305105
-Floating in a void~
+Upper Hall~
+The hallway here travels between studies, although with the number of
+soldiers intent on interrupting, studying seems out of the question. 
 ~
-0 4 1
+0 0 0
+D1
+~
+~
+0 -1 305106
+D3
+~
+~
+0 -1 305104
 S
 #305106
-Floating in a void~
+Upper Hall~
+The hallway here travels between studies, although with the number of
+soldiers intent on interrupting, studying seems out of the question. 
 ~
-0 4 1
+0 0 0
+D0
+~
+~
+0 -1 305114
+D3
+~
+~
+0 -1 305105
 S
 #305107
-Floating in a void~
+West Study~
+Extravagant bookcases line the walls, stretching from corner to corner
+with literary works from too many authors to count. 
 ~
-0 4 1
+0 0 0
+D0
+~
+~
+0 -1 305108
+D2
+~
+~
+0 -1 305103
 S
 #305108
-Floating in a void~
+West Study~
+Extravagant bookcases line the walls, stretching from corner to corner
+with literary works from too many authors to count. 
 ~
-0 4 1
+0 0 0
+D0
+~
+~
+0 -1 305112
+D1
+~
+~
+0 -1 305109
+D2
+~
+~
+0 -1 305107
+D3
+~
+~
+0 -1 305110
 S
 #305109
-Floating in a void~
+West Study~
+Extravagant bookcases line the walls, stretching from corner to corner
+with literary works from too many authors to count. 
 ~
-0 4 1
+0 0 0
+D0
+~
+~
+0 -1 305111
+D3
+~
+~
+0 -1 305108
 S
 #305110
-Floating in a void~
+West Study~
+Extravagant bookcases line the walls, stretching from corner to corner
+with literary works from too many authors to count. 
 ~
-0 4 1
+0 0 0
+D0
+~
+~
+0 -1 305113
+D1
+~
+~
+0 -1 305108
 S
 #305111
-Floating in a void~
+West Study~
+Extravagant bookcases line the walls, stretching from corner to corner
+with literary works from too many authors to count. 
 ~
-0 4 1
+0 0 0
+D2
+~
+~
+0 -1 305109
+D3
+~
+~
+0 -1 305112
 S
 #305112
-Floating in a void~
+West Study~
+Extravagant bookcases line the walls, stretching from corner to corner
+with literary works from too many authors to count. 
 ~
-0 4 1
+0 0 0
+D1
+~
+~
+0 -1 305111
+D2
+~
+~
+0 -1 305108
+D3
+~
+~
+0 -1 305113
 S
 #305113
-Floating in a void~
+West Study~
+Extravagant bookcases line the walls, stretching from corner to corner
+with literary works from too many authors to count. 
 ~
-0 4 1
+0 0 0
+D1
+~
+~
+0 -1 305112
+D2
+~
+~
+0 -1 305110
 S
 #305114
-Floating in a void~
+East Study~
+Extravagant bookcases line the walls, stretching from corner to corner
+with literary works from too many authors to count. 
 ~
-0 4 1
+0 0 0
+D0
+~
+~
+0 -1 305115
+D2
+~
+~
+0 -1 305106
 S
 #305115
-Floating in a void~
+East Study~
+Extravagant bookcases line the walls, stretching from corner to corner
+with literary works from too many authors to count. 
 ~
-0 4 1
+0 0 0
+D0
+~
+~
+0 -1 305119
+D1
+~
+~
+0 -1 305117
+D2
+~
+~
+0 -1 305114
+D3
+~
+~
+0 -1 305116
 S
 #305116
-Floating in a void~
+East Study~
+Extravagant bookcases line the walls, stretching from corner to corner
+with literary works from too many authors to count. 
 ~
-0 4 1
+0 0 0
+D0
+~
+~
+0 -1 305118
+D1
+~
+~
+0 -1 305115
 S
 #305117
-Floating in a void~
+East Study~
+Extravagant bookcases line the walls, stretching from corner to corner
+with literary works from too many authors to count. 
 ~
-0 4 1
+0 0 0
+D0
+~
+~
+0 -1 305120
+D3
+~
+~
+0 -1 305115
 S
 #305118
-Floating in a void~
+East Study~
+Extravagant bookcases line the walls, stretching from corner to corner
+with literary works from too many authors to count. 
 ~
-0 4 1
+0 0 0
+D1
+~
+~
+0 -1 305119
+D2
+~
+~
+0 -1 305116
 S
 #305119
-Floating in a void~
+East Study~
+Extravagant bookcases line the walls, stretching from corner to corner
+with literary works from too many authors to count. 
 ~
-0 4 1
+0 0 0
+D1
+~
+~
+0 -1 305120
+D2
+~
+~
+0 -1 305115
+D3
+~
+~
+0 -1 305118
 S
 #305120
-Floating in a void~
+East Study~
+Extravagant bookcases line the walls, stretching from corner to corner
+with literary works from too many authors to count. 
 ~
-0 4 1
+0 0 0
+D2
+~
+~
+0 -1 305117
+D3
+~
+~
+0 -1 305119
 S
 #305121
-Floating in a void~
+A Well-Defended Hallway~
 ~
-0 4 1
+0 0 0
+D0
+~
+~
+0 -1 305122
+D2
+~
+~
+0 -1 305100
 S
 #305122
-Floating in a void~
+A Well-Defended Hallway~
 ~
-0 4 1
+0 0 0
+D0
+~
+~
+0 -1 305123
+D2
+~
+~
+0 -1 305121
 S
 #305123
-Floating in a void~
+Before Commander Red's Office~
 ~
-0 4 1
+0 0 0
+D0
+~
+~
+0 -1 305126
+D1
+~
+~
+0 -1 305125
+D2
+~
+~
+0 -1 305122
+D3
+~
+~
+0 -1 305124
 S
 #305124
-Floating in a void~
+Patrol Annex~
 ~
-0 4 1
+0 0 0
+D1
+~
+~
+0 -1 305123
 S
 #305125
-Floating in a void~
+Patrol Annex~
 ~
-0 4 1
+0 0 0
+D3
+~
+~
+0 -1 305123
 S
 #305126
-Floating in a void~
+Commander Red's Office~
 ~
-0 4 1
+0 0 0
+D2
+~
+~
+0 -1 305123
 S
 #305127
-Floating in a void~
+Ammunitions Depot Foyer~
+The mouth of the hangar opens into a smaller section partitioned off
+with half-height walls.  You can make out giant machines lurking behind
+metal collumns, prepared to defend their weapon stores. 
 ~
 0 4 1
+D0
+~
+~
+0 -1 305128
+D1
+~
+~
+0 -1 305150
+D2
+~
+~
+0 -1 305139
+D3
+~
+~
+0 -1 305080
 S
 #305128
-Floating in a void~
+Ammunitions Depot: Northwest Corner~
+The polished walls of the depot curve gently here, doing little to
+obscure the massive gun sitting in the center of the floor plating. 
 ~
-0 4 1
+0 0 0
+D1
+~
+~
+0 -1 305129
+D2
+~
+~
+0 -1 305127
 S
 #305129
-Floating in a void~
+Ammunitions Depot~
+This building is absolutely cavernous, requiring you to crane your head
+to make out the ceiling.  Wooden boxes are stacked as high as the eye can
+see, propped against metal collumns. 
 ~
-0 4 1
+0 0 0
+D1
+~
+~
+0 -1 305130
+D2
+~
+~
+0 -1 305150
+D3
+~
+~
+0 -1 305128
 S
 #305130
-Floating in a void~
+Ammunitions Depot~
+This building is absolutely cavernous, requiring you to crane your head
+to make out the ceiling.  Wooden boxes are stacked as high as the eye can
+see, propped against metal collumns. 
 ~
-0 4 1
+0 0 0
+D1
+~
+~
+0 -1 305131
+D2
+~
+~
+0 -1 305151
+D3
+~
+~
+0 -1 305129
 S
 #305131
-Floating in a void~
+Ammunitions Depot~
+This building is absolutely cavernous, requiring you to crane your head
+to make out the ceiling.  Wooden boxes are stacked as high as the eye can
+see, propped against metal collumns. 
 ~
-0 4 1
+0 0 0
+D1
+~
+~
+0 -1 305132
+D2
+~
+~
+0 -1 305152
+D3
+~
+~
+0 -1 305130
 S
 #305132
-Floating in a void~
+Ammunitions Depot~
+This building is absolutely cavernous, requiring you to crane your head
+to make out the ceiling.  Wooden boxes are stacked as high as the eye can
+see, propped against metal collumns. 
 ~
-0 4 1
+0 0 0
+D1
+~
+~
+0 -1 305133
+D2
+~
+~
+0 -1 305153
+D3
+~
+~
+0 -1 305131
 S
 #305133
-Floating in a void~
+Ammunitions Depot~
+This building is absolutely cavernous, requiring you to crane your head
+to make out the ceiling.  Wooden boxes are stacked as high as the eye can
+see, propped against metal collumns. 
 ~
-0 4 1
+0 0 0
+D1
+~
+~
+0 -1 305134
+D2
+~
+~
+0 -1 305154
+D3
+~
+~
+0 -1 305132
 S
 #305134
-Floating in a void~
+Ammunitions Depot~
+This building is absolutely cavernous, requiring you to crane your head
+to make out the ceiling.  Wooden boxes are stacked as high as the eye can
+see, propped against metal collumns. 
 ~
-0 4 1
+0 0 0
+D1
+~
+~
+0 -1 305135
+D2
+~
+~
+0 -1 305155
+D3
+~
+~
+0 -1 305133
 S
 #305135
-Floating in a void~
+Ammunitions Depot~
+This building is absolutely cavernous, requiring you to crane your head
+to make out the ceiling.  Wooden boxes are stacked as high as the eye can
+see, propped against metal collumns. 
 ~
-0 4 1
+0 0 0
+D1
+~
+~
+0 -1 305136
+D2
+~
+~
+0 -1 305156
+D3
+~
+~
+0 -1 305134
 S
 #305136
-Floating in a void~
+Ammunitions Depot~
+This building is absolutely cavernous, requiring you to crane your head
+to make out the ceiling.  Wooden boxes are stacked as high as the eye can
+see, propped against metal collumns. 
 ~
-0 4 1
+0 0 0
+D1
+~
+~
+0 -1 305137
+D2
+~
+~
+0 -1 305157
+D3
+~
+~
+0 -1 305135
 S
 #305137
-Floating in a void~
+Ammunitions Depot~
+This building is absolutely cavernous, requiring you to crane your head
+to make out the ceiling.  Wooden boxes are stacked as high as the eye can
+see, propped against metal collumns. 
 ~
-0 4 1
+0 0 0
+D1
+~
+~
+0 -1 305138
+D2
+~
+~
+0 -1 305158
+D3
+~
+~
+0 -1 305136
 S
 #305138
-Floating in a void~
+Ammunitions Depot: Northeast Corner~
+The polished walls of the depot curve gently here, doing little to
+obscure the massive gun sitting in the center of the floor plating. 
 ~
-0 4 1
+0 0 0
+D2
+~
+~
+0 -1 305159
+D3
+~
+~
+0 -1 305137
 S
 #305139
-Floating in a void~
+Ammunitions Depot: Southwest Corner~
+The polished walls of the depot curve gently here, doing little to
+obscure the massive gun sitting in the center of the floor plating. 
 ~
-0 4 1
+0 0 0
+D0
+~
+~
+0 -1 305127
+D1
+~
+~
+0 -1 305140
 S
 #305140
-Floating in a void~
+Ammunitions Depot~
+This building is absolutely cavernous, requiring you to crane your head
+to make out the ceiling.  Wooden boxes are stacked as high as the eye can
+see, propped against metal collumns. 
 ~
-0 4 1
+0 0 0
+D0
+~
+~
+0 -1 305150
+D1
+~
+~
+0 -1 305141
+D3
+~
+~
+0 -1 305139
 S
 #305141
-Floating in a void~
+Ammunitions Depot~
+This building is absolutely cavernous, requiring you to crane your head
+to make out the ceiling.  Wooden boxes are stacked as high as the eye can
+see, propped against metal collumns. 
 ~
-0 4 1
+0 0 0
+D0
+~
+~
+0 -1 305151
+D1
+~
+~
+0 -1 305142
+D3
+~
+~
+0 -1 305140
 S
 #305142
-Floating in a void~
+Ammunitions Depot~
+This building is absolutely cavernous, requiring you to crane your head
+to make out the ceiling.  Wooden boxes are stacked as high as the eye can
+see, propped against metal collumns. 
 ~
-0 4 1
+0 0 0
+D0
+~
+~
+0 -1 305152
+D1
+~
+~
+0 -1 305143
+D3
+~
+~
+0 -1 305141
 S
 #305143
-Floating in a void~
+Ammunitions Depot~
+This building is absolutely cavernous, requiring you to crane your head
+to make out the ceiling.  Wooden boxes are stacked as high as the eye can
+see, propped against metal collumns. 
 ~
-0 4 1
+0 0 0
+D0
+~
+~
+0 -1 305153
+D1
+~
+~
+0 -1 305144
+D3
+~
+~
+0 -1 305142
 S
 #305144
-Floating in a void~
+Ammunitions Depot~
+This building is absolutely cavernous, requiring you to crane your head
+to make out the ceiling.  Wooden boxes are stacked as high as the eye can
+see, propped against metal collumns. 
 ~
-0 4 1
+0 0 0
+D0
+~
+~
+0 -1 305154
+D1
+~
+~
+0 -1 305145
+D3
+~
+~
+0 -1 305143
 S
 #305145
-Floating in a void~
+Ammunitions Depot~
+This building is absolutely cavernous, requiring you to crane your head
+to make out the ceiling.  Wooden boxes are stacked as high as the eye can
+see, propped against metal collumns. 
 ~
-0 4 1
+0 0 0
+D0
+~
+~
+0 -1 305155
+D1
+~
+~
+0 -1 305146
+D3
+~
+~
+0 -1 305144
 S
 #305146
-Floating in a void~
+Ammunitions Depot~
+This building is absolutely cavernous, requiring you to crane your head
+to make out the ceiling.  Wooden boxes are stacked as high as the eye can
+see, propped against metal collumns. 
 ~
-0 4 1
+0 0 0
+D0
+~
+~
+0 -1 305156
+D1
+~
+~
+0 -1 305147
+D3
+~
+~
+0 -1 305145
 S
 #305147
-Floating in a void~
+Ammunitions Depot~
+This building is absolutely cavernous, requiring you to crane your head
+to make out the ceiling.  Wooden boxes are stacked as high as the eye can
+see, propped against metal collumns. 
 ~
-0 4 1
+0 0 0
+D0
+~
+~
+0 -1 305157
+D1
+~
+~
+0 -1 305148
+D3
+~
+~
+0 -1 305146
 S
 #305148
-Floating in a void~
+Ammunitions Depot~
+This building is absolutely cavernous, requiring you to crane your head
+to make out the ceiling.  Wooden boxes are stacked as high as the eye can
+see, propped against metal collumns. 
 ~
-0 4 1
+0 0 0
+D0
+~
+~
+0 -1 305158
+D1
+~
+~
+0 -1 305149
+D3
+~
+~
+0 -1 305147
 S
 #305149
-Floating in a void~
+Ammunitions Depot: Southeast Corner~
+The polished walls of the depot curve gently here, doing little to
+obscure the massive gun sitting in the center of the floor plating. 
 ~
-0 4 1
+0 0 0
+D0
+~
+~
+0 -1 305159
+D3
+~
+~
+0 -1 305148
 S
 #305150
-Floating in a void~
+Ammunitions Depot~
+This building is absolutely cavernous, requiring you to crane your head
+to make out the ceiling.  Wooden boxes are stacked as high as the eye can
+see, propped against metal collumns. 
 ~
-0 4 1
+0 0 0
+D0
+~
+~
+0 -1 305129
+D1
+~
+~
+0 -1 305151
+D2
+~
+~
+0 -1 305140
+D3
+~
+~
+0 -1 305127
 S
 #305151
-Floating in a void~
+Ammunitions Depot~
+This building is absolutely cavernous, requiring you to crane your head
+to make out the ceiling.  Wooden boxes are stacked as high as the eye can
+see, propped against metal collumns. 
 ~
-0 4 1
+0 0 0
+D0
+~
+~
+0 -1 305130
+D1
+~
+~
+0 -1 305152
+D2
+~
+~
+0 -1 305141
+D3
+~
+~
+0 -1 305150
 S
 #305152
-Floating in a void~
+Ammunitions Depot~
+This building is absolutely cavernous, requiring you to crane your head
+to make out the ceiling.  Wooden boxes are stacked as high as the eye can
+see, propped against metal collumns. 
 ~
-0 4 1
+0 0 0
+D0
+~
+~
+0 -1 305131
+D1
+~
+~
+0 -1 305153
+D2
+~
+~
+0 -1 305142
+D3
+~
+~
+0 -1 305151
 S
 #305153
-Floating in a void~
+Ammunitions Depot~
+This building is absolutely cavernous, requiring you to crane your head
+to make out the ceiling.  Wooden boxes are stacked as high as the eye can
+see, propped against metal collumns. 
 ~
-0 4 1
+0 0 0
+D0
+~
+~
+0 -1 305132
+D1
+~
+~
+0 -1 305154
+D2
+~
+~
+0 -1 305143
+D3
+~
+~
+0 -1 305152
 S
 #305154
-Floating in a void~
+Ammunitions Depot~
+This building is absolutely cavernous, requiring you to crane your head
+to make out the ceiling.  Wooden boxes are stacked as high as the eye can
+see, propped against metal collumns. 
 ~
-0 4 1
+0 0 0
+D0
+~
+~
+0 -1 305133
+D1
+~
+~
+0 -1 305155
+D2
+~
+~
+0 -1 305144
+D3
+~
+~
+0 -1 305153
 S
 #305155
-Floating in a void~
+Ammunitions Depot~
+This building is absolutely cavernous, requiring you to crane your head
+to make out the ceiling.  Wooden boxes are stacked as high as the eye can
+see, propped against metal collumns. 
 ~
-0 4 1
+0 0 0
+D0
+~
+~
+0 -1 305134
+D1
+~
+~
+0 -1 305156
+D2
+~
+~
+0 -1 305145
+D3
+~
+~
+0 -1 305154
 S
 #305156
-Floating in a void~
+Ammunitions Depot~
+This building is absolutely cavernous, requiring you to crane your head
+to make out the ceiling.  Wooden boxes are stacked as high as the eye can
+see, propped against metal collumns. 
 ~
-0 4 1
+0 0 0
+D0
+~
+~
+0 -1 305135
+D1
+~
+~
+0 -1 305157
+D2
+~
+~
+0 -1 305146
+D3
+~
+~
+0 -1 305155
 S
 #305157
-Floating in a void~
+Ammunitions Depot~
+This building is absolutely cavernous, requiring you to crane your head
+to make out the ceiling.  Wooden boxes are stacked as high as the eye can
+see, propped against metal collumns. 
 ~
-0 4 1
+0 0 0
+D0
+~
+~
+0 -1 305136
+D1
+~
+~
+0 -1 305158
+D2
+~
+~
+0 -1 305147
+D3
+~
+~
+0 -1 305156
 S
 #305158
-Floating in a void~
+Ammunitions Depot~
+This building is absolutely cavernous, requiring you to crane your head
+to make out the ceiling.  Wooden boxes are stacked as high as the eye can
+see, propped against metal collumns. 
 ~
-0 4 1
+0 0 0
+D0
+~
+~
+0 -1 305137
+D1
+~
+~
+0 -1 305159
+D2
+~
+~
+0 -1 305148
+D3
+~
+~
+0 -1 305157
 S
 #305159
-Floating in a void~
+Ammunitions Depot~
+This building is absolutely cavernous, requiring you to crane your head
+to make out the ceiling.  Wooden boxes are stacked as high as the eye can
+see, propped against metal collumns.  A small partitioned room sits to the
+east, where a massive pile of ammunition glitters in the flourescent
+lighting. 
 ~
-0 4 1
+0 0 0
+D0
+~
+~
+0 -1 305138
+D1
+~
+~
+0 -1 305160
+D2
+~
+~
+0 -1 305149
+D3
+~
+~
+0 -1 305158
 S
 #305160
-Floating in a void~
+A Pile of Dangerous Weaponry~
+From the ceiling to the floor, nearly every inch of this partitioned off
+room is covered in grenades, missiles, assault weapons, and more than a few
+objects you don't quite recognize. 
 ~
-0 4 1
+0 0 0
+D3
+~
+~
+0 -1 305159
 S
 #305161
-Floating in a void~
+Wartorn Runway~
+What was once a runway for aircraft is lined with rubble and broken
+machinery, barely allowing a human to squeeze through the makeshift
+concrete path.  Gunfire resounds all around you, as if some eternal battle
+were raging just out of sight. 
 ~
-0 4 1
+0 0 1
+D1
+~
+~
+0 -1 305075
+D3
+~
+~
+0 -1 305162
 S
 #305162
-Floating in a void~
+Wartorn Runway~
+What was once a runway for aircraft is lined with rubble and broken
+machinery, barely allowing a human to squeeze through the makeshift
+concrete path.  Gunfire resounds all around you, as if some eternal battle
+were raging just out of sight. 
 ~
-0 4 1
+0 0 1
+D1
+~
+~
+0 -1 305161
+D3
+~
+~
+0 -1 305163
 S
 #305163
-Floating in a void~
+Wartorn Runway~
+What was once a runway for aircraft is lined with rubble and broken
+machinery, barely allowing a human to squeeze through the makeshift
+concrete path.  Gunfire resounds all around you, as if some eternal battle
+were raging just out of sight. 
 ~
-0 4 1
+0 0 1
+D1
+~
+~
+0 -1 305162
+D3
+~
+~
+0 -1 305164
 S
 #305164
-Floating in a void~
+Wartorn Runway~
+What was once a runway for aircraft is lined with rubble and broken
+machinery, barely allowing a human to squeeze through the makeshift
+concrete path.  Gunfire resounds all around you, as if some eternal battle
+were raging just out of sight. 
 ~
-0 4 1
+0 0 1
+D1
+~
+~
+0 -1 305163
+D3
+~
+~
+0 -1 305165
 S
 #305165
-Floating in a void~
+Before the Air Strip~
 ~
 0 4 1
+D0
+~
+~
+0 -1 305166
+D1
+~
+~
+0 -1 305164
 S
 #305166
-Floating in a void~
+Air Strip Pathway~
 ~
-0 4 1
+0 0 1
+D0
+~
+~
+0 -1 305167
+D2
+~
+~
+0 -1 305165
 S
 #305167
-Floating in a void~
+Air Strip Pathway~
 ~
-0 4 1
+0 0 1
+D0
+~
+~
+0 -1 305168
+D2
+~
+~
+0 -1 305166
 S
 #305168
-Floating in a void~
+Air Strip Pathway~
 ~
-0 4 1
+0 0 1
+D0
+~
+~
+0 -1 305169
+D2
+~
+~
+0 -1 305167
 S
 #305169
-Floating in a void~
+Air Strip Pathway~
 ~
-0 4 1
+0 0 1
+D0
+~
+~
+0 -1 305170
+D2
+~
+~
+0 -1 305168
 S
 #305170
-Floating in a void~
+Air Strip 01~
 ~
 0 4 1
+D0
+~
+~
+0 -1 305226
+D1
+~
+~
+0 -1 305171
+D2
+~
+~
+0 -1 305169
 S
 #305171
-Floating in a void~
+Air Strip 02~
 ~
-0 4 1
+0 0 1
+D0
+~
+~
+0 -1 305216
+D1
+~
+~
+0 -1 305172
+D3
+~
+~
+0 -1 305170
 S
 #305172
-Floating in a void~
+Air Strip 03~
 ~
-0 4 1
+0 0 1
+D0
+~
+~
+0 -1 305206
+D1
+~
+~
+0 -1 305173
+D3
+~
+~
+0 -1 305171
 S
 #305173
-Floating in a void~
+Air Strip 04~
 ~
-0 4 1
+0 0 1
+D0
+~
+~
+0 -1 305196
+D1
+~
+~
+0 -1 305174
+D3
+~
+~
+0 -1 305172
 S
 #305174
-Floating in a void~
+Air Strip 05~
 ~
-0 4 1
+0 0 1
+D0
+~
+~
+0 -1 305186
+D1
+~
+~
+0 -1 305175
+D3
+~
+~
+0 -1 305173
 S
 #305175
-Floating in a void~
+Air Strip 06~
 ~
-0 4 1
+0 0 1
+D0
+~
+~
+0 -1 305176
+D3
+~
+~
+0 -1 305174
 S
 #305176
-Floating in a void~
+Air Strip 06~
 ~
-0 4 1
+0 0 1
+D0
+~
+~
+0 -1 305177
+D2
+~
+~
+0 -1 305175
+D3
+~
+~
+0 -1 305186
 S
 #305177
-Floating in a void~
+Air Strip 06~
 ~
-0 4 1
+0 0 1
+D0
+~
+~
+0 -1 305178
+D2
+~
+~
+0 -1 305176
+D3
+~
+~
+0 -1 305187
 S
 #305178
-Floating in a void~
+Air Strip 06~
 ~
-0 4 1
+0 0 1
+D0
+~
+~
+0 -1 305179
+D2
+~
+~
+0 -1 305177
+D3
+~
+~
+0 -1 305188
 S
 #305179
-Floating in a void~
+Air Strip 06~
 ~
-0 4 1
+0 0 1
+D0
+~
+~
+0 -1 305180
+D2
+~
+~
+0 -1 305178
+D3
+~
+~
+0 -1 305189
 S
 #305180
-Floating in a void~
+Air Strip 06~
 ~
-0 4 1
+0 0 1
+D0
+~
+~
+0 -1 305181
+D2
+~
+~
+0 -1 305179
+D3
+~
+~
+0 -1 305190
 S
 #305181
-Floating in a void~
+Air Strip 06~
 ~
-0 4 1
+0 0 1
+D0
+~
+~
+0 -1 305182
+D2
+~
+~
+0 -1 305180
+D3
+~
+~
+0 -1 305191
 S
 #305182
-Floating in a void~
+Air Strip 06~
 ~
-0 4 1
+0 0 1
+D0
+~
+~
+0 -1 305183
+D2
+~
+~
+0 -1 305181
+D3
+~
+~
+0 -1 305192
 S
 #305183
-Floating in a void~
+Air Strip 06~
 ~
-0 4 1
+0 0 1
+D0
+~
+~
+0 -1 305184
+D2
+~
+~
+0 -1 305182
+D3
+~
+~
+0 -1 305193
 S
 #305184
-Floating in a void~
+Air Strip 06~
 ~
-0 4 1
+0 0 1
+D0
+~
+~
+0 -1 305185
+D2
+~
+~
+0 -1 305183
+D3
+~
+~
+0 -1 305194
 S
 #305185
-Floating in a void~
+Air Strip 06~
 ~
-0 4 1
+0 0 1
+D1
+~
+~
+0 -1 305280
+D2
+~
+~
+0 -1 305184
+D3
+~
+~
+0 -1 305195
 S
 #305186
-Floating in a void~
+Air Strip 05~
 ~
-0 4 1
+0 0 1
+D0
+~
+~
+0 -1 305187
+D1
+~
+~
+0 -1 305176
+D2
+~
+~
+0 -1 305174
+D3
+~
+~
+0 -1 305196
 S
 #305187
-Floating in a void~
+Air Strip 05~
 ~
-0 4 1
+0 0 1
+D0
+~
+~
+0 -1 305188
+D1
+~
+~
+0 -1 305177
+D2
+~
+~
+0 -1 305186
+D3
+~
+~
+0 -1 305197
 S
 #305188
-Floating in a void~
+Air Strip 05~
 ~
-0 4 1
+0 0 1
+D0
+~
+~
+0 -1 305189
+D1
+~
+~
+0 -1 305178
+D2
+~
+~
+0 -1 305187
+D3
+~
+~
+0 -1 305198
 S
 #305189
-Floating in a void~
+Air Strip 05~
 ~
-0 4 1
+0 0 1
+D0
+~
+~
+0 -1 305190
+D1
+~
+~
+0 -1 305179
+D2
+~
+~
+0 -1 305188
+D3
+~
+~
+0 -1 305199
 S
 #305190
-Floating in a void~
+Air Strip 05~
 ~
-0 4 1
+0 0 1
+D0
+~
+~
+0 -1 305191
+D1
+~
+~
+0 -1 305180
+D2
+~
+~
+0 -1 305189
+D3
+~
+~
+0 -1 305200
 S
 #305191
-Floating in a void~
+Air Strip 05~
 ~
-0 4 1
+0 0 1
+D0
+~
+~
+0 -1 305192
+D1
+~
+~
+0 -1 305181
+D2
+~
+~
+0 -1 305190
+D3
+~
+~
+0 -1 305201
 S
 #305192
-Floating in a void~
+Air Strip 05~
 ~
-0 4 1
+0 0 1
+D0
+~
+~
+0 -1 305193
+D1
+~
+~
+0 -1 305182
+D2
+~
+~
+0 -1 305191
+D3
+~
+~
+0 -1 305202
 S
 #305193
-Floating in a void~
+Air Strip 05~
 ~
-0 4 1
+0 0 1
+D0
+~
+~
+0 -1 305194
+D1
+~
+~
+0 -1 305183
+D2
+~
+~
+0 -1 305192
+D3
+~
+~
+0 -1 305203
 S
 #305194
-Floating in a void~
+Air Strip 05~
 ~
-0 4 1
+0 0 1
+D0
+~
+~
+0 -1 305195
+D1
+~
+~
+0 -1 305184
+D2
+~
+~
+0 -1 305193
+D3
+~
+~
+0 -1 305204
 S
 #305195
-Floating in a void~
+Air Strip 05~
 ~
-0 4 1
+0 0 1
+D0
+~
+~
+0 -1 305237
+D1
+~
+~
+0 -1 305185
+D2
+~
+~
+0 -1 305194
+D3
+~
+~
+0 -1 305205
 S
 #305196
-Floating in a void~
+Air Strip 04~
 ~
-0 4 1
+0 0 1
+D0
+~
+~
+0 -1 305197
+D1
+~
+~
+0 -1 305186
+D2
+~
+~
+0 -1 305173
+D3
+~
+~
+0 -1 305206
 S
 #305197
-Floating in a void~
+Air Strip 04~
 ~
-0 4 1
+0 0 1
+D0
+~
+~
+0 -1 305198
+D1
+~
+~
+0 -1 305187
+D2
+~
+~
+0 -1 305196
+D3
+~
+~
+0 -1 305207
 S
 #305198
-Floating in a void~
+Air Strip 04~
 ~
-0 4 1
+0 0 1
+D0
+~
+~
+0 -1 305199
+D1
+~
+~
+0 -1 305188
+D2
+~
+~
+0 -1 305197
+D3
+~
+~
+0 -1 305208
 S
 #305199
-Floating in a void~
+Air Strip 04~
 ~
-0 4 1
+0 0 1
+D0
+~
+~
+0 -1 305200
+D1
+~
+~
+0 -1 305189
+D2
+~
+~
+0 -1 305198
+D3
+~
+~
+0 -1 305209
 S
 #305200
-Floating in a void~
+Air Strip 04~
 ~
-0 4 1
+0 0 1
+D0
+~
+~
+0 -1 305201
+D1
+~
+~
+0 -1 305190
+D2
+~
+~
+0 -1 305199
+D3
+~
+~
+0 -1 305210
 S
 #305201
-Floating in a void~
+Air Strip 04~
 ~
-0 4 1
+0 0 1
+D0
+~
+~
+0 -1 305202
+D1
+~
+~
+0 -1 305191
+D2
+~
+~
+0 -1 305200
+D3
+~
+~
+0 -1 305211
 S
 #305202
-Floating in a void~
+Air Strip 04~
 ~
-0 4 1
+0 0 1
+D0
+~
+~
+0 -1 305203
+D1
+~
+~
+0 -1 305192
+D2
+~
+~
+0 -1 305201
+D3
+~
+~
+0 -1 305212
 S
 #305203
-Floating in a void~
+Air Strip 04~
 ~
-0 4 1
+0 0 1
+D0
+~
+~
+0 -1 305204
+D1
+~
+~
+0 -1 305193
+D2
+~
+~
+0 -1 305202
+D3
+~
+~
+0 -1 305213
 S
 #305204
-Floating in a void~
+Air Strip 04~
 ~
-0 4 1
+0 0 1
+D0
+~
+~
+0 -1 305205
+D1
+~
+~
+0 -1 305194
+D2
+~
+~
+0 -1 305203
+D3
+~
+~
+0 -1 305214
 S
 #305205
-Floating in a void~
+Air Strip 04~
 ~
-0 4 1
+0 0 1
+D1
+~
+~
+0 -1 305195
+D2
+~
+~
+0 -1 305204
+D3
+~
+~
+0 -1 305215
 S
 #305206
-Floating in a void~
+Air Strip 03~
 ~
-0 4 1
+0 0 1
+D0
+~
+~
+0 -1 305207
+D1
+~
+~
+0 -1 305196
+D2
+~
+~
+0 -1 305172
+D3
+~
+~
+0 -1 305216
 S
 #305207
-Floating in a void~
+Air Strip 03~
 ~
-0 4 1
+0 0 1
+D0
+~
+~
+0 -1 305208
+D1
+~
+~
+0 -1 305197
+D2
+~
+~
+0 -1 305206
+D3
+~
+~
+0 -1 305217
 S
 #305208
-Floating in a void~
+Air Strip 03~
 ~
-0 4 1
+0 0 1
+D0
+~
+~
+0 -1 305209
+D1
+~
+~
+0 -1 305198
+D2
+~
+~
+0 -1 305207
+D3
+~
+~
+0 -1 305218
 S
 #305209
-Floating in a void~
+Air Strip 03~
 ~
-0 4 1
+0 0 1
+D0
+~
+~
+0 -1 305210
+D1
+~
+~
+0 -1 305199
+D2
+~
+~
+0 -1 305208
+D3
+~
+~
+0 -1 305219
 S
 #305210
-Floating in a void~
+Air Strip 03~
 ~
-0 4 1
+0 0 1
+D0
+~
+~
+0 -1 305211
+D1
+~
+~
+0 -1 305200
+D2
+~
+~
+0 -1 305209
+D3
+~
+~
+0 -1 305220
 S
 #305211
-Floating in a void~
+Air Strip 03~
 ~
-0 4 1
+0 0 1
+D0
+~
+~
+0 -1 305212
+D1
+~
+~
+0 -1 305201
+D2
+~
+~
+0 -1 305210
+D3
+~
+~
+0 -1 305221
 S
 #305212
-Floating in a void~
+Air Strip 03~
 ~
-0 4 1
+0 0 1
+D0
+~
+~
+0 -1 305213
+D1
+~
+~
+0 -1 305202
+D2
+~
+~
+0 -1 305211
+D3
+~
+~
+0 -1 305222
 S
 #305213
-Floating in a void~
+Air Strip 03~
 ~
-0 4 1
+0 0 1
+D0
+~
+~
+0 -1 305214
+D1
+~
+~
+0 -1 305203
+D2
+~
+~
+0 -1 305212
+D3
+~
+~
+0 -1 305223
 S
 #305214
-Floating in a void~
+Air Strip 03~
 ~
-0 4 1
+0 0 1
+D0
+~
+~
+0 -1 305215
+D1
+~
+~
+0 -1 305204
+D2
+~
+~
+0 -1 305213
+D3
+~
+~
+0 -1 305224
 S
 #305215
-Floating in a void~
+Air Strip 03~
 ~
-0 4 1
+0 0 1
+D1
+~
+~
+0 -1 305205
+D2
+~
+~
+0 -1 305214
+D3
+~
+~
+0 -1 305225
 S
 #305216
-Floating in a void~
+Air Strip 02~
 ~
-0 4 1
+0 0 1
+D0
+~
+~
+0 -1 305217
+D1
+~
+~
+0 -1 305206
+D2
+~
+~
+0 -1 305171
+D3
+~
+~
+0 -1 305226
 S
 #305217
-Floating in a void~
+Air Strip 02~
 ~
-0 4 1
+0 0 1
+D0
+~
+~
+0 -1 305218
+D1
+~
+~
+0 -1 305207
+D2
+~
+~
+0 -1 305216
+D3
+~
+~
+0 -1 305227
 S
 #305218
-Floating in a void~
+Air Strip 02~
 ~
-0 4 1
+0 0 1
+D0
+~
+~
+0 -1 305219
+D1
+~
+~
+0 -1 305208
+D2
+~
+~
+0 -1 305217
+D3
+~
+~
+0 -1 305228
 S
 #305219
-Floating in a void~
+Air Strip 02~
 ~
-0 4 1
+0 0 1
+D0
+~
+~
+0 -1 305220
+D1
+~
+~
+0 -1 305209
+D2
+~
+~
+0 -1 305218
+D3
+~
+~
+0 -1 305229
 S
 #305220
-Floating in a void~
+Air Strip 02~
 ~
-0 4 1
+0 0 1
+D0
+~
+~
+0 -1 305221
+D1
+~
+~
+0 -1 305210
+D2
+~
+~
+0 -1 305219
+D3
+~
+~
+0 -1 305230
 S
 #305221
-Floating in a void~
+Air Strip 02~
 ~
-0 4 1
+0 0 1
+D0
+~
+~
+0 -1 305222
+D1
+~
+~
+0 -1 305211
+D2
+~
+~
+0 -1 305220
+D3
+~
+~
+0 -1 305231
 S
 #305222
-Floating in a void~
+Air Strip 02~
 ~
-0 4 1
+0 0 1
+D0
+~
+~
+0 -1 305223
+D1
+~
+~
+0 -1 305212
+D2
+~
+~
+0 -1 305221
+D3
+~
+~
+0 -1 305232
 S
 #305223
-Floating in a void~
+Air Strip 02~
 ~
-0 4 1
+0 0 1
+D0
+~
+~
+0 -1 305224
+D1
+~
+~
+0 -1 305213
+D2
+~
+~
+0 -1 305222
+D3
+~
+~
+0 -1 305233
 S
 #305224
-Floating in a void~
+Air Strip 02~
 ~
-0 4 1
+0 0 1
+D0
+~
+~
+0 -1 305225
+D1
+~
+~
+0 -1 305214
+D2
+~
+~
+0 -1 305223
+D3
+~
+~
+0 -1 305234
 S
 #305225
-Floating in a void~
+Air Strip 02~
 ~
-0 4 1
+0 0 1
+D0
+~
+~
+0 -1 305236
+D1
+~
+~
+0 -1 305215
+D2
+~
+~
+0 -1 305224
+D3
+~
+~
+0 -1 305235
 S
 #305226
-Floating in a void~
+Air Strip 01~
 ~
-0 4 1
+0 0 1
+D0
+~
+~
+0 -1 305227
+D1
+~
+~
+0 -1 305216
+D2
+~
+~
+0 -1 305170
 S
 #305227
-Floating in a void~
+Air Strip 01~
 ~
-0 4 1
+0 0 1
+D0
+~
+~
+0 -1 305228
+D1
+~
+~
+0 -1 305217
+D2
+~
+~
+0 -1 305226
 S
 #305228
-Floating in a void~
+Air Strip 01~
 ~
-0 4 1
+0 0 1
+D0
+~
+~
+0 -1 305229
+D1
+~
+~
+0 -1 305218
+D2
+~
+~
+0 -1 305227
 S
 #305229
-Floating in a void~
+Air Strip 01~
 ~
-0 4 1
+0 0 1
+D0
+~
+~
+0 -1 305230
+D1
+~
+~
+0 -1 305219
+D2
+~
+~
+0 -1 305228
 S
 #305230
-Floating in a void~
+Air Strip 01~
 ~
-0 4 1
+0 0 1
+D0
+~
+~
+0 -1 305231
+D1
+~
+~
+0 -1 305220
+D2
+~
+~
+0 -1 305229
 S
 #305231
-Floating in a void~
+Air Strip 01~
 ~
-0 4 1
+0 0 1
+D0
+~
+~
+0 -1 305232
+D1
+~
+~
+0 -1 305221
+D2
+~
+~
+0 -1 305230
 S
 #305232
-Floating in a void~
+Air Strip 01~
 ~
-0 4 1
+0 0 1
+D0
+~
+~
+0 -1 305233
+D1
+~
+~
+0 -1 305222
+D2
+~
+~
+0 -1 305231
 S
 #305233
-Floating in a void~
+Air Strip 01~
 ~
-0 4 1
+0 0 1
+D0
+~
+~
+0 -1 305234
+D1
+~
+~
+0 -1 305223
+D2
+~
+~
+0 -1 305232
 S
 #305234
-Floating in a void~
+Air Strip 01~
 ~
-0 4 1
+0 0 1
+D0
+~
+~
+0 -1 305235
+D1
+~
+~
+0 -1 305224
+D2
+~
+~
+0 -1 305233
 S
 #305235
-Floating in a void~
+Air Strip 01~
 ~
-0 4 1
+0 0 1
+D1
+~
+~
+0 -1 305225
+D2
+~
+~
+0 -1 305234
 S
 #305236
-Floating in a void~
+Hangar 01 Entrance~
 ~
 0 4 1
+D0
+~
+~
+0 -1 305259
+D2
+~
+~
+0 -1 305225
 S
 #305237
-Floating in a void~
+Hangar 02 Entrance~
 ~
-0 4 1
+0 4 0
+D0
+~
+~
+0 -1 305238
+D2
+~
+~
+0 -1 305195
 S
 #305238
-Floating in a void~
+Hangar 02~
 ~
-0 4 1
+0 4 0
+D0
+~
+~
+0 -1 305251
+D1
+~
+~
+0 -1 305252
+D2
+~
+~
+0 -1 305237
+D3
+~
+~
+0 -1 305239
 S
 #305239
-Floating in a void~
+Delicate Machinery~
 ~
-0 4 1
+0 4 0
+D0
+~
+~
+0 -1 305240
+D1
+~
+~
+0 -1 305238
 S
 #305240
-Floating in a void~
+Delicate Machinery~
 ~
-0 4 1
+0 4 0
+D0
+~
+~
+0 -1 305241
+D1
+~
+~
+0 -1 305251
+D2
+~
+~
+0 -1 305239
 S
 #305241
-Floating in a void~
+Delicate Machinery~
 ~
-0 4 1
+0 4 0
+D0
+~
+~
+0 -1 305242
+D1
+~
+~
+0 -1 305250
+D2
+~
+~
+0 -1 305240
 S
 #305242
-Floating in a void~
+Delicate Machinery~
 ~
-0 4 1
+0 4 0
+D0
+~
+~
+0 -1 305243
+D1
+~
+~
+0 -1 305249
+D2
+~
+~
+0 -1 305241
 S
 #305243
-Floating in a void~
+Delicate Machinery~
 ~
-0 4 1
+0 4 0
+D0
+~
+~
+0 -1 305244
+D1
+~
+~
+0 -1 305248
+D2
+~
+~
+0 -1 305242
 S
 #305244
-Floating in a void~
+Delicate Machinery~
 ~
-0 4 1
+0 4 0
+D0
+~
+~
+0 -1 305245
+D1
+~
+~
+0 -1 305247
+D2
+~
+~
+0 -1 305243
 S
 #305245
-Floating in a void~
+Delicate Machinery~
 ~
-0 4 1
+0 4 0
+D1
+~
+~
+0 -1 305246
+D2
+~
+~
+0 -1 305244
 S
 #305246
-Floating in a void~
+Posh Alcove~
 ~
-0 4 1
+0 4 0
+D1
+~
+~
+0 -1 305258
+D2
+~
+~
+0 -1 305247
+D3
+~
+~
+0 -1 305245
 S
 #305247
-Floating in a void~
+Hangar 02~
 ~
-0 4 1
+0 4 0
+D0
+~
+~
+0 -1 305246
+D1
+~
+~
+0 -1 305257
+D2
+~
+~
+0 -1 305248
+D3
+~
+~
+0 -1 305244
 S
 #305248
-Floating in a void~
+Hangar 02~
 ~
-0 4 1
+0 4 0
+D0
+~
+~
+0 -1 305247
+D1
+~
+~
+0 -1 305256
+D2
+~
+~
+0 -1 305249
+D3
+~
+~
+0 -1 305243
 S
 #305249
-Floating in a void~
+Hangar 02~
 ~
-0 4 1
+0 4 0
+D0
+~
+~
+0 -1 305248
+D1
+~
+~
+0 -1 305255
+D2
+~
+~
+0 -1 305250
+D3
+~
+~
+0 -1 305242
 S
 #305250
-Floating in a void~
+Hangar 02~
 ~
-0 4 1
+0 4 0
+D0
+~
+~
+0 -1 305249
+D1
+~
+~
+0 -1 305254
+D2
+~
+~
+0 -1 305251
+D3
+~
+~
+0 -1 305241
 S
 #305251
-Floating in a void~
+Hangar 02~
 ~
-0 4 1
+0 4 0
+D0
+~
+~
+0 -1 305250
+D1
+~
+~
+0 -1 305253
+D2
+~
+~
+0 -1 305238
+D3
+~
+~
+0 -1 305240
 S
 #305252
-Floating in a void~
+Delicate Machinery~
 ~
-0 4 1
+0 4 0
+D0
+~
+~
+0 -1 305253
+D3
+~
+~
+0 -1 305238
 S
 #305253
-Floating in a void~
+Delicate Machinery~
 ~
-0 4 1
+0 4 0
+D0
+~
+~
+0 -1 305254
+D2
+~
+~
+0 -1 305252
+D3
+~
+~
+0 -1 305251
 S
 #305254
-Floating in a void~
+Delicate Machinery~
 ~
-0 4 1
+0 4 0
+D0
+~
+~
+0 -1 305255
+D2
+~
+~
+0 -1 305253
+D3
+~
+~
+0 -1 305250
 S
 #305255
-Floating in a void~
+Delicate Machinery~
 ~
-0 4 1
+0 4 0
+D0
+~
+~
+0 -1 305256
+D2
+~
+~
+0 -1 305254
+D3
+~
+~
+0 -1 305249
 S
 #305256
-Floating in a void~
+Delicate Machinery~
 ~
-0 4 1
+0 4 0
+D0
+~
+~
+0 -1 305257
+D2
+~
+~
+0 -1 305255
+D3
+~
+~
+0 -1 305248
 S
 #305257
-Floating in a void~
+Delicate Machinery~
 ~
-0 4 1
+0 4 0
+D0
+~
+~
+0 -1 305258
+D2
+~
+~
+0 -1 305256
+D3
+~
+~
+0 -1 305247
 S
 #305258
-Floating in a void~
+Delicate Machinery~
 ~
-0 4 1
+0 4 0
+D2
+~
+~
+0 -1 305257
+D3
+~
+~
+0 -1 305246
 S
 #305259
-Floating in a void~
+Hangar 01~
 ~
 0 4 1
+D0
+~
+~
+0 -1 305260
+D1
+~
+~
+0 -1 305272
+D2
+~
+~
+0 -1 305236
+D3
+~
+~
+0 -1 305273
 S
 #305260
-Floating in a void~
+Dismantled Aircraft~
 ~
 0 4 1
+D0
+~
+~
+0 -1 305261
+D1
+~
+~
+0 -1 305271
+D2
+~
+~
+0 -1 305259
+D3
+~
+~
+0 -1 305274
 S
 #305261
-Floating in a void~
+Hangar 01~
 ~
 0 4 1
+D0
+~
+~
+0 -1 305262
+D1
+~
+~
+0 -1 305270
+D2
+~
+~
+0 -1 305260
+D3
+~
+~
+0 -1 305275
 S
 #305262
-Floating in a void~
+Hangar 01~
 ~
 0 4 1
+D0
+~
+~
+0 -1 305263
+D1
+~
+~
+0 -1 305269
+D2
+~
+~
+0 -1 305261
+D3
+~
+~
+0 -1 305276
 S
 #305263
-Floating in a void~
+Hangar 01~
 ~
 0 4 1
+D0
+~
+~
+0 -1 305264
+D1
+~
+~
+0 -1 305268
+D2
+~
+~
+0 -1 305262
+D3
+~
+~
+0 -1 305277
 S
 #305264
-Floating in a void~
+Hangar 01~
 ~
 0 4 1
+D0
+~
+~
+0 -1 305265
+D1
+~
+~
+0 -1 305267
+D2
+~
+~
+0 -1 305263
+D3
+~
+~
+0 -1 305278
 S
 #305265
-Floating in a void~
+Hangar 01~
 ~
 0 4 1
+D1
+~
+~
+0 -1 305266
+D2
+~
+~
+0 -1 305264
+D3
+~
+~
+0 -1 305279
 S
 #305266
-Floating in a void~
+Hangar 01~
 ~
 0 4 1
+D2
+~
+~
+0 -1 305267
+D3
+~
+~
+0 -1 305265
 S
 #305267
-Floating in a void~
+Hangar 01~
 ~
 0 4 1
+D0
+~
+~
+0 -1 305266
+D2
+~
+~
+0 -1 305268
+D3
+~
+~
+0 -1 305264
 S
 #305268
-Floating in a void~
+Hangar 01~
 ~
 0 4 1
+D0
+~
+~
+0 -1 305267
+D2
+~
+~
+0 -1 305269
+D3
+~
+~
+0 -1 305263
 S
 #305269
-Floating in a void~
+Hangar 01~
 ~
 0 4 1
+D0
+~
+~
+0 -1 305268
+D2
+~
+~
+0 -1 305270
+D3
+~
+~
+0 -1 305262
 S
 #305270
-Floating in a void~
+Hangar 01~
 ~
 0 4 1
+D0
+~
+~
+0 -1 305269
+D2
+~
+~
+0 -1 305271
+D3
+~
+~
+0 -1 305261
 S
 #305271
-Floating in a void~
+Hangar 01~
 ~
 0 4 1
+D0
+~
+~
+0 -1 305270
+D2
+~
+~
+0 -1 305272
+D3
+~
+~
+0 -1 305260
 S
 #305272
-Floating in a void~
+Hangar 01~
 ~
 0 4 1
+D0
+~
+~
+0 -1 305271
+D3
+~
+~
+0 -1 305259
 S
 #305273
-Floating in a void~
+Hangar 01~
 ~
 0 4 1
+D0
+~
+~
+0 -1 305274
+D1
+~
+~
+0 -1 305259
 S
 #305274
-Floating in a void~
+Hangar 01~
 ~
 0 4 1
+D0
+~
+~
+0 -1 305275
+D1
+~
+~
+0 -1 305260
+D2
+~
+~
+0 -1 305273
 S
 #305275
-Floating in a void~
+Hangar 01~
 ~
 0 4 1
+D0
+~
+~
+0 -1 305276
+D1
+~
+~
+0 -1 305261
+D2
+~
+~
+0 -1 305274
 S
 #305276
-Floating in a void~
+Hangar 01~
 ~
 0 4 1
+D0
+~
+~
+0 -1 305277
+D1
+~
+~
+0 -1 305262
+D2
+~
+~
+0 -1 305275
 S
 #305277
-Floating in a void~
+Hangar 01~
 ~
 0 4 1
+D0
+~
+~
+0 -1 305278
+D1
+~
+~
+0 -1 305263
+D2
+~
+~
+0 -1 305276
 S
 #305278
-Floating in a void~
+Hangar 01~
 ~
 0 4 1
+D0
+~
+~
+0 -1 305279
+D1
+~
+~
+0 -1 305264
+D2
+~
+~
+0 -1 305277
 S
 #305279
-Floating in a void~
+Hangar 01~
 ~
 0 4 1
+D1
+~
+~
+0 -1 305265
+D2
+~
+~
+0 -1 305278
 S
 #305280
-Floating in a void~
+Suspicious Path~
 ~
 0 4 1
+D1
+~
+~
+0 -1 305281
+D3
+~
+~
+0 -1 305185
 S
 #305281
-Floating in a void~
+Suspicious Path~
 ~
 0 4 1
+D1
+~
+~
+0 -1 305282
+D3
+~
+~
+0 -1 305280
 S
 #305282
-Floating in a void~
+Suspicious Path~
 ~
 0 4 1
+D1
+~
+~
+0 -1 305283
+D3
+~
+~
+0 -1 305281
 S
 #305283
-Floating in a void~
+Suspicious Path~
 ~
 0 4 1
+D1
+~
+~
+0 -1 305284
+D3
+~
+~
+0 -1 305282
 S
 #305284
-Floating in a void~
+Suspicious Path~
 ~
 0 4 1
+D1
+~
+~
+0 -1 305285
+D3
+~
+~
+0 -1 305283
 S
 #305285
-Floating in a void~
+Suspicious Path~
 ~
 0 4 1
+D0
+~
+~
+0 -1 305286
+D3
+~
+~
+0 -1 305284
 S
 #305286
-Floating in a void~
+A bend in the path~
 ~
 0 4 1
+D0
+~
+~
+0 -1 305287
+D2
+~
+~
+0 -1 305285
 S
 #305287
-Floating in a void~
+Suspicious Path~
 ~
 0 4 1
+D0
+~
+~
+0 -1 305288
+D2
+~
+~
+0 -1 305286
 S
 #305288
-Floating in a void~
+Suspicious Path~
 ~
 0 4 1
+D0
+~
+~
+0 -1 305289
+D2
+~
+~
+0 -1 305287
 S
 #305289
-Floating in a void~
+Before an Ominous Building~
 ~
 0 4 1
+D1
+~
+~
+0 -1 305290
+D2
+~
+~
+0 -1 305288
 S
 #305290
-Floating in a void~
+Gero Research Facility~
 ~
-0 4 1
+0 4 0
+D1
+~
+~
+0 -1 305291
+D3
+~
+~
+0 -1 305289
 S
 #305291
-Floating in a void~
+A Sanitized Hallway~
 ~
-0 4 1
+0 4 0
+D1
+~
+~
+0 -1 305292
+D3
+~
+~
+0 -1 305290
 S
 #305292
-Floating in a void~
+Before a Plastisteel Observation Room~
 ~
-0 4 1
+0 4 0
+D1
+~
+~
+0 -1 305293
+D3
+~
+~
+0 -1 305291
 S
 #305293
-Floating in a void~
+Observation Room 01~
 ~
-0 4 1
+0 4 0
+D3
+~
+~
+0 -1 305292
+> speech_prog 'agree'~
+mpecho &CDoctor Gero says 'Excellent choice. You won't regret it.'&d
+mea $n &cDoctor Gero inputs a command into his terminal, opening a door at the far end of the observation room. You make your way inside.&d
+mer $n &cDoctor Gero inputs a command into his terminal. $n disappears through a door at the far end of the room.&d
+mptransfer $n 305294
+mpat 305294 mpforce $n look
+~
+|
 S
 #305294
-Floating in a void~
+Observation Room 02~
 ~
-0 4 1
+0 4 0
+D0
+~
+~
+0 -1 305295
+> leave_prog 100~
+mea $n &cThe door seals shut behind you, becoming indistinguishable from the rest of the wall.&d
+~
+|
 S
 #305295
-Floating in a void~
+A Sanitized Hallway~
 ~
-0 4 1
+0 4 0
+D0
+~
+~
+0 -1 305296
+> entry_prog 100~
+mpecho &cThe crackling voice of Doctor Emalia rings out from a misty haze around you.&d
+mpecho &CDoctor Emalia says 'You actually agreed to help him? Unorthodox but... this may give us some insight.'&d
+mpecho &CDoctor Emalia says 'According to my information, Doctor Gero shouldn't be there at Red Ribbon HQ during that age.'&d
+mpecho &CDoctor Emalia says 'Be on guard. He's sure to pit you against his creations for 'testing'. They may be far more powerful than the timeline would suggest.'&d
+mpecho &CDoctor Emalia says 'If you must die, at least try to do it somewhere convenient so I can study your remains.'
+mpecho &cDoctor Emalia chuckles faintly as the mist fades.&d
+~
+> leave_prog 100~
+mea $n &cThe door seals shut behind you, becoming indistinguishable from the rest of the wall.&d
+~
+|
 S
 #305296
-Floating in a void~
+Subject Living Quarters~
 ~
-0 4 1
+0 536870916 0
+D1
+~
+~
+0 -1 305297
 S
 #305297
-Floating in a void~
+Data 'Acquisition' Center~
 ~
-0 4 1
+0 4 0
+D1
+~
+~
+0 -1 305298
+D3
+~
+~
+0 -1 305296
 S
 #305298
-Floating in a void~
+Data 'Acquisition' Center~
 ~
-0 4 1
+0 4 0
+D1
+~
+~
+0 -1 305299
+D3
+~
+~
+0 -1 305297
 S
 #305299
-Floating in a void~
+A Mass of Wires~
 ~
-0 4 1
+0 0 0
+D0
+~
+~
+0 -1 305300
+D1
+~
+~
+0 -1 305312
+D3
+~
+~
+0 -1 305298
 S
 #305300
-Floating in a void~
+A Mass of Wires~
 ~
-0 4 1
+0 0 0
+D0
+~
+~
+0 -1 305301
+D1
+~
+~
+0 -1 305309
+D2
+~
+~
+0 -1 305299
 S
 #305301
-Floating in a void~
+A Mass of Wires~
 ~
-0 4 1
+0 0 0
+D0
+~
+~
+0 -1 305302
+D1
+~
+~
+0 -1 305308
+D2
+~
+~
+0 -1 305300
 S
 #305302
-Floating in a void~
+A Mass of Wires~
 ~
-0 4 1
+0 0 0
+D1
+~
+~
+0 -1 305303
+D2
+~
+~
+0 -1 305301
 S
 #305303
-Floating in a void~
+A Mass of Wires~
 ~
-0 4 1
+0 0 0
+D1
+~
+~
+0 -1 305304
+D2
+~
+~
+0 -1 305308
+D3
+~
+~
+0 -1 305302
 S
 #305304
-Floating in a void~
+A Mass of Wires~
 ~
-0 4 1
+0 0 0
+D1
+~
+~
+0 -1 305305
+D2
+~
+~
+0 -1 305307
+D3
+~
+~
+0 -1 305303
 S
 #305305
-Floating in a void~
+A Mass of Wires~
 ~
-0 4 1
+0 0 0
+D2
+~
+~
+0 -1 305306
+D3
+~
+~
+0 -1 305304
 S
 #305306
-Floating in a void~
+A Mass of Wires~
 ~
-0 4 1
+0 0 0
+D0
+~
+~
+0 -1 305305
+D2
+~
+~
+0 -1 305311
+D3
+~
+~
+0 -1 305307
 S
 #305307
-Floating in a void~
+A Mass of Wires~
 ~
-0 4 1
+0 0 0
+D0
+~
+~
+0 -1 305304
+D1
+~
+~
+0 -1 305306
+D2
+~
+~
+0 -1 305310
+D3
+~
+~
+0 -1 305308
 S
 #305308
-Floating in a void~
+A Mass of Wires~
 ~
-0 4 1
+0 0 0
+D0
+~
+~
+0 -1 305303
+D1
+~
+~
+0 -1 305307
+D2
+~
+~
+0 -1 305309
+D3
+~
+~
+0 -1 305301
 S
 #305309
-Floating in a void~
+A Mass of Wires~
 ~
-0 4 1
+0 0 0
+D0
+~
+~
+0 -1 305308
+D1
+~
+~
+0 -1 305310
+D2
+~
+~
+0 -1 305312
+D3
+~
+~
+0 -1 305300
 S
 #305310
-Floating in a void~
+A Mass of Wires~
 ~
-0 4 1
+0 0 0
+D0
+~
+~
+0 -1 305307
+D1
+~
+~
+0 -1 305311
+D2
+~
+~
+0 -1 305313
+D3
+~
+~
+0 -1 305309
 S
 #305311
-Floating in a void~
+A Mass of Wires~
 ~
-0 4 1
+0 0 0
+D0
+~
+~
+0 -1 305306
+D2
+~
+~
+0 -1 305314
+D3
+~
+~
+0 -1 305310
 S
 #305312
-Floating in a void~
+A Mass of Wires~
 ~
-0 4 1
+0 0 0
+D0
+~
+~
+0 -1 305309
+D1
+~
+~
+0 -1 305313
+D3
+~
+~
+0 -1 305299
 S
 #305313
-Floating in a void~
+A Mass of Wires~
 ~
-0 4 1
+0 0 0
+D0
+~
+~
+0 -1 305310
+D1
+~
+~
+0 -1 305314
+D3
+~
+~
+0 -1 305312
 S
 #305314
-Floating in a void~
+A Mass of Wires~
 ~
-0 4 1
+0 0 0
+D0
+~
+~
+0 -1 305311
+D1
+~
+~
+0 -1 305315
+D3
+~
+~
+0 -1 305313
 S
 #305315
-Floating in a void~
+Data 'Acquisition' Center~
 ~
-0 4 1
+0 4 0
+D1
+~
+~
+0 -1 305316
+D3
+~
+~
+0 -1 305314
 S
 #305316
-Floating in a void~
+Stairwell~
 ~
-0 4 1
+0 4 0
+D3
+~
+~
+0 -1 305315
+D5
+~
+~
+0 -1 305317
 S
 #305317
-Floating in a void~
+Stairwell~
 ~
-0 4 1
+0 4 0
+D0
+~
+~
+0 -1 305318
+D4
+~
+~
+0 -1 305316
 S
 #305318
-Floating in a void~
+Access Hallway~
 ~
 0 4 1
+D0
+~
+~
+0 -1 305337
+D1
+~
+~
+0 -1 305320
+D2
+~
+~
+0 -1 305317
+D3
+~
+~
+0 -1 305319
 S
 #305319
-Floating in a void~
+A half-destroyed room~
 ~
-0 4 1
+0 0 0
+D1
+~
+~
+0 -1 305318
+D2
+~
+~
+0 -1 305329
+D3
+~
+~
+0 -1 305333
 S
 #305320
-Floating in a void~
+A half-destroyed room~
 ~
-0 4 1
+0 0 0
+D1
+~
+~
+0 -1 305325
+D2
+~
+~
+0 -1 305321
+D3
+~
+~
+0 -1 305318
 S
 #305321
-Floating in a void~
+A half-destroyed room~
 ~
-0 4 1
+0 0 0
+D0
+~
+~
+0 -1 305320
+D1
+~
+~
+0 -1 305324
+D2
+~
+~
+0 -1 305322
 S
 #305322
-Floating in a void~
+A half-destroyed room~
 ~
-0 4 1
+0 0 0
+D0
+~
+~
+0 -1 305321
+D1
+~
+~
+0 -1 305323
 S
 #305323
-Floating in a void~
+A half-destroyed room~
 ~
-0 4 1
+0 0 0
+D0
+~
+~
+0 -1 305324
+D1
+~
+~
+0 -1 305328
+D3
+~
+~
+0 -1 305322
 S
 #305324
-Floating in a void~
+A half-destroyed room~
 ~
-0 4 1
+0 0 0
+D0
+~
+~
+0 -1 305325
+D1
+~
+~
+0 -1 305327
+D2
+~
+~
+0 -1 305323
+D3
+~
+~
+0 -1 305321
 S
 #305325
-Floating in a void~
+A half-destroyed room~
 ~
-0 4 1
+0 0 0
+D1
+~
+~
+0 -1 305326
+D2
+~
+~
+0 -1 305324
+D3
+~
+~
+0 -1 305320
 S
 #305326
-Floating in a void~
+A half-destroyed room~
 ~
-0 4 1
+0 0 0
+D2
+~
+~
+0 -1 305327
+D3
+~
+~
+0 -1 305325
 S
 #305327
-Floating in a void~
+A half-destroyed room~
 ~
-0 4 1
+0 0 0
+D0
+~
+~
+0 -1 305326
+D2
+~
+~
+0 -1 305328
+D3
+~
+~
+0 -1 305324
 S
 #305328
-Floating in a void~
+A half-destroyed room~
 ~
-0 4 1
+0 0 0
+D0
+~
+~
+0 -1 305327
+D3
+~
+~
+0 -1 305323
 S
 #305329
-Floating in a void~
+A half-destroyed room~
 ~
-0 4 1
+0 0 0
+D0
+~
+~
+0 -1 305319
+D2
+~
+~
+0 -1 305330
+D3
+~
+~
+0 -1 305332
 S
 #305330
-Floating in a void~
+A half-destroyed room~
 ~
-0 4 1
+0 0 0
+D0
+~
+~
+0 -1 305329
+D3
+~
+~
+0 -1 305331
 S
 #305331
-Floating in a void~
+A half-destroyed room~
 ~
-0 4 1
+0 0 0
+D0
+~
+~
+0 -1 305332
+D1
+~
+~
+0 -1 305330
+D3
+~
+~
+0 -1 305336
 S
 #305332
-Floating in a void~
+A half-destroyed room~
 ~
-0 4 1
+0 0 0
+D0
+~
+~
+0 -1 305333
+D1
+~
+~
+0 -1 305329
+D2
+~
+~
+0 -1 305331
+D3
+~
+~
+0 -1 305335
 S
 #305333
-Floating in a void~
+A half-destroyed room~
 ~
-0 4 1
+0 0 0
+D1
+~
+~
+0 -1 305319
+D2
+~
+~
+0 -1 305332
+D3
+~
+~
+0 -1 305334
 S
 #305334
-Floating in a void~
+A half-destroyed room~
 ~
-0 4 1
+0 0 0
+D1
+~
+~
+0 -1 305333
+D2
+~
+~
+0 -1 305335
 S
 #305335
-Floating in a void~
+A half-destroyed room~
 ~
-0 4 1
+0 0 0
+D0
+~
+~
+0 -1 305334
+D1
+~
+~
+0 -1 305332
+D2
+~
+~
+0 -1 305336
 S
 #305336
-Floating in a void~
+A half-destroyed room~
 ~
-0 4 1
+0 0 0
+D0
+~
+~
+0 -1 305335
+D1
+~
+~
+0 -1 305331
 S
 #305337
-Floating in a void~
+Access Hallway~
 ~
-0 4 1
+0 4 0
+D0
+~
+~
+0 -1 305338
+D2
+~
+~
+0 -1 305318
 S
 #305338
-Floating in a void~
+Access Hallway~
 ~
-0 4 1
+0 4 0
+D0
+~
+~
+0 -1 305339
+D2
+~
+~
+0 -1 305337
 S
 #305339
-Floating in a void~
+Before an elevator~
 ~
-0 4 1
+0 4 0
+D2
+~
+~
+0 -1 305338
+> speech_prog 'continue'~
+mpecho &CAndroid 10 says 'Please be careful.'&d
+mea $n &cAndroid 10 opens the elevator and ushers you inside. After a short trip, you arrive on the floor below.&d
+mer $n &cAndroid 10 opens the elevator and ushers $n inside.&d
+mptransfer $n 305340
+mpat 305340 mpforce $n look
+~
+|
 S
 #305340
-Floating in a void~
+A Gooey Mess~
 ~
 0 4 1
+D0
+~
+~
+0 -1 305341
 S
 #305341
-Floating in a void~
+Glowing Pods~
 ~
 0 4 1
+D2
+~
+~
+0 -1 305340
 S
 #305342
-Floating in a void~
+Deep in the mist~
 ~
 0 4 1
+D0
+~
+~
+0 -1 305343
 S
 #305343
-Floating in a void~
+Deep in the mist~
 ~
 0 4 1
+D0
+~
+~
+0 -1 6000
+> leave_prog 100~
+mea $n &cThe mist engulfs you, and before you realize what's even happened, you're back at the Center of The Universe.&d
+~
+|
 S
 #305344
 Floating in a void~
@@ -22243,784 +27609,2608 @@ Floating in a void~
 0 4 1
 S
 #305400
-Floating in a void~
+Deep in the mountains~
 ~
 0 4 1
+D0
+~
+~
+0 -1 305401
+D2
+~
+~
+0 -1 305005
 S
 #305401
-Floating in a void~
+A rocky crag~
 ~
 0 4 1
+D2
+~
+~
+0 -1 305400
+D5
+~
+~
+0 -1 305402
 S
 #305402
-Floating in a void~
+Inside a rocky crag~
 ~
 0 4 1
+D0
+~
+~
+0 -1 305403
+D4
+~
+~
+0 -1 305401
 S
 #305403
-Floating in a void~
+A hazy mist~
 ~
 0 4 1
+D0
+~
+~
+0 -1 305404
+D2
+~
+~
+0 -1 305402
+> entry_prog 100~
+mea $n &cDoctor Emalia's voice echoes through your communicator.&d
+mea $n &CDoctor Emalia says 'The timeline here is extremey distorted!'&d
+mea $n &cDoctor Emalia pauses briefly.&d
+mea $n &CDoctor Emalia says 'This is November 3rd, Age 762. The day the Saiyans Nappa and Vegeta arrived on earth...'&d
+mea $n &CDoctor Emalia says 'A sticky situation on its own, but I'm detecting many strong powers that shouldn't exist at this time.'&d
+mea $n &CDoctor Emalia says 'Be careful, $n! I'm rooting for you!'&d
+mea $n &cSomehow you feel she's not entirely sincere.&d
+~
+|
 S
 #305404
-Floating in a void~
+A rocky wasteland~
 ~
 0 4 1
+D0
+~
+~
+0 -1 305405
+D2
+~
+~
+0 -1 305403
 S
 #305405
-Floating in a void~
+A rocky wasteland~
 ~
 0 4 1
+D2
+~
+~
+0 -1 305404
+D5
+~
+~
+0 -1 305406
 S
 #305406
-Floating in a void~
+A rocky wasteland~
 ~
 0 4 1
+D0
+~
+~
+0 -1 305407
+D4
+~
+~
+0 -1 305405
 S
 #305407
-Floating in a void~
+A rocky wasteland~
 ~
 0 4 1
+D2
+~
+~
+0 -1 305406
+D3
+~
+~
+0 -1 305408
 S
 #305408
-Floating in a void~
+A rocky wasteland~
 ~
 0 4 1
+D0
+~
+~
+0 -1 305409
+D1
+~
+~
+0 -1 305407
 S
 #305409
-Floating in a void~
+An ominous crater~
 ~
 0 4 1
+D0
+~
+~
+0 -1 305420
+D1
+~
+~
+0 -1 305415
+D2
+~
+~
+0 -1 305408
+D3
+~
+~
+0 -1 305410
 S
 #305410
-Floating in a void~
+Path between craters~
 ~
-0 4 1
+0 0 1
+D1
+~
+~
+0 -1 305409
+D3
+~
+~
+0 -1 305411
 S
 #305411
-Floating in a void~
+Battle-scarred ditch~
 ~
-0 4 1
+0 0 1
+D0
+~
+~
+0 -1 305414
+D1
+~
+~
+0 -1 305410
+D3
+~
+~
+0 -1 305412
 S
 #305412
-Floating in a void~
+Battle-scarred ditch~
 ~
-0 4 1
+0 0 1
+D0
+~
+~
+0 -1 305413
+D1
+~
+~
+0 -1 305411
 S
 #305413
-Floating in a void~
+Battle-scarred ditch~
 ~
-0 4 1
+0 0 1
+D1
+~
+~
+0 -1 305414
+D2
+~
+~
+0 -1 305412
 S
 #305414
-Floating in a void~
+Battle-scarred ditch~
 ~
-0 4 1
+0 0 1
+D2
+~
+~
+0 -1 305411
+D3
+~
+~
+0 -1 305413
 S
 #305415
-Floating in a void~
+Path between craters~
 ~
-0 4 1
+0 0 1
+D1
+~
+~
+0 -1 305416
+D3
+~
+~
+0 -1 305409
 S
 #305416
-Floating in a void~
+Battle-scarred ditch~
 ~
-0 4 1
+0 0 1
+D0
+~
+~
+0 -1 305418
+D1
+~
+~
+0 -1 305417
+D3
+~
+~
+0 -1 305415
 S
 #305417
-Floating in a void~
+Battle-scarred ditch~
 ~
-0 4 1
+0 0 1
+D0
+~
+~
+0 -1 305419
+D3
+~
+~
+0 -1 305416
 S
 #305418
-Floating in a void~
+Battle-scarred ditch~
 ~
-0 4 1
+0 0 1
+D1
+~
+~
+0 -1 305419
+D2
+~
+~
+0 -1 305416
 S
 #305419
-Floating in a void~
+Battle-scarred ditch~
 ~
-0 4 1
+0 0 1
+D2
+~
+~
+0 -1 305417
+D3
+~
+~
+0 -1 305418
 S
 #305420
-Floating in a void~
+Among many craters~
 ~
-0 4 1
+0 0 1
+D0
+~
+~
+0 -1 305421
+D2
+~
+~
+0 -1 305409
 S
 #305421
-Floating in a void~
+Among many craters~
 ~
-0 4 1
+0 0 1
+D0
+~
+~
+0 -1 305422
+D2
+~
+~
+0 -1 305420
 S
 #305422
-Floating in a void~
+Among many craters~
 ~
-0 4 1
+0 0 1
+D0
+~
+~
+0 -1 305423
+D2
+~
+~
+0 -1 305421
 S
 #305423
-Floating in a void~
+Among many craters~
 ~
-0 4 1
+0 0 1
+D2
+~
+~
+0 -1 305422
+D3
+~
+~
+0 -1 305424
 S
 #305424
-Floating in a void~
+Among many craters~
 ~
-0 4 1
+0 0 1
+D1
+~
+~
+0 -1 305423
+D3
+~
+~
+0 -1 305425
 S
 #305425
-Floating in a void~
+A sharp incline~
 ~
-0 4 1
+0 0 1
+D0
+~
+~
+0 -1 305426
+D1
+~
+~
+0 -1 305424
 S
 #305426
-Floating in a void~
+Atop a Sandy Plateau~
 ~
 0 4 1
+D0
+~
+~
+0 -1 305427
+D2
+~
+~
+0 -1 305425
+> entry_prog 100~
+mea $n &cDoctor Emalia's voice echoes from your communicator.&d
+mea $n &CDoctor Emalia says 'Watch yourself, $n. The readings are out of control in this area.'&d
+~
+|
 S
 #305427
-Floating in a void~
+Sandy Plateau~
 ~
-0 4 1
+0 0 1
+D0
+~
+~
+0 -1 305428
+D1
+~
+~
+0 -1 305444
+D2
+~
+~
+0 -1 305426
+D3
+~
+~
+0 -1 305445
 S
 #305428
-Floating in a void~
+Sandy Plateau~
 ~
-0 4 1
+0 0 1
+D0
+~
+~
+0 -1 305429
+D1
+~
+~
+0 -1 305443
+D2
+~
+~
+0 -1 305427
+D3
+~
+~
+0 -1 305446
 S
 #305429
-Floating in a void~
+Sandy Plateau~
 ~
-0 4 1
+0 0 1
+D0
+~
+~
+0 -1 305430
+D1
+~
+~
+0 -1 305442
+D2
+~
+~
+0 -1 305428
+D3
+~
+~
+0 -1 305447
 S
 #305430
-Floating in a void~
+Sandy Plateau~
 ~
-0 4 1
+0 0 1
+D0
+~
+~
+0 -1 305431
+D1
+~
+~
+0 -1 305441
+D2
+~
+~
+0 -1 305429
+D3
+~
+~
+0 -1 305448
 S
 #305431
-Floating in a void~
+Sandy Plateau~
 ~
-0 4 1
+0 0 1
+D0
+~
+~
+0 -1 305432
+D1
+~
+~
+0 -1 305440
+D2
+~
+~
+0 -1 305430
+D3
+~
+~
+0 -1 305449
 S
 #305432
-Floating in a void~
+Sandy Plateau~
 ~
-0 4 1
+0 0 1
+D0
+~
+~
+0 -1 305433
+D1
+~
+~
+0 -1 305439
+D2
+~
+~
+0 -1 305431
+D3
+~
+~
+0 -1 305450
 S
 #305433
-Floating in a void~
+Sandy Plateau~
 ~
-0 4 1
+0 0 1
+D0
+~
+~
+0 -1 305434
+D1
+~
+~
+0 -1 305438
+D2
+~
+~
+0 -1 305432
+D3
+~
+~
+0 -1 305451
 S
 #305434
-Floating in a void~
+Sandy Plateau~
 ~
-0 4 1
+0 0 1
+D0
+~
+~
+0 -1 305435
+D1
+~
+~
+0 -1 305437
+D2
+~
+~
+0 -1 305433
+D3
+~
+~
+0 -1 305452
 S
 #305435
-Floating in a void~
+Sandy Plateau~
 ~
-0 4 1
+0 0 1
+D1
+~
+~
+0 -1 305436
+D2
+~
+~
+0 -1 305434
+D3
+~
+~
+0 -1 305453
 S
 #305436
-Floating in a void~
+Sandy Plateau~
 ~
-0 4 1
+0 0 1
+D2
+~
+~
+0 -1 305437
+D3
+~
+~
+0 -1 305435
 S
 #305437
-Floating in a void~
+Sandy Plateau~
 ~
-0 4 1
+0 0 1
+D0
+~
+~
+0 -1 305436
+D2
+~
+~
+0 -1 305438
+D3
+~
+~
+0 -1 305434
 S
 #305438
-Floating in a void~
+Sandy Plateau~
 ~
-0 4 1
+0 0 1
+D0
+~
+~
+0 -1 305437
+D2
+~
+~
+0 -1 305439
+D3
+~
+~
+0 -1 305433
 S
 #305439
-Floating in a void~
+Sandy Plateau~
 ~
-0 4 1
+0 0 1
+D0
+~
+~
+0 -1 305438
+D2
+~
+~
+0 -1 305440
+D3
+~
+~
+0 -1 305432
 S
 #305440
-Floating in a void~
+Sandy Plateau~
 ~
-0 4 1
+0 0 1
+D0
+~
+~
+0 -1 305439
+D2
+~
+~
+0 -1 305441
+D3
+~
+~
+0 -1 305431
 S
 #305441
-Floating in a void~
+Sandy Plateau~
 ~
-0 4 1
+0 0 1
+D0
+~
+~
+0 -1 305440
+D2
+~
+~
+0 -1 305442
+D3
+~
+~
+0 -1 305430
 S
 #305442
-Floating in a void~
+Sandy Plateau~
 ~
-0 4 1
+0 0 1
+D0
+~
+~
+0 -1 305441
+D2
+~
+~
+0 -1 305443
+D3
+~
+~
+0 -1 305429
 S
 #305443
-Floating in a void~
+Sandy Plateau~
 ~
-0 4 1
+0 0 1
+D0
+~
+~
+0 -1 305442
+D2
+~
+~
+0 -1 305444
+D3
+~
+~
+0 -1 305428
 S
 #305444
-Floating in a void~
+Sandy Plateau~
 ~
-0 4 1
+0 0 1
+D0
+~
+~
+0 -1 305443
+D3
+~
+~
+0 -1 305427
 S
 #305445
-Floating in a void~
+Sandy Plateau~
 ~
-0 4 1
+0 0 1
+D0
+~
+~
+0 -1 305446
+D1
+~
+~
+0 -1 305427
 S
 #305446
-Floating in a void~
+Sandy Plateau~
 ~
-0 4 1
+0 0 1
+D0
+~
+~
+0 -1 305447
+D1
+~
+~
+0 -1 305428
+D2
+~
+~
+0 -1 305445
 S
 #305447
-Floating in a void~
+Sandy Plateau~
 ~
-0 4 1
+0 0 1
+D0
+~
+~
+0 -1 305448
+D1
+~
+~
+0 -1 305429
+D2
+~
+~
+0 -1 305446
 S
 #305448
-Floating in a void~
+Sandy Plateau~
 ~
-0 4 1
+0 0 1
+D0
+~
+~
+0 -1 305449
+D1
+~
+~
+0 -1 305430
+D2
+~
+~
+0 -1 305447
 S
 #305449
-Floating in a void~
+Sandy Plateau~
 ~
-0 4 1
+0 0 1
+D0
+~
+~
+0 -1 305450
+D1
+~
+~
+0 -1 305431
+D2
+~
+~
+0 -1 305448
+D3
+~
+~
+0 -1 305454
 S
 #305450
-Floating in a void~
+Sandy Plateau~
 ~
-0 4 1
+0 0 1
+D0
+~
+~
+0 -1 305451
+D1
+~
+~
+0 -1 305432
+D2
+~
+~
+0 -1 305449
 S
 #305451
-Floating in a void~
+Sandy Plateau~
 ~
-0 4 1
+0 0 1
+D0
+~
+~
+0 -1 305452
+D1
+~
+~
+0 -1 305433
+D2
+~
+~
+0 -1 305450
 S
 #305452
-Floating in a void~
+Sandy Plateau~
 ~
-0 4 1
+0 0 1
+D0
+~
+~
+0 -1 305453
+D1
+~
+~
+0 -1 305434
+D2
+~
+~
+0 -1 305451
 S
 #305453
-Floating in a void~
+Sandy Plateau~
 ~
-0 4 1
+0 0 1
+D1
+~
+~
+0 -1 305435
+D2
+~
+~
+0 -1 305452
 S
 #305454
-Floating in a void~
+Teetering rocks~
 ~
 0 4 1
+D1
+~
+~
+0 -1 305449
+D3
+~
+~
+0 -1 305455
 S
 #305455
-Floating in a void~
+Western Plateau~
 ~
-0 4 1
+0 0 1
+D0
+~
+~
+0 -1 305459
+D1
+~
+~
+0 -1 305454
+D2
+~
+~
+0 -1 305463
+D3
+~
+~
+0 -1 305456
 S
 #305456
-Floating in a void~
+Western Plateau~
 ~
-0 4 1
+0 0 1
+D0
+~
+~
+0 -1 305460
+D1
+~
+~
+0 -1 305455
+D2
+~
+~
+0 -1 305464
+D3
+~
+~
+0 -1 305457
 S
 #305457
-Floating in a void~
+Western Plateau~
 ~
-0 4 1
+0 0 1
+D0
+~
+~
+0 -1 305461
+D1
+~
+~
+0 -1 305456
+D2
+~
+~
+0 -1 305465
+D3
+~
+~
+0 -1 305458
 S
 #305458
-Floating in a void~
+Western Plateau~
 ~
-0 4 1
+0 0 1
+D0
+~
+~
+0 -1 305462
+D1
+~
+~
+0 -1 305457
+D2
+~
+~
+0 -1 305466
+D3
+~
+~
+0 -1 305467
 S
 #305459
-Floating in a void~
+Western Plateau~
 ~
-0 4 1
+0 0 1
+D2
+~
+~
+0 -1 305455
+D3
+~
+~
+0 -1 305460
 S
 #305460
-Floating in a void~
+Western Plateau~
 ~
-0 4 1
+0 0 1
+D1
+~
+~
+0 -1 305459
+D2
+~
+~
+0 -1 305456
+D3
+~
+~
+0 -1 305461
 S
 #305461
-Floating in a void~
+Western Plateau~
 ~
-0 4 1
+0 0 1
+D1
+~
+~
+0 -1 305460
+D2
+~
+~
+0 -1 305457
+D3
+~
+~
+0 -1 305462
 S
 #305462
-Floating in a void~
+Western Plateau~
 ~
-0 4 1
+0 0 1
+D1
+~
+~
+0 -1 305461
+D2
+~
+~
+0 -1 305458
 S
 #305463
-Floating in a void~
+Western Plateau~
 ~
-0 4 1
+0 0 1
+D0
+~
+~
+0 -1 305455
+D3
+~
+~
+0 -1 305464
 S
 #305464
-Floating in a void~
+Western Plateau~
 ~
-0 4 1
+0 0 1
+D0
+~
+~
+0 -1 305456
+D1
+~
+~
+0 -1 305463
+D3
+~
+~
+0 -1 305465
 S
 #305465
-Floating in a void~
+Western Plateau~
 ~
-0 4 1
+0 0 1
+D0
+~
+~
+0 -1 305457
+D1
+~
+~
+0 -1 305464
+D3
+~
+~
+0 -1 305466
 S
 #305466
-Floating in a void~
+Western Plateau~
 ~
-0 4 1
+0 0 1
+D0
+~
+~
+0 -1 305458
+D1
+~
+~
+0 -1 305465
 S
 #305467
-Floating in a void~
+Plateau Descent~
 ~
 0 4 1
+D1
+~
+~
+0 -1 305458
+D5
+~
+~
+0 -1 305468
 S
 #305468
-Floating in a void~
+Plateau Descent~
 ~
 0 4 1
+D4
+~
+~
+0 -1 305467
+D5
+~
+~
+0 -1 305469
 S
 #305469
-Floating in a void~
+Plateau Descent~
 ~
 0 4 1
+D0
+~
+~
+0 -1 305470
+D4
+~
+~
+0 -1 305468
 S
 #305470
-Floating in a void~
+Battle-Scarred Wasteland~
 ~
 0 4 1
+D0
+~
+~
+0 -1 305471
+D2
+~
+~
+0 -1 305469
 S
 #305471
-Floating in a void~
+Battle-Scarred Wasteland~
 ~
 0 4 1
+D0
+~
+~
+0 -1 305472
+D2
+~
+~
+0 -1 305470
 S
 #305472
-Floating in a void~
+Overlooking a Massive Crater~
 ~
 0 4 1
+D2
+~
+~
+0 -1 305471
+D5
+~
+~
+0 -1 305473
 S
 #305473
-Floating in a void~
+Crater Floor~
 ~
 0 4 1
+> entry_prog 100~
+mea $n &cVegeta visibly tenses at your approach.&d
+mea $n &CVegeta says 'What's this?! Another clown?!'&d
+mea $n &cGoku seems barely able to contain his anger. The bodies of Krillin, Gohan, and Piccolo lay just behind him.
+mea $n &cHe looks focused on the android rather than Vegeta, however, just before he shoots you a concerned look.&d
+mea $n &CGoku says 'I don't know who you are, but if you're not here to &Rhelp&C, you should leave while you still have the chance.'
+~
+|
 S
 #305474
-Floating in a void~
+Timespace Pocket~
 ~
 0 4 1
+D0
+~
+~
+0 -1 305475
 S
 #305475
-Floating in a void~
+Timespace Pocket~
 ~
 0 4 1
+D0
+~
+~
+0 -1 305476
+> entry_prog 100~
+mea $n &cDoctor Emalia's voice echoes over your communicator.&d
+mea $n &CDoctor Emalia says 'That was... Doctor Gero. He even seemed to recognize you, and if so, things are worse than I thought.'
+mea $n &CDoctor Emalia says 'The fractured timelines are merging, creating their own universe with its own continuity.'
+mea $n &CDoctor Emalia says 'We need to get you out of there as soon as possible!'
+~
+> leave_prog 100~
+mea $n &CDoctor Emalia says 'Move as fast as you can. You're still in danger!'&d
+mea $n &cYou appear back in the wastelands, some ways from the crater Doctor Emalia plucked you from.&d
+~
+|
 S
 #305476
-Floating in a void~
+Beside a Huge Crater~
 ~
 0 4 1
+D0
+~
+~
+0 -1 305477
 S
 #305477
-Floating in a void~
+Crumbling Rubble~
 ~
 0 4 1
+D0
+~
+~
+0 -1 305478
 S
 #305478
-Floating in a void~
+Crumbling Rubble~
 ~
 0 4 1
+D0
+~
+~
+0 -1 305479
+> entry_prog 100~
+mea $n &RGoku, his body engulfed in a blaze of red flame, careens overhead and directly through the side of a nearby plateau!&d
+~
+> leave_prog 100~
+mea $n &cA cloud of dusts billows out from the point of impact, obscuring your vision.&d
+~
+|
 S
 #305479
-Floating in a void~
+Crumbling Rubble~
 ~
 0 4 1
+D0
+~
+~
+0 -1 305480
 S
 #305480
-Floating in a void~
+Crumbling Rubble~
 ~
 0 4 1
+D0
+~
+~
+0 -1 305481
+> leave_prog 100~
+mea $n &cChunks of rubble collapse over the path behind you, an intense battle raging just out of sight.&d
+~
+|
 S
 #305481
-Floating in a void~
+Crumbling Rubble~
 ~
 0 4 1
+D0
+~
+~
+0 -1 305482
+> leave_prog 100~
+mea $n &YGoku yells 'KAAAAA--'
+~
+|
 S
 #305482
-Floating in a void~
+Crumbling Rubble~
 ~
 0 4 1
+D0
+~
+~
+0 -1 305483
+> leave_prog 100~
+mea $n &YGoku yells 'MEEEEE--'
+~
+|
 S
 #305483
-Floating in a void~
+Crumbling Rubble~
 ~
 0 4 1
+D0
+~
+~
+0 -1 305484
+> leave_prog 100~
+mea $n &YGoku yells 'HAAAAA--'
+~
+|
 S
 #305484
-Floating in a void~
+Crumbling Rubble~
 ~
 0 4 1
+D0
+~
+~
+0 -1 305485
+> leave_prog 100~
+mea $n &YGoku yells 'MEEEEE--'
+~
+|
 S
 #305485
-Floating in a void~
+Crumbling Rubble~
 ~
 0 4 1
+D0
+~
+~
+0 -1 305486
+> leave_prog 100~
+mea $n &YGoku yells 'HAAAAA!!!'
+mea $n &CA giant, blindingly bright beam of blue-white energy rockets through the sky overhead.&d
+~
+|
 S
 #305486
-Floating in a void~
+Crumbling Rubble~
 ~
 0 4 1
+D0
+~
+~
+0 -1 305487
+> leave_prog 100~
+mea $n &cThe sounds of battle fade away like a distant memory into the mist.&d
+~
+|
 S
 #305487
-Floating in a void~
+Lost in the rift~
 ~
 0 4 1
+D0
+~
+~
+0 -1 305488
 S
 #305488
-Floating in a void~
+Lost in the rift~
 ~
 0 4 1
+D0
+~
+~
+0 -1 6000
+> leave_prog 100~
+mea $n &cThe mist engulfs you, and before you realize what's even happened, you're back at the Center of The Universe.&d
+~
+|
 S
 #305489
-Floating in a void~
+Doctor Emalia's Laboratory~
 ~
 0 4 1
+D1
+~
+~
+0 -1 305490
 S
 #305490
-Floating in a void~
+Doctor Emalia's Laboratory~
 ~
 0 4 1
+D1
+~
+~
+0 -1 305491
+D3
+~
+~
+0 -1 305489
 S
 #305491
-Floating in a void~
+Timespace Research and Development~
 ~
 0 4 1
+D3
+~
+~
+0 -1 305490
 S
 #305492
-Floating in a void~
+Hyperbolic Time Fracture~
+The world behind the transparent glass seems to zip ahead at extreme
+speeds.  In mere minutes, Doctor Emalia completes an entire day's work in a
+blur of indistinguishable motion.  The only apparent exits are north into a
+building amidst the void, or back through the transparent doors to resume
+life at normal speed. 
 ~
 0 4 1
+D0
+~
+~
+0 -1 305493
 S
 #305493
-Floating in a void~
+Hyperbolic Time Fracture: First Stratum Facility~
+Unlike the rest of the void, the air here is calm and easy to breathe,
+as if weathering against the extreme conditions outside.  There appears to
+be a healing tank to the west, and a row of gravity chambers to the east. 
+You can sense a distinct array of distant powers to the north, but the
+light obscures your vision. 
 ~
-0 4 1
+0 4 0
+D0
+~
+~
+0 -1 305497
+D1
+~
+~
+0 -1 305495
+D2
+~
+~
+0 -1 305492
+D3
+~
+~
+0 -1 305494
 S
 #305494
-Floating in a void~
+Healing Tank~
+Doctor Emalia has equipped this chamber with the latest in healing
+technology.  Simply resting in this room will rejuvenate body and mind,
+accelerating your body's natural healing properties. 
 ~
-0 4 1
+0 536870916 0
+D1
+~
+~
+0 -1 305493
 S
 #305495
-Floating in a void~
+Gravity Chamber 01~
+This chamber of several is equipped with many different gravity settings
+to aid in your training.  A center console operates most of its features,
+letting out a low, droning hum as energy courses through the floor and
+ceiling. 
 ~
-0 4 1
+0 268435460 0
+D1
+~
+~
+0 -1 305496
+D3
+~
+~
+0 -1 305493
 S
 #305496
-Floating in a void~
+Gravity Chamber 02~
+This chamber of several is equipped with many different gravity settings
+to aid in your training.  A center console operates most of its features,
+letting out a low, droning hum as energy courses through the floor and
+ceiling. 
 ~
-0 4 1
+0 268435460 0
+D3
+~
+~
+0 -1 305495
 S
 #305497
-Floating in a void~
+Unsettling Void~
+The structure of the world here has no rhyme or reason to it.  At one
+moment the floor could be made of reflective glass, and in the next become
+crumbling concrete. Temperatures fluctuate as well, making it difficult to
+concentrate. 
 ~
 0 4 1
+D0
+~
+~
+0 -1 305498
+D2
+~
+~
+0 -1 305493
 S
 #305498
-Floating in a void~
+Unsettling Void~
+The void continues to warp and change around you, constantly bombarding
+you with new challenges and information to process.  A tiny path through
+the ever-changing landscape leads back to the building in the south. 
 ~
-0 4 1
+0 0 0
+D0
+~
+~
+0 -1 305505
+D1
+~
+~
+0 -1 305506
+D2
+~
+~
+0 -1 305497
+D3
+~
+~
+0 -1 305499
 S
 #305499
-Floating in a void~
+Unsettling Void~
+The void continues to warp and change around you, constantly bombarding
+you with new challenges and information to process. 
 ~
-0 4 1
+0 0 0
+D0
+~
+~
+0 -1 305504
+D1
+~
+~
+0 -1 305498
+D3
+~
+~
+0 -1 305500
 S
 #305500
-Floating in a void~
+Unsettling Void~
+The void continues to warp and change around you, constantly bombarding
+you with new challenges and information to process. 
 ~
-0 4 1
+0 0 0
+D0
+~
+~
+0 -1 305503
+D1
+~
+~
+0 -1 305499
+D3
+~
+~
+0 -1 305501
 S
 #305501
-Floating in a void~
+Unsettling Void~
+The void continues to warp and change around you, constantly bombarding
+you with new challenges and information to process. 
 ~
-0 4 1
+0 0 0
+D0
+~
+~
+0 -1 305502
+D1
+~
+~
+0 -1 305500
 S
 #305502
-Floating in a void~
+Unsettling Void~
+The void continues to warp and change around you, constantly bombarding
+you with new challenges and information to process. 
 ~
-0 4 1
+0 0 0
+D1
+~
+~
+0 -1 305503
+D2
+~
+~
+0 -1 305501
 S
 #305503
-Floating in a void~
+Unsettling Void~
+The void continues to warp and change around you, constantly bombarding
+you with new challenges and information to process. 
 ~
-0 4 1
+0 0 0
+D1
+~
+~
+0 -1 305504
+D2
+~
+~
+0 -1 305500
+D3
+~
+~
+0 -1 305502
 S
 #305504
-Floating in a void~
+Unsettling Void~
+The void continues to warp and change around you, constantly bombarding
+you with new challenges and information to process. 
 ~
-0 4 1
+0 0 0
+D1
+~
+~
+0 -1 305505
+D2
+~
+~
+0 -1 305499
+D3
+~
+~
+0 -1 305503
 S
 #305505
-Floating in a void~
+Unsettling Void~
+The void continues to warp and change around you, constantly bombarding
+you with new challenges and information to process. 
 ~
-0 4 1
+0 0 0
+D0
+~
+~
+0 -1 305512
+D1
+~
+~
+0 -1 305511
+D2
+~
+~
+0 -1 305498
+D3
+~
+~
+0 -1 305504
 S
 #305506
-Floating in a void~
+Unsettling Void~
+The void continues to warp and change around you, constantly bombarding
+you with new challenges and information to process. 
 ~
-0 4 1
+0 0 0
+D0
+~
+~
+0 -1 305511
+D1
+~
+~
+0 -1 305507
+D3
+~
+~
+0 -1 305498
 S
 #305507
-Floating in a void~
+Unsettling Void~
+The void continues to warp and change around you, constantly bombarding
+you with new challenges and information to process. 
 ~
-0 4 1
+0 0 0
+D0
+~
+~
+0 -1 305510
+D1
+~
+~
+0 -1 305508
+D3
+~
+~
+0 -1 305506
 S
 #305508
-Floating in a void~
+Unsettling Void~
+The void continues to warp and change around you, constantly bombarding
+you with new challenges and information to process. 
 ~
-0 4 1
+0 0 0
+D0
+~
+~
+0 -1 305509
+D3
+~
+~
+0 -1 305507
 S
 #305509
-Floating in a void~
+Unsettling Void~
+The void continues to warp and change around you, constantly bombarding
+you with new challenges and information to process. 
 ~
-0 4 1
+0 0 0
+D2
+~
+~
+0 -1 305508
+D3
+~
+~
+0 -1 305510
 S
 #305510
-Floating in a void~
+Unsettling Void~
+The void continues to warp and change around you, constantly bombarding
+you with new challenges and information to process. 
 ~
-0 4 1
+0 0 0
+D1
+~
+~
+0 -1 305509
+D2
+~
+~
+0 -1 305507
+D3
+~
+~
+0 -1 305511
 S
 #305511
-Floating in a void~
+Unsettling Void~
+The void continues to warp and change around you, constantly bombarding
+you with new challenges and information to process. 
 ~
-0 4 1
+0 0 0
+D1
+~
+~
+0 -1 305510
+D2
+~
+~
+0 -1 305506
+D3
+~
+~
+0 -1 305505
 S
 #305512
-Floating in a void~
+Time Fissure~
+The chamber 'wall' opens into a crackling mass of energy that travels
+downward.  The sense of danger from within is overwhelming compared to the
+void you've endured so far. 
 ~
 0 4 1
+D2
+~
+~
+0 -1 305505
+D5
+~
+~
+0 -1 305513
 S
 #305513
-Floating in a void~
+The Bottom of a Fissure~
+A brief jaunt downard brings you to a space between voids.  All around
+you hollow whispers echo through the ever-changing halls, menacing and
+many.  This place feels all the more dangerous than the world above. 
 ~
 0 4 1
+D0
+~
+~
+0 -1 305514
+D4
+~
+~
+0 -1 305512
 S
 #305514
-Floating in a void~
+Traveling a fissure~
+Seething energy jumps out at you at every opportunity, winding down a
+harsh and unforgiving path. 
 ~
-0 4 1
+0 0 1
+D0
+~
+~
+0 -1 305515
+D2
+~
+~
+0 -1 305513
 S
 #305515
-Floating in a void~
+Traveling a fissure~
+Seething energy jumps out at you at every opportunity, winding down a
+harsh and unforgiving path. 
 ~
-0 4 1
+0 0 1
+D2
+~
+~
+0 -1 305514
+D3
+~
+~
+0 -1 305516
 S
 #305516
-Floating in a void~
+Traveling a fissure~
+Seething energy jumps out at you at every opportunity, winding down a
+harsh and unforgiving path. 
 ~
-0 4 1
+0 0 1
+D1
+~
+~
+0 -1 305515
+D3
+~
+~
+0 -1 305517
 S
 #305517
-Floating in a void~
+Traveling a fissure~
+Seething energy jumps out at you at every opportunity, winding down a
+harsh and unforgiving path. 
 ~
-0 4 1
+0 0 1
+D0
+~
+~
+0 -1 305518
+D1
+~
+~
+0 -1 305516
 S
 #305518
-Floating in a void~
+Traveling a fissure~
+Seething energy jumps out at you at every opportunity, winding down a
+harsh and unforgiving path. 
 ~
-0 4 1
+0 0 1
+D0
+~
+~
+0 -1 305519
+D2
+~
+~
+0 -1 305517
 S
 #305519
-Floating in a void~
+Traveling a fissure~
+The seething pathway splits here, giving no indication of which way will
+take you forward. 
 ~
-0 4 1
+0 0 1
+D0
+~
+~
+0 -1 305523
+D2
+~
+~
+0 -1 305518
+D3
+~
+~
+0 -1 305520
 S
 #305520
-Floating in a void~
+Traveling a fissure~
+Seething energy jumps out at you at every opportunity, winding down a
+harsh and unforgiving path. 
 ~
-0 4 1
+0 0 1
+D1
+~
+~
+0 -1 305519
+D3
+~
+~
+0 -1 305521
 S
 #305521
-Floating in a void~
+Traveling a fissure~
+Seething energy jumps out at you at every opportunity, winding down a
+harsh and unforgiving path. 
 ~
-0 4 1
+0 0 1
+D1
+~
+~
+0 -1 305520
+D2
+~
+~
+0 -1 305522
 S
 #305522
-Floating in a void~
+A Dead End~
+The path of energy ends here abruptly.  With no way forward in sight,
+the only means you have is to return from whence you came. 
 ~
-0 4 1
+0 0 1
+D0
+~
+~
+0 -1 305521
 S
 #305523
-Floating in a void~
+Traveling a fissure~
+Seething energy jumps out at you at every opportunity, winding down a
+harsh and unforgiving path. 
 ~
-0 4 1
+0 0 1
+D0
+~
+~
+0 -1 305524
+D2
+~
+~
+0 -1 305519
 S
 #305524
-Floating in a void~
+Traveling a fissure~
+Seething energy jumps out at you at every opportunity, winding down a
+harsh and unforgiving path. 
 ~
-0 4 1
+0 0 1
+D0
+~
+~
+0 -1 305525
+D2
+~
+~
+0 -1 305523
 S
 #305525
-Floating in a void~
+Traveling a fissure~
+Seething energy jumps out at you at every opportunity, winding down a
+harsh and unforgiving path. 
 ~
-0 4 1
+0 0 1
+D0
+~
+~
+0 -1 305526
+D2
+~
+~
+0 -1 305524
 S
 #305526
-Floating in a void~
+Traveling a fissure~
+Seething energy jumps out at you at every opportunity, winding down a
+harsh and unforgiving path. 
 ~
-0 4 1
+0 0 1
+D0
+~
+~
+0 -1 305527
+D2
+~
+~
+0 -1 305525
 S
 #305527
-Floating in a void~
+A Frightening Void~
+The path opens into another void.  Unlike the one above, however, the
+landscape is wild and unforgiving.  Storms of lightning, snow, and hail
+rage overhead, pelting you incessantly. The air is thick and hard to
+breathe, and your feet feel heavy even standing here. 
 ~
 0 4 1
+D0
+~
+~
+0 -1 305528
+D2
+~
+~
+0 -1 305526
 S
 #305528
-Floating in a void~
+A Fightening Void~
+There seems to be little way to make heads or tails of the environment. 
+Each step feels heavier than the last, and the unrelenting storm wears on
+your body and mind.  Visions of yourself flitter in and out of existence,
+taunting you with each passing moment. 
 ~
-0 4 1
+0 0 1
+D0
+~
+~
+0 -1 305535
+D1
+~
+~
+0 -1 305544
+D2
+~
+~
+0 -1 305527
+D3
+~
+~
+0 -1 305529
 S
 #305529
-Floating in a void~
+A Fightening Void~
+There seems to be little way to make heads or tails of the environment. 
+Each step feels heavier than the last, and the unrelenting storm wears on
+your body and mind.  Visions of yourself flitter in and out of existence,
+taunting you with each passing moment. 
 ~
-0 4 1
+0 0 1
+D0
+~
+~
+0 -1 305534
+D1
+~
+~
+0 -1 305528
+D3
+~
+~
+0 -1 305530
 S
 #305530
-Floating in a void~
+A Fightening Void~
+There seems to be little way to make heads or tails of the environment. 
+Each step feels heavier than the last, and the unrelenting storm wears on
+your body and mind.  Visions of yourself flitter in and out of existence,
+taunting you with each passing moment. 
 ~
-0 4 1
+0 0 1
+D0
+~
+~
+0 -1 305533
+D1
+~
+~
+0 -1 305529
+D3
+~
+~
+0 -1 305531
 S
 #305531
-Floating in a void~
+A Fightening Void~
+There seems to be little way to make heads or tails of the environment. 
+Each step feels heavier than the last, and the unrelenting storm wears on
+your body and mind.  Visions of yourself flitter in and out of existence,
+taunting you with each passing moment. 
 ~
-0 4 1
+0 0 1
+D0
+~
+~
+0 -1 305532
+D1
+~
+~
+0 -1 305530
 S
 #305532
-Floating in a void~
+A Fightening Void~
+There seems to be little way to make heads or tails of the environment. 
+Each step feels heavier than the last, and the unrelenting storm wears on
+your body and mind.  Visions of yourself flitter in and out of existence,
+taunting you with each passing moment. 
 ~
-0 4 1
+0 0 1
+D0
+~
+~
+0 -1 305539
+D1
+~
+~
+0 -1 305533
+D2
+~
+~
+0 -1 305531
 S
 #305533
-Floating in a void~
+A Fightening Void~
+There seems to be little way to make heads or tails of the environment. 
+Each step feels heavier than the last, and the unrelenting storm wears on
+your body and mind.  Visions of yourself flitter in and out of existence,
+taunting you with each passing moment. 
 ~
-0 4 1
+0 0 1
+D0
+~
+~
+0 -1 305538
+D1
+~
+~
+0 -1 305534
+D2
+~
+~
+0 -1 305530
+D3
+~
+~
+0 -1 305532
 S
 #305534
-Floating in a void~
+A Fightening Void~
+There seems to be little way to make heads or tails of the environment. 
+Each step feels heavier than the last, and the unrelenting storm wears on
+your body and mind.  Visions of yourself flitter in and out of existence,
+taunting you with each passing moment. 
 ~
-0 4 1
+0 0 1
+D0
+~
+~
+0 -1 305537
+D1
+~
+~
+0 -1 305535
+D2
+~
+~
+0 -1 305529
+D3
+~
+~
+0 -1 305533
 S
 #305535
-Floating in a void~
+A Fightening Void~
+There seems to be little way to make heads or tails of the environment. 
+Each step feels heavier than the last, and the unrelenting storm wears on
+your body and mind.  Visions of yourself flitter in and out of existence,
+taunting you with each passing moment. 
 ~
-0 4 1
+0 0 1
+D0
+~
+~
+0 -1 305536
+D1
+~
+~
+0 -1 305549
+D2
+~
+~
+0 -1 305528
+D3
+~
+~
+0 -1 305534
 S
 #305536
-Floating in a void~
+A Fightening Void~
+There seems to be little way to make heads or tails of the environment. 
+Each step feels heavier than the last, and the unrelenting storm wears on
+your body and mind.  Visions of yourself flitter in and out of existence,
+taunting you with each passing moment. 
 ~
-0 4 1
+0 0 1
+D0
+~
+~
+0 -1 305543
+D1
+~
+~
+0 -1 305550
+D2
+~
+~
+0 -1 305535
+D3
+~
+~
+0 -1 305537
 S
 #305537
-Floating in a void~
+A Fightening Void~
+There seems to be little way to make heads or tails of the environment. 
+Each step feels heavier than the last, and the unrelenting storm wears on
+your body and mind.  Visions of yourself flitter in and out of existence,
+taunting you with each passing moment. 
 ~
-0 4 1
+0 0 1
+D0
+~
+~
+0 -1 305542
+D1
+~
+~
+0 -1 305536
+D2
+~
+~
+0 -1 305534
+D3
+~
+~
+0 -1 305538
 S
 #305538
-Floating in a void~
+A Fightening Void~
+There seems to be little way to make heads or tails of the environment. 
+Each step feels heavier than the last, and the unrelenting storm wears on
+your body and mind.  Visions of yourself flitter in and out of existence,
+taunting you with each passing moment. 
 ~
-0 4 1
+0 0 1
+D0
+~
+~
+0 -1 305541
+D1
+~
+~
+0 -1 305537
+D2
+~
+~
+0 -1 305533
+D3
+~
+~
+0 -1 305539
 S
 #305539
-Floating in a void~
+A Fightening Void~
+There seems to be little way to make heads or tails of the environment. 
+Each step feels heavier than the last, and the unrelenting storm wears on
+your body and mind.  Visions of yourself flitter in and out of existence,
+taunting you with each passing moment. 
 ~
-0 4 1
+0 0 1
+D0
+~
+~
+0 -1 305540
+D1
+~
+~
+0 -1 305538
+D2
+~
+~
+0 -1 305532
 S
 #305540
-Floating in a void~
+A Fightening Void~
+There seems to be little way to make heads or tails of the environment. 
+Each step feels heavier than the last, and the unrelenting storm wears on
+your body and mind.  Visions of yourself flitter in and out of existence,
+taunting you with each passing moment. 
 ~
-0 4 1
+0 0 1
+D1
+~
+~
+0 -1 305541
+D2
+~
+~
+0 -1 305539
 S
 #305541
-Floating in a void~
+A Fightening Void~
+There seems to be little way to make heads or tails of the environment. 
+Each step feels heavier than the last, and the unrelenting storm wears on
+your body and mind.  Visions of yourself flitter in and out of existence,
+taunting you with each passing moment. 
 ~
-0 4 1
+0 0 1
+D1
+~
+~
+0 -1 305542
+D2
+~
+~
+0 -1 305538
+D3
+~
+~
+0 -1 305540
 S
 #305542
-Floating in a void~
+A Fightening Void~
+There seems to be little way to make heads or tails of the environment. 
+Each step feels heavier than the last, and the unrelenting storm wears on
+your body and mind.  Visions of yourself flitter in and out of existence,
+taunting you with each passing moment. 
 ~
-0 4 1
+0 0 1
+D1
+~
+~
+0 -1 305543
+D2
+~
+~
+0 -1 305537
+D3
+~
+~
+0 -1 305541
 S
 #305543
-Floating in a void~
+A Fightening Void~
+There seems to be little way to make heads or tails of the environment. 
+Each step feels heavier than the last, and the unrelenting storm wears on
+your body and mind.  Visions of yourself flitter in and out of existence,
+taunting you with each passing moment. 
 ~
-0 4 1
+0 0 1
+D1
+~
+~
+0 -1 305553
+D2
+~
+~
+0 -1 305536
+D3
+~
+~
+0 -1 305542
 S
 #305544
-Floating in a void~
+A Fightening Void~
+There seems to be little way to make heads or tails of the environment. 
+Each step feels heavier than the last, and the unrelenting storm wears on
+your body and mind.  Visions of yourself flitter in and out of existence,
+taunting you with each passing moment. 
 ~
-0 4 1
+0 0 1
+D0
+~
+~
+0 -1 305549
+D1
+~
+~
+0 -1 305545
+D3
+~
+~
+0 -1 305528
 S
 #305545
-Floating in a void~
+A Fightening Void~
+There seems to be little way to make heads or tails of the environment. 
+Each step feels heavier than the last, and the unrelenting storm wears on
+your body and mind.  Visions of yourself flitter in and out of existence,
+taunting you with each passing moment. 
 ~
-0 4 1
+0 0 1
+D0
+~
+~
+0 -1 305548
+D1
+~
+~
+0 -1 305546
+D3
+~
+~
+0 -1 305544
 S
 #305546
-Floating in a void~
+A Fightening Void~
+There seems to be little way to make heads or tails of the environment. 
+Each step feels heavier than the last, and the unrelenting storm wears on
+your body and mind.  Visions of yourself flitter in and out of existence,
+taunting you with each passing moment. 
 ~
-0 4 1
+0 0 1
+D0
+~
+~
+0 -1 305547
+D3
+~
+~
+0 -1 305545
 S
 #305547
-Floating in a void~
+A Fightening Void~
+There seems to be little way to make heads or tails of the environment. 
+Each step feels heavier than the last, and the unrelenting storm wears on
+your body and mind.  Visions of yourself flitter in and out of existence,
+taunting you with each passing moment. 
 ~
-0 4 1
+0 0 1
+D0
+~
+~
+0 -1 305552
+D2
+~
+~
+0 -1 305546
+D3
+~
+~
+0 -1 305548
 S
 #305548
-Floating in a void~
+A Fightening Void~
+There seems to be little way to make heads or tails of the environment. 
+Each step feels heavier than the last, and the unrelenting storm wears on
+your body and mind.  Visions of yourself flitter in and out of existence,
+taunting you with each passing moment. 
 ~
-0 4 1
+0 0 1
+D0
+~
+~
+0 -1 305551
+D1
+~
+~
+0 -1 305547
+D2
+~
+~
+0 -1 305545
+D3
+~
+~
+0 -1 305549
 S
 #305549
-Floating in a void~
+A Fightening Void~
+There seems to be little way to make heads or tails of the environment. 
+Each step feels heavier than the last, and the unrelenting storm wears on
+your body and mind.  Visions of yourself flitter in and out of existence,
+taunting you with each passing moment. 
 ~
-0 4 1
+0 0 1
+D0
+~
+~
+0 -1 305550
+D1
+~
+~
+0 -1 305548
+D2
+~
+~
+0 -1 305544
+D3
+~
+~
+0 -1 305535
 S
 #305550
-Floating in a void~
+A Fightening Void~
+There seems to be little way to make heads or tails of the environment. 
+Each step feels heavier than the last, and the unrelenting storm wears on
+your body and mind.  Visions of yourself flitter in and out of existence,
+taunting you with each passing moment. 
 ~
-0 4 1
+0 0 1
+D0
+~
+~
+0 -1 305553
+D1
+~
+~
+0 -1 305551
+D2
+~
+~
+0 -1 305549
+D3
+~
+~
+0 -1 305536
 S
 #305551
-Floating in a void~
+A Fightening Void~
+There seems to be little way to make heads or tails of the environment. 
+Each step feels heavier than the last, and the unrelenting storm wears on
+your body and mind.  Visions of yourself flitter in and out of existence,
+taunting you with each passing moment. 
 ~
-0 4 1
+0 0 1
+D0
+~
+~
+0 -1 305554
+D1
+~
+~
+0 -1 305552
+D2
+~
+~
+0 -1 305548
+D3
+~
+~
+0 -1 305550
 S
 #305552
-Floating in a void~
+A Fightening Void~
+There seems to be little way to make heads or tails of the environment. 
+Each step feels heavier than the last, and the unrelenting storm wears on
+your body and mind.  Visions of yourself flitter in and out of existence,
+taunting you with each passing moment. 
 ~
-0 4 1
+0 0 1
+D0
+~
+~
+0 -1 305555
+D2
+~
+~
+0 -1 305547
+D3
+~
+~
+0 -1 305551
 S
 #305553
-Floating in a void~
+A Fightening Void~
+There seems to be little way to make heads or tails of the environment. 
+Each step feels heavier than the last, and the unrelenting storm wears on
+your body and mind.  Visions of yourself flitter in and out of existence,
+taunting you with each passing moment. 
 ~
-0 4 1
+0 0 1
+D1
+~
+~
+0 -1 305554
+D2
+~
+~
+0 -1 305550
+D3
+~
+~
+0 -1 305543
 S
 #305554
-Floating in a void~
+A Fightening Void~
+There seems to be little way to make heads or tails of the environment. 
+Each step feels heavier than the last, and the unrelenting storm wears on
+your body and mind.  Visions of yourself flitter in and out of existence,
+taunting you with each passing moment. 
 ~
-0 4 1
+0 0 1
+D1
+~
+~
+0 -1 305555
+D2
+~
+~
+0 -1 305551
+D3
+~
+~
+0 -1 305553
 S
 #305555
-Floating in a void~
+A Fightening Void~
+There seems to be little way to make heads or tails of the environment. 
+Each step feels heavier than the last, and the unrelenting storm wears on
+your body and mind.  Visions of yourself flitter in and out of existence,
+taunting you with each passing moment. 
 ~
-0 4 1
+0 0 1
+D2
+~
+~
+0 -1 305552
+D3
+~
+~
+0 -1 305554
 S
 #305556
 Floating in a void~
@@ -40245,10 +47435,11 @@ S
 
 #RESETS
 M 1 303901 1 303904
-M 1 303901 1 303906
 M 1 303901 1 303905
-M 1 303930 1 303909
-M 1 303930 1 303912
+M 1 303901 1 303906
+M 1 303930 1 303906
+M 1 303930 1 303907
+M 1 303902 1 303911
 M 1 303930 1 303914
 M 1 303930 1 303918
 M 1 303929 1 303921
@@ -40275,55 +47466,78 @@ M 1 303905 1 303947
 M 1 303905 1 303948
 M 1 303905 1 303949
 M 1 303905 1 303950
-M 1 303905 1 303978
-M 1 303905 1 303979
-M 1 303905 1 303956
-M 1 303905 1 303955
-M 1 303905 1 303954
-M 1 303905 1 303953
 M 1 303905 1 303952
-M 1 303905 1 303961
-M 1 303905 1 303960
-M 1 303905 1 303959
-M 1 303905 1 303958
+M 1 303905 1 303953
+M 1 303905 1 303954
+M 1 303905 1 303955
+M 1 303905 1 303956
 M 1 303905 1 303957
-M 1 303905 1 303980
+M 1 303905 1 303958
+M 1 303905 1 303959
+M 1 303905 1 303960
+M 1 303905 1 303961
 M 1 303906 1 303968
-M 1 303906 1 303977
-M 1 303906 1 303983
-M 1 303906 1 303984
-M 1 303906 1 303976
 M 1 303906 1 303969
 M 1 303906 1 303970
-M 1 303906 1 303975
-M 1 303906 1 303985
-M 1 303906 1 303986
-M 1 303906 1 303974
 M 1 303906 1 303971
 M 1 303906 1 303972
 M 1 303906 1 303973
+M 1 303906 1 303974
+M 1 303906 1 303975
+M 1 303906 1 303976
+M 1 303906 1 303977
+M 1 303905 1 303978
+M 1 303905 1 303979
+M 1 303905 1 303980
+M 1 303906 1 303981
+M 1 303906 1 303982
+M 1 303906 1 303983
+M 1 303906 1 303984
+M 1 303906 1 303985
+M 1 303906 1 303986
 M 1 303906 1 303987
 M 1 303906 1 303988
-M 1 303906 1 303982
-M 1 303906 1 303981
 M 1 303907 1 303990
 M 1 303907 1 303991
 M 1 303907 1 303992
 M 1 303907 1 303993
 M 1 303907 1 303994
-M 1 303907 1 304000
-M 1 303907 1 304001
 M 1 303907 1 303995
 M 1 303907 1 303996
 M 1 303907 1 303997
 M 1 303907 1 303998
 M 1 303907 1 303999
-M 1 303907 1 304007
-M 1 303907 1 304006
-M 1 303907 1 304005
-M 1 303907 1 304004
-M 1 303907 1 304003
+M 1 303907 1 304000
+M 1 303907 1 304001
 M 1 303907 1 304002
+M 1 303907 1 304003
+M 1 303907 1 304004
+M 1 303907 1 304005
+M 1 303907 1 304006
+M 1 303907 1 304007
+M 1 303909 1 304020
+M 1 303909 1 304021
+O 1 620 5 304021
+O 1 620 5 304021
+O 1 620 5 304021
+O 1 620 5 304021
+O 1 620 5 304021
+M 1 303909 1 304022
+M 1 303909 1 304023
+M 1 303909 1 304024
+M 1 303909 1 304025
+M 1 303909 1 304026
+M 1 303909 1 304027
+M 1 303909 1 304028
+M 1 303909 1 304029
+M 1 303909 1 304030
+M 1 303909 1 304031
+M 1 303909 1 304032
+M 1 303909 1 304033
+M 1 303909 1 304034
+M 1 303909 1 304035
+M 1 303909 1 304036
+M 1 303909 1 304037
 M 1 303908 1 304038
 M 1 303908 1 304039
 M 1 303908 1 304040
@@ -40342,50 +47556,33 @@ M 1 303908 1 304052
 M 1 303908 1 304053
 M 1 303908 1 304054
 M 1 303908 1 304055
-M 1 303909 1 304020
-M 1 303909 1 304021
-M 1 303909 1 304022
-M 1 303909 1 304023
-M 1 303909 1 304024
-M 1 303909 1 304025
-M 1 303909 1 304026
-M 1 303909 1 304027
-M 1 303909 1 304028
-M 1 303909 1 304029
-M 1 303909 1 304030
-M 1 303909 1 304031
-M 1 303909 1 304032
-M 1 303909 1 304033
-M 1 303909 1 304034
-M 1 303909 1 304035
-M 1 303909 1 304036
-M 1 303909 1 304037
 M 1 303910 1 304060
-M 1 303910 1 304061
+M 1 303910 1 304062
+M 1 303910 1 304062
 M 1 303910 1 304062
 M 1 303910 1 304063
+M 1 303910 1 304063
 M 1 303910 1 304064
-M 1 303910 1 304066
-M 1 303910 1 304067
-M 1 303910 1 304068
-M 1 303910 1 304071
-M 1 303910 1 304072
+M 1 303910 1 304064
+M 1 303910 1 304070
+M 1 303910 1 304070
 M 1 303910 1 304073
-M 1 303910 1 304074
+M 1 303910 1 304073
 M 1 303910 1 304075
+D 0 304076 3 1
 M 1 303911 1 304077
 D 0 304077 1 1
+M 1 303911 1 304078
+M 1 303911 1 304079
+M 1 303911 1 304080
+M 1 303911 1 304081
+M 1 303911 1 304082
+M 1 303911 1 304083
 M 1 303911 1 304084
 M 1 303911 1 304085
 M 1 303911 1 304086
-M 1 303911 1 304083
-M 1 303911 1 304078
-M 1 303911 1 304079
-M 1 303911 1 304082
 M 1 303911 1 304087
 M 1 303911 1 304088
-M 1 303911 1 304081
-M 1 303911 1 304080
 M 1 303912 1 304091
 M 1 303912 1 304092
 M 1 303912 1 304093
@@ -40420,242 +47617,153 @@ M 1 303912 1 304121
 M 1 303913 1 304122
 M 1 303903 1 304124
 M 1 303914 1 304140
+M 1 303916 1 304157
+M 1 303916 1 304158
 M 1 303916 1 304159
-M 1 303916 1 304170
+M 1 303916 1 304160
+M 1 303916 1 304161
+M 1 303916 1 304162
+M 1 303916 1 304163
+M 1 303916 1 304164
+M 1 303916 1 304165
+M 1 303916 1 304166
+M 1 303916 1 304167
+M 1 303916 1 304168
 M 1 303916 1 304169
+M 1 303916 1 304170
+M 1 303916 1 304171
 M 1 303916 1 304172
 M 1 303916 1 304173
 M 1 303916 1 304174
-M 1 303916 1 304164
-M 1 303916 1 304163
-M 1 303916 1 304162
-M 1 303916 1 304161
-M 1 303916 1 304160
-M 1 303916 1 304157
-M 1 303916 1 304158
-M 1 303916 1 304171
-M 1 303916 1 304168
-M 1 303916 1 304167
-M 1 303916 1 304166
-M 1 303916 1 304165
 M 1 303917 1 304179
-M 1 303917 1 304196
+M 1 303917 1 304180
+M 1 303917 1 304181
+M 1 303917 1 304182
+M 1 303917 1 304183
+M 1 303917 1 304184
 M 1 303917 1 304185
 M 1 303917 1 304186
-M 1 303917 1 304180
-M 1 303917 1 304195
-M 1 303917 1 304194
-M 1 303917 1 304181
 M 1 303917 1 304187
 M 1 303917 1 304188
-M 1 303917 1 304182
-M 1 303917 1 304193
-M 1 303917 1 304192
-M 1 303917 1 304183
 M 1 303917 1 304189
 M 1 303917 1 304190
-M 1 303917 1 304184
 M 1 303917 1 304191
-M 1 303918 1 304212
-M 1 303918 1 304211
-M 1 303918 1 304210
-M 1 303918 1 304209
-M 1 303918 1 304208
-M 1 303918 1 304207
-M 1 303918 1 304206
-M 1 303918 1 304205
-M 1 303918 1 304204
-M 1 303918 1 304203
-M 1 303918 1 304202
+M 1 303917 1 304192
+M 1 303917 1 304193
+M 1 303917 1 304194
+M 1 303917 1 304195
+M 1 303917 1 304196
 M 1 303918 1 304201
+M 1 303918 1 304202
+M 1 303918 1 304203
+M 1 303918 1 304204
+M 1 303918 1 304205
+M 1 303918 1 304206
+M 1 303918 1 304207
+M 1 303918 1 304208
+M 1 303918 1 304209
+M 1 303918 1 304210
+M 1 303918 1 304211
+M 1 303918 1 304212
 M 1 303918 1 304213
 M 1 303918 1 304214
 M 1 303918 1 304215
 M 1 303918 1 304216
 M 1 303918 1 304217
 M 1 303918 1 304218
+M 1 303915 1 304219
+M 1 303919 1 304248
+M 1 303919 1 304249
+M 1 303919 1 304250
+M 1 303919 1 304251
+M 1 303919 1 304252
+M 1 303919 1 304253
+M 1 303919 1 304254
+M 1 303919 1 304255
+M 1 303919 1 304256
+M 1 303919 1 304257
+M 1 303919 1 304258
+M 1 303919 1 304259
 M 1 303919 1 304260
 M 1 303919 1 304261
 M 1 303919 1 304262
 M 1 303919 1 304263
 M 1 303919 1 304264
 M 1 303919 1 304265
-M 1 303919 1 304253
-M 1 303919 1 304252
-M 1 303919 1 304251
-M 1 303919 1 304250
-M 1 303919 1 304249
-M 1 303919 1 304248
-M 1 303919 1 304258
-M 1 303919 1 304257
-M 1 303919 1 304256
-M 1 303919 1 304255
-M 1 303919 1 304254
+M 1 303920 1 304270
+M 1 303920 1 304271
+M 1 303920 1 304272
+M 1 303920 1 304273
+M 1 303920 1 304274
+M 1 303920 1 304275
+M 1 303920 1 304276
+M 1 303920 1 304277
+M 1 303920 1 304278
+M 1 303920 1 304279
+M 1 303920 1 304280
+M 1 303920 1 304281
 M 1 303920 1 304282
 M 1 303920 1 304283
 M 1 303920 1 304284
 M 1 303920 1 304285
 M 1 303920 1 304286
 M 1 303920 1 304287
-M 1 303920 1 304275
-M 1 303920 1 304274
-M 1 303920 1 304273
-M 1 303920 1 304272
-M 1 303920 1 304271
-M 1 303920 1 304270
-M 1 303920 1 304281
-M 1 303920 1 304280
-M 1 303920 1 304279
-M 1 303920 1 304278
-M 1 303920 1 304277
-M 1 303920 1 304276
+M 1 303921 1 304292
+M 1 303921 1 304293
+M 1 303921 1 304294
+M 1 303921 1 304295
+M 1 303921 1 304296
+M 1 303921 1 304297
+M 1 303921 1 304298
+M 1 303921 1 304299
+M 1 303921 1 304300
+M 1 303921 1 304301
+M 1 303921 1 304302
+M 1 303921 1 304303
 M 1 303921 1 304304
 M 1 303921 1 304305
 M 1 303921 1 304306
 M 1 303921 1 304307
 M 1 303921 1 304308
 M 1 303921 1 304309
-M 1 303921 1 304297
-M 1 303921 1 304296
-M 1 303921 1 304295
-M 1 303921 1 304294
-M 1 303921 1 304293
-M 1 303921 1 304292
-M 1 303921 1 304303
-M 1 303921 1 304302
-M 1 303921 1 304301
-M 1 303921 1 304300
-M 1 303921 1 304299
-M 1 303921 1 304298
-M 1 303915 1 304219
-M 1 303922 1 304331
-M 1 303922 1 304330
-M 1 303922 1 304329
-M 1 303922 1 304328
-M 1 303922 1 304327
-M 1 303922 1 304326
-M 1 303922 1 304319
-M 1 303922 1 304318
-M 1 303922 1 304317
-M 1 303922 1 304316
-M 1 303922 1 304315
 M 1 303922 1 304314
+M 1 303922 1 304315
+M 1 303922 1 304316
+M 1 303922 1 304317
+M 1 303922 1 304318
+M 1 303922 1 304319
 M 1 303922 1 304320
 M 1 303922 1 304321
 M 1 303922 1 304322
 M 1 303922 1 304323
 M 1 303922 1 304324
 M 1 303922 1 304325
-M 1 303933 1 304333
-M 1 303933 1 304335
+M 1 303922 1 304326
+M 1 303922 1 304327
+M 1 303922 1 304328
+M 1 303922 1 304329
+M 1 303922 1 304330
+M 1 303922 1 304331
 M 1 303933 1 304337
-M 1 303933 1 304339
+M 1 303933 1 304341
 M 1 303933 1 304343
-M 1 303933 1 304345
+M 1 303933 1 304346
+M 1 303933 1 304347
 M 1 303933 1 304348
+M 1 303933 1 304350
+M 1 304726 1 304351
+M 1 303933 1 304352
+M 1 303933 1 304363
+M 1 303933 1 304368
+M 1 303933 1 304370
+M 1 303936 1 304371
+G 1 303905 1
+M 1 303933 1 304371
+M 1 303933 1 304371
 M 1 303935 1 304373
 M 1 303934 1 304376
 G 1 303904 1
 G 1 303903 1
-M 1 303936 1 304371
-G 1 303905 1
-M 1 303933 1 304354
-M 1 303933 1 304356
-M 1 303933 1 304360
-M 1 303933 1 304362
-M 1 303933 1 304365
-M 1 303933 1 304369
-M 1 303926 1 304481
-M 1 303926 1 304482
-M 1 303926 1 304483
-M 1 303926 1 304484
-M 1 303926 1 304485
-M 1 303926 1 304486
-M 1 303926 1 304487
-M 1 303926 1 304488
-M 1 303926 1 304489
-M 1 303926 1 304490
-M 1 303926 1 304495
-M 1 303926 1 304494
-M 1 303926 1 304493
-M 1 303926 1 304492
-M 1 303926 1 304491
-M 1 303926 1 304499
-M 1 303926 1 304498
-M 1 303926 1 304497
-M 1 303926 1 304496
-M 1 303926 1 304505
-M 1 303926 1 304504
-M 1 303926 1 304503
-M 1 303926 1 304502
-M 1 303926 1 304501
-M 1 303938 1 304591
-M 1 303928 1 304636
-M 1 303939 1 304590
-M 1 303902 1 303911
-M 1 303931 1 304584
-D 0 304076 3 1
-M 1 303926 1 304576
-M 1 303926 1 304577
-M 1 303926 1 304574
-M 1 303926 1 304567
-M 1 303926 1 304564
-M 1 303926 1 304557
-M 1 303926 1 304558
-M 1 303926 1 304563
-M 1 303926 1 304568
-M 1 303926 1 304573
-M 1 303926 1 304578
-M 1 303926 1 304579
-M 1 303926 1 304572
-M 1 303926 1 304569
-M 1 303926 1 304562
-M 1 303926 1 304559
-M 1 303926 1 304560
-M 1 303926 1 304561
-M 1 303926 1 304570
-M 1 303926 1 304571
-M 1 303926 1 304580
-M 1 303926 1 304575
-M 1 303926 1 304566
-M 1 303926 1 304565
-M 1 303926 1 304556
-M 1 305000 1 305000
-G 1 305006 1
-G 1 305000 1
-G 1 305001 1
-G 1 305007 1
-G 1 305005 1
-G 1 305002 1
-G 1 305003 1
-G 1 305004 1
-G 1 305008 1
-G 1 305009 1
-O 1 308000 1 308002
-D 0 308004 0 1
-M 1 304722 1 304721
-M 1 304725 1 304724
-M 1 303919 1 304259
-M 1 303923 1 304389
-E 1 303919 1 5
-M 1 303923 1 304388
-E 1 303919 1 5
-M 1 303923 1 304387
-E 1 303919 1 5
-M 1 303923 1 304386
-E 1 303919 1 5
-M 1 303923 1 304385
-E 1 303919 1 5
-M 1 303923 1 304404
-E 1 303919 1 5
-M 1 303923 1 304403
-E 1 303919 1 5
-M 1 303923 1 304402
-E 1 303919 1 5
-M 1 303923 1 304401
-E 1 303919 1 5
-M 1 303923 1 304400
-E 1 303919 1 5
 M 1 303923 1 304380
 E 1 303919 1 5
 M 1 303923 1 304381
@@ -40666,45 +47774,45 @@ M 1 303923 1 304383
 E 1 303919 1 5
 M 1 303923 1 304384
 E 1 303919 1 5
-M 1 303923 1 304394
+M 1 303923 1 304385
 E 1 303919 1 5
-M 1 303923 1 304393
+M 1 303923 1 304386
 E 1 303919 1 5
-M 1 303923 1 304392
+M 1 303923 1 304387
 E 1 303919 1 5
-M 1 303923 1 304391
+M 1 303923 1 304388
+E 1 303919 1 5
+M 1 303923 1 304389
 E 1 303919 1 5
 M 1 303923 1 304390
 E 1 303919 1 5
-M 1 303923 1 304399
+M 1 303923 1 304391
 E 1 303919 1 5
-M 1 303923 1 304398
+M 1 303923 1 304392
 E 1 303919 1 5
-M 1 303923 1 304397
+M 1 303923 1 304393
 E 1 303919 1 5
-M 1 303923 1 304396
+M 1 303923 1 304394
 E 1 303919 1 5
 M 1 303923 1 304395
 E 1 303919 1 5
-M 1 303923 1 304425
+M 1 303923 1 304396
 E 1 303919 1 5
-M 1 303923 1 304424
+M 1 303923 1 304397
 E 1 303919 1 5
-M 1 303923 1 304423
+M 1 303923 1 304398
 E 1 303919 1 5
-M 1 303923 1 304422
+M 1 303923 1 304399
 E 1 303919 1 5
-M 1 303923 1 304421
+M 1 303923 1 304400
 E 1 303919 1 5
-M 1 303923 1 304420
+M 1 303923 1 304401
 E 1 303919 1 5
-M 1 303923 1 304419
+M 1 303923 1 304402
 E 1 303919 1 5
-M 1 303923 1 304418
+M 1 303923 1 304403
 E 1 303919 1 5
-M 1 303923 1 304417
-E 1 303919 1 5
-M 1 303923 1 304416
+M 1 303923 1 304404
 E 1 303919 1 5
 M 1 303923 1 304406
 E 1 303919 1 5
@@ -40726,6 +47834,26 @@ M 1 303923 1 304414
 E 1 303919 1 5
 M 1 303923 1 304415
 E 1 303919 1 5
+M 1 303923 1 304416
+E 1 303919 1 5
+M 1 303923 1 304417
+E 1 303919 1 5
+M 1 303923 1 304418
+E 1 303919 1 5
+M 1 303923 1 304419
+E 1 303919 1 5
+M 1 303923 1 304420
+E 1 303919 1 5
+M 1 303923 1 304421
+E 1 303919 1 5
+M 1 303923 1 304422
+E 1 303919 1 5
+M 1 303923 1 304423
+E 1 303919 1 5
+M 1 303923 1 304424
+E 1 303919 1 5
+M 1 303923 1 304425
+E 1 303919 1 5
 M 1 303923 1 304426
 E 1 303919 1 5
 M 1 303923 1 304427
@@ -40736,9 +47864,9 @@ M 1 303923 1 304429
 E 1 303919 1 5
 M 1 303923 1 304430
 E 1 303919 1 5
-M 1 303924 1 304432
-E 1 303919 1 5
 M 1 303924 1 304431
+E 1 303919 1 5
+M 1 303924 1 304432
 E 1 303919 1 5
 M 1 303924 1 304433
 E 1 303919 1 5
@@ -40746,46 +47874,121 @@ M 1 303924 1 304434
 E 1 303919 1 5
 M 1 303924 1 304435
 E 1 303919 1 5
-M 1 303924 1 304440
-E 1 303919 1 5
-M 1 303924 1 304439
-E 1 303919 1 5
-M 1 303924 1 304438
+M 1 303924 1 304436
 E 1 303919 1 5
 M 1 303924 1 304437
 E 1 303919 1 5
-M 1 303924 1 304436
+M 1 303924 1 304438
 E 1 303919 1 5
-M 1 303924 1 304445
+M 1 303924 1 304439
 E 1 303919 1 5
-M 1 303924 1 304444
-E 1 303919 1 5
-M 1 303924 1 304443
-E 1 303919 1 5
-M 1 303924 1 304442
+M 1 303924 1 304440
 E 1 303919 1 5
 M 1 303924 1 304441
 E 1 303919 1 5
-M 1 303924 1 304450
+M 1 303924 1 304442
 E 1 303919 1 5
-M 1 303924 1 304449
+M 1 303924 1 304443
 E 1 303919 1 5
-M 1 303924 1 304448
+M 1 303924 1 304444
 E 1 303919 1 5
-M 1 303924 1 304447
+M 1 303924 1 304445
 E 1 303919 1 5
 M 1 303924 1 304446
 E 1 303919 1 5
-M 1 303924 1 304455
+M 1 303924 1 304447
 E 1 303919 1 5
-M 1 303924 1 304454
+M 1 303924 1 304448
 E 1 303919 1 5
-M 1 303924 1 304453
+M 1 303924 1 304449
 E 1 303919 1 5
-M 1 303924 1 304452
+M 1 303924 1 304450
 E 1 303919 1 5
 M 1 303924 1 304451
 E 1 303919 1 5
+M 1 303924 1 304452
+E 1 303919 1 5
+M 1 303924 1 304453
+E 1 303919 1 5
+M 1 303924 1 304454
+E 1 303919 1 5
+M 1 303924 1 304455
+E 1 303919 1 5
+M 1 303925 1 304456
+E 1 303919 1 5
+M 1 303925 1 304457
+E 1 303919 1 5
+M 1 303925 1 304458
+E 1 303919 1 5
+M 1 303925 1 304459
+E 1 303919 1 5
+M 1 303925 1 304460
+E 1 303919 1 5
+M 1 303925 1 304461
+E 1 303919 1 5
+M 1 303925 1 304462
+E 1 303919 1 5
+M 1 303925 1 304463
+E 1 303919 1 5
+M 1 303925 1 304464
+E 1 303919 1 5
+M 1 303925 1 304465
+E 1 303919 1 5
+M 1 303925 1 304466
+E 1 303919 1 5
+M 1 303925 1 304467
+E 1 303919 1 5
+M 1 303925 1 304468
+E 1 303919 1 5
+M 1 303925 1 304469
+E 1 303919 1 5
+M 1 303925 1 304470
+E 1 303919 1 5
+M 1 303925 1 304471
+E 1 303919 1 5
+M 1 303925 1 304472
+E 1 303919 1 5
+M 1 303925 1 304473
+E 1 303919 1 5
+M 1 303925 1 304474
+E 1 303919 1 5
+M 1 303925 1 304475
+E 1 303919 1 5
+M 1 303925 1 304476
+E 1 303919 1 5
+M 1 303925 1 304477
+E 1 303919 1 5
+M 1 303925 1 304478
+E 1 303919 1 5
+M 1 303925 1 304479
+E 1 303919 1 5
+M 1 303925 1 304480
+E 1 303919 1 5
+M 1 303926 1 304481
+M 1 303926 1 304482
+M 1 303926 1 304483
+M 1 303926 1 304484
+M 1 303926 1 304485
+M 1 303926 1 304486
+M 1 303926 1 304487
+M 1 303926 1 304488
+M 1 303926 1 304489
+M 1 303926 1 304490
+M 1 303926 1 304491
+M 1 303926 1 304492
+M 1 303926 1 304493
+M 1 303926 1 304494
+M 1 303926 1 304495
+M 1 303926 1 304496
+M 1 303926 1 304497
+M 1 303926 1 304498
+M 1 303926 1 304499
+M 1 304500 1 304500
+M 1 303926 1 304501
+M 1 303926 1 304502
+M 1 303926 1 304503
+M 1 303926 1 304504
+M 1 303926 1 304505
 M 1 303924 1 304506
 E 1 303919 1 5
 M 1 303924 1 304507
@@ -40886,55 +48089,45 @@ M 1 303925 1 304554
 E 1 303919 1 5
 M 1 303925 1 304555
 E 1 303919 1 5
-M 1 303925 1 304456
+M 1 303926 1 304556
+M 1 303926 1 304557
+M 1 303926 1 304558
+M 1 303926 1 304559
+M 1 303926 1 304560
+M 1 303926 1 304561
+M 1 303926 1 304562
+M 1 303926 1 304563
+M 1 303926 1 304564
+M 1 303926 1 304565
+M 1 303926 1 304566
+M 1 303926 1 304567
+M 1 303926 1 304568
+M 1 303926 1 304569
+M 1 303926 1 304570
+M 1 303926 1 304571
+M 1 303926 1 304572
+M 1 303926 1 304573
+M 1 303926 1 304574
+M 1 303926 1 304575
+M 1 303926 1 304576
+M 1 303926 1 304577
+M 1 303926 1 304578
+M 1 303926 1 304579
+M 1 303926 1 304580
+M 1 303931 1 304584
+M 1 111 1 304586
+M 1 303939 1 304590
+M 1 303938 1 304591
+M 1 303928 1 304636
+M 1 303927 1 304646
 E 1 303919 1 5
-M 1 303925 1 304457
+M 1 303927 1 304647
 E 1 303919 1 5
-M 1 303925 1 304458
+M 1 303927 1 304648
 E 1 303919 1 5
-M 1 303925 1 304459
+M 1 303927 1 304649
 E 1 303919 1 5
-M 1 303925 1 304460
-E 1 303919 1 5
-M 1 303925 1 304461
-E 1 303919 1 5
-M 1 303925 1 304462
-E 1 303919 1 5
-M 1 303925 1 304463
-E 1 303919 1 5
-M 1 303925 1 304464
-E 1 303919 1 5
-M 1 303925 1 304465
-E 1 303919 1 5
-M 1 303925 1 304466
-E 1 303919 1 5
-M 1 303925 1 304467
-E 1 303919 1 5
-M 1 303925 1 304468
-E 1 303919 1 5
-M 1 303925 1 304469
-E 1 303919 1 5
-M 1 303925 1 304470
-E 1 303919 1 5
-M 1 303925 1 304471
-E 1 303919 1 5
-M 1 303925 1 304472
-E 1 303919 1 5
-M 1 303925 1 304473
-E 1 303919 1 5
-M 1 303925 1 304474
-E 1 303919 1 5
-M 1 303925 1 304475
-E 1 303919 1 5
-M 1 303925 1 304476
-E 1 303919 1 5
-M 1 303925 1 304477
-E 1 303919 1 5
-M 1 303925 1 304478
-E 1 303919 1 5
-M 1 303925 1 304479
-E 1 303919 1 5
-M 1 303925 1 304480
+M 1 303927 1 304650
 E 1 303919 1 5
 M 1 303927 1 304651
 E 1 303919 1 5
@@ -40942,27 +48135,330 @@ M 1 303927 1 304710
 E 1 303919 1 5
 M 1 303927 1 304711
 E 1 303919 1 5
-M 1 303927 1 304650
-E 1 303919 1 5
-M 1 303927 1 304649
-E 1 303919 1 5
 M 1 303927 1 304712
 E 1 303919 1 5
 M 1 303927 1 304713
-E 1 303919 1 5
-M 1 303927 1 304648
-E 1 303919 1 5
-M 1 303927 1 304647
 E 1 303919 1 5
 M 1 303927 1 304714
 E 1 303919 1 5
 M 1 303927 1 304715
 E 1 303919 1 5
-M 1 303927 1 304646
-E 1 303919 1 5
-M 1 304726 1 304351
-M 1 304500 1 304500
-M 1 111 1 304586
+M 1 304722 1 304721
+M 1 304725 1 304724
+M 1 305000 1 305000
+G 1 305006 1
+G 1 305000 1
+G 1 305001 1
+G 1 305007 1
+G 1 305005 1
+G 1 305002 1
+G 1 305003 1
+G 1 305004 1
+G 1 305009 1
+G 1 305008 1
+M 1 305011 1 305017
+M 1 305010 1 305018
+M 1 305010 1 305019
+M 1 305012 1 305021
+M 1 305010 1 305022
+M 1 305010 1 305023
+M 1 305010 1 305024
+M 1 305010 1 305025
+M 1 305010 1 305027
+M 1 305010 1 305028
+M 1 305010 1 305029
+M 1 305010 1 305030
+M 1 305010 1 305031
+M 1 305010 1 305032
+M 1 305010 1 305033
+M 1 305010 1 305034
+M 1 305010 1 305035
+M 1 305010 1 305036
+M 1 305012 1 305037
+M 1 305012 1 305038
+M 1 305012 1 305039
+M 1 305012 1 305040
+M 1 305012 1 305041
+M 1 305012 1 305042
+M 1 305010 1 305043
+M 1 305010 1 305044
+M 1 305012 1 305045
+M 1 305010 1 305046
+M 1 305012 1 305047
+M 1 305010 1 305048
+M 1 305012 1 305049
+M 1 305013 1 305051
+M 1 305013 1 305052
+M 1 305013 1 305053
+M 1 305013 1 305054
+M 1 305013 1 305055
+M 1 305013 1 305056
+M 1 305013 1 305057
+M 1 305013 1 305058
+M 1 305012 1 305059
+M 1 305013 1 305061
+M 1 305013 1 305062
+M 1 305013 1 305063
+M 1 305013 1 305064
+M 1 305013 1 305065
+M 1 305013 1 305066
+M 1 305013 1 305067
+M 1 305013 1 305068
+M 1 305012 1 305070
+M 1 305012 1 305072
+M 1 305012 1 305074
+M 1 305012 1 305077
+M 1 305012 1 305079
+M 1 305012 1 305082
+M 1 305012 1 305085
+M 1 305012 1 305087
+M 1 305012 1 305088
+M 1 305012 1 305090
+M 1 305014 1 305091
+M 1 305014 1 305092
+M 1 305014 1 305093
+M 1 305012 1 305095
+M 1 305012 1 305096
+M 1 305012 1 305097
+M 1 305012 1 305099
+M 1 305012 1 305100
+M 1 305012 1 305101
+M 1 305012 1 305103
+M 1 305012 1 305104
+M 1 305012 1 305106
+M 1 305012 1 305109
+M 1 305012 1 305110
+M 1 305012 1 305111
+M 1 305012 1 305113
+M 1 305012 1 305116
+M 1 305012 1 305117
+M 1 305012 1 305118
+M 1 305012 1 305120
+M 1 305014 1 305121
+M 1 305014 1 305122
+M 1 305014 1 305123
+M 1 305014 1 305124
+M 1 305014 1 305125
+M 1 305015 1 305126
+M 1 305016 1 305126
+M 1 305012 1 305128
+M 1 305017 1 305128
+M 1 305012 1 305130
+M 1 305017 1 305130
+M 1 305012 1 305132
+M 1 305017 1 305132
+M 1 305012 1 305134
+M 1 305017 1 305134
+M 1 305012 1 305136
+M 1 305017 1 305136
+M 1 305012 1 305138
+M 1 305017 1 305138
+M 1 305012 1 305139
+M 1 305017 1 305139
+M 1 305012 1 305141
+M 1 305017 1 305141
+M 1 305012 1 305143
+M 1 305017 1 305143
+M 1 305012 1 305145
+M 1 305017 1 305145
+M 1 305012 1 305147
+M 1 305017 1 305147
+M 1 305012 1 305149
+M 1 305017 1 305149
+M 1 305012 1 305151
+M 1 305012 1 305153
+M 1 305012 1 305155
+M 1 305012 1 305157
+M 1 305012 1 305159
+M 1 305017 1 305159
+M 1 305018 1 305160
+M 1 305012 1 305161
+M 1 305012 1 305163
+M 1 305012 1 305164
+M 1 305022 1 305170
+M 1 305022 1 305171
+M 1 305022 1 305172
+M 1 305022 1 305173
+M 1 305022 1 305174
+M 1 305022 1 305175
+M 1 305022 1 305177
+M 1 305022 1 305179
+M 1 305022 1 305181
+M 1 305022 1 305183
+M 1 305022 1 305185
+M 1 305022 1 305187
+M 1 305022 1 305189
+M 1 305022 1 305191
+M 1 305022 1 305193
+M 1 305022 1 305195
+M 1 305022 1 305197
+M 1 305022 1 305199
+M 1 305022 1 305201
+M 1 305022 1 305203
+M 1 305022 1 305205
+M 1 305022 1 305207
+M 1 305022 1 305209
+M 1 305022 1 305211
+M 1 305022 1 305213
+M 1 305022 1 305215
+M 1 305022 1 305217
+M 1 305022 1 305219
+M 1 305022 1 305221
+M 1 305022 1 305223
+M 1 305022 1 305225
+M 1 305022 1 305227
+M 1 305022 1 305229
+M 1 305022 1 305231
+M 1 305022 1 305233
+M 1 305022 1 305235
+M 1 305020 1 305239
+M 1 305020 1 305240
+M 1 305020 1 305241
+M 1 305020 1 305242
+M 1 305020 1 305243
+M 1 305020 1 305244
+M 1 305020 1 305245
+M 1 305019 1 305246
+M 1 305020 1 305252
+M 1 305020 1 305253
+M 1 305020 1 305254
+M 1 305020 1 305255
+M 1 305020 1 305256
+M 1 305020 1 305257
+M 1 305020 1 305258
+M 1 305021 1 305260
+M 1 305020 1 305266
+M 1 305020 1 305267
+M 1 305020 1 305268
+M 1 305020 1 305269
+M 1 305020 1 305270
+M 1 305020 1 305271
+M 1 305020 1 305272
+M 1 305020 1 305273
+M 1 305020 1 305274
+M 1 305020 1 305275
+M 1 305020 1 305276
+M 1 305020 1 305277
+M 1 305020 1 305278
+M 1 305020 1 305279
+O 1 308000 1 308002
+D 0 308004 0 1
+D 0 308005 2 0
+M 1 305023 1 305005
+M 1 305024 1 305289
+M 1 305025 1 305293
+M 1 305026 1 305305
+M 1 305026 1 305304
+M 1 305026 1 305303
+M 1 305026 1 305302
+M 1 305026 1 305301
+M 1 305026 1 305308
+M 1 305026 1 305307
+M 1 305026 1 305306
+M 1 305026 1 305311
+M 1 305026 1 305310
+M 1 305026 1 305309
+M 1 305026 1 305300
+M 1 305026 1 305299
+M 1 305026 1 305312
+M 1 305026 1 305313
+M 1 305026 1 305314
+M 1 305027 1 305328
+M 1 305027 1 305323
+M 1 305027 1 305322
+M 1 305027 1 305321
+M 1 305027 1 305324
+M 1 305027 1 305327
+M 1 305027 1 305326
+M 1 305027 1 305325
+M 1 305027 1 305320
+M 1 305027 1 305319
+M 1 305027 1 305333
+M 1 305027 1 305334
+M 1 305027 1 305335
+M 1 305027 1 305332
+M 1 305027 1 305329
+M 1 305027 1 305330
+M 1 305027 1 305331
+M 1 305027 1 305336
+M 1 305029 1 305339
+M 1 305030 1 305341
+M 1 305031 1 305343
+M 1 305010 1 305020
+M 1 305010 1 305011
+M 1 305010 1 305010
+M 1 305010 1 305009
+M 1 305032 1 305410
+M 1 305032 1 305411
+M 1 305032 1 305414
+M 1 305032 1 305413
+M 1 305032 1 305412
+M 1 305032 1 305415
+M 1 305032 1 305416
+M 1 305032 1 305418
+M 1 305032 1 305419
+M 1 305032 1 305417
+M 1 305032 1 305420
+M 1 305032 1 305421
+M 1 305032 1 305422
+M 1 305032 1 305423
+M 1 305032 1 305424
+M 1 305032 1 305425
+M 1 305033 1 305434
+M 1 305033 1 305432
+M 1 305033 1 305430
+M 1 305033 1 305428
+M 1 305033 1 305445
+M 1 305033 1 305444
+M 1 305033 1 305442
+M 1 305033 1 305447
+M 1 305033 1 305449
+M 1 305033 1 305440
+M 1 305033 1 305438
+M 1 305033 1 305451
+M 1 305033 1 305453
+M 1 305033 1 305436
+M 1 305033 1 305455
+M 1 305033 1 305460
+M 1 305033 1 305464
+M 1 305033 1 305466
+M 1 305033 1 305462
+M 1 305033 1 305457
+M 1 305034 1 305469
+M 1 305035 1 305473
+M 1 305036 1 305473
+M 1 305037 1 305473
+M 1 305038 1 305488
+M 1 305039 1 305491
+M 1 305040 1 305502
+M 1 305040 1 305501
+M 1 305040 1 305499
+M 1 305040 1 305504
+M 1 305040 1 305511
+M 1 305040 1 305506
+M 1 305040 1 305508
+M 1 305040 1 305509
+M 1 305042 1 305529
+M 1 305042 1 305531
+M 1 305042 1 305539
+M 1 305042 1 305541
+M 1 305042 1 305533
+M 1 305042 1 305537
+M 1 305042 1 305543
+M 1 305042 1 305535
+M 1 305042 1 305544
+M 1 305042 1 305550
+M 1 305042 1 305554
+M 1 305042 1 305548
+M 1 305042 1 305546
+M 1 305042 1 305552
+M 1 305041 1 305525
+M 1 305041 1 305523
+M 1 305041 1 305520
+M 1 305041 1 305522
+M 1 305041 1 305518
+M 1 305041 1 305516
+M 1 305041 1 305514
 S
 
 
