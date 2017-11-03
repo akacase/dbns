@@ -2318,8 +2318,14 @@ violence_update(void)
 		    ch->hit--;
 		    ch->mana -= URANGE(0, ch->mana * 0.005, ch->mana);
 		    gain_exp(ch, xp_gain);
-		    sprintf(buf, "Your power level increases by %s points.", num_punct(xp_gain));
-		    act(AT_HIT, buf, ch, NULL, NULL, TO_CHAR);
+			if (xp_gain > 1) {
+				sprintf(buf, "Your power level increases by %s points.", num_punct(xp_gain));
+				act(AT_HIT, buf, ch, NULL, NULL, TO_CHAR);
+			}
+			else {
+				sprintf(buf, "Your power level increases very slightly.", NULL);
+				act(AT_HIT, buf, ch, NULL, NULL, TO_CHAR);
+			}
 		    stat_train(ch, "spd", 15);
 		  }
 		  if (trainmessage >= 65 && trainmessage < 99) {
@@ -2328,8 +2334,14 @@ violence_update(void)
 		    ch->mana -= URANGE(0, ch->mana * 0.005, ch->mana);
 		    pager_printf(ch, "&GYou perform a combo in %d times gravity while skillfully dodging from side to side.\n\r", gravLevel);
 		    gain_exp(ch, xp_gain);
-		    sprintf(buf, "Your power level increases by %s points.", num_punct(xp_gain));
-		    act(AT_HIT, buf, ch, NULL, NULL, TO_CHAR);
+			if (xp_gain > 1) {
+				sprintf(buf, "Your power level increases by %s points.", num_punct(xp_gain));
+				act(AT_HIT, buf, ch, NULL, NULL, TO_CHAR);
+			}
+			else {
+				sprintf(buf, "Your power level increases very slightly.", NULL);
+				act(AT_HIT, buf, ch, NULL, NULL, TO_CHAR);
+			}
 		    stat_train(ch, "spd", 15);
 		  }
 		  if (trainmessage >= 99) {
@@ -2377,8 +2389,14 @@ violence_update(void)
 		    ch->hit--;
 		    ch->mana -= URANGE(0, ch->mana * 0.005, ch->mana);
 		    gain_exp(ch, xp_gain);
-		    sprintf(buf, "Your power level increases by %s points.", num_punct(xp_gain));
-		    act(AT_HIT, buf, ch, NULL, NULL, TO_CHAR);
+			if (xp_gain > 1) {
+				sprintf(buf, "Your power level increases by %s points.", num_punct(xp_gain));
+				act(AT_HIT, buf, ch, NULL, NULL, TO_CHAR);
+			}
+			else {
+				sprintf(buf, "Your power level increases very slightly.", NULL);
+				act(AT_HIT, buf, ch, NULL, NULL, TO_CHAR);
+			}
 		    stat_train(ch, "con", 15);
 		  }
 		  if (trainmessage >= 65 && trainmessage < 99) {
@@ -2387,8 +2405,14 @@ violence_update(void)
 		    ch->mana -= URANGE(0, ch->mana * 0.005, ch->mana);
 		    pager_printf(ch, "&GYou crank up the dial well beyond %d times gravity, fighting just to stay on your feet.\n\r", gravLevel);
 		    gain_exp(ch, xp_gain);
-		    sprintf(buf, "Your power level increases by %s points.", num_punct(xp_gain));
-		    act(AT_HIT, buf, ch, NULL, NULL, TO_CHAR);
+			if (xp_gain > 1) {
+				sprintf(buf, "Your power level increases by %s points.", num_punct(xp_gain));
+				act(AT_HIT, buf, ch, NULL, NULL, TO_CHAR);
+			}
+			else {
+				sprintf(buf, "Your power level increases very slightly.", NULL);
+				act(AT_HIT, buf, ch, NULL, NULL, TO_CHAR);
+			}
 		    stat_train(ch, "con", 15);
 		  }
 		  if (trainmessage >= 99) {
@@ -2434,8 +2458,14 @@ violence_update(void)
 		    ch->hit--;
 		    ch->mana -= URANGE(0, ch->mana * 0.005, ch->mana);
 		    gain_exp(ch, xp_gain);
-		    sprintf(buf, "Your power level increases by %s points.", num_punct(xp_gain));
-		    act(AT_HIT, buf, ch, NULL, NULL, TO_CHAR);
+			if (xp_gain > 1) {
+				sprintf(buf, "Your power level increases by %s points.", num_punct(xp_gain));
+				act(AT_HIT, buf, ch, NULL, NULL, TO_CHAR);
+			}
+			else {
+				sprintf(buf, "Your power level increases very slightly.", NULL);
+				act(AT_HIT, buf, ch, NULL, NULL, TO_CHAR);
+			}
 		    stat_train(ch, "int", 15);
 		  }			
 		  if (trainmessage >= 65 && trainmessage < 99) {
@@ -2444,8 +2474,14 @@ violence_update(void)
 		    ch->mana -= URANGE(0, ch->mana * 0.005, ch->mana);
 		    pager_printf(ch, "&GYou focus your mind's eye in %d times gravity, shutting all else out with extreme calm.\n\r", gravLevel);
 		    gain_exp(ch, xp_gain);
-		    sprintf(buf, "Your power level increases by %s points.", num_punct(xp_gain));
-		    act(AT_HIT, buf, ch, NULL, NULL, TO_CHAR);
+			if (xp_gain > 1) {
+				sprintf(buf, "Your power level increases by %s points.", num_punct(xp_gain));
+				act(AT_HIT, buf, ch, NULL, NULL, TO_CHAR);
+			}
+			else {
+				sprintf(buf, "Your power level increases very slightly.", NULL);
+				act(AT_HIT, buf, ch, NULL, NULL, TO_CHAR);
+			}
 		    stat_train(ch, "int", 15);
 		  }
 		  if (trainmessage >= 99) {
@@ -4601,14 +4637,14 @@ damage(CHAR_DATA * ch, CHAR_DATA * victim, int dam, int dt)
 				act(AT_HIT, buf1, ch, NULL, victim, TO_CHAR);
 			}
 		} else {
-			if (xp_gain_post != 1) {
+			if (xp_gain_post < 1) {
 				sprintf(buf1,
-				    "Your pl increases by %s points.",
-				    num_punct_ld(xp_gain_post));
+				    "Your pl increases very slightly.",
+				    NULL);
 
 				act(AT_HIT, buf1, ch, NULL, victim, TO_CHAR);
-			} else {
-				sprintf(buf1, "Your pl increases by %s point.",
+			} else if (xp_gain_post > 1) {
+				sprintf(buf1, "Your pl increases by %s points.",
 				    num_punct_ld(xp_gain_post));
 				act(AT_HIT, buf1, ch, NULL, victim, TO_CHAR);
 			}
