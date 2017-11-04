@@ -147,6 +147,14 @@ mea $n &YThe turbolift whirs into motion, whisking you away to your chosen floor
 mer $n &YThe turbolift whirs into motion, dropping $n off at their chosen floor.&d
 mptransfer $n 305002
 ~
+> speech_prog 'B2'~
+if wearingvnum($n) 305011
+say If you insist, $n. Don't touch anything.
+mea $n &YYou disappear and reappear in a flash of light!&d
+mer $n &Y$n disappears in a flash of light!&d
+mptransfer $n 305489
+endif
+~
 |
 #303904
 weak ESF trainee~
@@ -1962,6 +1970,7 @@ mpat 305006 mpforce $n look
 mpat 305006 mea $n &cDoctor Emalia smiles impishly and disappears into the fog.&d
 ~
 > speech_prog 'mountains'~
+if wearingvnum($n) 305010
 clap
 say Excellent! I knew you'd be a wonderful patsy. Toodle-oo!
 mea $n &YDoctor Emalia presses a series of buttons on her maintainence pad as the mist from the archway engulfs you!
@@ -1969,6 +1978,7 @@ mer $n &Y$n is engulfed in the mist from the archway!
 mptransfer $n 305400
 mpat 305400 mpforce $n look
 mpat 305400 mea $n &cDoctor Emalia smiles impishly and disappears into the fog.&d
+endif
 ~
 |
 #305024
@@ -2382,7 +2392,7 @@ mea $n &cDoctor Emalia heaves a heavy sigh of relief.&d
 mea $n &CDoctor Emalia says '... What? Don't give me that look. I didn't really want you to die. This time.'
 mea $n &cDoctor Emalia coughs nervously.
 mea $n &CDoctor Emalia says 'At any rate, it's clear I need to make a few adjustments to your communicator... One moment...'
-mpforce $n remove 305010
+mpforce $n remove mki
 mpforce $n give mki emalia
 mpjunk rift
 mpoload 305011
@@ -2401,7 +2411,7 @@ Doctor Emalia~
 Doctor Emalia stands here with an unsettling smile.
 ~
 ~
-1140850691 0 0 C
+67108867 0 0 C
 0
 1 0 100 1d20+0 2d5+0
 -1 1
@@ -7616,30 +7626,6 @@ side.  Immediately the terminal lights up, ready to assist its visitors.
 way through the elevator shaft to your desired floor, you brute.&d
 ~
 0 4 0
-D10
-~
-crash1~
-526336 -1 303924
-D10
-~
-crash2~
-526336 -1 304125
-D10
-~
-crash4~
-526336 -1 304332
-D10
-~
-crash5~
-526336 -1 304581
-D10
-~
-crash5~
-526336 -1 304592
-D10
-~
-crash0~
-526336 -1 303911
 > entry_prog 100~
 mpechoat $n &YThe turbolift doors quickly shut behind you as you step inside.&d
 mpechoaround $n &YThe turbolift doors whisk open, then quickly shut behind $n.&d
@@ -28957,6 +28943,10 @@ D1
 ~
 ~
 0 -1 305490
+D2
+~
+~
+0 -1 304124
 S
 #305490
 Doctor Emalia's Laboratory~
