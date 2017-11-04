@@ -29213,7 +29213,8 @@ S
 #305505
 Unsettling Void~
 The void continues to warp and change around you, constantly bombarding
-you with new challenges and information to process. 
+you with new challenges and information to process.  What looks to be a
+tiny fissure in the rift can be seen to the north. 
 ~
 0 0 0
 D0
@@ -48446,6 +48447,10 @@ M 1 305041 1 305522
 M 1 305041 1 305518
 M 1 305041 1 305516
 M 1 305041 1 305514
+M 1 305040 1 305500
+M 1 305040 1 305498
+M 1 305040 1 305507
+M 1 305040 1 305503
 S
 
 
