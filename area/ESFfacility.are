@@ -124,7 +124,7 @@ mea $n &YSimply speak the following number to depart to that floor.
 mea $n &Y0: Entry Floor
 mea $n &Y3: Advanced Facility & Armory
 mea $n &Y4: Basic Training & Healing Tanks
-mea $n &YB1: Anomaly Research Facility
+mea $n &Y Anomaly Research Facility[&RNEWBIE QUEST&Y]&d
 mea $n &Y----------------------------------------------------------
 ~
 > speech_prog 3~
@@ -2549,6 +2549,9 @@ endif
 > entry_prog 100~
 mprestore $i 30000
 ~
+> fight_prog 10~
+kame
+~
 |
 #305043
 timewarped soldier~
@@ -2563,13 +2566,13 @@ Some god abandoned a newly created timewarped soldier here.
 112 112 0
 #305044
 timewarped red ribbon soldier~
-a newly created timewarped red ribbon soldier~
+A Timewarped Red Ribbon Soldier~
 A warped and twisted Red Ribbon soldier wanders aimlessly, lost in time.
 ~
 ~
 3 0 0 C
 100
-1 0 100 1d20+600 2d5+0
+1 0 100 1d20+1000 2d5+0
 -1 50000
 112 112 0
 60 60 60 60 0
@@ -2590,6 +2593,9 @@ punch
 ~
 > fight_prog 5~
 kick
+~
+> fight_prog 10~
+kame
 ~
 |
 #305045
@@ -7694,9 +7700,6 @@ ESF Turbolift~
 Two large sliding doors frame the better half of this cylindrical
 capsule, replete with a small computer terminal embedded in the right-hand
 side.  Immediately the terminal lights up, ready to assist its visitors. 
-
-&YIf you are restricted from speaking, use the 'crash#' command to smash your
-way through the elevator shaft to your desired floor, you brute.&d
 ~
 0 4 0
 > entry_prog 100~

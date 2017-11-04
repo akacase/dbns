@@ -1082,9 +1082,7 @@ and departing.
 --------------------------------------------------------------------------
 &Y
 Visitors to The Center of the Universe may now seek training in the ESF
-Facility to the North.  We recommend your powerlevel be above 5,000.
-
-&YTo return to the Newbie Intro, say '&Cback to intro&Y'.&D
+&YFacility to the North. The newbie questline begins on floor '&RB1&Y'.
 ~
 0 8 0
 D0

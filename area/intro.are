@@ -343,21 +343,6 @@ You are entering the world of DragonBall: North Star.  Within lie many
 adventures and battles that you must endure.  Hopefully your time here will
 be entertaining!  We'll begin with a tutoral program for you so that you
 may learn how to play this MUD.  Please continue north by typing "north". 
-
-&RIMPORTANT ANNOUNCEMENT: &YAfter migrating to another server we ran into some
-password decryption problems on the new architecture, resulting in passwords
-no longer properly functioning for existing pfiles. Unfortunately, this means
-we had to perform a pwipe. We've used this opportunity to dramatically change
-up game balance, reducing powerelvels across the board for a more "show-like"
-feel. We're now also no longer in a "fully operational" state, and have moved
-into a public testing phase.
-
-For a full list of changes, come visit us at:
-
-&Chttps://www.reddit.com/r/dragonballnorthstar/&Y
-
-Your Superbest Buddy,
--- Zerhyn&D
 ~
 0 4 0
 D0
@@ -495,10 +480,9 @@ S
 #107
 Lesson 3 - Rules of the Game~
 Now that you're familiarized with the commands, you must agree to the
-rules of the game to continue.  DBNS currently has no restrictions on
-botting, multiplaying, or language, but the Administration does ask that
-you remain respectful to players and staff at all times.  Harassment of any
-kind will not be tolerated.  To continue to the game, please say "I agree".
+rules of the game to continue.  The Administration ask that you remain
+respectful to players and staff at all times.  Harassment of any kind will
+not be tolerated.  To continue to the game, please say "I agree". 
 ~
 0 4 0
 D5
