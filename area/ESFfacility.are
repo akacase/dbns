@@ -1923,9 +1923,8 @@ Doctor Emalia stands here in the mist, fiddling with strange technology.
 0 0 0 0 0 0 0 0
 > greet_prog 100~
 if wearingvnum($n) 305010
-say Oh, $n! Glad to see my communicator hasn't horribly torn apart your very existence yet.
-smirk
-say I don't have anything new for you quite yet, but you could always &Ragree&C to mop up a few more anomalies at Red Ribbon HQ.
+say Oh, $n! I picked up something else, something strange, that I think you should take a look at.
+say Care for a trip into the &Rmountains&C?
 else
 mumble
 say I can't believe we've run out of volunteers alrea--
@@ -1961,6 +1960,15 @@ mer $n &Y$n is engulfed in the mist from the archway!&d
 mptransfer $n 305006
 mpat 305006 mpforce $n look
 mpat 305006 mea $n &cDoctor Emalia smiles impishly and disappears into the fog.&d
+~
+> speech_prog 'mountains'~
+clap
+say Excellent! I knew you'd be a wonderful patsy. Toodle-oo!
+mea $n &YDoctor Emalia presses a series of buttons on her maintainence pad as the mist from the archway engulfs you!
+mer $n &Y$n is engulfed in the mist from the archway!
+mptransfer $n 305400
+mpat 305400 mpforce $n look
+mpat 305400 mea $n &cDoctor Emalia smiles impishly and disappears into the fog.&d
 ~
 |
 #305024
@@ -2178,7 +2186,7 @@ A Green Saibaman~
 A tiny green saibaman chitters menacingly.
 ~
 ~
-1073741857 0 0 C
+33 0 0 C
 50
 1 0 100 1d20+300 2d5+0
 -1 1250
@@ -2208,7 +2216,7 @@ A Time-Warped Saibaman~
 A tiny saibaman lurks here, its body glitching in and out of a strange mist.
 ~
 ~
-1073741857 0 0 C
+33 0 0 C
 55
 1 0 100 1d20+400 2d5+0
 -1 2500
@@ -2268,7 +2276,7 @@ Android 20~
 An android of striking resemblance to Doctor Gero stands here menacingly.
 ~
 ~
-1140850689 0 0 C
+67108865 0 0 C
 0
 1 0 100 1d20+0 2d5+0
 -1 250000
@@ -2330,7 +2338,7 @@ Vegeta~
 Vegeta clutches his shoulder, his face contorted with rage.
 ~
 ~
-1140850689 0 0 C
+67108865 0 0 C
 0
 1 0 100 1d20+0 2d5+0
 -1 18000
@@ -2345,7 +2353,7 @@ Goku~
 Goku stands warily between them.
 ~
 ~
-1140850689 0 0 C
+67108865 0 0 C
 0
 1 0 100 1d20+0 2d5+0
 -1 9001
