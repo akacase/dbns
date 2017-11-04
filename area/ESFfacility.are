@@ -2598,7 +2598,7 @@ Mr. Popo~
 A stocky man with pitch-black skin and unsettlingly piercing eyes stands here.
 ~
 ~
-67108867 0 0 C
+67109891 0 0 C
 0
 1 0 100 1d20+0 2d5+0
 -1 998
@@ -30273,6 +30273,8 @@ D3
 S
 #305556
 Hyperbolic Time Fracture: Second Stratum~
+The path from the first stratum seems to flip, turning the world
+upside-down. 
 ~
 0 4 1
 D0

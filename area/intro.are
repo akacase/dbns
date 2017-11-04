@@ -401,7 +401,7 @@ use the "OOC" channel.  OOC stands for Out of Charecter.
 D4
 ~
 ~
-0 -1 103
+0 -1 107
 D5
 ~
 ~
@@ -418,10 +418,6 @@ healing tanks where you can quickly gain back your strength, as well a
 chamber to increase your stats. 
 ~
 0 4 0
-D3
-~
-~
-0 -1 105
 D4
 ~
 ~
@@ -497,7 +493,7 @@ endif
 |
 S
 #107
-Lesson 4 - Rules of the Game~
+Lesson 3 - Rules of the Game~
 Now that you're familiarized with the commands, you must agree to the
 rules of the game to continue.  DBNS currently has no restrictions on
 botting, multiplaying, or language, but the Administration does ask that
@@ -508,7 +504,7 @@ kind will not be tolerated.  To continue to the game, please say "I agree".
 D5
 ~
 ~
-0 -1 103
+0 -1 102
 > speech_prog 'i agree'~
 mpecho Okay.
 mptransfer $n 6000
