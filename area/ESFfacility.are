@@ -122,23 +122,10 @@ mea $n &YWithout saying a word, Mini FRED presents you with a holographic displa
 mea $n &Y----------------------------------------------------------
 mea $n &YSimply speak the following number to depart to that floor.
 mea $n &Y0: Entry Floor
-mea $n &Y1: Trainee Facility
-mea $n &Y2: Intermediate Facility
 mea $n &Y3: Advanced Facility & Armory
 mea $n &Y4: Basic Training & Healing Tanks
-mea $n &Y5: Access Stairwell
 mea $n &YB1: Anomaly Research Facility
 mea $n &Y----------------------------------------------------------
-~
-> speech_prog 1~
-mea $n &YThe turbolift whirs into motion, whisking you away to your chosen floor.&d
-mer $n &YThe turbolift whirs into motion, dropping $n off at their chosen floor.&d
-mptransfer $n 303924
-~
-> speech_prog 2~
-mea $n &YThe turbolift whirs into motion, whisking you away to your chosen floor.&d
-mer $n &YThe turbolift whirs into motion, dropping $n off at their chosen floor.&d
-mptransfer $n 304125
 ~
 > speech_prog 3~
 mea $n &YThe turbolift whirs into motion, whisking you away to your chosen floor.&d
@@ -149,11 +136,6 @@ mptransfer $n 304332
 mea $n &YThe turbolift whirs into motion, whisking you away to your chosen floor.&d
 mer $n &YThe turbolift whirs into motion, dropping $n off at their chosen floor.&d
 mptransfer $n 304581
-~
-> speech_prog 5~
-mea $n &YThe turbolift whirs into motion, whisking you away to your chosen floor.&d
-mer $n &YThe turbolift whirs into motion, dropping $n off at their chosen floor.&d
-mptransfer $n 304592
 ~
 > speech_prog 0~
 mea $n &YThe turbolift whirs into motion, whisking you away to your chosen floor.&d
@@ -1945,16 +1927,12 @@ say Oh, $n! Glad to see my communicator hasn't horribly torn apart your very exi
 smirk
 say I don't have anything new for you quite yet, but you could always &Ragree&C to mop up a few more anomalies at Red Ribbon HQ.
 else
-if wearingvnum($n) 305011
-mea $n &cDoctor Emalia's body flickers in and out of existence, reacting strangely with your Rift Communicator.&d
-mea $n &cThis appears to only be a vision of Doctor Emalia.&d
 mumble
 say I can't believe we've run out of volunteers alrea--
 gasp
 say Oh, $n! I didn't notice you there.
 peer $n
 say You're one of those wanderers through time that washed up here, aren't you? Perhaps I could ask for your &Rhelp&C?
-endif
 endif
 ~
 > speech_prog 'help'~
@@ -2359,7 +2337,7 @@ Vegeta clutches his shoulder, his face contorted with rage.
 112 112 0
 10 10 10 10 10
 0 0 0 0 0
-0 0 0 0 0 0 0
+0 0 0 0 1 1 0
 0 0 0 0 0 0 0 0
 #305037
 saiyansaga goku~
@@ -2374,7 +2352,7 @@ Goku stands warily between them.
 112 112 0
 10 10 10 10 10
 0 0 0 0 0
-0 0 0 0 0 0 0
+0 0 0 0 1 1 0
 0 0 0 0 0 0 0 0
 #305038
 saiyansaga emalia~
@@ -2415,11 +2393,15 @@ Doctor Emalia~
 Doctor Emalia stands here with an unsettling smile.
 ~
 ~
-1140850691 0 0 S
+1140850691 0 0 C
 0
 1 0 100 1d20+0 2d5+0
 -1 1
 112 112 2
+10 10 10 10 10
+0 0 0 0 0
+0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0
 > greet_prog 100~
 if wearingvnum($n) 305011
 say There you are, $n. I hope you understand how monumental of an occasion this is.
@@ -2468,7 +2450,7 @@ An apparition of discarded energy meanders without purpose.
 112 112 0
 40 40 40 40 0
 0 0 0 0 0
-0 0 0 0 0 0 2
+0 0 0 0 1 1 2
 0 0 0 0 0 0 0 0
 > greet_prog 100~
 if ispc($n)
@@ -2496,7 +2478,7 @@ A mass of unstable energy vaguely resembling a person lurks through the fissure.
 112 112 0
 40 40 40 40 0
 0 0 0 0 0
-0 0 0 0 0 0 2
+0 0 0 0 1 1 2
 0 0 0 0 0 0 0 0
 > greet_prog 100~
 if ispc($n)
@@ -2526,7 +2508,7 @@ An anomolous copy of you stands here, reflecting countless prisms of light.
 112 112 0
 50 50 50 50 0
 0 0 0 0 0
-0 0 0 0 0 0 2
+0 0 0 0 1 1 2
 0 0 0 0 0 0 0 0
 > greet_prog 100~
 if ispc($n)
@@ -17337,10 +17319,6 @@ lit signs direct visitors to the healing tanks for those who may be in need
 of a little bodily reconstruction. 
 ~
 0 4 0
-D0
-~
-~
-0 -1 304586
 D1
 ~
 ~
