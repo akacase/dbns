@@ -2147,6 +2147,13 @@ mea $n &YAs the Cybaman dies at your hand, you disappear into a roiling mist!&d
 mer $n &Y$n disappears into a roiling mist.&d
 mptransfer $n 305342
 ~
+> greet_prog 100~
+if isfight($i)
+glower
+else
+mprestore self 30000
+endif
+~
 |
 #305031
 doctor emalia endquestrr~
