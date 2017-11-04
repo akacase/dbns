@@ -2550,6 +2550,72 @@ endif
 mprestore $i 30000
 ~
 |
+#305043
+timewarped soldier~
+a newly created timewarped soldier~
+Some god abandoned a newly created timewarped soldier here.
+~
+~
+1073741825 0 0 S
+0
+1 0 100 1d20+0 2d5+0
+-1 1
+112 112 0
+#305044
+timewarped red ribbon soldier~
+a newly created timewarped red ribbon soldier~
+A warped and twisted Red Ribbon soldier wanders aimlessly, lost in time.
+~
+~
+3 0 0 C
+100
+1 0 100 1d20+600 2d5+0
+-1 50000
+112 112 0
+60 60 60 60 0
+0 0 0 0 0
+1 1 0 0 0 0 2
+0 0 0 0 0 0 0 0
+> greet_prog 100~
+if ispc($n)
+if isfight($i)
+glower
+else
+mprestore $i 30000
+endif
+endif
+~
+> fight_prog 5~
+punch
+~
+> fight_prog 5~
+kick
+~
+|
+#305045
+mister mr popo~
+Mr. Popo~
+A stocky man with pitch-black skin and unsettlingly piercing eyes stands here.
+~
+~
+67108867 0 0 C
+0
+1 0 100 1d20+0 2d5+0
+-1 998
+112 112 1
+10 10 10 10 0
+0 0 0 0 0
+1 1 0 0 0 0 0
+0 0 0 0 0 0 0 0
+> greet_prog 100~
+say My word. How did you get in here?
+sigh
+~
+> speech_prog 'pecking order'~
+mea $n &cMr. Popo stares into the depths of your soul.&d
+mer $n &cMr. Popo stares into the depths of $n's soul.&d
+~
+|
 #306032
 gnarly dude~
 a gnarly dude~
@@ -29001,7 +29067,8 @@ Unlike the rest of the void, the air here is calm and easy to breathe,
 as if weathering against the extreme conditions outside.  There appears to
 be a healing tank to the west, and a row of gravity chambers to the east. 
 You can sense a distinct array of distant powers to the north, but the
-light obscures your vision. 
+light obscures your vision.  A curious opening in the floorboards leads
+downwards. 
 ~
 0 4 0
 D0
@@ -29020,6 +29087,10 @@ D3
 ~
 ~
 0 -1 305494
+D5
+~
+~
+0 -1 305556
 S
 #305494
 Healing Tank~
@@ -29585,7 +29656,7 @@ D2
 0 -1 305526
 S
 #305528
-A Fightening Void~
+A Frightening Void~
 There seems to be little way to make heads or tails of the environment. 
 Each step feels heavier than the last, and the unrelenting storm wears on
 your body and mind.  Visions of yourself flitter in and out of existence,
@@ -29610,7 +29681,7 @@ D3
 0 -1 305529
 S
 #305529
-A Fightening Void~
+A Frightening Void~
 There seems to be little way to make heads or tails of the environment. 
 Each step feels heavier than the last, and the unrelenting storm wears on
 your body and mind.  Visions of yourself flitter in and out of existence,
@@ -29631,7 +29702,7 @@ D3
 0 -1 305530
 S
 #305530
-A Fightening Void~
+A Frightening Void~
 There seems to be little way to make heads or tails of the environment. 
 Each step feels heavier than the last, and the unrelenting storm wears on
 your body and mind.  Visions of yourself flitter in and out of existence,
@@ -29652,7 +29723,7 @@ D3
 0 -1 305531
 S
 #305531
-A Fightening Void~
+A Frightening Void~
 There seems to be little way to make heads or tails of the environment. 
 Each step feels heavier than the last, and the unrelenting storm wears on
 your body and mind.  Visions of yourself flitter in and out of existence,
@@ -29669,7 +29740,7 @@ D1
 0 -1 305530
 S
 #305532
-A Fightening Void~
+A Frightening Void~
 There seems to be little way to make heads or tails of the environment. 
 Each step feels heavier than the last, and the unrelenting storm wears on
 your body and mind.  Visions of yourself flitter in and out of existence,
@@ -29690,7 +29761,7 @@ D2
 0 -1 305531
 S
 #305533
-A Fightening Void~
+A Frightening Void~
 There seems to be little way to make heads or tails of the environment. 
 Each step feels heavier than the last, and the unrelenting storm wears on
 your body and mind.  Visions of yourself flitter in and out of existence,
@@ -29715,7 +29786,7 @@ D3
 0 -1 305532
 S
 #305534
-A Fightening Void~
+A Frightening Void~
 There seems to be little way to make heads or tails of the environment. 
 Each step feels heavier than the last, and the unrelenting storm wears on
 your body and mind.  Visions of yourself flitter in and out of existence,
@@ -29740,7 +29811,7 @@ D3
 0 -1 305533
 S
 #305535
-A Fightening Void~
+A Frightening Void~
 There seems to be little way to make heads or tails of the environment. 
 Each step feels heavier than the last, and the unrelenting storm wears on
 your body and mind.  Visions of yourself flitter in and out of existence,
@@ -29765,7 +29836,7 @@ D3
 0 -1 305534
 S
 #305536
-A Fightening Void~
+A Frightening Void~
 There seems to be little way to make heads or tails of the environment. 
 Each step feels heavier than the last, and the unrelenting storm wears on
 your body and mind.  Visions of yourself flitter in and out of existence,
@@ -29790,7 +29861,7 @@ D3
 0 -1 305537
 S
 #305537
-A Fightening Void~
+A Frightening Void~
 There seems to be little way to make heads or tails of the environment. 
 Each step feels heavier than the last, and the unrelenting storm wears on
 your body and mind.  Visions of yourself flitter in and out of existence,
@@ -29815,7 +29886,7 @@ D3
 0 -1 305538
 S
 #305538
-A Fightening Void~
+A Frightening Void~
 There seems to be little way to make heads or tails of the environment. 
 Each step feels heavier than the last, and the unrelenting storm wears on
 your body and mind.  Visions of yourself flitter in and out of existence,
@@ -29840,7 +29911,7 @@ D3
 0 -1 305539
 S
 #305539
-A Fightening Void~
+A Frightening Void~
 There seems to be little way to make heads or tails of the environment. 
 Each step feels heavier than the last, and the unrelenting storm wears on
 your body and mind.  Visions of yourself flitter in and out of existence,
@@ -29861,7 +29932,7 @@ D2
 0 -1 305532
 S
 #305540
-A Fightening Void~
+A Frightening Void~
 There seems to be little way to make heads or tails of the environment. 
 Each step feels heavier than the last, and the unrelenting storm wears on
 your body and mind.  Visions of yourself flitter in and out of existence,
@@ -29878,7 +29949,7 @@ D2
 0 -1 305539
 S
 #305541
-A Fightening Void~
+A Frightening Void~
 There seems to be little way to make heads or tails of the environment. 
 Each step feels heavier than the last, and the unrelenting storm wears on
 your body and mind.  Visions of yourself flitter in and out of existence,
@@ -29899,7 +29970,7 @@ D3
 0 -1 305540
 S
 #305542
-A Fightening Void~
+A Frightening Void~
 There seems to be little way to make heads or tails of the environment. 
 Each step feels heavier than the last, and the unrelenting storm wears on
 your body and mind.  Visions of yourself flitter in and out of existence,
@@ -29920,7 +29991,7 @@ D3
 0 -1 305541
 S
 #305543
-A Fightening Void~
+A Frightening Void~
 There seems to be little way to make heads or tails of the environment. 
 Each step feels heavier than the last, and the unrelenting storm wears on
 your body and mind.  Visions of yourself flitter in and out of existence,
@@ -29941,7 +30012,7 @@ D3
 0 -1 305542
 S
 #305544
-A Fightening Void~
+A Frightening Void~
 There seems to be little way to make heads or tails of the environment. 
 Each step feels heavier than the last, and the unrelenting storm wears on
 your body and mind.  Visions of yourself flitter in and out of existence,
@@ -29962,7 +30033,7 @@ D3
 0 -1 305528
 S
 #305545
-A Fightening Void~
+A Frightening Void~
 There seems to be little way to make heads or tails of the environment. 
 Each step feels heavier than the last, and the unrelenting storm wears on
 your body and mind.  Visions of yourself flitter in and out of existence,
@@ -29983,7 +30054,7 @@ D3
 0 -1 305544
 S
 #305546
-A Fightening Void~
+A Frightening Void~
 There seems to be little way to make heads or tails of the environment. 
 Each step feels heavier than the last, and the unrelenting storm wears on
 your body and mind.  Visions of yourself flitter in and out of existence,
@@ -30000,7 +30071,7 @@ D3
 0 -1 305545
 S
 #305547
-A Fightening Void~
+A Frightening Void~
 There seems to be little way to make heads or tails of the environment. 
 Each step feels heavier than the last, and the unrelenting storm wears on
 your body and mind.  Visions of yourself flitter in and out of existence,
@@ -30021,7 +30092,7 @@ D3
 0 -1 305548
 S
 #305548
-A Fightening Void~
+A Frightening Void~
 There seems to be little way to make heads or tails of the environment. 
 Each step feels heavier than the last, and the unrelenting storm wears on
 your body and mind.  Visions of yourself flitter in and out of existence,
@@ -30046,7 +30117,7 @@ D3
 0 -1 305549
 S
 #305549
-A Fightening Void~
+A Frightening Void~
 There seems to be little way to make heads or tails of the environment. 
 Each step feels heavier than the last, and the unrelenting storm wears on
 your body and mind.  Visions of yourself flitter in and out of existence,
@@ -30071,7 +30142,7 @@ D3
 0 -1 305535
 S
 #305550
-A Fightening Void~
+A Frightening Void~
 There seems to be little way to make heads or tails of the environment. 
 Each step feels heavier than the last, and the unrelenting storm wears on
 your body and mind.  Visions of yourself flitter in and out of existence,
@@ -30096,7 +30167,7 @@ D3
 0 -1 305536
 S
 #305551
-A Fightening Void~
+A Frightening Void~
 There seems to be little way to make heads or tails of the environment. 
 Each step feels heavier than the last, and the unrelenting storm wears on
 your body and mind.  Visions of yourself flitter in and out of existence,
@@ -30121,7 +30192,7 @@ D3
 0 -1 305550
 S
 #305552
-A Fightening Void~
+A Frightening Void~
 There seems to be little way to make heads or tails of the environment. 
 Each step feels heavier than the last, and the unrelenting storm wears on
 your body and mind.  Visions of yourself flitter in and out of existence,
@@ -30142,7 +30213,7 @@ D3
 0 -1 305551
 S
 #305553
-A Fightening Void~
+A Frightening Void~
 There seems to be little way to make heads or tails of the environment. 
 Each step feels heavier than the last, and the unrelenting storm wears on
 your body and mind.  Visions of yourself flitter in and out of existence,
@@ -30163,7 +30234,7 @@ D3
 0 -1 305543
 S
 #305554
-A Fightening Void~
+A Frightening Void~
 There seems to be little way to make heads or tails of the environment. 
 Each step feels heavier than the last, and the unrelenting storm wears on
 your body and mind.  Visions of yourself flitter in and out of existence,
@@ -30184,7 +30255,7 @@ D3
 0 -1 305553
 S
 #305555
-A Fightening Void~
+A Frightening Void~
 There seems to be little way to make heads or tails of the environment. 
 Each step feels heavier than the last, and the unrelenting storm wears on
 your body and mind.  Visions of yourself flitter in and out of existence,
@@ -30201,109 +30272,273 @@ D3
 0 -1 305554
 S
 #305556
-Floating in a void~
+Hyperbolic Time Fracture: Second Stratum~
 ~
 0 4 1
+D0
+~
+~
+0 -1 305557
+D5
+~
+~
+0 -1 305493
 S
 #305557
-Floating in a void~
+Into The Hellish Void~
 ~
 0 4 1
+D0
+~
+~
+0 -1 305558
+D2
+~
+~
+0 -1 305556
 S
 #305558
-Floating in a void~
+Hellish Void~
 ~
 0 4 1
+D0
+~
+~
+0 -1 305559
+D2
+~
+~
+0 -1 305557
 S
 #305559
-Floating in a void~
+Hellish Void~
 ~
 0 4 1
+D0
+~
+~
+0 -1 305560
+D2
+~
+~
+0 -1 305558
 S
 #305560
-Floating in a void~
+Hellish Void~
 ~
 0 4 1
+D0
+~
+~
+0 -1 305561
+D2
+~
+~
+0 -1 305559
 S
 #305561
-Floating in a void~
+Hellish Void~
 ~
 0 4 1
+D2
+~
+~
+0 -1 305560
+D3
+~
+~
+0 -1 305562
 S
 #305562
-Floating in a void~
+Hellish Void~
 ~
 0 4 1
+D1
+~
+~
+0 -1 305561
+D3
+~
+~
+0 -1 305563
 S
 #305563
-Floating in a void~
+Hellish Void~
 ~
 0 4 1
+D1
+~
+~
+0 -1 305562
+D2
+~
+~
+0 -1 305564
 S
 #305564
-Floating in a void~
+Hellish Void~
 ~
 0 4 1
+D0
+~
+~
+0 -1 305563
+D2
+~
+~
+0 -1 305565
 S
 #305565
-Floating in a void~
+Hellish Void~
 ~
 0 4 1
+D0
+~
+~
+0 -1 305564
+D2
+~
+~
+0 -1 305566
 S
 #305566
-Floating in a void~
+Hellish Void~
 ~
 0 4 1
+D0
+~
+~
+0 -1 305565
+D3
+~
+~
+0 -1 305567
 S
 #305567
-Floating in a void~
+Hellish Void~
 ~
 0 4 1
+D1
+~
+~
+0 -1 305566
+D3
+~
+~
+0 -1 305568
 S
 #305568
-Floating in a void~
+Hellish Void~
 ~
 0 4 1
+D0
+~
+~
+0 -1 305569
+D1
+~
+~
+0 -1 305567
 S
 #305569
-Floating in a void~
+Ruins of a building~
 ~
 0 4 1
+D0
+~
+~
+0 -1 305572
+D1
+~
+~
+0 -1 305571
+D2
+~
+~
+0 -1 305568
+D3
+~
+~
+0 -1 305570
 S
 #305570
-Floating in a void~
+Ruined Resting Quarters~
 ~
 0 4 1
+D1
+~
+~
+0 -1 305569
 S
 #305571
-Floating in a void~
+Ruined Kitchen~
 ~
 0 4 1
+D3
+~
+~
+0 -1 305569
 S
 #305572
-Floating in a void~
+Hellish Void~
 ~
 0 4 1
+D0
+~
+~
+0 -1 305573
+D2
+~
+~
+0 -1 305569
 S
 #305573
-Floating in a void~
+Hellish Void~
 ~
 0 4 1
+D1
+~
+~
+0 -1 305574
+D2
+~
+~
+0 -1 305572
 S
 #305574
-Floating in a void~
+Hellish Void~
 ~
 0 4 1
+D1
+~
+~
+0 -1 305575
+D3
+~
+~
+0 -1 305573
 S
 #305575
-Floating in a void~
+Hellish Void~
 ~
 0 4 1
+D1
+~
+~
+0 -1 305576
+D3
+~
+~
+0 -1 305574
 S
 #305576
-Floating in a void~
+Hellish Void~
 ~
 0 4 1
+D3
+~
+~
+0 -1 305575
 S
 #305577
 Floating in a void~
@@ -48451,6 +48686,26 @@ M 1 305040 1 305500
 M 1 305040 1 305498
 M 1 305040 1 305507
 M 1 305040 1 305503
+M 1 305044 1 305558
+M 1 305044 1 305559
+M 1 305044 1 305560
+M 1 305044 1 305561
+M 1 305044 1 305562
+M 1 305044 1 305563
+M 1 305044 1 305564
+M 1 305044 1 305565
+M 1 305044 1 305566
+M 1 305044 1 305567
+M 1 305044 1 305568
+M 1 305044 1 305569
+M 1 305044 1 305570
+M 1 305044 1 305571
+M 1 305044 1 305572
+M 1 305044 1 305573
+M 1 305044 1 305574
+M 1 305044 1 305575
+M 1 305044 1 305576
+M 1 305045 1 305493
 S
 
 
