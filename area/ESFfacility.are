@@ -2531,7 +2531,7 @@ An anomolous copy of you stands here, reflecting countless prisms of light.
 1 0 100 1d20+500 2d5+0
 -1 25000
 112 112 0
-50 50 50 50 0
+100 50 100 50 0
 0 0 0 0 0
 0 0 0 0 1 1 2
 0 0 0 0 0 0 0 0
@@ -2551,6 +2551,12 @@ mprestore $i 30000
 ~
 > fight_prog 10~
 kame
+~
+> fight_prog 10~
+kick
+~
+> fight_prog 10~
+punch
 ~
 |
 #305043
@@ -2575,9 +2581,9 @@ A warped and twisted Red Ribbon soldier wanders aimlessly, lost in time.
 1 0 100 1d20+1000 2d5+0
 -1 50000
 112 112 0
-60 60 60 60 0
+150 60 150 60 0
 0 0 0 0 0
-1 1 0 0 0 0 2
+1 1 0 0 0 0 4
 0 0 0 0 0 0 0 0
 > greet_prog 100~
 if ispc($n)
@@ -29102,6 +29108,10 @@ technology.  Simply resting in this room will rejuvenate body and mind,
 accelerating your body's natural healing properties. 
 ~
 0 536870916 0
+D0
+~
+~
+0 -1 305577
 D1
 ~
 ~
@@ -30546,9 +30556,13 @@ D3
 0 -1 305575
 S
 #305577
-Floating in a void~
+Sparring Arena~
 ~
-0 4 1
+0 67108868 1
+D2
+~
+~
+0 -1 305494
 S
 #305578
 Floating in a void~
