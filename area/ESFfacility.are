@@ -2628,6 +2628,42 @@ mea $n &cMr. Popo stares into the depths of your soul.&d
 mer $n &cMr. Popo stares into the depths of $n's soul.&d
 ~
 |
+#305046
+lurking shadow~
+A Lurking Shadow~
+A black shadowy mass creeps stealthily across the 'floor'.
+~
+~
+35 0 0 C
+100
+1 0 100 1d20+1500 2d5+0
+-1 100000
+112 112 0
+250 250 200 200 0
+0 0 0 0 0
+0 0 0 0 0 0 5
+0 0 0 0 0 0 0 0
+> fight_prog 10~
+destructive
+~
+> fight_prog 10~
+kick
+~
+> fight_prog 10~
+punch
+~
+> greet_prog 100~
+if ispc($n)
+if isfight($i)
+glower
+else
+mprestore $i 30000
+mea $n &cA lurking shadow lunges at you!&d
+mpkill $n
+endif
+endif
+~
+|
 #306032
 gnarly dude~
 a gnarly dude~
@@ -30475,6 +30511,10 @@ D3
 ~
 ~
 0 -1 305570
+D5
+~
+~
+0 -1 305578
 S
 #305570
 Ruined Resting Quarters~
@@ -30565,79 +30605,243 @@ D2
 0 -1 305494
 S
 #305578
-Floating in a void~
+Among Shadows~
 ~
 0 4 1
+D0
+~
+~
+0 -1 305579
+D4
+~
+~
+0 -1 305569
 S
 #305579
-Floating in a void~
+Among Shadows~
 ~
 0 4 1
+D0
+~
+~
+0 -1 305580
+D2
+~
+~
+0 -1 305578
 S
 #305580
-Floating in a void~
+Among Shadows~
 ~
 0 4 1
+D0
+~
+~
+0 -1 305581
+D2
+~
+~
+0 -1 305579
 S
 #305581
-Floating in a void~
+Among Shadows~
 ~
 0 4 1
+D0
+~
+~
+0 -1 305586
+D1
+~
+~
+0 -1 305592
+D2
+~
+~
+0 -1 305580
+D3
+~
+~
+0 -1 305582
 S
 #305582
-Floating in a void~
+Among Shadows~
 ~
 0 4 1
+D0
+~
+~
+0 -1 305583
+D1
+~
+~
+0 -1 305581
 S
 #305583
-Floating in a void~
+Among Shadows~
 ~
 0 4 1
+D0
+~
+~
+0 -1 305584
+D1
+~
+~
+0 -1 305586
+D2
+~
+~
+0 -1 305582
 S
 #305584
-Floating in a void~
+Among Shadows~
 ~
 0 4 1
+D0
+~
+~
+0 -1 305585
+D1
+~
+~
+0 -1 305587
+D2
+~
+~
+0 -1 305583
 S
 #305585
-Floating in a void~
+Among Shadows~
 ~
 0 4 1
+D1
+~
+~
+0 -1 305588
+D2
+~
+~
+0 -1 305584
 S
 #305586
-Floating in a void~
+Among Shadows~
 ~
 0 4 1
+D0
+~
+~
+0 -1 305587
+D1
+~
+~
+0 -1 305591
+D2
+~
+~
+0 -1 305581
+D3
+~
+~
+0 -1 305583
 S
 #305587
-Floating in a void~
+Among Shadows~
 ~
 0 4 1
+D0
+~
+~
+0 -1 305588
+D1
+~
+~
+0 -1 305590
+D2
+~
+~
+0 -1 305586
+D3
+~
+~
+0 -1 305584
 S
 #305588
-Floating in a void~
+Among Shadows~
 ~
 0 4 1
+D1
+~
+~
+0 -1 305589
+D2
+~
+~
+0 -1 305587
+D3
+~
+~
+0 -1 305585
 S
 #305589
-Floating in a void~
+Among Shadows~
 ~
 0 4 1
+D2
+~
+~
+0 -1 305590
+D3
+~
+~
+0 -1 305588
 S
 #305590
-Floating in a void~
+Among Shadows~
 ~
 0 4 1
+D0
+~
+~
+0 -1 305589
+D2
+~
+~
+0 -1 305591
+D3
+~
+~
+0 -1 305587
 S
 #305591
-Floating in a void~
+Among Shadows~
 ~
 0 4 1
+D0
+~
+~
+0 -1 305590
+D2
+~
+~
+0 -1 305592
+D3
+~
+~
+0 -1 305586
 S
 #305592
-Floating in a void~
+Among Shadows~
 ~
 0 4 1
+D0
+~
+~
+0 -1 305591
+D3
+~
+~
+0 -1 305581
 S
 #305593
 Floating in a void~
@@ -48725,6 +48929,21 @@ M 1 305044 1 305574
 M 1 305044 1 305575
 M 1 305044 1 305576
 M 1 305045 1 305493
+M 1 305046 1 305578
+M 1 305046 1 305579
+M 1 305046 1 305580
+M 1 305046 1 305581
+M 1 305046 1 305582
+M 1 305046 1 305592
+M 1 305046 1 305591
+M 1 305046 1 305586
+M 1 305046 1 305583
+M 1 305046 1 305584
+M 1 305046 1 305587
+M 1 305046 1 305590
+M 1 305046 1 305589
+M 1 305046 1 305588
+M 1 305046 1 305585
 S
 
 
