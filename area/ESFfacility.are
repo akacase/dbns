@@ -2664,6 +2664,42 @@ endif
 endif
 ~
 |
+#305047
+nightmarish shadow~
+A Nightmarish Shadow~
+A nightmarish mass of shadows gathers in the darkness.
+~
+~
+3 0 0 C
+110
+1 0 100 1d20+2500 2d5+0
+-1 500000
+112 112 0
+400 400 250 250 0
+0 0 0 0 0
+0 0 0 0 0 0 5
+0 0 0 0 0 0 0 0
+> greet_prog 100~
+if ispc($n)
+if isfight($i)
+glower
+else
+mprestore $i 30000
+mea $n &cA nightmarish shadow lunges at you!&d
+mpkill $n
+endif
+endif
+~
+> fight_prog 10~
+destructive
+~
+> fight_prog 10~
+kick
+~
+> fight_prog 10~
+punch
+~
+|
 #306032
 gnarly dude~
 a gnarly dude~
@@ -30612,6 +30648,10 @@ D0
 ~
 ~
 0 -1 305579
+D2
+~
+~
+0 -1 305593
 D4
 ~
 ~
@@ -30844,104 +30884,340 @@ D3
 0 -1 305581
 S
 #305593
-Floating in a void~
+Into a Deeper Darkness~
 ~
 0 4 1
+D0
+~
+~
+0 -1 305578
+D5
+~
+~
+0 -1 305594
 S
 #305594
-Floating in a void~
+Absolute Darkness~
 ~
 0 4 1
+D0
+~
+~
+0 -1 305595
+D4
+~
+~
+0 -1 305593
 S
 #305595
-Floating in a void~
+Absolute Darkness~
 ~
 0 4 1
+D0
+~
+~
+0 -1 305596
+D1
+~
+~
+0 -1 305607
+D2
+~
+~
+0 -1 305594
+D3
+~
+~
+0 -1 305606
 S
 #305596
-Floating in a void~
+Absolute Darkness~
 ~
 0 4 1
+D0
+~
+~
+0 -1 305597
+D1
+~
+~
+0 -1 305608
+D2
+~
+~
+0 -1 305595
+D3
+~
+~
+0 -1 305605
 S
 #305597
-Floating in a void~
+Absolute Darkness~
 ~
 0 4 1
+D0
+~
+~
+0 -1 305598
+D1
+~
+~
+0 -1 305609
+D2
+~
+~
+0 -1 305596
+D3
+~
+~
+0 -1 305604
 S
 #305598
-Floating in a void~
+Absolute Darkness~
 ~
 0 4 1
+D0
+~
+~
+0 -1 305599
+D1
+~
+~
+0 -1 305610
+D2
+~
+~
+0 -1 305597
+D3
+~
+~
+0 -1 305603
 S
 #305599
-Floating in a void~
+Absolute Darkness~
 ~
 0 4 1
+D0
+~
+~
+0 -1 305600
+D1
+~
+~
+0 -1 305611
+D2
+~
+~
+0 -1 305598
+D3
+~
+~
+0 -1 305602
 S
 #305600
-Floating in a void~
+Absolute Darkness~
 ~
 0 4 1
+D1
+~
+~
+0 -1 305612
+D2
+~
+~
+0 -1 305599
+D3
+~
+~
+0 -1 305601
 S
 #305601
-Floating in a void~
+Absolute Darkness~
 ~
 0 4 1
+D1
+~
+~
+0 -1 305600
+D2
+~
+~
+0 -1 305602
 S
 #305602
-Floating in a void~
+Absolute Darkness~
 ~
 0 4 1
+D0
+~
+~
+0 -1 305601
+D1
+~
+~
+0 -1 305599
+D2
+~
+~
+0 -1 305603
 S
 #305603
-Floating in a void~
+Absolute Darkness~
 ~
 0 4 1
+D0
+~
+~
+0 -1 305602
+D1
+~
+~
+0 -1 305598
+D2
+~
+~
+0 -1 305604
 S
 #305604
-Floating in a void~
+Absolute Darkness~
 ~
 0 4 1
+D0
+~
+~
+0 -1 305603
+D1
+~
+~
+0 -1 305597
+D2
+~
+~
+0 -1 305605
 S
 #305605
-Floating in a void~
+Absolute Darkness~
 ~
 0 4 1
+D0
+~
+~
+0 -1 305604
+D1
+~
+~
+0 -1 305596
+D2
+~
+~
+0 -1 305606
 S
 #305606
-Floating in a void~
+Absolute Darkness~
 ~
 0 4 1
+D0
+~
+~
+0 -1 305605
+D1
+~
+~
+0 -1 305595
 S
 #305607
-Floating in a void~
+Absolute Darkness~
 ~
 0 4 1
+D0
+~
+~
+0 -1 305608
+D3
+~
+~
+0 -1 305595
 S
 #305608
-Floating in a void~
+Absolute Darkness~
 ~
 0 4 1
+D0
+~
+~
+0 -1 305609
+D2
+~
+~
+0 -1 305607
+D3
+~
+~
+0 -1 305596
 S
 #305609
-Floating in a void~
+Absolute Darkness~
 ~
 0 4 1
+D0
+~
+~
+0 -1 305610
+D2
+~
+~
+0 -1 305608
+D3
+~
+~
+0 -1 305597
 S
 #305610
-Floating in a void~
+Absolute Darkness~
 ~
 0 4 1
+D0
+~
+~
+0 -1 305611
+D2
+~
+~
+0 -1 305609
+D3
+~
+~
+0 -1 305598
 S
 #305611
-Floating in a void~
+Absolute Darkness~
 ~
 0 4 1
+D0
+~
+~
+0 -1 305612
+D2
+~
+~
+0 -1 305610
+D3
+~
+~
+0 -1 305599
 S
 #305612
-Floating in a void~
+Absolute Darkness~
 ~
 0 4 1
+D2
+~
+~
+0 -1 305611
+D3
+~
+~
+0 -1 305600
 S
 #305613
 Floating in a void~
@@ -48944,6 +49220,25 @@ M 1 305046 1 305590
 M 1 305046 1 305589
 M 1 305046 1 305588
 M 1 305046 1 305585
+M 1 305047 1 305594
+M 1 305047 1 305595
+M 1 305047 1 305606
+M 1 305047 1 305607
+M 1 305047 1 305608
+M 1 305047 1 305596
+M 1 305047 1 305605
+M 1 305047 1 305604
+M 1 305047 1 305597
+M 1 305047 1 305609
+M 1 305047 1 305610
+M 1 305047 1 305598
+M 1 305047 1 305603
+M 1 305047 1 305602
+M 1 305047 1 305599
+M 1 305047 1 305611
+M 1 305047 1 305612
+M 1 305047 1 305600
+M 1 305047 1 305601
 S
 
 
