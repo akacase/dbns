@@ -2620,12 +2620,26 @@ A stocky man with pitch-black skin and unsettlingly piercing eyes stands here.
 1 1 0 0 0 0 0
 0 0 0 0 0 0 0 0
 > greet_prog 100~
+if pl($n) > 10000000
+say Goodness... I can sense incredible energy from you, $n. You may wish to venture &Rdeeper&C to test yourself...
+else
 say My word. How did you get in here?
 sigh
+endif
 ~
 > speech_prog 'pecking order'~
 mea $n &cMr. Popo stares into the depths of your soul.&d
 mer $n &cMr. Popo stares into the depths of $n's soul.&d
+~
+> speech_prog 'deeper'~
+if pl($n) > 10000000
+say As you wish, $n. Conquer what lies inside yourself, and rise above... Or fail, and go no further.
+mea $n &YYou're engulfed in a blinding light. When things clear, you find yourself in a strange place within the void.&d
+mer $n &Y$n disappears in a flash of blinding light.&d
+mptransfer $n 305636
+else
+say I don't sense that you're strong enough for this training, $n.
+endif
 ~
 |
 #305046
@@ -2733,6 +2747,42 @@ death
 kick
 ~
 > fight_prog 10~
+punch
+~
+|
+#305049
+personal reflection~
+A Personal Reflection~
+A true reflection of yourself stands ready to conquer you.
+~
+~
+3 0 0 C
+120
+1 0 100 1d20+5000 2d5+0
+-1 10000000
+112 112 0
+500 500 500 500 0
+0 0 0 0 0
+0 0 0 0 0 0 6
+0 0 0 0 0 0 0 0
+> greet_prog 100~
+if ispc($n)
+if isfight($i)
+glower
+else
+mprestore $i 30000
+mea $n &cYour personal reflection challenges you!&d
+mpkill $n
+endif
+endif
+~
+> fight_prog 15~
+final
+~
+> fight_prog 15~
+kick
+~
+> fight_prog 15~
 punch
 ~
 |
@@ -31647,144 +31697,492 @@ D2
 0 -1 305620
 S
 #305636
-Floating in a void~
+The Final Test~
 ~
 0 4 1
+D0
+~
+~
+0 -1 305637
+D5
+~
+~
+0 -1 305493
 S
 #305637
-Floating in a void~
+Inner Glory~
 ~
 0 4 1
+D0
+~
+~
+0 -1 305638
+D1
+~
+~
+0 -1 305655
+D2
+~
+~
+0 -1 305636
+D3
+~
+~
+0 -1 305654
 S
 #305638
-Floating in a void~
+Inner Glory~
 ~
 0 4 1
+D0
+~
+~
+0 -1 305639
+D1
+~
+~
+0 -1 305656
+D2
+~
+~
+0 -1 305637
+D3
+~
+~
+0 -1 305653
 S
 #305639
-Floating in a void~
+Inner Glory~
 ~
 0 4 1
+D0
+~
+~
+0 -1 305640
+D1
+~
+~
+0 -1 305657
+D2
+~
+~
+0 -1 305638
+D3
+~
+~
+0 -1 305652
 S
 #305640
-Floating in a void~
+Inner Glory~
 ~
 0 4 1
+D0
+~
+~
+0 -1 305641
+D1
+~
+~
+0 -1 305658
+D2
+~
+~
+0 -1 305639
+D3
+~
+~
+0 -1 305651
 S
 #305641
-Floating in a void~
+Inner Glory~
 ~
 0 4 1
+D0
+~
+~
+0 -1 305642
+D1
+~
+~
+0 -1 305659
+D2
+~
+~
+0 -1 305640
+D3
+~
+~
+0 -1 305650
 S
 #305642
-Floating in a void~
+Inner Glory~
 ~
 0 4 1
+D0
+~
+~
+0 -1 305643
+D1
+~
+~
+0 -1 305660
+D2
+~
+~
+0 -1 305641
+D3
+~
+~
+0 -1 305649
 S
 #305643
-Floating in a void~
+Inner Glory~
 ~
 0 4 1
+D0
+~
+~
+0 -1 305644
+D1
+~
+~
+0 -1 305661
+D2
+~
+~
+0 -1 305642
+D3
+~
+~
+0 -1 305648
 S
 #305644
-Floating in a void~
+Inner Glory~
 ~
 0 4 1
+D0
+~
+~
+0 -1 305645
+D1
+~
+~
+0 -1 305662
+D2
+~
+~
+0 -1 305643
+D3
+~
+~
+0 -1 305647
 S
 #305645
-Floating in a void~
+Inner Glory~
 ~
 0 4 1
+D1
+~
+~
+0 -1 305663
+D2
+~
+~
+0 -1 305644
+D3
+~
+~
+0 -1 305646
 S
 #305646
-Floating in a void~
+Inner Glory~
 ~
 0 4 1
+D1
+~
+~
+0 -1 305645
+D2
+~
+~
+0 -1 305647
 S
 #305647
-Floating in a void~
+Inner Glory~
 ~
 0 4 1
+D0
+~
+~
+0 -1 305646
+D1
+~
+~
+0 -1 305644
+D2
+~
+~
+0 -1 305648
 S
 #305648
-Floating in a void~
+Inner Glory~
 ~
 0 4 1
+D0
+~
+~
+0 -1 305647
+D1
+~
+~
+0 -1 305643
+D2
+~
+~
+0 -1 305649
 S
 #305649
-Floating in a void~
+Inner Glory~
 ~
 0 4 1
+D0
+~
+~
+0 -1 305648
+D1
+~
+~
+0 -1 305642
+D2
+~
+~
+0 -1 305650
 S
 #305650
-Floating in a void~
+Inner Glory~
 ~
 0 4 1
+D0
+~
+~
+0 -1 305649
+D1
+~
+~
+0 -1 305641
+D2
+~
+~
+0 -1 305651
 S
 #305651
-Floating in a void~
+Inner Glory~
 ~
 0 4 1
+D0
+~
+~
+0 -1 305650
+D1
+~
+~
+0 -1 305640
+D2
+~
+~
+0 -1 305652
 S
 #305652
-Floating in a void~
+Inner Glory~
 ~
 0 4 1
+D0
+~
+~
+0 -1 305651
+D1
+~
+~
+0 -1 305639
+D2
+~
+~
+0 -1 305653
 S
 #305653
-Floating in a void~
+Inner Glory~
 ~
 0 4 1
+D0
+~
+~
+0 -1 305652
+D1
+~
+~
+0 -1 305638
+D2
+~
+~
+0 -1 305654
 S
 #305654
-Floating in a void~
+Inner Glory~
 ~
 0 4 1
+D0
+~
+~
+0 -1 305653
+D1
+~
+~
+0 -1 305637
 S
 #305655
-Floating in a void~
+Inner Glory~
 ~
 0 4 1
+D0
+~
+~
+0 -1 305656
+D3
+~
+~
+0 -1 305637
 S
 #305656
-Floating in a void~
+Inner Glory~
 ~
 0 4 1
+D0
+~
+~
+0 -1 305657
+D2
+~
+~
+0 -1 305655
+D3
+~
+~
+0 -1 305638
 S
 #305657
-Floating in a void~
+Inner Glory~
 ~
 0 4 1
+D0
+~
+~
+0 -1 305658
+D2
+~
+~
+0 -1 305656
+D3
+~
+~
+0 -1 305639
 S
 #305658
-Floating in a void~
+Inner Glory~
 ~
 0 4 1
+D0
+~
+~
+0 -1 305659
+D2
+~
+~
+0 -1 305657
+D3
+~
+~
+0 -1 305640
 S
 #305659
-Floating in a void~
+Inner Glory~
 ~
 0 4 1
+D0
+~
+~
+0 -1 305660
+D2
+~
+~
+0 -1 305658
+D3
+~
+~
+0 -1 305641
 S
 #305660
-Floating in a void~
+Inner Glory~
 ~
 0 4 1
+D0
+~
+~
+0 -1 305661
+D2
+~
+~
+0 -1 305659
+D3
+~
+~
+0 -1 305642
 S
 #305661
-Floating in a void~
+Inner Glory~
 ~
 0 4 1
+D0
+~
+~
+0 -1 305662
+D2
+~
+~
+0 -1 305660
+D3
+~
+~
+0 -1 305643
 S
 #305662
-Floating in a void~
+Inner Glory~
 ~
 0 4 1
+D0
+~
+~
+0 -1 305663
+D2
+~
+~
+0 -1 305661
+D3
+~
+~
+0 -1 305644
 S
 #305663
-Floating in a void~
+Inner Glory~
 ~
 0 4 1
+D2
+~
+~
+0 -1 305662
+D3
+~
+~
+0 -1 305645
 S
 #305664
 Floating in a void~
@@ -49571,6 +49969,33 @@ M 1 305048 1 305622
 M 1 305048 1 305621
 M 1 305048 1 305620
 M 1 305048 1 305634
+M 1 305049 1 305637
+M 1 305049 1 305638
+M 1 305049 1 305639
+M 1 305049 1 305640
+M 1 305049 1 305641
+M 1 305049 1 305642
+M 1 305049 1 305643
+M 1 305049 1 305644
+M 1 305049 1 305645
+M 1 305049 1 305646
+M 1 305049 1 305647
+M 1 305049 1 305648
+M 1 305049 1 305649
+M 1 305049 1 305650
+M 1 305049 1 305651
+M 1 305049 1 305652
+M 1 305049 1 305653
+M 1 305049 1 305654
+M 1 305049 1 305655
+M 1 305049 1 305656
+M 1 305049 1 305657
+M 1 305049 1 305658
+M 1 305049 1 305659
+M 1 305049 1 305660
+M 1 305049 1 305661
+M 1 305049 1 305662
+M 1 305049 1 305663
 S
 
 
