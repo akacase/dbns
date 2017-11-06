@@ -124,7 +124,7 @@ mea $n &YSimply speak the following number to depart to that floor.
 mea $n &Y0: Entry Floor
 mea $n &Y3: Advanced Facility & Armory
 mea $n &Y4: Basic Training & Healing Tanks
-mea $n &Y Anomaly Research Facility[&RNEWBIE QUEST&Y]&d
+mea $n &YB1: Anomaly Research Facility [&RNEWBIE QUEST&Y]
 mea $n &Y----------------------------------------------------------
 ~
 > speech_prog 3~
