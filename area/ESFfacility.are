@@ -2700,6 +2700,42 @@ kick
 punch
 ~
 |
+#305048
+abomination~
+A Twisted Abomination~
+A terrible mixture of the time fracture's residents lurks here.
+~
+~
+3 0 0 C
+110
+1 0 100 1d20+3000 2d5+0
+-1 2500000
+112 112 0
+500 500 300 300 0
+0 0 0 0 0
+0 0 0 0 0 0 6
+0 0 0 0 0 0 0 0
+> greet_prog 100~
+if ispc($n)
+if isfight($i)
+glower
+else
+mprestore $i 30000
+mea $n &cAn abomination creeps suddenly toward you!&d
+mpkill $n
+endif
+endif
+~
+> fight_prog 10~
+death
+~
+> fight_prog 10~
+kick
+~
+> fight_prog 10~
+punch
+~
+|
 #306032
 gnarly dude~
 a gnarly dude~
@@ -30908,6 +30944,10 @@ D4
 ~
 ~
 0 -1 305593
+D5
+~
+~
+0 -1 305613
 S
 #305595
 Absolute Darkness~
@@ -31220,119 +31260,391 @@ D3
 0 -1 305600
 S
 #305613
-Floating in a void~
+Center of The Void~
 ~
 0 4 1
+D0
+~
+~
+0 -1 305614
+D4
+~
+~
+0 -1 305594
 S
 #305614
-Floating in a void~
+Void Core~
 ~
 0 4 1
+D0
+~
+~
+0 -1 305615
+D1
+~
+~
+0 -1 305628
+D2
+~
+~
+0 -1 305613
+D3
+~
+~
+0 -1 305627
 S
 #305615
-Floating in a void~
+Void Core~
 ~
 0 4 1
+D0
+~
+~
+0 -1 305616
+D1
+~
+~
+0 -1 305629
+D2
+~
+~
+0 -1 305614
+D3
+~
+~
+0 -1 305626
 S
 #305616
-Floating in a void~
+Void Core~
 ~
 0 4 1
+D0
+~
+~
+0 -1 305617
+D1
+~
+~
+0 -1 305630
+D2
+~
+~
+0 -1 305615
+D3
+~
+~
+0 -1 305625
 S
 #305617
-Floating in a void~
+Void Core~
 ~
 0 4 1
+D0
+~
+~
+0 -1 305618
+D1
+~
+~
+0 -1 305631
+D2
+~
+~
+0 -1 305616
+D3
+~
+~
+0 -1 305624
 S
 #305618
-Floating in a void~
+Void Core~
 ~
 0 4 1
+D0
+~
+~
+0 -1 305619
+D1
+~
+~
+0 -1 305632
+D2
+~
+~
+0 -1 305617
+D3
+~
+~
+0 -1 305623
 S
 #305619
-Floating in a void~
+Void Core~
 ~
 0 4 1
+D0
+~
+~
+0 -1 305620
+D1
+~
+~
+0 -1 305633
+D2
+~
+~
+0 -1 305618
+D3
+~
+~
+0 -1 305622
 S
 #305620
-Floating in a void~
+Void Core~
 ~
 0 4 1
+D1
+~
+~
+0 -1 305634
+D2
+~
+~
+0 -1 305619
+D3
+~
+~
+0 -1 305621
 S
 #305621
-Floating in a void~
+Void Core~
 ~
 0 4 1
+D1
+~
+~
+0 -1 305620
+D2
+~
+~
+0 -1 305622
 S
 #305622
-Floating in a void~
+Void Core~
 ~
 0 4 1
+D0
+~
+~
+0 -1 305621
+D1
+~
+~
+0 -1 305619
+D2
+~
+~
+0 -1 305623
 S
 #305623
-Floating in a void~
+Void Core~
 ~
 0 4 1
+D0
+~
+~
+0 -1 305622
+D1
+~
+~
+0 -1 305618
+D2
+~
+~
+0 -1 305624
 S
 #305624
-Floating in a void~
+Void Core~
 ~
 0 4 1
+D0
+~
+~
+0 -1 305623
+D1
+~
+~
+0 -1 305617
+D2
+~
+~
+0 -1 305625
 S
 #305625
-Floating in a void~
+Void Core~
 ~
 0 4 1
+D0
+~
+~
+0 -1 305624
+D1
+~
+~
+0 -1 305616
+D2
+~
+~
+0 -1 305626
 S
 #305626
-Floating in a void~
+Void Core~
 ~
 0 4 1
+D0
+~
+~
+0 -1 305625
+D1
+~
+~
+0 -1 305615
+D2
+~
+~
+0 -1 305627
 S
 #305627
-Floating in a void~
+Void Core~
 ~
 0 4 1
+D0
+~
+~
+0 -1 305626
+D1
+~
+~
+0 -1 305614
 S
 #305628
-Floating in a void~
+Void Core~
 ~
 0 4 1
+D0
+~
+~
+0 -1 305629
+D3
+~
+~
+0 -1 305614
 S
 #305629
-Floating in a void~
+Void Core~
 ~
 0 4 1
+D0
+~
+~
+0 -1 305630
+D2
+~
+~
+0 -1 305628
+D3
+~
+~
+0 -1 305615
 S
 #305630
-Floating in a void~
+Void Core~
 ~
 0 4 1
+D0
+~
+~
+0 -1 305631
+D2
+~
+~
+0 -1 305629
+D3
+~
+~
+0 -1 305616
 S
 #305631
-Floating in a void~
+Void Core~
 ~
 0 4 1
+D0
+~
+~
+0 -1 305632
+D2
+~
+~
+0 -1 305630
+D3
+~
+~
+0 -1 305617
 S
 #305632
-Floating in a void~
+Void Core~
 ~
 0 4 1
+D0
+~
+~
+0 -1 305633
+D2
+~
+~
+0 -1 305631
+D3
+~
+~
+0 -1 305618
 S
 #305633
-Floating in a void~
+Void Core~
 ~
 0 4 1
+D0
+~
+~
+0 -1 305634
+D2
+~
+~
+0 -1 305632
+D3
+~
+~
+0 -1 305619
 S
 #305634
-Floating in a void~
+Void Core~
 ~
 0 4 1
+D2
+~
+~
+0 -1 305633
+D3
+~
+~
+0 -1 305620
 S
 #305635
-Floating in a void~
+Multiverse Anomaly~
 ~
 0 4 1
+D2
+~
+~
+0 -1 305620
 S
 #305636
 Floating in a void~
@@ -49220,7 +49532,6 @@ M 1 305046 1 305590
 M 1 305046 1 305589
 M 1 305046 1 305588
 M 1 305046 1 305585
-M 1 305047 1 305594
 M 1 305047 1 305595
 M 1 305047 1 305606
 M 1 305047 1 305607
@@ -49239,6 +49550,27 @@ M 1 305047 1 305611
 M 1 305047 1 305612
 M 1 305047 1 305600
 M 1 305047 1 305601
+M 1 305048 1 305627
+M 1 305048 1 305614
+M 1 305048 1 305628
+M 1 305048 1 305629
+M 1 305048 1 305615
+M 1 305048 1 305626
+M 1 305048 1 305625
+M 1 305048 1 305616
+M 1 305048 1 305630
+M 1 305048 1 305631
+M 1 305048 1 305617
+M 1 305048 1 305624
+M 1 305048 1 305623
+M 1 305048 1 305618
+M 1 305048 1 305632
+M 1 305048 1 305633
+M 1 305048 1 305619
+M 1 305048 1 305622
+M 1 305048 1 305621
+M 1 305048 1 305620
+M 1 305048 1 305634
 S
 
 
