@@ -2453,12 +2453,41 @@ endif
 > speech_prog train~
 if wearingvnum($n) 305011
 mpecho &cA mysterious white light floods the room as Doctor Emalia opens a passage into the room behind her.&d
-say Be careful in there, $n. Don't get too carried away.
+say Be careful, $n. It might be training, but if you don't take it seriously, you'll die.
+say We'll show Doctor Gero a thing or two when you're &Rready&C.
 mptransfer $n 305492
 mpat 305492 mpforce $n look
 mpat 305492 mea $n &cDoctor Emalia waves and disappears into the light.&d
 else
 slap $n
+endif
+~
+> speech_prog 'ready'~
+if pl($n) > 30000000
+say You think you're ready?
+mpecho &cDoctor Emalia picks up a scouter from the table beside her and fastens it over her right eye.&d
+say We'll see about that!
+mpsleep 5
+mea $n &cDoctor Emalia presses a button and stares at you intently.&d
+mer $n &cDoctor Emalia presses a button and stares at $n intently.&d
+mpsleep 5
+mpecho &cThe scouter alarms ominously and explodes!&d
+gasp
+say This is... amazing! How much time actually passed while you were in there?
+shake
+say No, that doesn't matter. What does matter, is you're definitely strong enough to &Rchallenge&C Gero now.
+mpecho &cDoctor Emalia pumps her fist in the air.&d
+say Let's go, go, go!
+else
+say You think you're ready?
+mpecho &cDoctor Emalia picks up a scouter from the table beside her and fastens it over her right eye.&d
+say We'll see about that!
+mpsleep 5
+mea $n &cDoctor Emalia presses a button and stares at you intently.&d
+mer $n &cDoctor Emalia presses a button and stares at $n intently.&d
+mpsleep 5
+shake
+say You're definitely strong... but, I don't think this is enough, $n.
 endif
 ~
 |
