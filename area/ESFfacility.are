@@ -2813,6 +2813,34 @@ kick
 punch
 ~
 |
+#305700
+android 19r~
+Android 19R~
+A mass-replicated Android 19 model sifts through the rubble.
+~
+~
+1073741825 0 0 C
+240
+1 0 50 1d20+10000 2d5+0
+-1 30000000
+112 112 0
+1500 1500 1000 1000 0
+0 0 0 0 0
+4 4 0 0 0 0 3
+0 0 0 0 0 0 0 0
+> greet_prog 100~
+if ispc($n)
+if isfight($i)
+glower
+else
+mprestore $i 30000
+mea $n &cAn Android 19R model's head turns ominously to face you.&d
+mea $n &CAndroid 19R says 'Memory: Subject $n -- Threat level -- Zero!'&d
+mpkill $n
+endif
+endif
+~
+|
 #306032
 gnarly dude~
 a gnarly dude~
@@ -34342,230 +34370,598 @@ S
 Time Fracture: Route 28~
 ~
 0 4 1
+D0
+~
+~
+0 -1 305866
 D2
 ~
 ~
 0 -1 305845
+D3
+~
+~
+0 -1 305847
 S
 #305847
-Floating in a void~
+Highway Rubble~
 ~
-0 4 1
+0 0 1
+D1
+~
+~
+0 -1 305846
+D3
+~
+~
+0 -1 305848
 S
 #305848
-Floating in a void~
+Highway Rubble~
 ~
-0 4 1
+0 0 1
+D1
+~
+~
+0 -1 305847
+D5
+~
+~
+0 -1 305849
 S
 #305849
-Floating in a void~
+Highway Ditch~
 ~
-0 4 1
+0 0 1
+D1
+~
+~
+0 -1 305850
+D4
+~
+~
+0 -1 305848
 S
 #305850
-Floating in a void~
+Under Route 28~
 ~
-0 4 1
+0 0 1
+D1
+~
+~
+0 -1 305851
+D3
+~
+~
+0 -1 305849
 S
 #305851
-Floating in a void~
+Under Route 28~
 ~
-0 4 1
+0 0 1
+D1
+~
+~
+0 -1 305852
+D3
+~
+~
+0 -1 305850
 S
 #305852
-Floating in a void~
+Under Route 28~
 ~
 0 4 1
+D0
+~
+~
+0 -1 305853
+D3
+~
+~
+0 -1 305851
 S
 #305853
-Floating in a void~
+Under Route 28~
 ~
-0 4 1
+0 0 1
+D0
+~
+~
+0 -1 305854
+D2
+~
+~
+0 -1 305852
 S
 #305854
-Floating in a void~
+Under Route 28~
 ~
-0 4 1
+0 0 1
+D0
+~
+~
+0 -1 305855
+D2
+~
+~
+0 -1 305853
 S
 #305855
-Floating in a void~
+Under Route 28~
 ~
-0 4 1
+0 0 1
+D0
+~
+~
+0 -1 305856
+D2
+~
+~
+0 -1 305854
 S
 #305856
-Floating in a void~
+Under Route 28~
 ~
 0 4 1
+D0
+~
+~
+0 -1 305859
+D2
+~
+~
+0 -1 305855
+D3
+~
+~
+0 -1 305857
 S
 #305857
-Floating in a void~
+Under Route 28~
 ~
-0 4 1
+0 0 1
+D0
+~
+~
+0 -1 305858
+D1
+~
+~
+0 -1 305856
+D3
+~
+~
+0 -1 305861
 S
 #305858
-Floating in a void~
+Under Route 28~
 ~
-0 4 1
+0 0 1
+D2
+~
+~
+0 -1 305857
 S
 #305859
-Floating in a void~
+Under Route 28~
 ~
-0 4 1
+0 0 1
+D0
+~
+~
+0 -1 305860
+D2
+~
+~
+0 -1 305856
 S
 #305860
-Floating in a void~
+Under Route 28~
 ~
-0 4 1
+0 0 1
+D0
+~
+~
+0 -1 305870
+D2
+~
+~
+0 -1 305859
 S
 #305861
-Floating in a void~
+Under Route 28~
 ~
-0 4 1
+0 0 1
+D1
+~
+~
+0 -1 305857
+D3
+~
+~
+0 -1 305862
 S
 #305862
-Floating in a void~
+Highway Ditch~
 ~
-0 4 1
+0 0 1
+D1
+~
+~
+0 -1 305861
+D4
+~
+~
+0 -1 305863
 S
 #305863
-Floating in a void~
+Highway Rubble~
 ~
-0 4 1
+0 0 1
+D1
+~
+~
+0 -1 305864
+D5
+~
+~
+0 -1 305862
 S
 #305864
-Floating in a void~
+Highway Rubble~
 ~
-0 4 1
+0 0 1
+D1
+~
+~
+0 -1 305865
+D3
+~
+~
+0 -1 305863
 S
 #305865
-Floating in a void~
+Highway Rubble~
 ~
-0 4 1
+0 0 1
+D1
+~
+~
+0 -1 305869
+D3
+~
+~
+0 -1 305864
 S
 #305866
-Floating in a void~
+Time Fracture: Route 28~
 ~
 0 4 1
+D0
+~
+~
+0 -1 305867
+D2
+~
+~
+0 -1 305846
 S
 #305867
-Floating in a void~
+Time Fracture: Route 28~
 ~
 0 4 1
+D0
+~
+~
+0 -1 305868
+D2
+~
+~
+0 -1 305866
 S
 #305868
-Floating in a void~
+Time Fracture: Route 28~
 ~
 0 4 1
+D0
+~
+~
+0 -1 305869
+D2
+~
+~
+0 -1 305867
 S
 #305869
-Floating in a void~
+Time Fracture: Route 28~
 ~
 0 4 1
+D0
+~
+~
+0 -1 305877
+D2
+~
+~
+0 -1 305868
+D3
+~
+~
+0 -1 305865
 S
 #305870
-Floating in a void~
+Under Route 28~
 ~
-0 4 1
+0 0 1
+D0
+~
+~
+0 -1 305871
+D2
+~
+~
+0 -1 305860
 S
 #305871
-Floating in a void~
+Under Route 28~
 ~
-0 4 1
+0 0 1
+D0
+~
+~
+0 -1 305872
+D2
+~
+~
+0 -1 305870
 S
 #305872
-Floating in a void~
+Under Route 28~
 ~
-0 4 1
+0 0 1
+D0
+~
+~
+0 -1 305873
+D2
+~
+~
+0 -1 305871
 S
 #305873
-Floating in a void~
+Under Route 28~
 ~
-0 4 1
+0 0 1
+D0
+~
+~
+0 -1 305874
+D2
+~
+~
+0 -1 305872
 S
 #305874
-Floating in a void~
+Under Route 28~
 ~
-0 4 1
+0 0 1
+D0
+~
+~
+0 -1 305875
+D2
+~
+~
+0 -1 305873
 S
 #305875
-Floating in a void~
+Under Route 28~
 ~
-0 4 1
+0 0 1
+D0
+~
+~
+0 -1 305876
+D2
+~
+~
+0 -1 305874
 S
 #305876
-Floating in a void~
+Collapsed Overpass~
 ~
-0 4 1
+0 0 1
+D2
+~
+~
+0 -1 305875
+D4
+~
+~
+0 -1 305885
 S
 #305877
-Floating in a void~
+Time Fracture: Route 28~
 ~
-0 4 1
+0 0 1
+D0
+~
+~
+0 -1 305878
+D2
+~
+~
+0 -1 305869
 S
 #305878
-Floating in a void~
+Time Fracture: Route 28~
 ~
-0 4 1
+0 0 1
+D0
+~
+~
+0 -1 305879
+D2
+~
+~
+0 -1 305877
 S
 #305879
-Floating in a void~
+Time Fracture: Route 28~
 ~
-0 4 1
+0 0 1
+D0
+~
+~
+0 -1 305880
+D2
+~
+~
+0 -1 305878
 S
 #305880
-Floating in a void~
+Time Fracture: Route 28~
 ~
-0 4 1
+0 0 1
+D0
+~
+~
+0 -1 305881
+D2
+~
+~
+0 -1 305879
 S
 #305881
-Floating in a void~
+Time Fracture: Route 28~
 ~
-0 4 1
+0 0 1
+D0
+~
+~
+0 -1 305882
+D2
+~
+~
+0 -1 305880
 S
 #305882
-Floating in a void~
+Time Fracture: Route 28~
 ~
-0 4 1
+0 0 1
+D0
+~
+~
+0 -1 305883
+D2
+~
+~
+0 -1 305881
 S
 #305883
-Floating in a void~
+Time Fracture: Route 28~
 ~
-0 4 1
+0 0 1
+D0
+~
+~
+0 -1 305884
+D2
+~
+~
+0 -1 305882
 S
 #305884
-Floating in a void~
+Time Fracture: Route 28~
 ~
-0 4 1
+0 0 1
+D0
+~
+~
+0 -1 305885
+D2
+~
+~
+0 -1 305883
 S
 #305885
-Floating in a void~
+Highway Collapse~
 ~
-0 4 1
+0 16777220 1
+D0
+~
+~
+0 -1 305886
+D2
+~
+~
+0 -1 305884
+D5
+~
+~
+0 -1 305876
 S
 #305886
-Floating in a void~
+Time Fracture: Route 28~
 ~
-0 4 1
+0 0 1
+D0
+~
+~
+0 -1 305887
+D2
+~
+~
+0 -1 305885
 S
 #305887
-Floating in a void~
+Time Fracture: Route 28~
 ~
-0 4 1
+0 0 1
+D0
+~
+~
+0 -1 305888
+D2
+~
+~
+0 -1 305886
 S
 #305888
-Floating in a void~
+Time Fracture: Route 28~
 ~
-0 4 1
+0 0 1
+D0
+~
+~
+0 -1 305889
+D2
+~
+~
+0 -1 305887
 S
 #305889
-Floating in a void~
+Time Fracture: Route 28~
 ~
-0 4 1
+0 0 1
+D0
+~
+~
+0 -1 305890
+D2
+~
+~
+0 -1 305888
 S
 #305890
-Floating in a void~
+Time Fracture: Route 28~
 ~
-0 4 1
+0 0 1
+D2
+~
+~
+0 -1 305889
 S
 #305891
 Floating in a void~
