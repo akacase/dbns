@@ -2467,10 +2467,8 @@ if pl($n) > 30000000
 say You think you're ready?
 mpecho &cDoctor Emalia picks up a scouter from the table beside her and fastens it over her right eye.&d
 say We'll see about that!
-mpsleep 5
 mea $n &cDoctor Emalia presses a button and stares at you intently.&d
 mer $n &cDoctor Emalia presses a button and stares at $n intently.&d
-mpsleep 5
 mpecho &cThe scouter alarms ominously and explodes!&d
 gasp
 say This is... amazing! How much time actually passed while you were in there?
@@ -2482,13 +2480,13 @@ else
 say You think you're ready?
 mpecho &cDoctor Emalia picks up a scouter from the table beside her and fastens it over her right eye.&d
 say We'll see about that!
-mpsleep 5
 mea $n &cDoctor Emalia presses a button and stares at you intently.&d
 mer $n &cDoctor Emalia presses a button and stares at $n intently.&d
-mpsleep 5
 shake
 say You're definitely strong... but, I don't think this is enough, $n.
 endif
+~
+> speech_prog 'challenge'~
 ~
 |
 #305040
@@ -29207,7 +29205,7 @@ S
 #305489
 Doctor Emalia's Laboratory~
 ~
-0 4 1
+0 4 0
 D1
 ~
 ~
@@ -29220,7 +29218,7 @@ S
 #305490
 Doctor Emalia's Laboratory~
 ~
-0 4 1
+0 4 0
 D1
 ~
 ~
@@ -29233,7 +29231,7 @@ S
 #305491
 Timespace Research and Development~
 ~
-0 4 1
+0 4 0
 D3
 ~
 ~
@@ -32394,209 +32392,529 @@ Floating in a void~
 0 4 1
 S
 #305700
-Floating in a void~
+West City: Central~
 ~
 0 4 1
+D0
+~
+~
+0 -1 305721
+D1
+~
+~
+0 -1 305731
+D2
+~
+~
+0 -1 305701
+D3
+~
+~
+0 -1 305711
 S
 #305701
-Floating in a void~
+West City: South Central Avenue~
 ~
 0 4 1
+D0
+~
+~
+0 -1 305700
+D2
+~
+~
+0 -1 305702
 S
 #305702
-Floating in a void~
+West City: South Central Avenue~
 ~
 0 4 1
+D0
+~
+~
+0 -1 305701
+D2
+~
+~
+0 -1 305703
 S
 #305703
-Floating in a void~
+West City: South Central Avenue~
 ~
 0 4 1
+D0
+~
+~
+0 -1 305702
+D2
+~
+~
+0 -1 305704
 S
 #305704
-Floating in a void~
+West City: South Central Avenue~
 ~
 0 4 1
+D0
+~
+~
+0 -1 305703
+D2
+~
+~
+0 -1 305705
 S
 #305705
-Floating in a void~
+West City: South Central Avenue~
 ~
 0 4 1
+D0
+~
+~
+0 -1 305704
+D2
+~
+~
+0 -1 305706
 S
 #305706
-Floating in a void~
+West City: South Central Avenue~
 ~
 0 4 1
+D0
+~
+~
+0 -1 305705
+D2
+~
+~
+0 -1 305707
 S
 #305707
-Floating in a void~
+West City: South Central Avenue~
 ~
 0 4 1
+D0
+~
+~
+0 -1 305706
+D2
+~
+~
+0 -1 305708
 S
 #305708
-Floating in a void~
+West City: South Central Avenue~
 ~
 0 4 1
+D0
+~
+~
+0 -1 305707
+D2
+~
+~
+0 -1 305709
 S
 #305709
-Floating in a void~
+West City: South Central Avenue~
 ~
 0 4 1
+D0
+~
+~
+0 -1 305708
+D2
+~
+~
+0 -1 305710
 S
 #305710
-Floating in a void~
+West City: South Central Avenue~
 ~
 0 4 1
+D0
+~
+~
+0 -1 305709
 S
 #305711
-Floating in a void~
+West City: West Central Avenue~
 ~
 0 4 1
+D1
+~
+~
+0 -1 305700
+D3
+~
+~
+0 -1 305712
 S
 #305712
-Floating in a void~
+West City: West Central Avenue~
 ~
 0 4 1
+D1
+~
+~
+0 -1 305711
+D3
+~
+~
+0 -1 305713
 S
 #305713
-Floating in a void~
+West City: West Central Avenue~
 ~
 0 4 1
+D1
+~
+~
+0 -1 305712
+D3
+~
+~
+0 -1 305714
 S
 #305714
-Floating in a void~
+West City: West Central Avenue~
 ~
 0 4 1
+D1
+~
+~
+0 -1 305713
+D3
+~
+~
+0 -1 305715
 S
 #305715
-Floating in a void~
+West City: West Central Avenue~
 ~
 0 4 1
+D1
+~
+~
+0 -1 305714
+D3
+~
+~
+0 -1 305716
 S
 #305716
-Floating in a void~
+West City: West Central Avenue~
 ~
 0 4 1
+D1
+~
+~
+0 -1 305715
+D3
+~
+~
+0 -1 305717
 S
 #305717
-Floating in a void~
+West City: West Central Avenue~
 ~
 0 4 1
+D1
+~
+~
+0 -1 305716
+D3
+~
+~
+0 -1 305718
 S
 #305718
-Floating in a void~
+West City: West Central Avenue~
 ~
 0 4 1
+D1
+~
+~
+0 -1 305717
+D3
+~
+~
+0 -1 305719
 S
 #305719
-Floating in a void~
+West City: West Central Avenue~
 ~
 0 4 1
+D1
+~
+~
+0 -1 305718
+D3
+~
+~
+0 -1 305720
 S
 #305720
-Floating in a void~
+West City: West Central Avenue~
 ~
 0 4 1
+D1
+~
+~
+0 -1 305719
 S
 #305721
-Floating in a void~
+West City: North Central Avenue~
 ~
 0 4 1
+D0
+~
+~
+0 -1 305722
+D2
+~
+~
+0 -1 305700
 S
 #305722
-Floating in a void~
+West City: North Central Avenue~
 ~
 0 4 1
+D0
+~
+~
+0 -1 305723
+D2
+~
+~
+0 -1 305721
 S
 #305723
-Floating in a void~
+West City: North Central Avenue~
 ~
 0 4 1
+D0
+~
+~
+0 -1 305724
+D2
+~
+~
+0 -1 305722
 S
 #305724
-Floating in a void~
+West City: North Central Avenue~
 ~
 0 4 1
+D0
+~
+~
+0 -1 305725
+D2
+~
+~
+0 -1 305723
 S
 #305725
-Floating in a void~
+West City: North Central Avenue~
 ~
 0 4 1
+D0
+~
+~
+0 -1 305726
+D2
+~
+~
+0 -1 305724
 S
 #305726
-Floating in a void~
+West City: North Central Avenue~
 ~
 0 4 1
+D0
+~
+~
+0 -1 305727
+D2
+~
+~
+0 -1 305725
 S
 #305727
-Floating in a void~
+West City: North Central Avenue~
 ~
 0 4 1
+D0
+~
+~
+0 -1 305728
+D2
+~
+~
+0 -1 305726
 S
 #305728
-Floating in a void~
+West City: North Central Avenue~
 ~
 0 4 1
+D0
+~
+~
+0 -1 305729
+D2
+~
+~
+0 -1 305727
 S
 #305729
-Floating in a void~
+West City: North Central Avenue~
 ~
 0 4 1
+D0
+~
+~
+0 -1 305730
+D2
+~
+~
+0 -1 305728
 S
 #305730
-Floating in a void~
+West City: North Central Avenue~
 ~
 0 4 1
+D2
+~
+~
+0 -1 305729
 S
 #305731
-Floating in a void~
+West City: East Central Avenue~
 ~
 0 4 1
+D1
+~
+~
+0 -1 305732
+D3
+~
+~
+0 -1 305700
 S
 #305732
-Floating in a void~
+West City: East Central Avenue~
 ~
 0 4 1
+D1
+~
+~
+0 -1 305733
+D3
+~
+~
+0 -1 305731
 S
 #305733
-Floating in a void~
+West City: East Central Avenue~
 ~
 0 4 1
+D1
+~
+~
+0 -1 305734
+D3
+~
+~
+0 -1 305732
 S
 #305734
-Floating in a void~
+West City: East Central Avenue~
 ~
 0 4 1
+D1
+~
+~
+0 -1 305735
+D3
+~
+~
+0 -1 305733
 S
 #305735
-Floating in a void~
+West City: East Central Avenue~
 ~
 0 4 1
+D1
+~
+~
+0 -1 305736
+D3
+~
+~
+0 -1 305734
 S
 #305736
-Floating in a void~
+West City: East Central Avenue~
 ~
 0 4 1
+D1
+~
+~
+0 -1 305737
+D3
+~
+~
+0 -1 305735
 S
 #305737
-Floating in a void~
+West City: East Central Avenue~
 ~
 0 4 1
+D1
+~
+~
+0 -1 305738
+D3
+~
+~
+0 -1 305736
 S
 #305738
-Floating in a void~
+West City: East Central Avenue~
 ~
 0 4 1
+D1
+~
+~
+0 -1 305739
+D3
+~
+~
+0 -1 305737
 S
 #305739
-Floating in a void~
+West City: East Central Avenue~
 ~
 0 4 1
+D1
+~
+~
+0 -1 305740
+D3
+~
+~
+0 -1 305738
 S
 #305740
-Floating in a void~
+West City: East Central Avenue~
 ~
 0 4 1
+D3
+~
+~
+0 -1 305739
 S
 #305741
 Floating in a void~
