@@ -122,6 +122,7 @@ mea $n &YWithout saying a word, Mini FRED presents you with a holographic displa
 mea $n &Y----------------------------------------------------------
 mea $n &YSimply speak the following number to depart to that floor.
 mea $n &Y0: Entry Floor
+mea $n &Y1: Transport Station
 mea $n &Y3: Advanced Facility & Armory
 mea $n &Y4: Basic Training & Healing Tanks
 mea $n &YB1: Anomaly Research Facility [&RNEWBIE QUEST&Y]
@@ -154,6 +155,11 @@ mea $n &YYou disappear and reappear in a flash of light!&d
 mer $n &Y$n disappears in a flash of light!&d
 mptransfer $n 305489
 endif
+~
+> speech_prog '1'~
+mea $n &YThe turbolift whirs into motion, whisking you away to your chosen floor.&d
+mer $n &YThe turbolift whirs into motion, dropping $n off at their chosen floor.&d
+mptransfer $n 304727
 ~
 |
 #303904
@@ -2815,11 +2821,11 @@ punch
 |
 #305700
 android 19r~
-Android 19R~
+An Android 19R~
 A mass-replicated Android 19 model sifts through the rubble.
 ~
 ~
-1073741825 0 0 C
+33 0 0 C
 240
 1 0 50 1d20+10000 2d5+0
 -1 30000000
@@ -2839,6 +2845,15 @@ mea $n &CAndroid 19R says 'Memory: Subject $n -- Threat level -- Zero!'&d
 mpkill $n
 endif
 endif
+~
+> fight_prog 20~
+eye
+~
+> fight_prog 10~
+eye
+~
+> entry_prog 100~
+mprestore $i 30000
 ~
 |
 #306032
@@ -20304,24 +20319,63 @@ D3
 0 -1 304724
 S
 #304727
-Floating in a void~
+ESF Transport Station~
 ~
 0 4 1
+D0
+~
+~
+0 -1 304728
+D2
+~
+~
+0 -1 304124
 S
 #304728
-Floating in a void~
+ESF Transport Station: Waiting Area~
 ~
 0 4 1
+D1
+~
+~
+0 -1 304730
+D2
+~
+~
+0 -1 304727
+D3
+~
+~
+0 -1 304729
 S
 #304729
-Floating in a void~
+ESF Transport Station: Arrivals~
 ~
 0 4 1
+D1
+~
+~
+0 -1 304728
 S
 #304730
-Floating in a void~
+ESF Transport Station: Departures~
 ~
 0 4 1
+D3
+~
+~
+0 -1 304728
+> entry_prog 100~
+mea $n &CA monotone voice says 'Hello, traveler. Currently, this station is only transporting tavelers to &RWest City&C.'&d
+~
+> speech_prog 'west city'~
+mea $n &cA robotic arm plucks you from where you're standing and places you neatly into a turbocar.&d
+mer $n &cA robotic arm plucks $n from where they're standing and places them neatly into a turbocar.&d
+mea $n &cIn a flash, your car arrives at West City.&d
+mptransfer $n 305838
+mpat 305838 mpforce $n look
+~
+|
 S
 #304731
 Floating in a void~
@@ -34266,6 +34320,17 @@ D3
 ~
 ~
 0 -1 305837
+> entry_prog 100~
+mea $n &CA monotone voice says 'Hello, traveler. Currently, this station is only transporting tavelers to the &RESF&C Facility.'&d
+~
+> speech_prog 'esf'~
+mea $n &cA robotic arm plucks you from where you're standing and places you neatly into a turbocar.&d
+mer $n &cA robotic arm plucks $n from where they're standing and places them neatly into a turbocar.&d
+mea $n &cIn a flash, your car arrives at the ESF Facility.&d
+mptransfer $n 304729
+mpat 304729 mpforce $n look
+~
+|
 S
 #305840
 Route 28~
@@ -51644,6 +51709,30 @@ D 0 305831 3 1
 D 0 305832 1 1
 D 0 305832 2 1
 D 0 305834 0 1
+M 1 305700 1 305890
+M 1 305700 1 305888
+M 1 305700 1 305886
+M 1 305700 1 305884
+M 1 305700 1 305882
+M 1 305700 1 305880
+M 1 305700 1 305878
+M 1 305700 1 305868
+M 1 305700 1 305866
+M 1 305700 1 305847
+M 1 305700 1 305849
+M 1 305700 1 305851
+M 1 305700 1 305853
+M 1 305700 1 305855
+M 1 305700 1 305859
+M 1 305700 1 305870
+M 1 305700 1 305872
+M 1 305700 1 305874
+M 1 305700 1 305876
+M 1 305700 1 305857
+M 1 305700 1 305861
+M 1 305700 1 305863
+M 1 305700 1 305865
+M 1 305700 1 305858
 S
 
 
