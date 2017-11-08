@@ -33179,9 +33179,13 @@ D3
 0 -1 305757
 S
 #305759
-Central and Beyman~
+Highway Ramp at Central and Beyman~
 ~
 0 4 1
+D0
+~
+~
+0 -1 305840
 D1
 ~
 ~
@@ -34203,7 +34207,7 @@ S
 #305837
 West City Transport Terminal~
 ~
-0 4 1
+0 4 0
 D1
 ~
 ~
@@ -34220,7 +34224,7 @@ S
 #305838
 West City Transport Terminal: Arrivals~
 ~
-0 4 1
+0 4 0
 D1
 ~
 ~
@@ -34229,46 +34233,119 @@ S
 #305839
 West City Transport Terminal: Departures~
 ~
-0 4 1
+0 4 0
 D3
 ~
 ~
 0 -1 305837
 S
 #305840
-Floating in a void~
+Route 28~
 ~
 0 4 1
+D0
+~
+~
+0 -1 305841
+D2
+~
+~
+0 -1 305759
 S
 #305841
-Floating in a void~
+Route 28~
 ~
 0 4 1
+D0
+~
+~
+0 -1 305842
+D2
+~
+~
+0 -1 305840
 S
 #305842
-Floating in a void~
+Route 28~
 ~
 0 4 1
+D0
+~
+~
+0 -1 305843
+D2
+~
+~
+0 -1 305841
 S
 #305843
-Floating in a void~
+West City Time Fracture~
 ~
 0 4 1
+D0
+~
+~
+0 -1 305844
+D2
+~
+~
+0 -1 305842
+> entry_prog 100~
+if wasinroom($n) == 305844
+else
+if wearingvnum($n) 305011
+mea $n &cThe voice of Doctor Emalia crackles over your communicator.&d
+mea $n &CDoctor Emalia says 'This is where all the trouble in West City seems to be happening.'&d
+mea $n &CDoctor Emalia says 'You'll need to raise your energy to an incredibly high level to pass through here. Try powering up and walking through.'&d
+endif
+endif
+~
+|
 S
 #305844
-Floating in a void~
+West City Time Fracture~
 ~
 0 4 1
+D0
+~
+~
+0 -1 305845
+D2
+~
+~
+0 -1 305843
+> entry_prog 100~
+if pl($n) < 30000000
+mea $n &cThe intense energy from the rift forces you back outside!&d
+mea $n &CDoctor Emalia says 'You're not putting out enough energy, $n!'&d
+mpforce $n south
+else
+mea $n &YThe energy from the rift washes over your body, but your high ki holds it at bay.&d
+endif
+~
+|
 S
 #305845
-Floating in a void~
+Time Fracture: Route 28~
 ~
 0 4 1
+D0
+~
+~
+0 -1 305846
+D2
+~
+~
+0 -1 305844
 S
 #305846
-Floating in a void~
+Time Fracture: Route 28~
 ~
 0 4 1
+D2
+~
+~
+0 -1 305845
 S
 #305847
 Floating in a void~
