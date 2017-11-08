@@ -2856,6 +2856,36 @@ eye
 mprestore $i 30000
 ~
 |
+#305701
+cybaman mkii~
+A Cybaman MKII~
+An advanced cybaman hunts for survivors to exterminate.
+~
+~
+1073741827 0 0 C
+240
+1 0 50 1d20+15000 2d5+0
+-1 60000000
+112 112 0
+2000 2000 1500 1500 0
+0 0 0 0 0
+0 0 0 0 0 0 6
+0 0 0 0 0 0 0 0
+> greet_prog 100~
+if ispc($n)
+if isfight($i)
+glower
+else
+mprestore $i 30000
+mea $n &cThe Cybaman gurgles incoherently and attacks!&d
+mpkill $n
+endif
+endif
+~
+> fight_prog 30~
+eye
+~
+|
 #306032
 gnarly dude~
 a gnarly dude~
@@ -34837,6 +34867,10 @@ S
 Collapsed Overpass~
 ~
 0 0 1
+D0
+~
+~
+0 -1 305891
 D2
 ~
 ~
@@ -35029,144 +35063,492 @@ D2
 0 -1 305889
 S
 #305891
-Floating in a void~
+Drain Pipe~
 ~
 0 4 1
+D0
+~
+~
+0 -1 305892
+D2
+~
+~
+0 -1 305876
 S
 #305892
-Floating in a void~
+Walking Through Muck~
 ~
 0 4 1
+D0
+~
+~
+0 -1 305893
+D1
+~
+~
+0 -1 305910
+D2
+~
+~
+0 -1 305891
+D3
+~
+~
+0 -1 305909
 S
 #305893
-Floating in a void~
+Walking Through Muck~
 ~
 0 4 1
+D0
+~
+~
+0 -1 305894
+D1
+~
+~
+0 -1 305911
+D2
+~
+~
+0 -1 305892
+D3
+~
+~
+0 -1 305908
 S
 #305894
-Floating in a void~
+Walking Through Muck~
 ~
 0 4 1
+D0
+~
+~
+0 -1 305895
+D1
+~
+~
+0 -1 305912
+D2
+~
+~
+0 -1 305893
+D3
+~
+~
+0 -1 305907
 S
 #305895
-Floating in a void~
+Walking Through Muck~
 ~
 0 4 1
+D0
+~
+~
+0 -1 305896
+D1
+~
+~
+0 -1 305913
+D2
+~
+~
+0 -1 305894
+D3
+~
+~
+0 -1 305906
 S
 #305896
-Floating in a void~
+Walking Through Muck~
 ~
 0 4 1
+D0
+~
+~
+0 -1 305897
+D1
+~
+~
+0 -1 305914
+D2
+~
+~
+0 -1 305895
+D3
+~
+~
+0 -1 305905
 S
 #305897
-Floating in a void~
+Walking Through Muck~
 ~
 0 4 1
+D0
+~
+~
+0 -1 305898
+D1
+~
+~
+0 -1 305915
+D2
+~
+~
+0 -1 305896
+D3
+~
+~
+0 -1 305904
 S
 #305898
-Floating in a void~
+Walking Through Muck~
 ~
 0 4 1
+D0
+~
+~
+0 -1 305899
+D1
+~
+~
+0 -1 305916
+D2
+~
+~
+0 -1 305897
+D3
+~
+~
+0 -1 305903
 S
 #305899
-Floating in a void~
+Walking Through Muck~
 ~
 0 4 1
+D0
+~
+~
+0 -1 305900
+D1
+~
+~
+0 -1 305917
+D2
+~
+~
+0 -1 305898
+D3
+~
+~
+0 -1 305902
 S
 #305900
-Floating in a void~
+Walking Through Muck~
 ~
 0 4 1
+D1
+~
+~
+0 -1 305918
+D2
+~
+~
+0 -1 305899
+D3
+~
+~
+0 -1 305901
 S
 #305901
-Floating in a void~
+Inside a Drain Pipe~
 ~
 0 4 1
+D1
+~
+~
+0 -1 305900
+D2
+~
+~
+0 -1 305902
 S
 #305902
-Floating in a void~
+Inside a Drain Pipe~
 ~
 0 4 1
+D0
+~
+~
+0 -1 305901
+D1
+~
+~
+0 -1 305899
+D2
+~
+~
+0 -1 305903
 S
 #305903
-Floating in a void~
+Inside a Drain Pipe~
 ~
 0 4 1
+D0
+~
+~
+0 -1 305902
+D1
+~
+~
+0 -1 305898
+D2
+~
+~
+0 -1 305904
 S
 #305904
-Floating in a void~
+Inside a Drain Pipe~
 ~
 0 4 1
+D0
+~
+~
+0 -1 305903
+D1
+~
+~
+0 -1 305897
+D2
+~
+~
+0 -1 305905
 S
 #305905
-Floating in a void~
+Inside a Drain Pipe~
 ~
 0 4 1
+D0
+~
+~
+0 -1 305904
+D1
+~
+~
+0 -1 305896
+D2
+~
+~
+0 -1 305906
 S
 #305906
-Floating in a void~
+Inside a Drain Pipe~
 ~
 0 4 1
+D0
+~
+~
+0 -1 305905
+D1
+~
+~
+0 -1 305895
+D2
+~
+~
+0 -1 305907
 S
 #305907
-Floating in a void~
+Inside a Drain Pipe~
 ~
 0 4 1
+D0
+~
+~
+0 -1 305906
+D1
+~
+~
+0 -1 305894
+D2
+~
+~
+0 -1 305908
 S
 #305908
-Floating in a void~
+Inside a Drain Pipe~
 ~
 0 4 1
+D0
+~
+~
+0 -1 305907
+D1
+~
+~
+0 -1 305893
+D2
+~
+~
+0 -1 305909
 S
 #305909
-Floating in a void~
+Inside a Drain Pipe~
 ~
 0 4 1
+D0
+~
+~
+0 -1 305908
+D1
+~
+~
+0 -1 305892
 S
 #305910
-Floating in a void~
+Inside a Drain Pipe~
 ~
 0 4 1
+D0
+~
+~
+0 -1 305911
+D3
+~
+~
+0 -1 305892
 S
 #305911
-Floating in a void~
+Inside a Drain Pipe~
 ~
 0 4 1
+D0
+~
+~
+0 -1 305912
+D2
+~
+~
+0 -1 305910
+D3
+~
+~
+0 -1 305893
 S
 #305912
-Floating in a void~
+Inside a Drain Pipe~
 ~
 0 4 1
+D0
+~
+~
+0 -1 305913
+D2
+~
+~
+0 -1 305911
+D3
+~
+~
+0 -1 305894
 S
 #305913
-Floating in a void~
+Inside a Drain Pipe~
 ~
 0 4 1
+D0
+~
+~
+0 -1 305914
+D2
+~
+~
+0 -1 305912
+D3
+~
+~
+0 -1 305895
 S
 #305914
-Floating in a void~
+Inside a Drain Pipe~
 ~
 0 4 1
+D0
+~
+~
+0 -1 305915
+D2
+~
+~
+0 -1 305913
+D3
+~
+~
+0 -1 305896
 S
 #305915
-Floating in a void~
+Inside a Drain Pipe~
 ~
 0 4 1
+D0
+~
+~
+0 -1 305916
+D2
+~
+~
+0 -1 305914
+D3
+~
+~
+0 -1 305897
 S
 #305916
-Floating in a void~
+Inside a Drain Pipe~
 ~
 0 4 1
+D0
+~
+~
+0 -1 305917
+D2
+~
+~
+0 -1 305915
+D3
+~
+~
+0 -1 305898
 S
 #305917
-Floating in a void~
+Inside a Drain Pipe~
 ~
 0 4 1
+D0
+~
+~
+0 -1 305918
+D2
+~
+~
+0 -1 305916
+D3
+~
+~
+0 -1 305899
 S
 #305918
-Floating in a void~
+Inside a Drain Pipe~
 ~
 0 4 1
+D2
+~
+~
+0 -1 305917
+D3
+~
+~
+0 -1 305900
 S
 #305919
 Floating in a void~
@@ -51733,6 +52115,33 @@ M 1 305700 1 305861
 M 1 305700 1 305863
 M 1 305700 1 305865
 M 1 305700 1 305858
+M 1 305701 1 305901
+M 1 305701 1 305902
+M 1 305701 1 305903
+M 1 305701 1 305904
+M 1 305701 1 305905
+M 1 305701 1 305906
+M 1 305701 1 305907
+M 1 305701 1 305908
+M 1 305701 1 305909
+M 1 305701 1 305892
+M 1 305701 1 305893
+M 1 305701 1 305894
+M 1 305701 1 305895
+M 1 305701 1 305896
+M 1 305701 1 305897
+M 1 305701 1 305898
+M 1 305701 1 305899
+M 1 305701 1 305900
+M 1 305701 1 305918
+M 1 305701 1 305917
+M 1 305701 1 305916
+M 1 305701 1 305915
+M 1 305701 1 305914
+M 1 305701 1 305913
+M 1 305701 1 305912
+M 1 305701 1 305911
+M 1 305701 1 305910
 S
 
 
