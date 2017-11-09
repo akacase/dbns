@@ -59,7 +59,7 @@ A better android training partner is prepared to fight you.
 ~
 3 0 0 C
 150
-1 0 100 1d20+0 2d5+0
+1 0 100 1d20+100 2d5+0
 -1 50
 112 112 0
 10 10 10 10 10
@@ -70,6 +70,15 @@ A better android training partner is prepared to fight you.
 mpecho &YThe android explodes into rattling chunks but pulls itself quickly together.&D
 mpmload 102
 ~
+> act_prog ready~
+if isfight($i)
+slap $n
+mpechoat $n You can't do that while the mob is in combat.
+else
+mprestore self 30000
+nod $n
+endif
+~
 |
 #103
 advanced android~
@@ -79,7 +88,7 @@ An advanced android training partner is prepared to fight you.
 ~
 3 0 0 C
 175
-1 0 100 1d20+0 2d5+0
+1 0 100 1d20+120 2d5+0
 -1 150
 112 112 0
 10 10 10 10 10
@@ -90,6 +99,15 @@ An advanced android training partner is prepared to fight you.
 mpecho &YThe android explodes into rattling chunks but pulls itself quickly together.&D
 mpmload 103
 ~
+> act_prog ready~
+if isfight($i)
+slap $n
+mpechoat $n You can't do that while the mob is in combat.
+else
+mprestore self 30000
+nod $n
+endif
+~
 |
 #104
 hyper android~
@@ -99,7 +117,7 @@ A hyper android training partner is prepared to fight you.
 ~
 3 0 0 C
 200
-1 0 100 1d20+0 2d5+0
+1 0 100 1d20+140 2d5+0
 -1 450
 112 112 0
 10 10 10 10 10
@@ -110,6 +128,15 @@ A hyper android training partner is prepared to fight you.
 mpecho &YThe android explodes into rattling chunks but pulls itself quickly together.&D
 mpmload 104
 ~
+> act_prog ready~
+if isfight($i)
+slap $n
+mpechoat $n You can't do that while the mob is in combat.
+else
+mprestore self 30000
+nod $n
+endif
+~
 |
 #105
 supreme android~
@@ -119,7 +146,7 @@ A supreme android training partner is prepared to fight you.
 ~
 3 0 0 C
 225
-1 0 100 1d20+0 2d5+0
+1 0 100 1d20+160 2d5+0
 -1 1350
 112 112 0
 10 10 10 10 10
@@ -130,6 +157,15 @@ A supreme android training partner is prepared to fight you.
 mpecho &YThe android explodes into rattling chunks but pulls itself quickly together.&D
 mpmload 105
 ~
+> act_prog ready~
+if isfight($i)
+slap $n
+mpechoat $n You can't do that while the mob is in combat.
+else
+mprestore self 30000
+nod $n
+endif
+~
 |
 #106
 ultimate android~
@@ -139,7 +175,7 @@ An ultimate android training partner is prepared to fight you.
 ~
 3 0 0 C
 250
-1 0 100 1d20+0 2d5+0
+1 0 100 1d20+200 2d5+0
 -1 4050
 112 112 0
 10 10 10 10 10
@@ -149,6 +185,15 @@ An ultimate android training partner is prepared to fight you.
 > death_prog 100~
 mpecho &YThe android explodes into rattling chunks but pulls itself quickly together.&D
 mpmload 106
+~
+> act_prog ready~
+if isfight($i)
+slap $n
+mpechoat $n You can't do that while the mob is in combat.
+else
+mprestore self 30000
+nod $n
+endif
 ~
 |
 #107
@@ -481,14 +526,9 @@ D5
 ~
 0 -1 103
 > speech_prog 'i agree'~
-if pl($n) > 2500
 mpecho Okay.
 mptransfer $n 6000
 mpat 6000 mpforce $n look
-else
-mpecho &CA mysterious voice says 'Your training is still incomplete.'
-mpecho &CA mysterious voice says, 'Return here when you've reached at least 5,000 Powerlevel.'
-endif
 ~
 |
 S
@@ -559,6 +599,14 @@ endif
 ~
 > speech_prog info~
 mpecho &CA robotic voice says, '50 powerlevel.'&D
+~
+> entry_prog 100~
+if ispc($n)
+if pl($n) < 25
+mea $n &CA better android training partner says 'Go gravity train first, $n. I don't want your meatbag blood on my hands.'&d
+mpforce $n d
+endif
+endif
 ~
 |
 S

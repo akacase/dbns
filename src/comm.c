@@ -2455,8 +2455,8 @@ nanny(DESCRIPTOR_DATA *d, char *argument)
 	name_stamp_stats(ch);
 
 	ch->level = 1;
-	ch->exp = 5;
-	ch->pl = 5;
+	ch->exp = 50;
+	ch->pl = 50;
 	ch->heart_pl = 5;
 	ch->max_hit += race_table[ch->race]->hit;
 	ch->max_mana += race_table[ch->race]->mana;
@@ -3324,7 +3324,7 @@ default_fprompt(CHAR_DATA * ch)
 				if (IS_NPC(ch) || IS_IMMORTAL(ch))
 					strcat(buf, " %i%R");
 			}
-			strcat(buf, "\n\r<Enemy(&R%y&w) Focus(&C%f&w) Armor(&c%z&w)> ");
+			strcat(buf, "\n\r<Enemy(&R%y&w) Focus(&C%f&w)> ");
 			break;
 		case 1:
 			if (is_android(ch)) {
@@ -3376,7 +3376,7 @@ default_fprompt(CHAR_DATA * ch)
 				if (IS_NPC(ch) || IS_IMMORTAL(ch))
 					strcat(buf, " %i%R");
 			}
-			strcat(buf, "\n\r<Enemy(&R%y&w) Focus(&C%f&w) Armor(&c%z&w)> ");
+			strcat(buf, "\n\r<Enemy(&R%y&w) Focus(&C%f&w)> ");
 			break;
 		case 3:
 			if (is_android(ch)) {
@@ -3429,7 +3429,7 @@ default_fprompt(CHAR_DATA * ch)
 			if (IS_NPC(ch) || IS_IMMORTAL(ch))
 				strcat(buf, " %i%R");
 		}
-		strcat(buf, "\n\r<Enemy(&R%y&w) Focus(&C%f&w) Armor(&c%z&w)> ");
+		strcat(buf, "\n\r<Enemy(&R%y&w) Focus(&C%f&w)> ");
 	}
 
 	return (buf);
