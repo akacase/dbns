@@ -4141,9 +4141,7 @@ void do_train(CHAR_DATA *ch, char *argument)
 		int safegrav = 0;
 
 	one_argument(argument, arg);
-	gravset = ch->gravSetting;
 	ch->gravAcc = (ch->gravExp / 1000);
-	safegrav = ch->gravAcc;
 	
 	if (IS_NPC(ch))
 		return;
@@ -4163,23 +4161,23 @@ void do_train(CHAR_DATA *ch, char *argument)
 		return;
 	}
 	if (!str_cmp(arg, "increase")) {
-		gravset + 1;
+		ch->gravSetting += 1;
 		pager_printf(ch, "&GYou crank the dial up to %d times gravity.\n\r", gravset);
 		return;
 	} else if (!str_cmp(arg, "decrease")) {
-		if ((gravset - 1) < 1) {
-			gravset = 1;
+		if ((ch->gravSetting - 1) < 1) {
+			ch->gravSetting = 1;
 			pager_printf(ch, "&GThis isn't an anti-gravity chamber!\n\r", NULL);
 			return;
 		}
 		else {
-			gravset - 1;
+			ch->gravSetting -= 1;
 			pager_printf(ch, "&GYou crank the dial down to %d times gravity.\n\r", gravset);
 			return;
 		}
 	} else if (!str_cmp(arg, "safe")) {
-		gravset = safegrav;
-		pager_printf(ch, "&GThe safety function automatically resets the machine to %d times gravity.\n\r", safegrav);
+		ch->gravSetting = ch->gravAcc;
+		pager_printf(ch, "&GThe safety function automatically resets the machine to %d times gravity.\n\r", ch->gravAcc);
 		return;
 	} else if (!str_cmp(arg, "pushup")) {
 
