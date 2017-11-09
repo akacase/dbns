@@ -4142,6 +4142,7 @@ void do_train(CHAR_DATA *ch, char *argument)
 
 	one_argument(argument, arg);
 	gravset = ch->gravSetting;
+	ch->gravAcc = (ch->gravExp / 1000);
 	safegrav = ch->gravAcc;
 	
 	if (IS_NPC(ch))
@@ -4162,7 +4163,7 @@ void do_train(CHAR_DATA *ch, char *argument)
 		return;
 	}
 	if (!str_cmp(arg, "increase")) {
-		gravset += 1;
+		gravset + 1;
 		pager_printf(ch, "&GYou crank the dial up to %d times gravity.\n\r", gravset);
 		return;
 	} else if (!str_cmp(arg, "decrease")) {
@@ -4172,7 +4173,7 @@ void do_train(CHAR_DATA *ch, char *argument)
 			return;
 		}
 		else {
-			gravset -= 1;
+			gravset - 1;
 			pager_printf(ch, "&GYou crank the dial down to %d times gravity.\n\r", gravset);
 			return;
 		}
