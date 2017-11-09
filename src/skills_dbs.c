@@ -5239,7 +5239,7 @@ do_meditate(CHAR_DATA * ch, char *argument)
             }
 		        statComb = ((get_curr_str(ch) + get_curr_dex(ch) + get_curr_int(ch) + get_curr_con(ch)) - 39);
 			increase = number_range(1,3);
-			xp_gain = (long double)increase / 100 * statComb;
+			xp_gain = (long double)increase / 1000 * statComb;
 			gain_exp(ch, xp_gain);
 			ch->mana += (float) right / 50 * ch->max_mana;
 		} else {

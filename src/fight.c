@@ -4643,7 +4643,7 @@ damage(CHAR_DATA * ch, CHAR_DATA * victim, int dam, int dt)
 				    NULL);
 
 				act(AT_HIT, buf1, ch, NULL, victim, TO_CHAR);
-			} else if (xp_gain_post > 1) {
+			} else if (xp_gain_post >= 1) {
 				sprintf(buf1, "Your pl increases by %s points.",
 				    num_punct_ld(xp_gain_post));
 				act(AT_HIT, buf1, ch, NULL, victim, TO_CHAR);
