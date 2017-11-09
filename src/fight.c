@@ -2216,9 +2216,10 @@ violence_update(void)
 		}
 		if (xIS_SET((ch)->affected_by, AFF_PUSHUPS) && xIS_SET((ch)->in_room->room_flags, ROOM_GRAV)) {
 		  // check if position has changed to not standing
-		  if(ch->position < POS_STANDING) {
+		  if(ch->position < POS_STANDING
+			&& ch->position != POS_DEAD) {
 		    xREMOVE_BIT((ch)->affected_by, AFF_PUSHUPS);
-		    send_to_char("You cannot gravity train in such a lax state.\n\r", ch);
+		    send_to_char("You cannot gravity train in such a state.\n\r", ch);
 		  }
 		  if(!ch->desc)
 			xREMOVE_BIT((ch)->affected_by, AFF_PUSHUPS);
@@ -2226,27 +2227,37 @@ violence_update(void)
 		  char buf[MAX_STRING_LENGTH];
 		  int trainmessage = 0;
 		  long double xp_gain = 0;
+		  long double base_xp = 0;
 		  int gravLevel = 0;
-		  int minLF;
 		  int increase = 0;
+		  int safegrav = 0;
+		  int gravdam = 0;
+		  int safediff = 0;
+		  int damrange = 0;
+		  int statbonus = 0;
+		  int breakbonus = 0;
+		  double overacc_bonus = 0;
+		  long double xp_bonus = 0;
             
 		  increase = number_range(1, 3);
-			
-		  gravLevel = ch->gravSetting;
+		  damrange = number_range(1, 6);
+		
+		  ch->gravAcc = (ch->gravExp / 1000);
 		  trainmessage = number_range(1, 100);
-		  minLF = 5;
-			
-		  if (ch->hit <= minLF) {
-		    xREMOVE_BIT((ch)->affected_by, AFF_PUSHUPS);
-		    act(AT_WHITE, "You almost pass out from training too hard.", ch, NULL, NULL, TO_CHAR);
-		    act(AT_WHITE, "$n almost passes out from training too hard.", ch, NULL, NULL, TO_NOTVICT);
-		  }
+		  safediff = ((ch->gravSetting - ch->gravAcc) + 1);
+		  gravdam = (pow(safediff, 3) * damrange);
+		  gravLevel = ch->gravSetting;
+		  statbonus = safediff + 15;
+		  breakbonus = statbonus * 2;
+		  overacc_bonus = 0.1 * safediff;
 
 		  if (trainmessage < 65) {
-		    xp_gain = (long double)increase / 1000 * gravLevel;
-		    ch->hit--;
-		    ch->mana -= URANGE(0, ch->mana * 0.005, ch->mana);
+		    base_xp = (long double)increase / 6 * gravLevel;
+			xp_bonus = (long double)base_xp * overacc_bonus;
+			xp_gain = (long double)base_xp + xp_bonus;
 		    gain_exp(ch, xp_gain);
+		    pager_printf(ch, "&GYou perform a push-up in %d times gravity, your strength steadily building.\n\r", gravLevel);
+			ch->gravExp += 100;
 			if (xp_gain > 1) {
 				sprintf(buf, "Your power level increases by %s points.", num_punct(xp_gain));
 				act(AT_HIT, buf, ch, NULL, NULL, TO_CHAR);
@@ -2255,14 +2266,32 @@ violence_update(void)
 				sprintf(buf, "Your power level increases very slightly.", NULL);
 				act(AT_HIT, buf, ch, NULL, NULL, TO_CHAR);
 			}
-		    stat_train(ch, "str", 15);
+		    stat_train(ch, "str", statbonus);
+			if (ch->mana - gravdam > 0)
+				ch->mana -= gravdam;
+			else if (ch->mana - gravdam <= 0) {
+				ch->mana = 0;
+				ch->hit -= (gravdam / 3);
+				act( AT_RED, "Your bones pop and creak ominously.", ch, NULL, NULL, TO_CHAR );
+				if (ch->hit - (gravdam / 3) < 0) {
+					update_pos(ch);
+					if (ch->position == POS_DEAD) {
+						act( AT_RED, "Your body has been crushed!", ch, NULL, NULL, TO_CHAR );
+						act( AT_RED, "$n collapses, DEAD, $s body crushed under intense gravity.", ch, NULL, NULL, TO_NOTVICT );
+						sprintf( buf, "%s is crushed into a pancake under intense gravity", ch->name );
+						do_info(ch, buf);
+						raw_kill(ch, ch);
+					}
+				}
+			}
 		  }
 		  if (trainmessage >= 65 && trainmessage < 99) {
-		    xp_gain = (long double)increase / 1000 * gravLevel;
-		    ch->hit--;
-		    ch->mana -= URANGE(0, ch->mana * 0.005, ch->mana);
-		    pager_printf(ch, "&GYou perform a push-up in %d times gravity, your strength steadily building.\n\r", gravLevel);
+		    base_xp = (long double)increase / 6 * gravLevel;
+			xp_bonus = (long double)base_xp * overacc_bonus;
+			xp_gain = (long double)base_xp + xp_bonus;
 		    gain_exp(ch, xp_gain);
+		    pager_printf(ch, "&GYou perform a push-up in %d times gravity, your strength steadily building.\n\r", gravLevel);
+			ch->gravExp += 100;
 			if (xp_gain > 1) {
 				sprintf(buf, "Your power level increases by %s points.", num_punct(xp_gain));
 				act(AT_HIT, buf, ch, NULL, NULL, TO_CHAR);
@@ -2271,18 +2300,53 @@ violence_update(void)
 				sprintf(buf, "Your power level increases very slightly.", NULL);
 				act(AT_HIT, buf, ch, NULL, NULL, TO_CHAR);
 			}
-		    stat_train(ch, "str", 15);
+		    stat_train(ch, "str", statbonus);
+			if (ch->mana - gravdam > 0)
+				ch->mana -= gravdam;
+			else if (ch->mana - gravdam <= 0) {
+				ch->mana = 0;
+				ch->hit -= (gravdam / 3);
+				act( AT_RED, "Your bones pop and creak ominously.", ch, NULL, NULL, TO_CHAR );
+				if (ch->hit - (gravdam / 3) < 0) {
+					update_pos(ch);
+					if (ch->position == POS_DEAD) {
+						act( AT_RED, "Your body has been crushed!", ch, NULL, NULL, TO_CHAR );
+						act( AT_RED, "$n collapses, DEAD, $s body crushed under intense gravity.", ch, NULL, NULL, TO_NOTVICT );
+						sprintf( buf, "%s is crushed into a pancake under intense gravity", ch->name );
+						do_info(ch, buf);
+						raw_kill(ch, ch);
+					}
+				}
+			}
 		  }
 		  if (trainmessage >= 99) {
-		    xp_gain = (long double)increase / 500 * gravLevel;
-		    ch->hit--;
-		    ch->mana -= URANGE(0, ch->mana * 0.010, ch->mana);
+		    base_xp = (long double)increase / 3 * gravLevel;
+			xp_bonus = (long double)base_xp * overacc_bonus;
+			xp_gain = (long double)base_xp + xp_bonus;
+		    gain_exp(ch, xp_gain);
+			ch->gravExp += 100;
 		    pager_printf(ch, "&GPushing past your normal limits, you perform a series of one-armed push-ups!\n\r", gravLevel);
 		    act(AT_WHITE, "$n does a set of one-armed pushups in rapid-fire succession.", ch, NULL, NULL, TO_NOTVICT);
-		    gain_exp(ch, xp_gain);
 			sprintf(buf, "Your power level suddenly increases by %s points.", num_punct(xp_gain));
 		    act(AT_HIT, buf, ch, NULL, NULL, TO_CHAR);
-		    stat_train(ch, "str", 30);
+		    stat_train(ch, "str", breakbonus);
+			if (ch->mana - gravdam > 0)
+				ch->mana -= gravdam;
+			else if (ch->mana - gravdam <= 0) {
+				ch->mana = 0;
+				ch->hit -= (gravdam / 3);
+				act( AT_RED, "Your bones pop and creak ominously.", ch, NULL, NULL, TO_CHAR );
+				if (ch->hit - (gravdam / 3) < 0) {
+					update_pos(ch);
+					if (ch->position == POS_DEAD) {
+						act( AT_RED, "Your body has been crushed!", ch, NULL, NULL, TO_CHAR );
+						act( AT_RED, "$n collapses, DEAD, $s body crushed under intense gravity.", ch, NULL, NULL, TO_NOTVICT );
+						sprintf( buf, "%s is crushed into a pancake under intense gravity", ch->name );
+						do_info(ch, buf);
+						raw_kill(ch, ch);
+					}
+				}
+			}
 		  }
 		}
 		if (xIS_SET((ch)->affected_by, AFF_SHADOWBOXING) && xIS_SET((ch)->in_room->room_flags, ROOM_GRAV)) {
