@@ -2242,7 +2242,7 @@ violence_update(void)
 		  increase = number_range(1, 3);
 		  damrange = number_range(1, 6);
 		
-		  ch->gravAcc = (ch->gravExp / 1000);
+		  ch->gravAcc = ((ch->gravExp / 1000) + 1);
 		  if (ch->gravAcc < 1)
 			  ch->gravAcc = 1;
 		  trainmessage = number_range(1, 100);
@@ -2383,7 +2383,7 @@ violence_update(void)
 		  increase = number_range(1, 3);
 		  damrange = number_range(1, 6);
 		
-		  ch->gravAcc = (ch->gravExp / 1000);
+		  ch->gravAcc = ((ch->gravExp / 1000) + 1);
 		  if (ch->gravAcc < 1)
 				ch->gravAcc = 1;
 		  trainmessage = number_range(1, 100);
@@ -2524,7 +2524,7 @@ violence_update(void)
 		  increase = number_range(1, 3);
 		  damrange = number_range(1, 6);
 		
-		  ch->gravAcc = (ch->gravExp / 1000);
+		  ch->gravAcc = ((ch->gravExp / 1000) + 1);
 		  if (ch->gravAcc < 1)
 				ch->gravAcc = 1;
 		  trainmessage = number_range(1, 100);
