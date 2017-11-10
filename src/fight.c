@@ -2244,9 +2244,9 @@ violence_update(void)
 		
 		  ch->gravAcc = (ch->gravExp / 1000);
 		  trainmessage = number_range(1, 100);
-		  safediff = ((ch->gravSetting - ch->gravAcc) + 2);
-		  if (safediff < 2)
-			  safediff = 2;
+		  safediff = ((ch->gravSetting - ch->gravAcc) + 1);
+		  if (safediff < 1)
+			  safediff = 1;
 		  gravdam = (pow(safediff, 3) * damrange);
 		  gravLevel = ch->gravSetting;
 		  statbonus = safediff + 15;
@@ -2257,6 +2257,7 @@ violence_update(void)
 		    base_xp = (long double)increase / 24 * gravLevel;
 			xp_bonus = (long double)base_xp * overacc_bonus;
 			xp_gain = (long double)base_xp + xp_bonus;
+			gain_exp(ch, xp_gain);
 			ch->gravExp += increase;
 			if (xp_gain > 1) {
 				sprintf(buf, "Your power level increases by %s points.", num_punct(xp_gain));
@@ -2379,9 +2380,9 @@ violence_update(void)
 		
 		  ch->gravAcc = (ch->gravExp / 1000);
 		  trainmessage = number_range(1, 100);
-		  safediff = ((ch->gravSetting - ch->gravAcc) + 2);
-		  if (safediff < 2)
-			  safediff = 2;
+		  safediff = ((ch->gravSetting - ch->gravAcc) + 1);
+		  if (safediff < 1)
+			  safediff = 1;
 		  gravdam = (pow(safediff, 3) * damrange);
 		  gravLevel = ch->gravSetting;
 		  statbonus = safediff + 15;
@@ -2392,6 +2393,7 @@ violence_update(void)
 		    base_xp = (long double)increase / 24 * gravLevel;
 			xp_bonus = (long double)base_xp * overacc_bonus;
 			xp_gain = (long double)base_xp + xp_bonus;
+			gain_exp(ch, xp_gain);
 			ch->gravExp += increase;
 			if (xp_gain > 1) {
 				sprintf(buf, "Your power level increases by %s points.", num_punct(xp_gain));
@@ -2514,9 +2516,9 @@ violence_update(void)
 		
 		  ch->gravAcc = (ch->gravExp / 1000);
 		  trainmessage = number_range(1, 100);
-		  safediff = ((ch->gravSetting - ch->gravAcc) + 2);
-		  if (safediff < 2)
-			  safediff = 2;
+		  safediff = ((ch->gravSetting - ch->gravAcc) + 1);
+		  if (safediff < 1)
+			  safediff = 1;
 		  gravdam = (pow(safediff, 3) * damrange);
 		  gravLevel = ch->gravSetting;
 		  statbonus = safediff + 15;
@@ -2527,6 +2529,7 @@ violence_update(void)
 		    base_xp = (long double)increase / 24 * gravLevel;
 			xp_bonus = (long double)base_xp * overacc_bonus;
 			xp_gain = (long double)base_xp + xp_bonus;
+			gain_exp(ch, xp_gain);
 			ch->gravExp += increase;
 			if (xp_gain > 1) {
 				sprintf(buf, "Your power level increases by %s points.", num_punct(xp_gain));
@@ -2647,11 +2650,13 @@ violence_update(void)
 		  increase = number_range(1, 3);
 		  damrange = number_range(1, 6);
 		
-		  ch->gravAcc = (ch->gravExp / 1000);
+		  ch->gravAcc = ((ch->gravExp / 1000) + 1);
+		  if (ch->gravAcc < 1)
+			  ch->gravAcc = 1;
 		  trainmessage = number_range(1, 100);
-		  safediff = ((ch->gravSetting - ch->gravAcc) + 2);
-		  if (safediff < 2)
-			  safediff = 2;
+		  safediff = ((ch->gravSetting - ch->gravAcc) + 1);
+		  if (safediff < 1)
+			  safediff = 1;
 		  gravdam = (pow(safediff, 3) * damrange);
 		  gravLevel = ch->gravSetting;
 		  statbonus = safediff + 15;
@@ -2662,6 +2667,7 @@ violence_update(void)
 		    base_xp = (long double)increase / 24 * gravLevel;
 			xp_bonus = (long double)base_xp * overacc_bonus;
 			xp_gain = (long double)base_xp + xp_bonus;
+			gain_exp(ch, xp_gain);
 			ch->gravExp += increase;
 			if (xp_gain > 1) {
 				sprintf(buf, "Your power level increases by %s points.", num_punct(xp_gain));
