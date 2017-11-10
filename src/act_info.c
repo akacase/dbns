@@ -4137,8 +4137,6 @@ do_consider(CHAR_DATA * ch, char *argument)
 void do_train(CHAR_DATA *ch, char *argument)
 {
         char arg[MAX_INPUT_LENGTH];
-		int gravset = 0;
-		int safegrav = 0;
 
 	one_argument(argument, arg);
 	ch->gravAcc = (ch->gravExp / 1000);
@@ -4157,12 +4155,12 @@ void do_train(CHAR_DATA *ch, char *argument)
 		send_to_char("The level of gravity is now manually controlled one level at a time with 'gravtrain increase/decrease'.\n\r", ch);
 		send_to_char("To select the level you are most comfortable with automatically, use the 'gravtrain safe' command.\n\r", ch);
 		send_to_char("Once set, activities are: gravtrain pushup, shadowbox, endure, meditate.\n\r", ch);
-		pager_printf(ch, "&wThe machine is currently set to %d times gravity.\n\r", gravset);
+		pager_printf(ch, "&wThe machine is currently set to %d times gravity.\n\r", ch->gravSetting);
 		return;
 	}
 	if (!str_cmp(arg, "increase")) {
 		ch->gravSetting += 1;
-		pager_printf(ch, "&GYou crank the dial up to %d times gravity.\n\r", gravset);
+		pager_printf(ch, "&GYou crank the dial up to %d times gravity.\n\r", ch->gravSetting);
 		return;
 	} else if (!str_cmp(arg, "decrease")) {
 		if ((ch->gravSetting - 1) < 1) {
@@ -4172,7 +4170,7 @@ void do_train(CHAR_DATA *ch, char *argument)
 		}
 		else {
 			ch->gravSetting -= 1;
-			pager_printf(ch, "&GYou crank the dial down to %d times gravity.\n\r", gravset);
+			pager_printf(ch, "&GYou crank the dial down to %d times gravity.\n\r", ch->gravSetting);
 			return;
 		}
 	} else if (!str_cmp(arg, "safe")) {
