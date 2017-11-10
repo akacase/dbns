@@ -434,6 +434,7 @@ do_score(CHAR_DATA * ch, char *argument)
 		}
 		pager_printf_color(ch, "&GKI CONTROL: &Y%-3d\n\r", ch->train);
 		pager_printf_color(ch, "&GFORM MASTERY LEVEL: &Y%-3d\n\r", form_mastery);
+		pager_printf_color(ch, "&GGRAVITY LEVEL: &Y%-3d\n\r", ch->gravAcc);
 	}
 	long double pltrack = 0;
 

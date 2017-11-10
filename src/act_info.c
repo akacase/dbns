@@ -4159,9 +4159,14 @@ void do_train(CHAR_DATA *ch, char *argument)
 		return;
 	}
 	if (!str_cmp(arg, "increase")) {
-		ch->gravSetting += 1;
-		pager_printf(ch, "&GYou crank the dial up to %d times gravity.\n\r", ch->gravSetting);
-		return;
+		if ((ch->gravSetting + 1) < (ch->gravAcc + 20)) {
+			ch->gravSetting += 1;
+			pager_printf(ch, "&GYou crank the dial up to %d times gravity.\n\r", ch->gravSetting);
+			return;
+		} else if ((ch->gravSetting + 1) >= (ch->gravAcc + 20)) {
+			pager_printf(ch, "&GThat's far too much!\n\r", NULL);
+			return;
+		}
 	} else if (!str_cmp(arg, "decrease")) {
 		if ((ch->gravSetting - 1) < 1) {
 			ch->gravSetting = 1;
@@ -4175,6 +4180,8 @@ void do_train(CHAR_DATA *ch, char *argument)
 		}
 	} else if (!str_cmp(arg, "safe")) {
 		ch->gravSetting = ch->gravAcc;
+		if (ch->gravAcc < 1)
+			ch->gravSetting = 1;
 		pager_printf(ch, "&GThe safety function automatically resets the machine to %d times gravity.\n\r", ch->gravAcc);
 		return;
 	} else if (!str_cmp(arg, "pushup")) {
