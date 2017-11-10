@@ -4139,7 +4139,9 @@ void do_train(CHAR_DATA *ch, char *argument)
         char arg[MAX_INPUT_LENGTH];
 
 	one_argument(argument, arg);
-	ch->gravAcc = (ch->gravExp / 1000);
+	ch->gravAcc = ((ch->gravExp / 1000) + 1);
+	if (ch->gravAcc < 1)
+		ch->gravAcc = 1;
 	
 	if (IS_NPC(ch))
 		return;
@@ -4182,7 +4184,7 @@ void do_train(CHAR_DATA *ch, char *argument)
 		ch->gravSetting = ch->gravAcc;
 		if (ch->gravAcc < 1)
 			ch->gravSetting = 1;
-		pager_printf(ch, "&GThe safety function automatically resets the machine to %d times gravity.\n\r", ch->gravAcc);
+		pager_printf(ch, "&GThe safety function automatically resets the machine to %d times gravity.\n\r", ch->gravSetting);
 		return;
 	} else if (!str_cmp(arg, "pushup")) {
 
