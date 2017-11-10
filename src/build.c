@@ -1566,6 +1566,15 @@ do_mset(CHAR_DATA * ch, char *argument)
 			victim->pIndexData->worth = value;
 		return;
 	}
+	if (!str_cmp(arg2, "gravexp")) {
+		if (!can_mmodify(ch, victim))
+			return;
+		if (IS_NPC(victim))
+			return;
+		else if (!IS_NPC(victim))
+			victim->gravExp = value;
+		return;
+	}
 	if (!str_cmp(arg2, "class")) {
 		if (!can_mmodify(ch, victim))
 			return;
