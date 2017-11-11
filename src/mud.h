@@ -2648,7 +2648,7 @@ struct char_data {
 	long long int     worth;
 	int		gravSetting;
 	int		gravAcc;
-	long double gravExp;
+	long long int gravExp;
 	int 	mana;
 	int 	max_mana;
 	sh_int 	max_energy;
