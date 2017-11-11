@@ -694,7 +694,7 @@ violence_update(void)
 					if (form_mastery >= 6)
 						ch->train += 1;
 					else if (form_mastery < 6)
-						ch->train += 15;
+						ch->train += 30;
 				}
 		}
 		if (!IS_NPC(ch)
@@ -722,7 +722,7 @@ violence_update(void)
 					if (form_mastery >= 20)
 						ch->train += 1;
 					else if (form_mastery < 20)
-						ch->train += 15;
+						ch->train += 30;
 				}
 		}
 		if (!IS_NPC(ch)
@@ -1230,7 +1230,7 @@ violence_update(void)
 					safemaximum = ((get_curr_int(ch) * 0.03) + 1);
 					if (ch->powerup < safemaximum) {
 						
-						ch->pl *= 1.15;
+						ch->pl *= 1.30;
 						ch->powerup += 1;
 						transStatApply(ch, powerupstr, powerupspd, powerupint, powerupcon);
 						if (plmod >= 30
@@ -1572,7 +1572,7 @@ violence_update(void)
 					&& !xIS_SET((ch)->affected_by, AFF_GOLDENFORM)) {
 					safemaximum = ((get_curr_int(ch) * 0.03) + 1);
 					if (ch->powerup < safemaximum) {
-						ch->pl *= 1.15;
+						ch->pl *= 1.30;
 						ch->powerup += 1;
 						transStatApply(ch, powerupstr, powerupspd, powerupint, powerupcon);
 						if (plmod >= 2) {
@@ -1797,7 +1797,7 @@ violence_update(void)
 					mysticTotal = ((ch->perm_str + ch->perm_dex) + (ch->perm_int * 2) + (ch->perm_con * 3));
 					safemaximum = ((get_curr_int(ch) * 0.03) + 1);
 					if (ch->powerup < safemaximum) {
-						ch->pl *= 1.15;
+						ch->pl *= 1.30;
 						ch->powerup += 1;
 						transStatApply(ch, powerupstr, powerupspd, powerupint, powerupcon);
 						if (plmod >= 30
@@ -1969,7 +1969,7 @@ violence_update(void)
 					namekTotal = ((ch->perm_str + ch->perm_dex) + (ch->perm_int * 3) + (ch->perm_con * 2));
 					safemaximum = ((get_curr_int(ch) * 0.03) + 1);
 					if (ch->powerup < safemaximum) {
-						ch->pl *= 1.15;
+						ch->pl *= 1.30;
 						ch->powerup += 1;
 						transStatApply(ch, powerupstr, powerupspd, powerupint, powerupcon);
 						if (plmod >= 40
