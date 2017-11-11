@@ -14,7 +14,7 @@ $
 #RESETMSG &cA tiny fracture in spacetime dances before your eyes.&d~
 
 #FLAGS
-2 5
+2 4
 
 #CLIMATE 2 2 2
 
@@ -2431,7 +2431,7 @@ Doctor Emalia stands here with an unsettling smile.
 112 112 2
 10 10 10 10 10
 0 0 0 0 0
-0 0 0 0 0 0 0
+0 0 0 0 1 1 0
 0 0 0 0 0 0 0 0
 > greet_prog 100~
 if wearingvnum($n) 305011
@@ -2598,11 +2598,15 @@ a newly created timewarped soldier~
 Some god abandoned a newly created timewarped soldier here.
 ~
 ~
-1073741825 0 0 S
+1073741825 0 0 C
 0
 1 0 100 1d20+0 2d5+0
 -1 1
 112 112 0
+10 10 10 10 10
+0 0 0 0 0
+0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0
 #305044
 timewarped red ribbon soldier~
 A Timewarped Red Ribbon Soldier~
@@ -2616,7 +2620,7 @@ A warped and twisted Red Ribbon soldier wanders aimlessly, lost in time.
 112 112 0
 200 200 150 60 0
 0 0 0 0 0
-1 1 0 0 0 0 4
+1 1 0 0 1 1 4
 0 0 0 0 0 0 0 0
 > greet_prog 100~
 if ispc($n)
@@ -2650,7 +2654,7 @@ A stocky man with pitch-black skin and unsettlingly piercing eyes stands here.
 112 112 1
 10 10 10 10 0
 0 0 0 0 0
-1 1 0 0 0 0 0
+1 1 0 0 1 1 0
 0 0 0 0 0 0 0 0
 > greet_prog 100~
 if pl($n) > 10000000
@@ -2688,7 +2692,7 @@ A black shadowy mass creeps stealthily across the 'floor'.
 112 112 0
 250 250 200 200 0
 0 0 0 0 0
-0 0 0 0 0 0 5
+0 0 0 0 1 1 5
 0 0 0 0 0 0 0 0
 > fight_prog 10~
 destructive
@@ -2724,7 +2728,7 @@ A nightmarish mass of shadows gathers in the darkness.
 112 112 0
 400 400 250 250 0
 0 0 0 0 0
-0 0 0 0 0 0 5
+0 0 0 0 1 1 5
 0 0 0 0 0 0 0 0
 > greet_prog 100~
 if ispc($n)
@@ -2760,7 +2764,7 @@ A terrible mixture of the time fracture's residents lurks here.
 112 112 0
 500 500 300 300 0
 0 0 0 0 0
-0 0 0 0 0 0 6
+0 0 0 0 1 1 6
 0 0 0 0 0 0 0 0
 > greet_prog 100~
 if ispc($n)
@@ -2796,7 +2800,7 @@ A true reflection of yourself stands ready to conquer you.
 112 112 0
 500 500 500 500 0
 0 0 0 0 0
-0 0 0 0 0 0 6
+0 0 0 0 1 1 6
 0 0 0 0 0 0 0 0
 > greet_prog 100~
 if ispc($n)
@@ -2832,7 +2836,7 @@ A mass-replicated Android 19 model sifts through the rubble.
 112 112 0
 1500 1500 1000 1000 0
 0 0 0 0 0
-4 4 0 0 0 0 3
+4 4 0 0 1 1 3
 0 0 0 0 0 0 0 0
 > greet_prog 100~
 if ispc($n)
@@ -2869,7 +2873,7 @@ An advanced cybaman hunts for survivors to exterminate.
 112 112 0
 2000 2000 1500 1500 0
 0 0 0 0 0
-0 0 0 0 0 0 6
+0 0 0 0 1 1 6
 0 0 0 0 0 0 0 0
 > greet_prog 100~
 if ispc($n)
