@@ -432,9 +432,11 @@ do_score(CHAR_DATA * ch, char *argument)
 		} else {
 			pager_printf(ch, "CURR POWERLEVEL: %-16s\n\r", num_punct_ld(ch->pl));
 		}
+		int acc = 0;
+		acc = ((ch->gravExp / 1000) + 1);
 		pager_printf_color(ch, "&GKI CONTROL: &Y%-3d\n\r", ch->train);
 		pager_printf_color(ch, "&GFORM MASTERY LEVEL: &Y%-3d\n\r", form_mastery);
-		pager_printf_color(ch, "&GGRAVITY LEVEL: &Y%-3d\n\r", ch->gravAcc);
+		pager_printf_color(ch, "&GGRAVITY LEVEL: &Y%-3d\n\r", acc);
 	}
 	long double pltrack = 0;
 

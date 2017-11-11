@@ -2238,15 +2238,16 @@ violence_update(void)
 		  int breakbonus = 0;
 		  double overacc_bonus = 0;
 		  long double xp_bonus = 0;
+		  int acc = 0;
             
 		  increase = number_range(1, 3);
 		  damrange = number_range(1, 6);
 		
-		  ch->gravAcc = ((ch->gravExp / 1000) + 1);
-		  if (ch->gravAcc < 1)
-			  ch->gravAcc = 1;
+		  acc = ((ch->gravExp / 1000) + 1);
+		  if (acc < 1)
+			  acc = 1;
 		  trainmessage = number_range(1, 100);
-		  safediff = ((ch->gravSetting - ch->gravAcc) + 1);
+		  safediff = ((ch->gravSetting - acc) + 1);
 		  if (safediff < 1)
 			  safediff = 1;
 		  gravdam = (pow(safediff, 3) * damrange);
@@ -2379,15 +2380,16 @@ violence_update(void)
 		  int breakbonus = 0;
 		  double overacc_bonus = 0;
 		  long double xp_bonus = 0;
+		  int acc = 0;
             
 		  increase = number_range(1, 3);
 		  damrange = number_range(1, 6);
 		
-		  ch->gravAcc = ((ch->gravExp / 1000) + 1);
-		  if (ch->gravAcc < 1)
-				ch->gravAcc = 1;
+		  acc = ((ch->gravExp / 1000) + 1);
+		  if (acc < 1)
+				acc = 1;
 		  trainmessage = number_range(1, 100);
-		  safediff = ((ch->gravSetting - ch->gravAcc) + 1);
+		  safediff = ((ch->gravSetting - acc) + 1);
 		  if (safediff < 1)
 			  safediff = 1;
 		  gravdam = (pow(safediff, 3) * damrange);
@@ -2520,15 +2522,16 @@ violence_update(void)
 		  int breakbonus = 0;
 		  double overacc_bonus = 0;
 		  long double xp_bonus = 0;
+		  int acc = 0;
             
 		  increase = number_range(1, 3);
 		  damrange = number_range(1, 6);
 		
-		  ch->gravAcc = ((ch->gravExp / 1000) + 1);
-		  if (ch->gravAcc < 1)
-				ch->gravAcc = 1;
+		  acc = ((ch->gravExp / 1000) + 1);
+		  if (acc < 1)
+				acc = 1;
 		  trainmessage = number_range(1, 100);
-		  safediff = ((ch->gravSetting - ch->gravAcc) + 1);
+		  safediff = ((ch->gravSetting - acc) + 1);
 		  if (safediff < 1)
 			  safediff = 1;
 		  gravdam = (pow(safediff, 3) * damrange);
@@ -2661,15 +2664,16 @@ violence_update(void)
 		  int breakbonus = 0;
 		  double overacc_bonus = 0;
 		  long double xp_bonus = 0;
+		  int acc = 0;
             
 		  increase = number_range(1, 3);
 		  damrange = number_range(1, 6);
 		
-		  ch->gravAcc = ((ch->gravExp / 1000) + 1);
-		  if (ch->gravAcc < 1)
-			  ch->gravAcc = 1;
+		  acc = ((ch->gravExp / 1000) + 1);
+		  if (acc < 1)
+			  acc = 1;
 		  trainmessage = number_range(1, 100);
-		  safediff = ((ch->gravSetting - ch->gravAcc) + 1);
+		  safediff = ((ch->gravSetting - acc) + 1);
 		  if (safediff < 1)
 			  safediff = 1;
 		  gravdam = (pow(safediff, 3) * damrange);
