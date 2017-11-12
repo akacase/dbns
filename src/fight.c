@@ -2239,18 +2239,24 @@ violence_update(void)
 		  double overacc_bonus = 0;
 		  long double xp_bonus = 0;
 		  int acc = 0;
+		  int gravres = 0;
+		  int resdiff = 0;
             
 		  increase = number_range(1, 3);
 		  damrange = number_range(1, 6);
+		  gravres = (get_curr_con(ch) / 500) + 1;
 		
 		  acc = ((ch->gravExp / 1000) + 1);
 		  if (acc < 1)
-			  acc = 1;
+				acc = 1;
 		  trainmessage = number_range(1, 100);
-		  safediff = ((ch->gravSetting - acc) + 1);
+		  safediff = ((ch->gravSetting - acc) + 2);
 		  if (safediff < 1)
 			  safediff = 1;
-		  gravdam = (pow(safediff, 3) * damrange);
+		  resdiff = (safediff - gravres);
+		  if (resdiff < 1)
+			  resdiff = 1;
+		  gravdam = (pow(resdiff, 3) * damrange);
 		  gravLevel = ch->gravSetting;
 		  statbonus = safediff + 15;
 		  breakbonus = statbonus * 2;
@@ -2381,18 +2387,24 @@ violence_update(void)
 		  double overacc_bonus = 0;
 		  long double xp_bonus = 0;
 		  int acc = 0;
+		  int gravres = 0;
+		  int resdiff = 0;
             
 		  increase = number_range(1, 3);
 		  damrange = number_range(1, 6);
+		  gravres = (get_curr_con(ch) / 500) + 1;
 		
 		  acc = ((ch->gravExp / 1000) + 1);
 		  if (acc < 1)
 				acc = 1;
 		  trainmessage = number_range(1, 100);
-		  safediff = ((ch->gravSetting - acc) + 1);
+		  safediff = ((ch->gravSetting - acc) + 2);
 		  if (safediff < 1)
 			  safediff = 1;
-		  gravdam = (pow(safediff, 3) * damrange);
+		  resdiff = (safediff - gravres);
+		  if (resdiff < 1)
+			  resdiff = 1;
+		  gravdam = (pow(resdiff, 3) * damrange);
 		  gravLevel = ch->gravSetting;
 		  statbonus = safediff + 15;
 		  breakbonus = statbonus * 2;
@@ -2523,18 +2535,24 @@ violence_update(void)
 		  double overacc_bonus = 0;
 		  long double xp_bonus = 0;
 		  int acc = 0;
+		  int gravres = 0;
+		  int resdiff = 0;
             
 		  increase = number_range(1, 3);
 		  damrange = number_range(1, 6);
+		  gravres = (get_curr_con(ch) / 500) + 1;
 		
 		  acc = ((ch->gravExp / 1000) + 1);
 		  if (acc < 1)
 				acc = 1;
 		  trainmessage = number_range(1, 100);
-		  safediff = ((ch->gravSetting - acc) + 1);
+		  safediff = ((ch->gravSetting - acc) + 2);
 		  if (safediff < 1)
 			  safediff = 1;
-		  gravdam = (pow(safediff, 3) * damrange);
+		  resdiff = (safediff - gravres);
+		  if (resdiff < 1)
+			  resdiff = 1;
+		  gravdam = (pow(resdiff, 3) * damrange);
 		  gravLevel = ch->gravSetting;
 		  statbonus = safediff + 15;
 		  breakbonus = statbonus * 2;
@@ -2665,18 +2683,24 @@ violence_update(void)
 		  double overacc_bonus = 0;
 		  long double xp_bonus = 0;
 		  int acc = 0;
+		  int gravres = 0;
+		  int resdiff = 0;
             
 		  increase = number_range(1, 3);
 		  damrange = number_range(1, 6);
+		  gravres = (get_curr_con(ch) / 500) + 1;
 		
 		  acc = ((ch->gravExp / 1000) + 1);
 		  if (acc < 1)
-			  acc = 1;
+				acc = 1;
 		  trainmessage = number_range(1, 100);
-		  safediff = ((ch->gravSetting - acc) + 1);
+		  safediff = ((ch->gravSetting - acc) + 2);
 		  if (safediff < 1)
 			  safediff = 1;
-		  gravdam = (pow(safediff, 3) * damrange);
+		  resdiff = (safediff - gravres);
+		  if (resdiff < 1)
+			  resdiff = 1;
+		  gravdam = (pow(resdiff, 3) * damrange);
 		  gravLevel = ch->gravSetting;
 		  statbonus = safediff + 15;
 		  breakbonus = statbonus * 2;
