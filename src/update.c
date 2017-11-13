@@ -592,8 +592,8 @@ mana_gain(CHAR_DATA * ch)
 
 	gain = (double) gain / 200 * ch->max_mana;
 	
-	if (gain > 10000)
-		gain = 10000;
+	if (gain > (ch->max_mana * 0.2))
+		gain = (ch->max_mana * 0.2);
 
 	return UMIN(gain, ch->max_mana - ch->mana);
 }
