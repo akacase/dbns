@@ -4167,7 +4167,7 @@ void do_train(CHAR_DATA *ch, char *argument)
 		return;
 	}
 	if (!str_cmp(arg, "increase")) {
-		if ((ch->gravSetting + 1) < (acc + 20)) {
+		if ((ch->gravSetting + 1) < (acc + 20 + gravres)) {
 			ch->gravSetting += 1;
 			pager_printf(ch, "&GYou crank the dial up to %d times gravity.\n\r", ch->gravSetting);
 			return;
