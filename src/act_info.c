@@ -4138,9 +4138,14 @@ void do_train(CHAR_DATA *ch, char *argument)
 {
         char arg[MAX_INPUT_LENGTH];
 		int acc = 0;
+		int gravres = 0;
 
 	one_argument(argument, arg);
-	acc = ((ch->gravExp / 1000) + 1);
+	if (ch->gravExp >= 400000)
+		acc = ((ch->gravExp / 4000) + 301);
+	else if (ch->gravExp < 400000)
+		acc = ((ch->gravExp / 1000) + 1);
+	gravres = (get_curr_con(ch) / 500) + 1;
 	if (acc < 1)
 		acc = 1;
 	
@@ -4166,7 +4171,7 @@ void do_train(CHAR_DATA *ch, char *argument)
 			ch->gravSetting += 1;
 			pager_printf(ch, "&GYou crank the dial up to %d times gravity.\n\r", ch->gravSetting);
 			return;
-		} else if ((ch->gravSetting + 1) >= (acc + 20)) {
+		} else if ((ch->gravSetting + 1) >= (acc + gravres + 20)) {
 			pager_printf(ch, "&GThat's far too much!\n\r", NULL);
 			return;
 		}
