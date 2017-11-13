@@ -5192,6 +5192,7 @@ do_meditate(CHAR_DATA * ch, char *argument)
 	// check if user is powering up
 	if(IS_AFFECTED(ch, AFF_POWERCHANNEL)) {
 		send_to_char("You cannot meditate while powering up.\n\r", ch);
+		return;
 	}
 	
 	left = (float) ch->mana / ch->max_mana;
