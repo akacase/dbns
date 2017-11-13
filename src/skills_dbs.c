@@ -5189,6 +5189,10 @@ do_meditate(CHAR_DATA * ch, char *argument)
 	  send_to_char("You cannot meditate while gravity training.\n\r", ch);
 	  return;
 	}
+	// check if user is powering up
+	if(IS_AFFECTED(ch, AFF_POWERCHANNEL)) {
+		send_to_char("You cannot meditate while powering up.\n\r", ch);
+	}
 	
 	left = (float) ch->mana / ch->max_mana;
 	right = (float) ch->pcdata->learned[gsn_meditate] / 100;
