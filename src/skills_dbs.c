@@ -1811,13 +1811,13 @@ void do_powerup(CHAR_DATA *ch, char *argument)
 		}
 	}
 	if (!str_cmp(arg, "release")) {
-		if ((ch->pl - (ch->pl * 1.03)) > ch->exp) {
-			ch->pl -= (ch->pl * 1.03);
+		if ((ch->pl - (ch->pl * 0.03)) > ch->exp) {
+			ch->pl -= (ch->pl * 0.03);
 			act(AT_WHITE, "You take a deep breath, releasing some of your pent-up energy.", ch, NULL, NULL, TO_CHAR);
 			act(AT_WHITE, "$n takes a deep breath, releasing some pent-up energy.", ch, NULL, NULL, TO_NOTVICT);
 			return;
 		}
-		else if ((ch->pl - (ch->pl * 1.03)) <= ch->exp) {
+		else if ((ch->pl - (ch->pl * 0.03)) <= ch->exp) {
 			send_to_char("It might be a better idea to 'powerdown'.\n\r", ch);
 			return;
 		}
