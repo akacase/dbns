@@ -2211,6 +2211,7 @@ violence_update(void)
 			int safediff = 0;
 			int resdiff = 0;
 			int acc = 0;
+			int gravres = 0;
 			
 			if (xIS_SET((ch)->in_room->room_flags, ROOM_GRAV10))
 				ch->gravSetting = 10;
