@@ -2193,6 +2193,82 @@ violence_update(void)
 				}
 			}
 		}
+		/* Gravity area/room effects */
+		if (xIS_SET((ch)->in_room->room_flags, ROOM_GRAV10)
+		|| xIS_SET((ch)->in_room->room_flags, ROOM_GRAV50)
+		|| xIS_SET((ch)->in_room->room_flags, ROOM_GRAV100)
+		|| xIS_SET((ch)->in_room->room_flags, ROOM_GRAV200)
+		|| xIS_SET((ch)->in_room->room_flags, ROOM_GRAV300)
+		|| xIS_SET((ch)->in_room->room_flags, ROOM_GRAV400)
+		|| xIS_SET((ch)->in_room->room_flags, ROOM_GRAV500)
+		|| xIS_SET((ch)->in_room->room_flags, ROOM_GRAV600)
+		|| xIS_SET((ch)->in_room->room_flags, ROOM_GRAV700)
+		|| xIS_SET((ch)->in_room->room_flags, ROOM_GRAV800)
+		|| xIS_SET((ch)->in_room->room_flags, ROOM_GRAV900)
+		|| xIS_SET((ch)->in_room->room_flags, ROOM_GRAV1000)) {
+			int gravdam = 0;
+			int damrange = 0;
+			int safediff = 0;
+			int resdiff = 0;
+			int acc = 0;
+			
+			if (xIS_SET((ch)->in_room->room_flags, ROOM_GRAV10))
+				ch->gravSetting = 10;
+			else if (xIS_SET((ch)->in_room->room_flags, ROOM_GRAV50))
+				ch->gravSetting = 50;
+			else if (xIS_SET((ch)->in_room->room_flags, ROOM_GRAV100))
+				ch->gravSetting = 100;
+			else if (xIS_SET((ch)->in_room->room_flags, ROOM_GRAV200))
+				ch->gravSetting = 200;
+			else if (xIS_SET((ch)->in_room->room_flags, ROOM_GRAV300))
+				ch->gravSetting = 300;
+			else if (xIS_SET((ch)->in_room->room_flags, ROOM_GRAV400))
+				ch->gravSetting = 400;
+			else if (xIS_SET((ch)->in_room->room_flags, ROOM_GRAV500))
+				ch->gravSetting = 500;
+			else if (xIS_SET((ch)->in_room->room_flags, ROOM_GRAV600))
+				ch->gravSetting = 600;
+			else if (xIS_SET((ch)->in_room->room_flags, ROOM_GRAV700))
+				ch->gravSetting = 700;
+			else if (xIS_SET((ch)->in_room->room_flags, ROOM_GRAV800))
+				ch->gravSetting = 800;
+			else if (xIS_SET((ch)->in_room->room_flags, ROOM_GRAV900))
+				ch->gravSetting = 900;
+			else if (xIS_SET((ch)->in_room->room_flags, ROOM_GRAV1000))
+				ch->gravSetting = 1000;
+			if (ch->gravExp >= 400000)
+				acc = ((ch->gravExp / 4000) + 301);
+			else if (ch->gravExp < 400000)
+				acc = ((ch->gravExp / 1000) + 1);
+			if (acc < 1)
+				acc = 1;
+			damrange = number_range(1, 3);
+			gravres = (get_curr_con(ch) / 500) + 1;
+			safediff = ((ch->gravSetting - acc) + 2);
+			if (safediff < 1)
+				safediff = 1;
+			resdiff = (safediff - gravres);
+			if (resdiff < 1)
+				resdiff = 1;
+			gravdam = (pow(resdiff, 3) * damrange);
+			if (ch->mana - gravdam > 0)
+				ch->mana -= gravdam;
+			else if (ch->mana - gravdam <= 0) {
+				ch->mana = 0;
+				ch->hit -= (gravdam / 3);
+				act( AT_RED, "Your bones pop and creak ominously.", ch, NULL, NULL, TO_CHAR );
+				if (ch->hit - (gravdam / 3) < 0) {
+					update_pos(ch);
+					if (ch->position == POS_DEAD) {
+						act( AT_RED, "Your body has been crushed!", ch, NULL, NULL, TO_CHAR );
+						act( AT_RED, "$n collapses, DEAD, $s body crushed under intense gravity.", ch, NULL, NULL, TO_NOTVICT );
+						sprintf( buf, "%s is crushed into a pancake under intense gravity", ch->name );
+						do_info(ch, buf);
+						raw_kill(ch, ch);
+					}
+				}
+			}
+		}
 		/* New Gravity Training */
 		if (xIS_SET((ch)->affected_by, AFF_PUSHUPS) && !xIS_SET((ch)->in_room->room_flags, ROOM_GRAV)) {
 			

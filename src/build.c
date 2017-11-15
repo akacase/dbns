@@ -86,7 +86,8 @@ char   *const r_flags[] =
 	"nosummon", "noastral", "teleport", "teleshowdesc", "nofloor",
 	"nosupplicate", "arena", "nomissile", "grav", "htanks", "prototype", "dnd",
 	"spaceship", "nodriving", "timechamber", "noteleport", "noteleportout",
-	"astralshield"
+	"astralshield", "grav10", "grav50", "grav100", "grav200", "grav300", "grav400",
+	"grav500", "grav600", "grav700", "grav800", "grav900", "grav1000"
 };
 
 char   *const o_flags[] =
