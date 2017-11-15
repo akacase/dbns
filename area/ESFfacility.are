@@ -2605,7 +2605,7 @@ Some god abandoned a newly created timewarped soldier here.
 112 112 0
 10 10 10 10 10
 0 0 0 0 0
-0 0 0 0 0 0 0
+0 0 0 0 1 1 0
 0 0 0 0 0 0 0 0
 #305044
 timewarped red ribbon soldier~
@@ -30868,6 +30868,84 @@ D2
 ~
 ~
 0 -1 305494
+> entry_prog 100~
+mea $n &CA mysterious voice says 'To access the advanced gravity arenas, speak aloud your desired gravity level.'&d
+mea $n &CA mysterious voice says '10, 50, 100, 200, 300, and so on, up to 1000.'&d
+mea $n &CA mysterious voice says 'It is strongly suggested that you're able to endure the level of gravity you select...'&d
+~
+> speech_prog '10'~
+mea $n &YYou disappear and reappear in a flash of light!&d
+mer $n &Y$n disappears in a flash of light.&d
+mptransfer $n 307000
+mpat 307000 mpforce $n look
+~
+> speech_prog '50'~
+mea $n &YYou disappear and reappear in a flash of light!&d
+mer $n &Y$n disappears in a flash of light.&d
+mptransfer $n 307001
+mpat 307001 mpforce $n look
+~
+> speech_prog '100'~
+mea $n &YYou disappear and reappear in a flash of light!&d
+mer $n &Y$n disappears in a flash of light.&d
+mptransfer $n 307002
+mpat 307002 mpforce $n look
+~
+> speech_prog '200'~
+mea $n &YYou disappear and reappear in a flash of light!&d
+mer $n &Y$n disappears in a flash of light.&d
+mptransfer $n 307003
+mpat 307003 mpforce $n look
+~
+> speech_prog '300'~
+mea $n &YYou disappear and reappear in a flash of light!&d
+mer $n &Y$n disappears in a flash of light.&d
+mptransfer $n 307004
+mpat 307004 mpforce $n look
+~
+> speech_prog '400'~
+mea $n &YYou disappear and reappear in a flash of light!&d
+mer $n &Y$n disappears in a flash of light.&d
+mptransfer $n 307005
+mpat 307005 mpforce $n look
+~
+> speech_prog '500'~
+mea $n &YYou disappear and reappear in a flash of light!&d
+mer $n &Y$n disappears in a flash of light.&d
+mptransfer $n 307006
+mpat 307006 mpforce $n look
+~
+> speech_prog '600'~
+mea $n &YYou disappear and reappear in a flash of light!&d
+mer $n &Y$n disappears in a flash of light.&d
+mptransfer $n 307007
+mpat 307007 mpforce $n look
+~
+> speech_prog '700'~
+mea $n &YYou disappear and reappear in a flash of light!&d
+mer $n &Y$n disappears in a flash of light.&d
+mptransfer $n 307008
+mpat 307008 mpforce $n look
+~
+> speech_prog '800'~
+mea $n &YYou disappear and reappear in a flash of light!&d
+mer $n &Y$n disappears in a flash of light.&d
+mptransfer $n 307009
+mpat 307009 mpforce $n look
+~
+> speech_prog '900'~
+mea $n &YYou disappear and reappear in a flash of light!&d
+mer $n &Y$n disappears in a flash of light.&d
+mptransfer $n 307010
+mpat 307010 mpforce $n look
+~
+> speech_prog '1000'~
+mea $n &YYou disappear and reappear in a flash of light!&d
+mer $n &Y$n disappears in a flash of light.&d
+mptransfer $n 307011
+mpat 307011 mpforce $n look
+~
+|
 S
 #305578
 Among Shadows~
@@ -41337,64 +41415,112 @@ Floating in a void~
 0 4 1
 S
 #307000
-Floating in a void~
+Gravity Arena: 10x~
 ~
-0 4 1
+0 67108868&64 1
+D2
+~
+~
+0 -1 305577
 S
 #307001
-Floating in a void~
+Gravity Arena: 50x~
 ~
-0 4 1
+0 67108868&128 1
+D2
+~
+~
+0 -1 305577
 S
 #307002
-Floating in a void~
+Gravity Arena: 100x~
 ~
-0 4 1
+0 67108868&256 1
+D2
+~
+~
+0 -1 305577
 S
 #307003
-Floating in a void~
+Gravity Arena: 200x~
 ~
-0 4 1
+0 67108868&512 1
+D2
+~
+~
+0 -1 305577
 S
 #307004
-Floating in a void~
+Gravity Arena: 300x~
 ~
-0 4 1
+0 67108868&1024 1
+D2
+~
+~
+0 -1 305577
 S
 #307005
-Floating in a void~
+Gravity Arena: 400x~
 ~
-0 4 1
+0 67108868&2048 1
+D2
+~
+~
+0 -1 305577
 S
 #307006
-Floating in a void~
+Gravity Arena: 500x~
 ~
-0 4 1
+0 67108868&4096 1
+D2
+~
+~
+0 -1 305577
 S
 #307007
-Floating in a void~
+Gravity Arena: 600x~
 ~
-0 4 1
+0 67108868&8192 1
+D2
+~
+~
+0 -1 305577
 S
 #307008
-Floating in a void~
+Gravity Arena: 700x~
 ~
-0 4 1
+0 67108868&16384 1
+D2
+~
+~
+0 -1 305577
 S
 #307009
-Floating in a void~
+Gravity Arena: 800x~
 ~
-0 4 1
+0 67108868&32768 1
+D2
+~
+~
+0 -1 305577
 S
 #307010
-Floating in a void~
+Gravity Arena: 900x~
 ~
-0 4 1
+0 67108868&65536 1
+D2
+~
+~
+0 -1 305577
 S
 #307011
-Floating in a void~
+Gravity Arena: 1000x~
 ~
-0 4 1
+0 67108868&131072 1
+D2
+~
+~
+0 -1 305577
 S
 #307012
 Floating in a void~
