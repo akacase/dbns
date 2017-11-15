@@ -531,42 +531,6 @@ violence_update(void)
 				affect_remove(ch, paf);
 			}
 		}
-		/* In-combat bonuses */
-		if (!IS_NPC(ch)) {
-			if (ch->position == POS_FIGHTING) {
-				stat_train(ch, "str", 5);
-				stat_train(ch, "spd", 5);
-				stat_train(ch, "con", 5);
-				stat_train(ch, "int", 5);
-				ch->train += 3;
-			}
-			if (ch->position == POS_AGGRESSIVE) {
-				stat_train(ch, "str", 6);
-				stat_train(ch, "spd", 5);
-				stat_train(ch, "con", 5);
-				stat_train(ch, "int", 4);
-				ch->train += 3;
-			}
-			if (ch->position == POS_BERSERK) {
-				stat_train(ch, "str", 10);
-				stat_train(ch, "spd", 5);
-				stat_train(ch, "con", 5);
-				ch->train += 3;
-			}
-			if (ch->position == POS_DEFENSIVE) {
-				stat_train(ch, "str", 2);
-				stat_train(ch, "spd", 5);
-				stat_train(ch, "con", 8);
-				stat_train(ch, "int", 5);
-				ch->train += 3;
-			}
-			if (ch->position == POS_EVASIVE) {
-				stat_train(ch, "spd", 7);
-				stat_train(ch, "con", 5);
-				stat_train(ch, "int", 8);
-				ch->train += 3;
-			}
-		}
 		/* Transformation Update */
 		if (!IS_NPC(ch)
 			&& xIS_SET((ch)->affected_by, AFF_SNAMEK)) {
