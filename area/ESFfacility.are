@@ -2952,6 +2952,36 @@ mprestore $i 9000
 mpecho &Y$I grins wickedly, completely unaffected by your attacks.&D
 ~
 |
+#307000
+neutron spectre~
+A Neutron Spectre~
+A ghost-like mass of ultra dense energy thrives in the intense gravity.
+~
+~
+3 0 0 C
+480
+1 0 40 1d20+20000 2d5+0
+-1 500000000
+112 112 0
+4000 4000 2000 2000 0
+0 0 0 0 0
+0 0 0 0 0 0 6
+0 0 0 0 0 0 0 0
+> greet_prog 100~
+if ispc($n)
+if isfight($i)
+glower
+else
+mprestore $i 30000
+mea $n &cThe spectre lashes out at you!&d
+mpkill $n
+endif
+endif
+~
+> fight_prog 40~
+death
+~
+|
 #308000
 invis parlor closer~
 The Parlor Closer~
@@ -29732,6 +29762,10 @@ downward.  The sense of danger from within is overwhelming compared to the
 void you've endured so far. 
 ~
 0 4 1
+D0
+~
+~
+0 -1 307012
 D2
 ~
 ~
@@ -35329,6 +35363,10 @@ S
 Walking Through Muck~
 ~
 0 4 1
+D0
+~
+~
+0 -1 305919
 D1
 ~
 ~
@@ -35633,159 +35671,547 @@ D3
 0 -1 305900
 S
 #305919
-Floating in a void~
+Drain Overflow~
 ~
 0 4 1
+D0
+~
+~
+0 -1 305920
+D2
+~
+~
+0 -1 305900
 S
 #305920
-Floating in a void~
+Walking Through Muck~
 ~
 0 4 1
+D0
+~
+~
+0 -1 305921
+D1
+~
+~
+0 -1 305940
+D2
+~
+~
+0 -1 305919
+D3
+~
+~
+0 -1 305939
 S
 #305921
-Floating in a void~
+Walking Through Muck~
 ~
 0 4 1
+D0
+~
+~
+0 -1 305922
+D1
+~
+~
+0 -1 305941
+D2
+~
+~
+0 -1 305920
+D3
+~
+~
+0 -1 305938
 S
 #305922
-Floating in a void~
+Walking Through Muck~
 ~
 0 4 1
+D0
+~
+~
+0 -1 305923
+D1
+~
+~
+0 -1 305942
+D2
+~
+~
+0 -1 305921
+D3
+~
+~
+0 -1 305937
 S
 #305923
-Floating in a void~
+Walking Through Muck~
 ~
 0 4 1
+D0
+~
+~
+0 -1 305924
+D1
+~
+~
+0 -1 305943
+D2
+~
+~
+0 -1 305922
+D3
+~
+~
+0 -1 305936
 S
 #305924
-Floating in a void~
+Walking Through Muck~
 ~
 0 4 1
+D0
+~
+~
+0 -1 305925
+D1
+~
+~
+0 -1 305944
+D2
+~
+~
+0 -1 305923
+D3
+~
+~
+0 -1 305935
 S
 #305925
-Floating in a void~
+Walking Through Muck~
 ~
 0 4 1
+D0
+~
+~
+0 -1 305926
+D1
+~
+~
+0 -1 305945
+D2
+~
+~
+0 -1 305924
+D3
+~
+~
+0 -1 305934
 S
 #305926
-Floating in a void~
+Walking Through Muck~
 ~
 0 4 1
+D0
+~
+~
+0 -1 305927
+D1
+~
+~
+0 -1 305946
+D2
+~
+~
+0 -1 305925
+D3
+~
+~
+0 -1 305933
 S
 #305927
-Floating in a void~
+Walking Through Muck~
 ~
 0 4 1
+D0
+~
+~
+0 -1 305928
+D1
+~
+~
+0 -1 305947
+D2
+~
+~
+0 -1 305926
+D3
+~
+~
+0 -1 305932
 S
 #305928
-Floating in a void~
+Walking Through Muck~
 ~
 0 4 1
+D0
+~
+~
+0 -1 305929
+D1
+~
+~
+0 -1 305948
+D2
+~
+~
+0 -1 305927
+D3
+~
+~
+0 -1 305931
 S
 #305929
-Floating in a void~
+Walking Through Muck~
 ~
 0 4 1
+D1
+~
+~
+0 -1 305949
+D2
+~
+~
+0 -1 305928
+D3
+~
+~
+0 -1 305930
 S
 #305930
-Floating in a void~
+Inside a Drain Pipe~
 ~
 0 4 1
+D1
+~
+~
+0 -1 305929
+D2
+~
+~
+0 -1 305931
 S
 #305931
-Floating in a void~
+Inside a Drain Pipe~
 ~
 0 4 1
+D0
+~
+~
+0 -1 305930
+D1
+~
+~
+0 -1 305928
+D2
+~
+~
+0 -1 305932
 S
 #305932
-Floating in a void~
+Inside a Drain Pipe~
 ~
 0 4 1
+D0
+~
+~
+0 -1 305931
+D1
+~
+~
+0 -1 305927
+D2
+~
+~
+0 -1 305933
 S
 #305933
-Floating in a void~
+Inside a Drain Pipe~
 ~
 0 4 1
+D0
+~
+~
+0 -1 305932
+D1
+~
+~
+0 -1 305926
+D2
+~
+~
+0 -1 305934
 S
 #305934
-Floating in a void~
+Inside a Drain Pipe~
 ~
 0 4 1
+D0
+~
+~
+0 -1 305933
+D1
+~
+~
+0 -1 305925
+D2
+~
+~
+0 -1 305935
 S
 #305935
-Floating in a void~
+Inside a Drain Pipe~
 ~
 0 4 1
+D0
+~
+~
+0 -1 305934
+D1
+~
+~
+0 -1 305924
+D2
+~
+~
+0 -1 305936
 S
 #305936
-Floating in a void~
+Inside a Drain Pipe~
 ~
 0 4 1
+D0
+~
+~
+0 -1 305935
+D1
+~
+~
+0 -1 305923
+D2
+~
+~
+0 -1 305937
 S
 #305937
-Floating in a void~
+Inside a Drain Pipe~
 ~
 0 4 1
+D0
+~
+~
+0 -1 305936
+D1
+~
+~
+0 -1 305922
+D2
+~
+~
+0 -1 305938
 S
 #305938
-Floating in a void~
+Inside a Drain Pipe~
 ~
 0 4 1
+D0
+~
+~
+0 -1 305937
+D1
+~
+~
+0 -1 305921
+D2
+~
+~
+0 -1 305939
 S
 #305939
-Floating in a void~
+Inside a Drain Pipe~
 ~
 0 4 1
+D0
+~
+~
+0 -1 305938
+D1
+~
+~
+0 -1 305920
 S
 #305940
-Floating in a void~
+Inside a Drain Pipe~
 ~
 0 4 1
+D0
+~
+~
+0 -1 305941
+D3
+~
+~
+0 -1 305920
 S
 #305941
-Floating in a void~
+Inside a Drain Pipe~
 ~
 0 4 1
+D0
+~
+~
+0 -1 305942
+D2
+~
+~
+0 -1 305940
+D3
+~
+~
+0 -1 305921
 S
 #305942
-Floating in a void~
+Inside a Drain Pipe~
 ~
 0 4 1
+D0
+~
+~
+0 -1 305943
+D2
+~
+~
+0 -1 305941
+D3
+~
+~
+0 -1 305922
 S
 #305943
-Floating in a void~
+Inside a Drain Pipe~
 ~
 0 4 1
+D0
+~
+~
+0 -1 305944
+D2
+~
+~
+0 -1 305942
+D3
+~
+~
+0 -1 305923
 S
 #305944
-Floating in a void~
+Inside a Drain Pipe~
 ~
 0 4 1
+D0
+~
+~
+0 -1 305945
+D2
+~
+~
+0 -1 305943
+D3
+~
+~
+0 -1 305924
 S
 #305945
-Floating in a void~
+Inside a Drain Pipe~
 ~
 0 4 1
+D0
+~
+~
+0 -1 305946
+D2
+~
+~
+0 -1 305944
+D3
+~
+~
+0 -1 305925
 S
 #305946
-Floating in a void~
+Inside a Drain Pipe~
 ~
 0 4 1
+D0
+~
+~
+0 -1 305947
+D2
+~
+~
+0 -1 305945
+D3
+~
+~
+0 -1 305926
 S
 #305947
-Floating in a void~
+Inside a Drain Pipe~
 ~
 0 4 1
+D0
+~
+~
+0 -1 305948
+D2
+~
+~
+0 -1 305946
+D3
+~
+~
+0 -1 305927
 S
 #305948
-Floating in a void~
+Inside a Drain Pipe~
 ~
 0 4 1
+D0
+~
+~
+0 -1 305949
+D2
+~
+~
+0 -1 305947
+D3
+~
+~
+0 -1 305928
 S
 #305949
-Floating in a void~
+Inside a Drain Pipe~
 ~
 0 4 1
+D2
+~
+~
+0 -1 305948
+D3
+~
+~
+0 -1 305929
 S
 #305950
 Floating in a void~
@@ -41523,159 +41949,554 @@ D2
 0 -1 305577
 S
 #307012
-Floating in a void~
+Crushing Gravity~
+The air grows ever thicker and harder to breathe here, like your very
+bones are pulled down to the 'floor' through your skin.  Every step grows
+more difficult. 
 ~
 0 4 1
+D0
+~
+~
+0 -1 307013
+D2
+~
+~
+0 -1 305512
+> entry_prog 100~
+mea $n &YThe intense gravity gets worse with each step. If your body isn't used to high gravity, perhaps it would be best not to venture further.&d
+~
+|
 S
 #307013
-Floating in a void~
+Gravitron Void~
 ~
-0 4 1
+0 4&2048 1
+D0
+~
+~
+0 -1 307014
+D1
+~
+~
+0 -1 307033
+D2
+~
+~
+0 -1 307012
+D3
+~
+~
+0 -1 307032
 S
 #307014
-Floating in a void~
+Gravitron Void~
 ~
-0 4 1
+0 4&2048 1
+D0
+~
+~
+0 -1 307015
+D1
+~
+~
+0 -1 307034
+D2
+~
+~
+0 -1 307013
+D3
+~
+~
+0 -1 307031
 S
 #307015
-Floating in a void~
+Gravitron Void~
 ~
-0 4 1
+0 4&2048 1
+D0
+~
+~
+0 -1 307016
+D1
+~
+~
+0 -1 307035
+D2
+~
+~
+0 -1 307014
+D3
+~
+~
+0 -1 307030
 S
 #307016
-Floating in a void~
+Gravitron Void~
 ~
-0 4 1
+0 4&2048 1
+D0
+~
+~
+0 -1 307017
+D1
+~
+~
+0 -1 307036
+D2
+~
+~
+0 -1 307015
+D3
+~
+~
+0 -1 307029
 S
 #307017
-Floating in a void~
+Gravitron Void~
 ~
-0 4 1
+0 4&2048 1
+D0
+~
+~
+0 -1 307018
+D1
+~
+~
+0 -1 307037
+D2
+~
+~
+0 -1 307016
+D3
+~
+~
+0 -1 307028
 S
 #307018
-Floating in a void~
+Gravitron Void~
 ~
-0 4 1
+0 4&2048 1
+D0
+~
+~
+0 -1 307019
+D1
+~
+~
+0 -1 307038
+D2
+~
+~
+0 -1 307017
+D3
+~
+~
+0 -1 307027
 S
 #307019
-Floating in a void~
+Gravitron Void~
 ~
-0 4 1
+0 4&2048 1
+D0
+~
+~
+0 -1 307020
+D1
+~
+~
+0 -1 307039
+D2
+~
+~
+0 -1 307018
+D3
+~
+~
+0 -1 307026
 S
 #307020
-Floating in a void~
+Gravitron Void~
 ~
-0 4 1
+0 4&2048 1
+D0
+~
+~
+0 -1 307021
+D1
+~
+~
+0 -1 307040
+D2
+~
+~
+0 -1 307019
+D3
+~
+~
+0 -1 307025
 S
 #307021
-Floating in a void~
+Gravitron Void~
 ~
-0 4 1
+0 4&2048 1
+D0
+~
+~
+0 -1 307022
+D1
+~
+~
+0 -1 307041
+D2
+~
+~
+0 -1 307020
+D3
+~
+~
+0 -1 307024
 S
 #307022
-Floating in a void~
+Gravitron Void~
 ~
-0 4 1
+0 4&2048 1
+D1
+~
+~
+0 -1 307042
+D2
+~
+~
+0 -1 307021
+D3
+~
+~
+0 -1 307023
 S
 #307023
-Floating in a void~
+Gravitron Void~
 ~
-0 4 1
+0 4&2048 1
+D1
+~
+~
+0 -1 307022
+D2
+~
+~
+0 -1 307024
 S
 #307024
-Floating in a void~
+Gravitron Void~
 ~
-0 4 1
+0 4&2048 1
+D0
+~
+~
+0 -1 307023
+D1
+~
+~
+0 -1 307021
+D2
+~
+~
+0 -1 307025
 S
 #307025
-Floating in a void~
+Gravitron Void~
 ~
-0 4 1
+0 4&2048 1
+D0
+~
+~
+0 -1 307024
+D1
+~
+~
+0 -1 307020
+D2
+~
+~
+0 -1 307026
 S
 #307026
-Floating in a void~
+Gravitron Void~
 ~
-0 4 1
+0 4&2048 1
+D0
+~
+~
+0 -1 307025
+D1
+~
+~
+0 -1 307019
+D2
+~
+~
+0 -1 307027
 S
 #307027
-Floating in a void~
+Gravitron Void~
 ~
-0 4 1
+0 4&2048 1
+D0
+~
+~
+0 -1 307026
+D1
+~
+~
+0 -1 307018
+D2
+~
+~
+0 -1 307028
 S
 #307028
-Floating in a void~
+Gravitron Void~
 ~
-0 4 1
+0 4&2048 1
+D0
+~
+~
+0 -1 307027
+D1
+~
+~
+0 -1 307017
+D2
+~
+~
+0 -1 307029
 S
 #307029
-Floating in a void~
+Gravitron Void~
 ~
-0 4 1
+0 4&2048 1
+D0
+~
+~
+0 -1 307028
+D1
+~
+~
+0 -1 307016
+D2
+~
+~
+0 -1 307030
 S
 #307030
-Floating in a void~
+Gravitron Void~
 ~
-0 4 1
+0 4&2048 1
+D0
+~
+~
+0 -1 307029
+D1
+~
+~
+0 -1 307015
+D2
+~
+~
+0 -1 307031
 S
 #307031
-Floating in a void~
+Gravitron Void~
 ~
-0 4 1
+0 4&2048 1
+D0
+~
+~
+0 -1 307030
+D1
+~
+~
+0 -1 307014
+D2
+~
+~
+0 -1 307032
 S
 #307032
-Floating in a void~
+Gravitron Void~
 ~
-0 4 1
+0 4&2048 1
+D0
+~
+~
+0 -1 307031
+D1
+~
+~
+0 -1 307013
 S
 #307033
-Floating in a void~
+Gravitron Void~
 ~
-0 4 1
+0 4&2048 1
+D0
+~
+~
+0 -1 307034
+D3
+~
+~
+0 -1 307013
 S
 #307034
-Floating in a void~
+Gravitron Void~
 ~
-0 4 1
+0 4&2048 1
+D0
+~
+~
+0 -1 307035
+D2
+~
+~
+0 -1 307033
+D3
+~
+~
+0 -1 307014
 S
 #307035
-Floating in a void~
+Gravitron Void~
 ~
-0 4 1
+0 4&2048 1
+D0
+~
+~
+0 -1 307036
+D2
+~
+~
+0 -1 307034
+D3
+~
+~
+0 -1 307015
 S
 #307036
-Floating in a void~
+Gravitron Void~
 ~
-0 4 1
+0 4&2048 1
+D0
+~
+~
+0 -1 307037
+D2
+~
+~
+0 -1 307035
+D3
+~
+~
+0 -1 307016
 S
 #307037
-Floating in a void~
+Gravitron Void~
 ~
-0 4 1
+0 4&2048 1
+D0
+~
+~
+0 -1 307038
+D2
+~
+~
+0 -1 307036
+D3
+~
+~
+0 -1 307017
 S
 #307038
-Floating in a void~
+Gravitron Void~
 ~
-0 4 1
+0 4&2048 1
+D0
+~
+~
+0 -1 307039
+D2
+~
+~
+0 -1 307037
+D3
+~
+~
+0 -1 307018
 S
 #307039
-Floating in a void~
+Gravitron Void~
 ~
-0 4 1
+0 4&2048 1
+D0
+~
+~
+0 -1 307040
+D2
+~
+~
+0 -1 307038
+D3
+~
+~
+0 -1 307019
 S
 #307040
-Floating in a void~
+Gravitron Void~
 ~
-0 4 1
+0 4&2048 1
+D0
+~
+~
+0 -1 307041
+D2
+~
+~
+0 -1 307039
+D3
+~
+~
+0 -1 307020
 S
 #307041
-Floating in a void~
+Gravitron Void~
 ~
-0 4 1
+0 4&2048 1
+D0
+~
+~
+0 -1 307042
+D2
+~
+~
+0 -1 307040
+D3
+~
+~
+0 -1 307021
 S
 #307042
-Floating in a void~
+Gravitron Void~
 ~
-0 4 1
+0 4&2048 1
+D2
+~
+~
+0 -1 307041
+D3
+~
+~
+0 -1 307022
 S
 #307043
 Floating in a void~
@@ -52272,6 +53093,65 @@ M 1 305701 1 305913
 M 1 305701 1 305912
 M 1 305701 1 305911
 M 1 305701 1 305910
+M 1 305701 1 305920
+M 1 305701 1 305939
+M 1 305701 1 305940
+M 1 305701 1 305941
+M 1 305701 1 305921
+M 1 305701 1 305938
+M 1 305701 1 305937
+M 1 305701 1 305922
+M 1 305701 1 305942
+M 1 305701 1 305943
+M 1 305701 1 305923
+M 1 305701 1 305936
+M 1 305701 1 305935
+M 1 305701 1 305924
+M 1 305701 1 305944
+M 1 305701 1 305945
+M 1 305701 1 305925
+M 1 305701 1 305934
+M 1 305701 1 305933
+M 1 305701 1 305926
+M 1 305701 1 305946
+M 1 305701 1 305947
+M 1 305701 1 305927
+M 1 305701 1 305932
+M 1 305701 1 305931
+M 1 305701 1 305928
+M 1 305701 1 305948
+M 1 305701 1 305949
+M 1 305701 1 305929
+M 1 305701 1 305930
+M 1 307000 1 307032
+M 1 307000 1 307033
+M 1 307000 1 307034
+M 1 307000 1 307014
+M 1 307000 1 307031
+M 1 307000 1 307030
+M 1 307000 1 307015
+M 1 307000 1 307035
+M 1 307000 1 307036
+M 1 307000 1 307016
+M 1 307000 1 307029
+M 1 307000 1 307028
+M 1 307000 1 307017
+M 1 307000 1 307037
+M 1 307000 1 307038
+M 1 307000 1 307018
+M 1 307000 1 307027
+M 1 307000 1 307026
+M 1 307000 1 307019
+M 1 307000 1 307039
+M 1 307000 1 307040
+M 1 307000 1 307020
+M 1 307000 1 307025
+M 1 307000 1 307024
+M 1 307000 1 307021
+M 1 307000 1 307041
+M 1 307000 1 307042
+M 1 307000 1 307022
+M 1 307000 1 307023
 S
 
 
