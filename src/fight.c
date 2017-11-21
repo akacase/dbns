@@ -1946,8 +1946,8 @@ violence_update(void)
 							ch->pl = ch->exp * 50;
 							transStatApply(ch, onestr, onespd, oneint, onecon);
 						}
-						if (plmod >= 40
-							&& namekTotal < 4000) {
+						else if (plmod >= 40
+							&& namekTotal < 5000) {
 							ch->pl = (ch->exp * 40);
 							act( auraColor, "You stop abruptly, unable to concentrate any further.", ch, NULL, NULL, TO_CHAR );
 							act( auraColor, "$n stops abruptly, unable to concentrate any further.", ch, NULL, NULL, TO_NOTVICT );
