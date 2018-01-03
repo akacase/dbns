@@ -1305,7 +1305,7 @@ rage5(CHAR_DATA * ch, CHAR_DATA * victim)
 		if (ch->rage < 1500)
 			return;
 			
-		if (ch->train < 2790000)
+		if (ch->train < 2835000)
 			return;
 
 		if (ch->pcdata->learned[gsn_sgod] > 0)
@@ -4566,7 +4566,10 @@ do_kamehameha(CHAR_DATA * ch, char *argument)
 {
 	CHAR_DATA *victim;
 	int 	dam = 0;
+	int		arg = 100;
+	int		argdam = 0;
 
+	arg = atoi(argument);
 	if (IS_NPC(ch) && is_split(ch)) {
 		if (!ch->master)
 			return;
@@ -4587,7 +4590,17 @@ do_kamehameha(CHAR_DATA * ch, char *argument)
 		send_to_char("You aren't fighting anyone.\n\r", ch);
 		return;
 	}
-	if (ch->mana < skill_table[gsn_kamehameha]->min_mana) {
+	if (arg >= 200)
+		arg = 200;
+	if (arg < 100)
+		arg = 100;
+	if (arg >= 100)
+		arg = 100;
+	if (arg = 100 && ch->mana < skill_table[gsn_kamehameha]->min_mana) {
+		send_to_char("You don't have enough energy.\n\r", ch);
+		return;
+	}
+	else if (arg = 200 && ch->mana < (skill_table[gsn_kamehameha]->min_mana * 4)) {
 		send_to_char("You don't have enough energy.\n\r", ch);
 		return;
 	}
@@ -4599,35 +4612,59 @@ do_kamehameha(CHAR_DATA * ch, char *argument)
 
 	WAIT_STATE(ch, skill_table[gsn_kamehameha]->beats);
 	if (can_use_skill(ch, number_percent(), gsn_kamehameha)) {
-		dam = get_attmod(ch, victim) * (number_range(20, 25) + (get_curr_int(ch) / 40));
+		argdam = (arg / 4);
+		dam = get_attmod(ch, victim) * (number_range(argdam, argdam) + (get_curr_int(ch) / 40));
 		if (ch->charge > 0)
-			dam = chargeDamMult(ch, dam);
-		act(AT_LBLUE,
-		    "You put your arms back and cup your hands. 'KA-ME-HA-ME-HA!!!!'	",
-		    ch, NULL, victim, TO_CHAR);
-		act(AT_LBLUE,
-		    "You push your hands forward, throwing a blue beam at $N. &W[$t]",
-		    ch, num_punct(dam), victim, TO_CHAR);
-		act(AT_LBLUE,
-		    "$n puts $s arms back and cups $s hands. 'KA-ME-HA-ME-HA!!!!'	",
-		    ch, NULL, victim, TO_VICT);
-		act(AT_LBLUE,
-		    "$n pushes $s hands forward, throwing a blue beam at you. &W[$t]",
-		    ch, num_punct(dam), victim, TO_VICT);
-		act(AT_LBLUE,
-		    "$n puts $s arms back and cups $s hands. 'KA-ME-HA-ME-HA!!!!'	",
-		    ch, NULL, victim, TO_NOTVICT);
-		act(AT_LBLUE,
-		    "$n pushes $s hands forward, throwing a blue beam at $N. &W[$t]",
-		    ch, num_punct(dam), victim, TO_NOTVICT);
+		dam = chargeDamMult(ch, dam);
+		if (arg < 200) {
+			act(AT_LBLUE,
+				"You put your arms back and cup your hands. 'KA-ME-HA-ME-HA!!!!'	",
+				ch, NULL, victim, TO_CHAR);
+			act(AT_LBLUE,
+				"You push your hands forward, throwing a blue beam at $N. &W[$t]",
+				ch, num_punct(dam), victim, TO_CHAR);
+			act(AT_LBLUE,
+				"$n puts $s arms back and cups $s hands. 'KA-ME-HA-ME-HA!!!!'	",
+				ch, NULL, victim, TO_VICT);
+			act(AT_LBLUE,
+				"$n pushes $s hands forward, throwing a blue beam at you. &W[$t]",
+				ch, num_punct(dam), victim, TO_VICT);
+			act(AT_LBLUE,
+				"$n puts $s arms back and cups $s hands. 'KA-ME-HA-ME-HA!!!!'	",
+				ch, NULL, victim, TO_NOTVICT);
+			act(AT_LBLUE,
+				"$n pushes $s hands forward, throwing a blue beam at $N. &W[$t]",
+				ch, num_punct(dam), victim, TO_NOTVICT);
+		}
+		else {
+			act(AT_LBLUE,
+				"You put your arms back and cup your hands. 'CHOU KA-ME-HA-ME-HA!!!!'	",
+				ch, NULL, victim, TO_CHAR);
+			act(AT_LBLUE,
+				"You push your hands forward, throwing a massive blue beam at $N. &W[$t]",
+				ch, num_punct(dam), victim, TO_CHAR);
+			act(AT_LBLUE,
+				"$n puts $s arms back and cups $s hands. 'CHOU KA-ME-HA-ME-HA!!!!'	",
+				ch, NULL, victim, TO_VICT);
+			act(AT_LBLUE,
+				"$n pushes $s hands forward, throwing a massive blue beam at you. &W[$t]",
+				ch, num_punct(dam), victim, TO_VICT);
+			act(AT_LBLUE,
+				"$n puts $s arms back and cups $s hands. 'CHOU KA-ME-HA-ME-HA!!!!'	",
+				ch, NULL, victim, TO_NOTVICT);
+			act(AT_LBLUE,
+				"$n pushes $s hands forward, throwing a massive blue beam at $N. &W[$t]",
+				ch, num_punct(dam), victim, TO_NOTVICT);
+		}
 
 		dam = ki_absorb(victim, ch, dam, gsn_kamehameha);
 		learn_from_success(ch, gsn_kamehameha);
 		global_retcode = damage(ch, victim, dam, TYPE_HIT);
-        if (!IS_NPC(ch)) {
-            stat_train(ch, "int", 8);
+		if (!IS_NPC(ch)) {
+			stat_train(ch, "int", 8);
 			ch->train += 2;
-        }
+		}
+	}
 	} else {
 		act(AT_LBLUE, "You missed $N with your kamehameha.", ch, NULL,
 		    victim, TO_CHAR);
@@ -4638,8 +4675,14 @@ do_kamehameha(CHAR_DATA * ch, char *argument)
 		learn_from_failure(ch, gsn_kamehameha);
 		global_retcode = damage(ch, victim, 0, TYPE_HIT);
 	}
-	ch->mana -= skill_table[gsn_kamehameha]->min_mana;
-	return;
+	if (arg = 100) {
+		ch->mana -= skill_table[gsn_kamehameha]->min_mana;
+		return;
+	}
+	else if (arg = 200) {
+		ch->mana -= (skill_table[gsn_kamehameha]->min_mana * 4);
+		return;
+	}
 }
 
 void
