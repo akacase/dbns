@@ -4565,11 +4565,11 @@ void
 do_kamehameha(CHAR_DATA * ch, char *argument)
 {
 	CHAR_DATA *victim;
+	char 	arg[MAX_INPUT_LENGTH];
 	int 	dam = 0;
-	int		arg = 0;
 	int		argdam = 0;
 
-	arg = atoi(argument);
+	one_argument(argument, arg);
 	if (IS_NPC(ch) && is_split(ch)) {
 		if (!ch->master)
 			return;
@@ -4590,16 +4590,11 @@ do_kamehameha(CHAR_DATA * ch, char *argument)
 		send_to_char("You aren't fighting anyone.\n\r", ch);
 		return;
 	}
-	if (arg >= 200)
-		arg = 200;
-	else
-		arg = 100;
-		
-	if (arg = 100 && ch->mana < skill_table[gsn_kamehameha]->min_mana) {
+	if (arg[0] == '\0' && ch->mana < skill_table[gsn_kamehameha]->min_mana) {
 		send_to_char("You don't have enough energy.\n\r", ch);
 		return;
 	}
-	else if (arg = 200 && ch->mana < (skill_table[gsn_kamehameha]->min_mana * 4)) {
+	else if (!str_cmp(arg, "2") && ch->mana < (skill_table[gsn_kamehameha]->min_mana * 4)) {
 		send_to_char("You don't have enough energy.\n\r", ch);
 		return;
 	}
@@ -4611,11 +4606,14 @@ do_kamehameha(CHAR_DATA * ch, char *argument)
 
 	WAIT_STATE(ch, skill_table[gsn_kamehameha]->beats);
 	if (can_use_skill(ch, number_percent(), gsn_kamehameha)) {
-		argdam = (arg / 4);
-		dam = get_attmod(ch, victim) * (number_range(argdam, argdam) + (get_curr_int(ch) / 40));
+		if (arg[0] == '\0')
+			argdam = (number_range(20, 25);
+		if (!str_cmp(arg, "2"))
+			argdam = (number_range(40, 50);
+		dam = get_attmod(ch, victim) * argdam + (get_curr_int(ch) / 40));
 		if (ch->charge > 0)
 		dam = chargeDamMult(ch, dam);
-		if (arg < 200) {
+		if (!str_cmp(arg, "2")) {
 			act(AT_LBLUE,
 				"You put your arms back and cup your hands. 'KA-ME-HA-ME-HA!!!!'	",
 				ch, NULL, victim, TO_CHAR);
@@ -4635,7 +4633,7 @@ do_kamehameha(CHAR_DATA * ch, char *argument)
 				"$n pushes $s hands forward, throwing a blue beam at $N. &W[$t]",
 				ch, num_punct(dam), victim, TO_NOTVICT);
 		}
-		else {
+		else if (arg[0] == '\0') {
 			act(AT_LBLUE,
 				"You put your arms back and cup your hands. 'CHOU KA-ME-HA-ME-HA!!!!'	",
 				ch, NULL, victim, TO_CHAR);
@@ -4673,11 +4671,11 @@ do_kamehameha(CHAR_DATA * ch, char *argument)
 		learn_from_failure(ch, gsn_kamehameha);
 		global_retcode = damage(ch, victim, 0, TYPE_HIT);
 	}
-	if (arg = 100) {
+	if (arg[0] == '\0') {
 		ch->mana -= skill_table[gsn_kamehameha]->min_mana;
 		return;
 	}
-	else if (arg = 200) {
+	else if (!str_cmp(arg, "2")) {
 		ch->mana -= (skill_table[gsn_kamehameha]->min_mana * 4);
 		return;
 	}
