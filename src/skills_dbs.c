@@ -4616,7 +4616,7 @@ do_kamehameha(CHAR_DATA * ch, char *argument)
 	WAIT_STATE(ch, skill_table[gsn_kamehameha]->beats);
 	if (can_use_skill(ch, number_percent(), gsn_kamehameha)) {
 		argdam = (arg / 4);
-		dam = get_attmod(ch, victim) * (number_range(argdam, argdam) + (get_curr_int(ch) / 40));
+		dam = get_attmod(ch, victim) * (number_range(20, 25) + (get_curr_int(ch) / 40));
 		if (ch->charge > 0)
 		dam = chargeDamMult(ch, dam);
 		if (arg < 200) {
