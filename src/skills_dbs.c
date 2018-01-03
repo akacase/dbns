@@ -4613,7 +4613,7 @@ do_kamehameha(CHAR_DATA * ch, char *argument)
 		dam = (get_attmod(ch, victim) * argdam) + (get_curr_int(ch) / 40);
 		if (ch->charge > 0)
 		dam = chargeDamMult(ch, dam);
-		if (!str_cmp(arg, "2")) {
+		if (arg[0] == '\0') {
 			act(AT_LBLUE,
 				"You put your arms back and cup your hands. 'KA-ME-HA-ME-HA!!!!'	",
 				ch, NULL, victim, TO_CHAR);
@@ -4633,7 +4633,7 @@ do_kamehameha(CHAR_DATA * ch, char *argument)
 				"$n pushes $s hands forward, throwing a blue beam at $N. &W[$t]",
 				ch, num_punct(dam), victim, TO_NOTVICT);
 		}
-		else if (arg[0] == '\0') {
+		else if (!str_cmp(arg, "2")) {
 			act(AT_LBLUE,
 				"You put your arms back and cup your hands. 'CHOU KA-ME-HA-ME-HA!!!!'	",
 				ch, NULL, victim, TO_CHAR);
