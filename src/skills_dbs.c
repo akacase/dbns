@@ -4592,10 +4592,13 @@ do_kamehameha(CHAR_DATA * ch, char *argument)
 	}
 	if (arg >= 200)
 		arg = 200;
+		
 	if (arg < 100)
 		arg = 100;
+		
 	if (arg >= 100)
 		arg = 100;
+		
 	if (arg = 100 && ch->mana < skill_table[gsn_kamehameha]->min_mana) {
 		send_to_char("You don't have enough energy.\n\r", ch);
 		return;
@@ -4664,7 +4667,6 @@ do_kamehameha(CHAR_DATA * ch, char *argument)
 			stat_train(ch, "int", 8);
 			ch->train += 2;
 		}
-	}
 	} else {
 		act(AT_LBLUE, "You missed $N with your kamehameha.", ch, NULL,
 		    victim, TO_CHAR);
