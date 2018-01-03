@@ -4610,7 +4610,7 @@ do_kamehameha(CHAR_DATA * ch, char *argument)
 			argdam = number_range(20, 25);
 		if (!str_cmp(arg, "2"))
 			argdam = number_range(40, 50);
-		dam = get_attmod(ch, victim) * argdam + (get_curr_int(ch) / 40));
+		dam = (get_attmod(ch, victim) * argdam) + (get_curr_int(ch) / 40);
 		if (ch->charge > 0)
 		dam = chargeDamMult(ch, dam);
 		if (!str_cmp(arg, "2")) {
