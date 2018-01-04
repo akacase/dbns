@@ -4497,6 +4497,7 @@ do_energy_ball(CHAR_DATA * ch, char *argument)
 	int		argdam = 0;
 
 	one_argument(argument, arg);
+	sh_int 	z = get_aura(ch);
 
 	if (IS_NPC(ch) && is_split(ch)) {
 		if (!ch->master)
@@ -4538,8 +4539,6 @@ do_energy_ball(CHAR_DATA * ch, char *argument)
 		ch->focus -= skill_table[gsn_energy_ball]->focus;
 
 	WAIT_STATE(ch, skill_table[gsn_energy_ball]->beats);
-
-	sh_int 	z = get_aura(ch);
 
 	if (can_use_skill(ch, number_percent(), gsn_energy_ball)) {
 		if (arg[0] == '\0')
