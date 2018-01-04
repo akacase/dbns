@@ -4551,8 +4551,8 @@ do_energy_ball(CHAR_DATA * ch, char *argument)
 			argdam = number_range(2, 4);
 		dam = get_attmod(ch, victim) * (argdam + (get_curr_int(ch) / 50));
 		if (ch->charge > 0)
-		if (arg[0] == '\0') {
 			dam = chargeDamMult(ch, dam);
+		if (arg[0] == '\0') {
 			act(z, "You blast $N with a single energy ball. &W[$t]", ch,
 				num_punct(dam), victim, TO_CHAR);
 			act(z, "$n blasts you with a single energy ball. &W[$t]", ch,
@@ -4561,7 +4561,6 @@ do_energy_ball(CHAR_DATA * ch, char *argument)
 				num_punct(dam), victim, TO_NOTVICT);
 		}
 		else if (!str_cmp(arg, "volley")) {
-			dam = chargeDamMult(ch, dam);
 			act(z, "You assail $N with consecutive energy blasts! &W[$t]", ch,
 				num_punct(dam), victim, TO_CHAR);
 			act(z, "$n assails you with consecutive energy blasts! &W[$t]", ch,
@@ -4570,7 +4569,6 @@ do_energy_ball(CHAR_DATA * ch, char *argument)
 				num_punct(dam), victim, TO_NOTVICT);
 		}
 		else if (!str_cmp(arg, "desperation")) {
-			dam = chargeDamMult(ch, dam);
 			act(z, "You throw your hands forward and dust the sky with a furious,", ch,
 				NULL, victim, TO_CHAR);
 			act(z, "desperate barrage of countless blasts, engulfing $N! &W[$t]", ch,
