@@ -4544,9 +4544,9 @@ do_energy_ball(CHAR_DATA * ch, char *argument)
 	if (can_use_skill(ch, number_percent(), gsn_energy_ball)) {
 		if (arg[0] == '\0')
 			argdam = number_range(2, 4);
-		else if (!str_cmp(arg, "volley")
+		else if (!str_cmp(arg, "volley"))
 			argdam = number_range(8, 16);
-		else if (!str_cmp(arg, "desperation")
+		else if (!str_cmp(arg, "desperation"))
 			argdam = number_range(32, 64);
 		else
 			argdam = number_range(2, 4);
