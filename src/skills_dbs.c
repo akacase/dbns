@@ -4492,7 +4492,11 @@ void
 do_energy_ball(CHAR_DATA * ch, char *argument)
 {
 	CHAR_DATA *victim;
+	char 	arg[MAX_INPUT_LENGTH];
 	int 	dam = 0;
+	int		argdam = 0;
+
+	one_argument(argument, arg);
 
 	if (IS_NPC(ch) && is_split(ch)) {
 		if (!ch->master)
@@ -4514,9 +4518,18 @@ do_energy_ball(CHAR_DATA * ch, char *argument)
 		send_to_char("You aren't fighting anyone.\n\r", ch);
 		return;
 	}
-	if (ch->mana < skill_table[gsn_energy_ball]->min_mana) {
-		send_to_char("You don't have enough energy.\n\r", ch);
-		return;
+	if (arg[0] == '\0'
+		|| !str_cmp(arg, "volley")) {
+		if (ch->mana < skill_table[gsn_energy_ball]->min_mana) {
+			send_to_char("You don't have enough energy.\n\r", ch);
+			return;
+		}
+	}
+	else if (!str_cmp(arg, "desperation")) {
+		if (ch->mana < (skill_table[gsn_energy_ball]->min_mana * 64)) {
+			send_to_char("You don't have enough energy.\n\r", ch);
+			return;
+		}
 	}
 	if (ch->focus < skill_table[gsn_energy_ball]->focus) {
 		send_to_char("You need to focus more.\n\r", ch);
@@ -4529,15 +4542,46 @@ do_energy_ball(CHAR_DATA * ch, char *argument)
 	sh_int 	z = get_aura(ch);
 
 	if (can_use_skill(ch, number_percent(), gsn_energy_ball)) {
-		dam = get_attmod(ch, victim) * (number_range(6, 8) + (get_curr_int(ch) / 50));
+		if (arg[0] == '\0')
+			argdam = number_range(2, 4);
+		else if (!str_cmp(arg, "volley")
+			argdam = number_range(8, 16);
+		else if (!str_cmp(arg, "desperation")
+			argdam = number_range(32, 64);
+		else
+			argdam = number_range(2, 4);
+		dam = get_attmod(ch, victim) * (argdam + (get_curr_int(ch) / 50));
 		if (ch->charge > 0)
+		if (arg[0] == '\0') {
 			dam = chargeDamMult(ch, dam);
-		act(z, "You hit $N with an energy ball. &W[$t]", ch,
-		    num_punct(dam), victim, TO_CHAR);
-		act(z, "$n hits you with an energy ball. &W[$t]", ch,
-		    num_punct(dam), victim, TO_VICT);
-		act(z, "$n hits $N with an energy ball. &W[$t]", ch,
-		    num_punct(dam), victim, TO_NOTVICT);
+			act(z, "You blast $N with a single energy ball. &W[$t]", ch,
+				num_punct(dam), victim, TO_CHAR);
+			act(z, "$n blasts you with a single energy ball. &W[$t]", ch,
+				num_punct(dam), victim, TO_VICT);
+			act(z, "$n blasts $N with a single energy ball. &W[$t]", ch,
+				num_punct(dam), victim, TO_NOTVICT);
+		}
+		else if (!str_cmp(arg, "volley") {
+			dam = chargeDamMult(ch, dam);
+			act(z, "You assail $N with consecutive energy blasts! &W[$t]", ch,
+				num_punct(dam), victim, TO_CHAR);
+			act(z, "$n assails you with consecutive energy blasts! &W[$t]", ch,
+				num_punct(dam), victim, TO_VICT);
+			act(z, "$n assails $N with consecutive energy blasts! &W[$t]", ch,
+				num_punct(dam), victim, TO_NOTVICT);
+		}
+		else if (!str_cmp(arg, "desperation") {
+			dam = chargeDamMult(ch, dam);
+			act(z, "You throw your hands forward and dust the sky with a furious,", ch,
+				NULL, victim, TO_CHAR);
+			act(z, "desperate barrage of countless blasts, engulfing $N! &W[$t]", ch,
+				num_punct(dam), victim, TO_CHAR);
+			act(z, "$n engulfs you in a desperate barrage of energy blasts! &W[$t]", ch,
+				num_punct(dam), victim, TO_VICT);
+			act(z, "$n engulfs $N in a desperate barrage of energy blasts! &W[$t]", ch,
+				num_punct(dam), victim, TO_NOTVICT);
+		}
+				
 		dam = ki_absorb(victim, ch, dam, gsn_energy_ball);
 		learn_from_success(ch, gsn_energy_ball);
 		global_retcode = damage(ch, victim, dam, TYPE_HIT);
@@ -4546,19 +4590,26 @@ do_energy_ball(CHAR_DATA * ch, char *argument)
 			ch->train += 1;
         }
 	} else {
-		act(z, "You missed $N with your energy ball.", ch, NULL, victim,
+		act(z, "Your energy blast veers wildly off course.", ch, NULL, victim,
 		    TO_CHAR);
-		act(z, "$n misses you with $s energy ball.", ch, NULL, victim,
+		act(z, "$n's energy blast sails harmlessly past you.", ch, NULL, victim,
 		    TO_VICT);
-		act(z, "$n missed $N with an energy ball.", ch, NULL, victim,
+		act(z, "$n's energy blast sails harmlessly past $N.", ch, NULL, victim,
 		    TO_NOTVICT);
 		learn_from_failure(ch, gsn_energy_ball);
 		global_retcode = damage(ch, victim, 0, TYPE_HIT);
 	}
 
 	if (!is_android_h(ch))
-		ch->mana -= skill_table[gsn_energy_ball]->min_mana;
-	return;
+		if (arg[0] == '\0'
+			|| !str_cmp(arg, "volley")) {
+			ch->mana -= skill_table[gsn_energy_ball]->min_mana;
+			return;
+		}
+		else if (!str_cmp(arg, "desperation")) {
+			ch->mana -= (skill_table[gsn_energy_ball]->min_mana * 64);
+			return;
+		}
 }
 
 void
@@ -4610,7 +4661,7 @@ do_kamehameha(CHAR_DATA * ch, char *argument)
 			argdam = number_range(20, 25);
 		if (!str_cmp(arg, "2"))
 			argdam = number_range(40, 50);
-		dam = (get_attmod(ch, victim) * argdam) + (get_curr_int(ch) / 40);
+		dam = get_attmod(ch, victim) * (argdam + (get_curr_int(ch) / 40));
 		if (ch->charge > 0)
 		dam = chargeDamMult(ch, dam);
 		if (arg[0] == '\0') {
