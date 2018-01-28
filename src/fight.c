@@ -53,15 +53,15 @@ args((CHAR_DATA * ch, CHAR_DATA * victim, int dam,
 	if (IS_NPC(ch) || IS_NPC(victim))
 		return true;
 
-	if (ch->exp <= 100000) {
+	if (ch->exp <= 5000) {
 		send_to_char
-		    ("You can not fight other players until you are a 'Skilled Fighter'.\n\r",
+		    ("You can not fight other players until you're out of training'.\n\r",
 		    ch);
 		return false;
 	}
-	if (victim->exp <= 100000) {
+	if (victim->exp <= 5000) {
 		send_to_char
-		    ("You can not fight other players until they are a 'Skilled Fighter'.\n\r",
+		    ("You can not fight other players until they're out of training.\n\r",
 		    ch);
 		return false;
 	}
@@ -576,10 +576,12 @@ violence_update(void)
 				if (form_drain < 1)
 					form_drain = 1;
 				ch->mana -= form_drain;
-				if (form_drain <= 1)
-					ch->train += 1;
-				else if (form_drain > 1)
-					ch->train += 3;
+				if (ch->desc) {
+					if (form_drain <= 1)
+						ch->train += 1;
+					else if (form_drain > 1)
+						ch->train += 3;
+				}
 		}
 		if (!IS_NPC(ch)
 			&& xIS_SET((ch)->affected_by, AFF_MYSTIC)) {
@@ -624,10 +626,12 @@ violence_update(void)
 				if (form_drain < 1)
 					form_drain = 1;
 				ch->mana -= form_drain;
-				if (form_drain <= 1)
-					ch->train += 1;
-				else if (form_drain > 1)
-					ch->train += 3;
+				if (ch->desc) {
+					if (form_drain <= 1)
+						ch->train += 1;
+					else if (form_drain > 1)
+						ch->train += 3;
+				}
 		}
 		if (!IS_NPC(ch)
 			&& xIS_SET((ch)->affected_by, AFF_ICER2)) {
@@ -648,12 +652,14 @@ violence_update(void)
 					act( AT_PURPLE, "You lose control of your ki and return to normal!", ch, NULL, NULL, TO_CHAR );
 					act( AT_PURPLE, "$n loses control of $s ki and returns to normal!", ch, NULL, NULL, TO_NOTVICT );
 				}
-				if (form_mastery < 1)
-					form_mastery = 1;
-				if (form_mastery >= 6)
-					ch->train += 1;
-				else if (form_mastery < 6)
-					ch->train += 15;
+				if (ch->desc) {
+					if (form_mastery < 1)
+						form_mastery = 1;
+					if (form_mastery >= 6)
+						ch->train += 1;
+					else if (form_mastery < 6)
+						ch->train += 30;
+				}
 		}
 		if (!IS_NPC(ch)
 			&& xIS_SET((ch)->affected_by, AFF_ICER3)) {
@@ -674,12 +680,14 @@ violence_update(void)
 					act( AT_PURPLE, "You lose control of your ki and return to normal!", ch, NULL, NULL, TO_CHAR );
 					act( AT_PURPLE, "$n loses control of $s ki and returns to normal!", ch, NULL, NULL, TO_NOTVICT );
 				}
-				if (form_mastery < 1)
-					form_mastery = 1;
-				if (form_mastery >= 20)
-					ch->train += 1;
-				else if (form_mastery < 20)
-					ch->train += 15;
+				if (ch->desc) {
+					if (form_mastery < 1)
+						form_mastery = 1;
+					if (form_mastery >= 20)
+						ch->train += 1;
+					else if (form_mastery < 20)
+						ch->train += 30;
+				}
 		}
 		if (!IS_NPC(ch)
 			&& xIS_SET((ch)->affected_by, AFF_ICER4)) {
@@ -700,12 +708,14 @@ violence_update(void)
 					act( AT_PURPLE, "You lose control of your ki and return to normal!", ch, NULL, NULL, TO_CHAR );
 					act( AT_PURPLE, "$n loses control of $s ki and returns to normal!", ch, NULL, NULL, TO_NOTVICT );
 				}
-				if (form_mastery < 1)
-					form_mastery = 1;
-				if (form_mastery >= 44)
-					ch->train += 1;
-				else if (form_mastery < 44)
-					ch->train += 3;
+				if (ch->desc) {
+					if (form_mastery < 1)
+						form_mastery = 1;
+					if (form_mastery >= 44)
+						ch->train += 1;
+					else if (form_mastery < 44)
+						ch->train += 3;
+				}
 		}
 		if (!IS_NPC(ch)
 			&& xIS_SET((ch)->affected_by, AFF_ICER5)) {
@@ -733,10 +743,12 @@ violence_update(void)
 				if (form_drain < 1)
 					form_drain = 1;
 				ch->mana -= form_drain;
-				if (form_mastery >= 64)
-					ch->train += 1;
-				else if (form_mastery < 64)
-					ch->train += 3;
+				if (ch->desc) {
+					if (form_mastery >= 64)
+						ch->train += 1;
+					else if (form_mastery < 64)
+						ch->train += 3;
+				}
 		}
 		if (!IS_NPC(ch)
 			&& xIS_SET((ch)->affected_by, AFF_GOLDENFORM)) {
@@ -764,10 +776,12 @@ violence_update(void)
 				if (form_drain < 400)
 					form_drain = 400;
 				ch->mana -= form_drain;
-				if (form_drain > 400)
-					ch->train += 3;
-				else if (form_drain <= 400)
-					ch->train += 1;
+				if (ch->desc) {
+					if (form_drain > 400)
+						ch->train += 3;
+					else if (form_drain <= 400)
+						ch->train += 1;
+				}
 		}
 		if (!IS_NPC(ch)
 			&& xIS_SET((ch)->affected_by, AFF_SSJ)
@@ -803,10 +817,12 @@ violence_update(void)
 				if (form_drain < 1)
 					form_drain = 1;
 				ch->mana -= form_drain;
-				if (form_mastery >= 9)
-					ch->train += 1;
-				else if (form_mastery < 9)
-					ch->train += 3;
+				if (ch->desc) {
+					if (form_mastery >= 9)
+						ch->train += 1;
+					else if (form_mastery < 9)
+						ch->train += 3;
+				}
 		}
 		if (!IS_NPC(ch)
 			&& xIS_SET((ch)->affected_by, AFF_SSJ)
@@ -843,10 +859,12 @@ violence_update(void)
 				if (form_drain < 1)
 					form_drain = 1;
 				ch->mana -= form_drain;
-				if (form_mastery >= 19)
-					ch->train += 1;
-				else if (form_mastery < 19)
-					ch->train += 3;
+				if (ch->desc) {
+					if (form_mastery >= 19)
+						ch->train += 1;
+					else if (form_mastery < 19)
+						ch->train += 3;
+				}
 		}
 		if (!IS_NPC(ch)
 			&& xIS_SET((ch)->affected_by, AFF_SSJ)
@@ -884,10 +902,12 @@ violence_update(void)
 				if (form_drain < 1)
 					form_drain = 1;
 				ch->mana -= form_drain;
-				if (form_mastery >= 29)
-					ch->train += 1;
-				else if (form_mastery < 29)
-					ch->train += 3;
+				if (ch->desc) {
+					if (form_mastery >= 29)
+						ch->train += 1;
+					else if (form_mastery < 29)
+						ch->train += 3;
+				}
 		}
 		if (!IS_NPC(ch)
 			&& xIS_SET((ch)->affected_by, AFF_SSJ)
@@ -926,10 +946,12 @@ violence_update(void)
 				if (form_drain < 1)
 					form_drain = 1;
 				ch->mana -= form_drain;
-				if (form_drain >= 39)
-					ch->train += 1;
-				else if (form_drain < 39)
-					ch->train += 3;
+				if (ch->desc) {
+					if (form_drain >= 39)
+						ch->train += 1;
+					else if (form_drain < 39)
+						ch->train += 3;
+				}
 		}
 		if (!IS_NPC(ch)
 			&& xIS_SET((ch)->affected_by, AFF_SSJ)
@@ -969,10 +991,12 @@ violence_update(void)
 				if (form_drain < 1)
 					form_drain = 1;
 				ch->mana -= form_drain;
-				if (form_mastery >= 52)
-					ch->train += 1;
-				else if (form_mastery < 52)
-					ch->train += 3;
+				if (ch->desc) {
+					if (form_mastery >= 52)
+						ch->train += 1;
+					else if (form_mastery < 52)
+						ch->train += 3;
+				}
 		}
 		if (!IS_NPC(ch)
 			&& xIS_SET((ch)->affected_by, AFF_SSJ)
@@ -1013,10 +1037,12 @@ violence_update(void)
 				if (form_drain < 1)
 					form_drain = 1;
 				ch->mana -= form_drain;
-				if (form_mastery >= 62)
-					ch->train += 1;
-				else if (form_mastery < 62)
-					ch->train += 3;
+				if (ch->desc) {
+					if (form_mastery >= 62)
+						ch->train += 1;
+					else if (form_mastery < 62)
+						ch->train += 3;
+				}
 		}
 		if (!IS_NPC(ch)
 			&& xIS_SET((ch)->affected_by, AFF_SSJ)
@@ -1058,10 +1084,12 @@ violence_update(void)
 				if (form_drain < 250)
 					form_drain = 250;
 				ch->mana -= form_drain;
-				if (form_drain <= 250)
-					ch->train += 1;
-				else if (form_drain > 250)
-					ch->train += 3;
+				if (ch->desc) {
+					if (form_drain <= 250)
+						ch->train += 1;
+					else if (form_drain > 250)
+						ch->train += 3;
+				}
 		}
 		/* Bug Guard */
 		if (xIS_SET((ch)->affected_by, AFF_POWERCHANNEL)
@@ -1166,7 +1194,7 @@ violence_update(void)
 					safemaximum = ((get_curr_int(ch) * 0.03) + 1);
 					if (ch->powerup < safemaximum) {
 						
-						ch->pl *= 1.15;
+						ch->pl *= 1.30;
 						ch->powerup += 1;
 						transStatApply(ch, powerupstr, powerupspd, powerupint, powerupcon);
 						if (plmod >= 30
@@ -1508,7 +1536,7 @@ violence_update(void)
 					&& !xIS_SET((ch)->affected_by, AFF_GOLDENFORM)) {
 					safemaximum = ((get_curr_int(ch) * 0.03) + 1);
 					if (ch->powerup < safemaximum) {
-						ch->pl *= 1.15;
+						ch->pl *= 1.30;
 						ch->powerup += 1;
 						transStatApply(ch, powerupstr, powerupspd, powerupint, powerupcon);
 						if (plmod >= 2) {
@@ -1733,7 +1761,7 @@ violence_update(void)
 					mysticTotal = ((ch->perm_str + ch->perm_dex) + (ch->perm_int * 2) + (ch->perm_con * 3));
 					safemaximum = ((get_curr_int(ch) * 0.03) + 1);
 					if (ch->powerup < safemaximum) {
-						ch->pl *= 1.15;
+						ch->pl *= 1.30;
 						ch->powerup += 1;
 						transStatApply(ch, powerupstr, powerupspd, powerupint, powerupcon);
 						if (plmod >= 30
@@ -1905,7 +1933,7 @@ violence_update(void)
 					namekTotal = ((ch->perm_str + ch->perm_dex) + (ch->perm_int * 3) + (ch->perm_con * 2));
 					safemaximum = ((get_curr_int(ch) * 0.03) + 1);
 					if (ch->powerup < safemaximum) {
-						ch->pl *= 1.15;
+						ch->pl *= 1.30;
 						ch->powerup += 1;
 						transStatApply(ch, powerupstr, powerupspd, powerupint, powerupcon);
 						if (plmod >= 40
@@ -1918,8 +1946,8 @@ violence_update(void)
 							ch->pl = ch->exp * 50;
 							transStatApply(ch, onestr, onespd, oneint, onecon);
 						}
-						if (plmod >= 40
-							&& namekTotal < 4000) {
+						else if (plmod >= 40
+							&& namekTotal < 5000) {
 							ch->pl = (ch->exp * 40);
 							act( auraColor, "You stop abruptly, unable to concentrate any further.", ch, NULL, NULL, TO_CHAR );
 							act( auraColor, "$n stops abruptly, unable to concentrate any further.", ch, NULL, NULL, TO_NOTVICT );
@@ -2129,6 +2157,528 @@ violence_update(void)
 				}
 			}
 		}
+		/* Gravity area/room effects and bonus combat stats */
+		if (!IS_NPC(ch)) {
+			if (xIS_SET((ch)->in_room->room_flags, ROOM_GRAV10)
+			|| xIS_SET((ch)->in_room->room_flags, ROOM_GRAV50)
+			|| xIS_SET((ch)->in_room->room_flags, ROOM_GRAV100)
+			|| xIS_SET((ch)->in_room->room_flags, ROOM_GRAV200)
+			|| xIS_SET((ch)->in_room->room_flags, ROOM_GRAV300)
+			|| xIS_SET((ch)->in_room->room_flags, ROOM_GRAV400)
+			|| xIS_SET((ch)->in_room->room_flags, ROOM_GRAV500)
+			|| xIS_SET((ch)->in_room->room_flags, ROOM_GRAV600)
+			|| xIS_SET((ch)->in_room->room_flags, ROOM_GRAV700)
+			|| xIS_SET((ch)->in_room->room_flags, ROOM_GRAV800)
+			|| xIS_SET((ch)->in_room->room_flags, ROOM_GRAV900)
+			|| xIS_SET((ch)->in_room->room_flags, ROOM_GRAV1000)) {
+				int gravdam = 0;
+				int damrange = 0;
+				int safediff = 0;
+				int resdiff = 0;
+				int acc = 0;
+				int gravres = 0;
+			
+				if (xIS_SET((ch)->in_room->room_flags, ROOM_GRAV10)) {
+					ch->gravSetting = 10;
+					if (ch->position == POS_FIGHTING) {
+						stat_train(ch, "str", 7);
+						stat_train(ch, "spd", 7);
+						stat_train(ch, "con", 7);
+						stat_train(ch, "int", 7);
+						ch->train += 4;
+					}
+					if (ch->position == POS_AGGRESSIVE) {
+						stat_train(ch, "str", 8);
+						stat_train(ch, "spd", 7);
+						stat_train(ch, "con", 7);
+						stat_train(ch, "int", 6);
+						ch->train += 4;
+					}
+					if (ch->position == POS_BERSERK) {
+						stat_train(ch, "str", 14);
+						stat_train(ch, "spd", 7);
+						stat_train(ch, "con", 7);
+						ch->train += 4;
+					}
+					if (ch->position == POS_DEFENSIVE) {
+						stat_train(ch, "str", 4);
+						stat_train(ch, "spd", 7);
+						stat_train(ch, "con", 10);
+						stat_train(ch, "int", 7);
+						ch->train += 4;
+					}
+					if (ch->position == POS_EVASIVE) {
+						stat_train(ch, "spd", 9);
+						stat_train(ch, "con", 7);
+						stat_train(ch, "int", 12);
+						ch->train += 4;
+					}
+				}
+				else if (xIS_SET((ch)->in_room->room_flags, ROOM_GRAV50)) {
+					ch->gravSetting = 50;
+										if (ch->position == POS_FIGHTING) {
+						stat_train(ch, "str", 10);
+						stat_train(ch, "spd", 10);
+						stat_train(ch, "con", 10);
+						stat_train(ch, "int", 10);
+						ch->train += 4;
+					}
+					if (ch->position == POS_AGGRESSIVE) {
+						stat_train(ch, "str", 12);
+						stat_train(ch, "spd", 10);
+						stat_train(ch, "con", 10);
+						stat_train(ch, "int", 8);
+						ch->train += 4;
+					}
+					if (ch->position == POS_BERSERK) {
+						stat_train(ch, "str", 20);
+						stat_train(ch, "spd", 10);
+						stat_train(ch, "con", 10);
+						ch->train += 4;
+					}
+					if (ch->position == POS_DEFENSIVE) {
+						stat_train(ch, "str", 5);
+						stat_train(ch, "spd", 10);
+						stat_train(ch, "con", 16);
+						stat_train(ch, "int", 9);
+						ch->train += 4;
+					}
+					if (ch->position == POS_EVASIVE) {
+						stat_train(ch, "spd", 14);
+						stat_train(ch, "con", 10);
+						stat_train(ch, "int", 16);
+						ch->train += 4;
+					}
+				}
+				else if (xIS_SET((ch)->in_room->room_flags, ROOM_GRAV100)) {
+					ch->gravSetting = 100;
+					if (ch->position == POS_FIGHTING) {
+						stat_train(ch, "str", 12);
+						stat_train(ch, "spd", 12);
+						stat_train(ch, "con", 12);
+						stat_train(ch, "int", 12);
+						ch->train += 4;
+					}
+					if (ch->position == POS_AGGRESSIVE) {
+						stat_train(ch, "str", 14);
+						stat_train(ch, "spd", 12);
+						stat_train(ch, "con", 12);
+						stat_train(ch, "int", 10);
+						ch->train += 4;
+					}
+					if (ch->position == POS_BERSERK) {
+						stat_train(ch, "str", 24);
+						stat_train(ch, "spd", 12);
+						stat_train(ch, "con", 12);
+						ch->train += 4;
+					}
+					if (ch->position == POS_DEFENSIVE) {
+						stat_train(ch, "str", 6);
+						stat_train(ch, "spd", 12);
+						stat_train(ch, "con", 18);
+						stat_train(ch, "int", 12);
+						ch->train += 4;
+					}
+					if (ch->position == POS_EVASIVE) {
+						stat_train(ch, "spd", 16);
+						stat_train(ch, "con", 12);
+						stat_train(ch, "int", 20);
+						ch->train += 4;
+					}
+				}
+				else if (xIS_SET((ch)->in_room->room_flags, ROOM_GRAV200)) {
+					ch->gravSetting = 200;
+					if (ch->position == POS_FIGHTING) {
+						stat_train(ch, "str", 14);
+						stat_train(ch, "spd", 14);
+						stat_train(ch, "con", 14);
+						stat_train(ch, "int", 14);
+						ch->train += 5;
+					}
+					if (ch->position == POS_AGGRESSIVE) {
+						stat_train(ch, "str", 16);
+						stat_train(ch, "spd", 14);
+						stat_train(ch, "con", 14);
+						stat_train(ch, "int", 12);
+						ch->train += 5;
+					}
+					if (ch->position == POS_BERSERK) {
+						stat_train(ch, "str", 28);
+						stat_train(ch, "spd", 14);
+						stat_train(ch, "con", 14);
+						ch->train += 5;
+					}
+					if (ch->position == POS_DEFENSIVE) {
+						stat_train(ch, "str", 8);
+						stat_train(ch, "spd", 14);
+						stat_train(ch, "con", 20);
+						stat_train(ch, "int", 14);
+						ch->train += 5;
+					}
+					if (ch->position == POS_EVASIVE) {
+						stat_train(ch, "spd", 18);
+						stat_train(ch, "con", 14);
+						stat_train(ch, "int", 24);
+						ch->train += 5;
+					}
+				}
+				else if (xIS_SET((ch)->in_room->room_flags, ROOM_GRAV300)) {
+					ch->gravSetting = 300;
+					if (ch->position == POS_FIGHTING) {
+						stat_train(ch, "str", 15);
+						stat_train(ch, "spd", 15);
+						stat_train(ch, "con", 15);
+						stat_train(ch, "int", 15);
+						ch->train += 5;
+					}
+					if (ch->position == POS_AGGRESSIVE) {
+						stat_train(ch, "str", 17);
+						stat_train(ch, "spd", 15);
+						stat_train(ch, "con", 15);
+						stat_train(ch, "int", 13);
+						ch->train += 5;
+					}
+					if (ch->position == POS_BERSERK) {
+						stat_train(ch, "str", 30);
+						stat_train(ch, "spd", 15);
+						stat_train(ch, "con", 15);
+						ch->train += 5;
+					}
+					if (ch->position == POS_DEFENSIVE) {
+						stat_train(ch, "str", 9);
+						stat_train(ch, "spd", 15);
+						stat_train(ch, "con", 21);
+						stat_train(ch, "int", 15);
+						ch->train += 5;
+					}
+					if (ch->position == POS_EVASIVE) {
+						stat_train(ch, "spd", 19);
+						stat_train(ch, "con", 15);
+						stat_train(ch, "int", 26);
+						ch->train += 5;
+					}
+				}
+				else if (xIS_SET((ch)->in_room->room_flags, ROOM_GRAV400)) {
+					ch->gravSetting = 400;
+					if (ch->position == POS_FIGHTING) {
+						stat_train(ch, "str", 16);
+						stat_train(ch, "spd", 16);
+						stat_train(ch, "con", 16);
+						stat_train(ch, "int", 16);
+						ch->train += 5;
+					}
+					if (ch->position == POS_AGGRESSIVE) {
+						stat_train(ch, "str", 18);
+						stat_train(ch, "spd", 16);
+						stat_train(ch, "con", 16);
+						stat_train(ch, "int", 15);
+						ch->train += 5;
+					}
+					if (ch->position == POS_BERSERK) {
+						stat_train(ch, "str", 32);
+						stat_train(ch, "spd", 16);
+						stat_train(ch, "con", 16);
+						ch->train += 5;
+					}
+					if (ch->position == POS_DEFENSIVE) {
+						stat_train(ch, "str", 10);
+						stat_train(ch, "spd", 16);
+						stat_train(ch, "con", 22);
+						stat_train(ch, "int", 16);
+						ch->train += 5;
+					}
+					if (ch->position == POS_EVASIVE) {
+						stat_train(ch, "spd", 20);
+						stat_train(ch, "con", 16);
+						stat_train(ch, "int", 28);
+						ch->train += 5;
+					}
+				}
+				else if (xIS_SET((ch)->in_room->room_flags, ROOM_GRAV500)) {
+					ch->gravSetting = 500;
+					if (ch->position == POS_FIGHTING) {
+						stat_train(ch, "str", 17);
+						stat_train(ch, "spd", 17);
+						stat_train(ch, "con", 17);
+						stat_train(ch, "int", 17);
+						ch->train += 6;
+					}
+					if (ch->position == POS_AGGRESSIVE) {
+						stat_train(ch, "str", 18);
+						stat_train(ch, "spd", 17);
+						stat_train(ch, "con", 17);
+						stat_train(ch, "int", 16);
+						ch->train += 6;
+					}
+					if (ch->position == POS_BERSERK) {
+						stat_train(ch, "str", 34);
+						stat_train(ch, "spd", 17);
+						stat_train(ch, "con", 17);
+						ch->train += 6;
+					}
+					if (ch->position == POS_DEFENSIVE) {
+						stat_train(ch, "str", 11);
+						stat_train(ch, "spd", 17);
+						stat_train(ch, "con", 23);
+						stat_train(ch, "int", 17);
+						ch->train += 6;
+					}
+					if (ch->position == POS_EVASIVE) {
+						stat_train(ch, "spd", 21);
+						stat_train(ch, "con", 17);
+						stat_train(ch, "int", 30);
+						ch->train += 6;
+					}
+				}
+				else if (xIS_SET((ch)->in_room->room_flags, ROOM_GRAV600)) {
+					ch->gravSetting = 600;
+					if (ch->position == POS_FIGHTING) {
+						stat_train(ch, "str", 18);
+						stat_train(ch, "spd", 18);
+						stat_train(ch, "con", 18);
+						stat_train(ch, "int", 18);
+						ch->train += 6;
+					}
+					if (ch->position == POS_AGGRESSIVE) {
+						stat_train(ch, "str", 19);
+						stat_train(ch, "spd", 18);
+						stat_train(ch, "con", 18);
+						stat_train(ch, "int", 17);
+						ch->train += 6;
+					}
+					if (ch->position == POS_BERSERK) {
+						stat_train(ch, "str", 36);
+						stat_train(ch, "spd", 18);
+						stat_train(ch, "con", 18);
+						ch->train += 6;
+					}
+					if (ch->position == POS_DEFENSIVE) {
+						stat_train(ch, "str", 12);
+						stat_train(ch, "spd", 18);
+						stat_train(ch, "con", 24);
+						stat_train(ch, "int", 18);
+						ch->train += 6;
+					}
+					if (ch->position == POS_EVASIVE) {
+						stat_train(ch, "spd", 22);
+						stat_train(ch, "con", 18);
+						stat_train(ch, "int", 32);
+						ch->train += 6;
+					}
+				}
+				else if (xIS_SET((ch)->in_room->room_flags, ROOM_GRAV700)) {
+					ch->gravSetting = 700;
+					if (ch->position == POS_FIGHTING) {
+						stat_train(ch, "str", 19);
+						stat_train(ch, "spd", 19);
+						stat_train(ch, "con", 19);
+						stat_train(ch, "int", 19);
+						ch->train += 6;
+					}
+					if (ch->position == POS_AGGRESSIVE) {
+						stat_train(ch, "str", 20);
+						stat_train(ch, "spd", 19);
+						stat_train(ch, "con", 19);
+						stat_train(ch, "int", 18);
+						ch->train += 6;
+					}
+					if (ch->position == POS_BERSERK) {
+						stat_train(ch, "str", 38);
+						stat_train(ch, "spd", 19);
+						stat_train(ch, "con", 19);
+						ch->train += 6;
+					}
+					if (ch->position == POS_DEFENSIVE) {
+						stat_train(ch, "str", 13);
+						stat_train(ch, "spd", 19);
+						stat_train(ch, "con", 25);
+						stat_train(ch, "int", 19);
+						ch->train += 6;
+					}
+					if (ch->position == POS_EVASIVE) {
+						stat_train(ch, "spd", 23);
+						stat_train(ch, "con", 19);
+						stat_train(ch, "int", 34);
+						ch->train += 6;
+					}
+				}
+				else if (xIS_SET((ch)->in_room->room_flags, ROOM_GRAV800)) {
+					ch->gravSetting = 800;
+					if (ch->position == POS_FIGHTING) {
+						stat_train(ch, "str", 20);
+						stat_train(ch, "spd", 20);
+						stat_train(ch, "con", 20);
+						stat_train(ch, "int", 20);
+						ch->train += 6;
+					}
+					if (ch->position == POS_AGGRESSIVE) {
+						stat_train(ch, "str", 21);
+						stat_train(ch, "spd", 20);
+						stat_train(ch, "con", 20);
+						stat_train(ch, "int", 19);
+						ch->train += 6;
+					}
+					if (ch->position == POS_BERSERK) {
+						stat_train(ch, "str", 40);
+						stat_train(ch, "spd", 20);
+						stat_train(ch, "con", 20);
+						ch->train += 6;
+					}
+					if (ch->position == POS_DEFENSIVE) {
+						stat_train(ch, "str", 14);
+						stat_train(ch, "spd", 20);
+						stat_train(ch, "con", 26);
+						stat_train(ch, "int", 20);
+						ch->train += 6;
+					}
+					if (ch->position == POS_EVASIVE) {
+						stat_train(ch, "spd", 24);
+						stat_train(ch, "con", 20);
+						stat_train(ch, "int", 36);
+						ch->train += 6;
+					}
+				}
+				else if (xIS_SET((ch)->in_room->room_flags, ROOM_GRAV900)) {
+					ch->gravSetting = 900;
+					if (ch->position == POS_FIGHTING) {
+						stat_train(ch, "str", 21);
+						stat_train(ch, "spd", 21);
+						stat_train(ch, "con", 21);
+						stat_train(ch, "int", 21);
+						ch->train += 6;
+					}
+					if (ch->position == POS_AGGRESSIVE) {
+						stat_train(ch, "str", 22);
+						stat_train(ch, "spd", 21);
+						stat_train(ch, "con", 21);
+						stat_train(ch, "int", 20);
+						ch->train += 6;
+					}
+					if (ch->position == POS_BERSERK) {
+						stat_train(ch, "str", 42);
+						stat_train(ch, "spd", 21);
+						stat_train(ch, "con", 21);
+						ch->train += 6;
+					}
+					if (ch->position == POS_DEFENSIVE) {
+						stat_train(ch, "str", 15);
+						stat_train(ch, "spd", 21);
+						stat_train(ch, "con", 27);
+						stat_train(ch, "int", 21);
+						ch->train += 6;
+					}
+					if (ch->position == POS_EVASIVE) {
+						stat_train(ch, "spd", 25);
+						stat_train(ch, "con", 21);
+						stat_train(ch, "int", 38);
+						ch->train += 6;
+					}
+				}
+				else if (xIS_SET((ch)->in_room->room_flags, ROOM_GRAV1000)) {
+					ch->gravSetting = 1000;
+					if (ch->position == POS_FIGHTING) {
+						stat_train(ch, "str", 22);
+						stat_train(ch, "spd", 22);
+						stat_train(ch, "con", 22);
+						stat_train(ch, "int", 22);
+						ch->train += 6;
+					}
+					if (ch->position == POS_AGGRESSIVE) {
+						stat_train(ch, "str", 23);
+						stat_train(ch, "spd", 22);
+						stat_train(ch, "con", 22);
+						stat_train(ch, "int", 21);
+						ch->train += 6;
+					}
+					if (ch->position == POS_BERSERK) {
+						stat_train(ch, "str", 44);
+						stat_train(ch, "spd", 22);
+						stat_train(ch, "con", 22);
+						ch->train += 6;
+					}
+					if (ch->position == POS_DEFENSIVE) {
+						stat_train(ch, "str", 16);
+						stat_train(ch, "spd", 22);
+						stat_train(ch, "con", 28);
+						stat_train(ch, "int", 22);
+						ch->train += 6;
+					}
+					if (ch->position == POS_EVASIVE) {
+						stat_train(ch, "spd", 26);
+						stat_train(ch, "con", 22);
+						stat_train(ch, "int", 40);
+						ch->train += 6;
+					}
+				}
+				else {
+					if (ch->position == POS_FIGHTING) {
+						stat_train(ch, "str", 5);
+						stat_train(ch, "spd", 5);
+						stat_train(ch, "con", 5);
+						stat_train(ch, "int", 5);
+						ch->train += 3;
+					}
+					if (ch->position == POS_AGGRESSIVE) {
+						stat_train(ch, "str", 6);
+						stat_train(ch, "spd", 5);
+						stat_train(ch, "con", 5);
+						stat_train(ch, "int", 4);
+						ch->train += 3;
+					}
+					if (ch->position == POS_BERSERK) {
+						stat_train(ch, "str", 10);
+						stat_train(ch, "spd", 5);
+						stat_train(ch, "con", 5);
+						ch->train += 3;
+					}
+					if (ch->position == POS_DEFENSIVE) {
+						stat_train(ch, "str", 2);
+						stat_train(ch, "spd", 5);
+						stat_train(ch, "con", 8);
+						stat_train(ch, "int", 5);
+						ch->train += 3;
+					}
+					if (ch->position == POS_EVASIVE) {
+						stat_train(ch, "spd", 7);
+						stat_train(ch, "con", 5);
+						stat_train(ch, "int", 8);
+						ch->train += 3;
+					}
+				}
+				if (ch->gravExp >= 400000)
+					acc = ((ch->gravExp / 4000) + 301);
+				else if (ch->gravExp < 400000)
+					acc = ((ch->gravExp / 1000) + 1);
+				if (acc < 1)
+					acc = 1;
+				damrange = number_range(1, 3);
+				gravres = (get_curr_con(ch) / 500) + 1;
+				safediff = ((ch->gravSetting - acc) + 2);
+				if (safediff < 1)
+					safediff = 1;
+				resdiff = (safediff - gravres);
+				if (resdiff < 1)
+					resdiff = 1;
+				gravdam = (pow(resdiff, 3) * damrange);
+				if (ch->mana - gravdam > 0)
+					ch->mana -= gravdam;
+				else if (ch->mana - gravdam <= 0) {
+					ch->mana = 0;
+					ch->hit -= (gravdam / 3);
+					act( AT_RED, "Your bones pop and creak ominously.", ch, NULL, NULL, TO_CHAR );
+					if (ch->hit - (gravdam / 3) < 0) {
+						update_pos(ch);
+						if (ch->position == POS_DEAD) {
+							act( AT_RED, "Your body has been crushed!", ch, NULL, NULL, TO_CHAR );
+							act( AT_RED, "$n collapses, DEAD, $s body crushed under intense gravity.", ch, NULL, NULL, TO_NOTVICT );
+							sprintf( buf, "%s is crushed into a pancake under intense gravity", ch->name );
+							do_info(ch, buf);
+							raw_kill(ch, ch);
+						}
+					}
+				}
+			}
+		}
 		/* New Gravity Training */
 		if (xIS_SET((ch)->affected_by, AFF_PUSHUPS) && !xIS_SET((ch)->in_room->room_flags, ROOM_GRAV)) {
 			
@@ -2152,224 +2702,606 @@ violence_update(void)
 		}
 		if (xIS_SET((ch)->affected_by, AFF_PUSHUPS) && xIS_SET((ch)->in_room->room_flags, ROOM_GRAV)) {
 		  // check if position has changed to not standing
-		  if(ch->position < POS_STANDING) {
+		  if(ch->position < POS_STANDING
+			&& ch->position != POS_DEAD) {
 		    xREMOVE_BIT((ch)->affected_by, AFF_PUSHUPS);
-		    send_to_char("You cannot gravity train in such a lax state.\n\r", ch);
+		    send_to_char("You cannot gravity train in such a state.\n\r", ch);
 		  }
+		  if(!ch->desc)
+			xREMOVE_BIT((ch)->affected_by, AFF_PUSHUPS);
+			
 		  char buf[MAX_STRING_LENGTH];
 		  int trainmessage = 0;
 		  long double xp_gain = 0;
+		  long double base_xp = 0;
 		  int gravLevel = 0;
-		  int minLF;
 		  int increase = 0;
+		  int safegrav = 0;
+		  int gravdam = 0;
+		  int safediff = 0;
+		  int damrange = 0;
+		  int statbonus = 0;
+		  int breakbonus = 0;
+		  double overacc_bonus = 0;
+		  long double xp_bonus = 0;
+		  int acc = 0;
+		  int gravres = 0;
+		  int resdiff = 0;
             
 		  increase = number_range(1, 3);
-			
-		  gravLevel = ((get_curr_str(ch) + get_curr_dex(ch) + get_curr_int(ch) + get_curr_con(ch)) - 39);
+		  damrange = number_range(1, 6);
+		  gravres = (get_curr_con(ch) / 500) + 1;
+		
+		  if (ch->gravExp >= 400000)
+			  acc = ((ch->gravExp / 4000) + 301);
+		  else if (ch->gravExp < 400000)
+			  acc = ((ch->gravExp / 1000) + 1);
+		  if (acc < 1)
+				acc = 1;
 		  trainmessage = number_range(1, 100);
-		  minLF = 5;
-			
-		  if (ch->hit <= minLF) {
-		    xREMOVE_BIT((ch)->affected_by, AFF_PUSHUPS);
-		    act(AT_WHITE, "You almost pass out from training too hard.", ch, NULL, NULL, TO_CHAR);
-		    act(AT_WHITE, "$n almost passes out from training too hard.", ch, NULL, NULL, TO_NOTVICT);
-		  }
+		  safediff = ((ch->gravSetting - acc) + 2);
+		  if (safediff < 1)
+			  safediff = 1;
+		  resdiff = (safediff - gravres);
+		  if (resdiff < 1)
+			  resdiff = 1;
+		  gravdam = (pow(resdiff, 3) * damrange);
+		  gravLevel = ch->gravSetting;
+		  statbonus = safediff + 15;
+		  breakbonus = statbonus * 2;
+		  overacc_bonus = 0.1 * safediff;
 
 		  if (trainmessage < 65) {
-		    xp_gain = (long double)increase / 100 * gravLevel;
-		    ch->hit--;
-		    ch->mana -= URANGE(0, ch->mana * 0.005, ch->mana);
-		    gain_exp(ch, xp_gain);
-		    sprintf(buf, "Your power level increases by %s points.", num_punct(xp_gain));
-		    act(AT_HIT, buf, ch, NULL, NULL, TO_CHAR);
-		    stat_train(ch, "str", 15);
+		    base_xp = (long double)increase / 24 * gravLevel;
+			xp_bonus = (long double)base_xp * overacc_bonus;
+			xp_gain = (long double)base_xp + xp_bonus;
+			gain_exp(ch, xp_gain);
+			if (safediff > 1)
+				ch->gravExp += (increase + safediff);
+			if (xp_gain > 1) {
+				sprintf(buf, "Your power level increases by %s points.", num_punct(xp_gain));
+				act(AT_HIT, buf, ch, NULL, NULL, TO_CHAR);
+			}
+			else {
+				sprintf(buf, "Your power level increases very slightly.", NULL);
+				act(AT_HIT, buf, ch, NULL, NULL, TO_CHAR);
+			}
+		    stat_train(ch, "str", statbonus);
+			if (ch->mana - gravdam > 0)
+				ch->mana -= gravdam;
+			else if (ch->mana - gravdam <= 0) {
+				ch->mana = 0;
+				ch->hit -= (gravdam / 3);
+				act( AT_RED, "Your bones pop and creak ominously.", ch, NULL, NULL, TO_CHAR );
+				if (ch->hit - (gravdam / 3) < 0) {
+					update_pos(ch);
+					if (ch->position == POS_DEAD) {
+						act( AT_RED, "Your body has been crushed!", ch, NULL, NULL, TO_CHAR );
+						act( AT_RED, "$n collapses, DEAD, $s body crushed under intense gravity.", ch, NULL, NULL, TO_NOTVICT );
+						sprintf( buf, "%s is crushed into a pancake under intense gravity", ch->name );
+						do_info(ch, buf);
+						raw_kill(ch, ch);
+					}
+				}
+			}
 		  }
 		  if (trainmessage >= 65 && trainmessage < 99) {
-		    xp_gain = (long double)increase / 100 * gravLevel;
-		    ch->hit--;
-		    ch->mana -= URANGE(0, ch->mana * 0.005, ch->mana);
-		    pager_printf(ch, "&GYou perform a push-up in %d times gravity, your strength steadily building.\n\r", gravLevel);
+		    base_xp = (long double)increase / 24 * gravLevel;
+			xp_bonus = (long double)base_xp * overacc_bonus;
+			xp_gain = (long double)base_xp + xp_bonus;
 		    gain_exp(ch, xp_gain);
-		    sprintf(buf, "Your power level increases by %s points.", num_punct(xp_gain));
-		    act(AT_HIT, buf, ch, NULL, NULL, TO_CHAR);
-		    stat_train(ch, "str", 15);
+		    pager_printf(ch, "&GYou perform a push-up in %d times gravity, your strength steadily building.\n\r", gravLevel);
+			if (safediff > 1)
+				ch->gravExp += (increase + safediff);
+			if (xp_gain > 1) {
+				sprintf(buf, "Your power level increases by %s points.", num_punct(xp_gain));
+				act(AT_HIT, buf, ch, NULL, NULL, TO_CHAR);
+			}
+			else {
+				sprintf(buf, "Your power level increases very slightly.", NULL);
+				act(AT_HIT, buf, ch, NULL, NULL, TO_CHAR);
+			}
+		    stat_train(ch, "str", statbonus);
+			if (ch->mana - gravdam > 0)
+				ch->mana -= gravdam;
+			else if (ch->mana - gravdam <= 0) {
+				ch->mana = 0;
+				ch->hit -= (gravdam / 3);
+				act( AT_RED, "Your bones pop and creak ominously.", ch, NULL, NULL, TO_CHAR );
+				if (ch->hit - (gravdam / 3) < 0) {
+					update_pos(ch);
+					if (ch->position == POS_DEAD) {
+						act( AT_RED, "Your body has been crushed!", ch, NULL, NULL, TO_CHAR );
+						act( AT_RED, "$n collapses, DEAD, $s body crushed under intense gravity.", ch, NULL, NULL, TO_NOTVICT );
+						sprintf( buf, "%s is crushed into a pancake under intense gravity", ch->name );
+						do_info(ch, buf);
+						raw_kill(ch, ch);
+					}
+				}
+			}
 		  }
 		  if (trainmessage >= 99) {
-		    xp_gain = (long double)increase / 50 * gravLevel;
-		    ch->hit--;
-		    ch->mana -= URANGE(0, ch->mana * 0.010, ch->mana);
+		    base_xp = (long double)increase / 12 * gravLevel;
+			xp_bonus = (long double)base_xp * overacc_bonus;
+			xp_gain = (long double)base_xp + xp_bonus;
+		    gain_exp(ch, xp_gain);
+			if (safediff > 1)
+				ch->gravExp += (increase + safediff);
 		    pager_printf(ch, "&GPushing past your normal limits, you perform a series of one-armed push-ups!\n\r", gravLevel);
 		    act(AT_WHITE, "$n does a set of one-armed pushups in rapid-fire succession.", ch, NULL, NULL, TO_NOTVICT);
-		    gain_exp(ch, xp_gain);
-		    sprintf(buf, "Your power level suddenly increases by %s points.", num_punct(xp_gain));
+			sprintf(buf, "Your power level suddenly increases by %s points.", num_punct(xp_gain));
 		    act(AT_HIT, buf, ch, NULL, NULL, TO_CHAR);
-		    stat_train(ch, "str", 30);
+		    stat_train(ch, "str", breakbonus);
+			if (ch->mana - gravdam > 0)
+				ch->mana -= gravdam;
+			else if (ch->mana - gravdam <= 0) {
+				ch->mana = 0;
+				ch->hit -= (gravdam / 3);
+				act( AT_RED, "Your bones pop and creak ominously.", ch, NULL, NULL, TO_CHAR );
+				if (ch->hit - (gravdam / 3) < 0) {
+					update_pos(ch);
+					if (ch->position == POS_DEAD) {
+						act( AT_RED, "Your body has been crushed!", ch, NULL, NULL, TO_CHAR );
+						act( AT_RED, "$n collapses, DEAD, $s body crushed under intense gravity.", ch, NULL, NULL, TO_NOTVICT );
+						sprintf( buf, "%s is crushed into a pancake under intense gravity", ch->name );
+						do_info(ch, buf);
+						raw_kill(ch, ch);
+					}
+				}
+			}
 		  }
 		}
 		if (xIS_SET((ch)->affected_by, AFF_SHADOWBOXING) && xIS_SET((ch)->in_room->room_flags, ROOM_GRAV)) {
 		  // check if positioning has changed to not standing
-                  if(ch->position < POS_STANDING) {
+                  if(ch->position < POS_STANDING
+					&& ch->position != POS_DEAD) {
                     xREMOVE_BIT((ch)->affected_by, AFF_SHADOWBOXING);
                     send_to_char("You cannot gravity train in such a lax state.\n\r", ch);
                   }
+		  if(!ch->desc)
+			xREMOVE_BIT((ch)->affected_by, AFF_SHADOWBOXING);
+			
 		  char buf[MAX_STRING_LENGTH];
 		  int trainmessage = 0;
 		  long double xp_gain = 0;
+		  long double base_xp = 0;
 		  int gravLevel = 0;
-		  int minLF;
 		  int increase = 0;
-
+		  int safegrav = 0;
+		  int gravdam = 0;
+		  int safediff = 0;
+		  int damrange = 0;
+		  int statbonus = 0;
+		  int breakbonus = 0;
+		  double overacc_bonus = 0;
+		  long double xp_bonus = 0;
+		  int acc = 0;
+		  int gravres = 0;
+		  int resdiff = 0;
+            
 		  increase = number_range(1, 3);
-			
-		  gravLevel = ((get_curr_str(ch) + get_curr_dex(ch) + get_curr_int(ch) + get_curr_con(ch)) - 39);
+		  damrange = number_range(1, 6);
+		  gravres = (get_curr_con(ch) / 500) + 1;
+		
+		  if (ch->gravExp >= 400000)
+			  acc = ((ch->gravExp / 4000) + 301);
+		  else if (ch->gravExp < 400000)
+			  acc = ((ch->gravExp / 1000) + 1);
+		  if (acc < 1)
+				acc = 1;
 		  trainmessage = number_range(1, 100);
-		  minLF = 5;
-			
-		  if (ch->hit <= minLF) {
-		    xREMOVE_BIT((ch)->affected_by, AFF_SHADOWBOXING);
-		    act(AT_WHITE, "You almost pass out from training too hard.", ch, NULL, NULL, TO_CHAR);
-		    act(AT_WHITE, "$n almost passes out from training too hard.", ch, NULL, NULL, TO_NOTVICT);
-		  }
+		  safediff = ((ch->gravSetting - acc) + 2);
+		  if (safediff < 1)
+			  safediff = 1;
+		  resdiff = (safediff - gravres);
+		  if (resdiff < 1)
+			  resdiff = 1;
+		  gravdam = (pow(resdiff, 3) * damrange);
+		  gravLevel = ch->gravSetting;
+		  statbonus = safediff + 15;
+		  breakbonus = statbonus * 2;
+		  overacc_bonus = 0.1 * safediff;
 
 		  if (trainmessage < 65) {
-		    xp_gain = (long double)increase / 100 * gravLevel;
-		    ch->hit--;
-		    ch->mana -= URANGE(0, ch->mana * 0.005, ch->mana);
-		    gain_exp(ch, xp_gain);
-		    sprintf(buf, "Your power level increases by %s points.", num_punct(xp_gain));
-		    act(AT_HIT, buf, ch, NULL, NULL, TO_CHAR);
-		    stat_train(ch, "spd", 15);
+		    base_xp = (long double)increase / 24 * gravLevel;
+			xp_bonus = (long double)base_xp * overacc_bonus;
+			xp_gain = (long double)base_xp + xp_bonus;
+			gain_exp(ch, xp_gain);
+			if (safediff > 1)
+				ch->gravExp += (increase + safediff);
+			if (xp_gain > 1) {
+				sprintf(buf, "Your power level increases by %s points.", num_punct(xp_gain));
+				act(AT_HIT, buf, ch, NULL, NULL, TO_CHAR);
+			}
+			else {
+				sprintf(buf, "Your power level increases very slightly.", NULL);
+				act(AT_HIT, buf, ch, NULL, NULL, TO_CHAR);
+			}
+		    stat_train(ch, "spd", statbonus);
+			if (ch->mana - gravdam > 0)
+				ch->mana -= gravdam;
+			else if (ch->mana - gravdam <= 0) {
+				ch->mana = 0;
+				ch->hit -= (gravdam / 3);
+				act( AT_RED, "Your bones pop and creak ominously.", ch, NULL, NULL, TO_CHAR );
+				if (ch->hit - (gravdam / 3) < 0) {
+					update_pos(ch);
+					if (ch->position == POS_DEAD) {
+						act( AT_RED, "Your body has been crushed!", ch, NULL, NULL, TO_CHAR );
+						act( AT_RED, "$n collapses, DEAD, $s body crushed under intense gravity.", ch, NULL, NULL, TO_NOTVICT );
+						sprintf( buf, "%s is crushed into a pancake under intense gravity", ch->name );
+						do_info(ch, buf);
+						raw_kill(ch, ch);
+					}
+				}
+			}
 		  }
 		  if (trainmessage >= 65 && trainmessage < 99) {
-		    xp_gain = (long double)increase / 100 * gravLevel;
-		    ch->hit--;
-		    ch->mana -= URANGE(0, ch->mana * 0.005, ch->mana);
-		    pager_printf(ch, "&GYou perform a combo in %d times gravity while skillfully dodging from side to side.\n\r", gravLevel);
+		    base_xp = (long double)increase / 24 * gravLevel;
+			xp_bonus = (long double)base_xp * overacc_bonus;
+			xp_gain = (long double)base_xp + xp_bonus;
 		    gain_exp(ch, xp_gain);
-		    sprintf(buf, "Your power level increases by %s points.", num_punct(xp_gain));
-		    act(AT_HIT, buf, ch, NULL, NULL, TO_CHAR);
-		    stat_train(ch, "spd", 15);
+		    pager_printf(ch, "&GYou perform a combo in %d times gravity while skillfully dodging from side to side.\n\r", gravLevel);
+			if (safediff > 1)
+				ch->gravExp += (increase + safediff);
+			if (xp_gain > 1) {
+				sprintf(buf, "Your power level increases by %s points.", num_punct(xp_gain));
+				act(AT_HIT, buf, ch, NULL, NULL, TO_CHAR);
+			}
+			else {
+				sprintf(buf, "Your power level increases very slightly.", NULL);
+				act(AT_HIT, buf, ch, NULL, NULL, TO_CHAR);
+			}
+		    stat_train(ch, "spd", statbonus);
+			if (ch->mana - gravdam > 0)
+				ch->mana -= gravdam;
+			else if (ch->mana - gravdam <= 0) {
+				ch->mana = 0;
+				ch->hit -= (gravdam / 3);
+				act( AT_RED, "Your bones pop and creak ominously.", ch, NULL, NULL, TO_CHAR );
+				if (ch->hit - (gravdam / 3) < 0) {
+					update_pos(ch);
+					if (ch->position == POS_DEAD) {
+						act( AT_RED, "Your body has been crushed!", ch, NULL, NULL, TO_CHAR );
+						act( AT_RED, "$n collapses, DEAD, $s body crushed under intense gravity.", ch, NULL, NULL, TO_NOTVICT );
+						sprintf( buf, "%s is crushed into a pancake under intense gravity", ch->name );
+						do_info(ch, buf);
+						raw_kill(ch, ch);
+					}
+				}
+			}
 		  }
 		  if (trainmessage >= 99) {
-		    xp_gain = (long double)increase / 50 * gravLevel;
-		    ch->hit--;
-		    ch->mana -= URANGE(0, ch->mana * 0.010, ch->mana);
+		    base_xp = (long double)increase / 12 * gravLevel;
+			xp_bonus = (long double)base_xp * overacc_bonus;
+			xp_gain = (long double)base_xp + xp_bonus;
+		    gain_exp(ch, xp_gain);
+			if (safediff > 1)
+				ch->gravExp += (increase + safediff);
 		    pager_printf(ch, "&GBreathing deeply, you throw all of your energy into a vicious jab-cross-hook-knee combination!\n\r", gravLevel);
 		    act(AT_WHITE, "$n drives forward with a long combo, bouncing light on $s feet.", ch, NULL, NULL, TO_NOTVICT);
-		    gain_exp(ch, xp_gain);
-		    sprintf(buf, "Your power level suddenly increases by %s points.", num_punct(xp_gain));
+			sprintf(buf, "Your power level suddenly increases by %s points.", num_punct(xp_gain));
 		    act(AT_HIT, buf, ch, NULL, NULL, TO_CHAR);
-		    stat_train(ch, "spd", 30);
+		    stat_train(ch, "spd", breakbonus);
+			if (ch->mana - gravdam > 0)
+				ch->mana -= gravdam;
+			else if (ch->mana - gravdam <= 0) {
+				ch->mana = 0;
+				ch->hit -= (gravdam / 3);
+				act( AT_RED, "Your bones pop and creak ominously.", ch, NULL, NULL, TO_CHAR );
+				if (ch->hit - (gravdam / 3) < 0) {
+					update_pos(ch);
+					if (ch->position == POS_DEAD) {
+						act( AT_RED, "Your body has been crushed!", ch, NULL, NULL, TO_CHAR );
+						act( AT_RED, "$n collapses, DEAD, $s body crushed under intense gravity.", ch, NULL, NULL, TO_NOTVICT );
+						sprintf( buf, "%s is crushed into a pancake under intense gravity", ch->name );
+						do_info(ch, buf);
+						raw_kill(ch, ch);
+					}
+				}
+			}
 		  }
 		}
 		if (xIS_SET((ch)->affected_by, AFF_ENDURING) && xIS_SET((ch)->in_room->room_flags, ROOM_GRAV)) {
 		  // check if position is no longer standing
-                  if(ch->position < POS_STANDING) {
+                  if(ch->position < POS_STANDING
+					&& ch->position != POS_DEAD) {
                     xREMOVE_BIT((ch)->affected_by, AFF_ENDURING);
                     send_to_char("You cannot gravity train in such a lax state.\n\r", ch);
                   }
+		  if(!ch->desc)
+			xREMOVE_BIT((ch)->affected_by, AFF_ENDURING);
+			
 		  char buf[MAX_STRING_LENGTH];
 		  int trainmessage = 0;
 		  long double xp_gain = 0;
+		  long double base_xp = 0;
 		  int gravLevel = 0;
-		  int minLF;
 		  int increase = 0;
-
+		  int safegrav = 0;
+		  int gravdam = 0;
+		  int safediff = 0;
+		  int damrange = 0;
+		  int statbonus = 0;
+		  int breakbonus = 0;
+		  double overacc_bonus = 0;
+		  long double xp_bonus = 0;
+		  int acc = 0;
+		  int gravres = 0;
+		  int resdiff = 0;
+            
 		  increase = number_range(1, 3);
-			
-		  gravLevel = ((get_curr_str(ch) + get_curr_dex(ch) + get_curr_int(ch) + get_curr_con(ch)) - 39);
+		  damrange = number_range(1, 6);
+		  gravres = (get_curr_con(ch) / 500) + 1;
+		
+		  if (ch->gravExp >= 400000)
+			  acc = ((ch->gravExp / 4000) + 301);
+		  else if (ch->gravExp < 400000)
+			  acc = ((ch->gravExp / 1000) + 1);
+		  if (acc < 1)
+				acc = 1;
 		  trainmessage = number_range(1, 100);
-		  minLF = 5;
-			
-		  if (ch->hit <= minLF) {
-		    xREMOVE_BIT((ch)->affected_by, AFF_ENDURING);
-		    act(AT_WHITE, "You almost pass out from training too hard.", ch, NULL, NULL, TO_CHAR);
-		    act(AT_WHITE, "$n almost passes out from training too hard.", ch, NULL, NULL, TO_NOTVICT);
-		  }
+		  safediff = ((ch->gravSetting - acc) + 2);
+		  if (safediff < 1)
+			  safediff = 1;
+		  resdiff = (safediff - gravres);
+		  if (resdiff < 1)
+			  resdiff = 1;
+		  gravdam = (pow(resdiff, 3) * damrange);
+		  gravLevel = ch->gravSetting;
+		  statbonus = safediff + 15;
+		  breakbonus = statbonus * 2;
+		  overacc_bonus = 0.1 * safediff;
 
 		  if (trainmessage < 65) {
-		    xp_gain = (long double)increase / 100 * gravLevel;
-		    ch->hit--;
-		    ch->mana -= URANGE(0, ch->mana * 0.005, ch->mana);
-		    gain_exp(ch, xp_gain);
-		    sprintf(buf, "Your power level increases by %s points.", num_punct(xp_gain));
-		    act(AT_HIT, buf, ch, NULL, NULL, TO_CHAR);
-		    stat_train(ch, "con", 15);
+		    base_xp = (long double)increase / 24 * gravLevel;
+			xp_bonus = (long double)base_xp * overacc_bonus;
+			xp_gain = (long double)base_xp + xp_bonus;
+			gain_exp(ch, xp_gain);
+			if (safediff > 1)
+				ch->gravExp += (increase + safediff);
+			if (xp_gain > 1) {
+				sprintf(buf, "Your power level increases by %s points.", num_punct(xp_gain));
+				act(AT_HIT, buf, ch, NULL, NULL, TO_CHAR);
+			}
+			else {
+				sprintf(buf, "Your power level increases very slightly.", NULL);
+				act(AT_HIT, buf, ch, NULL, NULL, TO_CHAR);
+			}
+		    stat_train(ch, "con", statbonus);
+			if (ch->mana - gravdam > 0)
+				ch->mana -= gravdam;
+			else if (ch->mana - gravdam <= 0) {
+				ch->mana = 0;
+				ch->hit -= (gravdam / 3);
+				act( AT_RED, "Your bones pop and creak ominously.", ch, NULL, NULL, TO_CHAR );
+				if (ch->hit - (gravdam / 3) < 0) {
+					update_pos(ch);
+					if (ch->position == POS_DEAD) {
+						act( AT_RED, "Your body has been crushed!", ch, NULL, NULL, TO_CHAR );
+						act( AT_RED, "$n collapses, DEAD, $s body crushed under intense gravity.", ch, NULL, NULL, TO_NOTVICT );
+						sprintf( buf, "%s is crushed into a pancake under intense gravity", ch->name );
+						do_info(ch, buf);
+						raw_kill(ch, ch);
+					}
+				}
+			}
 		  }
 		  if (trainmessage >= 65 && trainmessage < 99) {
-		    xp_gain = (long double)increase / 100 * gravLevel;
-		    ch->hit--;
-		    ch->mana -= URANGE(0, ch->mana * 0.005, ch->mana);
-		    pager_printf(ch, "&GYou crank up the dial well beyond %d times gravity, fighting just to stay on your feet.\n\r", gravLevel);
+		    base_xp = (long double)increase / 24 * gravLevel;
+			xp_bonus = (long double)base_xp * overacc_bonus;
+			xp_gain = (long double)base_xp + xp_bonus;
 		    gain_exp(ch, xp_gain);
-		    sprintf(buf, "Your power level increases by %s points.", num_punct(xp_gain));
-		    act(AT_HIT, buf, ch, NULL, NULL, TO_CHAR);
-		    stat_train(ch, "con", 15);
+		    pager_printf(ch, "&GYou crank up the dial well beyond %d times gravity, fighting just to stay on your feet.\n\r", gravLevel);
+			if (safediff > 1)
+				ch->gravExp += (increase + safediff);
+			if (xp_gain > 1) {
+				sprintf(buf, "Your power level increases by %s points.", num_punct(xp_gain));
+				act(AT_HIT, buf, ch, NULL, NULL, TO_CHAR);
+			}
+			else {
+				sprintf(buf, "Your power level increases very slightly.", NULL);
+				act(AT_HIT, buf, ch, NULL, NULL, TO_CHAR);
+			}
+		    stat_train(ch, "con", statbonus);
+			if (ch->mana - gravdam > 0)
+				ch->mana -= gravdam;
+			else if (ch->mana - gravdam <= 0) {
+				ch->mana = 0;
+				ch->hit -= (gravdam / 3);
+				act( AT_RED, "Your bones pop and creak ominously.", ch, NULL, NULL, TO_CHAR );
+				if (ch->hit - (gravdam / 3) < 0) {
+					update_pos(ch);
+					if (ch->position == POS_DEAD) {
+						act( AT_RED, "Your body has been crushed!", ch, NULL, NULL, TO_CHAR );
+						act( AT_RED, "$n collapses, DEAD, $s body crushed under intense gravity.", ch, NULL, NULL, TO_NOTVICT );
+						sprintf( buf, "%s is crushed into a pancake under intense gravity", ch->name );
+						do_info(ch, buf);
+						raw_kill(ch, ch);
+					}
+				}
+			}
 		  }
 		  if (trainmessage >= 99) {
-		    xp_gain = (long double)increase / 50 * gravLevel;
-		    ch->mana -= URANGE(0, ch->mana * 0.010, ch->mana);
+		    base_xp = (long double)increase / 12 * gravLevel;
+			xp_bonus = (long double)base_xp * overacc_bonus;
+			xp_gain = (long double)base_xp + xp_bonus;
+		    gain_exp(ch, xp_gain);
+			if (safediff > 1)
+				ch->gravExp += (increase + safediff);
 		    pager_printf(ch, "&GYou push the dial even further, gritting your teeth and nearly crushing your body to the floor!\n\r", gravLevel);
 		    act(AT_WHITE, "$n endures a level of gravity far beyond their normal limits, fighting just to stay alive!", ch, NULL, NULL, TO_NOTVICT);
-		    gain_exp(ch, xp_gain);
-		    sprintf(buf, "Your power level suddenly increases by %s points.", num_punct(xp_gain));
+			sprintf(buf, "Your power level suddenly increases by %s points.", num_punct(xp_gain));
 		    act(AT_HIT, buf, ch, NULL, NULL, TO_CHAR);
-		    stat_train(ch, "con", 30);
+		    stat_train(ch, "con", breakbonus);
+			if (ch->mana - gravdam > 0)
+				ch->mana -= gravdam;
+			else if (ch->mana - gravdam <= 0) {
+				ch->mana = 0;
+				ch->hit -= (gravdam / 3);
+				act( AT_RED, "Your bones pop and creak ominously.", ch, NULL, NULL, TO_CHAR );
+				if (ch->hit - (gravdam / 3) < 0) {
+					update_pos(ch);
+					if (ch->position == POS_DEAD) {
+						act( AT_RED, "Your body has been crushed!", ch, NULL, NULL, TO_CHAR );
+						act( AT_RED, "$n collapses, DEAD, $s body crushed under intense gravity.", ch, NULL, NULL, TO_NOTVICT );
+						sprintf( buf, "%s is crushed into a pancake under intense gravity", ch->name );
+						do_info(ch, buf);
+						raw_kill(ch, ch);
+					}
+				}
+			}
 		  }
 		}
 		if (xIS_SET((ch)->affected_by, AFF_MEDITATION) && xIS_SET((ch)->in_room->room_flags, ROOM_GRAV)) {
 		  // check if position is no longer standing
-                  if(ch->position < POS_STANDING) {
+                  if(ch->position < POS_STANDING
+					&& ch->position != POS_DEAD) {
                     xREMOVE_BIT((ch)->affected_by, AFF_MEDITATION);
                     send_to_char("You cannot gravity train in such a lax state.\n\r", ch);
                   }
+		  if(!ch->desc)
+			xREMOVE_BIT((ch)->affected_by, AFF_MEDITATION);
+			
 		  char buf[MAX_STRING_LENGTH];
 		  int trainmessage = 0;
 		  long double xp_gain = 0;
+		  long double base_xp = 0;
 		  int gravLevel = 0;
-		  int minLF;
 		  int increase = 0;
-
+		  int safegrav = 0;
+		  int gravdam = 0;
+		  int safediff = 0;
+		  int damrange = 0;
+		  int statbonus = 0;
+		  int breakbonus = 0;
+		  double overacc_bonus = 0;
+		  long double xp_bonus = 0;
+		  int acc = 0;
+		  int gravres = 0;
+		  int resdiff = 0;
+            
 		  increase = number_range(1, 3);
-			
-		  gravLevel = ((get_curr_str(ch) + get_curr_dex(ch) + get_curr_int(ch) + get_curr_con(ch)) - 39);
+		  damrange = number_range(1, 6);
+		  gravres = (get_curr_con(ch) / 500) + 1;
+		
+		  if (ch->gravExp >= 400000)
+			  acc = ((ch->gravExp / 4000) + 301);
+		  else if (ch->gravExp < 400000)
+			  acc = ((ch->gravExp / 1000) + 1);
+		  if (acc < 1)
+				acc = 1;
 		  trainmessage = number_range(1, 100);
-		  minLF = 5;
-			
-		  if (ch->hit <= minLF) {
-		    xREMOVE_BIT((ch)->affected_by, AFF_MEDITATION);
-		    act(AT_WHITE, "You almost pass out from training too hard.", ch, NULL, NULL, TO_CHAR);
-		    act(AT_WHITE, "$n almost passes out from training too hard.", ch, NULL, NULL, TO_NOTVICT);
-		  }
+		  safediff = ((ch->gravSetting - acc) + 2);
+		  if (safediff < 1)
+			  safediff = 1;
+		  resdiff = (safediff - gravres);
+		  if (resdiff < 1)
+			  resdiff = 1;
+		  gravdam = (pow(resdiff, 3) * damrange);
+		  gravLevel = ch->gravSetting;
+		  statbonus = safediff + 15;
+		  breakbonus = statbonus * 2;
+		  overacc_bonus = 0.1 * safediff;
+
 		  if (trainmessage < 65) {
-		    xp_gain = (long double)increase / 100 * gravLevel;
-		    ch->hit--;
-		    ch->mana -= URANGE(0, ch->mana * 0.005, ch->mana);
-		    gain_exp(ch, xp_gain);
-		    sprintf(buf, "Your power level increases by %s points.", num_punct(xp_gain));
-		    act(AT_HIT, buf, ch, NULL, NULL, TO_CHAR);
-		    stat_train(ch, "int", 15);
-		  }			
+		    base_xp = (long double)increase / 24 * gravLevel;
+			xp_bonus = (long double)base_xp * overacc_bonus;
+			xp_gain = (long double)base_xp + xp_bonus;
+			gain_exp(ch, xp_gain);
+			if (safediff > 1)
+				ch->gravExp += (increase + safediff);
+			if (xp_gain > 1) {
+				sprintf(buf, "Your power level increases by %s points.", num_punct(xp_gain));
+				act(AT_HIT, buf, ch, NULL, NULL, TO_CHAR);
+			}
+			else {
+				sprintf(buf, "Your power level increases very slightly.", NULL);
+				act(AT_HIT, buf, ch, NULL, NULL, TO_CHAR);
+			}
+		    stat_train(ch, "int", statbonus);
+			if (ch->mana - gravdam > 0)
+				ch->mana -= gravdam;
+			else if (ch->mana - gravdam <= 0) {
+				ch->mana = 0;
+				ch->hit -= (gravdam / 3);
+				act( AT_RED, "Your bones pop and creak ominously.", ch, NULL, NULL, TO_CHAR );
+				if (ch->hit - (gravdam / 3) < 0) {
+					update_pos(ch);
+					if (ch->position == POS_DEAD) {
+						act( AT_RED, "Your body has been crushed!", ch, NULL, NULL, TO_CHAR );
+						act( AT_RED, "$n collapses, DEAD, $s body crushed under intense gravity.", ch, NULL, NULL, TO_NOTVICT );
+						sprintf( buf, "%s is crushed into a pancake under intense gravity", ch->name );
+						do_info(ch, buf);
+						raw_kill(ch, ch);
+					}
+				}
+			}
+		  }
 		  if (trainmessage >= 65 && trainmessage < 99) {
-		    xp_gain = (long double)increase / 100 * gravLevel;
-		    ch->hit--;
-		    ch->mana -= URANGE(0, ch->mana * 0.005, ch->mana);
-		    pager_printf(ch, "&GYou focus your mind's eye in %d times gravity, shutting all else out with extreme calm.\n\r", gravLevel);
+		    base_xp = (long double)increase / 24 * gravLevel;
+			xp_bonus = (long double)base_xp * overacc_bonus;
+			xp_gain = (long double)base_xp + xp_bonus;
 		    gain_exp(ch, xp_gain);
-		    sprintf(buf, "Your power level increases by %s points.", num_punct(xp_gain));
-		    act(AT_HIT, buf, ch, NULL, NULL, TO_CHAR);
-		    stat_train(ch, "int", 15);
+		    pager_printf(ch, "&GYou focus your mind's eye in %d times gravity, shutting all else out with extreme calm.\n\r", gravLevel);
+			if (safediff > 1)
+				ch->gravExp += (increase + safediff);
+			if (xp_gain > 1) {
+				sprintf(buf, "Your power level increases by %s points.", num_punct(xp_gain));
+				act(AT_HIT, buf, ch, NULL, NULL, TO_CHAR);
+			}
+			else {
+				sprintf(buf, "Your power level increases very slightly.", NULL);
+				act(AT_HIT, buf, ch, NULL, NULL, TO_CHAR);
+			}
+		    stat_train(ch, "int", statbonus);
+			if (ch->mana - gravdam > 0)
+				ch->mana -= gravdam;
+			else if (ch->mana - gravdam <= 0) {
+				ch->mana = 0;
+				ch->hit -= (gravdam / 3);
+				act( AT_RED, "Your bones pop and creak ominously.", ch, NULL, NULL, TO_CHAR );
+				if (ch->hit - (gravdam / 3) < 0) {
+					update_pos(ch);
+					if (ch->position == POS_DEAD) {
+						act( AT_RED, "Your body has been crushed!", ch, NULL, NULL, TO_CHAR );
+						act( AT_RED, "$n collapses, DEAD, $s body crushed under intense gravity.", ch, NULL, NULL, TO_NOTVICT );
+						sprintf( buf, "%s is crushed into a pancake under intense gravity", ch->name );
+						do_info(ch, buf);
+						raw_kill(ch, ch);
+					}
+				}
+			}
 		  }
 		  if (trainmessage >= 99) {
-		    xp_gain = (long double)increase / 50 * gravLevel;
-		    ch->hit--;
-		    ch->mana -= URANGE(0, ch->mana * 0.010, ch->mana);
+		    base_xp = (long double)increase / 12 * gravLevel;
+			xp_bonus = (long double)base_xp * overacc_bonus;
+			xp_gain = (long double)base_xp + xp_bonus;
+		    gain_exp(ch, xp_gain);
+			if (safediff > 1)
+				ch->gravExp += (increase + safediff);
 		    pager_printf(ch, "&GYour mind clears completely and you momentarily achieve an overwhelming sense of inner peace.\n\r", gravLevel);
 		    act(AT_WHITE, "$n sits in peaceful meditation, displaying absolutely no outward emotion.", ch, NULL, NULL, TO_NOTVICT);
-		    gain_exp(ch, xp_gain);
-		    sprintf(buf, "Your power level suddenly increases by %s points.", num_punct(xp_gain));
+			sprintf(buf, "Your power level suddenly increases by %s points.", num_punct(xp_gain));
 		    act(AT_HIT, buf, ch, NULL, NULL, TO_CHAR);
-		    stat_train(ch, "int", 30);
+		    stat_train(ch, "int", breakbonus);
+			if (ch->mana - gravdam > 0)
+				ch->mana -= gravdam;
+			else if (ch->mana - gravdam <= 0) {
+				ch->mana = 0;
+				ch->hit -= (gravdam / 3);
+				act( AT_RED, "Your bones pop and creak ominously.", ch, NULL, NULL, TO_CHAR );
+				if (ch->hit - (gravdam / 3) < 0) {
+					update_pos(ch);
+					if (ch->position == POS_DEAD) {
+						act( AT_RED, "Your body has been crushed!", ch, NULL, NULL, TO_CHAR );
+						act( AT_RED, "$n collapses, DEAD, $s body crushed under intense gravity.", ch, NULL, NULL, TO_NOTVICT );
+						sprintf( buf, "%s is crushed into a pancake under intense gravity", ch->name );
+						do_info(ch, buf);
+						raw_kill(ch, ch);
+					}
+				}
+			}
 		  }
 		}
 		/* Kaioken drain */
@@ -4513,14 +5445,14 @@ damage(CHAR_DATA * ch, CHAR_DATA * victim, int dam, int dt)
 				act(AT_HIT, buf1, ch, NULL, victim, TO_CHAR);
 			}
 		} else {
-			if (xp_gain_post != 1) {
+			if (xp_gain_post < 1) {
 				sprintf(buf1,
-				    "Your pl increases by %s points.",
-				    num_punct_ld(xp_gain_post));
+				    "Your pl increases very slightly.",
+				    NULL);
 
 				act(AT_HIT, buf1, ch, NULL, victim, TO_CHAR);
-			} else {
-				sprintf(buf1, "Your pl increases by %s point.",
+			} else if (xp_gain_post >= 1) {
+				sprintf(buf1, "Your pl increases by %s points.",
 				    num_punct_ld(xp_gain_post));
 				act(AT_HIT, buf1, ch, NULL, victim, TO_CHAR);
 			}
@@ -4529,7 +5461,8 @@ damage(CHAR_DATA * ch, CHAR_DATA * victim, int dam, int dt)
 		gain_exp(ch, xp_gain);
 
 		/* fight training for strength */
-		stat_train(ch, "str", 0);
+		stat_train(ch, "str", 3);
+		ch->train += 1;
 	}
 	if (!IS_NPC(victim) && victim->level >= LEVEL_IMMORTAL
 	    && victim->hit < 1) {

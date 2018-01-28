@@ -2251,7 +2251,10 @@ typedef enum {
 	ROOM_NOMISSILE, ROOM_GRAV, ROOM_HTANKS, ROOM_PROTOTYPE, ROOM_DND,
 	ROOM_SPACECRAFT,
 	ROOM_NO_DRIVING, ROOM_TIME_CHAMBER, ROOM_NO_TELEPORT, ROOM_NO_TELEPORT_OUT,
-	ROOM_ASTRALSHIELD
+	ROOM_ASTRALSHIELD,
+	ROOM_GRAV10, ROOM_GRAV50, ROOM_GRAV100, ROOM_GRAV200, ROOM_GRAV300,
+	ROOM_GRAV400, ROOM_GRAV500, ROOM_GRAV600, ROOM_GRAV700, ROOM_GRAV800,
+	ROOM_GRAV900, ROOM_GRAV1000
 } 	ext_room_flags;
 
 /*
@@ -2646,6 +2649,9 @@ struct char_data {
 	int 	hit;
 	int 	max_hit;
 	long long int     worth;
+	int		gravSetting;
+	int		gravAcc;
+	long long int gravExp;
 	int 	mana;
 	int 	max_mana;
 	sh_int 	max_energy;
@@ -5624,7 +5630,6 @@ args((const char *argument, int channel,
 	void clan_auto_kick args((CHAR_DATA * ch));
 	void clan_auto_align args((CHAR_DATA * ch, CLAN_DATA * clan));
 	void clan_auto_align_kick args((CLAN_DATA * clan));
-	void damage_armor args((CHAR_DATA * ch, int dam));
 	int dam_armor_recalc args((CHAR_DATA * ch, int dam));
 	void sort_censor args((CENSOR_DATA * pRes));
 	void do_info args((CHAR_DATA * ch, char *argument));

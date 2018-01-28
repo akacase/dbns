@@ -4137,8 +4137,17 @@ do_consider(CHAR_DATA * ch, char *argument)
 void do_train(CHAR_DATA *ch, char *argument)
 {
         char arg[MAX_INPUT_LENGTH];
+		int acc = 0;
+		int gravres = 0;
 
 	one_argument(argument, arg);
+	if (ch->gravExp >= 400000)
+		acc = ((ch->gravExp / 4000) + 301);
+	else if (ch->gravExp < 400000)
+		acc = ((ch->gravExp / 1000) + 1);
+	gravres = (get_curr_con(ch) / 500) + 1;
+	if (acc < 1)
+		acc = 1;
 	
 	if (IS_NPC(ch))
 		return;
@@ -4147,14 +4156,43 @@ void do_train(CHAR_DATA *ch, char *argument)
 		return;
 	}
 	else if (ch->position < POS_STANDING) {
-	  send_to_char("You can't gravity train in such a lax state.\n\r", ch);
+	  send_to_char("You can't gravity train in such a state.\n\r", ch);
 	  return;
 	}
 	else if (arg[0] == '\0') {
-		send_to_char("Gravtrain which activity? Activities are: pushup, shadowbox, endure, meditate.\n\r", ch);
+		send_to_char("The level of gravity is now manually controlled one level at a time with 'gravtrain increase/decrease'.\n\r", ch);
+		send_to_char("To select the level you are most comfortable with automatically, use the 'gravtrain safe' command.\n\r", ch);
+		send_to_char("Once set, activities are: gravtrain pushup, shadowbox, endure, meditate.\n\r", ch);
+		pager_printf(ch, "&wThe machine is currently set to %d times gravity.\n\r", ch->gravSetting);
+		return;
 	}
-
-	if (!str_cmp(arg, "pushup")) {
+	if (!str_cmp(arg, "increase")) {
+		if ((ch->gravSetting + 1) < (acc + 20 + gravres)) {
+			ch->gravSetting += 1;
+			pager_printf(ch, "&GYou crank the dial up to %d times gravity.\n\r", ch->gravSetting);
+			return;
+		} else if ((ch->gravSetting + 1) >= (acc + gravres + 20)) {
+			pager_printf(ch, "&GThat's far too much!\n\r", NULL);
+			return;
+		}
+	} else if (!str_cmp(arg, "decrease")) {
+		if ((ch->gravSetting - 1) < 1) {
+			ch->gravSetting = 1;
+			pager_printf(ch, "&GThis isn't an anti-gravity chamber!\n\r", NULL);
+			return;
+		}
+		else {
+			ch->gravSetting -= 1;
+			pager_printf(ch, "&GYou crank the dial down to %d times gravity.\n\r", ch->gravSetting);
+			return;
+		}
+	} else if (!str_cmp(arg, "safe")) {
+		ch->gravSetting = acc;
+		if (acc < 1)
+			ch->gravSetting = 1;
+		pager_printf(ch, "&GThe safety function automatically resets the machine to %d times gravity.\n\r", ch->gravSetting);
+		return;
+	} else if (!str_cmp(arg, "pushup")) {
 
 		if (xIS_SET((ch)->affected_by, AFF_PUSHUPS) || xIS_SET((ch)->affected_by, AFF_SHADOWBOXING)
 		|| xIS_SET((ch)->affected_by, AFF_ENDURING) || xIS_SET((ch)->affected_by, AFF_MEDITATION)) {

@@ -1305,7 +1305,7 @@ rage5(CHAR_DATA * ch, CHAR_DATA * victim)
 		if (ch->rage < 1500)
 			return;
 			
-		if (ch->train < 2790000)
+		if (ch->train < 2835000)
 			return;
 
 		if (ch->pcdata->learned[gsn_sgod] > 0)
@@ -1810,7 +1810,18 @@ void do_powerup(CHAR_DATA *ch, char *argument)
 			return;
 		}
 	}
-	if (!str_cmp(arg, "begin")) {
+	if (!str_cmp(arg, "release")) {
+		if ((ch->pl - (ch->pl * 0.03)) > ch->exp) {
+			ch->pl -= (ch->pl * 0.03);
+			act(AT_WHITE, "You take a deep breath, releasing some of your pent-up energy.", ch, NULL, NULL, TO_CHAR);
+			act(AT_WHITE, "$n takes a deep breath, releasing some pent-up energy.", ch, NULL, NULL, TO_NOTVICT);
+			return;
+		}
+		else if ((ch->pl - (ch->pl * 0.03)) <= ch->exp) {
+			send_to_char("It might be a better idea to 'powerdown'.\n\r", ch);
+			return;
+		}
+	} else if (!str_cmp(arg, "begin")) {
 		if (xIS_SET((ch)->affected_by, AFF_SAFEMAX)) {
 			send_to_char("You'd have to push yourself to go beyond this level.\n\r", ch);
 			return;
@@ -4481,7 +4492,12 @@ void
 do_energy_ball(CHAR_DATA * ch, char *argument)
 {
 	CHAR_DATA *victim;
+	char 	arg[MAX_INPUT_LENGTH];
 	int 	dam = 0;
+	int		argdam = 0;
+
+	one_argument(argument, arg);
+	sh_int 	z = get_aura(ch);
 
 	if (IS_NPC(ch) && is_split(ch)) {
 		if (!ch->master)
@@ -4503,9 +4519,18 @@ do_energy_ball(CHAR_DATA * ch, char *argument)
 		send_to_char("You aren't fighting anyone.\n\r", ch);
 		return;
 	}
-	if (ch->mana < skill_table[gsn_energy_ball]->min_mana) {
-		send_to_char("You don't have enough energy.\n\r", ch);
-		return;
+	if (arg[0] == '\0'
+		|| !str_cmp(arg, "volley")) {
+		if (ch->mana < skill_table[gsn_energy_ball]->min_mana) {
+			send_to_char("You don't have enough energy.\n\r", ch);
+			return;
+		}
+	}
+	else if (!str_cmp(arg, "desperation")) {
+		if (ch->mana < (skill_table[gsn_energy_ball]->min_mana * 64)) {
+			send_to_char("You don't have enough energy.\n\r", ch);
+			return;
+		}
 	}
 	if (ch->focus < skill_table[gsn_energy_ball]->focus) {
 		send_to_char("You need to focus more.\n\r", ch);
@@ -4515,46 +4540,84 @@ do_energy_ball(CHAR_DATA * ch, char *argument)
 
 	WAIT_STATE(ch, skill_table[gsn_energy_ball]->beats);
 
-	sh_int 	z = get_aura(ch);
-
 	if (can_use_skill(ch, number_percent(), gsn_energy_ball)) {
-		dam = get_attmod(ch, victim) * (number_range(6, 8) + (get_curr_int(ch) / 50));
+		if (arg[0] == '\0')
+			argdam = number_range(2, 4);
+		else if (!str_cmp(arg, "volley"))
+			argdam = number_range(8, 16);
+		else if (!str_cmp(arg, "desperation"))
+			argdam = number_range(32, 64);
+		else
+			argdam = number_range(2, 4);
+		dam = get_attmod(ch, victim) * (argdam + (get_curr_int(ch) / 50));
 		if (ch->charge > 0)
 			dam = chargeDamMult(ch, dam);
-		act(z, "You hit $N with an energy ball. &W[$t]", ch,
-		    num_punct(dam), victim, TO_CHAR);
-		act(z, "$n hits you with an energy ball. &W[$t]", ch,
-		    num_punct(dam), victim, TO_VICT);
-		act(z, "$n hits $N with an energy ball. &W[$t]", ch,
-		    num_punct(dam), victim, TO_NOTVICT);
+		if (arg[0] == '\0') {
+			act(z, "You blast $N with a single energy ball. &W[$t]", ch,
+				num_punct(dam), victim, TO_CHAR);
+			act(z, "$n blasts you with a single energy ball. &W[$t]", ch,
+				num_punct(dam), victim, TO_VICT);
+			act(z, "$n blasts $N with a single energy ball. &W[$t]", ch,
+				num_punct(dam), victim, TO_NOTVICT);
+		}
+		else if (!str_cmp(arg, "volley")) {
+			act(z, "You assail $N with consecutive energy blasts! &W[$t]", ch,
+				num_punct(dam), victim, TO_CHAR);
+			act(z, "$n assails you with consecutive energy blasts! &W[$t]", ch,
+				num_punct(dam), victim, TO_VICT);
+			act(z, "$n assails $N with consecutive energy blasts! &W[$t]", ch,
+				num_punct(dam), victim, TO_NOTVICT);
+		}
+		else if (!str_cmp(arg, "desperation")) {
+			act(z, "You throw your hands forward and dust the sky with a furious,", ch,
+				NULL, victim, TO_CHAR);
+			act(z, "desperate barrage of countless blasts, engulfing $N! &W[$t]", ch,
+				num_punct(dam), victim, TO_CHAR);
+			act(z, "$n engulfs you in a desperate barrage of energy blasts! &W[$t]", ch,
+				num_punct(dam), victim, TO_VICT);
+			act(z, "$n engulfs $N in a desperate barrage of energy blasts! &W[$t]", ch,
+				num_punct(dam), victim, TO_NOTVICT);
+		}
+				
 		dam = ki_absorb(victim, ch, dam, gsn_energy_ball);
 		learn_from_success(ch, gsn_energy_ball);
 		global_retcode = damage(ch, victim, dam, TYPE_HIT);
         if (!IS_NPC(ch)) {
             stat_train(ch, "int", 5);
+			ch->train += 1;
         }
 	} else {
-		act(z, "You missed $N with your energy ball.", ch, NULL, victim,
+		act(z, "Your energy blast veers wildly off course.", ch, NULL, victim,
 		    TO_CHAR);
-		act(z, "$n misses you with $s energy ball.", ch, NULL, victim,
+		act(z, "$n's energy blast sails harmlessly past you.", ch, NULL, victim,
 		    TO_VICT);
-		act(z, "$n missed $N with an energy ball.", ch, NULL, victim,
+		act(z, "$n's energy blast sails harmlessly past $N.", ch, NULL, victim,
 		    TO_NOTVICT);
 		learn_from_failure(ch, gsn_energy_ball);
 		global_retcode = damage(ch, victim, 0, TYPE_HIT);
 	}
 
 	if (!is_android_h(ch))
-		ch->mana -= skill_table[gsn_energy_ball]->min_mana;
-	return;
+		if (arg[0] == '\0'
+			|| !str_cmp(arg, "volley")) {
+			ch->mana -= skill_table[gsn_energy_ball]->min_mana;
+			return;
+		}
+		else if (!str_cmp(arg, "desperation")) {
+			ch->mana -= (skill_table[gsn_energy_ball]->min_mana * 64);
+			return;
+		}
 }
 
 void
 do_kamehameha(CHAR_DATA * ch, char *argument)
 {
 	CHAR_DATA *victim;
+	char 	arg[MAX_INPUT_LENGTH];
 	int 	dam = 0;
+	int		argdam = 0;
 
+	one_argument(argument, arg);
 	if (IS_NPC(ch) && is_split(ch)) {
 		if (!ch->master)
 			return;
@@ -4575,7 +4638,11 @@ do_kamehameha(CHAR_DATA * ch, char *argument)
 		send_to_char("You aren't fighting anyone.\n\r", ch);
 		return;
 	}
-	if (ch->mana < skill_table[gsn_kamehameha]->min_mana) {
+	if (arg[0] == '\0' && ch->mana < skill_table[gsn_kamehameha]->min_mana) {
+		send_to_char("You don't have enough energy.\n\r", ch);
+		return;
+	}
+	else if (!str_cmp(arg, "2") && ch->mana < (skill_table[gsn_kamehameha]->min_mana * 4)) {
 		send_to_char("You don't have enough energy.\n\r", ch);
 		return;
 	}
@@ -4587,34 +4654,61 @@ do_kamehameha(CHAR_DATA * ch, char *argument)
 
 	WAIT_STATE(ch, skill_table[gsn_kamehameha]->beats);
 	if (can_use_skill(ch, number_percent(), gsn_kamehameha)) {
-		dam = get_attmod(ch, victim) * (number_range(20, 25) + (get_curr_int(ch) / 40));
+		if (arg[0] == '\0')
+			argdam = number_range(20, 25);
+		if (!str_cmp(arg, "2"))
+			argdam = number_range(40, 50);
+		dam = get_attmod(ch, victim) * (argdam + (get_curr_int(ch) / 40));
 		if (ch->charge > 0)
-			dam = chargeDamMult(ch, dam);
-		act(AT_LBLUE,
-		    "You put your arms back and cup your hands. 'KA-ME-HA-ME-HA!!!!'	",
-		    ch, NULL, victim, TO_CHAR);
-		act(AT_LBLUE,
-		    "You push your hands forward, throwing a blue beam at $N. &W[$t]",
-		    ch, num_punct(dam), victim, TO_CHAR);
-		act(AT_LBLUE,
-		    "$n puts $s arms back and cups $s hands. 'KA-ME-HA-ME-HA!!!!'	",
-		    ch, NULL, victim, TO_VICT);
-		act(AT_LBLUE,
-		    "$n pushes $s hands forward, throwing a blue beam at you. &W[$t]",
-		    ch, num_punct(dam), victim, TO_VICT);
-		act(AT_LBLUE,
-		    "$n puts $s arms back and cups $s hands. 'KA-ME-HA-ME-HA!!!!'	",
-		    ch, NULL, victim, TO_NOTVICT);
-		act(AT_LBLUE,
-		    "$n pushes $s hands forward, throwing a blue beam at $N. &W[$t]",
-		    ch, num_punct(dam), victim, TO_NOTVICT);
+		dam = chargeDamMult(ch, dam);
+		if (arg[0] == '\0') {
+			act(AT_LBLUE,
+				"You put your arms back and cup your hands. 'KA-ME-HA-ME-HA!!!!'	",
+				ch, NULL, victim, TO_CHAR);
+			act(AT_LBLUE,
+				"You push your hands forward, throwing a blue beam at $N. &W[$t]",
+				ch, num_punct(dam), victim, TO_CHAR);
+			act(AT_LBLUE,
+				"$n puts $s arms back and cups $s hands. 'KA-ME-HA-ME-HA!!!!'	",
+				ch, NULL, victim, TO_VICT);
+			act(AT_LBLUE,
+				"$n pushes $s hands forward, throwing a blue beam at you. &W[$t]",
+				ch, num_punct(dam), victim, TO_VICT);
+			act(AT_LBLUE,
+				"$n puts $s arms back and cups $s hands. 'KA-ME-HA-ME-HA!!!!'	",
+				ch, NULL, victim, TO_NOTVICT);
+			act(AT_LBLUE,
+				"$n pushes $s hands forward, throwing a blue beam at $N. &W[$t]",
+				ch, num_punct(dam), victim, TO_NOTVICT);
+		}
+		else if (!str_cmp(arg, "2")) {
+			act(AT_LBLUE,
+				"You put your arms back and cup your hands. 'CHOU KA-ME-HA-ME-HA!!!!'	",
+				ch, NULL, victim, TO_CHAR);
+			act(AT_LBLUE,
+				"You push your hands forward, throwing a massive blue beam at $N. &W[$t]",
+				ch, num_punct(dam), victim, TO_CHAR);
+			act(AT_LBLUE,
+				"$n puts $s arms back and cups $s hands. 'CHOU KA-ME-HA-ME-HA!!!!'	",
+				ch, NULL, victim, TO_VICT);
+			act(AT_LBLUE,
+				"$n pushes $s hands forward, throwing a massive blue beam at you. &W[$t]",
+				ch, num_punct(dam), victim, TO_VICT);
+			act(AT_LBLUE,
+				"$n puts $s arms back and cups $s hands. 'CHOU KA-ME-HA-ME-HA!!!!'	",
+				ch, NULL, victim, TO_NOTVICT);
+			act(AT_LBLUE,
+				"$n pushes $s hands forward, throwing a massive blue beam at $N. &W[$t]",
+				ch, num_punct(dam), victim, TO_NOTVICT);
+		}
 
 		dam = ki_absorb(victim, ch, dam, gsn_kamehameha);
 		learn_from_success(ch, gsn_kamehameha);
 		global_retcode = damage(ch, victim, dam, TYPE_HIT);
-        if (!IS_NPC(ch)) {
-            stat_train(ch, "int", 8);
-        }
+		if (!IS_NPC(ch)) {
+			stat_train(ch, "int", 8);
+			ch->train += 2;
+		}
 	} else {
 		act(AT_LBLUE, "You missed $N with your kamehameha.", ch, NULL,
 		    victim, TO_CHAR);
@@ -4625,8 +4719,14 @@ do_kamehameha(CHAR_DATA * ch, char *argument)
 		learn_from_failure(ch, gsn_kamehameha);
 		global_retcode = damage(ch, victim, 0, TYPE_HIT);
 	}
-	ch->mana -= skill_table[gsn_kamehameha]->min_mana;
-	return;
+	if (arg[0] == '\0') {
+		ch->mana -= skill_table[gsn_kamehameha]->min_mana;
+		return;
+	}
+	else if (!str_cmp(arg, "2")) {
+		ch->mana -= (skill_table[gsn_kamehameha]->min_mana * 4);
+		return;
+	}
 }
 
 void
@@ -4693,6 +4793,7 @@ do_masenko(CHAR_DATA * ch, char *argument)
 		global_retcode = damage(ch, victim, dam, TYPE_HIT);
         if (!IS_NPC(ch)) {
             stat_train(ch, "int", 6);
+			ch->train += 2;
         }
 	} else {
 		act(AT_YELLOW, "You missed $N with your masenko blast.", ch,
@@ -4775,6 +4876,7 @@ do_sbc(CHAR_DATA * ch, char *argument)
 		global_retcode = damage(ch, victim, dam, TYPE_HIT);
         if (!IS_NPC(ch)) {
             stat_train(ch, "int", 8);
+			ch->train += 2;
         }
 	} else {
 		act(AT_YELLOW, "You missed $N with your special beam cannon.",
@@ -4856,6 +4958,7 @@ do_dd(CHAR_DATA * ch, char *argument)
 		global_retcode = damage(ch, victim, dam, TYPE_HIT);
         if (!IS_NPC(ch)) {
             stat_train(ch, "int", 6);
+			ch->train += 2;
         }
 	} else {
 		act(AT_YELLOW, "You missed $N with your destructo disk.", ch,
@@ -4934,6 +5037,7 @@ do_ff(CHAR_DATA * ch, char *argument)
 		global_retcode = damage(ch, victim, dam, TYPE_HIT);
         if (!IS_NPC(ch)) {
             stat_train(ch, "int", 12);
+			ch->train += 3;
         }
 	} else {
 		act(AT_YELLOW, "You missed $N with your final flash.", ch, NULL,
@@ -5183,6 +5287,11 @@ do_meditate(CHAR_DATA * ch, char *argument)
 	  send_to_char("You cannot meditate while gravity training.\n\r", ch);
 	  return;
 	}
+	// check if user is powering up
+	if(IS_AFFECTED(ch, AFF_POWERCHANNEL)) {
+		send_to_char("You cannot meditate while powering up.\n\r", ch);
+		return;
+	}
 	
 	left = (float) ch->mana / ch->max_mana;
 	right = (float) ch->pcdata->learned[gsn_meditate] / 100;
@@ -5233,7 +5342,7 @@ do_meditate(CHAR_DATA * ch, char *argument)
             }
 		        statComb = ((get_curr_str(ch) + get_curr_dex(ch) + get_curr_int(ch) + get_curr_con(ch)) - 39);
 			increase = number_range(1,3);
-			xp_gain = (long double)increase / 100 * statComb;
+			xp_gain = (long double)increase / 1000 * statComb;
 			gain_exp(ch, xp_gain);
 			ch->mana += (float) right / 50 * ch->max_mana;
 		} else {
@@ -5395,6 +5504,7 @@ do_scatter_shot(CHAR_DATA * ch, char *arg)
 		learn_from_success(ch, gsn_scatter_shot);
         if (!IS_NPC(ch)) {
             stat_train(ch, "int", 6);
+			ch->train += 2;
         }
 		global_retcode =
 		    damage(ch, victim,
@@ -5570,6 +5680,7 @@ do_ddd(CHAR_DATA * ch, char *argument)
 			global_retcode = damage(ch, victim, dam, TYPE_HIT);
             if (!IS_NPC(ch)) {
                 stat_train(ch, "int", 8);
+				ch->train += 2;
             }
 		}
 	else {
@@ -5641,6 +5752,7 @@ do_death_ball(CHAR_DATA * ch, char *argument)
         global_retcode = damage(ch, victim, dam, TYPE_HIT);
         if (!IS_NPC(ch)) {
             stat_train(ch, "int", 12);
+			ch->train += 3;
         }
     }
     else {
@@ -5714,6 +5826,7 @@ do_eye_beam(CHAR_DATA * ch, char *argument)
 		global_retcode = damage(ch, victim, dam, TYPE_HIT);
         if (!IS_NPC(ch)) {
             stat_train(ch, "int", 6);
+			ch->train += 2;
         }
 	} else {
 		act(z, "You missed $N with your eye beam.", ch, NULL, victim,
@@ -5789,6 +5902,7 @@ do_finger_beam(CHAR_DATA * ch, char *argument)
 		global_retcode = damage(ch, victim, dam, TYPE_HIT);
         if (!IS_NPC(ch)) {
             stat_train(ch, "int", 8);
+			ch->train += 2;
         }
 	} else {
 		act(z, "You missed $N with your finger beam.", ch, NULL, victim,
@@ -5878,6 +5992,7 @@ do_tribeam(CHAR_DATA * ch, char *argument)
 		global_retcode = damage(ch, victim, dam, TYPE_HIT);
         if (!IS_NPC(ch)) {
             stat_train(ch, "int", 12);
+			ch->train += 3;
         }
 	} else {
 		act(AT_YELLOW, "You missed $N with your tri-beam attack.", ch,
@@ -5941,6 +6056,8 @@ do_solar_flare(CHAR_DATA * ch, char *argument)
 		    ch, NULL, NULL, TO_NOTVICT);
 
 		learn_from_success(ch, gsn_solar_flare);
+		if (!IS_NPC(ch))
+			ch->train += 2;
 		for (vch = ch->in_room->first_person; vch; vch = vch_next) {
 
 			vch_next = vch->next_in_room;
@@ -6825,6 +6942,7 @@ do_ki_heal(CHAR_DATA * ch, char *argument)
 			victim->hit = victim->max_hit;
 		}
 		learn_from_success(ch, gsn_ki_heal);
+		ch->train += 6;
 		ch->mana -= (healTo * skill_table[gsn_ki_heal]->min_mana);
 	} else {
 		act(AT_YELLOW,
@@ -7694,6 +7812,7 @@ do_destructive_wave(CHAR_DATA * ch, char *argument)
 		global_retcode = damage(ch, victim, dam, TYPE_HIT);
         if (!IS_NPC(ch)) {
             stat_train(ch, "int", 8);
+			ch->train += 2;
         }
 	} else {
 		act(z, "You missed $N with your destructive wave attack.", ch,
@@ -7776,6 +7895,7 @@ do_dodon_ray(CHAR_DATA * ch, char *argument)
 		global_retcode = damage(ch, victim, dam, TYPE_HIT);
         if (!IS_NPC(ch)) {
             stat_train(ch, "int", 8);
+			ch->train += 2;
         }
 	} else {
 		act(z, "You missed $N with your dodon ray attack.", ch, NULL,
@@ -7856,6 +7976,7 @@ do_spirit_ball(CHAR_DATA * ch, char *argument)
 		global_retcode = damage(ch, victim, dam, TYPE_HIT);
         if (!IS_NPC(ch)) {
             stat_train(ch, "int", 8);
+			ch->train += 2;
         }
 	} else {
 		act(AT_YELLOW, "You missed $N with your spirit ball attack.",
@@ -7937,6 +8058,7 @@ do_shockwave(CHAR_DATA * ch, char *argument)
 		global_retcode = damage(ch, victim, dam, TYPE_HIT);
         if (!IS_NPC(ch)) {
             stat_train(ch, "int", 8);
+			ch->train += 2;
         }
 	} else {
 		act(z, "You missed $N with your shockwave.", ch, NULL, victim,
@@ -8010,6 +8132,7 @@ do_psiblast(CHAR_DATA * ch, char *argument)
 		global_retcode = damage(ch, victim, dam, TYPE_HIT);
         if (!IS_NPC(ch)) {
             stat_train(ch, "int", 10);
+			ch->train += 2;
         }
 	} else {
 		act(z, "You missed $N with your psionic blast.", ch, NULL,
@@ -8090,6 +8213,7 @@ do_divinewrath(CHAR_DATA * ch, char *argument)
 		global_retcode = damage(ch, victim, dam, TYPE_HIT);
         if (!IS_NPC(ch)) {
             stat_train(ch, "int", 12);
+			ch->train += 3;
         }
 	} else {
 		act(AT_RED, "You missed $N with your divine wrath.", ch, NULL,
@@ -8170,6 +8294,7 @@ do_big_bang(CHAR_DATA * ch, char *argument)
 		global_retcode = damage(ch, victim, dam, TYPE_HIT);
         if (!IS_NPC(ch)) {
             stat_train(ch, "int", 10);
+			ch->train += 2;
         }
 	} else {
 		act(AT_BLUE, "You missed $N with your big bang attack.", ch,
@@ -8251,6 +8376,7 @@ do_gallic_gun(CHAR_DATA * ch, char *argument)
 		global_retcode = damage(ch, victim, dam, TYPE_HIT);
         if (!IS_NPC(ch)) {
             stat_train(ch, "int", 8);
+			ch->train += 2;
         }
 	} else {
 		act(AT_PURPLE, "You missed $N with your gallic gun attack.", ch,
@@ -8332,6 +8458,7 @@ do_burning_attack(CHAR_DATA * ch, char *argument)
 		global_retcode = damage(ch, victim, dam, TYPE_HIT);
         if (!IS_NPC(ch)) {
             stat_train(ch, "int", 8);
+			ch->train += 2;
         }
 	} else {
 		act(AT_YELLOW, "You missed $N with your burning attack.", ch,
@@ -8413,6 +8540,7 @@ do_finishing_buster(CHAR_DATA * ch, char *argument)
 		global_retcode = damage(ch, victim, dam, TYPE_HIT);
         if (!IS_NPC(ch)) {
             stat_train(ch, "int", 12);
+			ch->train += 2;
         }
 	} else {
 		act(AT_BLUE, "You missed $N with your finishing buster attack.",
@@ -8494,6 +8622,7 @@ do_heaven_splitter_cannon(CHAR_DATA * ch, char *argument)
 		global_retcode = damage(ch, victim, dam, TYPE_HIT);
         if (!IS_NPC(ch)) {
             stat_train(ch, "int", 12);
+			ch->train += 3;
         }
 	} else {
 		act(AT_YELLOW,
@@ -8713,6 +8842,7 @@ do_makosen(CHAR_DATA * ch, char *argument)
 		global_retcode = damage(ch, victim, dam, TYPE_HIT);
         if (!IS_NPC(ch)) {
             stat_train(ch, "int", 8);
+			ch->train += 2;
         }
 	} else {
 		act(AT_YELLOW, "You missed $N with your makosen attack.", ch,
@@ -8801,6 +8931,7 @@ do_trap_ball(CHAR_DATA * ch, char *argument)
 		global_retcode = damage(ch, victim, dam, TYPE_HIT);
         if (!IS_NPC(ch)) {
             stat_train(ch, "int", 10);
+			ch->train += 2;
         }
 	} else {
 		act(AT_YELLOW, "You missed $N with your trap ball attack.", ch,

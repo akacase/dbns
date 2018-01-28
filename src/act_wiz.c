@@ -1399,6 +1399,8 @@ do_mstat(CHAR_DATA * ch, char *argument)
 	if (get_trust(ch) >= LEVEL_GOD)
 		pager_printf_color(ch,
 		    "&cWorth: &w%lld\n\r", victim->worth);
+		if (!IS_NPC(victim))
+			pager_printf_color(ch, "&cGravExp: &w%lld\n\r", victim->gravExp);
 	if (get_trust(ch) >= LEVEL_GOD && !IS_NPC(victim) && victim->desc)
 		pager_printf_color(ch,
 		    "&cUser: &w%s@%s   Descriptor: %d  &cTrust: &w%d\n\r",

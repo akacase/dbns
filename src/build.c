@@ -86,7 +86,8 @@ char   *const r_flags[] =
 	"nosummon", "noastral", "teleport", "teleshowdesc", "nofloor",
 	"nosupplicate", "arena", "nomissile", "grav", "htanks", "prototype", "dnd",
 	"spaceship", "nodriving", "timechamber", "noteleport", "noteleportout",
-	"astralshield"
+	"astralshield", "grav10", "grav50", "grav100", "grav200", "grav300", "grav400",
+	"grav500", "grav600", "grav700", "grav800", "grav900", "grav1000"
 };
 
 char   *const o_flags[] =
@@ -1564,6 +1565,15 @@ do_mset(CHAR_DATA * ch, char *argument)
 		victim->worth = value;
 		if (IS_NPC(victim))
 			victim->pIndexData->worth = value;
+		return;
+	}
+	if (!str_cmp(arg2, "gravexp")) {
+		if (!can_mmodify(ch, victim))
+			return;
+		if (IS_NPC(victim))
+			return;
+		else if (!IS_NPC(victim))
+			victim->gravExp = value;
 		return;
 	}
 	if (!str_cmp(arg2, "class")) {

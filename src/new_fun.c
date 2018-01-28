@@ -283,7 +283,7 @@ int get_strDef( CHAR_DATA *victim )
 {
 	int strDef = 0;
 
-	strDef = get_curr_str(victim) / 50;
+	strDef = 0;
 
 	if (victim->mental_state > 5 && victim->mental_state < 15)
 	  strDef++;
@@ -298,7 +298,7 @@ int get_conDef( CHAR_DATA *victim )
 {
 	int conDef = 0;
 
-	conDef = get_curr_con(victim) / 25;
+	conDef = 0;
 
 	if (victim->mental_state > 5 && victim->mental_state < 15)
 	  conDef++;
@@ -311,55 +311,22 @@ int get_conDef( CHAR_DATA *victim )
 
 int get_armor( CHAR_DATA *ch )
 {
-    OBJ_DATA *obj;
-    int iWear;
 	int armor = 0;
 
-    for ( iWear = 0; iWear < MAX_WEAR; iWear++ )
-    {
-	for ( obj = ch->first_carrying; obj; obj = obj->next_content )
-	   if ( obj->wear_loc == iWear )
-	   {
-			if (obj->item_type == ITEM_ARMOR && obj->value[4] > 0)
-				armor += obj->value[4];
-	   }
-    }
-
 	if (!IS_NPC(ch))
-	{
-		ch->pcdata->natural_ac = (float) ch->hit / 100 * ch->pcdata->natural_ac_max;
-		if (ch->pcdata->natural_ac < 0)
-			ch->pcdata->natural_ac = 0;
-		armor += ch->pcdata->natural_ac;
-	}
+		armor = ((ch->perm_con / 3) + (ch->perm_str / 6));
 
-    if (armor > 10000)
-    	armor = 10000;
+    if (armor > 8000)
+    	armor = 8000;
     return armor;
 }
 
 int get_maxarmor( CHAR_DATA *ch )
 {
-    OBJ_DATA *obj;
-    int iWear;
 	int armor = 0;
 
-    for ( iWear = 0; iWear < MAX_WEAR; iWear++ )
-    {
-	for ( obj = ch->first_carrying; obj; obj = obj->next_content )
-	   if ( obj->wear_loc == iWear )
-	   {
-			if (obj->item_type == ITEM_ARMOR && obj->value[5] > 0)
-				armor += obj->value[5];
-	   }
-    }
-
 	if (!IS_NPC(ch))
-	{
-		if (ch->pcdata->natural_ac_max < 0)
-			ch->pcdata->natural_ac_max = 0;
-		armor += ch->pcdata->natural_ac_max;
-	}
+		armor = ((ch->perm_con / 3) + (ch->perm_str / 6));
 
     if (armor > 8000)
     	armor = 8000;
@@ -746,64 +713,8 @@ void kaioken_drain(CHAR_DATA *ch)
 	return;
 }
 
-void damage_armor( CHAR_DATA *ch, int dam )
-{
-    OBJ_DATA *obj;
-    int iWear;
-	int count = 0;
-	int ac_dam = 0;
-	int cary_over = 0;
-
-	if (dam <= 0)
-		return;
-
-	ac_dam = dam;
-
-    for ( iWear = 0; iWear < MAX_WEAR; iWear++ )
-    {
-	for ( obj = ch->first_carrying; obj; obj = obj->next_content )
-	   if ( obj->wear_loc == iWear )
-	   {
-			if (obj->item_type == ITEM_ARMOR && obj->value[4] > 0)
-				count++;
-	   }
-    }
-
-	if (ac_dam < count)
-		while (ac_dam < count)
-		{
-			count--;
-		}
-
-	ac_dam = ac_dam / count;
-
-    for ( iWear = 0; iWear < MAX_WEAR; iWear++ )
-    {
-	for ( obj = ch->first_carrying; obj; obj = obj->next_content )
-	   if ( obj->wear_loc == iWear )
-	   {
-			if (obj->item_type == ITEM_ARMOR && obj->value[4] > 0)
-			{
-				if ( obj->value[4] >= (ac_dam + cary_over) )
-				{
-					obj->value[4] -= (ac_dam + cary_over);
-					cary_over = 0;
-				}
-				else
-				{
-					cary_over = (ac_dam + cary_over) - obj->value[4];
-					obj->value[4] = 0;
-				}
-			}
-	   }
-    }
-
-	return;
-}
-
 int dam_armor_recalc( CHAR_DATA *ch, int dam )
 {
-	double dam_to_ac = 0;
 	double dam_to_lf = 0;
 	int armorValue = get_armor( ch );
 
@@ -815,22 +726,12 @@ int dam_armor_recalc( CHAR_DATA *ch, int dam )
           armorValue = 8000;
         }
 
-	dam_to_ac = (double) armorValue / 1000 * dam;
 	dam_to_lf = dam - ((double) armorValue / 10000 * dam);
 
-	dam_to_ac = floor(dam_to_ac);
 	dam_to_lf = floor(dam_to_lf);
 
-	if (dam_to_ac > 999999999)
-		dam_to_ac = 999999999;
 	if (dam_to_lf > 999999999)
 		dam_to_lf = 999999999;
-
-	if (!IS_NPC(ch))
-	{
-		if (armorValue > ch->pcdata->natural_ac && dam_to_lf < ch->hit)
-			damage_armor(ch, (int)dam_to_ac);
-	}
 
 	return (int)dam_to_lf;
 }
