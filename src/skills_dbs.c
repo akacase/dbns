@@ -4698,7 +4698,7 @@ do_kamehameha(CHAR_DATA * ch, char *argument)
 		}
 		else if (!str_cmp(arg, "2")) {
 			act(AT_LBLUE,
-				"You put your arms back and cup your hands. 'CHOU KA-ME-HA-ME-HA!!!!'	",
+				"DEBUG: You put your arms back and cup your hands. 'CHOU KA-ME-HA-ME-HA!!!!'	",
 				ch, NULL, victim, TO_CHAR);
 			act(AT_LBLUE,
 				"You push your hands forward, throwing a massive blue beam at $N. &W[$t]",
