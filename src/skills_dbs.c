@@ -2634,14 +2634,14 @@ do_punch(CHAR_DATA * ch, char *argument)
 	if (can_use_skill(ch, number_percent(), gsn_punch)) {
 		learn_from_success(ch, gsn_punch);
 			act(AT_YELLOW,
-				"You land a solid punch on $N. &W[$t]",
-				ch, num_punct(dam), victim, TO_CHAR);
+				"You land a solid punch on $N.",
+				ch, NULL, victim, TO_CHAR);
 			act(AT_YELLOW,
-				"$n lands a solid punch on you. &W[$t]",
-				ch, num_punct(dam), victim, TO_VICT);
+				"$n lands a solid punch on you.",
+				ch, NULL, victim, TO_VICT);
 			act(AT_YELLOW,
-				"$n lands a solid punch on $N. &W[$t]",
-				ch, num_punct(dam), victim, TO_NOTVICT);
+				"$n lands a solid punch on $N.",
+				ch, NULL, victim, TO_NOTVICT);
 		ch->melee = true;
 		global_retcode =
 		    damage(ch, victim,
