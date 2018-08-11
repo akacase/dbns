@@ -2936,12 +2936,12 @@ struct pc_data {
 
 	int 	sd_charge;
 
-	sh_int 	tStr;
-	sh_int 	tSpd;
-	sh_int 	tInt;
-	sh_int 	tCon;
+	int 	tStr;
+	int 	tSpd;
+	int 	tInt;
+	int 	tCon;
 	sh_int 	tRounds;
-	sh_int 	tStat;
+	int 	tStat;
 
 	/*
 	 * I'm using this as a back up of ch->desc->host for link deads
