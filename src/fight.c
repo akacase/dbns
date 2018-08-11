@@ -4729,9 +4729,9 @@ ris_damage(CHAR_DATA * ch, int dam, int ris)
 void
 stat_train(CHAR_DATA * ch, char *stat, int *modifier)
 {
-	sh_int *tAbility;
-	sh_int *pAbility;
-	sh_int *permTstat;
+	int *tAbility;
+	int *pAbility;
+	int *permTstat;
 	int fightIncrease = 0;
 	int gainMod = 0;
 	if(modifier > 0) {
@@ -4769,7 +4769,7 @@ stat_train(CHAR_DATA * ch, char *stat, int *modifier)
 
 	*tAbility += fightIncrease;
 
-	if ( *tAbility >= 1000 && *permTstat < 32000 ) {
+	if ( *tAbility >= 1000 && *permTstat < 2000000000 ) {
 	    *tAbility = 0;
 	    *pAbility += 1;
 	    *permTstat += 1;
@@ -4785,7 +4785,7 @@ stat_train(CHAR_DATA * ch, char *stat, int *modifier)
             if( stat == "con") {
                 send_to_char( "&CYou feel your constitution improving!&D\n\r", ch);
             }
-	} else if (*permTstat >= 32000 && *tAbility >= 999) {
+	} else if (*permTstat >= 2000000000 && *tAbility >= 999) {
 	    *tAbility = 999;
 	}
 }
@@ -4819,9 +4819,9 @@ damage(CHAR_DATA * ch, CHAR_DATA * victim, int dam, int dt)
 	ROOM_INDEX_DATA *pRoomIndex;
 	double clothingPlMod = 0;
 	/* fight training */
-	sh_int *tAbility;
-	sh_int *pAbility;
-	sh_int *permTstat;
+	int *tAbility;
+	int *pAbility;
+	int *permTstat;
 	int fightIncrease = 0;
 
 	retcode = rNONE;

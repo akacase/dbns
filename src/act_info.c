@@ -6583,7 +6583,7 @@ do_upgrade(CHAR_DATA * ch, char *argument)
 		/* 'train' section */
 
 		else {
-			sh_int *pAbility;
+			int *pAbility;
 			char *pOutput;
 
 			if (!str_cmp(argument, "str")
