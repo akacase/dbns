@@ -2633,6 +2633,15 @@ do_punch(CHAR_DATA * ch, char *argument)
 	WAIT_STATE(ch, skill_table[gsn_punch]->beats);
 	if (can_use_skill(ch, number_percent(), gsn_punch)) {
 		learn_from_success(ch, gsn_punch);
+			act(AT_YELLOW,
+				"You land a solid punch on $N. &W[$t]",
+				ch, num_punct(dam), victim, TO_CHAR);
+			act(AT_YELLOW,
+				"$n lands a solid punch on you. &W[$t]",
+				ch, num_punct(dam), victim, TO_VICT);
+			act(AT_YELLOW,
+				"$n lands a solid punch on $N. &W[$t]",
+				ch, num_punct(dam), victim, TO_NOTVICT);
 		ch->melee = true;
 		global_retcode =
 		    damage(ch, victim,
@@ -2640,6 +2649,12 @@ do_punch(CHAR_DATA * ch, char *argument)
 		    TYPE_HIT);
 		ch->melee = false;
 	} else {
+			act(AT_YELLOW, "You swing wildly and miss $N with your punch.", ch, NULL,
+				victim, TO_CHAR);
+			act(AT_YELLOW, "$n swings wildly and misses you with $s punch.", ch, NULL,
+				victim, TO_VICT);
+			act(AT_YELLOW, "$n swings wildly and misses $N with a punch.", ch, NULL,
+				victim, TO_NOTVICT);
 		learn_from_failure(ch, gsn_punch);
 		ch->melee = true;
 		global_retcode = damage(ch, victim, 0, TYPE_HIT);
