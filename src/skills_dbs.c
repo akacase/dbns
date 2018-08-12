@@ -2260,12 +2260,12 @@ check_parry(CHAR_DATA * ch, CHAR_DATA * victim)
 	if (!IS_NPC(victim)
 	    && !IS_SET(victim->pcdata->flags, PCFLAG_GAG))
 		/* SB */
-		act(AT_SKILL, "You anticipate $n's attack and block it.",
+		act(AT_BLUE, "You anticipate $n's attack and block it.",
 		    ch, NULL, victim, TO_VICT);
 
 	if (!IS_NPC(ch)
 	    && !IS_SET(ch->pcdata->flags, PCFLAG_GAG))	/* SB */
-		act(AT_SKILL, "$N anticipates your attack and blocks it.", ch,
+		act(AT_BLUE, "$N anticipates your attack and blocks it.", ch,
 		    NULL, victim, TO_CHAR);
 
 	learn_from_success(victim, gsn_parry);
