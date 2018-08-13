@@ -2610,41 +2610,6 @@ violence_update(void)
 						ch->train += 6;
 					}
 				}
-				else {
-					if (ch->position == POS_FIGHTING) {
-						stat_train(ch, "str", 5);
-						stat_train(ch, "spd", 5);
-						stat_train(ch, "con", 5);
-						stat_train(ch, "int", 5);
-						ch->train += 3;
-					}
-					if (ch->position == POS_AGGRESSIVE) {
-						stat_train(ch, "str", 6);
-						stat_train(ch, "spd", 5);
-						stat_train(ch, "con", 5);
-						stat_train(ch, "int", 4);
-						ch->train += 3;
-					}
-					if (ch->position == POS_BERSERK) {
-						stat_train(ch, "str", 10);
-						stat_train(ch, "spd", 5);
-						stat_train(ch, "con", 5);
-						ch->train += 3;
-					}
-					if (ch->position == POS_DEFENSIVE) {
-						stat_train(ch, "str", 2);
-						stat_train(ch, "spd", 5);
-						stat_train(ch, "con", 8);
-						stat_train(ch, "int", 5);
-						ch->train += 3;
-					}
-					if (ch->position == POS_EVASIVE) {
-						stat_train(ch, "spd", 7);
-						stat_train(ch, "con", 5);
-						stat_train(ch, "int", 8);
-						ch->train += 3;
-					}
-				}
 				if (ch->gravExp >= 400000)
 					acc = ((ch->gravExp / 4000) + 301);
 				else if (ch->gravExp < 400000)
@@ -2676,6 +2641,41 @@ violence_update(void)
 							raw_kill(ch, ch);
 						}
 					}
+				}
+			}
+			else {
+				if (ch->position == POS_FIGHTING) {
+					stat_train(ch, "str", 5);
+					stat_train(ch, "spd", 5);
+					stat_train(ch, "con", 5);
+					stat_train(ch, "int", 5);
+					ch->train += 3;
+				}
+				if (ch->position == POS_AGGRESSIVE) {
+					stat_train(ch, "str", 6);
+					stat_train(ch, "spd", 5);
+					stat_train(ch, "con", 5);
+					stat_train(ch, "int", 4);
+					ch->train += 3;
+				}
+				if (ch->position == POS_BERSERK) {
+					stat_train(ch, "str", 10);
+					stat_train(ch, "spd", 5);
+					stat_train(ch, "con", 5);
+					ch->train += 3;
+				}
+				if (ch->position == POS_DEFENSIVE) {
+					stat_train(ch, "str", 2);
+					stat_train(ch, "spd", 5);
+					stat_train(ch, "con", 8);
+					stat_train(ch, "int", 5);
+					ch->train += 3;
+				}
+				if (ch->position == POS_EVASIVE) {
+					stat_train(ch, "spd", 7);
+					stat_train(ch, "con", 5);
+					stat_train(ch, "int", 8);
+					ch->train += 3;
 				}
 			}
 		}
