@@ -5308,7 +5308,6 @@ do_meditate(CHAR_DATA * ch, char *argument)
 		return;
 	}
 	
-	left = (float) ch->mana / ch->max_mana;
 	right = (float) ch->pcdata->learned[gsn_meditate] / 100;
 
 	if (ch->fighting) {
@@ -5357,7 +5356,7 @@ do_meditate(CHAR_DATA * ch, char *argument)
             }
 		        statComb = ((get_curr_str(ch) + get_curr_dex(ch) + get_curr_int(ch) + get_curr_con(ch)) - 39);
 			increase = number_range(1,3);
-			xp_gain = (long double)increase / 1000 * statComb;
+			xp_gain = (long double)increase / 200 * statComb;
 			gain_exp(ch, xp_gain);
 			ch->mana += (float) right / 50 * ch->max_mana;
 		} else {
@@ -5394,6 +5393,9 @@ do_meditate(CHAR_DATA * ch, char *argument)
                         xp_gain = (long double)increase / 200 * statComb;
 			gain_exp(ch, xp_gain);
 			ch->mana += (float) right / 50 * ch->max_mana;
+			if (ch->mana > ch->max_mana) {
+				ch->mana = ch->max_mana;
+			}
 		} else {
 			send_to_char
 			    ("&wYou spend several minutes in deep concentration, but fail to collect any energy.\n\r",
