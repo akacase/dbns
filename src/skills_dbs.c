@@ -5351,15 +5351,28 @@ do_meditate(CHAR_DATA * ch, char *argument)
 			    ("&wYou meditate peacefully, collecting energy from the cosmos\n\r",
 			    ch);
 			learn_from_success(ch, gsn_meditate);
-            if (!IS_NPC(ch)) {
-                stat_train(ch, "int", 60);
-            }
-		        statComb = ((get_curr_str(ch) + get_curr_dex(ch) + get_curr_int(ch) + get_curr_con(ch)) - 39);
-			increase = number_range(1,3);
-			xp_gain = (long double)increase / 200 * statComb;
-			gain_exp(ch, xp_gain);
-			ch->mana += (float) right / 50 * ch->max_mana;
-		} else {
+		if (!IS_NPC(ch)) {
+			if (is_kaio(ch) || is_namek(ch)) {
+				stat_train(ch, "int", 90);
+				statComb = ((get_curr_str(ch) + get_curr_dex(ch) + get_curr_int(ch) + get_curr_con(ch)) - 39);
+				increase = number_range(1,3);
+				xp_gain = (long double)increase / 150 * statComb;
+				gain_exp(ch, xp_gain);
+				ch->mana += (float) right / 50 * ch->max_mana;
+			}
+			else { 
+				stat_train(ch, "int", 60);
+				statComb = ((get_curr_str(ch) + get_curr_dex(ch) + get_curr_int(ch) + get_curr_con(ch)) - 39);
+				increase = number_range(1,3);
+				xp_gain = (long double)increase / 200 * statComb;
+				gain_exp(ch, xp_gain);
+				ch->mana += (float) right / 50 * ch->max_mana;
+				if (ch->mana > ch->max_mana) {
+					ch->mana = ch->max_mana;
+				}
+			}
+		}
+		else {
 			send_to_char
 			    ("&wYou spend several minutes in deep concentration, but fail to collect any energy.\n\r",
 			    ch);
@@ -5386,16 +5399,26 @@ do_meditate(CHAR_DATA * ch, char *argument)
 			    ch);
 			learn_from_success(ch, gsn_meditate);
             if (!IS_NPC(ch)) {
-                stat_train(ch, "int", 30);
+				if (is_kaio(ch) || is_namek(ch)) {
+					stat_train(ch, "int", 45);
+					statComb = ((get_curr_str(ch) + get_curr_dex(ch) + get_curr_int(ch) + get_curr_con(ch)) - 39);
+					increase = number_range(1,3);
+					xp_gain = (long double)increase / 150 * statComb;
+					gain_exp(ch, xp_gain);
+					ch->mana += (float) right / 50 * ch->max_mana;
+				}
+				else { 
+					stat_train(ch, "int", 30);
+					statComb = ((get_curr_str(ch) + get_curr_dex(ch) + get_curr_int(ch) + get_curr_con(ch)) - 39);
+					increase = number_range(1,3);
+					xp_gain = (long double)increase / 200 * statComb;
+					gain_exp(ch, xp_gain);
+					ch->mana += (float) right / 50 * ch->max_mana;
+					if (ch->mana > ch->max_mana) {
+						ch->mana = ch->max_mana;
+					}
+				}
             }
-                        statComb = ((get_curr_str(ch) + get_curr_dex(ch) + get_curr_int(ch) + get_curr_con(ch)) - 39);
-			increase = number_range(1,3);
-                        xp_gain = (long double)increase / 200 * statComb;
-			gain_exp(ch, xp_gain);
-			ch->mana += (float) right / 50 * ch->max_mana;
-			if (ch->mana > ch->max_mana) {
-				ch->mana = ch->max_mana;
-			}
 		} else {
 			send_to_char
 			    ("&wYou spend several minutes in deep concentration, but fail to collect any energy.\n\r",
