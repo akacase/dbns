@@ -5308,7 +5308,7 @@ do_meditate(CHAR_DATA * ch, char *argument)
 		return;
 	}
 	
-	right = (float) ch->pcdata->learned[gsn_meditate] / 100;
+	right = (float) 100;
 
 	if (ch->fighting) {
 		send_to_char("&wYou can't concentrate enough for that.\n\r",
