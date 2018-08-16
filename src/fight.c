@@ -1512,8 +1512,8 @@ violence_update(void)
 				onestr = ch->perm_str * 0.10; 
 				twostr = ch->perm_str * 0.15;
 				threestr = ch->perm_str * 0.20;
-				fourstr = ch->perm_str * 0.50;
-				fivestr = ch->perm_str;
+				fourstr = ch->perm_str * 0.60;
+				fivestr = ch->perm_str * 1.20;
 				onespd = ch->perm_dex * 0.10;
 				twospd = ch->perm_dex * 0.15;
 				threespd = ch->perm_dex * 0.20;
@@ -1527,8 +1527,8 @@ violence_update(void)
 				onecon = ch->perm_con * 0.15;
 				twocon = ch->perm_con * 0.20;
 				threecon = ch->perm_con * 0.30;
-				fourcon = ch->perm_con * 0.75;
-				fivecon = ch->perm_con * 1.50;
+				fourcon = ch->perm_con * 0.60;
+				fivecon = ch->perm_con * 1.40;
 				if (!xIS_SET((ch)->affected_by, AFF_ICER2)
 					&& !xIS_SET((ch)->affected_by, AFF_ICER3)
 					&& !xIS_SET((ch)->affected_by, AFF_ICER4)
@@ -1748,7 +1748,7 @@ violence_update(void)
 				fiveint = ch->perm_int * 0.70;
 				sixint = ch->perm_int * 1.10;
 				sevenint = ch->perm_int * 1.30;
-				onecon = ch->perm_con * 0.15;
+				onecon = ch->perm_con * 0.20;
 				twocon = ch->perm_con * 0.20;
 				threecon = ch->perm_con * 0.20;
 				fourcon = ch->perm_con * 0.40;
@@ -1899,13 +1899,13 @@ violence_update(void)
 				int sixcon = 0;
 				int sevencon = 0;
 					
-				onestr = ch->perm_str * 0.10; 
-				twostr = ch->perm_str * 0.15;
-				threestr = ch->perm_str * 0.20;
-				fourstr = ch->perm_str * 0.30;
+				onestr = ch->perm_str * 0.20; 
+				twostr = ch->perm_str * 0.25;
+				threestr = ch->perm_str * 0.30;
+				fourstr = ch->perm_str * 0.40;
 				fivestr = ch->perm_str * 0.50;
-				sixstr = ch->perm_str * 0.60;
-				sevenstr = ch->perm_str * 0.75;
+				sixstr = ch->perm_str * 0.9;
+				sevenstr = ch->perm_str * 1.10;
 				onespd = ch->perm_dex * 0.10;
 				twospd = ch->perm_dex * 0.15;
 				threespd = ch->perm_dex * 0.25;
@@ -1920,13 +1920,13 @@ violence_update(void)
 				fiveint = ch->perm_int;
 				sixint = ch->perm_int * 1.25;
 				sevenint = ch->perm_int * 1.75;
-				onecon = ch->perm_con * 0.15;
+				onecon = ch->perm_con * 0.20;
 				twocon = ch->perm_con * 0.15;
 				threecon = ch->perm_con * 0.25;
 				fourcon = ch->perm_con * 0.35;
 				fivecon = ch->perm_con * 0.60;
 				sixcon = ch->perm_con * 0.80;
-				sevencon = ch->perm_con * 1.10;
+				sevencon = ch->perm_con * 1.15;
 				if (!xIS_SET((ch)->affected_by, AFF_SNAMEK)) {
 					int namekTotal = 0;
 					
