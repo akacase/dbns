@@ -1921,9 +1921,9 @@ violence_update(void)
 				sixint = ch->perm_int * 1.25;
 				sevenint = ch->perm_int * 1.75;
 				onecon = ch->perm_con * 0.20;
-				twocon = ch->perm_con * 0.15;
-				threecon = ch->perm_con * 0.25;
-				fourcon = ch->perm_con * 0.35;
+				twocon = ch->perm_con * 0.30;
+				threecon = ch->perm_con * 0.30;
+				fourcon = ch->perm_con * 0.40;
 				fivecon = ch->perm_con * 0.60;
 				sixcon = ch->perm_con * 0.80;
 				sevencon = ch->perm_con * 1.15;

@@ -4631,6 +4631,7 @@ do_kamehameha(CHAR_DATA * ch, char *argument)
 	char 	arg[MAX_INPUT_LENGTH];
 	int 	dam = 0;
 	int		argdam = 0;
+	int		kilimit = 0;
 
 	one_argument(argument, arg);
 	if (IS_NPC(ch) && is_split(ch)) {
@@ -4649,15 +4650,60 @@ do_kamehameha(CHAR_DATA * ch, char *argument)
 		send_to_char("You can't do that.\n\r", ch);
 		return;
 	}
+	kilimit = ch->train / 10000;
 	if ((victim = who_fighting(ch)) == NULL) {
 		send_to_char("You aren't fighting anyone.\n\r", ch);
+		return;
+	}
+	if (!str_cmp(arg, "200") && (kilimit < 2)) {
+		send_to_char("You're unable to control your energy well enough!\n\r", ch);
+		return;
+	}
+	if (!str_cmp(arg, "300") && (kilimit < 10)) {
+		send_to_char("You're unable to control your energy well enough!\n\r", ch);
+		return;
+	}
+	if (!str_cmp(arg, "400") && (kilimit < 20)) {
+		send_to_char("You're unable to control your energy well enough!\n\r", ch);
+		return;
+	}
+	if (!str_cmp(arg, "500") && (kilimit < 30)) {
+		send_to_char("You're unable to control your energy well enough!\n\r", ch);
+		return;
+	}
+	if (!str_cmp(arg, "1000") && (kilimit < 40)) {
+		send_to_char("You're unable to control your energy well enough!\n\r", ch);
 		return;
 	}
 	if (arg[0] == '\0' && ch->mana < skill_table[gsn_kamehameha]->min_mana) {
 		send_to_char("You don't have enough energy.\n\r", ch);
 		return;
 	}
-	else if (!str_cmp(arg, "2") && ch->mana < (skill_table[gsn_kamehameha]->min_mana * 4)) {
+	if (!str_cmp(arg, "50") && ch->mana < (skill_table[gsn_kamehameha]->min_mana) / 4) {
+		send_to_char("You don't have enough energy.\n\r", ch);
+		return;
+	}
+	if (!str_cmp(arg, "100") && ch->mana < (skill_table[gsn_kamehameha]->min_mana)) {
+		send_to_char("You don't have enough energy.\n\r", ch);
+		return;
+	}
+	if (!str_cmp(arg, "200") && (ch->mana < (skill_table[gsn_kamehameha]->min_mana) * 4)) {
+		send_to_char("You don't have enough energy.\n\r", ch);
+		return;
+	}
+	if (!str_cmp(arg, "300") && ch->mana < (skill_table[gsn_kamehameha]->min_mana) * 16) {
+		send_to_char("You don't have enough energy.\n\r", ch);
+		return;
+	}
+	if (!str_cmp(arg, "400") && ch->mana < (skill_table[gsn_kamehameha]->min_mana) * 64) {
+		send_to_char("You don't have enough energy.\n\r", ch);
+		return;
+	}
+	if (!str_cmp(arg, "500") && ch->mana < (skill_table[gsn_kamehameha]->min_mana) * 256) {
+		send_to_char("You don't have enough energy.\n\r", ch);
+		return;
+	}
+	if (!str_cmp(arg, "1000") && ch->mana < (skill_table[gsn_kamehameha]->min_mana) * 1024) {
 		send_to_char("You don't have enough energy.\n\r", ch);
 		return;
 	}
@@ -4669,10 +4715,38 @@ do_kamehameha(CHAR_DATA * ch, char *argument)
 
 	WAIT_STATE(ch, skill_table[gsn_kamehameha]->beats);
 	if (can_use_skill(ch, number_percent(), gsn_kamehameha)) {
-		if (arg[0] == '\0')
+		if (arg[0] == '\0') {
 			argdam = number_range(20, 25);
-		if (!str_cmp(arg, "2"))
+			dam = get_attmod(ch, victim) * (argdam + (get_curr_int(ch) / 40));
+		}
+		if (!str_cmp(arg, "50")) {
+			argdam = number_range(10, 13);
+			dam = get_attmod(ch, victim) * (argdam + (get_curr_int(ch) / 40));
+		}
+		if (!str_cmp(arg, "100")) {
+			argdam = number_range(20, 25);
+			dam = get_attmod(ch, victim) * (argdam + (get_curr_int(ch) / 40));
+		}
+		if (!str_cmp(arg, "200")) {
 			argdam = number_range(40, 50);
+			dam = get_attmod(ch, victim) * (argdam + (get_curr_int(ch) / 40));			
+		}
+		if (!str_cmp(arg, "300")) {
+			argdam = number_range(60, 75);
+			dam = get_attmod(ch, victim) * (argdam + (get_curr_int(ch) / 40));			
+		}
+		if (!str_cmp(arg, "400")) {
+			argdam = number_range(80, 100);
+			dam = get_attmod(ch, victim) * (argdam + (get_curr_int(ch) / 40));			
+		}
+		if (!str_cmp(arg, "500")) {
+			argdam = number_range(100, 125);
+			dam = get_attmod(ch, victim) * (argdam + (get_curr_int(ch) / 40));			
+		}
+		if (!str_cmp(arg, "1000")){
+			argdam = number_range(200, 250);
+			dam = get_attmod(ch, victim) * (argdam + (get_curr_int(ch) / 40));			
+		}
 		dam = get_attmod(ch, victim) * (argdam + (get_curr_int(ch) / 40));
 		if (ch->charge > 0)
 		dam = chargeDamMult(ch, dam);
@@ -4696,24 +4770,169 @@ do_kamehameha(CHAR_DATA * ch, char *argument)
 				"$n pushes $s hands forward, throwing a blue beam at $N. &W[$t]",
 				ch, num_punct(dam), victim, TO_NOTVICT);
 		}
-		else if (!str_cmp(arg, "2")) {
+		if (!str_cmp(arg, "50")) {
 			act(AT_LBLUE,
-				"DEBUG: You put your arms back and cup your hands. 'CHOU KA-ME-HA-ME-HA!!!!'	",
+				"You put your arms back and cup your hands. 'KA-ME-HA-ME-HA!!!!'	",
+				ch, NULL, victim, TO_CHAR);
+			act(AT_LBLUE,
+				"You push your hands forward, throwing a small blue beam at $N. &W[$t]",
+				ch, num_punct(dam), victim, TO_CHAR);
+			act(AT_LBLUE,
+				"$n puts $s arms back and cups $s hands. 'KA-ME-HA-ME-HA!!!!'	",
+				ch, NULL, victim, TO_VICT);
+			act(AT_LBLUE,
+				"$n pushes $s hands forward, throwing a small blue beam at you. &W[$t]",
+				ch, num_punct(dam), victim, TO_VICT);
+			act(AT_LBLUE,
+				"$n puts $s arms back and cups $s hands. 'KA-ME-HA-ME-HA!!!!'	",
+				ch, NULL, victim, TO_NOTVICT);
+			act(AT_LBLUE,
+				"$n pushes $s hands forward, throwing a small blue beam at $N. &W[$t]",
+				ch, num_punct(dam), victim, TO_NOTVICT);
+		}
+		if (!str_cmp(arg, "200")) {
+			act(AT_LBLUE,
+				"You put your arms back and cup your hands. 'KA-ME-HA-ME-HA!!!!'	",
+				ch, NULL, victim, TO_CHAR);
+			act(AT_LBLUE,
+				"You push your hands forward, throwing a huge blue beam at $N. &W[$t]",
+				ch, num_punct(dam), victim, TO_CHAR);
+			act(AT_LBLUE,
+				"$n puts $s arms back and cups $s hands. 'KA-ME-HA-ME-HA!!!!'	",
+				ch, NULL, victim, TO_VICT);
+			act(AT_LBLUE,
+				"$n pushes $s hands forward, throwing a huge blue beam at you. &W[$t]",
+				ch, num_punct(dam), victim, TO_VICT);
+			act(AT_LBLUE,
+				"$n puts $s arms back and cups $s hands. 'KA-ME-HA-ME-HA!!!!'	",
+				ch, NULL, victim, TO_NOTVICT);
+			act(AT_LBLUE,
+				"$n pushes $s hands forward, throwing a huge blue beam at $N. &W[$t]",
+				ch, num_punct(dam), victim, TO_NOTVICT);
+		}
+		if (!str_cmp(arg, "300")) {
+			act(AT_LBLUE,
+				"You put your arms back and cup your hands. 'KA-ME-HA-ME-HA!!!!'	",
 				ch, NULL, victim, TO_CHAR);
 			act(AT_LBLUE,
 				"You push your hands forward, throwing a massive blue beam at $N. &W[$t]",
 				ch, num_punct(dam), victim, TO_CHAR);
 			act(AT_LBLUE,
-				"$n puts $s arms back and cups $s hands. 'CHOU KA-ME-HA-ME-HA!!!!'	",
+				"$n puts $s arms back and cups $s hands. 'KA-ME-HA-ME-HA!!!!'	",
 				ch, NULL, victim, TO_VICT);
 			act(AT_LBLUE,
 				"$n pushes $s hands forward, throwing a massive blue beam at you. &W[$t]",
 				ch, num_punct(dam), victim, TO_VICT);
 			act(AT_LBLUE,
-				"$n puts $s arms back and cups $s hands. 'CHOU KA-ME-HA-ME-HA!!!!'	",
+				"$n puts $s arms back and cups $s hands. 'KA-ME-HA-ME-HA!!!!'	",
 				ch, NULL, victim, TO_NOTVICT);
 			act(AT_LBLUE,
 				"$n pushes $s hands forward, throwing a massive blue beam at $N. &W[$t]",
+				ch, num_punct(dam), victim, TO_NOTVICT);
+		}
+		if (!str_cmp(arg, "400")) {
+			act(AT_LBLUE,
+				"You put your arms back and cup your hands, an enormous amount of",
+				ch, NULL, victim, TO_CHAR);
+			act(AT_LBLUE,
+				"ki exploding out from within your body. 'CHOU KA-ME-HA-ME-HAAAAA!!!'",
+				ch, NULL, victim, TO_CHAR);
+			act(AT_LBLUE,
+				"You push your hands forward, engulfing $N in an otherworldly blast. &W[$t]",
+				ch, num_punct(dam), victim, TO_CHAR);
+			act(AT_LBLUE,
+				"$n puts $s arms back and cups $s hands, an enormous amount of",
+				ch, NULL, victim, TO_VICT);
+			act(AT_LBLUE,
+				"ki exploding out from within $s body. 'CHOU KA-ME-HA-ME-HAAAAA!!!'",
+				ch, NULL, victim, TO_VICT);
+			act(AT_LBLUE,
+				"$n pushes $s hands forward, engulfing you in an otherworldly blast. &W[$t]",
+				ch, num_punct(dam), victim, TO_VICT);
+			act(AT_LBLUE,
+				"$n puts $s arms back and cups $s hands, an enormous amount of",
+				ch, NULL, victim, TO_NOTVICT);
+			act(AT_LBLUE,
+				"ki exploding out from within $s body. 'CHOU KA-ME-HA-ME-HAAAAA!!!'",
+				ch, NULL, victim, TO_NOTVICT);
+			act(AT_LBLUE,
+				"$n pushes $s hands forward, engulfing $N in an otherworldly blast. &W[$t]",
+				ch, num_punct(dam), victim, TO_NOTVICT);
+		}
+		if (!str_cmp(arg, "500")) {
+			act(AT_LBLUE,
+				"You put your arms back and cup your hands, an enormous amount of",
+				ch, NULL, victim, TO_CHAR);
+			act(AT_LBLUE,
+				"ki exploding out from within your body. 'KAAAA-MEEEE ... HAAA-MEEEE ...'",
+				ch, NULL, victim, TO_CHAR);
+			act(AT_LBLUE,
+				"You suddenly disappear, reappearing in a flash behind $N! 'HAAAAAAAA!!!!'",
+				ch, NULL, victim, TO_CHAR);
+			act(AT_LBLUE,
+				"$N is engulfed at point-blank range in a massive whorl of energy!  &W[$t]",
+				ch, num_punct(dam), victim, TO_CHAR);
+			act(AT_LBLUE,
+				"$n puts $s arms back and cups $s hands, an enormous amount of",
+				ch, NULL, victim, TO_VICT);
+			act(AT_LBLUE,
+				"ki exploding out from within $s body. 'KAAAA-MEEEE ... HAAA-MEEEE ...'",
+				ch, NULL, victim, TO_VICT);
+			act(AT_LBLUE,
+				"$n suddenly disappears, reappearing in a flash behind you! 'HAAAAAAAA!!!!'",
+				ch, NULL, victim, TO_VICT);
+			act(AT_LBLUE,
+				"You're engulfed at point-blank range in a massive whorl of energy! &W[$t]",
+				ch, num_punct(dam), victim, TO_VICT);
+			act(AT_LBLUE,
+				"$n puts $s arms back and cups $s hands, an enormous amount of",
+				ch, NULL, victim, TO_NOTVICT);
+			act(AT_LBLUE,
+				"ki exploding out from within $s body. 'KAAAA-MEEEE ... HAAA-MEEEE ...'",
+				ch, NULL, victim, TO_NOTVICT);
+			act(AT_LBLUE,
+				"$n suddenly disappears, reappearing in a flash behind $N! 'HAAAAAAAA!!!!'",
+				ch, NULL, victim, TO_NOTVICT);
+			act(AT_LBLUE,
+				"$N is engulfed at point-blank range in a massive whorl of energy! &W[$t]",
+				ch, num_punct(dam), victim, TO_NOTVICT);
+		}
+		if (!str_cmp(arg, "1000")) {
+			act(AT_LBLUE,
+				"You put your arms back and cup your hands, an enormous amount of",
+				ch, NULL, victim, TO_CHAR);
+			act(AT_LBLUE,
+				"ki exploding out from within your body. 'KAAAA-MEEEE ... HAAA-MEEEE ...'",
+				ch, NULL, victim, TO_CHAR);
+			act(AT_LBLUE,
+				"You throw your hands forward, nearly tearing apart your own body! 'HAAAAAAAA!!!!' ",
+				ch, NULL, victim, TO_CHAR);
+			act(AT_LBLUE,
+				"$N is engulfed in a universe-ravaging torrent of energy!  &W[$t]",
+				ch, num_punct(dam), victim, TO_CHAR);
+			act(AT_LBLUE,
+				"$n puts $s arms back and cups $s hands, an enormous amount of",
+				ch, NULL, victim, TO_VICT);
+			act(AT_LBLUE,
+				"ki exploding out from within $s body. 'KAAAA-MEEEE ... HAAA-MEEEE ...'",
+				ch, NULL, victim, TO_VICT);
+			act(AT_LBLUE,
+				"$n throws &s hands forward, nearly tearing apart &s own body! 'HAAAAAAAA!!!!'",
+				ch, NULL, victim, TO_VICT);
+			act(AT_LBLUE,
+				"You're engulfed in a universe-ravaging torrent of energy! &W[$t]",
+				ch, num_punct(dam), victim, TO_VICT);
+			act(AT_LBLUE,
+				"$n puts $s arms back and cups $s hands, an enormous amount of",
+				ch, NULL, victim, TO_NOTVICT);
+			act(AT_LBLUE,
+				"ki exploding out from within $s body. 'KAAAA-MEEEE ... HAAA-MEEEE ...'",
+				ch, NULL, victim, TO_NOTVICT);
+			act(AT_LBLUE,
+				"$n throws &s hands forward, nearly tearing apart &s own body! 'HAAAAAAAA!!!!'",
+				ch, NULL, victim, TO_NOTVICT);
+			act(AT_LBLUE,
+				"$N is engulfed in a universe-ravaging torrent of energy! &W[$t]",
 				ch, num_punct(dam), victim, TO_NOTVICT);
 		}
 
@@ -4734,12 +4953,32 @@ do_kamehameha(CHAR_DATA * ch, char *argument)
 		learn_from_failure(ch, gsn_kamehameha);
 		global_retcode = damage(ch, victim, 0, TYPE_HIT);
 	}
-	if (arg[0] == '\0') {
+	if (arg[0] == '\0' || !str_cmp(arg, "100")) {
 		ch->mana -= skill_table[gsn_kamehameha]->min_mana;
 		return;
 	}
-	else if (!str_cmp(arg, "2")) {
+	else if (!str_cmp(arg, "50")) {
+		ch->mana -= (skill_table[gsn_kamehameha]->min_mana / 4);
+		return;
+	}
+	else if (!str_cmp(arg, "200")) {
 		ch->mana -= (skill_table[gsn_kamehameha]->min_mana * 4);
+		return;
+	}
+	else if (!str_cmp(arg, "300")) {
+		ch->mana -= (skill_table[gsn_kamehameha]->min_mana * 16);
+		return;
+	}
+	else if (!str_cmp(arg, "400")) {
+		ch->mana -= (skill_table[gsn_kamehameha]->min_mana * 64);
+		return;
+	}
+	else if (!str_cmp(arg, "500")) {
+		ch->mana -= (skill_table[gsn_kamehameha]->min_mana * 256);
+		return;
+	}
+	else if (!str_cmp(arg, "1000")) {
+		ch->mana -= (skill_table[gsn_kamehameha]->min_mana * 1024);
 		return;
 	}
 }
