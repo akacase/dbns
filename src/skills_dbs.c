@@ -5321,85 +5321,85 @@ do_meditate(CHAR_DATA * ch, char *argument)
 		return;
 	}
 	switch (ch->substate) {
-	default:
-		if (IS_NPC(ch) && IS_AFFECTED(ch, AFF_CHARM)) {
-			send_to_char
-			    ("&wYou can't concentrate enough for that.\n\r",
-			    ch);
-			return;
-		}
-		if (ch->mount) {
-			send_to_char("&wYou can't do that while mounted.\n\r",
-			    ch);
-			return;
-		}
-		add_timer(ch, TIMER_DO_FUN, number_range(1, 3), do_meditate, 1);
-		send_to_char("&wYou begin to meditate...\n\r", ch);
-		act(AT_PLAIN, "$n begins to meditate...", ch, NULL, NULL,
-		    TO_ROOM);
-		return;
-
-	case 1:
-		if (ch->fighting) {
-			send_to_char("&wYou stop meditating...\n\r", ch);
-			act(AT_PLAIN, "$n stops meditating...", ch, NULL, NULL,
-			    TO_ROOM);
-			return;
-		}
-		if (can_use_skill(ch, number_percent(), gsn_meditate)) {
-			send_to_char
-			    ("&wYou meditate peacefully, collecting energy from the cosmos\n\r",
-			    ch);
-			learn_from_success(ch, gsn_meditate);
-		if (!IS_NPC(ch)) {
-			if (is_kaio(ch) || is_namek(ch)) {
-				stat_train(ch, "int", 90);
-				statComb = ((get_curr_str(ch) + get_curr_dex(ch) + get_curr_int(ch) + get_curr_con(ch)) - 39);
-				increase = number_range(1,3);
-				xp_gain = (long double)increase / 150 * statComb;
-				gain_exp(ch, xp_gain);
-				ch->mana += (float) right / 50 * ch->max_mana;
+		default:
+			if (IS_NPC(ch) && IS_AFFECTED(ch, AFF_CHARM)) {
+				send_to_char
+					("&wYou can't concentrate enough for that.\n\r",
+					ch);
+				return;
 			}
-			else { 
-				stat_train(ch, "int", 60);
-				statComb = ((get_curr_str(ch) + get_curr_dex(ch) + get_curr_int(ch) + get_curr_con(ch)) - 39);
-				increase = number_range(1,3);
-				xp_gain = (long double)increase / 200 * statComb;
-				gain_exp(ch, xp_gain);
-				ch->mana += (float) right / 50 * ch->max_mana;
-				if (ch->mana > ch->max_mana) {
-					ch->mana = ch->max_mana;
+			if (ch->mount) {
+				send_to_char("&wYou can't do that while mounted.\n\r",
+					ch);
+				return;
+			}
+			add_timer(ch, TIMER_DO_FUN, number_range(1, 3), do_meditate, 1);
+			send_to_char("&wYou begin to meditate...\n\r", ch);
+			act(AT_PLAIN, "$n begins to meditate...", ch, NULL, NULL,
+				TO_ROOM);
+			return;
+
+		case 1:
+			if (ch->fighting) {
+				send_to_char("&wYou stop meditating...\n\r", ch);
+				act(AT_PLAIN, "$n stops meditating...", ch, NULL, NULL,
+					TO_ROOM);
+				return;
+			}
+			if (can_use_skill(ch, number_percent(), gsn_meditate)) {
+				send_to_char
+					("&wYou meditate peacefully, collecting energy from the cosmos\n\r",
+					ch);
+				learn_from_success(ch, gsn_meditate);
+			if (!IS_NPC(ch)) {
+				if (is_kaio(ch) || is_namek(ch)) {
+					stat_train(ch, "int", 90);
+					statComb = ((get_curr_str(ch) + get_curr_dex(ch) + get_curr_int(ch) + get_curr_con(ch)) - 39);
+					increase = number_range(1,3);
+					xp_gain = (long double)increase / 150 * statComb;
+					gain_exp(ch, xp_gain);
+					ch->mana += (float) right / 50 * ch->max_mana;
+				}
+				else {
+					stat_train(ch, "int", 60);
+					statComb = ((get_curr_str(ch) + get_curr_dex(ch) + get_curr_int(ch) + get_curr_con(ch)) - 39);
+					increase = number_range(1,3);
+					xp_gain = (long double)increase / 200 * statComb;
+					gain_exp(ch, xp_gain);
+					ch->mana += (float) right / 50 * ch->max_mana;
+					if (ch->mana > ch->max_mana) {
+						ch->mana = ch->max_mana;
+					}
 				}
 			}
-		}
-		else {
-			send_to_char
-			    ("&wYou spend several minutes in deep concentration, but fail to collect any energy.\n\r",
-			    ch);
-			learn_from_failure(ch, gsn_meditate);
-		}
+			else {
+				send_to_char
+					("&wYou spend several minutes in deep concentration, but fail to collect any energy.\n\r",
+					ch);
+				learn_from_failure(ch, gsn_meditate);
+			}
 
-		if (left >= right) {
-			send_to_char
-			    ("&wYou are now at peace with everything.\n\r", ch);
+			if (left >= right) {
+				send_to_char
+					("&wYou are now at peace with everything.\n\r", ch);
+				return;
+			}
+			add_timer(ch, TIMER_DO_FUN, number_range(1, 3), do_meditate, 2);
 			return;
-		}
-		add_timer(ch, TIMER_DO_FUN, number_range(1, 3), do_meditate, 2);
-		return;
-	case 2:
-		if (ch->fighting) {
-			send_to_char("&wYou stop meditating...\n\r", ch);
-			act(AT_PLAIN, "$n stops meditating...", ch, NULL, NULL,
-			    TO_ROOM);
-			return;
-		}
-		if (can_use_skill(ch, number_percent(), gsn_meditate)) {
-			send_to_char
-			    ("&wYou meditate peacefully, collecting energy from the cosmos\n\r",
-			    ch);
-			learn_from_success(ch, gsn_meditate);
-            if (!IS_NPC(ch)) {
-				if (is_kaio(ch) || is_namek(ch)) {
+		case 2:
+			if (ch->fighting) {
+				send_to_char("&wYou stop meditating...\n\r", ch);
+				act(AT_PLAIN, "$n stops meditating...", ch, NULL, NULL,
+					TO_ROOM);
+				return;
+			}
+			if (can_use_skill(ch, number_percent(), gsn_meditate)) {
+				send_to_char
+					("&wYou meditate peacefully, collecting energy from the cosmos\n\r",
+					ch);
+				learn_from_success(ch, gsn_meditate);
+				if (!IS_NPC(ch)) {
+					if (is_kaio(ch) || is_namek(ch)) {
 					stat_train(ch, "int", 45);
 					statComb = ((get_curr_str(ch) + get_curr_dex(ch) + get_curr_int(ch) + get_curr_con(ch)) - 39);
 					increase = number_range(1,3);
@@ -5407,7 +5407,7 @@ do_meditate(CHAR_DATA * ch, char *argument)
 					gain_exp(ch, xp_gain);
 					ch->mana += (float) right / 50 * ch->max_mana;
 				}
-				else { 
+				else {
 					stat_train(ch, "int", 30);
 					statComb = ((get_curr_str(ch) + get_curr_dex(ch) + get_curr_int(ch) + get_curr_con(ch)) - 39);
 					increase = number_range(1,3);
@@ -5418,31 +5418,31 @@ do_meditate(CHAR_DATA * ch, char *argument)
 						ch->mana = ch->max_mana;
 					}
 				}
-            }
-		} else {
-			send_to_char
-			    ("&wYou spend several minutes in deep concentration, but fail to collect any energy.\n\r",
-			    ch);
-			learn_from_failure(ch, gsn_meditate);
-		}
-
-		if (left >= right) {
-			send_to_char
-			    ("&wYou are now at peace with everything.\n\r", ch);
+				}
+			}
+			else {
+				send_to_char
+					("&wYou spend several minutes in deep concentration, but fail to collect any energy.\n\r",
+					ch);
+				learn_from_failure(ch, gsn_meditate);
+			}
+			if (left >= right) {
+				send_to_char
+					("&wYou are now at peace with everything.\n\r", ch);
+				return;
+			}
+			add_timer(ch, TIMER_DO_FUN, number_range(1, 3), do_meditate, 1);
 			return;
-		}
-		add_timer(ch, TIMER_DO_FUN, number_range(1, 3), do_meditate, 1);
-		return;
-	case SUB_TIMER_DO_ABORT:
-		ch->substate = SUB_NONE;
-		send_to_char("&wYou stop meditating...\n\r", ch);
-		act(AT_PLAIN, "$n stops meditating...", ch, NULL, NULL,
-		    TO_ROOM);
-		return;
-	}
+		case SUB_TIMER_DO_ABORT:
+			ch->substate = SUB_NONE;
+			send_to_char("&wYou stop meditating...\n\r", ch);
+			act(AT_PLAIN, "$n stops meditating...", ch, NULL, NULL,
+				TO_ROOM);
+			return;
+			}
 	return;
+	}
 }
-
 void
 do_scatter_shot(CHAR_DATA * ch, char *arg)
 {
