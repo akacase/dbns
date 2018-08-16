@@ -5359,6 +5359,9 @@ do_meditate(CHAR_DATA * ch, char *argument)
 						xp_gain = (long double)increase / 150 * statComb;
 						gain_exp(ch, xp_gain);
 						ch->mana += (float) right / 50 * ch->max_mana;
+						if (ch->mana > ch->max_mana) {
+							ch->mana = ch->max_mana;
+						}
 					}
 					else {
 						stat_train(ch, "int", 60);
@@ -5407,6 +5410,9 @@ do_meditate(CHAR_DATA * ch, char *argument)
 						xp_gain = (long double)increase / 150 * statComb;
 						gain_exp(ch, xp_gain);
 						ch->mana += (float) right / 50 * ch->max_mana;
+						if (ch->mana > ch->max_mana) {
+							ch->mana = ch->max_mana;
+						}
 					}
 					else {
 						stat_train(ch, "int", 30);
