@@ -5442,7 +5442,6 @@ do_meditate(CHAR_DATA * ch, char *argument)
 			return;
 			}
 	return;
-	}
 }
 void
 do_scatter_shot(CHAR_DATA * ch, char *arg)
