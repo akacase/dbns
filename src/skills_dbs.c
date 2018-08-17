@@ -8243,6 +8243,11 @@ do_destructive_wave(CHAR_DATA * ch, char *argument)
 		send_to_char("You aren't fighting anyone.\n\r", ch);
 		return;
 	}
+	if (!IS_NPC(ch)) {
+		kilimit = ch->train / 10000;
+		kimult = (float) get_curr_int(ch) / 1000 + 1;
+		kicmult = (float) kilimit / 100 + 1;
+	}
 	if (!str_cmp(arg, "200") && (kilimit < 5)) {
 		send_to_char("You're unable to control your energy well enough!\n\r", ch);
 		return;
