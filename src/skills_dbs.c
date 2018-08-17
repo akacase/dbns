@@ -6239,6 +6239,10 @@ do_eye_beam(CHAR_DATA * ch, char *argument)
 {
 	CHAR_DATA *victim;
 	int 	dam = 0;
+	int		argdam = 0;
+	int		kilimit = 0;
+	float	kimult = 0;
+	float	kicmult = 0;
 
 	if (IS_NPC(ch) && is_split(ch)) {
 		if (!ch->master)
@@ -6259,6 +6263,11 @@ do_eye_beam(CHAR_DATA * ch, char *argument)
 		send_to_char("You aren't fighting anyone.\n\r", ch);
 		return;
 	}
+	if (!IS_NPC(ch)) {
+		kilimit = ch->train / 10000;
+		kimult = (float) get_curr_int(ch) / 1000 + 1;
+		kicmult = (float) kilimit / 100 + 1;
+	}
 	if (ch->mana < skill_table[gsn_eye_beam]->min_mana) {
 		send_to_char("You don't have enough energy.\n\r", ch);
 		return;
@@ -6273,7 +6282,14 @@ do_eye_beam(CHAR_DATA * ch, char *argument)
 
 	WAIT_STATE(ch, skill_table[gsn_eye_beam]->beats);
 	if (can_use_skill(ch, number_percent(), gsn_eye_beam)) {
-		dam = get_attmod(ch, victim) * (number_range(12, 14) + (get_curr_int(ch) / 45));
+		if (!IS_NPC(ch)) {
+			argdam = number_range(12, 14) * kicmult;
+			dam = get_attmod(ch, victim) * (argdam * kimult);
+			stat_train(ch, "int", 10);
+			ch->train += 10;
+		}
+		if (IS_NPC(ch))
+			dam = get_attmod(ch, victim) * (number_range(10, 12) + (get_curr_int(ch) / 45));
 		if (ch->charge > 0)
 			dam = chargeDamMult(ch, dam);
 		act(z,
@@ -6289,10 +6305,6 @@ do_eye_beam(CHAR_DATA * ch, char *argument)
 		dam = ki_absorb(victim, ch, dam, gsn_eye_beam);
 		learn_from_success(ch, gsn_eye_beam);
 		global_retcode = damage(ch, victim, dam, TYPE_HIT);
-        if (!IS_NPC(ch)) {
-            stat_train(ch, "int", 6);
-			ch->train += 2;
-        }
 	} else {
 		act(z, "You missed $N with your eye beam.", ch, NULL, victim,
 		    TO_CHAR);
