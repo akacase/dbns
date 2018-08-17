@@ -4632,6 +4632,9 @@ do_kamehameha(CHAR_DATA * ch, char *argument)
 	int 	dam = 0;
 	int		argdam = 0;
 	int		kilimit = 0;
+	int		kimult = 0;
+	int 	kicmult = 0;
+	float	totalmult = 0;
 
 	one_argument(argument, arg);
 	if (IS_NPC(ch) && is_split(ch)) {
@@ -4650,7 +4653,12 @@ do_kamehameha(CHAR_DATA * ch, char *argument)
 		send_to_char("You can't do that.\n\r", ch);
 		return;
 	}
-	kilimit = ch->train / 10000;
+	if (!IS_NPC(ch) {
+		kilimit = ch->train / 10000;
+		kimult = ((get_curr_int(ch) / 1000) + 1);
+		kicmult = ((kilimit / 100) + 1);
+		totalmult = (float) kimult * kicmult;
+	}
 	if ((victim = who_fighting(ch)) == NULL) {
 		send_to_char("You aren't fighting anyone.\n\r", ch);
 		return;
@@ -4715,41 +4723,80 @@ do_kamehameha(CHAR_DATA * ch, char *argument)
 
 	WAIT_STATE(ch, skill_table[gsn_kamehameha]->beats);
 	if (can_use_skill(ch, number_percent(), gsn_kamehameha)) {
-		if (arg[0] == '\0') {
-			argdam = number_range(20, 25);
-			dam = get_attmod(ch, victim) * (argdam + (get_curr_int(ch) / 40));
+		if (!IS_NPC(ch)) {
+			if (arg[0] == '\0') {
+				argdam = number_range(20, 25);
+				dam = get_attmod(ch, victim) * (argdam * totalmult);
+			}
+			if (!str_cmp(arg, "50")) {
+				argdam = number_range(10, 13);
+				dam = get_attmod(ch, victim) * (argdam * totalmult);
+			}
+			if (!str_cmp(arg, "100")) {
+				argdam = number_range(20, 25);
+				dam = get_attmod(ch, victim) * (argdam * totalmult);
+			}
+			if (!str_cmp(arg, "200")) {
+				argdam = number_range(40, 50);
+				dam = get_attmod(ch, victim) * (argdam * totalmult);		
+			}
+			if (!str_cmp(arg, "300")) {
+				argdam = number_range(60, 75);
+				dam = get_attmod(ch, victim) * (argdam * totalmult);		
+			}
+			if (!str_cmp(arg, "400")) {
+				argdam = number_range(80, 100);
+				dam = get_attmod(ch, victim) * (argdam * totalmult);		
+			}
+			if (!str_cmp(arg, "500")) {
+				argdam = number_range(100, 125);
+				dam = get_attmod(ch, victim) * (argdam * totalmult);		
+			}
+			if (!str_cmp(arg, "1000")){
+				argdam = number_range(200, 250);
+				dam = get_attmod(ch, victim) * (argdam * totalmult);		
+			}
+		
 		}
-		if (!str_cmp(arg, "50")) {
-			argdam = number_range(10, 13);
-			dam = get_attmod(ch, victim) * (argdam + (get_curr_int(ch) / 40));
+		if (IS_NPC(ch)) {
+			if (arg[0] == '\0') {
+				argdam = number_range(20, 25);
+				dam = get_attmod(ch, victim) * (argdam + (get_curr_int(ch) / 40));
+			}
+			if (!str_cmp(arg, "50")) {
+				argdam = number_range(10, 13);
+				dam = get_attmod(ch, victim) * (argdam + (get_curr_int(ch) / 40));
+			}
+			if (!str_cmp(arg, "100")) {
+				argdam = number_range(20, 25);
+				dam = get_attmod(ch, victim) * (argdam + (get_curr_int(ch) / 40));
+			}
+			if (!str_cmp(arg, "200")) {
+				argdam = number_range(40, 50);
+				dam = get_attmod(ch, victim) * (argdam + (get_curr_int(ch) / 40));			
+			}
+			if (!str_cmp(arg, "300")) {
+				argdam = number_range(60, 75);
+				dam = get_attmod(ch, victim) * (argdam + (get_curr_int(ch) / 40));			
+			}
+			if (!str_cmp(arg, "400")) {
+				argdam = number_range(80, 100);
+				dam = get_attmod(ch, victim) * (argdam + (get_curr_int(ch) / 40));			
+			}
+			if (!str_cmp(arg, "500")) {
+				argdam = number_range(100, 125);
+				dam = get_attmod(ch, victim) * (argdam + (get_curr_int(ch) / 40));			
+			}
+			if (!str_cmp(arg, "1000")){
+				argdam = number_range(200, 250);
+				dam = get_attmod(ch, victim) * (argdam + (get_curr_int(ch) / 40));			
+			}
+		
 		}
-		if (!str_cmp(arg, "100")) {
-			argdam = number_range(20, 25);
-			dam = get_attmod(ch, victim) * (argdam + (get_curr_int(ch) / 40));
-		}
-		if (!str_cmp(arg, "200")) {
-			argdam = number_range(40, 50);
-			dam = get_attmod(ch, victim) * (argdam + (get_curr_int(ch) / 40));			
-		}
-		if (!str_cmp(arg, "300")) {
-			argdam = number_range(60, 75);
-			dam = get_attmod(ch, victim) * (argdam + (get_curr_int(ch) / 40));			
-		}
-		if (!str_cmp(arg, "400")) {
-			argdam = number_range(80, 100);
-			dam = get_attmod(ch, victim) * (argdam + (get_curr_int(ch) / 40));			
-		}
-		if (!str_cmp(arg, "500")) {
-			argdam = number_range(100, 125);
-			dam = get_attmod(ch, victim) * (argdam + (get_curr_int(ch) / 40));			
-		}
-		if (!str_cmp(arg, "1000")){
-			argdam = number_range(200, 250);
-			dam = get_attmod(ch, victim) * (argdam + (get_curr_int(ch) / 40));			
-		}
-		dam = get_attmod(ch, victim) * (argdam + (get_curr_int(ch) / 40));
+		if (dam < 1)
+			dam = 1;
 		if (ch->charge > 0)
-		dam = chargeDamMult(ch, dam);
+			dam = chargeDamMult(ch, dam);
 		if (arg[0] == '\0') {
 			act(AT_LBLUE,
 				"You put your arms back and cup your hands. 'KA-ME-HA-ME-HA!!!!'	",
@@ -4939,10 +4986,6 @@ do_kamehameha(CHAR_DATA * ch, char *argument)
 		dam = ki_absorb(victim, ch, dam, gsn_kamehameha);
 		learn_from_success(ch, gsn_kamehameha);
 		global_retcode = damage(ch, victim, dam, TYPE_HIT);
-		if (!IS_NPC(ch)) {
-			stat_train(ch, "int", 8);
-			ch->train += 2;
-		}
 	} else {
 		act(AT_LBLUE, "You missed $N with your kamehameha.", ch, NULL,
 		    victim, TO_CHAR);
@@ -5585,6 +5628,8 @@ do_meditate(CHAR_DATA * ch, char *argument)
 					TO_ROOM);
 				return;
 			}
+			if(!ch->desc)
+				return;
 			if (can_use_skill(ch, number_percent(), gsn_meditate)) {
 				send_to_char
 					("&wYou meditate peacefully, collecting energy from the cosmos\n\r",
@@ -5638,6 +5683,8 @@ do_meditate(CHAR_DATA * ch, char *argument)
 					TO_ROOM);
 				return;
 			}
+			if(!ch->desc)
+				return;
 			if (can_use_skill(ch, number_percent(), gsn_meditate)) {
 				send_to_char
 					("&wYou meditate peacefully, collecting energy from the cosmos\n\r",
