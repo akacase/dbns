@@ -4632,9 +4632,8 @@ do_kamehameha(CHAR_DATA * ch, char *argument)
 	int 	dam = 0;
 	int		argdam = 0;
 	int		kilimit = 0;
-	int		kimult = 0;
-	int 	kicmult = 0;
-	float	totalmult = 0;
+	float	kimult = 0;
+	float	kicmult = 0;
 
 	one_argument(argument, arg);
 	if (IS_NPC(ch) && is_split(ch)) {
@@ -4655,9 +4654,8 @@ do_kamehameha(CHAR_DATA * ch, char *argument)
 	}
 	if (!IS_NPC(ch)) {
 		kilimit = ch->train / 10000;
-		kimult = ((get_curr_int(ch) / 1000) + 1);
-		kicmult = ((kilimit / 100) + 1);
-		totalmult = (float) kimult * kicmult;
+		kimult = (float) get_curr_int(ch) / 1000 + 1;
+		kicmult = (float) kilimit / 100 + 1;
 	}
 	if ((victim = who_fighting(ch)) == NULL) {
 		send_to_char("You aren't fighting anyone.\n\r", ch);
@@ -4725,36 +4723,36 @@ do_kamehameha(CHAR_DATA * ch, char *argument)
 	if (can_use_skill(ch, number_percent(), gsn_kamehameha)) {
 		if (!IS_NPC(ch)) {
 			if (arg[0] == '\0') {
-				argdam = number_range(20, 25);
-				dam = get_attmod(ch, victim) * (argdam * totalmult);
+				argdam = number_range(20, 25) * kicmult;
+				dam = get_attmod(ch, victim) * (argdam * kimult);
 			}
 			if (!str_cmp(arg, "50")) {
-				argdam = number_range(10, 13);
-				dam = get_attmod(ch, victim) * (argdam * totalmult);
+				argdam = number_range(10, 13) * kicmult ;
+				dam = get_attmod(ch, victim) * (argdam * kimult);
 			}
 			if (!str_cmp(arg, "100")) {
-				argdam = number_range(20, 25);
-				dam = get_attmod(ch, victim) * (argdam * totalmult);
+				argdam = number_range(20, 25) * kicmult;
+				dam = get_attmod(ch, victim) * (argdam * kimult);
 			}
 			if (!str_cmp(arg, "200")) {
-				argdam = number_range(40, 50);
-				dam = get_attmod(ch, victim) * (argdam * totalmult);		
+				argdam = number_range(40, 50) * kicmult;
+				dam = get_attmod(ch, victim) * (argdam * kimult);		
 			}
 			if (!str_cmp(arg, "300")) {
-				argdam = number_range(60, 75);
-				dam = get_attmod(ch, victim) * (argdam * totalmult);		
+				argdam = number_range(60, 75) * kicmult;
+				dam = get_attmod(ch, victim) * (argdam * kimult);		
 			}
 			if (!str_cmp(arg, "400")) {
-				argdam = number_range(80, 100);
-				dam = get_attmod(ch, victim) * (argdam * totalmult);		
+				argdam = number_range(80, 100) * kicmult;
+				dam = get_attmod(ch, victim) * (argdam * kimult);		
 			}
 			if (!str_cmp(arg, "500")) {
-				argdam = number_range(100, 125);
-				dam = get_attmod(ch, victim) * (argdam * totalmult);		
+				argdam = number_range(100, 125) * kicmult;
+				dam = get_attmod(ch, victim) * (argdam * kimult);		
 			}
 			if (!str_cmp(arg, "1000")){
-				argdam = number_range(200, 250);
-				dam = get_attmod(ch, victim) * (argdam * totalmult);		
+				argdam = number_range(200, 250) * kicmult;
+				dam = get_attmod(ch, victim) * (argdam * kimult);		
 			}
 		
 		}
