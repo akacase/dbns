@@ -4510,6 +4510,10 @@ do_energy_ball(CHAR_DATA * ch, char *argument)
 	char 	arg[MAX_INPUT_LENGTH];
 	int 	dam = 0;
 	int		argdam = 0;
+	int		kilimit = 0;
+	float	kimult = 0;
+	float	kicmult= 0;
+	
 
 	one_argument(argument, arg);
 	sh_int 	z = get_aura(ch);
@@ -4530,22 +4534,57 @@ do_energy_ball(CHAR_DATA * ch, char *argument)
 		send_to_char("You can't do that.\n\r", ch);
 		return;
 	}
+	if (!IS_NPC(ch)) {
+		kilimit = ch->train / 10000;
+		kimult = (float) get_curr_int(ch) / 1000 + 1;
+		kicmult = (float) kilimit / 100 + 1;
+	}
+	if (!str_cmp(arg, "200") && (kilimit < 1)) {
+		send_to_char("You're unable to control your energy well enough!\n\r", ch);
+		return;
+	}
+	if (!str_cmp(arg, "300") && (kilimit < 2)) {
+		send_to_char("You're unable to control your energy well enough!\n\r", ch);
+		return;
+	}
+	if (!str_cmp(arg, "400") && (kilimit < 3)) {
+		send_to_char("You're unable to control your energy well enough!\n\r", ch);
+		return;
+	}
+	if (!str_cmp(arg, "500") && (kilimit < 4)) {
+		send_to_char("You're unable to control your energy well enough!\n\r", ch);
+		return;
+	}
 	if ((victim = who_fighting(ch)) == NULL) {
 		send_to_char("You aren't fighting anyone.\n\r", ch);
 		return;
 	}
 	if (arg[0] == '\0'
-		|| !str_cmp(arg, "volley")) {
+		|| !str_cmp(arg, "100")) {
 		if (ch->mana < skill_table[gsn_energy_ball]->min_mana) {
 			send_to_char("You don't have enough energy.\n\r", ch);
 			return;
 		}
 	}
-	else if (!str_cmp(arg, "desperation")) {
-		if (ch->mana < (skill_table[gsn_energy_ball]->min_mana * 64)) {
+	if (!str_cmp(arg, "50")) {
+			send_to_char("Your energy ball fizzles out in your hand from a lack of ki.\n\r", ch);
+			return;
+	}
+	if (!str_cmp(arg, "200") && ch->mana < (skill_table[gsn_energy_ball]->min_mana) * 4) {
 			send_to_char("You don't have enough energy.\n\r", ch);
 			return;
-		}
+	}
+	if (!str_cmp(arg, "300") && ch->mana < (skill_table[gsn_energy_ball]->min_mana) * 8) {
+			send_to_char("You don't have enough energy.\n\r", ch);
+			return;
+	}
+	if (!str_cmp(arg, "400") && ch->mana < (skill_table[gsn_energy_ball]->min_mana) * 12) {
+			send_to_char("You don't have enough energy.\n\r", ch);
+			return;
+	}
+	if (!str_cmp(arg, "500") && ch->mana < (skill_table[gsn_energy_ball]->min_mana) * 16) {
+			send_to_char("You don't have enough energy.\n\r", ch);
+			return;
 	}
 	if (ch->focus < skill_table[gsn_energy_ball]->focus) {
 		send_to_char("You need to focus more.\n\r", ch);
@@ -4556,57 +4595,121 @@ do_energy_ball(CHAR_DATA * ch, char *argument)
 	WAIT_STATE(ch, skill_table[gsn_energy_ball]->beats);
 
 	if (can_use_skill(ch, number_percent(), gsn_energy_ball)) {
-		if (arg[0] == '\0')
-			argdam = number_range(2, 4);
-		else if (!str_cmp(arg, "volley"))
-			argdam = number_range(8, 16);
-		else if (!str_cmp(arg, "desperation"))
-			argdam = number_range(32, 64);
-		else
-			argdam = number_range(2, 4);
-		dam = get_attmod(ch, victim) * (argdam + (get_curr_int(ch) / 50));
+		if (!IS_NPC(ch)) {
+			if (arg[0] == '\0' || !str_cmp(arg, "100"))  {
+				argdam = number_range(2, 4) * kicmult;
+				dam = get_attmod(ch, victim) * (argdam * kimult);
+			}
+			if (!str_cmp(arg, "200"){
+				argdam = number_range(3, 5) * kicmult;
+				dam = get_attmod(ch, victim) * (argdam * kimult);
+			}
+			if (!str_cmp(arg, "300"){
+				argdam = number_range(5, 6) * kicmult;
+				dam = get_attmod(ch, victim) * (argdam * kimult);
+			}
+			if (!str_cmp(arg, "400"){
+				argdam = number_range(7, 8) * kicmult;
+				dam = get_attmod(ch, victim) * (argdam * kimult);
+			}
+			if (!str_cmp(arg, "500"){
+				argdam = number_range(9, 10) * kicmult;
+				dam = get_attmod(ch, victim) * (argdam * kimult);
+			}
+		}
+		if (IS_NPC(ch)) {
+			if (arg[0] == '\0' || !str_cmp(arg, "100"))  {
+				argdam = number_range(2, 4);
+				dam = get_attmod(ch, victim) * (argdam + (get_curr_int(ch) / 50));
+			}
+			if (!str_cmp(arg, "200"){
+				argdam = number_range(3, 5);
+				dam = get_attmod(ch, victim) * (argdam + (get_curr_int(ch) / 50));
+			}
+			if (!str_cmp(arg, "300"){
+				argdam = number_range(5, 6);
+				dam = get_attmod(ch, victim) * (argdam + (get_curr_int(ch) / 50));
+			}
+			if (!str_cmp(arg, "400"){
+				argdam = number_range(7, 8);
+				dam = get_attmod(ch, victim) * (argdam + (get_curr_int(ch) / 50));
+			}
+			if (!str_cmp(arg, "500"){
+				argdam = number_range(9, 10);
+				dam = get_attmod(ch, victim) * (argdam + (get_curr_int(ch) / 50));
+			}
+		}
 		if (ch->charge > 0)
 			dam = chargeDamMult(ch, dam);
-		if (arg[0] == '\0') {
+		if (arg[0] == '\0' || !str_cmp(arg, "100")) {
 			act(z, "You blast $N with a single energy ball. &W[$t]", ch,
 				num_punct(dam), victim, TO_CHAR);
 			act(z, "$n blasts you with a single energy ball. &W[$t]", ch,
 				num_punct(dam), victim, TO_VICT);
 			act(z, "$n blasts $N with a single energy ball. &W[$t]", ch,
 				num_punct(dam), victim, TO_NOTVICT);
+			if (!IS_NPC(ch)) {
+				stat_train(ch, "int", 5);
+				ch->train += 1;
+			}
 		}
-		else if (!str_cmp(arg, "volley")) {
-			act(z, "You assail $N with consecutive energy blasts! &W[$t]", ch,
+		if (!str_cmp(arg, "200")) {
+			act(z, "You blast $N with an oversized energy ball. &W[$t]", ch,
 				num_punct(dam), victim, TO_CHAR);
-			act(z, "$n assails you with consecutive energy blasts! &W[$t]", ch,
+			act(z, "$n blasts you with an oversized energy ball. &W[$t]", ch,
 				num_punct(dam), victim, TO_VICT);
-			act(z, "$n assails $N with consecutive energy blasts! &W[$t]", ch,
+			act(z, "$n blasts $N with an oversized energy ball. &W[$t]", ch,
 				num_punct(dam), victim, TO_NOTVICT);
+			if (!IS_NPC(ch)) {
+				stat_train(ch, "int", 6);
+				ch->train += 2;
+			}
 		}
-		else if (!str_cmp(arg, "desperation")) {
-			act(z, "You throw your hands forward and dust the sky with a furious,", ch,
-				NULL, victim, TO_CHAR);
-			act(z, "desperate barrage of countless blasts, engulfing $N! &W[$t]", ch,
+		if (!str_cmp(arg, "300")) {
+			act(z, "You blast $N with a huge energy ball. &W[$t]", ch,
 				num_punct(dam), victim, TO_CHAR);
-			act(z, "$n engulfs you in a desperate barrage of energy blasts! &W[$t]", ch,
+			act(z, "$n blasts you with a huge energy ball. &W[$t]", ch,
 				num_punct(dam), victim, TO_VICT);
-			act(z, "$n engulfs $N in a desperate barrage of energy blasts! &W[$t]", ch,
+			act(z, "$n blasts $N with a huge energy ball. &W[$t]", ch,
 				num_punct(dam), victim, TO_NOTVICT);
+			if (!IS_NPC(ch)) {
+				stat_train(ch, "int", 7);
+				ch->train += 2;
+			}
 		}
-				
+		if (!str_cmp(arg, "400")) {
+			act(z, "You assail $N with multiple energy blasts. &W[$t]", ch,
+				num_punct(dam), victim, TO_CHAR);
+			act(z, "$n assails you with multiple energy blasts. &W[$t]", ch,
+				num_punct(dam), victim, TO_VICT);
+			act(z, "$n assails $N with multiple energy blasts. &W[$t]", ch,
+				num_punct(dam), victim, TO_NOTVICT);
+			if (!IS_NPC(ch)) {
+				stat_train(ch, "int", 8);
+				ch->train += 3;
+			}
+		}
+		if (!str_cmp(arg, "500")) {
+			act(z, "You dust the sky around $N with a huge number of energy blasts! &W[$t]", ch,
+				num_punct(dam), victim, TO_CHAR);
+			act(z, "$n dusts the sky around you with a huge number of energy blasts! &W[$t]", ch,
+				num_punct(dam), victim, TO_VICT);
+			act(z, "$n dusts the sky around $N with a huge number of energy blasts! &W[$t]", ch,
+				num_punct(dam), victim, TO_NOTVICT);
+			if (!IS_NPC(ch)) {
+				stat_train(ch, "int", 9);
+				ch->train += 4;
+			}
+		}
 		dam = ki_absorb(victim, ch, dam, gsn_energy_ball);
 		learn_from_success(ch, gsn_energy_ball);
 		global_retcode = damage(ch, victim, dam, TYPE_HIT);
-        if (!IS_NPC(ch)) {
-            stat_train(ch, "int", 5);
-			ch->train += 1;
-        }
 	} else {
-		act(z, "Your energy blast veers wildly off course.", ch, NULL, victim,
+		act(z, "Your energy attack veers wildly off course.", ch, NULL, victim,
 		    TO_CHAR);
-		act(z, "$n's energy blast sails harmlessly past you.", ch, NULL, victim,
+		act(z, "$n's energy attack sails harmlessly past you.", ch, NULL, victim,
 		    TO_VICT);
-		act(z, "$n's energy blast sails harmlessly past $N.", ch, NULL, victim,
+		act(z, "$n's energy attack sails harmlessly past $N.", ch, NULL, victim,
 		    TO_NOTVICT);
 		learn_from_failure(ch, gsn_energy_ball);
 		global_retcode = damage(ch, victim, 0, TYPE_HIT);
@@ -4614,12 +4717,24 @@ do_energy_ball(CHAR_DATA * ch, char *argument)
 
 	if (!is_android_h(ch))
 		if (arg[0] == '\0'
-			|| !str_cmp(arg, "volley")) {
+			|| !str_cmp(arg, "100")) {
 			ch->mana -= skill_table[gsn_energy_ball]->min_mana;
 			return;
 		}
-		else if (!str_cmp(arg, "desperation")) {
-			ch->mana -= (skill_table[gsn_energy_ball]->min_mana * 64);
+		if (!str_cmp(arg, "200")) {
+			ch->mana -= (skill_table[gsn_energy_ball]->min_mana * 4);
+			return;
+		}
+		if (!str_cmp(arg, "300")) {
+			ch->mana -= (skill_table[gsn_energy_ball]->min_mana * 8);
+			return;
+		}
+		if (!str_cmp(arg, "400")) {
+			ch->mana -= (skill_table[gsn_energy_ball]->min_mana * 12);
+			return;
+		}
+		if (!str_cmp(arg, "500")) {
+			ch->mana -= (skill_table[gsn_energy_ball]->min_mana * 16);
 			return;
 		}
 }
@@ -4693,7 +4808,7 @@ do_kamehameha(CHAR_DATA * ch, char *argument)
 		send_to_char("You don't have enough energy.\n\r", ch);
 		return;
 	}
-	if (!str_cmp(arg, "200") && (ch->mana < (skill_table[gsn_kamehameha]->min_mana) * 4)) {
+	if (!str_cmp(arg, "200") && ch->mana < (skill_table[gsn_kamehameha]->min_mana) * 4) {
 		send_to_char("You don't have enough energy.\n\r", ch);
 		return;
 	}
@@ -4725,34 +4840,50 @@ do_kamehameha(CHAR_DATA * ch, char *argument)
 			if (arg[0] == '\0') {
 				argdam = number_range(20, 25) * kicmult;
 				dam = get_attmod(ch, victim) * (argdam * kimult);
+				stat_train(ch, "int", 10);
+				ch->train += 5;
 			}
 			if (!str_cmp(arg, "50")) {
 				argdam = number_range(10, 13) * kicmult ;
 				dam = get_attmod(ch, victim) * (argdam * kimult);
+				stat_train(ch, "int", 9);
+				ch->train += 4;
 			}
 			if (!str_cmp(arg, "100")) {
 				argdam = number_range(20, 25) * kicmult;
 				dam = get_attmod(ch, victim) * (argdam * kimult);
+				stat_train(ch, "int", 10);
+				ch->train += 5;
 			}
 			if (!str_cmp(arg, "200")) {
 				argdam = number_range(40, 50) * kicmult;
-				dam = get_attmod(ch, victim) * (argdam * kimult);		
+				dam = get_attmod(ch, victim) * (argdam * kimult);
+				stat_train(ch, "int", 15);
+				ch->train += 7;	
 			}
 			if (!str_cmp(arg, "300")) {
 				argdam = number_range(60, 75) * kicmult;
-				dam = get_attmod(ch, victim) * (argdam * kimult);		
+				dam = get_attmod(ch, victim) * (argdam * kimult);
+				stat_train(ch, "int", 22);
+				ch->train += 10;	
 			}
 			if (!str_cmp(arg, "400")) {
 				argdam = number_range(80, 100) * kicmult;
-				dam = get_attmod(ch, victim) * (argdam * kimult);		
+				dam = get_attmod(ch, victim) * (argdam * kimult);
+				stat_train(ch, "int", 33);
+				ch->train += 15;	
 			}
 			if (!str_cmp(arg, "500")) {
 				argdam = number_range(100, 125) * kicmult;
-				dam = get_attmod(ch, victim) * (argdam * kimult);		
+				dam = get_attmod(ch, victim) * (argdam * kimult);
+				stat_train(ch, "int", 49);
+				ch->train += 22;	
 			}
 			if (!str_cmp(arg, "1000")){
 				argdam = number_range(200, 250) * kicmult;
-				dam = get_attmod(ch, victim) * (argdam * kimult);		
+				dam = get_attmod(ch, victim) * (argdam * kimult);
+				stat_train(ch, "int", 73);
+				ch->train += 33;	
 			}
 		
 		}
