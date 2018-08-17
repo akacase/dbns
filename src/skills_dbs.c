@@ -4653,7 +4653,7 @@ do_kamehameha(CHAR_DATA * ch, char *argument)
 		send_to_char("You can't do that.\n\r", ch);
 		return;
 	}
-	if (!IS_NPC(ch) {
+	if (!IS_NPC(ch)) {
 		kilimit = ch->train / 10000;
 		kimult = ((get_curr_int(ch) / 1000) + 1);
 		kicmult = ((kilimit / 100) + 1);
