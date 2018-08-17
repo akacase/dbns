@@ -4600,19 +4600,19 @@ do_energy_ball(CHAR_DATA * ch, char *argument)
 				argdam = number_range(2, 4) * kicmult;
 				dam = get_attmod(ch, victim) * (argdam * kimult);
 			}
-			if (!str_cmp(arg, "200"){
+			if (!str_cmp(arg, "200")) {
 				argdam = number_range(3, 5) * kicmult;
 				dam = get_attmod(ch, victim) * (argdam * kimult);
 			}
-			if (!str_cmp(arg, "300"){
+			if (!str_cmp(arg, "300")) {
 				argdam = number_range(5, 6) * kicmult;
 				dam = get_attmod(ch, victim) * (argdam * kimult);
 			}
-			if (!str_cmp(arg, "400"){
+			if (!str_cmp(arg, "400")) {
 				argdam = number_range(7, 8) * kicmult;
 				dam = get_attmod(ch, victim) * (argdam * kimult);
 			}
-			if (!str_cmp(arg, "500"){
+			if (!str_cmp(arg, "500")) {
 				argdam = number_range(9, 10) * kicmult;
 				dam = get_attmod(ch, victim) * (argdam * kimult);
 			}
@@ -4622,19 +4622,19 @@ do_energy_ball(CHAR_DATA * ch, char *argument)
 				argdam = number_range(2, 4);
 				dam = get_attmod(ch, victim) * (argdam + (get_curr_int(ch) / 50));
 			}
-			if (!str_cmp(arg, "200"){
+			if (!str_cmp(arg, "200")) {
 				argdam = number_range(3, 5);
 				dam = get_attmod(ch, victim) * (argdam + (get_curr_int(ch) / 50));
 			}
-			if (!str_cmp(arg, "300"){
+			if (!str_cmp(arg, "300")) {
 				argdam = number_range(5, 6);
 				dam = get_attmod(ch, victim) * (argdam + (get_curr_int(ch) / 50));
 			}
-			if (!str_cmp(arg, "400"){
+			if (!str_cmp(arg, "400")) {
 				argdam = number_range(7, 8);
 				dam = get_attmod(ch, victim) * (argdam + (get_curr_int(ch) / 50));
 			}
-			if (!str_cmp(arg, "500"){
+			if (!str_cmp(arg, "500")) {
 				argdam = number_range(9, 10);
 				dam = get_attmod(ch, victim) * (argdam + (get_curr_int(ch) / 50));
 			}
