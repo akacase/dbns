@@ -4535,7 +4535,7 @@ do_energy_ball(CHAR_DATA * ch, char *argument)
 		return;
 	}
 	if (!IS_NPC(ch)) {
-		kilimit = ch->train / 10000;
+		kilimit = ch->train / 2000;
 		kimult = (float) get_curr_int(ch) / 1000 + 1;
 		kicmult = (float) kilimit / 100 + 1;
 	}
