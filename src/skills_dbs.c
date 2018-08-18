@@ -5160,6 +5160,10 @@ do_masenko(CHAR_DATA * ch, char *argument)
 {
 	CHAR_DATA *victim;
 	int 	dam = 0;
+	int		argdam = 0;
+	int		kilimit = 0;
+	float	kimult = 0;
+	float	kicmult = 0;
 
 	if (IS_NPC(ch) && is_split(ch)) {
 		if (!ch->master)
@@ -5180,6 +5184,11 @@ do_masenko(CHAR_DATA * ch, char *argument)
 		send_to_char("You aren't fighting anyone.\n\r", ch);
 		return;
 	}
+	if (!IS_NPC(ch)) {
+		kilimit = ch->train / 10000;
+		kimult = (float) get_curr_int(ch) / 1000 + 1;
+		kicmult = (float) kilimit / 100 + 1;
+	}
 	if (ch->mana < skill_table[gsn_masenko]->min_mana) {
 		send_to_char("You don't have enough energy.\n\r", ch);
 		return;
@@ -5192,7 +5201,14 @@ do_masenko(CHAR_DATA * ch, char *argument)
 
 	WAIT_STATE(ch, skill_table[gsn_masenko]->beats);
 	if (can_use_skill(ch, number_percent(), gsn_masenko)) {
-		dam = get_attmod(ch, victim) * (number_range(10, 16) + (get_curr_int(ch) / 45));
+		if (!IS_NPC(ch)) {
+			argdam = number_range(12, 14) * kicmult;
+			dam = get_attmod(ch, victim) * (argdam * kimult);
+			stat_train(ch, "int", 10);
+			ch->train += 10;
+		}
+		if (IS_NPC(ch))
+			dam = get_attmod(ch, victim) * (number_range(10, 12) + (get_curr_int(ch) / 45));
 		if (ch->charge > 0)
 			dam = chargeDamMult(ch, dam);
 		act(AT_YELLOW,
@@ -5651,6 +5667,10 @@ do_dd(CHAR_DATA * ch, char *argument)
 {
 	CHAR_DATA *victim;
 	int 	dam = 0;
+	int		argdam = 0;
+	int		kilimit = 0;
+	float	kimult = 0;
+	float	kicmult = 0;
 
 	if (IS_NPC(ch) && is_split(ch)) {
 		if (!ch->master)
@@ -5671,6 +5691,11 @@ do_dd(CHAR_DATA * ch, char *argument)
 		send_to_char("You aren't fighting anyone.\n\r", ch);
 		return;
 	}
+	if (!IS_NPC(ch)) {
+		kilimit = ch->train / 10000;
+		kimult = (float) get_curr_int(ch) / 1000 + 1;
+		kicmult = (float) kilimit / 100 + 1;
+	}
 	if (ch->mana < skill_table[gsn_dd]->min_mana) {
 		send_to_char("You don't have enough energy.\n\r", ch);
 		return;
@@ -5683,7 +5708,14 @@ do_dd(CHAR_DATA * ch, char *argument)
 
 	WAIT_STATE(ch, skill_table[gsn_dd]->beats);
 	if (can_use_skill(ch, number_percent(), gsn_dd)) {
-		dam = get_attmod(ch, victim) * (number_range(12, 18) + (get_curr_int(ch) / 45));
+		if (!IS_NPC(ch)) {
+			argdam = number_range(12, 14) * kicmult;
+			dam = get_attmod(ch, victim) * (argdam * kimult);
+			stat_train(ch, "int", 10);
+			ch->train += 10;
+		}
+		if (IS_NPC(ch))
+			dam = get_attmod(ch, victim) * (number_range(10, 12) + (get_curr_int(ch) / 45));
 		if (ch->charge > 0)
 			dam = chargeDamMult(ch, dam);
 		act(AT_YELLOW,
@@ -6100,6 +6132,7 @@ do_meditate(CHAR_DATA * ch, char *argument)
 						xp_gain = (long double)increase / 150 * statComb;
 						gain_exp(ch, xp_gain);
 						ch->mana += (float) right / 50 * ch->max_mana;
+						ch->mana += 10;
 						ch->train += 7;
 						if (ch->mana > ch->max_mana) {
 							ch->mana = ch->max_mana;
@@ -6112,6 +6145,7 @@ do_meditate(CHAR_DATA * ch, char *argument)
 						xp_gain = (long double)increase / 200 * statComb;
 						gain_exp(ch, xp_gain);
 						ch->mana += (float) right / 50 * ch->max_mana;
+						ch->mana += 10;
 						ch->train += 6;
 						if (ch->mana > ch->max_mana) {
 							ch->mana = ch->max_mana;
@@ -6155,6 +6189,7 @@ do_meditate(CHAR_DATA * ch, char *argument)
 						xp_gain = (long double)increase / 150 * statComb;
 						gain_exp(ch, xp_gain);
 						ch->mana += (float) right / 50 * ch->max_mana;
+						ch->mana += 10;
 						ch->train += 7;
 						if (ch->mana > ch->max_mana) {
 							ch->mana = ch->max_mana;
@@ -6167,6 +6202,7 @@ do_meditate(CHAR_DATA * ch, char *argument)
 						xp_gain = (long double)increase / 200 * statComb;
 						gain_exp(ch, xp_gain);
 						ch->mana += (float) right / 50 * ch->max_mana;
+						ch->mana += 10;
 						ch->train += 6;
 						if (ch->mana > ch->max_mana) {
 							ch->mana = ch->max_mana;
@@ -6176,9 +6212,11 @@ do_meditate(CHAR_DATA * ch, char *argument)
 			}
 			else {
 				send_to_char
-					("&wYou spend several minutes in deep concentration, but fail to collect any energy.\n\r",
+					("&wYou spend several minutes in deep concentration, but fail to collect much energy.\n\r",
 					ch);
 				learn_from_failure(ch, gsn_meditate);
+				ch->mana += 5;
+				
 			}
 			if (left >= right) {
 				send_to_char
@@ -6653,8 +6691,14 @@ void
 do_finger_beam(CHAR_DATA * ch, char *argument)
 {
 	CHAR_DATA *victim;
+	char 	arg[MAX_INPUT_LENGTH];
 	int 	dam = 0;
+	int		argdam = 0;
+	int		kilimit = 0;
+	float	kimult = 0;
+	float	kicmult = 0;
 
+	one_argument(argument, arg);
 	if (IS_NPC(ch) && is_split(ch)) {
 		if (!ch->master)
 			return;
@@ -6675,7 +6719,60 @@ do_finger_beam(CHAR_DATA * ch, char *argument)
 		send_to_char("You aren't fighting anyone.\n\r", ch);
 		return;
 	}
-	if (ch->mana < skill_table[gsn_finger_beam]->min_mana) {
+	if (!IS_NPC(ch)) {
+		kilimit = ch->train / 10000;
+		kimult = (float) get_curr_int(ch) / 1000 + 1;
+		kicmult = (float) kilimit / 100 + 1;
+	}
+	if (!str_cmp(arg, "200") && (kilimit < 2)) {
+		send_to_char("You're unable to control your energy well enough!\n\r", ch);
+		return;
+	}
+	if (!str_cmp(arg, "300") && (kilimit < 10)) {
+		send_to_char("You're unable to control your energy well enough!\n\r", ch);
+		return;
+	}
+	if (!str_cmp(arg, "400") && (kilimit < 20)) {
+		send_to_char("You're unable to control your energy well enough!\n\r", ch);
+		return;
+	}
+	if (!str_cmp(arg, "500") && (kilimit < 30)) {
+		send_to_char("You're unable to control your energy well enough!\n\r", ch);
+		return;
+	}
+	if (!str_cmp(arg, "1000") && (kilimit < 40)) {
+		send_to_char("You're unable to control your energy well enough!\n\r", ch);
+		return;
+	}
+	if (arg[0] == '\0' && ch->mana < skill_table[gsn_finger_beam]->min_mana) {
+		send_to_char("You don't have enough energy.\n\r", ch);
+		return;
+	}
+	if (!str_cmp(arg, "50") && ch->mana < (skill_table[gsn_finger_beam]->min_mana) / 4) {
+		send_to_char("You don't have enough energy.\n\r", ch);
+		return;
+	}
+	if (!str_cmp(arg, "100") && ch->mana < (skill_table[gsn_finger_beam]->min_mana)) {
+		send_to_char("You don't have enough energy.\n\r", ch);
+		return;
+	}
+	if (!str_cmp(arg, "200") && ch->mana < (skill_table[gsn_finger_beam]->min_mana) * 4) {
+		send_to_char("You don't have enough energy.\n\r", ch);
+		return;
+	}
+	if (!str_cmp(arg, "300") && ch->mana < (skill_table[gsn_finger_beam]->min_mana) * 16) {
+		send_to_char("You don't have enough energy.\n\r", ch);
+		return;
+	}
+	if (!str_cmp(arg, "400") && ch->mana < (skill_table[gsn_finger_beam]->min_mana) * 64) {
+		send_to_char("You don't have enough energy.\n\r", ch);
+		return;
+	}
+	if (!str_cmp(arg, "500") && ch->mana < (skill_table[gsn_finger_beam]->min_mana) * 256) {
+		send_to_char("You don't have enough energy.\n\r", ch);
+		return;
+	}
+	if (!str_cmp(arg, "1000") && ch->mana < (skill_table[gsn_finger_beam]->min_mana) * 1024) {
 		send_to_char("You don't have enough energy.\n\r", ch);
 		return;
 	}
@@ -6689,7 +6786,92 @@ do_finger_beam(CHAR_DATA * ch, char *argument)
 
 	WAIT_STATE(ch, skill_table[gsn_finger_beam]->beats);
 	if (can_use_skill(ch, number_percent(), gsn_finger_beam)) {
-		dam = get_attmod(ch, victim) * (number_range(16, 22) + (get_curr_int(ch) / 40));
+		if (!IS_NPC(ch)) {
+			if (arg[0] == '\0') {
+				argdam = number_range(20, 25) * kicmult;
+				dam = get_attmod(ch, victim) * (argdam * kimult);
+				stat_train(ch, "int", 10);
+				ch->train += 10;
+			}
+			if (!str_cmp(arg, "50")) {
+				argdam = number_range(10, 13) * kicmult ;
+				dam = get_attmod(ch, victim) * (argdam * kimult);
+				stat_train(ch, "int", 9);
+				ch->train += 4;
+			}
+			if (!str_cmp(arg, "100")) {
+				argdam = number_range(20, 25) * kicmult;
+				dam = get_attmod(ch, victim) * (argdam * kimult);
+				stat_train(ch, "int", 10);
+				ch->train += 10;
+			}
+			if (!str_cmp(arg, "200")) {
+				argdam = number_range(40, 50) * kicmult;
+				dam = get_attmod(ch, victim) * (argdam * kimult);
+				stat_train(ch, "int", 15);
+				ch->train += 15;	
+			}
+			if (!str_cmp(arg, "300")) {
+				argdam = number_range(60, 75) * kicmult;
+				dam = get_attmod(ch, victim) * (argdam * kimult);
+				stat_train(ch, "int", 22);
+				ch->train += 22;	
+			}
+			if (!str_cmp(arg, "400")) {
+				argdam = number_range(80, 100) * kicmult;
+				dam = get_attmod(ch, victim) * (argdam * kimult);
+				stat_train(ch, "int", 33);
+				ch->train += 33;	
+			}
+			if (!str_cmp(arg, "500")) {
+				argdam = number_range(100, 125) * kicmult;
+				dam = get_attmod(ch, victim) * (argdam * kimult);
+				stat_train(ch, "int", 49);
+				ch->train += 50;	
+			}
+			if (!str_cmp(arg, "1000")){
+				argdam = number_range(200, 250) * kicmult;
+				dam = get_attmod(ch, victim) * (argdam * kimult);
+				stat_train(ch, "int", 73);
+				ch->train += 50;	
+			}
+		
+		}
+		if (IS_NPC(ch)) {
+			if (arg[0] == '\0') {
+				argdam = number_range(20, 25);
+				dam = get_attmod(ch, victim) * (argdam + (get_curr_int(ch) / 40));
+			}
+			if (!str_cmp(arg, "50")) {
+				argdam = number_range(10, 13);
+				dam = get_attmod(ch, victim) * (argdam + (get_curr_int(ch) / 40));
+			}
+			if (!str_cmp(arg, "100")) {
+				argdam = number_range(20, 25);
+				dam = get_attmod(ch, victim) * (argdam + (get_curr_int(ch) / 40));
+			}
+			if (!str_cmp(arg, "200")) {
+				argdam = number_range(40, 50);
+				dam = get_attmod(ch, victim) * (argdam + (get_curr_int(ch) / 40));			
+			}
+			if (!str_cmp(arg, "300")) {
+				argdam = number_range(60, 75);
+				dam = get_attmod(ch, victim) * (argdam + (get_curr_int(ch) / 40));			
+			}
+			if (!str_cmp(arg, "400")) {
+				argdam = number_range(80, 100);
+				dam = get_attmod(ch, victim) * (argdam + (get_curr_int(ch) / 40));			
+			}
+			if (!str_cmp(arg, "500")) {
+				argdam = number_range(100, 125);
+				dam = get_attmod(ch, victim) * (argdam + (get_curr_int(ch) / 40));			
+			}
+			if (!str_cmp(arg, "1000")){
+				argdam = number_range(200, 250);
+				dam = get_attmod(ch, victim) * (argdam + (get_curr_int(ch) / 40));			
+			}
+		
+		}
 		if (ch->charge > 0)
 			dam = chargeDamMult(ch, dam);
 		act(z,
@@ -6705,10 +6887,6 @@ do_finger_beam(CHAR_DATA * ch, char *argument)
 		dam = ki_absorb(victim, ch, dam, gsn_finger_beam);
 		learn_from_success(ch, gsn_finger_beam);
 		global_retcode = damage(ch, victim, dam, TYPE_HIT);
-        if (!IS_NPC(ch)) {
-            stat_train(ch, "int", 8);
-			ch->train += 2;
-        }
 	} else {
 		act(z, "You missed $N with your finger beam.", ch, NULL, victim,
 		    TO_CHAR);
@@ -6719,9 +6897,34 @@ do_finger_beam(CHAR_DATA * ch, char *argument)
 		learn_from_failure(ch, gsn_finger_beam);
 		global_retcode = damage(ch, victim, 0, TYPE_HIT);
 	}
-	if (!is_android_h(ch))
-		ch->mana -= skill_table[gsn_finger_beam]->min_mana;
-	return;
+	if (arg[0] == '\0' || !str_cmp(arg, "100")) {
+		ch->mana -= skill_table[gsn_shockwave]->min_mana;
+		return;
+	}
+	else if (!str_cmp(arg, "50")) {
+		ch->mana -= (skill_table[gsn_finger_beam]->min_mana / 4);
+		return;
+	}
+	else if (!str_cmp(arg, "200")) {
+		ch->mana -= (skill_table[gsn_finger_beam]->min_mana * 4);
+		return;
+	}
+	else if (!str_cmp(arg, "300")) {
+		ch->mana -= (skill_table[gsn_finger_beam]->min_mana * 16);
+		return;
+	}
+	else if (!str_cmp(arg, "400")) {
+		ch->mana -= (skill_table[gsn_finger_beam]->min_mana * 64);
+		return;
+	}
+	else if (!str_cmp(arg, "500")) {
+		ch->mana -= (skill_table[gsn_finger_beam]->min_mana * 256);
+		return;
+	}
+	else if (!str_cmp(arg, "1000")) {
+		ch->mana -= (skill_table[gsn_finger_beam]->min_mana * 1024);
+		return;
+	}
 }
 
 void
@@ -9017,8 +9220,14 @@ void
 do_shockwave(CHAR_DATA * ch, char *argument)
 {
 	CHAR_DATA *victim;
+	char 	arg[MAX_INPUT_LENGTH];
 	int 	dam = 0;
+	int		argdam = 0;
+	int		kilimit = 0;
+	float	kimult = 0;
+	float	kicmult = 0;
 
+	one_argument(argument, arg);
 	if (IS_NPC(ch) && is_split(ch)) {
 		if (!ch->master)
 			return;
@@ -9038,7 +9247,60 @@ do_shockwave(CHAR_DATA * ch, char *argument)
 		send_to_char("You aren't fighting anyone.\n\r", ch);
 		return;
 	}
-	if (ch->mana < skill_table[gsn_shockwave]->min_mana) {
+	if (!IS_NPC(ch)) {
+		kilimit = ch->train / 10000;
+		kimult = (float) get_curr_int(ch) / 1000 + 1;
+		kicmult = (float) kilimit / 100 + 1;
+	}
+	if (!str_cmp(arg, "200") && (kilimit < 2)) {
+		send_to_char("You're unable to control your energy well enough!\n\r", ch);
+		return;
+	}
+	if (!str_cmp(arg, "300") && (kilimit < 10)) {
+		send_to_char("You're unable to control your energy well enough!\n\r", ch);
+		return;
+	}
+	if (!str_cmp(arg, "400") && (kilimit < 20)) {
+		send_to_char("You're unable to control your energy well enough!\n\r", ch);
+		return;
+	}
+	if (!str_cmp(arg, "500") && (kilimit < 30)) {
+		send_to_char("You're unable to control your energy well enough!\n\r", ch);
+		return;
+	}
+	if (!str_cmp(arg, "1000") && (kilimit < 40)) {
+		send_to_char("You're unable to control your energy well enough!\n\r", ch);
+		return;
+	}
+	if (arg[0] == '\0' && ch->mana < skill_table[gsn_shockwave]->min_mana) {
+		send_to_char("You don't have enough energy.\n\r", ch);
+		return;
+	}
+	if (!str_cmp(arg, "50") && ch->mana < (skill_table[gsn_shockwave]->min_mana) / 4) {
+		send_to_char("You don't have enough energy.\n\r", ch);
+		return;
+	}
+	if (!str_cmp(arg, "100") && ch->mana < (skill_table[gsn_shockwave]->min_mana)) {
+		send_to_char("You don't have enough energy.\n\r", ch);
+		return;
+	}
+	if (!str_cmp(arg, "200") && ch->mana < (skill_table[gsn_shockwave]->min_mana) * 4) {
+		send_to_char("You don't have enough energy.\n\r", ch);
+		return;
+	}
+	if (!str_cmp(arg, "300") && ch->mana < (skill_table[gsn_shockwave]->min_mana) * 16) {
+		send_to_char("You don't have enough energy.\n\r", ch);
+		return;
+	}
+	if (!str_cmp(arg, "400") && ch->mana < (skill_table[gsn_shockwave]->min_mana) * 64) {
+		send_to_char("You don't have enough energy.\n\r", ch);
+		return;
+	}
+	if (!str_cmp(arg, "500") && ch->mana < (skill_table[gsn_shockwave]->min_mana) * 256) {
+		send_to_char("You don't have enough energy.\n\r", ch);
+		return;
+	}
+	if (!str_cmp(arg, "1000") && ch->mana < (skill_table[gsn_shockwave]->min_mana) * 1024) {
 		send_to_char("You don't have enough energy.\n\r", ch);
 		return;
 	}
@@ -9077,10 +9339,6 @@ do_shockwave(CHAR_DATA * ch, char *argument)
 		dam = ki_absorb(victim, ch, dam, gsn_shockwave);
 		learn_from_success(ch, gsn_shockwave);
 		global_retcode = damage(ch, victim, dam, TYPE_HIT);
-        if (!IS_NPC(ch)) {
-            stat_train(ch, "int", 8);
-			ch->train += 2;
-        }
 	} else {
 		act(z, "You missed $N with your shockwave.", ch, NULL, victim,
 		    TO_CHAR);
@@ -9091,8 +9349,34 @@ do_shockwave(CHAR_DATA * ch, char *argument)
 		learn_from_failure(ch, gsn_shockwave);
 		global_retcode = damage(ch, victim, 0, TYPE_HIT);
 	}
-	ch->mana -= skill_table[gsn_shockwave]->min_mana;
-	return;
+	if (arg[0] == '\0' || !str_cmp(arg, "100")) {
+		ch->mana -= skill_table[gsn_kamehameha]->min_mana;
+		return;
+	}
+	else if (!str_cmp(arg, "50")) {
+		ch->mana -= (skill_table[gsn_shockwave]->min_mana / 4);
+		return;
+	}
+	else if (!str_cmp(arg, "200")) {
+		ch->mana -= (skill_table[gsn_shockwave]->min_mana * 4);
+		return;
+	}
+	else if (!str_cmp(arg, "300")) {
+		ch->mana -= (skill_table[gsn_shockwave]->min_mana * 16);
+		return;
+	}
+	else if (!str_cmp(arg, "400")) {
+		ch->mana -= (skill_table[gsn_shockwave]->min_mana * 64);
+		return;
+	}
+	else if (!str_cmp(arg, "500")) {
+		ch->mana -= (skill_table[gsn_shockwave]->min_mana * 256);
+		return;
+	}
+	else if (!str_cmp(arg, "1000")) {
+		ch->mana -= (skill_table[gsn_shockwave]->min_mana * 1024);
+		return;
+	}
 }
 
 void
