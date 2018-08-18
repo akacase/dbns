@@ -5245,7 +5245,8 @@ do_sbc(CHAR_DATA * ch, char *argument)
 	int		kilimit = 0;
 	float	kimult = 0;
 	float	kicmult = 0;
-
+	
+	one_argument(argument, arg);
 	if (IS_NPC(ch) && is_split(ch)) {
 		if (!ch->master)
 			return;
