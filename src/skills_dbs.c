@@ -6131,7 +6131,7 @@ do_meditate(CHAR_DATA * ch, char *argument)
 						increase = number_range(1,3);
 						xp_gain = (long double)increase / 150 * statComb;
 						gain_exp(ch, xp_gain);
-						ch->mana += (float) right / 50 * ch->max_mana;
+						ch->mana += (float) right / 19 * ch->max_mana;
 						ch->mana += 10;
 						ch->train += 7;
 						if (ch->mana > ch->max_mana) {
@@ -6144,7 +6144,7 @@ do_meditate(CHAR_DATA * ch, char *argument)
 						increase = number_range(1,3);
 						xp_gain = (long double)increase / 200 * statComb;
 						gain_exp(ch, xp_gain);
-						ch->mana += (float) right / 50 * ch->max_mana;
+						ch->mana += (float) right / 19 * ch->max_mana;
 						ch->mana += 10;
 						ch->train += 6;
 						if (ch->mana > ch->max_mana) {
@@ -6155,9 +6155,10 @@ do_meditate(CHAR_DATA * ch, char *argument)
 			}
 			else {
 				send_to_char
-					("&wYou spend several minutes in deep concentration, but fail to collect any energy.\n\r",
+					("&wYou spend several minutes in deep concentration, but fail to collect much energy.\n\r",
 					ch);
 				learn_from_failure(ch, gsn_meditate);
+				ch->mana += 5;
 			}
 
 			if (left >= right) {
@@ -6188,7 +6189,7 @@ do_meditate(CHAR_DATA * ch, char *argument)
 						increase = number_range(1,3);
 						xp_gain = (long double)increase / 150 * statComb;
 						gain_exp(ch, xp_gain);
-						ch->mana += (float) right / 50 * ch->max_mana;
+						ch->mana += (float) right / 19 * ch->max_mana;
 						ch->mana += 10;
 						ch->train += 7;
 						if (ch->mana > ch->max_mana) {
@@ -6201,7 +6202,7 @@ do_meditate(CHAR_DATA * ch, char *argument)
 						increase = number_range(1,3);
 						xp_gain = (long double)increase / 200 * statComb;
 						gain_exp(ch, xp_gain);
-						ch->mana += (float) right / 50 * ch->max_mana;
+						ch->mana += (float) right / 19 * ch->max_mana;
 						ch->mana += 10;
 						ch->train += 6;
 						if (ch->mana > ch->max_mana) {
