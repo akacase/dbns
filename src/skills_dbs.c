@@ -5519,7 +5519,7 @@ do_sbc(CHAR_DATA * ch, char *argument)
 			act(AT_YELLOW,
 				"The wind churns and howls, your body wreathed with flashing lightning.",
 				ch, num_punct(dam), victim, TO_CHAR);
-			act(AT YELLOW,
+			act(AT_YELLOW,
 				"You thrust your hand forward, sending a massive converging beam at $N! &W[$t]",
 				ch, num_punct(dam), victim, TO_CHAR);
 			act(AT_YELLOW,
@@ -5549,7 +5549,7 @@ do_sbc(CHAR_DATA * ch, char *argument)
 			act(AT_YELLOW,
 				"Every muscle in your body pulses, swelling with incredible amounts of ki.",
 				ch, num_punct(dam), victim, TO_CHAR);
-			act(AT YELLOW,
+			act(AT_YELLOW,
 				"Your arm stretches forward and unleashes a catastrophic beam at $N from point-blank range! &W[$t]",
 				ch, num_punct(dam), victim, TO_CHAR);
 			act(AT_YELLOW,
@@ -5579,7 +5579,7 @@ do_sbc(CHAR_DATA * ch, char *argument)
 			act(AT_YELLOW,
 				"Every muscle in your body pulses, swelling with incredible amounts of ki.",
 				ch, num_punct(dam), victim, TO_CHAR);
-			act(AT YELLOW,
+			act(AT_YELLOW,
 				"Your arm stretches forward and unleashes a catastrophic beam at $N from point-blank range! &W[$t]",
 				ch, num_punct(dam), victim, TO_CHAR);
 			act(AT_YELLOW,
