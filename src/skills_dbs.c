@@ -6159,6 +6159,8 @@ do_meditate(CHAR_DATA * ch, char *argument)
 					ch);
 				learn_from_failure(ch, gsn_meditate);
 				ch->mana += 5;
+				if (ch->mana > ch->max_mana)
+					ch->mana = ch->max_mana;
 			}
 
 			if (left >= right) {
@@ -6217,6 +6219,8 @@ do_meditate(CHAR_DATA * ch, char *argument)
 					ch);
 				learn_from_failure(ch, gsn_meditate);
 				ch->mana += 5;
+				if (ch->mana > ch->max_mana)
+					ch->mana = ch->max_mana;
 				
 			}
 			if (left >= right) {
