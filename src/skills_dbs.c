@@ -5489,7 +5489,7 @@ do_sbc(CHAR_DATA * ch, char *argument)
 			act(AT_YELLOW,
 				"The ground trembles and shakes, sending dust and debris scattering in all directions.",
 				ch, num_punct(dam), victim, TO_CHAR);
-			act(AT YELLOW,
+			act(AT_YELLOW,
 				"You thrust your hand forward, sending a massive corkscrew beam toward $N! &W[$t]",
 				ch, num_punct(dam), victim, TO_CHAR);
 			act(AT_YELLOW,
