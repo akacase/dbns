@@ -5616,8 +5616,34 @@ do_sbc(CHAR_DATA * ch, char *argument)
 		learn_from_failure(ch, gsn_sbc);
 		global_retcode = damage(ch, victim, 0, TYPE_HIT);
 	}
-	ch->mana -= skill_table[gsn_sbc]->min_mana;
-	return;
+	if (arg[0] == '\0' || !str_cmp(arg, "100")) {
+		ch->mana -= skill_table[gsn_sbc]->min_mana;
+		return;
+	}
+	else if (!str_cmp(arg, "50")) {
+		ch->mana -= (skill_table[gsn_sbc]->min_mana / 4);
+		return;
+	}
+	else if (!str_cmp(arg, "200")) {
+		ch->mana -= (skill_table[gsn_sbc]->min_mana * 4);
+		return;
+	}
+	else if (!str_cmp(arg, "300")) {
+		ch->mana -= (skill_table[gsn_sbc]->min_mana * 16);
+		return;
+	}
+	else if (!str_cmp(arg, "400")) {
+		ch->mana -= (skill_table[gsn_sbc]->min_mana * 64);
+		return;
+	}
+	else if (!str_cmp(arg, "500")) {
+		ch->mana -= (skill_table[gsn_sbc]->min_mana * 256);
+		return;
+	}
+	else if (!str_cmp(arg, "1000")) {
+		ch->mana -= (skill_table[gsn_sbc]->min_mana * 1024);
+		return;
+	}
 }
 
 void
