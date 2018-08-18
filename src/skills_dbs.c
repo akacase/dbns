@@ -9314,7 +9314,92 @@ do_shockwave(CHAR_DATA * ch, char *argument)
 
 	WAIT_STATE(ch, skill_table[gsn_shockwave]->beats);
 	if (can_use_skill(ch, number_percent(), gsn_shockwave)) {
-		dam = get_attmod(ch, victim) * (number_range(22, 26) + (get_curr_int(ch) / 40));
+		if (!IS_NPC(ch)) {
+			if (arg[0] == '\0') {
+				argdam = number_range(20, 25) * kicmult;
+				dam = get_attmod(ch, victim) * (argdam * kimult);
+				stat_train(ch, "int", 10);
+				ch->train += 10;
+			}
+			if (!str_cmp(arg, "50")) {
+				argdam = number_range(10, 13) * kicmult ;
+				dam = get_attmod(ch, victim) * (argdam * kimult);
+				stat_train(ch, "int", 9);
+				ch->train += 4;
+			}
+			if (!str_cmp(arg, "100")) {
+				argdam = number_range(20, 25) * kicmult;
+				dam = get_attmod(ch, victim) * (argdam * kimult);
+				stat_train(ch, "int", 10);
+				ch->train += 10;
+			}
+			if (!str_cmp(arg, "200")) {
+				argdam = number_range(40, 50) * kicmult;
+				dam = get_attmod(ch, victim) * (argdam * kimult);
+				stat_train(ch, "int", 15);
+				ch->train += 15;	
+			}
+			if (!str_cmp(arg, "300")) {
+				argdam = number_range(60, 75) * kicmult;
+				dam = get_attmod(ch, victim) * (argdam * kimult);
+				stat_train(ch, "int", 22);
+				ch->train += 22;	
+			}
+			if (!str_cmp(arg, "400")) {
+				argdam = number_range(80, 100) * kicmult;
+				dam = get_attmod(ch, victim) * (argdam * kimult);
+				stat_train(ch, "int", 33);
+				ch->train += 33;	
+			}
+			if (!str_cmp(arg, "500")) {
+				argdam = number_range(100, 125) * kicmult;
+				dam = get_attmod(ch, victim) * (argdam * kimult);
+				stat_train(ch, "int", 49);
+				ch->train += 50;	
+			}
+			if (!str_cmp(arg, "1000")){
+				argdam = number_range(200, 250) * kicmult;
+				dam = get_attmod(ch, victim) * (argdam * kimult);
+				stat_train(ch, "int", 73);
+				ch->train += 50;	
+			}
+		
+		}
+		if (IS_NPC(ch)) {
+			if (arg[0] == '\0') {
+				argdam = number_range(20, 25);
+				dam = get_attmod(ch, victim) * (argdam + (get_curr_int(ch) / 40));
+			}
+			if (!str_cmp(arg, "50")) {
+				argdam = number_range(10, 13);
+				dam = get_attmod(ch, victim) * (argdam + (get_curr_int(ch) / 40));
+			}
+			if (!str_cmp(arg, "100")) {
+				argdam = number_range(20, 25);
+				dam = get_attmod(ch, victim) * (argdam + (get_curr_int(ch) / 40));
+			}
+			if (!str_cmp(arg, "200")) {
+				argdam = number_range(40, 50);
+				dam = get_attmod(ch, victim) * (argdam + (get_curr_int(ch) / 40));			
+			}
+			if (!str_cmp(arg, "300")) {
+				argdam = number_range(60, 75);
+				dam = get_attmod(ch, victim) * (argdam + (get_curr_int(ch) / 40));			
+			}
+			if (!str_cmp(arg, "400")) {
+				argdam = number_range(80, 100);
+				dam = get_attmod(ch, victim) * (argdam + (get_curr_int(ch) / 40));			
+			}
+			if (!str_cmp(arg, "500")) {
+				argdam = number_range(100, 125);
+				dam = get_attmod(ch, victim) * (argdam + (get_curr_int(ch) / 40));			
+			}
+			if (!str_cmp(arg, "1000")){
+				argdam = number_range(200, 250);
+				dam = get_attmod(ch, victim) * (argdam + (get_curr_int(ch) / 40));			
+			}
+		
+		}
 		if (ch->charge > 0)
 			dam = chargeDamMult(ch, dam);
 		act(z,
