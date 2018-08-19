@@ -6137,62 +6137,62 @@ do_meditate(CHAR_DATA * ch, char *argument)
 						if (xIS_SET((ch)->in_room->room_flags, ROOM_GRAV10)) {
 							stat_train(ch, "int", 15);
 							stat_train(ch, "con", 15);
-							ch->train += 14;
+							ch->train += 28;
 						}
 						else if (xIS_SET((ch)->in_room->room_flags, ROOM_GRAV50)) {
 							stat_train(ch, "int", 15);
 							stat_train(ch, "con", 15);
-							ch->train += 28;
+							ch->train += 48;
 						}
 						else if (xIS_SET((ch)->in_room->room_flags, ROOM_GRAV100)) {
 							stat_train(ch, "int", 15);
 							stat_train(ch, "con", 15);
-							ch->train += 32;
+							ch->train += 64;
 						}
 						else if (xIS_SET((ch)->in_room->room_flags, ROOM_GRAV200)) {
 							stat_train(ch, "int", 15);
 							stat_train(ch, "con", 15);
-							ch->train += 36;
+							ch->train += 72;
 						}						
 						else if (xIS_SET((ch)->in_room->room_flags, ROOM_GRAV300)) {
 							stat_train(ch, "int", 15);
 							stat_train(ch, "con", 15);
-							ch->train += 40;
+							ch->train += 80;
 						}						
 						else if (xIS_SET((ch)->in_room->room_flags, ROOM_GRAV400)) {
 							stat_train(ch, "int", 15);
 							stat_train(ch, "con", 15);
-							ch->train += 44;
+							ch->train += 88;
 						}						
 						else if (xIS_SET((ch)->in_room->room_flags, ROOM_GRAV500)) {
 							stat_train(ch, "int", 15);
 							stat_train(ch, "con", 15);
-							ch->train += 48;
+							ch->train += 96;
 						}						
 						else if (xIS_SET((ch)->in_room->room_flags, ROOM_GRAV600)) {
 							stat_train(ch, "int", 15);
 							stat_train(ch, "con", 15);
-							ch->train += 52;
+							ch->train += 104;
 						}						
 						else if (xIS_SET((ch)->in_room->room_flags, ROOM_GRAV700)) {
 							stat_train(ch, "int", 15);
 							stat_train(ch, "con", 15);
-							ch->train += 56;
+							ch->train += 112;
 						}						
 						else if (xIS_SET((ch)->in_room->room_flags, ROOM_GRAV800)) {
 							stat_train(ch, "int", 15);
 							stat_train(ch, "con", 15);
-							ch->train += 60;
+							ch->train += 120;
 						}
 						else if (xIS_SET((ch)->in_room->room_flags, ROOM_GRAV900)) {
 							stat_train(ch, "int", 15);
 							stat_train(ch, "con", 15);
-							ch->train += 64;
+							ch->train += 128;
 						}
 						else if (xIS_SET((ch)->in_room->room_flags, ROOM_GRAV1000)) {
 							stat_train(ch, "int", 15);
 							stat_train(ch, "con", 15);
-							ch->train += 68;
+							ch->train += 136;
 						}
 						if (ch->mana > ch->max_mana) {
 							ch->mana = ch->max_mana;
@@ -6210,62 +6210,62 @@ do_meditate(CHAR_DATA * ch, char *argument)
 						if (xIS_SET((ch)->in_room->room_flags, ROOM_GRAV10)) {
 							stat_train(ch, "int", 12);
 							stat_train(ch, "con", 12);
-							ch->train += 12;
+							ch->train += 24;
 						}
 						else if (xIS_SET((ch)->in_room->room_flags, ROOM_GRAV50)) {
 							stat_train(ch, "int", 12);
 							stat_train(ch, "con", 12);
-							ch->train += 24;
+							ch->train += 48;
 						}
 						else if (xIS_SET((ch)->in_room->room_flags, ROOM_GRAV100)) {
 							stat_train(ch, "int", 12);
 							stat_train(ch, "con", 12);
-							ch->train += 28;
+							ch->train += 56;
 						}
 						else if (xIS_SET((ch)->in_room->room_flags, ROOM_GRAV200)) {
 							stat_train(ch, "int", 12);
 							stat_train(ch, "con", 12);
-							ch->train += 32;
+							ch->train += 64;
 						}						
 						else if (xIS_SET((ch)->in_room->room_flags, ROOM_GRAV300)) {
 							stat_train(ch, "int", 12);
 							stat_train(ch, "con", 12);
-							ch->train += 36;
+							ch->train += 72;
 						}						
 						else if (xIS_SET((ch)->in_room->room_flags, ROOM_GRAV400)) {
 							stat_train(ch, "int", 12);
 							stat_train(ch, "con", 12);
-							ch->train += 40;
+							ch->train += 80;
 						}						
 						else if (xIS_SET((ch)->in_room->room_flags, ROOM_GRAV500)) {
 							stat_train(ch, "int", 12);
 							stat_train(ch, "con", 12);
-							ch->train += 44;
+							ch->train += 88;
 						}						
 						else if (xIS_SET((ch)->in_room->room_flags, ROOM_GRAV600)) {
 							stat_train(ch, "int", 12);
 							stat_train(ch, "con", 12);
-							ch->train += 48;
+							ch->train += 96;
 						}						
 						else if (xIS_SET((ch)->in_room->room_flags, ROOM_GRAV700)) {
 							stat_train(ch, "int", 12);
 							stat_train(ch, "con", 12);
-							ch->train += 52;
+							ch->train += 104;
 						}						
 						else if (xIS_SET((ch)->in_room->room_flags, ROOM_GRAV800)) {
 							stat_train(ch, "int", 12);
 							stat_train(ch, "con", 12);
-							ch->train += 56;
+							ch->train += 112;
 						}
 						else if (xIS_SET((ch)->in_room->room_flags, ROOM_GRAV900)) {
 							stat_train(ch, "int", 12);
 							stat_train(ch, "con", 12);
-							ch->train += 60;
+							ch->train += 120;
 						}
 						else if (xIS_SET((ch)->in_room->room_flags, ROOM_GRAV1000)) {
 							stat_train(ch, "int", 12);
 							stat_train(ch, "con", 12);
-							ch->train += 64;
+							ch->train += 128;
 						}
 						if (ch->mana > ch->max_mana) {
 							ch->mana = ch->max_mana;
@@ -6317,62 +6317,62 @@ do_meditate(CHAR_DATA * ch, char *argument)
 						if (xIS_SET((ch)->in_room->room_flags, ROOM_GRAV10)) {
 							stat_train(ch, "int", 15);
 							stat_train(ch, "con", 15);
-							ch->train += 14;
+							ch->train += 28;
 						}
 						else if (xIS_SET((ch)->in_room->room_flags, ROOM_GRAV50)) {
 							stat_train(ch, "int", 15);
 							stat_train(ch, "con", 15);
-							ch->train += 28;
+							ch->train += 48;
 						}
 						else if (xIS_SET((ch)->in_room->room_flags, ROOM_GRAV100)) {
 							stat_train(ch, "int", 15);
 							stat_train(ch, "con", 15);
-							ch->train += 32;
+							ch->train += 64;
 						}
 						else if (xIS_SET((ch)->in_room->room_flags, ROOM_GRAV200)) {
 							stat_train(ch, "int", 15);
 							stat_train(ch, "con", 15);
-							ch->train += 36;
+							ch->train += 72;
 						}						
 						else if (xIS_SET((ch)->in_room->room_flags, ROOM_GRAV300)) {
 							stat_train(ch, "int", 15);
 							stat_train(ch, "con", 15);
-							ch->train += 40;
+							ch->train += 80;
 						}						
 						else if (xIS_SET((ch)->in_room->room_flags, ROOM_GRAV400)) {
 							stat_train(ch, "int", 15);
 							stat_train(ch, "con", 15);
-							ch->train += 44;
+							ch->train += 88;
 						}						
 						else if (xIS_SET((ch)->in_room->room_flags, ROOM_GRAV500)) {
 							stat_train(ch, "int", 15);
 							stat_train(ch, "con", 15);
-							ch->train += 48;
+							ch->train += 96;
 						}						
 						else if (xIS_SET((ch)->in_room->room_flags, ROOM_GRAV600)) {
 							stat_train(ch, "int", 15);
 							stat_train(ch, "con", 15);
-							ch->train += 52;
+							ch->train += 104;
 						}						
 						else if (xIS_SET((ch)->in_room->room_flags, ROOM_GRAV700)) {
 							stat_train(ch, "int", 15);
 							stat_train(ch, "con", 15);
-							ch->train += 56;
+							ch->train += 112;
 						}						
 						else if (xIS_SET((ch)->in_room->room_flags, ROOM_GRAV800)) {
 							stat_train(ch, "int", 15);
 							stat_train(ch, "con", 15);
-							ch->train += 60;
+							ch->train += 120;
 						}
 						else if (xIS_SET((ch)->in_room->room_flags, ROOM_GRAV900)) {
 							stat_train(ch, "int", 15);
 							stat_train(ch, "con", 15);
-							ch->train += 64;
+							ch->train += 128;
 						}
 						else if (xIS_SET((ch)->in_room->room_flags, ROOM_GRAV1000)) {
 							stat_train(ch, "int", 15);
 							stat_train(ch, "con", 15);
-							ch->train += 68;
+							ch->train += 136;
 						}
 						else if (ch->mana > ch->max_mana) {
 							ch->mana = ch->max_mana;
@@ -6390,62 +6390,62 @@ do_meditate(CHAR_DATA * ch, char *argument)
 						if (xIS_SET((ch)->in_room->room_flags, ROOM_GRAV10)) {
 							stat_train(ch, "int", 12);
 							stat_train(ch, "con", 12);
-							ch->train += 12;
+							ch->train += 24;
 						}
 						else if (xIS_SET((ch)->in_room->room_flags, ROOM_GRAV50)) {
 							stat_train(ch, "int", 12);
 							stat_train(ch, "con", 12);
-							ch->train += 24;
+							ch->train += 48;
 						}
 						else if (xIS_SET((ch)->in_room->room_flags, ROOM_GRAV100)) {
 							stat_train(ch, "int", 12);
 							stat_train(ch, "con", 12);
-							ch->train += 28;
+							ch->train += 56;
 						}
 						else if (xIS_SET((ch)->in_room->room_flags, ROOM_GRAV200)) {
 							stat_train(ch, "int", 12);
 							stat_train(ch, "con", 12);
-							ch->train += 32;
+							ch->train += 64;
 						}						
 						else if (xIS_SET((ch)->in_room->room_flags, ROOM_GRAV300)) {
 							stat_train(ch, "int", 12);
 							stat_train(ch, "con", 12);
-							ch->train += 36;
+							ch->train += 72;
 						}						
 						else if (xIS_SET((ch)->in_room->room_flags, ROOM_GRAV400)) {
 							stat_train(ch, "int", 12);
 							stat_train(ch, "con", 12);
-							ch->train += 40;
+							ch->train += 80;
 						}						
 						else if (xIS_SET((ch)->in_room->room_flags, ROOM_GRAV500)) {
 							stat_train(ch, "int", 12);
 							stat_train(ch, "con", 12);
-							ch->train += 44;
+							ch->train += 88;
 						}						
 						else if (xIS_SET((ch)->in_room->room_flags, ROOM_GRAV600)) {
 							stat_train(ch, "int", 12);
 							stat_train(ch, "con", 12);
-							ch->train += 48;
+							ch->train += 96;
 						}						
 						else if (xIS_SET((ch)->in_room->room_flags, ROOM_GRAV700)) {
 							stat_train(ch, "int", 12);
 							stat_train(ch, "con", 12);
-							ch->train += 52;
+							ch->train += 104;
 						}						
 						else if (xIS_SET((ch)->in_room->room_flags, ROOM_GRAV800)) {
 							stat_train(ch, "int", 12);
 							stat_train(ch, "con", 12);
-							ch->train += 56;
+							ch->train += 112;
 						}
 						else if (xIS_SET((ch)->in_room->room_flags, ROOM_GRAV900)) {
 							stat_train(ch, "int", 12);
 							stat_train(ch, "con", 12);
-							ch->train += 60;
+							ch->train += 120;
 						}
 						else if (xIS_SET((ch)->in_room->room_flags, ROOM_GRAV1000)) {
 							stat_train(ch, "int", 12);
 							stat_train(ch, "con", 12);
-							ch->train += 64;
+							ch->train += 128;
 						}
 						if (ch->mana > ch->max_mana) {
 							ch->mana = ch->max_mana;
