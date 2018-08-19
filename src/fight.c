@@ -538,7 +538,7 @@ violence_update(void)
 				int form_mastery = 0;
 				double plmod = 0;
 				
-				form_mastery = (ch->train / 45000);
+				form_mastery = (ch->train / 90000);
 				plmod = (ch->pl / ch->exp);
 				if (ch->mana <= 0) {
 					xREMOVE_BIT((ch)->affected_by, AFF_SNAMEK);
@@ -578,9 +578,9 @@ violence_update(void)
 				ch->mana -= form_drain;
 				if (ch->desc) {
 					if (form_drain <= 1)
-						ch->train += 1;
-					else if (form_drain > 1)
 						ch->train += 3;
+					else if (form_drain > 1)
+						ch->train += 9;
 				}
 		}
 		if (!IS_NPC(ch)
@@ -589,7 +589,7 @@ violence_update(void)
 				int form_mastery = 0;
 				double plmod = 0;
 				
-				form_mastery = (ch->train / 45000);
+				form_mastery = (ch->train / 90000);
 				plmod = (ch->pl / ch->exp);
 				if (ch->mana <= 0) {
 					xREMOVE_BIT((ch)->affected_by, AFF_MYSTIC);
@@ -628,16 +628,16 @@ violence_update(void)
 				ch->mana -= form_drain;
 				if (ch->desc) {
 					if (form_drain <= 1)
-						ch->train += 1;
-					else if (form_drain > 1)
 						ch->train += 3;
+					else if (form_drain > 1)
+						ch->train += 9;
 				}
 		}
 		if (!IS_NPC(ch)
 			&& xIS_SET((ch)->affected_by, AFF_ICER2)) {
 				int form_mastery = 0;
 				
-				form_mastery = (ch->train / 45000);
+				form_mastery = (ch->train / 90000);
 				if (ch->mana <= 0) {
 					xREMOVE_BIT((ch)->affected_by, AFF_ICER2);
 					if (xIS_SET((ch)->affected_by, AFF_POWERCHANNEL))
@@ -658,14 +658,14 @@ violence_update(void)
 					if (form_mastery >= 6)
 						ch->train += 1;
 					else if (form_mastery < 6)
-						ch->train += 30;
+						ch->train += 60;
 				}
 		}
 		if (!IS_NPC(ch)
 			&& xIS_SET((ch)->affected_by, AFF_ICER3)) {
 				int form_mastery = 0;
 				
-				form_mastery = (ch->train / 45000);
+				form_mastery = (ch->train / 90000);
 				if (ch->mana <= 0) {
 					xREMOVE_BIT((ch)->affected_by, AFF_ICER3);
 					if (xIS_SET((ch)->affected_by, AFF_POWERCHANNEL))
@@ -686,14 +686,14 @@ violence_update(void)
 					if (form_mastery >= 20)
 						ch->train += 1;
 					else if (form_mastery < 20)
-						ch->train += 30;
+						ch->train += 60;
 				}
 		}
 		if (!IS_NPC(ch)
 			&& xIS_SET((ch)->affected_by, AFF_ICER4)) {
 				int form_mastery = 0;
 				
-				form_mastery = (ch->train / 45000);
+				form_mastery = (ch->train / 90000);
 				if (ch->mana <= 0) {
 					xREMOVE_BIT((ch)->affected_by, AFF_ICER4);
 					if (xIS_SET((ch)->affected_by, AFF_POWERCHANNEL))
@@ -712,9 +712,9 @@ violence_update(void)
 					if (form_mastery < 1)
 						form_mastery = 1;
 					if (form_mastery >= 44)
-						ch->train += 1;
-					else if (form_mastery < 44)
 						ch->train += 3;
+					else if (form_mastery < 44)
+						ch->train += 9;
 				}
 		}
 		if (!IS_NPC(ch)
@@ -722,7 +722,7 @@ violence_update(void)
 				int form_drain = 0;
 				int form_mastery = 0;
 				
-				form_mastery = (ch->train / 45000);
+				form_mastery = (ch->train / 90000);
 				if (ch->mana <= 0) {
 					xREMOVE_BIT((ch)->affected_by, AFF_ICER5);
 					if (xIS_SET((ch)->affected_by, AFF_POWERCHANNEL))
@@ -745,9 +745,9 @@ violence_update(void)
 				ch->mana -= form_drain;
 				if (ch->desc) {
 					if (form_mastery >= 64)
-						ch->train += 1;
-					else if (form_mastery < 64)
 						ch->train += 3;
+					else if (form_mastery < 64)
+						ch->train += 9;
 				}
 		}
 		if (!IS_NPC(ch)
@@ -755,7 +755,7 @@ violence_update(void)
 				int form_drain = 0;
 				int form_mastery = 0;
 				
-				form_mastery = (ch->train / 45000);
+				form_mastery = (ch->train / 90000);
 				if (ch->mana <= 0) {
 					xREMOVE_BIT((ch)->affected_by, AFF_GOLDENFORM);
 					if (xIS_SET((ch)->affected_by, AFF_POWERCHANNEL))
@@ -778,9 +778,9 @@ violence_update(void)
 				ch->mana -= form_drain;
 				if (ch->desc) {
 					if (form_drain > 400)
-						ch->train += 3;
+						ch->train += 9;
 					else if (form_drain <= 400)
-						ch->train += 1;
+						ch->train += 3;
 				}
 		}
 		if (!IS_NPC(ch)
@@ -794,7 +794,7 @@ violence_update(void)
 				int form_drain = 0;
 				int form_mastery = 0;
 				
-				form_mastery = (ch->train / 45000);
+				form_mastery = (ch->train / 90000);
 				if (ch->mana <= 0) {
 					xREMOVE_BIT((ch)->affected_by, AFF_SSJ);
 					if (xIS_SET((ch)->affected_by, AFF_POWERCHANNEL))
@@ -819,9 +819,9 @@ violence_update(void)
 				ch->mana -= form_drain;
 				if (ch->desc) {
 					if (form_mastery >= 9)
-						ch->train += 1;
-					else if (form_mastery < 9)
 						ch->train += 3;
+					else if (form_mastery < 9)
+						ch->train += 9;
 				}
 		}
 		if (!IS_NPC(ch)
@@ -835,7 +835,7 @@ violence_update(void)
 				int form_drain = 0;
 				int form_mastery = 0;
 				
-				form_mastery = (ch->train / 45000);
+				form_mastery = (ch->train / 90000);
 				if (ch->mana <= 0) {
 					xREMOVE_BIT((ch)->affected_by, AFF_SSJ);
 					xREMOVE_BIT((ch)->affected_by, AFF_USSJ);
@@ -861,9 +861,9 @@ violence_update(void)
 				ch->mana -= form_drain;
 				if (ch->desc) {
 					if (form_mastery >= 19)
-						ch->train += 1;
-					else if (form_mastery < 19)
 						ch->train += 3;
+					else if (form_mastery < 19)
+						ch->train += 9;
 				}
 		}
 		if (!IS_NPC(ch)
@@ -877,7 +877,7 @@ violence_update(void)
 				int form_drain = 0;
 				int form_mastery = 0;
 				
-				form_mastery = (ch->train / 45000);
+				form_mastery = (ch->train / 90000);
 				if (ch->mana <= 0) {
 					xREMOVE_BIT((ch)->affected_by, AFF_SSJ);
 					xREMOVE_BIT((ch)->affected_by, AFF_USSJ);
@@ -904,9 +904,9 @@ violence_update(void)
 				ch->mana -= form_drain;
 				if (ch->desc) {
 					if (form_mastery >= 29)
-						ch->train += 1;
-					else if (form_mastery < 29)
 						ch->train += 3;
+					else if (form_mastery < 29)
+						ch->train += 9;
 				}
 		}
 		if (!IS_NPC(ch)
@@ -920,7 +920,7 @@ violence_update(void)
 				int form_drain = 0;
 				int form_mastery = 0;
 				
-				form_mastery = (ch->train / 45000);
+				form_mastery = (ch->train / 90000);
 				if (ch->mana <= 0) {
 					xREMOVE_BIT((ch)->affected_by, AFF_SSJ);
 					xREMOVE_BIT((ch)->affected_by, AFF_USSJ);
@@ -948,9 +948,9 @@ violence_update(void)
 				ch->mana -= form_drain;
 				if (ch->desc) {
 					if (form_drain >= 39)
-						ch->train += 1;
-					else if (form_drain < 39)
 						ch->train += 3;
+					else if (form_drain < 39)
+						ch->train += 9;
 				}
 		}
 		if (!IS_NPC(ch)
@@ -964,7 +964,7 @@ violence_update(void)
 				int form_drain = 0;
 				int form_mastery = 0;
 				
-				form_mastery = (ch->train / 45000);
+				form_mastery = (ch->train / 90000);
 				if (ch->mana <= 0) {
 					xREMOVE_BIT((ch)->affected_by, AFF_SSJ);
 					xREMOVE_BIT((ch)->affected_by, AFF_USSJ);
@@ -993,9 +993,9 @@ violence_update(void)
 				ch->mana -= form_drain;
 				if (ch->desc) {
 					if (form_mastery >= 52)
-						ch->train += 1;
-					else if (form_mastery < 52)
 						ch->train += 3;
+					else if (form_mastery < 52)
+						ch->train += 9;
 				}
 		}
 		if (!IS_NPC(ch)
@@ -1009,7 +1009,7 @@ violence_update(void)
 				int form_drain = 0;
 				int form_mastery = 0;
 				
-				form_mastery = (ch->train / 45000);
+				form_mastery = (ch->train / 90000);
 				if (ch->mana <= 0) {
 					xREMOVE_BIT((ch)->affected_by, AFF_SSJ);
 					xREMOVE_BIT((ch)->affected_by, AFF_USSJ);
@@ -1039,9 +1039,9 @@ violence_update(void)
 				ch->mana -= form_drain;
 				if (ch->desc) {
 					if (form_mastery >= 62)
-						ch->train += 1;
-					else if (form_mastery < 62)
 						ch->train += 3;
+					else if (form_mastery < 62)
+						ch->train += 9;
 				}
 		}
 		if (!IS_NPC(ch)
@@ -1055,7 +1055,7 @@ violence_update(void)
 				int form_drain = 0;
 				int form_mastery = 0;
 				
-				form_mastery = (ch->train / 45000);
+				form_mastery = (ch->train / 90000);
 				if (ch->mana <= 0) {
 					xREMOVE_BIT((ch)->affected_by, AFF_SSJ);
 					xREMOVE_BIT((ch)->affected_by, AFF_USSJ);
@@ -1086,9 +1086,9 @@ violence_update(void)
 				ch->mana -= form_drain;
 				if (ch->desc) {
 					if (form_drain <= 250)
-						ch->train += 1;
-					else if (form_drain > 250)
 						ch->train += 3;
+					else if (form_drain > 250)
+						ch->train += 9;
 				}
 		}
 		/* Bug Guard */
@@ -1118,7 +1118,7 @@ violence_update(void)
 			powerupcon = ch->perm_con * 0.05;
 			
 			safemaximum = ((get_curr_int(ch) * 0.03) + 1);
-			form_mastery = (ch->train / 45000);
+			form_mastery = (ch->train / 90000);
 			plmod = (ch->pl / ch->exp);
 			if( !IS_NPC( ch ) && ch->pcdata->auraColorPowerUp > 0 )
 				auraColor = ch->pcdata->auraColorPowerUp;
@@ -2058,7 +2058,7 @@ violence_update(void)
 				xREMOVE_BIT((ch)->affected_by, AFF_OVERCHANNEL);
 				send_to_char("You must stand if you wish to power up.\n\r", ch);
 			}
-			form_mastery = (ch->train / 45000);
+			form_mastery = (ch->train / 90000);
 			if (xIS_SET((ch)->affected_by, AFF_SSJ)
 				|| xIS_SET((ch)->affected_by, AFF_SSJ2)
 				|| xIS_SET((ch)->affected_by, AFF_SSJ3)

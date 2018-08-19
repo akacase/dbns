@@ -411,7 +411,7 @@ do_score(CHAR_DATA * ch, char *argument)
 	pager_printf_color(ch, "ZENI : &Y%-13s&C           AutoSac: (&W%c&C)\n\r",
 	    num_punct(ch->gold), xIS_SET(ch->act, PLR_AUTOSAC) ? 'X' : ' ');
 
-	int form_mastery = (ch->train / 45000);
+	int form_mastery = (ch->train / 90000);
 
 	if(form_mastery < 1) {
 	  form_mastery = 1;
