@@ -1727,30 +1727,30 @@ violence_update(void)
 				int sixcon = 0;
 				int sevencon = 0;
 					
-				onestr = ch->perm_str * 0.10; 
-				twostr = ch->perm_str * 0.15;
-				threestr = ch->perm_str * 0.15;
-				fourstr = ch->perm_str * 0.30;
+				onestr = ch->perm_str * 0.20; 
+				twostr = ch->perm_str * 0.25;
+				threestr = ch->perm_str * 0.30;
+				fourstr = ch->perm_str * 0.40;
 				fivestr = ch->perm_str * 0.60;
 				sixstr = ch->perm_str;
 				sevenstr = ch->perm_str * 1.20;
 				onespd = ch->perm_dex * 0.10;
 				twospd = ch->perm_dex * 0.15;
-				threespd = ch->perm_dex * 0.15;
+				threespd = ch->perm_dex * 0.20;
 				fourspd = ch->perm_dex * 0.30;
 				fivespd = ch->perm_dex * 0.70;
 				sixspd = ch->perm_dex;
 				sevenspd = ch->perm_dex * 1.20;
 				oneint = ch->perm_int * 0.15;
 				twoint = ch->perm_int * 0.20;
-				threeint = ch->perm_int * 0.20;
+				threeint = ch->perm_int * 0.30;
 				fourint = ch->perm_int * 0.40;
 				fiveint = ch->perm_int * 0.70;
 				sixint = ch->perm_int * 1.10;
 				sevenint = ch->perm_int * 1.30;
 				onecon = ch->perm_con * 0.20;
 				twocon = ch->perm_con * 0.20;
-				threecon = ch->perm_con * 0.20;
+				threecon = ch->perm_con * 0.30;
 				fourcon = ch->perm_con * 0.40;
 				fivecon = ch->perm_con * 0.60;
 				sixcon = ch->perm_con;
@@ -1991,10 +1991,10 @@ violence_update(void)
 							ch->pl *= 1.03;
 						}
 						else if (plmod >= 400) {
-							ch->pl *= 1.02;
+							ch->pl *= 1.04;
 						}
 						else if (plmod < 400) {
-							ch->pl *= 1.06;
+							ch->pl *= 1.05;
 						}
 						ch->powerup += 1;
 						if (plmod > 600) {
