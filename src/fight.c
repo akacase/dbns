@@ -5193,7 +5193,7 @@ damage(CHAR_DATA * ch, CHAR_DATA * victim, int dam, int dt)
 						if (IS_NPC(ch) && !IS_NPC(victim) && !IS_SET(victim->pcdata->flags, PCFLAG_GAG)) {
 							pager_printf(victim,
 							"&OYou skillfully dodge %s's attack.\n\r",
-							victim->short_descr);
+							ch->short_descr);
 						}
 						if (!IS_NPC(ch) && !IS_NPC(victim) && !IS_SET(victim->pcdata->flags, PCFLAG_GAG)) {
 							pager_printf(victim,
