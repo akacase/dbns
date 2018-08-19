@@ -2216,7 +2216,7 @@ violence_update(void)
 				}
 				else if (xIS_SET((ch)->in_room->room_flags, ROOM_GRAV50)) {
 					ch->gravSetting = 50;
-										if (ch->position == POS_FIGHTING) {
+					if (ch->position == POS_FIGHTING) {
 						stat_train(ch, "str", 10);
 						stat_train(ch, "spd", 10);
 						stat_train(ch, "con", 10);
@@ -2627,10 +2627,12 @@ violence_update(void)
 				gravdam = (pow(resdiff, 3) * damrange);
 				if (ch->mana - gravdam > 0)
 					ch->mana -= gravdam;
+					ch->gravExp += 2;
 				else if (ch->mana - gravdam <= 0) {
 					ch->mana = 0;
 					ch->hit -= (gravdam / 3);
 					act( AT_RED, "Your bones pop and creak ominously.", ch, NULL, NULL, TO_CHAR );
+					ch->gravExp += 2;
 					if (ch->hit - (gravdam / 3) < 0) {
 						update_pos(ch);
 						if (ch->position == POS_DEAD) {
