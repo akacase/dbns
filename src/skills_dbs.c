@@ -6196,6 +6196,9 @@ do_meditate(CHAR_DATA * ch, char *argument)
 						}
 						if (ch->mana > ch->max_mana) {
 							ch->mana = ch->max_mana;
+							send_to_char
+								("&wYour excess energy dissipates back into the cosmos\n\r",
+								ch);
 						}
 					}
 					else {
@@ -6269,6 +6272,9 @@ do_meditate(CHAR_DATA * ch, char *argument)
 						}
 						if (ch->mana > ch->max_mana) {
 							ch->mana = ch->max_mana;
+							send_to_char
+								("&wYour excess energy dissipates back into the cosmos\n\r",
+								ch);
 						}
 					}
 				}
@@ -6281,6 +6287,9 @@ do_meditate(CHAR_DATA * ch, char *argument)
 				ch->mana += 5;
 				if (ch->mana > ch->max_mana)
 					ch->mana = ch->max_mana;
+					send_to_char
+						("&wYour excess energy dissipates back into the cosmos\n\r",
+						ch);
 			}
 
 			if (left >= right) {
@@ -6376,6 +6385,9 @@ do_meditate(CHAR_DATA * ch, char *argument)
 						}
 						else if (ch->mana > ch->max_mana) {
 							ch->mana = ch->max_mana;
+							send_to_char
+								("&wYour excess energy dissipates back into the cosmos\n\r",
+								ch);
 						}
 					}
 					else {
@@ -6449,6 +6461,9 @@ do_meditate(CHAR_DATA * ch, char *argument)
 						}
 						if (ch->mana > ch->max_mana) {
 							ch->mana = ch->max_mana;
+							send_to_char
+								("&wYour excess energy dissipates back into the cosmos\n\r",
+								ch);
 						}
 					}
 				}
@@ -6461,6 +6476,9 @@ do_meditate(CHAR_DATA * ch, char *argument)
 				ch->mana += 5;
 				if (ch->mana > ch->max_mana)
 					ch->mana = ch->max_mana;
+					send_to_char
+						("&wYour excess energy dissipates back into the cosmos\n\r",
+						ch);
 				
 			}
 			if (left >= right) {
