@@ -2625,9 +2625,10 @@ violence_update(void)
 				if (resdiff < 1)
 					resdiff = 1;
 				gravdam = (pow(resdiff, 3) * damrange);
-				if (ch->mana - gravdam > 0)
+				if (ch->mana - gravdam > 0) {
 					ch->mana -= gravdam;
 					ch->gravExp += 2;
+				}
 				else if (ch->mana - gravdam <= 0) {
 					ch->mana = 0;
 					ch->hit -= (gravdam / 3);
