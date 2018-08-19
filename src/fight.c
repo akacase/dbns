@@ -5190,9 +5190,16 @@ damage(CHAR_DATA * ch, CHAR_DATA * victim, int dam, int dt)
 						victim->dodge = true;
 						learn_from_success(victim,
 						    gsn_dodge);
-						pager_printf(victim,
-						"&zYou skillfully dodge %'s attack.\n\r",
-						ch->name);
+						if (IS_NPC(ch) && !IS_NPC(victim) && !IS_SET(victim->pcdata->flags, PCFLAG_GAG)) {
+							pager_printf(victim,
+							"&OYou skillfully dodge %s's attack.\n\r",
+							victim->short_descr);
+						}
+						if (!IS_NPC(ch) && !IS_NPC(victim) && !IS_SET(victim->pcdata->flags, PCFLAG_GAG)) {
+							pager_printf(victim,
+							"&OYou successfully block %s's attack.\n\r",
+							ch->name);	
+						}
                         // train speed stat on dodge success
 						if(!IS_NPC(victim)){
 						  stat_train(victim, "spd", 5);
@@ -5215,7 +5222,7 @@ damage(CHAR_DATA * ch, CHAR_DATA * victim, int dam, int dt)
 					  learn_from_success(victim,
 						    gsn_block);
 						pager_printf(victim,
-						"&zYou successfully block %'s attack.\n\r",
+						"&OYou successfully block %'s attack.\n\r",
 						ch->name);
 					  // train speed stat on block success
 					  if (!IS_NPC(victim)) {
