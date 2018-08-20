@@ -942,7 +942,7 @@ update_aris(CHAR_DATA * ch)
 	int 	aff_ab, aff_ac, aff_ad, aff_ae, aff_af, aff_ag, aff_ah;
 	int 	aff_ai, aff_aj, aff_ak, aff_al, aff_am, aff_an;
 	int		aff_ao, aff_ap, aff_aq, aff_ar, aff_as, aff_at, aff_au;
-	int		aff_av, aff_aw;
+	int		aff_av, aff_aw, aff_ax, aff_ay;
 
 	if (IS_NPC(ch) || IS_IMMORTAL(ch))
 		return;
@@ -1000,6 +1000,8 @@ update_aris(CHAR_DATA * ch)
 	aff_au = IS_AFFECTED(ch, AFF_SAFEMAX);
 	aff_av = IS_AFFECTED(ch, AFF_GOLDENFORM);
 	aff_aw = IS_AFFECTED(ch, AFF_ENERGYFIST);
+	aff_ax = IS_AFFECTED(ch, AFF_HYBRIDSTYLE);
+	aff_ay = IS_AFFECTED(ch, AFF_BRUISERSTYLE);
 
 	xCLEAR_BITS(ch->affected_by);
 	ch->resistant = 0;
@@ -1162,6 +1164,10 @@ update_aris(CHAR_DATA * ch)
 		xSET_BIT(ch->affected_by, AFF_GOLDENFORM);
 	if (aff_aw)
 		xSET_BIT((ch)->affected_by, AFF_ENERGYFIST);
+	if (aff_ax)
+		xSET_BIT((ch)->affected_by, AFF_HYBRIDSTYLE);
+	if (aff_ay)
+		xSET_BIT((ch)->affected_by, AFF_BRUISERSTYLE);
 	return;
 }
 
@@ -3260,6 +3266,10 @@ affect_bit_name(EXT_BV * vector)
 		strcat(buf, " invisible");
 	if (xIS_SET(*vector, AFF_ENERGYFIST))
 		strcat(buf, " energy_fist");
+	if (xIS_SET(*vector, AFF_HYBRIDSTYLE))
+		strcat(buf, " hybrid_style");
+	if (xIS_SET(*vector, AFF_BRUISERSTYLE))
+		strcat(buf, " bruiser_style");
 	if (xIS_SET(*vector, AFF_DETECT_EVIL))
 		strcat(buf, " detect_evil");
 	if (xIS_SET(*vector, AFF_DETECT_INVIS))

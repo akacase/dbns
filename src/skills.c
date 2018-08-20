@@ -5048,12 +5048,48 @@ void do_style( CHAR_DATA *ch, char *argument )
 	if( !str_prefix(arg, "energy") ) {
 		if (!xIS_SET((ch)->affected_by, AFF_ENERGYFIST)) {
 			xSET_BIT((ch)->affected_by, AFF_ENERGYFIST);
-			send_to_char( "Your limbs swell with ki, augmenting your basic combat abilities.\n\r",ch);
+			if (xIS_SET((ch)->affected_by, AFF_HYBRIDSTYLE))
+				xREMOVE_BIT((ch)->affected_by, AFF_HYBRIDSTYLE);
+			if (xIS_SET((ch)->affected_by, AFF_BRUISERSTYLE))
+				xREMOVE_BIT((ch)->affected_by, AFF_BRUISERSTYLE);
+			send_to_char( "Your limbs swell with ki, augmenting your basic combat abilities with a calm mind.\n\r",ch);
 			return;
 		}
 		if (xIS_SET((ch)->affected_by, AFF_ENERGYFIST)) {
 			xREMOVE_BIT((ch)->affected_by, AFF_ENERGYFIST);
 			send_to_char( "The ki gathered in your limbs dissipates.\n\r",ch);
+			return;
+		}
+	}
+	if( !str_prefix(arg, "hybrid") ) {
+		if (!xIS_SET((ch)->affected_by, AFF_HYBRIDSTYLE)) {
+			xSET_BIT((ch)->affected_by, AFF_HYBRIDSTYLE);
+			if (xIS_SET((ch)->affected_by, AFF_ENERGYFIST))
+				xREMOVE_BIT((ch)->affected_by, AFF_ENERGYFIST);
+			if (xIS_SET((ch)->affected_by, AFF_BRUISERSTYLE))
+				xREMOVE_BIT((ch)->affected_by, AFF_BRUISERSTYLE);
+			send_to_char( "You adopt a balanced approach to combat ki management.\n\r",ch);
+			return;
+		}
+		if (xIS_SET((ch)->affected_by, AFF_HYBRIDSTYLE)) {
+			xREMOVE_BIT((ch)->affected_by, AFF_HYBRIDSTYLE);
+			send_to_char( "You stop your hybrid approach.\n\r",ch);
+			return;
+		}
+	}
+	if( !str_prefix(arg, "bruiser") ) {
+		if (!xIS_SET((ch)->affected_by, AFF_BRUISERSTYLE)) {
+			xSET_BIT((ch)->affected_by, AFF_BRUISERSTYLE);
+			if (xIS_SET((ch)->affected_by, AFF_HYBRIDSTYLE))
+				xREMOVE_BIT((ch)->affected_by, AFF_HYBRIDSTYLE);
+			if (xIS_SET((ch)->affected_by, AFF_ENERGYFIST))
+				xREMOVE_BIT((ch)->affected_by, AFF_ENERGYFIST);
+			send_to_char( "Your muscles swell with energy to devastating effect.\n\r",ch);
+			return;
+		}
+		if (xIS_SET((ch)->affected_by, AFF_ENERGYFIST)) {
+			xREMOVE_BIT((ch)->affected_by, AFF_ENERGYFIST);
+			send_to_char( "Your muscles reduce moderately in size.\n\r",ch);
 			return;
 		}
 	}

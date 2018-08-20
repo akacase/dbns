@@ -274,8 +274,11 @@ int get_damroll( CHAR_DATA *ch)
 		damroll = get_curr_int(ch) / 40;
 	}
 		
-	else if (!xIS_SET((ch)->affected_by, AFF_ENERGYFIST)) {
-		damroll = get_curr_str(ch) / 20;
+	else if (xIS_SET((ch)->affected_by, AFF_HYBRIDSTYLE)) {
+		damroll = (get_curr_str(ch) / 30) + (get_curr_int(ch) / 30;
+	}
+	else if (xIS_SET((ch)->affected_by, AFF_BRUISERSTYLE)) {
+		damroll = get_curr_str(ch) / 15;
 	}
 
 	if (ch->mental_state > 5 && ch->mental_state < 15)
