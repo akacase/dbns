@@ -4182,34 +4182,30 @@ one_hit(CHAR_DATA * ch, CHAR_DATA * victim, int dt)
 	/*
 	 * Calculate Damage Modifiers from Victim's Fighting Style
 	 */
-	if (victim->position == POS_FIGHTING)
-		dam = .5 * dam;
-	else if (victim->position == POS_BERSERK)
-		dam = .6 * dam;
+	if (victim->position == POS_BERSERK)
+		dam = 1.2 * dam;
 	else if (victim->position == POS_AGGRESSIVE)
-		dam = .55 * dam;
+		dam = 1.1 * dam;
 	else if (victim->position == POS_DEFENSIVE) {
-		dam = .425 * dam;
+		dam = .85 * dam;
 		learn_from_success(victim, gsn_style_defensive);
 	} else if (victim->position == POS_EVASIVE) {
-		dam = .4 * dam;
+		dam = .8 * dam;
 		learn_from_success(victim, gsn_style_evasive);
 	}
 	/*
 	 * Calculate Damage Modifiers from Attacker's Fighting Style
 	 */
-	if (ch->position == POS_FIGHTING)
-		dam = .5 * dam;
-	else if (ch->position == POS_BERSERK) {
-		dam = .6 * dam;
+	if (ch->position == POS_BERSERK) {
+		dam = 1.2 * dam;
 		learn_from_success(ch, gsn_style_berserk);
 	} else if (ch->position == POS_AGGRESSIVE) {
-		dam = .55 * dam;
+		dam = 1.1 * dam;
 		learn_from_success(ch, gsn_style_aggressive);
 	} else if (ch->position == POS_DEFENSIVE)
-		dam = .425 * dam;
+		dam = .85 * dam;
 	else if (ch->position == POS_EVASIVE)
-		dam = .4 * dam;
+		dam = .8 * dam;
 
 	if (!IS_NPC(ch) && ch->pcdata->learned[gsn_enhanced_damage] > 0) {
 		dam += (int)(dam * LEARNED(ch, gsn_enhanced_damage) / 120);
