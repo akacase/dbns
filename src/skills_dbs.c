@@ -2627,7 +2627,7 @@ do_punch(CHAR_DATA * ch, char *argument)
 		return;
 	}
 	if (!IS_NPC(ch)) {
-		kilimit = ch->train / 10000;
+		kilimit = ch->train / 2000;
 		physmult = (float) get_curr_str(ch) / 1000 + 1;
 		kicmult = (float) kilimit / 100 + 1;
 	}
