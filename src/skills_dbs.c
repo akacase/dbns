@@ -2711,7 +2711,6 @@ do_punch(CHAR_DATA * ch, char *argument)
 				"$n crashes his fist straight into $N with all $s might, crushing $M into the dirt! &W[$t]",
 				ch, num_punct(dam), victim, TO_NOTVICT);
 		}
-		dam = ki_absorb(victim, ch, dam, gsn_punch);
 		learn_from_success(ch, gsn_punch);
 		global_retcode = damage(ch, victim, dam, TYPE_HIT);
 	}
