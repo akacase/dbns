@@ -5087,8 +5087,8 @@ void do_style( CHAR_DATA *ch, char *argument )
 			send_to_char( "Your muscles swell with energy to devastating effect.\n\r",ch);
 			return;
 		}
-		if (xIS_SET((ch)->affected_by, AFF_ENERGYFIST)) {
-			xREMOVE_BIT((ch)->affected_by, AFF_ENERGYFIST);
+		if (xIS_SET((ch)->affected_by, AFF_BRUISERSTYLE)) {
+			xREMOVE_BIT((ch)->affected_by, AFF_BRUISERSTYLE);
 			send_to_char( "Your muscles reduce moderately in size.\n\r",ch);
 			return;
 		}
