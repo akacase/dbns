@@ -5485,7 +5485,13 @@ damage(CHAR_DATA * ch, CHAR_DATA * victim, int dam, int dt)
 		gain_exp(ch, xp_gain);
 
 		/* fight training for strength */
-		stat_train(ch, "str", 3);
+		if (xIS_SET((ch)->affected_by, AFF_ENERGYFIST)) {
+			stat_train(ch, "int", 3);
+		}
+		else if (!xIS_SET((ch)->affected_by, AFF_ENERGYFIST)) {
+			stat_train(ch, "str", 3);
+		}
+			
 		ch->train += 1;
 	}
 	if (!IS_NPC(victim) && victim->level >= LEVEL_IMMORTAL

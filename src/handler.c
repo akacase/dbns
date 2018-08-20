@@ -999,6 +999,7 @@ update_aris(CHAR_DATA * ch)
 	aff_at = IS_AFFECTED(ch, AFF_OVERCHANNEL);
 	aff_au = IS_AFFECTED(ch, AFF_SAFEMAX);
 	aff_av = IS_AFFECTED(ch, AFF_GOLDENFORM);
+	aff_aw = IS_AFFECTED(ch, AFF_ENERGYFIST);
 
 	xCLEAR_BITS(ch->affected_by);
 	ch->resistant = 0;
@@ -1159,6 +1160,8 @@ update_aris(CHAR_DATA * ch)
 		xSET_BIT(ch->affected_by, AFF_SAFEMAX);
 	if (aff_av)
 		xSET_BIT(ch->affected_by, AFF_GOLDENFORM);
+	if (aff_aw)
+		xSET_BIT((ch)->affected_by, AFF_ENERGYFIST);
 	return;
 }
 
@@ -3255,6 +3258,8 @@ affect_bit_name(EXT_BV * vector)
 		strcat(buf, " overchannel");
 	if (xIS_SET(*vector, AFF_INVISIBLE))
 		strcat(buf, " invisible");
+	if (xIS_SET(*vector, AFF_ENERGYFIST))
+		strcat(buf, " energy_fist");
 	if (xIS_SET(*vector, AFF_DETECT_EVIL))
 		strcat(buf, " detect_evil");
 	if (xIS_SET(*vector, AFF_DETECT_INVIS))

@@ -5045,8 +5045,19 @@ void do_style( CHAR_DATA *ch, char *argument )
                                           "standard"     );
 	return;
     }
-
-    if( !str_prefix(arg, "evasive") ){
+	if( !str_prefix(arg, "energy") ) {
+		if (!xIS_SET((ch)->affected_by, AFF_ENERGYFIST)) {
+			xSET_BIT((ch)->affected_by, AFF_ENERGYFIST);
+			send_to_char( "Your limbs swell with ki, augmenting your basic combat abilities.\n\r",ch);
+			return;
+		}
+		if (xIS_SET((ch)->affected_by, AFF_ENERGYFIST)) {
+			xREMOVE_BIT((ch)->affected_by, AFF_ENERGYFIST);
+			send_to_char( "The ki gathered in your limbs dissipates.\n\r",ch);
+			return;
+		}
+	}
+    else if( !str_prefix(arg, "evasive") ){
       if( ch->exp < skill_table[gsn_style_evasive]->skill_level[ch->class])
       {
          send_to_char( "You have not yet learned enough to fight evasively.\n\r",ch);
