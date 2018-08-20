@@ -280,7 +280,9 @@ int get_damroll( CHAR_DATA *ch)
 	else if (xIS_SET((ch)->affected_by, AFF_BRUISERSTYLE)) {
 		damroll = get_curr_str(ch) / 15;
 	}
-
+	else {
+		damroll = get_curr_str(ch) / 20;
+	}
 	if (ch->mental_state > 5 && ch->mental_state < 15)
 		damroll++;
 
