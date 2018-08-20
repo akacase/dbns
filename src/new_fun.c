@@ -271,17 +271,17 @@ int get_damroll( CHAR_DATA *ch)
 	int damroll = 0;
 	
 	if (xIS_SET((ch)->affected_by, AFF_ENERGYFIST)) {
-		damroll = get_curr_int(ch) / 30;
+		damroll = get_curr_int(ch) / 30 + 2;
 	}
 		
 	else if (xIS_SET((ch)->affected_by, AFF_HYBRIDSTYLE)) {
-		damroll = (get_curr_str(ch) / 25) + (get_curr_int(ch) / 50);
+		damroll = (get_curr_str(ch) / 25) + (get_curr_int(ch) / 50) + 2;
 	}
 	else if (xIS_SET((ch)->affected_by, AFF_BRUISERSTYLE)) {
-		damroll = get_curr_str(ch) / 18;
+		damroll = get_curr_str(ch) / 18 + 2;
 	}
 	else {
-		damroll = get_curr_str(ch) / 20;
+		damroll = get_curr_str(ch) / 20 + 2;
 	}
 	if (ch->mental_state > 5 && ch->mental_state < 15)
 		damroll++;
