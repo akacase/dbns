@@ -275,7 +275,7 @@ int get_damroll( CHAR_DATA *ch)
 	}
 		
 	else if (xIS_SET((ch)->affected_by, AFF_HYBRIDSTYLE)) {
-		damroll = (get_curr_str(ch) / 30) + (get_curr_int(ch) / 30;
+		damroll = (get_curr_str(ch) / 30) + (get_curr_int(ch) / 30);
 	}
 	else if (xIS_SET((ch)->affected_by, AFF_BRUISERSTYLE)) {
 		damroll = get_curr_str(ch) / 15;
