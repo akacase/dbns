@@ -942,7 +942,7 @@ update_aris(CHAR_DATA * ch)
 	int 	aff_ab, aff_ac, aff_ad, aff_ae, aff_af, aff_ag, aff_ah;
 	int 	aff_ai, aff_aj, aff_ak, aff_al, aff_am, aff_an;
 	int		aff_ao, aff_ap, aff_aq, aff_ar, aff_as, aff_at, aff_au;
-	int		aff_av; aff_aw;
+	int		aff_av, aff_aw;
 
 	if (IS_NPC(ch) || IS_IMMORTAL(ch))
 		return;
