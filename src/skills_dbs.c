@@ -2654,13 +2654,13 @@ do_punch(CHAR_DATA * ch, char *argument)
 		if (!IS_NPC(ch)) {
 			if (arg[0] == '\0') {
 				argdam = number_range(2, 4) * kicmult;
-				dam = get_attmod(ch, victim) * (argdam * kimult);
+				dam = get_attmod(ch, victim) * (argdam * physmult);
 				stat_train(ch, "str", 5);
 				ch->train += 1;
 			}
-			if (!str_cmp(arg, "heavy") {
+			if (!str_cmp(arg, "heavy")) {
 				argdam = number_range(10, 12) * kicmult;
-				dam = get_attmod(ch, victim) * (argdam * kimult);
+				dam = get_attmod(ch, victim) * (argdam * physmult);
 				stat_train(ch, "str", 10);
 				ch->train += 4;
 			}
@@ -2691,7 +2691,7 @@ do_punch(CHAR_DATA * ch, char *argument)
 				"$n exploits an opening in $N's defense and hammers $S in the stomach! &W[$t]",
 				ch, num_punct(dam), victim, TO_NOTVICT);
 		}
-		if (!str_cmp(arg, "heavy") {
+		if (!str_cmp(arg, "heavy")) {
 			act(AT_YELLOW,
 				"You rush down $N with an arm drawn back, throwing all of your weight forward.",
 				ch, NULL, victim, TO_CHAR);
