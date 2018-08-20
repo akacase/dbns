@@ -2599,7 +2599,14 @@ void
 do_punch(CHAR_DATA * ch, char *argument)
 {
 	CHAR_DATA *victim;
+	char 	arg[MAX_INPUT_LENGTH];
+	int 	dam = 0;
+	int		argdam = 0;
+	int		kilimit = 0;
+	float	physmult = 0;
+	float	kicmult = 0;
 
+	one_argument(argument, arg);
 	if (IS_NPC(ch) && is_split(ch)) {
 		if (!ch->master)
 			return;
@@ -2612,15 +2619,27 @@ do_punch(CHAR_DATA * ch, char *argument)
 	}
 	if (!IS_NPC(ch)
 	    && ch->exp < skill_table[gsn_punch]->skill_level[ch->class]) {
-		send_to_char
-		    ("You better leave the martial arts to fighters.\n\r", ch);
+		send_to_char("You can't do that.\n\r", ch);
 		return;
 	}
 	if ((victim = who_fighting(ch)) == NULL) {
 		send_to_char("You aren't fighting anyone.\n\r", ch);
 		return;
 	}
-	if (ch->mana < skill_table[gsn_punch]->min_mana) {
+	if (!IS_NPC(ch)) {
+		kilimit = ch->train / 10000;
+		physmult = (float) get_curr_str(ch) / 1000 + 1;
+		kicmult = (float) kilimit / 100 + 1;
+	}
+	if (!str_cmp(arg, "heavy") && (kilimit < 4)) {
+		send_to_char("You're unable to augment your strength enough to do that yet.\n\r", ch);
+		return;
+	}
+	if (arg[0] == '\0' && ch->mana < skill_table[gsn_punch]->min_mana) {
+		send_to_char("You don't have enough energy.\n\r", ch);
+		return;
+	}
+	if (!str_cmp(arg, "heavy") && ch->mana < skill_table[gsn_punch]->min_mana * 16) {
 		send_to_char("You don't have enough energy.\n\r", ch);
 		return;
 	}
@@ -2632,38 +2651,88 @@ do_punch(CHAR_DATA * ch, char *argument)
 
 	WAIT_STATE(ch, skill_table[gsn_punch]->beats);
 	if (can_use_skill(ch, number_percent(), gsn_punch)) {
-		learn_from_success(ch, gsn_punch);
+		if (!IS_NPC(ch)) {
+			if (arg[0] == '\0') {
+				argdam = number_range(2, 4) * kicmult;
+				dam = get_attmod(ch, victim) * (argdam * kimult);
+				stat_train(ch, "str", 5);
+				ch->train += 1;
+			}
+			if (!str_cmp(arg, "heavy") {
+				argdam = number_range(10, 12) * kicmult;
+				dam = get_attmod(ch, victim) * (argdam * kimult);
+				stat_train(ch, "str", 10);
+				ch->train += 4;
+			}
+		}
+		if (IS_NPC(ch)) {
+			if (arg[0] == '\0')
+				dam = get_attmod(ch, victim) * (number_range(2, 4) + (get_curr_str(ch) / 50));
+		}
+		if (ch->charge > 0)
+			dam = chargeDamMult(ch, dam);
+		if (arg[0] == '\0') {
 			act(AT_YELLOW,
-				"You land a solid punch on $N.",
+				"You carefully study $N's movements, waiting for the perfect opportunity to strike.",
 				ch, NULL, victim, TO_CHAR);
 			act(AT_YELLOW,
-				"$n lands a solid punch on you.",
-				ch, NULL, victim, TO_VICT);
+				"$N presents an opening, and you hammer $M directly in the stomach! &W[$t]",
+				ch, num_punct(dam), victim, TO_CHAR);
 			act(AT_YELLOW,
-				"$n lands a solid punch on $N.",
-				ch, NULL, victim, TO_NOTVICT);
-		ch->melee = true;
-		global_retcode =
-		    damage(ch, victim,
-		    (get_attmod(ch, victim) * number_range(1, 3)),
-		    TYPE_HIT);
-		ch->melee = false;
-	} else {
-			act(AT_YELLOW, "You swing wildly and miss $N with your punch.", ch, NULL,
-				victim, TO_CHAR);
-			act(AT_YELLOW, "$n swings wildly and misses you with $s punch.", ch, NULL,
-				victim, TO_VICT);
-			act(AT_YELLOW, "$n swings wildly and misses $N with a punch.", ch, NULL,
-				victim, TO_NOTVICT);
-		learn_from_failure(ch, gsn_punch);
-		ch->melee = true;
-		global_retcode = damage(ch, victim, 0, TYPE_HIT);
-		ch->melee = false;
+				"$n carefully studies your movements.", ch,
+				NULL, victim, TO_VICT);
+			act(AT_YELLOW,
+				"$n exploits an opening in your defense and hammers you in the stomach! &W[$t]",
+				ch, num_punct(dam), victim, TO_VICT);
+			act(AT_YELLOW,
+				"$n carefully studies $N's movements.", ch,
+				NULL, victim, TO_NOTVICT);
+			act(AT_YELLOW,
+				"$n exploits an opening in $N's defense and hammers $S in the stomach! &W[$t]",
+				ch, num_punct(dam), victim, TO_NOTVICT);
+		}
+		if (!str_cmp(arg, "heavy") {
+			act(AT_YELLOW,
+				"You rush down $N with an arm drawn back, throwing all of your weight forward.",
+				ch, NULL, victim, TO_CHAR);
+			act(AT_YELLOW,
+				"You crash your fist straight into $N with all your might, crushing $M into the dirt! &W[$t]",
+				ch, num_punct(dam), victim, TO_CHAR);
+			act(AT_YELLOW,
+				"$n rushes you down with an arm drawn back, throwing all of $s weight forward.", ch,
+				NULL, victim, TO_VICT);
+			act(AT_YELLOW,
+				"$n crashes his fist straight into you with all $s might, crushing you into the dirt! &W[$t]",
+				ch, num_punct(dam), victim, TO_VICT);
+			act(AT_YELLOW,
+				"$n rushes down $N with an arm drawn back, throwing all of $s weight forward.", ch,
+				NULL, victim, TO_NOTVICT);
+			act(AT_YELLOW,
+				"$n crashes his fist straight into $N with all $s might, crushing $M into the dirt! &W[$t]",
+				ch, num_punct(dam), victim, TO_NOTVICT);
+		}
+		dam = ki_absorb(victim, ch, dam, gsn_punch);
+		learn_from_success(ch, gsn_punch);
+		global_retcode = damage(ch, victim, dam, TYPE_HIT);
 	}
-
-	if (!is_android_h(ch))
+	else {
+		act(AT_YELLOW, "You missed $N with a clumsily timed punch.", ch,
+		    NULL, victim, TO_CHAR);
+		act(AT_YELLOW, "$n misses you with a clumsily timed punch.", ch, NULL,
+		    victim, TO_VICT);
+		act(AT_YELLOW, "$n missed $N with a clumsily timed punch.", ch, NULL,
+		    victim, TO_NOTVICT);
+		learn_from_failure(ch, gsn_punch);
+		global_retcode = damage(ch, victim, 0, TYPE_HIT);
+	}
+	if (arg[0] == '\0') {
 		ch->mana -= skill_table[gsn_punch]->min_mana;
-	return;
+		return;
+	}
+	else if (!str_cmp(arg, "heavy")) {
+		ch->mana -= skill_table[gsn_punch]->min_mana * 16;
+		return;
+	}
 }
 
 void
@@ -5233,10 +5302,6 @@ do_masenko(CHAR_DATA * ch, char *argument)
 		dam = ki_absorb(victim, ch, dam, gsn_masenko);
 		learn_from_success(ch, gsn_masenko);
 		global_retcode = damage(ch, victim, dam, TYPE_HIT);
-        if (!IS_NPC(ch)) {
-            stat_train(ch, "int", 6);
-			ch->train += 2;
-        }
 	} else {
 		act(AT_YELLOW, "You missed $N with your masenko blast.", ch,
 		    NULL, victim, TO_CHAR);
