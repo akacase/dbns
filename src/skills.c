@@ -2846,50 +2846,137 @@ void do_sting( CHAR_DATA *ch, char *argument )
 
 void do_bash( CHAR_DATA *ch, char *argument )
 {
-    CHAR_DATA *victim;
-    int chance;
+	CHAR_DATA *victim;
+	char 	arg[MAX_INPUT_LENGTH];
+	int 	dam = 0;
+	int		argdam = 0;
+	int		kilimit = 0;
+	float	physmult = 0;
+	float	kicmult = 0;
 
-    if ( IS_NPC(ch) && IS_AFFECTED( ch, AFF_CHARM ) )
-    {
-	send_to_char( "You can't concentrate enough for that.\n\r", ch );
-	return;
-    }
+	one_argument(argument, arg);
+	if (IS_NPC(ch) && is_split(ch)) {
+		if (!ch->master)
+			return;
+		if (!can_use_skill(ch->master, number_percent(), gsn_bash))
+			return;
+	}
+	if (IS_NPC(ch) && IS_AFFECTED(ch, AFF_CHARM)) {
+		send_to_char("You can't concentrate enough for that.\n\r", ch);
+		return;
+	}
+	if ((victim = who_fighting(ch)) == NULL) {
+		send_to_char("You aren't fighting anyone.\n\r", ch);
+		return;
+	}
+	if (!IS_NPC(ch)) {
+		kilimit = ch->train / 10000;
+		physmult = (float) get_curr_str(ch) / 1000 + 1;
+		kicmult = (float) kilimit / 100 + 1;
+	}
+	if (!str_cmp(arg, "lariat") && (kilimit < 8)) {
+		send_to_char("You're unable to augment your strength enough to do that yet.\n\r", ch);
+		return;
+	}
+	if (arg[0] == '\0' && ch->mana < skill_table[gsn_bash]->min_mana) {
+		send_to_char("You don't have enough energy.\n\r", ch);
+		return;
+	}
+	if (!str_cmp(arg, "heavy") && ch->mana < skill_table[gsn_bash]->min_mana * 16) {
+		send_to_char("You don't have enough energy.\n\r", ch);
+		return;
+	}
+	if (ch->focus < skill_table[gsn_bash]->focus) {
+		send_to_char("You need to focus more.\n\r", ch);
+		return;
+	} else
+		ch->focus -= skill_table[gsn_punch]->focus;
 
-    if ( !IS_NPC(ch)
-    &&   ch->level < skill_table[gsn_bash]->skill_level[ch->class] )
-    {
-	send_to_char(
-	    "You better leave the martial arts to fighters.\n\r", ch );
-	return;
-    }
-
-    if ( ( victim = who_fighting( ch ) ) == NULL )
-    {
-	send_to_char( "You aren't fighting anyone.\n\r", ch );
-	return;
-    }
-
-   chance = (((get_curr_dex(victim) + get_curr_str(victim))
-	   -  (get_curr_dex(ch)     + get_curr_str(ch))) * 10) + 10;
-    if ( !IS_NPC(ch) && !IS_NPC(victim) )
-      chance += sysdata.bash_plr_vs_plr;
-    if ( victim->fighting && victim->fighting->who != ch )
-      chance += sysdata.bash_nontank;
-    WAIT_STATE( ch, skill_table[gsn_bash]->beats );
-  if ( can_use_skill(ch, (number_percent () + chance), gsn_bash ) )
-    {
-	learn_from_success( ch, gsn_bash );
-	/* do not change anything here!  -Thoric */
-	WAIT_STATE( victim, 2 * PULSE_VIOLENCE );
-	victim->position = POS_SITTING;
-	global_retcode = damage( ch, victim, number_range( 1, ch->level ), gsn_bash );
-    }
-    else
-    {
-	learn_from_failure( ch, gsn_bash );
-	global_retcode = damage( ch, victim, 0, gsn_bash );
-    }
-    return;
+	WAIT_STATE(ch, skill_table[gsn_bash]->beats);
+	if (can_use_skill(ch, number_percent(), gsn_bash)) {
+		if (!IS_NPC(ch)) {
+			if (arg[0] == '\0') {
+				argdam = number_range(12, 14) * kicmult;
+				dam = get_attmod(ch, victim) * (argdam * physmult);
+				stat_train(ch, "str", 10);
+				ch->train += 5;
+			}
+			if (!str_cmp(arg, "lariat")) {
+				argdam = number_range(33, 37) * kicmult;
+				dam = get_attmod(ch, victim) * (argdam * physmult);
+				stat_train(ch, "str", 14);
+				ch->train += 16;
+			}
+		}
+		if (IS_NPC(ch)) {
+			if (arg[0] == '\0')
+				dam = get_attmod(ch, victim) * (number_range(12, 14) + (get_curr_str(ch) / 45));
+			if (!str_cmp(arg, "lariat"))
+				dam = get_attmod(ch, victim) * (number_range(33, 37) + (get_curr_str(ch) / 45));
+		}
+		if (ch->charge > 0)
+			dam = chargeDamMult(ch, dam);
+		if (arg[0] == '\0') {
+			act(AT_YELLOW,
+				"Through a billowing cloud of dust and debris, you tear forward at $N.",
+				ch, NULL, victim, TO_CHAR);
+			act(AT_YELLOW,
+				"You collide your body directly with $N, sending them careening from the impact! &W[$t]",
+				ch, num_punct(dam), victim, TO_CHAR);
+			act(AT_YELLOW,
+				"$n tears forward at you, leaving a billowing cloud of dust and debris in $s wake.", ch,
+				NULL, victim, TO_VICT);
+			act(AT_YELLOW,
+				"$N's body collides directly with you, sending you careening from the impact! &W[$t]",
+				ch, num_punct(dam), victim, TO_VICT);
+			act(AT_YELLOW,
+				"$n tears forward at $N, leaving a billowing cloud of dust and debris in $s wake.", ch,
+				NULL, victim, TO_NOTVICT);
+			act(AT_YELLOW,
+				"$n's body collides directly with $N, sending them careening from the impact! &W[$t]",
+				ch, num_punct(dam), victim, TO_NOTVICT);
+		}
+		if (!str_cmp(arg, "lariat")) {
+			act(AT_YELLOW,
+				"Through a billowing cloud of dust and debris, you tear forward at $N.",
+				ch, NULL, victim, TO_CHAR);
+			act(AT_YELLOW,
+				"Your arm hooks around $N's neck, dragging them with you directly through the terrain! &W[$t]",
+				ch, num_punct(dam), victim, TO_CHAR);
+			act(AT_YELLOW,
+				"$n tears forward at you, leaving a billowing cloud of dust and debris in $s wake.", ch,
+				NULL, victim, TO_VICT);
+			act(AT_YELLOW,
+				"$n's arm hooks around your neck, dragging you directly through the terrain! &W[$t]",
+				ch, num_punct(dam), victim, TO_VICT);
+			act(AT_YELLOW,
+				"$n tears forward at $N, leaving a billowing cloud of dust and debris in $s wake.", ch,
+				NULL, victim, TO_NOTVICT);
+			act(AT_YELLOW,
+				"$n's arm hooks around $N's neck, dragging them directly through the terrain! &W[$t]",
+				ch, num_punct(dam), victim, TO_NOTVICT);
+		}
+		learn_from_success(ch, gsn_bash);
+		global_retcode = damage(ch, victim, dam, TYPE_HIT);
+	}
+	else {
+		act(AT_YELLOW, "You missed $N with a barreling collision.", ch,
+		    NULL, victim, TO_CHAR);
+		act(AT_YELLOW, "$n misses you with a barreling collision.", ch, NULL,
+		    victim, TO_VICT);
+		act(AT_YELLOW, "$n missed $N with a barreling collision.", ch, NULL,
+		    victim, TO_NOTVICT);
+		learn_from_failure(ch, gsn_punch);
+		global_retcode = damage(ch, victim, 0, TYPE_HIT);
+	}
+	if (arg[0] == '\0') {
+		ch->mana -= skill_table[gsn_bash]->min_mana;
+		return;
+	}
+	else if (!str_cmp(arg, "lariat")) {
+		ch->mana -= skill_table[gsn_bash]->min_mana * 12;
+		return;
+	}
 }
 
 
