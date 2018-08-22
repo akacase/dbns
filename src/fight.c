@@ -1936,7 +1936,7 @@ violence_update(void)
 						ch->pl *= 1.30;
 						ch->powerup += 1;
 						transStatApply(ch, powerupstr, powerupspd, powerupint, powerupcon);
-						if (plmod >= 40
+						if (plmod >= 35
 							&& namekTotal >= 5000) {
 							xSET_BIT((ch)->affected_by, AFF_SNAMEK);
 							xREMOVE_BIT((ch)->affected_by, AFF_POWERCHANNEL);
@@ -1946,7 +1946,7 @@ violence_update(void)
 							ch->pl = ch->exp * 50;
 							transStatApply(ch, onestr, onespd, oneint, onecon);
 						}
-						else if (plmod >= 40
+						else if (plmod >= 35
 							&& namekTotal < 5000) {
 							ch->pl = (ch->exp * 40);
 							act( auraColor, "You stop abruptly, unable to concentrate any further.", ch, NULL, NULL, TO_CHAR );
@@ -1994,7 +1994,7 @@ violence_update(void)
 							ch->pl *= 1.04;
 						}
 						else if (plmod < 400) {
-							ch->pl *= 1.05;
+							ch->pl *= 1.04;
 						}
 						ch->powerup += 1;
 						if (plmod > 600) {
