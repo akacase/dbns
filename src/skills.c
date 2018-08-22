@@ -2853,8 +2853,12 @@ void do_bash( CHAR_DATA *ch, char *argument )
 	int		kilimit = 0;
 	float	physmult = 0;
 	float	kicmult = 0;
+	int 	auraColor = AT_YELLOW;
+	float	splitmult = 0;
 
 	one_argument(argument, arg);
+	if (!IS_NPC(ch))
+		auraColor = ch->pcdata->auraColorPowerUp;
 	if (IS_NPC(ch) && is_split(ch)) {
 		if (!ch->master)
 			return;
@@ -2872,9 +2876,14 @@ void do_bash( CHAR_DATA *ch, char *argument )
 	if (!IS_NPC(ch)) {
 		kilimit = ch->train / 10000;
 		physmult = (float) get_curr_str(ch) / 1000 + 1;
+		splitmult = (float) (get_curr_str(ch) / 1000 + 1) + (get_curr_int(ch) / 2000);
 		kicmult = (float) kilimit / 100 + 1;
 	}
-	if (!str_cmp(arg, "lariat") && (kilimit < 8)) {
+	if (!str_cmp(arg, "lariat") && (kilimit < 4)) {
+		send_to_char("You're unable to augment your strength enough to do that yet.\n\r", ch);
+		return;
+	}
+	if (!str_cmp(arg, "crusher") && (kilimit < 10)) {
 		send_to_char("You're unable to augment your strength enough to do that yet.\n\r", ch);
 		return;
 	}
@@ -2882,7 +2891,11 @@ void do_bash( CHAR_DATA *ch, char *argument )
 		send_to_char("You don't have enough energy.\n\r", ch);
 		return;
 	}
-	if (!str_cmp(arg, "heavy") && ch->mana < skill_table[gsn_bash]->min_mana * 16) {
+	if (!str_cmp(arg, "lariat") && ch->mana < skill_table[gsn_bash]->min_mana * 12) {
+		send_to_char("You don't have enough energy.\n\r", ch);
+		return;
+	}
+	if (!str_cmp(arg, "crusher") && ch->mana < skill_table[gsn_bash]->min_mana * 16) {
 		send_to_char("You don't have enough energy.\n\r", ch);
 		return;
 	}
@@ -2907,12 +2920,21 @@ void do_bash( CHAR_DATA *ch, char *argument )
 				stat_train(ch, "str", 14);
 				ch->train += 16;
 			}
+			if (!str_cmp(arg, "crusher")) {
+				argdam = number_range(33, 37) * kicmult;
+				dam = get_attmod(ch, victim) * (argdam * splitmult);
+				stat_train(ch, "str", 14);
+				stat_train(ch, "int", 7);
+				ch->train += 18;
+			}
 		}
 		if (IS_NPC(ch)) {
 			if (arg[0] == '\0')
 				dam = get_attmod(ch, victim) * (number_range(12, 14) + (get_curr_str(ch) / 45));
 			if (!str_cmp(arg, "lariat"))
 				dam = get_attmod(ch, victim) * (number_range(33, 37) + (get_curr_str(ch) / 45));
+			if (!str_cmp(arg, "crusher"))
+				dam = get_attmod(ch, victim) * (number_range(33, 37) + (get_curr_str(ch) / 40));
 		}
 		if (ch->charge > 0)
 			dam = chargeDamMult(ch, dam);
@@ -2956,6 +2978,35 @@ void do_bash( CHAR_DATA *ch, char *argument )
 				"$n's arm hooks around $N's neck, dragging them directly through the terrain! &W[$t]",
 				ch, num_punct(dam), victim, TO_NOTVICT);
 		}
+		if (!str_cmp(arg, "crusher")) {
+			act(auraColor,
+				"Through a billowing cloud of dust and debris, you tear forward at $N.",
+				ch, NULL, victim, TO_CHAR);
+			act(auraColor,
+				"Your open palm collides directly with $N's chest, carrying $M along with",
+				ch, NULL, victim, TO_CHAR);
+			act(auraColor,
+				"an explosive blast of ki that launches $S into the distance! &W[$t]",
+				ch, num_punct(dam), victim, TO_CHAR);
+			act(auraColor,
+				"$n tears forward at you, leaving a billowing cloud of dust and debris in $s wake.", ch,
+				NULL, victim, TO_VICT);
+			act(auraColor,
+				"$n's open palm collides directly with your chest, carrying you along with'", ch,
+				NULL, victim, TO_VICT);
+			act(auraColor,
+				"an explosive blast of ki that launches you into the distance! &W[$t]",
+				ch, num_punct(dam), victim, TO_VICT);
+			act(auraColor,
+				"$n tears forward at $N, leaving a billowing cloud of dust and debris in $s wake.", ch,
+				NULL, victim, TO_NOTVICT);
+			act(auraColor,
+				"$n's open palm collides directly with $N's chest, carrying $M along with.", ch,
+				NULL, victim, TO_NOTVICT);
+			act(auraColor,
+				"an explosive blast of ki that launches $S into the distance! &W[$t]",
+				ch, num_punct(dam), victim, TO_NOTVICT);
+		}
 		learn_from_success(ch, gsn_bash);
 		global_retcode = damage(ch, victim, dam, TYPE_HIT);
 	}
@@ -2975,6 +3026,10 @@ void do_bash( CHAR_DATA *ch, char *argument )
 	}
 	else if (!str_cmp(arg, "lariat")) {
 		ch->mana -= skill_table[gsn_bash]->min_mana * 12;
+		return;
+	}
+	else if (!str_cmp(arg, "crusher")) {
+		ch->mana -= skill_table[gsn_bash]->min_mana * 16;
 		return;
 	}
 }
