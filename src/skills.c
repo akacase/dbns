@@ -2876,7 +2876,7 @@ void do_bash( CHAR_DATA *ch, char *argument )
 	if (!IS_NPC(ch)) {
 		kilimit = ch->train / 10000;
 		physmult = (float) get_curr_str(ch) / 1000 + 1;
-		splitmult = (float) (get_curr_str(ch) / 1000 + 1) + (get_curr_int(ch) / 2000);
+		splitmult = (float) (get_curr_str(ch) / 1000 + 1) + (float) (get_curr_int(ch) / 2000);
 		kicmult = (float) kilimit / 100 + 1;
 	}
 	if (!str_cmp(arg, "lariat") && (kilimit < 4)) {
