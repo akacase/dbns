@@ -2986,7 +2986,7 @@ void do_bash( CHAR_DATA *ch, char *argument )
 				"Your open palm collides directly with $N's chest, carrying $M along with",
 				ch, NULL, victim, TO_CHAR);
 			act(auraColor,
-				"an explosive blast of ki that launches $S into the distance! &W[$t]",
+				"an explosive blast of ki that launches $M into the distance! &W[$t]",
 				ch, num_punct(dam), victim, TO_CHAR);
 			act(auraColor,
 				"$n tears forward at you, leaving a billowing cloud of dust and debris in $s wake.", ch,
@@ -3004,7 +3004,7 @@ void do_bash( CHAR_DATA *ch, char *argument )
 				"$n's open palm collides directly with $N's chest, carrying $M along with.", ch,
 				NULL, victim, TO_NOTVICT);
 			act(auraColor,
-				"an explosive blast of ki that launches $S into the distance! &W[$t]",
+				"an explosive blast of ki that launches $M into the distance! &W[$t]",
 				ch, num_punct(dam), victim, TO_NOTVICT);
 		}
 		learn_from_success(ch, gsn_bash);

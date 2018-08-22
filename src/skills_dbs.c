@@ -9329,7 +9329,7 @@ do_destructive_wave(CHAR_DATA * ch, char *argument)
 				"You hold one arm straight, palm facing $N, your free hand grasping your forearm to steady your aim.",
 				ch, NULL, victim, TO_CHAR);
 			act(z,
-				"A gigantic wave of energy nearly touches the sky, completely enfulfing $N! &W[$t]",
+				"A gigantic wave of energy nearly touches the sky, completely engulfing $N! &W[$t]",
 				ch, num_punct(dam), victim, TO_CHAR);
 			act(z,
 				"$n holds one arm straight, palm facing you, $s free hand grasping $s forearm to steady $s aim.",
@@ -9341,7 +9341,7 @@ do_destructive_wave(CHAR_DATA * ch, char *argument)
 				"$n holds one arm straight, palm facing $N, $s free hand grasping $s forearm to steady $s aim.",
 				ch, NULL, victim, TO_NOTVICT);
 			act(z,
-				"A gigantic wave of energy nearly touches the sky, completely enfulfing $N! &W[$t]",
+				"A gigantic wave of energy nearly touches the sky, completely engulfing $N! &W[$t]",
 				ch, num_punct(dam), victim, TO_NOTVICT);
 		}
 
