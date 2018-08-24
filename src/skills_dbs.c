@@ -702,7 +702,7 @@ rage2(CHAR_DATA * ch, CHAR_DATA * victim)
 		if (ch->rage < 800)
 			return;
 			
-		if (ch->train < 1305000)
+		if (ch->train < 2610000)
 			return;
 
 		switch (number_range(1, 5)) {
@@ -923,7 +923,7 @@ rage3(CHAR_DATA * ch, CHAR_DATA * victim)
 		if (ch->rage < 1000)
 			return;
 			
-		if (ch->train < 1755000)
+		if (ch->train < 3510000)
 			return;
 
 		if (ch->pcdata->learned[gsn_ssj3] > 0)
@@ -1104,7 +1104,7 @@ rage4(CHAR_DATA * ch, CHAR_DATA * victim)
 		if (ch->rage < 1500)
 			return;
 			
-		if (ch->train < 2340000)
+		if (ch->train < 4680000)
 			return;
 
 		if (ch->pcdata->learned[gsn_ssj4] > 0)
@@ -1305,7 +1305,7 @@ rage5(CHAR_DATA * ch, CHAR_DATA * victim)
 		if (ch->rage < 1500)
 			return;
 			
-		if (ch->train < 2835000)
+		if (ch->train < 5670000)
 			return;
 
 		if (ch->pcdata->learned[gsn_sgod] > 0)
