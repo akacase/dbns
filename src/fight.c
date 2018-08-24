@@ -3815,45 +3815,55 @@ multi_hit(CHAR_DATA * ch, CHAR_DATA * victim, int dt)
 		}
 		return retcode;
 	}
-	if (xIS_SET((ch)->affected_by, AFF_BRUISERSTYLE))
-		chance = 95 / 1.5;
+	chance = IS_NPC(ch) ? ch->level
+	    : (int)((LEARNED(ch, gsn_tail_attack) + dual_bonus) / 1.5);
 	if (number_percent() < chance) {
+		learn_from_success(ch, gsn_tail_attack);
 		retcode = one_hit(ch, victim, dt);
 		if (retcode != rNONE || who_fighting(ch) != victim)
 			return retcode;
-	}
+	} else
+		learn_from_failure(ch, gsn_tail_attack);
 
-	if (xIS_SET((ch)->affected_by, AFF_BRUISERSTYLE))
-		chance = 95 / 1.5;
+	chance = IS_NPC(ch) ? ch->level
+	    : (int)((LEARNED(ch, gsn_second_attack) + dual_bonus) / 1.5);
 	if (number_percent() < chance) {
+		learn_from_success(ch, gsn_second_attack);
 		retcode = one_hit(ch, victim, dt);
 		if (retcode != rNONE || who_fighting(ch) != victim)
 			return retcode;
-	}
+	} else
+		learn_from_failure(ch, gsn_second_attack);
 
-	if (xIS_SET((ch)->affected_by, AFF_BRUISERSTYLE))
-		chance = 95 / 1.5;
+	chance = IS_NPC(ch) ? ch->level
+	    : (int)((LEARNED(ch, gsn_third_attack) + (dual_bonus * 1.5)) / 2);
 	if (number_percent() < chance) {
+		learn_from_success(ch, gsn_third_attack);
 		retcode = one_hit(ch, victim, dt);
 		if (retcode != rNONE || who_fighting(ch) != victim)
 			return retcode;
-	}
+	} else
+		learn_from_failure(ch, gsn_third_attack);
 
-	if (xIS_SET((ch)->affected_by, AFF_BRUISERSTYLE))
-		chance = 95 / 1.5;
+	chance = IS_NPC(ch) ? ch->level
+	    : (int)((LEARNED(ch, gsn_fourth_attack) + (dual_bonus * 2)) / 3);
 	if (number_percent() < chance) {
+		learn_from_success(ch, gsn_fourth_attack);
 		retcode = one_hit(ch, victim, dt);
 		if (retcode != rNONE || who_fighting(ch) != victim)
 			return retcode;
-	}
+	} else
+		learn_from_failure(ch, gsn_fourth_attack);
 
-	if (xIS_SET((ch)->affected_by, AFF_BRUISERSTYLE))
-		chance = 95 / 1.5;
+	chance = IS_NPC(ch) ? ch->level
+	    : (int)((LEARNED(ch, gsn_fifth_attack) + (dual_bonus * 3)) / 4);
 	if (number_percent() < chance) {
+		learn_from_success(ch, gsn_fifth_attack);
 		retcode = one_hit(ch, victim, dt);
 		if (retcode != rNONE || who_fighting(ch) != victim)
 			return retcode;
-	}
+	} else
+		learn_from_failure(ch, gsn_fifth_attack);
 
 	retcode = rNONE;
 
