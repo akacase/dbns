@@ -4180,6 +4180,16 @@ void do_train(CHAR_DATA *ch, char *argument)
 			pager_printf(ch, "&GThat's far too much!\n\r", NULL);
 			return;
 		}
+	}
+	if (!str_cmp(arg, "crank")) {
+		if ((ch->gravSetting + 5) < (acc + 20 + gravres)) {
+			ch->gravSetting += 5;
+			pager_printf(ch, "&GYou crank the dial way up to %d times gravity.\n\r", ch->gravSetting);
+			return;
+		} else if ((ch->gravSetting + 5) >= (acc + gravres + 20)) {
+			pager_printf(ch, "&GThat's far too much!\n\r", NULL);
+			return;
+		}
 	} else if (!str_cmp(arg, "decrease")) {
 		if ((ch->gravSetting - 1) < 1) {
 			ch->gravSetting = 1;
