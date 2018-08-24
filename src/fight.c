@@ -1120,10 +1120,6 @@ violence_update(void)
 			safemaximum = ((get_curr_int(ch) * 0.03) + 1);
 			form_mastery = (ch->train / 90000);
 			plmod = (ch->pl / ch->exp);
-			if (!IS_NPC) {
-				stat_train(ch, "int", 10);
-				ch->train += 25;
-			}
 			if( !IS_NPC( ch ) && ch->pcdata->auraColorPowerUp > 0 )
 				auraColor = ch->pcdata->auraColorPowerUp;
 			if (form_mastery < 1)
@@ -2133,9 +2129,6 @@ violence_update(void)
 				}
 				ch->pl *= 1.01;
 				ch->powerup += 1;
-				ch->train += 50;
-				stat_train(ch, "int", 15);
-				stat_train(ch, "con", 15);
 				if ((ch->mana - danger) < 0)
 					ch->mana = 0;
 					
