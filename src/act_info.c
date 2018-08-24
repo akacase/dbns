@@ -4166,6 +4166,11 @@ void do_train(CHAR_DATA *ch, char *argument)
 		pager_printf(ch, "&wThe machine is currently set to %d times gravity.\n\r", ch->gravSetting);
 		return;
 	}
+	if (!str_cmp(arg, "check")) {
+			pager_printf(ch, "&GYou may safely train in %d times gravity.&D\n\r", acc);
+			pager_printf(ch, "&GThe machine is currently set to %d times gravity.&D\n\r", ch->gravSetting);
+			return;
+	}
 	if (!str_cmp(arg, "increase")) {
 		if ((ch->gravSetting + 1) < (acc + 20 + gravres)) {
 			ch->gravSetting += 1;

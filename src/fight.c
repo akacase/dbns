@@ -2629,16 +2629,6 @@ violence_update(void)
 					ch->mana -= gravdam;
 					if (ch->desc)
 						ch->gravExp += 3;
-						if (ch->gravExp >= 400000) {
-							if (acc > (ch->max_energy))
-								send_to_char( "&GYou've mastered a new level of gravity!&D\n\r", ch);
-								ch->max_energy += 1;
-						}
-						else if (ch->gravExp < 400000) {
-							if (acc > (ch->max_energy))
-								send_to_char( "&GYou've mastered a new level of gravity!&D\n\r", ch);
-								ch->max_energy += 1;
-						}
 				}
 				else if (ch->mana - gravdam <= 0) {
 					ch->mana = 0;
@@ -2772,16 +2762,6 @@ violence_update(void)
 			gain_exp(ch, xp_gain);
 			if (safediff > 1)
 				ch->gravExp += (increase + safediff);
-				if (ch->gravExp >= 400000) {
-					if (acc > (ch->max_energy))
-						send_to_char( "&GYou've mastered a new level of gravity!&D\n\r", ch);
-						ch->max_energy += 1;
-				}
-				else if (ch->gravExp < 400000) {
-					if (acc > (ch->max_energy))
-						send_to_char( "&GYou've mastered a new level of gravity!&D\n\r", ch);
-						ch->max_energy += 1;
-				}
 			if (xp_gain > 1) {
 				sprintf(buf, "Your power level increases by %s points.", num_punct(xp_gain));
 				act(AT_HIT, buf, ch, NULL, NULL, TO_CHAR);
@@ -2817,16 +2797,6 @@ violence_update(void)
 		    pager_printf(ch, "&GYou perform a push-up in %d times gravity, your strength steadily building.\n\r", gravLevel);
 			if (safediff > 1)
 				ch->gravExp += (increase + safediff);
-				if (ch->gravExp >= 400000) {
-					if (acc > (ch->max_energy))
-						send_to_char( "&GYou've mastered a new level of gravity!&D\n\r", ch);
-						ch->max_energy += 1;
-				}
-				else if (ch->gravExp < 400000) {
-					if (acc > (ch->max_energy))
-						send_to_char( "&GYou've mastered a new level of gravity!&D\n\r", ch);
-						ch->max_energy += 1;
-				}
 			if (xp_gain > 1) {
 				sprintf(buf, "Your power level increases by %s points.", num_punct(xp_gain));
 				act(AT_HIT, buf, ch, NULL, NULL, TO_CHAR);
@@ -2861,16 +2831,6 @@ violence_update(void)
 		    gain_exp(ch, xp_gain);
 			if (safediff > 1)
 				ch->gravExp += (increase + safediff);
-				if (ch->gravExp >= 400000) {
-					if (acc > (ch->max_energy))
-						send_to_char( "&GYou've mastered a new level of gravity!&D\n\r", ch);
-						ch->max_energy += 1;
-				}
-				else if (ch->gravExp < 400000) {
-					if (acc > (ch->max_energy))
-						send_to_char( "&GYou've mastered a new level of gravity!&D\n\r", ch);
-						ch->max_energy += 1;
-				}
 		    pager_printf(ch, "&GPushing past your normal limits, you perform a series of one-armed push-ups!\n\r", gravLevel);
 		    act(AT_WHITE, "$n does a set of one-armed pushups in rapid-fire succession.", ch, NULL, NULL, TO_NOTVICT);
 			sprintf(buf, "Your power level suddenly increases by %s points.", num_punct(xp_gain));
@@ -2953,16 +2913,6 @@ violence_update(void)
 			gain_exp(ch, xp_gain);
 			if (safediff > 1)
 				ch->gravExp += (increase + safediff);
-				if (ch->gravExp >= 400000) {
-					if (acc > (ch->max_energy))
-						send_to_char( "&GYou've mastered a new level of gravity!&D\n\r", ch);
-						ch->max_energy += 1;
-				}
-				else if (ch->gravExp < 400000) {
-					if (acc > (ch->max_energy))
-						send_to_char( "&GYou've mastered a new level of gravity!&D\n\r", ch);
-						ch->max_energy += 1;
-				}
 			if (xp_gain > 1) {
 				sprintf(buf, "Your power level increases by %s points.", num_punct(xp_gain));
 				act(AT_HIT, buf, ch, NULL, NULL, TO_CHAR);
@@ -2998,16 +2948,6 @@ violence_update(void)
 		    pager_printf(ch, "&GYou perform a combo in %d times gravity while skillfully dodging from side to side.\n\r", gravLevel);
 			if (safediff > 1)
 				ch->gravExp += (increase + safediff);
-				if (ch->gravExp >= 400000) {
-					if (acc > (ch->max_energy))
-						send_to_char( "&GYou've mastered a new level of gravity!&D\n\r", ch);
-						ch->max_energy += 1;
-				}
-				else if (ch->gravExp < 400000) {
-					if (acc > (ch->max_energy))
-						send_to_char( "&GYou've mastered a new level of gravity!&D\n\r", ch);
-						ch->max_energy += 1;
-				}
 			if (xp_gain > 1) {
 				sprintf(buf, "Your power level increases by %s points.", num_punct(xp_gain));
 				act(AT_HIT, buf, ch, NULL, NULL, TO_CHAR);
@@ -3042,16 +2982,6 @@ violence_update(void)
 		    gain_exp(ch, xp_gain);
 			if (safediff > 1)
 				ch->gravExp += (increase + safediff);
-				if (ch->gravExp >= 400000) {
-					if (acc > (ch->max_energy))
-						send_to_char( "&GYou've mastered a new level of gravity!&D\n\r", ch);
-						ch->max_energy += 1;
-				}
-				else if (ch->gravExp < 400000) {
-					if (acc > (ch->max_energy))
-						send_to_char( "&GYou've mastered a new level of gravity!&D\n\r", ch);
-						ch->max_energy += 1;
-				}
 		    pager_printf(ch, "&GBreathing deeply, you throw all of your energy into a vicious jab-cross-hook-knee combination!\n\r", gravLevel);
 		    act(AT_WHITE, "$n drives forward with a long combo, bouncing light on $s feet.", ch, NULL, NULL, TO_NOTVICT);
 			sprintf(buf, "Your power level suddenly increases by %s points.", num_punct(xp_gain));
@@ -3134,16 +3064,6 @@ violence_update(void)
 			gain_exp(ch, xp_gain);
 			if (safediff > 1)
 				ch->gravExp += (increase + safediff);
-				if (ch->gravExp >= 400000) {
-					if (acc > (ch->max_energy))
-						send_to_char( "&GYou've mastered a new level of gravity!&D\n\r", ch);
-						ch->max_energy += 1;
-				}
-				else if (ch->gravExp < 400000) {
-					if (acc > (ch->max_energy))
-						send_to_char( "&GYou've mastered a new level of gravity!&D\n\r", ch);
-						ch->max_energy += 1;
-				}
 			if (xp_gain > 1) {
 				sprintf(buf, "Your power level increases by %s points.", num_punct(xp_gain));
 				act(AT_HIT, buf, ch, NULL, NULL, TO_CHAR);
@@ -3179,16 +3099,6 @@ violence_update(void)
 		    pager_printf(ch, "&GYou crank up the dial well beyond %d times gravity, fighting just to stay on your feet.\n\r", gravLevel);
 			if (safediff > 1)
 				ch->gravExp += (increase + safediff);
-				if (ch->gravExp >= 400000) {
-					if (acc > (ch->max_energy))
-						send_to_char( "&GYou've mastered a new level of gravity!&D\n\r", ch);
-						ch->max_energy += 1;
-				}
-				else if (ch->gravExp < 400000) {
-					if (acc > (ch->max_energy))
-						send_to_char( "&GYou've mastered a new level of gravity!&D\n\r", ch);
-						ch->max_energy += 1;
-				}
 			if (xp_gain > 1) {
 				sprintf(buf, "Your power level increases by %s points.", num_punct(xp_gain));
 				act(AT_HIT, buf, ch, NULL, NULL, TO_CHAR);
@@ -3223,16 +3133,6 @@ violence_update(void)
 		    gain_exp(ch, xp_gain);
 			if (safediff > 1)
 				ch->gravExp += (increase + safediff);
-				if (ch->gravExp >= 400000) {
-					if (acc > (ch->max_energy))
-						send_to_char( "&GYou've mastered a new level of gravity!&D\n\r", ch);
-						ch->max_energy += 1;
-				}
-				else if (ch->gravExp < 400000) {
-					if (acc > (ch->max_energy))
-						send_to_char( "&GYou've mastered a new level of gravity!&D\n\r", ch);
-						ch->max_energy += 1;
-				}
 		    pager_printf(ch, "&GYou push the dial even further, gritting your teeth and nearly crushing your body to the floor!\n\r", gravLevel);
 		    act(AT_WHITE, "$n endures a level of gravity far beyond their normal limits, fighting just to stay alive!", ch, NULL, NULL, TO_NOTVICT);
 			sprintf(buf, "Your power level suddenly increases by %s points.", num_punct(xp_gain));
@@ -3315,16 +3215,6 @@ violence_update(void)
 			gain_exp(ch, xp_gain);
 			if (safediff > 1)
 				ch->gravExp += (increase + safediff);
-				if (ch->gravExp >= 400000) {
-					if (acc > (ch->max_energy))
-						send_to_char( "&GYou've mastered a new level of gravity!&D\n\r", ch);
-						ch->max_energy += 1;
-				}
-				else if (ch->gravExp < 400000) {
-					if (acc > (ch->max_energy))
-						send_to_char( "&GYou've mastered a new level of gravity!&D\n\r", ch);
-						ch->max_energy += 1;
-				}
 			if (xp_gain > 1) {
 				sprintf(buf, "Your power level increases by %s points.", num_punct(xp_gain));
 				act(AT_HIT, buf, ch, NULL, NULL, TO_CHAR);
@@ -3360,16 +3250,6 @@ violence_update(void)
 		    pager_printf(ch, "&GYou focus your mind's eye in %d times gravity, shutting all else out with extreme calm.\n\r", gravLevel);
 			if (safediff > 1)
 				ch->gravExp += (increase + safediff);
-				if (ch->gravExp >= 400000) {
-					if (acc > (ch->max_energy))
-						send_to_char( "&GYou've mastered a new level of gravity!&D\n\r", ch);
-						ch->max_energy += 1;
-				}
-				else if (ch->gravExp < 400000) {
-					if (acc > (ch->max_energy))
-						send_to_char( "&GYou've mastered a new level of gravity!&D\n\r", ch);
-						ch->max_energy += 1;
-				}
 			if (xp_gain > 1) {
 				sprintf(buf, "Your power level increases by %s points.", num_punct(xp_gain));
 				act(AT_HIT, buf, ch, NULL, NULL, TO_CHAR);
@@ -3404,16 +3284,6 @@ violence_update(void)
 		    gain_exp(ch, xp_gain);
 			if (safediff > 1)
 				ch->gravExp += (increase + safediff);
-				if (ch->gravExp >= 400000) {
-					if (acc > (ch->max_energy))
-						send_to_char( "&GYou've mastered a new level of gravity!&D\n\r", ch);
-						ch->max_energy += 1;
-				}
-				else if (ch->gravExp < 400000) {
-					if (acc > (ch->max_energy))
-						send_to_char( "&GYou've mastered a new level of gravity!&D\n\r", ch);
-						ch->max_energy += 1;
-				}
 		    pager_printf(ch, "&GYour mind clears completely and you momentarily achieve an overwhelming sense of inner peace.\n\r", gravLevel);
 		    act(AT_WHITE, "$n sits in peaceful meditation, displaying absolutely no outward emotion.", ch, NULL, NULL, TO_NOTVICT);
 			sprintf(buf, "Your power level suddenly increases by %s points.", num_punct(xp_gain));
