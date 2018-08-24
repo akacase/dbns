@@ -2654,7 +2654,7 @@ struct char_data {
 	long long int gravExp;
 	int 	mana;
 	int 	max_mana;
-	sh_int 	max_energy;
+	int 	max_energy;
 	sh_int 	move;
 	sh_int 	max_move;
 	sh_int 	practice;
