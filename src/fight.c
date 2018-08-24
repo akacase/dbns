@@ -2630,12 +2630,12 @@ violence_update(void)
 					if (ch->desc)
 						ch->gravExp += 3;
 						if (ch->gravExp >= 400000) {
-							if (acc >= (ch->max_energy + 301))
+							if (acc > (ch->max_energy))
 								send_to_char( "&GYou've mastered a new level of gravity!&D\n\r", ch);
 								ch->max_energy += 1;
 						}
 						else if (ch->gravExp < 400000) {
-							if (acc >= (ch->max_energy + 1))
+							if (acc > (ch->max_energy))
 								send_to_char( "&GYou've mastered a new level of gravity!&D\n\r", ch);
 								ch->max_energy += 1;
 						}
@@ -2773,12 +2773,12 @@ violence_update(void)
 			if (safediff > 1)
 				ch->gravExp += (increase + safediff);
 				if (ch->gravExp >= 400000) {
-					if (acc >= (ch->max_energy + 301))
+					if (acc > (ch->max_energy))
 						send_to_char( "&GYou've mastered a new level of gravity!&D\n\r", ch);
 						ch->max_energy += 1;
 				}
 				else if (ch->gravExp < 400000) {
-					if (acc >= (ch->max_energy + 1))
+					if (acc > (ch->max_energy))
 						send_to_char( "&GYou've mastered a new level of gravity!&D\n\r", ch);
 						ch->max_energy += 1;
 				}
@@ -2818,12 +2818,12 @@ violence_update(void)
 			if (safediff > 1)
 				ch->gravExp += (increase + safediff);
 				if (ch->gravExp >= 400000) {
-					if (acc >= (ch->max_energy + 301))
+					if (acc > (ch->max_energy))
 						send_to_char( "&GYou've mastered a new level of gravity!&D\n\r", ch);
 						ch->max_energy += 1;
 				}
 				else if (ch->gravExp < 400000) {
-					if (acc >= (ch->max_energy + 1))
+					if (acc > (ch->max_energy))
 						send_to_char( "&GYou've mastered a new level of gravity!&D\n\r", ch);
 						ch->max_energy += 1;
 				}
@@ -2862,12 +2862,12 @@ violence_update(void)
 			if (safediff > 1)
 				ch->gravExp += (increase + safediff);
 				if (ch->gravExp >= 400000) {
-					if (acc >= (ch->max_energy + 301))
+					if (acc > (ch->max_energy))
 						send_to_char( "&GYou've mastered a new level of gravity!&D\n\r", ch);
 						ch->max_energy += 1;
 				}
 				else if (ch->gravExp < 400000) {
-					if (acc >= (ch->max_energy + 1))
+					if (acc > (ch->max_energy))
 						send_to_char( "&GYou've mastered a new level of gravity!&D\n\r", ch);
 						ch->max_energy += 1;
 				}
@@ -2954,12 +2954,12 @@ violence_update(void)
 			if (safediff > 1)
 				ch->gravExp += (increase + safediff);
 				if (ch->gravExp >= 400000) {
-					if (acc >= (ch->max_energy + 301))
+					if (acc > (ch->max_energy))
 						send_to_char( "&GYou've mastered a new level of gravity!&D\n\r", ch);
 						ch->max_energy += 1;
 				}
 				else if (ch->gravExp < 400000) {
-					if (acc >= (ch->max_energy + 1))
+					if (acc > (ch->max_energy))
 						send_to_char( "&GYou've mastered a new level of gravity!&D\n\r", ch);
 						ch->max_energy += 1;
 				}
@@ -2999,12 +2999,12 @@ violence_update(void)
 			if (safediff > 1)
 				ch->gravExp += (increase + safediff);
 				if (ch->gravExp >= 400000) {
-					if (acc >= (ch->max_energy + 301))
+					if (acc > (ch->max_energy))
 						send_to_char( "&GYou've mastered a new level of gravity!&D\n\r", ch);
 						ch->max_energy += 1;
 				}
 				else if (ch->gravExp < 400000) {
-					if (acc >= (ch->max_energy + 1))
+					if (acc > (ch->max_energy))
 						send_to_char( "&GYou've mastered a new level of gravity!&D\n\r", ch);
 						ch->max_energy += 1;
 				}
@@ -3043,12 +3043,12 @@ violence_update(void)
 			if (safediff > 1)
 				ch->gravExp += (increase + safediff);
 				if (ch->gravExp >= 400000) {
-					if (acc >= (ch->max_energy + 301))
+					if (acc > (ch->max_energy))
 						send_to_char( "&GYou've mastered a new level of gravity!&D\n\r", ch);
 						ch->max_energy += 1;
 				}
 				else if (ch->gravExp < 400000) {
-					if (acc >= (ch->max_energy + 1))
+					if (acc > (ch->max_energy))
 						send_to_char( "&GYou've mastered a new level of gravity!&D\n\r", ch);
 						ch->max_energy += 1;
 				}
@@ -3135,12 +3135,12 @@ violence_update(void)
 			if (safediff > 1)
 				ch->gravExp += (increase + safediff);
 				if (ch->gravExp >= 400000) {
-					if (acc >= (ch->max_energy + 301))
+					if (acc > (ch->max_energy))
 						send_to_char( "&GYou've mastered a new level of gravity!&D\n\r", ch);
 						ch->max_energy += 1;
 				}
 				else if (ch->gravExp < 400000) {
-					if (acc >= (ch->max_energy + 1))
+					if (acc > (ch->max_energy))
 						send_to_char( "&GYou've mastered a new level of gravity!&D\n\r", ch);
 						ch->max_energy += 1;
 				}
@@ -3180,12 +3180,12 @@ violence_update(void)
 			if (safediff > 1)
 				ch->gravExp += (increase + safediff);
 				if (ch->gravExp >= 400000) {
-					if (acc >= (ch->max_energy + 301))
+					if (acc > (ch->max_energy))
 						send_to_char( "&GYou've mastered a new level of gravity!&D\n\r", ch);
 						ch->max_energy += 1;
 				}
 				else if (ch->gravExp < 400000) {
-					if (acc >= (ch->max_energy + 1))
+					if (acc > (ch->max_energy))
 						send_to_char( "&GYou've mastered a new level of gravity!&D\n\r", ch);
 						ch->max_energy += 1;
 				}
@@ -3224,12 +3224,12 @@ violence_update(void)
 			if (safediff > 1)
 				ch->gravExp += (increase + safediff);
 				if (ch->gravExp >= 400000) {
-					if (acc >= (ch->max_energy + 301))
+					if (acc > (ch->max_energy))
 						send_to_char( "&GYou've mastered a new level of gravity!&D\n\r", ch);
 						ch->max_energy += 1;
 				}
 				else if (ch->gravExp < 400000) {
-					if (acc >= (ch->max_energy + 1))
+					if (acc > (ch->max_energy))
 						send_to_char( "&GYou've mastered a new level of gravity!&D\n\r", ch);
 						ch->max_energy += 1;
 				}
@@ -3316,12 +3316,12 @@ violence_update(void)
 			if (safediff > 1)
 				ch->gravExp += (increase + safediff);
 				if (ch->gravExp >= 400000) {
-					if (acc >= (ch->max_energy + 301))
+					if (acc > (ch->max_energy))
 						send_to_char( "&GYou've mastered a new level of gravity!&D\n\r", ch);
 						ch->max_energy += 1;
 				}
 				else if (ch->gravExp < 400000) {
-					if (acc >= (ch->max_energy + 1))
+					if (acc > (ch->max_energy))
 						send_to_char( "&GYou've mastered a new level of gravity!&D\n\r", ch);
 						ch->max_energy += 1;
 				}
@@ -3361,12 +3361,12 @@ violence_update(void)
 			if (safediff > 1)
 				ch->gravExp += (increase + safediff);
 				if (ch->gravExp >= 400000) {
-					if (acc >= (ch->max_energy + 301))
+					if (acc > (ch->max_energy))
 						send_to_char( "&GYou've mastered a new level of gravity!&D\n\r", ch);
 						ch->max_energy += 1;
 				}
 				else if (ch->gravExp < 400000) {
-					if (acc >= (ch->max_energy + 1))
+					if (acc > (ch->max_energy))
 						send_to_char( "&GYou've mastered a new level of gravity!&D\n\r", ch);
 						ch->max_energy += 1;
 				}
@@ -3405,12 +3405,12 @@ violence_update(void)
 			if (safediff > 1)
 				ch->gravExp += (increase + safediff);
 				if (ch->gravExp >= 400000) {
-					if (acc >= (ch->max_energy + 301))
+					if (acc > (ch->max_energy))
 						send_to_char( "&GYou've mastered a new level of gravity!&D\n\r", ch);
 						ch->max_energy += 1;
 				}
 				else if (ch->gravExp < 400000) {
-					if (acc >= (ch->max_energy + 1))
+					if (acc > (ch->max_energy))
 						send_to_char( "&GYou've mastered a new level of gravity!&D\n\r", ch);
 						ch->max_energy += 1;
 				}
