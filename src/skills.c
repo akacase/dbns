@@ -3017,7 +3017,7 @@ void do_bash( CHAR_DATA *ch, char *argument )
 		    victim, TO_VICT);
 		act(AT_YELLOW, "$n missed $N with a barreling collision.", ch, NULL,
 		    victim, TO_NOTVICT);
-		learn_from_failure(ch, gsn_punch);
+		learn_from_failure(ch, gsn_bash);
 		global_retcode = damage(ch, victim, 0, TYPE_HIT);
 	}
 	if (arg[0] == '\0') {
