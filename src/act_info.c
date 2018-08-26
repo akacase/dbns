@@ -2856,7 +2856,7 @@ do_hset(CHAR_DATA * ch, char *argument)
 		log_string_plus("Saving help.are...", LOG_NORMAL,
 		    LEVEL_GREATER);
 
-		rename("help.are", "help.are.bak");
+		rename(HELP_FILE, HELP_FILE_BAK);
 		if ((fpout = fopen(HELP_FILE, "w")) == NULL) {
 			bug("hset save: fopen", 0);
 			perror("help.are");

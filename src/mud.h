@@ -5262,7 +5262,8 @@ DECLARE_SPELL_FUN(spell_sensu_bean);
 							 * protect */
 #define CLASSDIR	PREFIX_DIR "/classes/"
 #define RACEDIR 	PREFIX_DIR "/races/"
-#define HELP_FILE	SYSTEM_DIR "help.txt"	/* For undefined helps */
+#define HELP_FILE	AREA_DIR "help.are"	/* For undefined helps */
+#define HELP_FILE_BAK	AREA_DIR "help.are.bak"	/* For undefined helps */
 
 #define SHIP_DIR        PREFIX_DIR "/space/"
 #define SPACE_DIR       PREFIX_DIR "/space/"
