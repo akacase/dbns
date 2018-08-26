@@ -2887,6 +2887,10 @@ void do_bash( CHAR_DATA *ch, char *argument )
 		send_to_char("You're unable to augment your strength enough to do that yet.\n\r", ch);
 		return;
 	}
+	if (!str_cmp(arg, "meteor") && (kilimit < 30)) {
+		send_to_char("You're unable to augment your strength enough to do that yet.\n\r", ch);
+		return;
+	}
 	if (arg[0] == '\0' && ch->mana < skill_table[gsn_bash]->min_mana) {
 		send_to_char("You don't have enough energy.\n\r", ch);
 		return;
@@ -2896,6 +2900,10 @@ void do_bash( CHAR_DATA *ch, char *argument )
 		return;
 	}
 	if (!str_cmp(arg, "crusher") && ch->mana < skill_table[gsn_bash]->min_mana * 16) {
+		send_to_char("You don't have enough energy.\n\r", ch);
+		return;
+	}
+	if (!str_cmp(arg, "meteor") && ch->mana < skill_table[gsn_bash]->min_mana * 100) {
 		send_to_char("You don't have enough energy.\n\r", ch);
 		return;
 	}
@@ -2927,6 +2935,13 @@ void do_bash( CHAR_DATA *ch, char *argument )
 				stat_train(ch, "int", 7);
 				ch->train += 18;
 			}
+			if (!str_cmp(arg, "meteor")) {
+				argdam = number_range(55, 65) * kicmult;
+				dam = get_attmod(ch, victim) * (argdam * splitmult);
+				stat_train(ch, "str", 28);
+				stat_train(ch, "int", 12);
+				ch->train += 28;
+			}
 		}
 		if (IS_NPC(ch)) {
 			if (arg[0] == '\0')
@@ -2935,6 +2950,8 @@ void do_bash( CHAR_DATA *ch, char *argument )
 				dam = get_attmod(ch, victim) * (number_range(33, 37) + (get_curr_str(ch) / 45));
 			if (!str_cmp(arg, "crusher"))
 				dam = get_attmod(ch, victim) * (number_range(33, 37) + (get_curr_str(ch) / 40));
+			if (!str_cmp(arg, "meteor"))
+				dam = get_attmod(ch, victim) * (number_range(55, 65) + (get_curr_str(ch) / 40));
 		}
 		if (ch->charge > 0)
 			dam = chargeDamMult(ch, dam);
@@ -3007,6 +3024,35 @@ void do_bash( CHAR_DATA *ch, char *argument )
 				"an explosive blast of ki that launches $M into the distance! &W[$t]",
 				ch, num_punct(dam), victim, TO_NOTVICT);
 		}
+		if (!str_cmp(arg, "meteor")) {
+			act(auraColor,
+				"You crash your fist into $N, hammering $M into the splintering earth.",
+				ch, NULL, victim, TO_CHAR);
+			act(auraColor,
+				"An immense mass of crackling energy wreathes your entire body, slowly gathering to your palm.",
+				ch, NULL, victim, TO_CHAR);
+			act(auraColor,
+				"Without remorse, you engulf $N in a gigantic flash of energy! &W[$t]",
+				ch, num_punct(dam), victim, TO_CHAR);
+			act(auraColor,
+				"$n crashes $s fist into you, hammering you into the splintering earth.", ch,
+				NULL, victim, TO_VICT);
+			act(auraColor,
+				"An immense mass of crackling energy wreathes $n's entire body, slowly gathering to &s palm.", ch,
+				NULL, victim, TO_VICT);
+			act(auraColor,
+				"Without remorse, $n engulfs you in a gigantic flash of energy! &W[$t]",
+				ch, num_punct(dam), victim, TO_VICT);
+			act(auraColor,
+				"$n crashes $s fist into $N, hammering $M into the splintering earth.", ch,
+				NULL, victim, TO_NOTVICT);
+			act(auraColor,
+				"An immense mass of crackling energy wreathes $n's entire body, slowly gathering to &s palm.", ch,
+				NULL, victim, TO_NOTVICT);
+			act(auraColor,
+				"Without remorse, $n engulfs $N in a gigantic flash of energy! &W[$t]",
+				ch, num_punct(dam), victim, TO_NOTVICT);
+		}
 		learn_from_success(ch, gsn_bash);
 		global_retcode = damage(ch, victim, dam, TYPE_HIT);
 	}
@@ -3030,6 +3076,10 @@ void do_bash( CHAR_DATA *ch, char *argument )
 	}
 	else if (!str_cmp(arg, "crusher")) {
 		ch->mana -= skill_table[gsn_bash]->min_mana * 16;
+		return;
+	}
+	else if (!str_cmp(arg, "meteor")) {
+		ch->mana -= skill_table[gsn_bash]->min_mana * 100;
 		return;
 	}
 }
