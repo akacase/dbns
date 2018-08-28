@@ -2634,7 +2634,8 @@ violence_update(void)
 					ch->mana = 0;
 					ch->hit -= (gravdam / 3);
 					act( AT_RED, "Your bones pop and creak ominously.", ch, NULL, NULL, TO_CHAR );
-					ch->gravExp += 2;
+					if (ch->desc)
+						ch->gravExp += 3;
 					if (ch->hit - (gravdam / 3) < 0) {
 						update_pos(ch);
 						if (ch->position == POS_DEAD) {
