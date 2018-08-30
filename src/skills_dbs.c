@@ -1968,7 +1968,7 @@ void do_powerup(CHAR_DATA *ch, char *argument)
 				send_to_char("You can't do that.\n\r", ch);
 				return;
 			}
-			else if (xIS_SET((ch)->affected_by, AFF_SSJ) {
+			else if (xIS_SET((ch)->affected_by, AFF_SSJ)) {
 				send_to_char("You're already a Super Saiyan.\n\r", ch);
 				return;
 			}
