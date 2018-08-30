@@ -1968,7 +1968,14 @@ void do_powerup(CHAR_DATA *ch, char *argument)
 				send_to_char("You can't do that.\n\r", ch);
 				return;
 			}
+			else if (xIS_SET((ch)->affected_by, AFF_SSJ) {
+				send_to_char("You're already a Super Saiyan.\n\r", ch);
+				return;
+			}
 			else {
+				xSET_BIT((ch)->affected_by, AFF_SSJ);
+				if (!xIS_SET((ch)->affected_by, AFF_POWERCHANNEL))
+					xREMOVE_BIT((ch)->affected_by, AFF_POWERCHANNEL);
 				act(AT_YELLOW, "Your eyes turn blue, your hair flashes blonde and a fiery golden aura erupts around you!", ch, NULL, NULL, TO_CHAR);
 				act(AT_YELLOW, "$n's hair suddenly flashes blonde, transcending beyond $s normal limits in a fiery display of golden ki!", ch, NULL, NULL, TO_NOTVICT);
 				ch->powerup = 0;
