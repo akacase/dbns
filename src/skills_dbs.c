@@ -1791,6 +1791,7 @@ void do_powerup(CHAR_DATA *ch, char *argument)
 	double 	safemaximum = 0;
 	int 	form_mastery = 0;
 	double 	plmod = 0;
+	int auraColor = AT_WHITE;
 	int onestr = 0; 
 	int twostr = 0;
 	int threestr = 0;
@@ -1827,6 +1828,8 @@ void do_powerup(CHAR_DATA *ch, char *argument)
 	
 	if (IS_NPC(ch))
 		return;
+	if(ch->pcdata->auraColorPowerUp > 0)
+		auraColor = ch->pcdata->auraColorPowerUp;
 	if (ch->position < POS_STANDING) {
 		send_to_char("You must be standing to do that.\n\r", ch);
 		return;
@@ -2086,7 +2089,7 @@ void do_powerup(CHAR_DATA *ch, char *argument)
 				send_to_char("You must be transformed into a Super Saiyan 3 to attempt this.\n\r", ch);
 				return;
 			}
-			else if (xIS_SET((ch)->affected_by, AFF_SGOD)) {
+			else if (xIS_SET((ch)->affected_by, AFF_SSJ4)) {
 				send_to_char("You're already too powerful to see any benefit from doing that.\n\r", ch);
 				return;
 			}
@@ -2107,6 +2110,197 @@ void do_powerup(CHAR_DATA *ch, char *argument)
 					ch->pcdata->haircolor = 3;
 				}
 				return;
+			}
+	}
+	else if (!str_cmp(arg, "4th")) {
+			if (is_saiyan(ch) || is_halfbreed(ch)) {
+				send_to_char("A filthy monkey like you? I don't think so.\n\r", ch);
+				return;
+			}
+			if (!is_icer(ch)) {
+				send_to_char("You clearly lack proper breeding.\n\r", ch);
+				return;
+			}
+			else if (ch->train < 1800000) {
+				send_to_char("You lack enough control over your power to transform instantly.\n\r", ch);
+				return;
+			}
+			else if (xIS_SET((ch)->affected_by, AFF_SAFEMAX)) {
+				send_to_char("You can't do that.\n\r", ch);
+				return;
+			}
+			else if (xIS_SET((ch)->affected_by, AFF_ICER4)) {
+				send_to_char("You're already in your fourth form.\n\r", ch);
+				return;
+			}
+			else {
+				xSET_BIT((ch)->affected_by, AFF_ICER4);
+				if (xIS_SET((ch)->affected_by, AFF_ICER2))
+					xREMOVE_BIT((ch)->affected_by, AFF_ICER2);
+				if (xIS_SET((ch)->affected_by, AFF_ICER3))
+					xREMOVE_BIT((ch)->affected_by, AFF_ICER3);
+				if (xIS_SET((ch)->affected_by, AFF_POWERCHANNEL))
+					xREMOVE_BIT((ch)->affected_by, AFF_POWERCHANNEL);
+				act( AT_PURPLE, "In an explosion of ki your body fades away, emerging from the dust in a new form!", ch, NULL, NULL, TO_CHAR );
+				act( AT_PURPLE, "Your chitinous body is replaced with smooth skin and patches as reflective as glass.", ch, NULL, NULL, TO_CHAR );
+				act( AT_PURPLE, "$n emerges from an explosion of ki, $s body transformed into a sleek, smooth form.", ch, NULL, NULL, TO_NOTVICT );
+				ch->pl = ch->exp * 50;
+				ch->powerup = 12;
+				transStatApply(ch, threestr, threespd, threeint, threecon);
+				return;
+			}
+	}
+	else if (!str_cmp(arg, "5th")) {
+			if (is_saiyan(ch) || is_halfbreed(ch)) {
+				send_to_char("A filthy monkey like you? I don't think so.\n\r", ch);
+				return;
+			}
+			if (!is_icer(ch)) {
+				send_to_char("You clearly lack proper breeding.\n\r", ch);
+				return;
+			}
+			else if (ch->train < 4140000) {
+				send_to_char("You lack enough control over your power to transform instantly.\n\r", ch);
+				return;
+			}
+			else if (xIS_SET((ch)->affected_by, AFF_SAFEMAX)) {
+				send_to_char("You can't do that.\n\r", ch);
+				return;
+			}
+			else if (!xIS_SET((ch)->affected_by, AFF_ICER4)) {
+				send_to_char("You must be in your fourth form to do that.\n\r", ch);
+				return;
+			}
+			else if (xIS_SET((ch)->affected_by, AFF_ICER5)) {
+				send_to_char("You're already in your fifth form.\n\r", ch);
+				return;
+			}
+			else {
+				xSET_BIT((ch)->affected_by, AFF_ICER5);
+				if (xIS_SET((ch)->affected_by, AFF_ICER2))
+					xREMOVE_BIT((ch)->affected_by, AFF_ICER2);
+				if (xIS_SET((ch)->affected_by, AFF_ICER3))
+					xREMOVE_BIT((ch)->affected_by, AFF_ICER3);
+				if (xIS_SET((ch)->affected_by, AFF_ICER4))
+					xREMOVE_BIT((ch)->affected_by, AFF_ICER4);
+				if (xIS_SET((ch)->affected_by, AFF_POWERCHANNEL))
+					xREMOVE_BIT((ch)->affected_by, AFF_POWERCHANNEL);
+				act( AT_PURPLE, "Your muscles expand massively in size, swelling with incredible energy!", ch, NULL, NULL, TO_CHAR );
+				act( AT_PURPLE, "$n's muscles expand massively in size, swelling with incredible energy!", ch, NULL, NULL, TO_NOTVICT );
+				ch->pl = ch->exp * 150;
+				transStatApply(ch, fourstr, fourspd, fourint, fourcon);
+				ch->powerup = 46;
+				return;
+			}
+	}
+	else if (!str_cmp(arg, "mystic")) {
+			if (!is_kaio(ch) && !is_human(ch)) {
+				send_to_char("You have other means of unlocking your potential.\n\r", ch);
+				return;
+			}
+			else if (ch->train < 2520000) {
+				send_to_char("You lack enough control over your power to transform instantly.\n\r", ch);
+				return;
+			}
+			else if (xIS_SET((ch)->affected_by, AFF_SAFEMAX)) {
+				send_to_char("You can't do that.\n\r", ch);
+				return;
+			}
+			else if (xIS_SET((ch)->affected_by, AFF_MYSTIC)) {
+				send_to_char("You've already unlocked your potential.\n\r", ch);
+				return;
+			}
+			else {
+				xSET_BIT((ch)->affected_by, AFF_MYSTIC);
+				if (xIS_SET((ch)->affected_by, AFF_POWERCHANNEL))
+					xREMOVE_BIT((ch)->affected_by, AFF_POWERCHANNEL);
+				if (ch->train >= 4950000) {
+					act( auraColor, "In a violent flash of energy, the deepest reaches of your potential explodes to the surface.", ch, NULL, NULL, TO_CHAR );
+					act( auraColor, "In a violent flash of energy, the deepest reaches of $n's potential explodes to the surface.", ch, NULL, NULL, TO_NOTVICT );
+					transStatApply(ch, sixstr, sixspd, sixint, sixcon);
+					ch->pl = ch->exp * 346.708;
+					ch->powerup = 47;
+					return;
+				}
+				else if (ch->train >= 4230000) {
+					act( auraColor, "Hundreds of bolts of pure, white energy crackle across the surface of your body as you access your true potential.", ch, NULL, NULL, TO_CHAR );
+					act( auraColor, "Hundreds of bolts of pure, white energy crackle across the surface of $n's body as they access their true potential.", ch, NULL, NULL, TO_NOTVICT );
+					transStatApply(ch, fivestr, fivespd, fiveint, fivecon);
+					ch->pl = ch->exp * 246.399;
+					ch->powerup = 40;
+					return;
+				}
+				else if (ch->train >= 3600000) {
+					act( auraColor, "A massive amount of energy floods through your body as you access your latent potential.", ch, NULL, NULL, TO_CHAR );
+					act( auraColor, "A massive amount of energy floods through $n's body as they access their latent potential.", ch, NULL, NULL, TO_NOTVICT );
+					transStatApply(ch, fourstr, fourspd, fourint, fourcon);
+					ch->pl = ch->exp * 151.267;
+					ch->powerup = 30;
+					return;
+				}
+				else if (ch->train >= 2520000) {
+					act( auraColor, "A massive amount of energy floods through your body as you access your latent potential.", ch, NULL, NULL, TO_CHAR );
+					act( auraColor, "A massive amount of energy floods through $n's body as they access their latent potential.", ch, NULL, NULL, TO_NOTVICT );
+					transStatApply(ch, onestr, onespd, oneint, onecon);
+					ch->pl = ch->exp * 51.710;
+					ch->powerup = 8;
+					return;
+				}
+			}
+	}
+	else if (!str_cmp(arg, "supernamek")) {
+			if (!is_namek(ch)) {
+				send_to_char("Maybe in another life you were a Namekian, but definitely not in this one.\n\r", ch);
+				return;
+			}
+			else if (ch->train < 2520000) {
+				send_to_char("You lack enough control over your power to transform instantly.\n\r", ch);
+				return;
+			}
+			else if (xIS_SET((ch)->affected_by, AFF_SAFEMAX)) {
+				send_to_char("You can't do that.\n\r", ch);
+				return;
+			}
+			else if (xIS_SET((ch)->affected_by, AFF_SNAMEK)) {
+				send_to_char("You're already channeling the knowledge of the Ancients.\n\r", ch);
+				return;
+			}
+			else {
+				xSET_BIT((ch)->affected_by, AFF_SNAMEK);
+				if (xIS_SET((ch)->affected_by, AFF_POWERCHANNEL))
+					xREMOVE_BIT((ch)->affected_by, AFF_POWERCHANNEL);
+				if (ch->train >= 5310000) {
+					act( auraColor, "The heavens shake and the earth trembles at your feet as you unleash your ancestral might.", ch, NULL, NULL, TO_CHAR );
+					act( auraColor, "The heavens shake and the earth trembles at $n's feet as they unleash their ancestral might.", ch, NULL, NULL, TO_NOTVICT );
+					transStatApply(ch, fivestr, fivespd, fiveint, fivecon);
+					ch->pl = ch->exp * 346.708;
+					ch->powerup = 47;
+					return;
+				}
+				if (ch->train >= 4500000) {
+					act( auraColor, "A blinding white aura suffuses your body, sending crackling energy scattering in all directions.", ch, NULL, NULL, TO_CHAR );
+					act( auraColor, "A blinding white aura suffuses $n's body, sending crackling energy scattering in all directions.", ch, NULL, NULL, TO_NOTVICT );
+					transStatApply(ch, fourstr, fourspd, fourint, fourcon);
+					ch->pl = ch->exp * 246.399;
+					ch->powerup = 40;
+					return;
+				}
+				if (ch->train >= 3600000) {
+					act( auraColor, "Giant beams of light erupt from the surface of your body as you unleash ancient secrets.", ch, NULL, NULL, TO_CHAR );
+					act( auraColor, "Giant beams of light erupt from the surface of $n's body as they unleash ancient secrets.", ch, NULL, NULL, TO_NOTVICT );
+					transStatApply(ch, threestr, threespd, threeint, threecon);
+					ch->pl = ch->exp * 151.267;
+					ch->powerup = 30;
+					return;
+				}
+				if (ch->train >= 2520000) {
+					act( auraColor, "A brilliant white light emerges from within, flooding the room with a sense of spiritual calm.", ch, NULL, NULL, TO_CHAR );
+					act( auraColor, "A brilliant white light emerges from within $n, flooding the room with a sense of spiritual calm.", ch, NULL, NULL, TO_NOTVICT );
+					transStatApply(ch, onestr, onespd, oneint, onecon);
+					ch->pl = ch->exp * 50;
+					ch->powerup = 0;
+					return;
+				}
 			}
 	}
 	else if (!str_cmp(arg, "release")) {
