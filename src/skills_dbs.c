@@ -1787,15 +1787,161 @@ do_powerdown(CHAR_DATA * ch, char *argument)
 
 void do_powerup(CHAR_DATA *ch, char *argument)
 {
-        char arg[MAX_INPUT_LENGTH];
+	char 	arg[MAX_INPUT_LENGTH];
+	double 	safemaximum = 0;
+	int 	form_mastery = 0;
+	double 	plmod = 0;
+	int onestr = 0; 
+	int twostr = 0;
+	int threestr = 0;
+	int fourstr = 0;
+	int fivestr = 0;
+	int sixstr = 0;
+	int sevenstr = 0;
+	int onespd = 0;
+	int twospd = 0;
+	int threespd = 0;
+	int fourspd = 0;
+	int fivespd = 0;
+	int sixspd = 0;
+	int sevenspd = 0;
+	int oneint = 0;
+	int twoint = 0;
+	int threeint = 0;
+	int fourint = 0;
+	int fiveint = 0;
+	int sixint = 0;
+	int sevenint = 0;
+	int onecon = 0;
+	int twocon = 0;
+	int threecon = 0;
+	int fourcon = 0;
+	int fivecon = 0;
+	int sixcon = 0;
+	int sevencon = 0;
 
 	one_argument(argument, arg);
+	form_mastery = (ch->train / 90000);
+	safemaximum = form_mastery;
+	plmod = (ch->pl / ch->exp);
 	
 	if (IS_NPC(ch))
 		return;
 	if (ch->position < POS_STANDING) {
 		send_to_char("You must be standing to do that.\n\r", ch);
 		return;
+	}
+	if (is_saiyan(ch) || is_hb(ch)) {
+		onestr = ch->perm_str * 0.20; 
+		twostr = ch->perm_str * 0.30;
+		threestr = ch->perm_str * 0.50;
+		fourstr = ch->perm_str * 0.50;
+		fivestr = ch->perm_str * 0.60;
+		sixstr = ch->perm_str;
+		sevenstr = ch->perm_str * 1.25;
+		onespd = ch->perm_dex * 0.20;
+		twospd = ch->perm_dex * 0.25;
+		threespd = -250;
+		fourspd = ch->perm_dex * 0.50;
+		fivespd = ch->perm_dex * 0.60;
+		sixspd = ch->perm_dex;
+		sevenspd = ch->perm_dex * 1.25;
+		oneint = ch->perm_int * 0.10;
+		twoint = ch->perm_int * 0.10;
+		threeint = ch->perm_int * 0.10;
+		fourint = ch->perm_int * 0.25;
+		fiveint = ch->perm_int * 0.30;
+		sixint = ch->perm_int * 0.50;
+		sevenint = ch->perm_int;
+		onecon = ch->perm_con * 0.20;
+		twocon = ch->perm_con * 0.30;
+		threecon = ch->perm_con * 0.50;
+		fourcon = ch->perm_con * 0.40;
+		fivecon = ch->perm_con * 0.50;
+		sixcon = ch->perm_con;
+		sevencon = ch->perm_con * 1.25;
+	}
+	else if (is_icer(ch)) {
+		onestr = ch->perm_str * 0.10; 
+		twostr = ch->perm_str * 0.15;
+		threestr = ch->perm_str * 0.20;
+		fourstr = ch->perm_str * 0.60;
+		fivestr = ch->perm_str * 1.20;
+		onespd = ch->perm_dex * 0.10;
+		twospd = ch->perm_dex * 0.15;
+		threespd = ch->perm_dex * 0.20;
+		fourspd = ch->perm_dex * 0.50;
+		fivespd = ch->perm_dex;
+		oneint = ch->perm_int * 0.10;
+		twoint = ch->perm_int * 0.10;
+		threeint = ch->perm_int * 0.15;
+		fourint = ch->perm_int * 0.25;
+		fiveint = ch->perm_int;
+		onecon = ch->perm_con * 0.15;
+		twocon = ch->perm_con * 0.20;
+		threecon = ch->perm_con * 0.30;
+		fourcon = ch->perm_con * 0.60;
+		fivecon = ch->perm_con * 1.40;
+	}
+	else if (is_namek(ch)) {
+		onestr = ch->perm_str * 0.20; 
+		twostr = ch->perm_str * 0.25;
+		threestr = ch->perm_str * 0.30;
+		fourstr = ch->perm_str * 0.40;
+		fivestr = ch->perm_str * 0.50;
+		sixstr = ch->perm_str * 0.9;
+		sevenstr = ch->perm_str * 1.10;
+		onespd = ch->perm_dex * 0.10;
+		twospd = ch->perm_dex * 0.15;
+		threespd = ch->perm_dex * 0.25;
+		fourspd = ch->perm_dex * 0.35;
+		fivespd = ch->perm_dex * 0.60;
+		sixspd = ch->perm_dex * 0.80;
+		sevenspd = ch->perm_dex;
+		oneint = ch->perm_int * 0.15;
+		twoint = ch->perm_int * 0.25;
+		threeint = ch->perm_int * 0.50;
+		fourint = ch->perm_int * 0.75;
+		fiveint = ch->perm_int;
+		sixint = ch->perm_int * 1.25;
+		sevenint = ch->perm_int * 1.75;
+		onecon = ch->perm_con * 0.20;
+		twocon = ch->perm_con * 0.30;
+		threecon = ch->perm_con * 0.30;
+		fourcon = ch->perm_con * 0.40;
+		fivecon = ch->perm_con * 0.60;
+		sixcon = ch->perm_con * 0.80;
+		sevencon = ch->perm_con * 1.15;
+	}
+	else if (is_human(ch) || is_kaio(ch)) {
+		onestr = ch->perm_str * 0.20; 
+		twostr = ch->perm_str * 0.25;
+		threestr = ch->perm_str * 0.30;
+		fourstr = ch->perm_str * 0.40;
+		fivestr = ch->perm_str * 0.60;
+		sixstr = ch->perm_str;
+		sevenstr = ch->perm_str * 1.20;
+		onespd = ch->perm_dex * 0.10;
+		twospd = ch->perm_dex * 0.15;
+		threespd = ch->perm_dex * 0.20;
+		fourspd = ch->perm_dex * 0.30;
+		fivespd = ch->perm_dex * 0.70;
+		sixspd = ch->perm_dex;
+		sevenspd = ch->perm_dex * 1.20;
+		oneint = ch->perm_int * 0.15;
+		twoint = ch->perm_int * 0.20;
+		threeint = ch->perm_int * 0.30;
+		fourint = ch->perm_int * 0.40;
+		fiveint = ch->perm_int * 0.70;
+		sixint = ch->perm_int * 1.10;
+		sevenint = ch->perm_int * 1.30;
+		onecon = ch->perm_con * 0.20;
+		twocon = ch->perm_con * 0.20;
+		threecon = ch->perm_con * 0.30;
+		fourcon = ch->perm_con * 0.40;
+		fivecon = ch->perm_con * 0.60;
+		sixcon = ch->perm_con;
+		sevencon = ch->perm_con * 1.25;
 	}
 	if (arg[0] == '\0') {
 		if (ch->pl >= ch->exp) {
@@ -1809,8 +1955,33 @@ void do_powerup(CHAR_DATA *ch, char *argument)
 			act(AT_WHITE, "$n unsuppresses $s power.", ch, NULL, NULL, TO_NOTVICT);
 			return;
 		}
-	}
-	if (!str_cmp(arg, "release")) {
+	} if (!str_cmp(arg, "ssj1")) {
+			if (!is_saiyan(ch) && !is_hb(ch)) {
+				send_to_char("You don't even HAVE Saiyan blood, you clown.\n\r", ch);
+				return;
+			}
+			else if (ch->pcdata->learned[gsn_ssj2] < 10) {
+				send_to_char("You lack enough control over your power to transform instantly.\n\r", ch);
+				return;
+			}
+			else if (xIS_SET((ch)->affected_by, AFF_SAFEMAX)) {
+				send_to_char("You can't do that.\n\r", ch);
+				return;
+			}
+			else {
+				act(AT_YELLOW, "Your eyes turn blue, your hair flashes blonde and a fiery golden aura erupts around you!", ch, NULL, NULL, TO_CHAR);
+				act(AT_YELLOW, "$n's hair suddenly flashes blonde, transcending beyond $s normal limits in a fiery display of golden ki!", ch, NULL, NULL, TO_NOTVICT);
+				ch->powerup = 0;
+				ch->pl = ch->exp * 50;
+				transStatApply(ch, onestr, onespd, oneint, onecon);
+				if (!IS_NPC(ch)) {
+					ch->pcdata->eyes = 0;
+					ch->pcdata->haircolor = 3;
+				}
+				return;
+			}
+		
+	} else if (!str_cmp(arg, "release")) {
 		if ((ch->pl - (ch->pl * 0.03)) > ch->exp) {
 			ch->pl -= (ch->pl * 0.03);
 			act(AT_WHITE, "You take a deep breath, releasing some of your pent-up energy.", ch, NULL, NULL, TO_CHAR);
