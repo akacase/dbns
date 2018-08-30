@@ -2113,7 +2113,7 @@ void do_powerup(CHAR_DATA *ch, char *argument)
 			}
 	}
 	else if (!str_cmp(arg, "4th")) {
-			if (is_saiyan(ch) || is_halfbreed(ch)) {
+			if (is_saiyan(ch) || is_hb(ch)) {
 				send_to_char("A filthy monkey like you? I don't think so.\n\r", ch);
 				return;
 			}
@@ -2151,7 +2151,7 @@ void do_powerup(CHAR_DATA *ch, char *argument)
 			}
 	}
 	else if (!str_cmp(arg, "5th")) {
-			if (is_saiyan(ch) || is_halfbreed(ch)) {
+			if (is_saiyan(ch) || is_hb(ch)) {
 				send_to_char("A filthy monkey like you? I don't think so.\n\r", ch);
 				return;
 			}
