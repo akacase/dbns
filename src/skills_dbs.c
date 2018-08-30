@@ -1955,7 +1955,8 @@ void do_powerup(CHAR_DATA *ch, char *argument)
 			act(AT_WHITE, "$n unsuppresses $s power.", ch, NULL, NULL, TO_NOTVICT);
 			return;
 		}
-	} if (!str_cmp(arg, "ssj1")) {
+	}
+	if (!str_cmp(arg, "ssj1")) {
 			if (!is_saiyan(ch) && !is_hb(ch)) {
 				send_to_char("You don't even HAVE Saiyan blood, you clown.\n\r", ch);
 				return;
@@ -1974,7 +1975,7 @@ void do_powerup(CHAR_DATA *ch, char *argument)
 			}
 			else {
 				xSET_BIT((ch)->affected_by, AFF_SSJ);
-				if (!xIS_SET((ch)->affected_by, AFF_POWERCHANNEL))
+				if (xIS_SET((ch)->affected_by, AFF_POWERCHANNEL))
 					xREMOVE_BIT((ch)->affected_by, AFF_POWERCHANNEL);
 				act(AT_YELLOW, "Your eyes turn blue, your hair flashes blonde and a fiery golden aura erupts around you!", ch, NULL, NULL, TO_CHAR);
 				act(AT_YELLOW, "$n's hair suddenly flashes blonde, transcending beyond $s normal limits in a fiery display of golden ki!", ch, NULL, NULL, TO_NOTVICT);
@@ -1987,8 +1988,128 @@ void do_powerup(CHAR_DATA *ch, char *argument)
 				}
 				return;
 			}
-		
-	} else if (!str_cmp(arg, "release")) {
+	}
+	else if (!str_cmp(arg, "ssj2")) {
+			if (!is_saiyan(ch) && !is_hb(ch)) {
+				send_to_char("You don't even HAVE Saiyan blood, you clown.\n\r", ch);
+				return;
+			}
+			else if (ch->pcdata->learned[gsn_ssj3] < 10) {
+				send_to_char("You lack enough control over your power to transform instantly.\n\r", ch);
+				return;
+			}
+			else if (xIS_SET((ch)->affected_by, AFF_SAFEMAX)) {
+				send_to_char("You can't do that.\n\r", ch);
+				return;
+			}
+			else if (!xIS_SET((ch)->affected_by, AFF_SSJ)) {
+				send_to_char("You must be transformed into a Super Saiyan to attempt this.\n\r", ch);
+				return;
+			}
+			else if (xIS_SET((ch)->affected_by, AFF_SSJ2)) {
+				send_to_char("You're already too powerful to see any benefit from doing that.\n\r", ch);
+				return;
+			}
+			else {
+				xSET_BIT((ch)->affected_by, AFF_USSJ);
+				xSET_BIT((ch)->affected_by, AFF_USSJ2);
+				xSET_BIT((ch)->affected_by, AFF_SSJ2);
+				if (xIS_SET((ch)->affected_by, AFF_POWERCHANNEL))
+					xREMOVE_BIT((ch)->affected_by, AFF_POWERCHANNEL);
+				act( AT_YELLOW, "In an intense explosion of rage your power grows, sending arcing bolts of energy from your body.", ch, NULL, NULL, TO_CHAR );
+				act( AT_YELLOW, "Your hair stands further on end as you ascend to the true next level.", ch, NULL, NULL, TO_CHAR );
+				act( AT_YELLOW, "$n is enveloped in a storm golden ki. Wreathed in crackling, pure energy, $e truly ascends to the next level.", ch, NULL, NULL, TO_NOTVICT );
+				act( AT_YELLOW, "$n stares straight ahead with absolute confidence.", ch, NULL, NULL, TO_NOTVICT );
+				ch->powerup = 29;
+				ch->pl = ch->exp * 225;
+				transStatApply(ch, fourstr, fourspd, fourint, fourcon);
+				if (!IS_NPC(ch)) {
+					ch->pcdata->eyes = 0;
+					ch->pcdata->haircolor = 3;
+				}
+				return;
+			}
+	}
+	else if (!str_cmp(arg, "ssj3")) {
+			if (!is_saiyan(ch) && !is_hb(ch)) {
+				send_to_char("You don't even HAVE Saiyan blood, you clown.\n\r", ch);
+				return;
+			}
+			else if (ch->pcdata->learned[gsn_ssj4] < 10) {
+				send_to_char("You lack enough control over your power to transform instantly.\n\r", ch);
+				return;
+			}
+			else if (xIS_SET((ch)->affected_by, AFF_SAFEMAX)) {
+				send_to_char("You can't do that.\n\r", ch);
+				return;
+			}
+			else if (!xIS_SET((ch)->affected_by, AFF_SSJ2)) {
+				send_to_char("You must be transformed into a Super Saiyan 2 to attempt this.\n\r", ch);
+				return;
+			}
+			else if (xIS_SET((ch)->affected_by, AFF_SSJ3)) {
+				send_to_char("You're already too powerful to see any benefit from doing that.\n\r", ch);
+				return;
+			}
+			else {
+				xSET_BIT((ch)->affected_by, AFF_SSJ3);
+				if (xIS_SET((ch)->affected_by, AFF_POWERCHANNEL))
+					xREMOVE_BIT((ch)->affected_by, AFF_POWERCHANNEL);
+				act(AT_YELLOW, "An earth-shattering burst of energy expands your aura. Your eyebrows disappear and your hair lengthens, flowing down your back.", ch, NULL, NULL, TO_CHAR);
+				act(AT_YELLOW, "Only the stench of ozone accompanies the countless bolts of energy wreathing your body.", ch, NULL, NULL, TO_CHAR);
+				act(AT_YELLOW, "The world feel as though it could pull apart as $n's aura expands! $s eyebrows disappear slowly and $s hair lengthens, flowing down $s back.", ch, NULL, NULL, TO_NOTVICT);
+				act(AT_YELLOW, "When the bright light fades, $n stands within a wreath of countless bolts of energy, unleashing the primal rage of the Saiyan race.", ch, NULL, NULL, TO_NOTVICT);
+				ch->powerup = 39;
+				ch->pl = ch->exp * 350;
+				transStatApply(ch, fivestr, fivespd, fiveint, fivecon);
+				if (!IS_NPC(ch)) {
+					ch->pcdata->eyes = 0;
+					ch->pcdata->haircolor = 3;
+				}
+				return;
+			}
+	}
+	else if (!str_cmp(arg, "ssgod")) {
+			if (!is_saiyan(ch) && !is_hb(ch)) {
+				send_to_char("You don't even HAVE Saiyan blood, you clown.\n\r", ch);
+				return;
+			}
+			else if (ch->pcdata->learned[gsn_sgod] < 10) {
+				send_to_char("You lack enough control over your power to transform instantly.\n\r", ch);
+				return;
+			}
+			else if (xIS_SET((ch)->affected_by, AFF_SAFEMAX)) {
+				send_to_char("You can't do that.\n\r", ch);
+				return;
+			}
+			else if (!xIS_SET((ch)->affected_by, AFF_SSJ3)) {
+				send_to_char("You must be transformed into a Super Saiyan 3 to attempt this.\n\r", ch);
+				return;
+			}
+			else if (xIS_SET((ch)->affected_by, AFF_SGOD)) {
+				send_to_char("You're already too powerful to see any benefit from doing that.\n\r", ch);
+				return;
+			}
+			else {
+				xSET_BIT((ch)->affected_by, AFF_SSJ4);
+				if (xIS_SET((ch)->affected_by, AFF_POWERCHANNEL))
+					xREMOVE_BIT((ch)->affected_by, AFF_POWERCHANNEL);
+				act( AT_RED, "Your aura fades and your hair and eyes return to normal. However, in the next instant something inside you changes.", ch, NULL, NULL, TO_CHAR );
+				act( AT_RED, "Godly Ki radiates from deep within, and with a mighty shout that pierces the heavens, a brilliant red and gold aura encompasses you.", ch, NULL, NULL, TO_CHAR );
+				act( AT_RED, "Your hair and eyes flash red, tinted subtly with violet as you ascend beyond your mortal restrictions.", ch, NULL, NULL, TO_CHAR );
+				act( AT_RED, "$n's hair and eyes return to normal. However, in the next instant something feels very different.", ch, NULL, NULL, TO_NOTVICT );
+				act( AT_RED, "$n is encompassed in a massive aura of crimson and gold, $s hair and eyes shifting red with a subtle violet tint.", ch, NULL, NULL, TO_NOTVICT );
+				ch->powerup = 48;
+				ch->pl = ch->exp * 500;
+				transStatApply(ch, sixstr, sixspd, sixint, sixcon);
+				if (!IS_NPC(ch)) {
+					ch->pcdata->eyes = 0;
+					ch->pcdata->haircolor = 3;
+				}
+				return;
+			}
+	}
+	else if (!str_cmp(arg, "release")) {
 		if ((ch->pl - (ch->pl * 0.03)) > ch->exp) {
 			ch->pl -= (ch->pl * 0.03);
 			act(AT_WHITE, "You take a deep breath, releasing some of your pent-up energy.", ch, NULL, NULL, TO_CHAR);
