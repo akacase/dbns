@@ -157,7 +157,6 @@ untransform_oozaru(CHAR_DATA * ch)
 	 * Added to represent when after a person dropped from Oozaru,
 	 * they were incredibly drained of energy. -Karma
 	 */
-	ch->mana = 0;
 
 	return;
 }

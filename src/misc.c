@@ -2104,7 +2104,7 @@ void remove_tail(CHAR_DATA *ch)
 	OBJ_DATA *tail;
 	int regen_time = 0;
 	
-	regen_time = number_range( 60, 720 );
+	regen_time = number_range( 1000, 7200 );
 	
 	act( AT_RED, "You grab ahold of your tail and pull... OUCH!!!", ch, NULL, NULL, TO_CHAR );
 	act( AT_PLAIN, "$n grabs ahold of $s tail and pulls it off... OUCH!!!", ch, NULL, NULL, TO_ROOM );
