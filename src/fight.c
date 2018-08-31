@@ -5494,7 +5494,7 @@ damage(CHAR_DATA * ch, CHAR_DATA * victim, int dam, int dt)
 			stat_train(ch, "int", 2);
 		}
 		else if (xIS_SET((ch)->affected_by, AFF_BRUISERSTYLE)) {
-			stat_train(ch, "str", 5);
+			stat_train(ch, "str", 10);
 		}
 		else {
 			stat_train(ch, "str", 3);
