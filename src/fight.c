@@ -8315,9 +8315,7 @@ do_kill(CHAR_DATA * ch, char *argument)
 			victim->focus = 0;
 		}
 		check_illegal_pk(ch, victim);
-	} else
-		WAIT_STATE(ch, 1 * PULSE_VIOLENCE);
-
+	}
 	if (!IS_NPC(ch) && ch->race == 6) {
 		find_absorb_data(ch, victim);
 		ch->pcdata->absorb_pl = 0;
