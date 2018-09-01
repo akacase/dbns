@@ -1166,9 +1166,9 @@ violence_update(void)
 				twostr = ch->perm_str * 0.30;
 				threestr = ch->perm_str * 0.50;
 				fourstr = ch->perm_str * 0.50;
-				fivestr = ch->perm_str * 0.60;
+				fivestr = ch->perm_str * 0.80;
 				sixstr = ch->perm_str;
-				sevenstr = ch->perm_str * 1.25;
+				sevenstr = ch->perm_str * 1.40;
 				onespd = ch->perm_dex * 0.20;
 				twospd = ch->perm_dex * 0.25;
 				threespd = -250;
@@ -1187,7 +1187,7 @@ violence_update(void)
 				twocon = ch->perm_con * 0.30;
 				threecon = ch->perm_con * 0.50;
 				fourcon = ch->perm_con * 0.40;
-				fivecon = ch->perm_con * 0.50;
+				fivecon = ch->perm_con * 0.70;
 				sixcon = ch->perm_con;
 				sevencon = ch->perm_con * 1.25;
 				if (!xIS_SET((ch)->affected_by, AFF_SSJ)) {
@@ -5273,7 +5273,7 @@ damage(CHAR_DATA * ch, CHAR_DATA * victim, int dam, int dt)
 
 	if (!is_android_h(victim))
 		victim->mana -=
-		    URANGE(0, ((double)dam / 1000 * 0.25 * victim->mana),
+		    URANGE(0, ((double)dam / 7500 * 0.25 * victim->mana),
 		    victim->max_mana);
 
 	heart_calc(victim, "");
