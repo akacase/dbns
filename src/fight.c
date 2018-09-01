@@ -2610,10 +2610,7 @@ violence_update(void)
 						ch->train += 6;
 					}
 				}
-				if (ch->gravExp >= 400000)
-					acc = ((ch->gravExp / 4000) + 301);
-				else if (ch->gravExp < 400000)
-					acc = ((ch->gravExp / 1000) + 1);
+				acc = ((ch->gravExp / 1000) + 1);
 				if (acc < 1)
 					acc = 1;
 				damrange = number_range(1, 3);
@@ -2737,10 +2734,7 @@ violence_update(void)
 		  damrange = number_range(1, 6);
 		  gravres = (get_curr_con(ch) / 500) + 1;
 		
-		  if (ch->gravExp >= 400000)
-			  acc = ((ch->gravExp / 4000) + 301);
-		  else if (ch->gravExp < 400000)
-			  acc = ((ch->gravExp / 1000) + 1);
+		  acc = ((ch->gravExp / 1000) + 1);
 		  if (acc < 1)
 				acc = 1;
 		  trainmessage = number_range(1, 100);
@@ -2888,10 +2882,7 @@ violence_update(void)
 		  damrange = number_range(1, 6);
 		  gravres = (get_curr_con(ch) / 500) + 1;
 		
-		  if (ch->gravExp >= 400000)
-			  acc = ((ch->gravExp / 4000) + 301);
-		  else if (ch->gravExp < 400000)
-			  acc = ((ch->gravExp / 1000) + 1);
+		  acc = ((ch->gravExp / 1000) + 1);
 		  if (acc < 1)
 				acc = 1;
 		  trainmessage = number_range(1, 100);
@@ -3039,10 +3030,7 @@ violence_update(void)
 		  damrange = number_range(1, 6);
 		  gravres = (get_curr_con(ch) / 500) + 1;
 		
-		  if (ch->gravExp >= 400000)
-			  acc = ((ch->gravExp / 4000) + 301);
-		  else if (ch->gravExp < 400000)
-			  acc = ((ch->gravExp / 1000) + 1);
+		  acc = ((ch->gravExp / 1000) + 1);
 		  if (acc < 1)
 				acc = 1;
 		  trainmessage = number_range(1, 100);
@@ -3190,10 +3178,7 @@ violence_update(void)
 		  damrange = number_range(1, 6);
 		  gravres = (get_curr_con(ch) / 500) + 1;
 		
-		  if (ch->gravExp >= 400000)
-			  acc = ((ch->gravExp / 4000) + 301);
-		  else if (ch->gravExp < 400000)
-			  acc = ((ch->gravExp / 1000) + 1);
+		  acc = ((ch->gravExp / 1000) + 1);
 		  if (acc < 1)
 				acc = 1;
 		  trainmessage = number_range(1, 100);

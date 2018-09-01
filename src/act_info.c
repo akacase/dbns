@@ -4141,10 +4141,7 @@ void do_train(CHAR_DATA *ch, char *argument)
 		int gravres = 0;
 
 	one_argument(argument, arg);
-	if (ch->gravExp >= 400000)
-		acc = ((ch->gravExp / 4000) + 301);
-	else if (ch->gravExp < 400000)
-		acc = ((ch->gravExp / 1000) + 1);
+	acc = ((ch->gravExp / 1000) + 1);
 	gravres = (get_curr_con(ch) / 500) + 1;
 	if (acc < 1)
 		acc = 1;
