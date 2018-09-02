@@ -1703,8 +1703,8 @@ do_mset(CHAR_DATA * ch, char *argument)
 	if (!str_cmp(arg2, "hp")) {
 		if (!can_mmodify(ch, victim))
 			return;
-		if (value < 1 || value > 32700) {
-			send_to_char("Hp range is 1 to 32,700 hit points.\n\r", ch);
+		if (value < 1 || value > 2000000000) {
+			send_to_char("Hp range is 1 to 2,000,000,000 hit points.\n\r", ch);
 			return;
 		}
 		victim->max_hit = value;
@@ -1725,8 +1725,8 @@ do_mset(CHAR_DATA * ch, char *argument)
 	if (!str_cmp(arg2, "energy")) {
 		if (!can_mmodify(ch, victim))
 			return;
-		if (value < 0 || value > 99999) {
-			send_to_char("Energy range is 0 to 99,999 points.\n\r", ch);
+		if (value < 0 || value > 2000000000) {
+			send_to_char("Energy range is 0 to 2,000,000,000 points.\n\r", ch);
 			return;
 		}
 		victim->max_mana = value;
@@ -2548,8 +2548,8 @@ do_mset(CHAR_DATA * ch, char *argument)
 		}
 		if (!can_mmodify(ch, victim))
 			return;
-		if (value < 0 || value > 32767) {
-			send_to_char("Hitpoint bonus range is 0 to 30000.\n\r", ch);
+		if (value < 0 || value > 2000000000) {
+			send_to_char("Hitpoint bonus range is 0 to 2,000,000,000.\n\r", ch);
 			return;
 		}
 		if (IS_NPC(victim) && xIS_SET(victim->act, ACT_PROTOTYPE))
