@@ -10419,6 +10419,8 @@ do_godstat(CHAR_DATA * ch, char *argument)
 	pager_printf(ch, "PK time left:      %d\n\r", victim->pcdata->pk_timer);
 	pager_printf(ch, "Creation Date:     %s\n\r",
 	    (char *) ctime(&victim->pcdata->creation_date));
+	pager_printf(ch,
+		"School: %d", victim->pcdata->school);
 	send_to_pager("&w&D\n\r", ch);
 }
 
