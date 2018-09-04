@@ -3734,6 +3734,17 @@ extern sh_int gsn_bite;
 extern sh_int gsn_claw;
 extern sh_int gsn_sting;
 extern sh_int gsn_tail;
+extern sh_int gsn_energybeam;
+extern sh_int gsn_haymaker;
+extern sh_int gsn_lariat;
+extern sh_int gsn_crusherball;
+extern sh_int gsn_collide;
+extern sh_int gsn_meteor;
+extern sh_int gsn_gigantic_meteor;
+extern sh_int gsn_ecliptic_meteor;
+extern sh_int gsn_concentrated_beam;
+extern sh_int gsn_forcewave;
+extern sh_int gsn_energy_disc;
 
 extern sh_int gsn_poison_weapon;
 extern sh_int gsn_scribe;

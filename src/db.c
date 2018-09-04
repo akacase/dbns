@@ -211,6 +211,17 @@ sh_int 	gsn_suppress;
 sh_int 	gsn_meditate;
 sh_int 	gsn_scatter_shot;
 sh_int 	gsn_sense;
+sh_int	gsn_energybeam;
+sh_int	gsn_haymaker;
+sh_int	gsn_lariat;
+sh_int	gsn_crusherball;
+sh_int	gsn_collide;
+sh_int	gsn_meteor;
+sh_int	gsn_gigantic_meteor;
+sh_int	gsn_ecliptic_meteor;
+sh_int	gsn_concentrated_beam;
+sh_int	gsn_forcewave;
+sh_int	gsn_energy_disc;
 
 sh_int 	gsn_uppercut;
 
@@ -721,6 +732,18 @@ boot_db()
 		ASSIGN_GSN(gsn_ultraperfect, "ultra-perfect form");
 
 		ASSIGN_GSN(gsn_punch, "punch");
+		ASSIGN_GSN(gsn_energybeam, "energy beam");
+		ASSIGN_GSN(gsn_haymaker, "haymaker");
+		ASSIGN_GSN(gsn_lariat, "lariat");
+		ASSIGN_GSN(gsn_crusherball, "crusher ball");
+		ASSIGN_GSN(gsn_collide, "collide");
+		ASSIGN_GSN(gsn_meteor, "meteor");
+		ASSIGN_GSN(gsn_gigantic_meteor, "gigantic meteor");
+		ASSIGN_GSN(gsn_ecliptic_meteor, "ecliptic meteor");
+		ASSIGN_GSN(gsn_concentrated_beam, "concentrated beam");
+		ASSIGN_GSN(gsn_forcewave, "forcewave");
+		ASSIGN_GSN(gsn_energy_disc, "energy disc");
+		
 
 		ASSIGN_GSN(gsn_fly, "fly");
 		ASSIGN_GSN(gsn_energy_ball, "energy ball");
