@@ -1582,7 +1582,7 @@ do_mset(CHAR_DATA * ch, char *argument)
 		if (IS_NPC(victim))
 			return;
 		else if (!IS_NPC(victim))
-			victim->school = value;
+			victim->pcdata->school = value;
 		return;
 	}
 	if (!str_cmp(arg2, "strikemastery")) {
