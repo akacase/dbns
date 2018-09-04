@@ -2915,6 +2915,14 @@ struct pc_data {
 	int 	hairstyle;
 	int 	hairlen;
 	int 	tail;
+	int		gravityrankup;
+	int		school;
+	int		strikemastery;
+	int		strikerank;
+	int		energymastery;
+	int		energyrank;
+	int		bodymastery;
+	int		bodyrank;
 
 	int 	bounty;
 	int 	bowed;
