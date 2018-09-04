@@ -10421,6 +10421,12 @@ do_godstat(CHAR_DATA * ch, char *argument)
 	    (char *) ctime(&victim->pcdata->creation_date));
 	pager_printf(ch,
 		"School: %d", victim->school);
+	pager_printf(ch,
+		"Strike Mastery: %d", victim->strikemastery);
+	pager_printf(ch,
+		"Ki Mastery: %d", victim->energymastery);
+	pager_printf(ch,
+		"Body Mastery: %d", victim->bodymastery);
 	send_to_pager("&w&D\n\r", ch);
 }
 
