@@ -4642,6 +4642,7 @@ DECLARE_DO_FUN(do_description5);
 DECLARE_DO_FUN(do_destro);
 DECLARE_DO_FUN(do_destroy);
 DECLARE_DO_FUN(do_detrap);
+DECLARE_DO_FUN(do_develop);
 DECLARE_DO_FUN(do_devote);
 DECLARE_DO_FUN(do_diagnose);
 DECLARE_DO_FUN(do_dig);

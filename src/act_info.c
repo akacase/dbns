@@ -4559,6 +4559,32 @@ do_practice(CHAR_DATA * ch, char *argument)
 		}
 	}
 }
+void
+do_develop(CHAR_DATA * ch, char *argument) {
+	
+	char 	arg1[MAX_INPUT_LENGTH];
+	char 	arg2[MAX_INPUT_LENGTH];
+	
+	argument = one_argument(argument, arg1);
+	argument = one_argument(argument, arg2);
+	
+	if (IS_NPC(ch)) {
+		send_to_char("Stop that!\n\r", ch);
+		return;
+	}
+	if (arg1[0] == '\0' && arg2[0] == '\0') {
+		send_to_char("DEBUG: both arguments empty\n\r", ch);
+		return;
+	}
+	if (!str_cmp(arg1, "debug") && arg2[0] == '\0') {
+		send_to_char("DEBUG: argument 1 accepted, 2 is empty\n\r", ch);
+		return;
+	}
+	if (!str_cmp(arg1, "debug") && !str_cmp(arg2, "debug2")) {
+		send_to_char("DEBUG: both arguments accepted\n\r", ch);
+		return;
+	}
+}
 
 void
 do_wimpy(CHAR_DATA * ch, char *argument)
@@ -6051,7 +6077,7 @@ do_skills(CHAR_DATA * ch, char *argument) {
 			"\n\r");
 		if (ch->strikemastery >= 10000000) {
 			pager_printf_color(ch,
-				"&CSTRIKE MASTERY&B----------&Y[&GRANDMASTER %d&Y]\n\r", gmastersrank);
+				"&CSTRIKE MASTERY&B----------&Y[&GGRANDMASTER %d&Y]\n\r", gmastersrank);
 		}
 		else if (ch->strikemastery >= 1000000) {
 			pager_printf_color(ch,

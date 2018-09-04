@@ -214,6 +214,7 @@ DO_FUN *skill_function( char *name )
       if ( !str_cmp( name, "do_destro"                    ))    return do_destro;
       if ( !str_cmp( name, "do_destroy"                   ))    return do_destroy;
       if ( !str_cmp( name, "do_detrap"                    ))    return do_detrap;
+      if ( !str_cmp( name, "do_develop"                    ))    return do_develop;
       if ( !str_cmp( name, "do_devote"                    ))    return do_devote;
       if ( !str_cmp( name, "do_diagnose"                  ))    return do_diagnose;
       if ( !str_cmp( name, "do_dig"                       ))    return do_dig;
@@ -993,6 +994,7 @@ char *skill_name( DO_FUN *skill )
   if ( skill == do_destro                      )    return "do_destro";
   if ( skill == do_destroy                     )    return "do_destroy";
   if ( skill == do_detrap                      )    return "do_detrap";
+  if ( skill == do_develop                      )    return "do_develop";
   if ( skill == do_devote                      )    return "do_devote";
   if ( skill == do_diagnose                    )    return "do_diagnose";
   if ( skill == do_dig                         )    return "do_dig";
