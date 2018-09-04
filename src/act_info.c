@@ -5991,16 +5991,30 @@ do_slist(CHAR_DATA * ch, char *argument)
 	}
 
 }
+
 void
 do_skills(CHAR_DATA * ch, char *argument) {
 	
 	char 	arg[MAX_INPUT_LENGTH];
 	int		novicesrank = 0;
-	int		novicekrank = 0;
-	int		novicebrank = 0;
 	int		appsrank = 0;
+	int		skillsrank = 0;
+	int		expertsrank = 0;
+	int		mastersrank = 0;
+	int		gmastersrank = 0;
+	int		novicekrank = 0;
 	int		appkrank = 0;
+	int		skillkrank = 0;
+	int		expertkrank = 0;
+	int		masterkrank = 0;
+	int		gmasterkrank = 0;
+	int		novicebrank = 0;
 	int		appbrank = 0;
+	int		skillbrank = 0;
+	int		expertbrank = 0;
+	int		masterbrank = 0;
+	int		gmasterbrank = 0;
+	
 	
 	one_argument(argument, arg);
 	
@@ -6009,47 +6023,217 @@ do_skills(CHAR_DATA * ch, char *argument) {
 		return;
 	}
 	
-	novicesrank = (ch->strikemastery / 1000);
+	novicesrank = (ch->strikemastery / 100);
 	appsrank = (novicesrank / 10);
-	novicekrank = (ch->energymastery / 1000);
-	appkrank = (novicekrank / 10);
-	novicebrank = (ch->bodymastery / 1000);
-	appbrank = (novicebrank / 10);
+	skillsrank = (appsrank / 10);
+	expertsrank = (skillsrank / 10);
+	mastersrank = (expertsrank / 10);
+	gmastersrank = (mastersrank /10);
 	
+	novicekrank = (ch->energymastery / 100);
+	appkrank = (novicekrank / 10);
+	skillkrank = (appkrank / 10);
+	expertkrank = (skillkrank / 10);
+	masterkrank = (expertkrank / 10);
+	gmasterkrank = (masterkrank / 10);
+	
+	novicebrank = (ch->bodymastery / 100);
+	appbrank = (novicebrank / 10);
+	skillbrank = (appbrank / 10);
+	expertbrank = (skillbrank / 10);
+	masterbrank = (expertbrank / 10);
+	gmasterbrank = (masterbrank / 10);
+
 	if (argument[0] == '\0') {
 		pager_printf_color(ch,
 			"&B---------------------&CSKILL MASTERIES&B-----------------------\n\r");
 		pager_printf_color(ch,
 			"\n\r");
-		if (ch->strikemastery < 10000) {
+		if (ch->strikemastery >= 10000000) {
 			pager_printf_color(ch,
-				"&CSTRIKE MASTERY&B----------&Y[&GNOVICE %d&Y]\n\r", novicesrank);
+				"&CSTRIKE MASTERY&B----------&Y[&GRANDMASTER %d&Y]\n\r", gmastersrank);
 		}
-		else {
+		else if (ch->strikemastery >= 1000000) {
+			pager_printf_color(ch,
+				"&CSTRIKE MASTERY&B----------&Y[&GMASTER %d&Y]\n\r", mastersrank);
+		}
+		else if (ch->strikemastery >= 100000) {
+			pager_printf_color(ch,
+				"&CSTRIKE MASTERY&B----------&Y[&GEXPERT %d&Y]\n\r", expertsrank);
+		}
+		else if (ch->strikemastery >= 10000) {
+			pager_printf_color(ch,
+				"&CSTRIKE MASTERY&B----------&Y[&GSKILLED %d&Y]\n\r", skillsrank);
+		}
+		else if (ch->strikemastery >= 1000) {
 			pager_printf_color(ch,
 				"&CSTRIKE MASTERY&B----------&Y[&GAPPRENTICE %d&Y]\n\r", appsrank);
 		}
+		else {
+			pager_printf_color(ch,
+				"&CSTRIKE MASTERY&B----------&Y[&GNOVICE %d&Y]\n\r", novicesrank);
+		}
 		pager_printf_color(ch,
 			"\n\r");
-		if (ch->energymastery < 10000) {
+		if (ch->energymastery >= 10000000) {
 			pager_printf_color(ch,
-				"&CKI MASTERY&B--------------&Y[&GNOVICE %d&Y]\n\r", novicekrank);
+				"&CKI MASTERY&B--------------&Y[&GGRANDMASTER %d&Y]\n\r", gmasterkrank);
 		}
-		else {
+		else if (ch->energymastery >= 1000000) {
+			pager_printf_color(ch,
+				"&CKI MASTERY&B--------------&Y[&GMASTER %d&Y]\n\r", masterkrank);
+		}
+		else if (ch->energymastery >= 100000) {
+			pager_printf_color(ch,
+				"&CKI MASTERY&B--------------&Y[&GEXPERT %d&Y]\n\r", expertkrank);
+		}
+		else if (ch->energymastery >= 10000) {
+			pager_printf_color(ch,
+				"&CKI MASTERY&B--------------&Y[&GSKILLED %d&Y]\n\r", skillkrank);
+		}
+		else if (ch->energymastery >= 1000) {
 			pager_printf_color(ch,
 				"&CKI MASTERY&B--------------&Y[&GAPPRENTICE %d&Y]\n\r", appkrank);
 		}
+		else {
+			pager_printf_color(ch,
+				"&CKI MASTERY&B--------------&Y[&GNOVICE %d&Y]\n\r", novicekrank);
+		}
 		pager_printf_color(ch,
 			"\n\r");
-		if (ch->bodymastery < 10000) {
+		if (ch->bodymastery >= 10000000) {
 			pager_printf_color(ch,
-				"&CBODY MASTERY&B------------&Y[&GNOVICE %d&Y]\n\r", novicebrank);
+				"&CBODY MASTERY&B------------&Y[&GGRANDMASTER %d&Y]\n\r", gmasterbrank);
 		}
-		else {
+		else if (ch->bodymastery >= 1000000) {
+			pager_printf_color(ch,
+				"&CBODY MASTERY&B------------&Y[&GMASTER %d&Y]\n\r", masterbrank);
+		}
+		else if (ch->bodymastery >= 100000) {
+			pager_printf_color(ch,
+				"&CBODY MASTERY&B------------&Y[&GEXPERT %d&Y]\n\r", expertbrank);
+		}
+		else if (ch->bodymastery >= 10000) {
+			pager_printf_color(ch,
+				"&CBODY MASTERY&B------------&Y[&GSKILLED %d&Y]\n\r", skillbrank);
+		}
+		else if (ch->bodymastery >= 1000) {
 			pager_printf_color(ch,
 				"&CBODY MASTERY&B------------&Y[&GAPPRENTICE %d&Y]\n\r", appbrank);
 		}
+		else {
+			pager_printf_color(ch,
+				"&CBODY MASTERY&B------------&Y[&GNOVICE %d&Y]\n\r", novicebrank);
+		}
 	}
+		if (!str_cmp(arg, "strike")) {
+			pager_printf_color(ch,
+				"&B------------------&CYOUR LEARNED STRIKING SKILLS&B-------------------\n\r");
+			pager_printf_color(ch,
+				"\n\r");
+			if (ch->strikemastery >= 10000000) {
+				pager_printf_color(ch,
+					"&Y   Punch, Punch Heavy\n\r");
+				pager_printf_color(ch,
+					"&Y   Kick\n\r");
+				pager_printf_color(ch,
+					"&Y   Bash, Bash Heavy, Bash Lariat\n\r");
+				pager_printf_color(ch,
+					"&Y   Bruiser Style\n\r");
+			}
+			else if (ch->strikemastery >= 1000000) {
+				pager_printf_color(ch,
+					"&Y   Punch, Punch Heavy\n\r");
+				pager_printf_color(ch,
+					"&Y   Kick\n\r");
+				pager_printf_color(ch,
+					"&Y   Bash, Bash Heavy, Bash Lariat\n\r");
+				pager_printf_color(ch,
+					"&Y   Bruiser Style\n\r");
+			}
+			else if (ch->strikemastery >= 100000) {
+				pager_printf_color(ch,
+					"&Y   Punch, Punch Heavy\n\r");
+				pager_printf_color(ch,
+					"&Y   Kick\n\r");
+				pager_printf_color(ch,
+					"&Y   Bash, Bash Heavy\n\r");
+				pager_printf_color(ch,
+					"&Y   Bruiser Style\n\r");
+			}
+			else if (ch->strikemastery >= 10000) {
+				pager_printf_color(ch,
+					"&Y   Punch, Punch Heavy\n\r");
+				pager_printf_color(ch,
+					"&Y   Kick\n\r");
+				pager_printf_color(ch,
+					"&Y   Bash\n\r");
+				pager_printf_color(ch,
+					"&Y   Bruiser Style\n\r");
+			}
+			else if (ch->strikemastery >= 1000) {
+				pager_printf_color(ch,
+					"&Y   Punch, Punch Heavy\n\r");
+				pager_printf_color(ch,
+					"&Y   Kick\n\r");
+				pager_printf_color(ch,
+					"&Y   Bruiser Style\n\r");
+			}
+			else {
+				pager_printf_color(ch,
+					"&Y   Punch\n\r");
+				pager_printf_color(ch,
+					"&Y   Kick\n\r");
+			}
+		}
+		if (!str_cmp(arg, "ki")) {
+			pager_printf_color(ch,
+				"&B------------------&CYOUR LEARNED KI ABILITIES&B-------------------\n\r");
+			pager_printf_color(ch,
+				"\n\r");
+			if (ch->energymastery >= 10000000) {
+				pager_printf_color(ch,
+					"&Y   Energy Desperation\n\r");
+				pager_printf_color(ch,
+					"&Y   Energy Style(Energy Fist)\n\r");
+			}
+			else if (ch->energymastery >= 1000000) {
+				pager_printf_color(ch,
+					"&Y   Energy Desperation\n\r");
+				pager_printf_color(ch,
+					"&Y   Energy Style(Energy Fist)\n\r");
+			}
+			else if (ch->energymastery >= 100000) {
+				pager_printf_color(ch,
+					"&Y   Energy Barrage\n\r");
+				pager_printf_color(ch,
+					"&Y   Energy Style(Energy Fist)\n\r");
+			}
+			else if (ch->energymastery >= 10000) {
+				pager_printf_color(ch,
+					"&Y   Enhanced Energy Ball\n\r");
+				pager_printf_color(ch,
+					"&Y   Energy Style(Energy Fist)\n\r");
+			}
+			else if (ch->energymastery >= 1000) {
+				pager_printf_color(ch,
+					"&Y   Enhanced Energy Ball\n\r");
+				pager_printf_color(ch,
+					"&Y   Energy Style(Energy Fist)\n\r");
+			}
+			else {
+				pager_printf_color(ch,
+					"&Y   Energy Ball\n\r");
+			}
+		}
+		if (!str_cmp(arg, "body")) {
+			pager_printf_color(ch,
+				"&B------------------&CYOUR INNATE ABILITIES&B-------------------\n\r");
+			pager_printf_color(ch,
+				"\n\r");
+			pager_printf_color(ch,
+				"Sorry, nothing here! ... yet\n\r");
+		}
 	return;
 }
 
