@@ -5991,6 +5991,67 @@ do_slist(CHAR_DATA * ch, char *argument)
 	}
 
 }
+void
+do_skills(CHAR_DATA * ch, char *argument) {
+	
+	char 	arg[MAX_INPUT_LENGTH];
+	int		novicesrank = 0;
+	int		novicekrank = 0;
+	int		novicebrank = 0;
+	int		appsrank = 0;
+	int		appkrank = 0;
+	int		appbrank = 0;
+	
+	one_argument(argument, arg);
+	
+	if (IS_NPC(ch)) {
+		send_to_char("Mobiles don't need to see a skill list.\n\r", ch);
+		return;
+	}
+	
+	novicesrank = (ch->strikemastery / 1000);
+	appsrank = (novicesrank / 10);
+	novicekrank = (ch->energymastery / 1000);
+	appkrank = (novicekrank / 10);
+	novicebrank = (ch->bodymastery / 1000);
+	appbrank = (novicebrank / 10);
+	
+	if (argument[0] == '\0') {
+		pager_printf_color(ch,
+			"&B---------------------&CSKILL MASTERIES&B-----------------------\n\r");
+		pager_printf_color(ch,
+			"\n\r");
+		if (ch->strikemastery < 10000) {
+			pager_printf_color(ch,
+				"&CSTRIKE MASTERY----------[NOVICE %d]\n\r", num_punct(novicesrank));
+		}
+		else {
+			pager_printf_color(ch,
+				"&CSTRIKE MASTERY----------[APPRENTICE %d]\n\r", num_punct(appsrank));
+		}
+		pager_printf_color(ch,
+			"\n\r");
+		if (ch->energymastery < 10000) {
+			pager_printf_color(ch,
+				"&CKI MASTERY--------------[NOVICE %d]\n\r", num_punct(novicekrank));
+		}
+		else {
+			pager_printf_color(ch,
+				"&CKI MASTERY--------------[APPRENTICE %d]\n\r", num_punct(appkrank));
+		}
+		pager_printf_color(ch,
+			"\n\r");
+		if (ch->bodymastery < 10000) {
+			pager_printf_color(ch,
+				"&CBODY MASTERY------------[NOVICE %d]\n\r", num_punct(novicebrank));
+		}
+		else {
+			pager_printf_color(ch,
+				"&CBODY MASTERY------------[APPRENTICE %d]\n\r", num_punct(appbrank));
+		}
+	}
+	return;
+}
 
 void
 do_whois(CHAR_DATA * ch, char *argument)

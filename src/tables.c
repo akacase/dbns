@@ -640,6 +640,7 @@ DO_FUN *skill_function( char *name )
       if ( !str_cmp( name, "do_rstat"                     ))    return do_rstat;
       break;
     case 's':
+      if ( !str_cmp( name, "do_skills"			  ))	return do_skills;
       if ( !str_cmp( name, "do_summon"			  ))	return do_summon;
       if ( !str_cmp( name, "do_sanctuary"		  ))	return do_sanctuary;
       if ( !str_cmp( name, "do_scattered_finger_beam"                 ))    return do_scattered_finger_beam;
@@ -894,6 +895,7 @@ char *skill_name( DO_FUN *skill )
   if ( skill == do_superandroid		  )	return "do_superandroid";
   if ( skill == do_scattered_finger_beam                    )    return "do_scattered_finger_beam";
   if ( skill == do_shockwave		  )     return "do_shockwave";
+  if ( skill == do_skills		  )     return "do_skills";
   if ( skill == do_spirit_ball                    )    return "do_spirit_ball";
   if ( skill == do_spirit_bomb                    )    return "do_spirit_bomb";
   if ( skill == do_summon			   )	return "do_summon";
