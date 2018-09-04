@@ -1396,8 +1396,8 @@ fread_char (CHAR_DATA * ch, FILE * fp, bool preload)
 	  case 'B':
 	       KEY ("Bamfin", ch->pcdata->bamfin, fread_string_nohash (fp));
 	       KEY ("Bamfout", ch->pcdata->bamfout, fread_string_nohash (fp));
-	       KEY ("BodyMastery", ch->pcdata->bodymastery, fread_number (fp));
-	       KEY ("BodyRank", ch->pcdata->bodyrank, fread_number (fp));
+	       KEY ("BodyMastery", ch->bodymastery, fread_number (fp));
+	       KEY ("BodyRank", ch->bodyrank, fread_number (fp));
 	       /* Read in board status */
 	       if (!str_cmp (word, "Boards")) {
 		    int i, num = fread_number (fp);	/* number of boards saved */
@@ -1938,8 +1938,8 @@ fread_char (CHAR_DATA * ch, FILE * fp, bool preload)
 	       KEY ("ShortDescr", ch->short_descr, fread_string (fp));
 	       KEY ("Sparcount", ch->pcdata->sparcount, fread_number (fp));
 	       KEY ("Spouse", ch->pcdata->spouse, fread_string_nohash (fp));
-	       KEY ("StrikeMastery", ch->pcdata->strikemastery, fread_number (fp));
-	       KEY ("StrikeRank", ch->pcdata->strikerank, fread_number (fp));
+	       KEY ("StrikeMastery", ch->strikemastery, fread_number (fp));
+	       KEY ("StrikeRank", ch->strikerank, fread_number (fp));
 	       KEY ("Style", ch->style, fread_number (fp));
 	       KEY ("Suppress", ch->pcdata->suppress, fread_number_ld (fp));
 	       KEY ("Susceptible", ch->susceptible, fread_number (fp));
@@ -2124,8 +2124,8 @@ fread_char (CHAR_DATA * ch, FILE * fp, bool preload)
 		    return;
 	       }
 	       KEY ("Email", ch->pcdata->email, fread_string_nohash (fp));
-	       KEY ("EnergyMastery", ch->pcdata->energymastery, fread_number (fp));
-	       KEY ("EnergyRank", ch->pcdata->energyrank, fread_number (fp));
+	       KEY ("EnergyMastery", ch->energymastery, fread_number (fp));
+	       KEY ("EnergyRank", ch->energyrank, fread_number (fp));
 	       KEY ("Evilmod", ch->evilmod, fread_number (fp));
 	       KEY ("Exp", ch->exp, fread_number_ld (fp));
 	       KEY ("Eyes", ch->pcdata->eyes, fread_number (fp));
