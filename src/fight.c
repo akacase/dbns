@@ -2636,6 +2636,7 @@ violence_update(void)
 					if (ch->hit - (gravdam / 3) < 0) {
 						update_pos(ch);
 						if (ch->position == POS_DEAD) {
+							ch->gravSetting = acc;
 							act( AT_RED, "Your body has been crushed!", ch, NULL, NULL, TO_CHAR );
 							act( AT_RED, "$n collapses, DEAD, $s body crushed under intense gravity.", ch, NULL, NULL, TO_NOTVICT );
 							sprintf( buf, "%s is crushed into a pancake under intense gravity", ch->name );
