@@ -4999,6 +4999,7 @@ DECLARE_DO_FUN(do_shutdow);
 DECLARE_DO_FUN(do_shutdown);
 DECLARE_DO_FUN(do_silence);
 DECLARE_DO_FUN(do_sit);
+DECLARE_DO_FUN(do_skills);
 DECLARE_DO_FUN(do_skin);
 DECLARE_DO_FUN(do_sla);
 DECLARE_DO_FUN(do_slay);
