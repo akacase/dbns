@@ -2460,6 +2460,14 @@ nanny(DESCRIPTOR_DATA *d, char *argument)
 	ch->gravAcc = 1;
 	ch->gravSetting = 1;
 	ch->gravExp = 1000;
+	ch->school = 0;
+	ch->strikemastery = 0;
+	ch->strikerank = 0;
+	ch->energymastery = 0;
+	ch->energyrank = 0;
+	ch->bodymastery = 0;
+	ch->gravityrankup = 0;
+	ch->bodyrank = 0;
 	ch->heart_pl = 5;
 	ch->max_hit += race_table[ch->race]->hit;
 	ch->max_mana += race_table[ch->race]->mana;

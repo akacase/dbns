@@ -316,8 +316,16 @@ fwrite_char (CHAR_DATA * ch, FILE * fp)
        (ch->in_room == get_room_index (ROOM_VNUM_LIMBO)
 	 && ch->was_in_room) ? ch->was_in_room->vnum : ch->in_room->vnum);
      fprintf (fp, "Worth           %lld\n", ch->worth);
+	 fprintf (fp, "School               %d\n", ch->school);
+	 fprintf (fp, "StrikeMastery               %d\n", ch->strikemastery);
+	 fprintf (fp, "StrikeRank               %d\n", ch->strikerank);
+	 fprintf (fp, "EnergyMastery               %d\n", ch->energymastery);
+	 fprintf (fp, "EnergyRank               %d\n", ch->energyrank);
+	 fprintf (fp, "BodyMastery               %d\n", ch->bodymastery);
+	 fprintf (fp, "BodyRank               %d\n", ch->bodyrank);
 	 fprintf (fp, "Gravitysetting               %d\n", ch->gravSetting);
 	 fprintf (fp, "Gravityacclimation           %d\n", ch->gravAcc);
+	 fprintf (fp, "Gravityrankup           %d\n", ch->gravityrankup);
 	 fprintf (fp, "Gravityexp                   %lld\n", ch->gravExp);
      fprintf (fp, "HpManaMove     %d %d %d %d %d %d\n",
        ch->hit, ch->max_hit, ch->mana, ch->max_mana, ch->move,
@@ -1388,6 +1396,8 @@ fread_char (CHAR_DATA * ch, FILE * fp, bool preload)
 	  case 'B':
 	       KEY ("Bamfin", ch->pcdata->bamfin, fread_string_nohash (fp));
 	       KEY ("Bamfout", ch->pcdata->bamfout, fread_string_nohash (fp));
+	       KEY ("BodyMastery", ch->pcdata->bodymastery, fread_number (fp));
+	       KEY ("BodyRank", ch->pcdata->bodyrank, fread_number (fp));
 	       /* Read in board status */
 	       if (!str_cmp (word, "Boards")) {
 		    int i, num = fread_number (fp);	/* number of boards saved */
@@ -1598,6 +1608,7 @@ fread_char (CHAR_DATA * ch, FILE * fp, bool preload)
 		   KEY ("Gravityacclimation", ch->gravAcc, fread_number (fp));
 		   KEY ("Gravitysetting", ch->gravSetting, fread_number (fp));
 		   KEY ("Gravityexp", ch->gravExp, fread_number_ll (fp));
+		   KEY ("Gravityrankup", ch->gravityrankup, fread_number (fp));
 	       /* temporary measure */
 	       if (!strcmp (word, "Guild")) {
 		    ch->pcdata->clan_name = fread_string (fp);
@@ -1918,6 +1929,7 @@ fread_char (CHAR_DATA * ch, FILE * fp, bool preload)
 	       break;
 
 	  case 'S':
+	       KEY ("School", ch->pcdata->school, fread_number (fp));
 	       KEY ("SD_Charge", ch->pcdata->sd_charge, fread_number (fp));
 	       KEY ("Secondarycolor", ch->pcdata->secondarycolor, fread_number (fp));
 	       KEY ("Sex", ch->sex, fread_number (fp));
@@ -1926,6 +1938,8 @@ fread_char (CHAR_DATA * ch, FILE * fp, bool preload)
 	       KEY ("ShortDescr", ch->short_descr, fread_string (fp));
 	       KEY ("Sparcount", ch->pcdata->sparcount, fread_number (fp));
 	       KEY ("Spouse", ch->pcdata->spouse, fread_string_nohash (fp));
+	       KEY ("StrikeMastery", ch->pcdata->strikemastery, fread_number (fp));
+	       KEY ("StrikeRank", ch->pcdata->strikerank, fread_number (fp));
 	       KEY ("Style", ch->style, fread_number (fp));
 	       KEY ("Suppress", ch->pcdata->suppress, fread_number_ld (fp));
 	       KEY ("Susceptible", ch->susceptible, fread_number (fp));
@@ -2110,6 +2124,8 @@ fread_char (CHAR_DATA * ch, FILE * fp, bool preload)
 		    return;
 	       }
 	       KEY ("Email", ch->pcdata->email, fread_string_nohash (fp));
+	       KEY ("EnergyMastery", ch->pcdata->energymastery, fread_number (fp));
+	       KEY ("EnergyRank", ch->pcdata->energyrank, fread_number (fp));
 	       KEY ("Evilmod", ch->evilmod, fread_number (fp));
 	       KEY ("Exp", ch->exp, fread_number_ld (fp));
 	       KEY ("Eyes", ch->pcdata->eyes, fread_number (fp));

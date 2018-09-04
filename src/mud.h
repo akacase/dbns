@@ -2652,6 +2652,14 @@ struct char_data {
 	int		gravSetting;
 	int		gravAcc;
 	long long int gravExp;
+	int		gravityrankup;
+	int		school;
+	int		strikemastery;
+	int		strikerank;
+	int		energymastery;
+	int		energyrank;
+	int		bodymastery;
+	int		bodyrank;
 	int 	mana;
 	int 	max_mana;
 	int 	max_energy;

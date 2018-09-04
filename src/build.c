@@ -1576,6 +1576,69 @@ do_mset(CHAR_DATA * ch, char *argument)
 			victim->gravExp = value;
 		return;
 	}
+	if (!str_cmp(arg2, "school")) {
+		if (!can_mmodify(ch, victim))
+			return;
+		if (IS_NPC(victim))
+			return;
+		else if (!IS_NPC(victim))
+			victim->school = value;
+		return;
+	}
+	if (!str_cmp(arg2, "strikemastery")) {
+		if (!can_mmodify(ch, victim))
+			return;
+		if (IS_NPC(victim))
+			return;
+		else if (!IS_NPC(victim))
+			victim->strikemastery = value;
+		return;
+	}
+	if (!str_cmp(arg2, "strikerank")) {
+		if (!can_mmodify(ch, victim))
+			return;
+		if (IS_NPC(victim))
+			return;
+		else if (!IS_NPC(victim))
+			victim->strikerank = value;
+		return;
+	}
+	if (!str_cmp(arg2, "energymastery")) {
+		if (!can_mmodify(ch, victim))
+			return;
+		if (IS_NPC(victim))
+			return;
+		else if (!IS_NPC(victim))
+			victim->energymastery = value;
+		return;
+	}
+	if (!str_cmp(arg2, "energyrank")) {
+		if (!can_mmodify(ch, victim))
+			return;
+		if (IS_NPC(victim))
+			return;
+		else if (!IS_NPC(victim))
+			victim->energyrank = value;
+		return;
+	}
+	if (!str_cmp(arg2, "bodymastery")) {
+		if (!can_mmodify(ch, victim))
+			return;
+		if (IS_NPC(victim))
+			return;
+		else if (!IS_NPC(victim))
+			victim->bodymastery = value;
+		return;
+	}
+	if (!str_cmp(arg2, "bodyrank")) {
+		if (!can_mmodify(ch, victim))
+			return;
+		if (IS_NPC(victim))
+			return;
+		else if (!IS_NPC(victim))
+			victim->bodyrank = value;
+		return;
+	}
 	if (!str_cmp(arg2, "class")) {
 		if (!can_mmodify(ch, victim))
 			return;
