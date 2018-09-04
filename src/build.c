@@ -1582,7 +1582,7 @@ do_mset(CHAR_DATA * ch, char *argument)
 		if (IS_NPC(victim))
 			return;
 		else if (!IS_NPC(victim))
-			victim->pcdata->school = value;
+			victim->school = value;
 		return;
 	}
 	if (!str_cmp(arg2, "strikemastery")) {
@@ -1591,7 +1591,7 @@ do_mset(CHAR_DATA * ch, char *argument)
 		if (IS_NPC(victim))
 			return;
 		else if (!IS_NPC(victim))
-			victim->pcdata->strikemastery = value;
+			victim->strikemastery = value;
 		return;
 	}
 	if (!str_cmp(arg2, "strikerank")) {
@@ -1600,7 +1600,7 @@ do_mset(CHAR_DATA * ch, char *argument)
 		if (IS_NPC(victim))
 			return;
 		else if (!IS_NPC(victim))
-			victim->pcdata->strikerank = value;
+			victim->strikerank = value;
 		return;
 	}
 	if (!str_cmp(arg2, "energymastery")) {
@@ -1609,7 +1609,7 @@ do_mset(CHAR_DATA * ch, char *argument)
 		if (IS_NPC(victim))
 			return;
 		else if (!IS_NPC(victim))
-			victim->pcdata->energymastery = value;
+			victim->energymastery = value;
 		return;
 	}
 	if (!str_cmp(arg2, "energyrank")) {
@@ -1618,7 +1618,7 @@ do_mset(CHAR_DATA * ch, char *argument)
 		if (IS_NPC(victim))
 			return;
 		else if (!IS_NPC(victim))
-			victim->pcdata->energyrank = value;
+			victim->energyrank = value;
 		return;
 	}
 	if (!str_cmp(arg2, "bodymastery")) {
@@ -1627,7 +1627,7 @@ do_mset(CHAR_DATA * ch, char *argument)
 		if (IS_NPC(victim))
 			return;
 		else if (!IS_NPC(victim))
-			victim->pcdata->bodymastery = value;
+			victim->bodymastery = value;
 		return;
 	}
 	if (!str_cmp(arg2, "bodyrank")) {
@@ -1636,7 +1636,7 @@ do_mset(CHAR_DATA * ch, char *argument)
 		if (IS_NPC(victim))
 			return;
 		else if (!IS_NPC(victim))
-			victim->pcdata->bodyrank = value;
+			victim->bodyrank = value;
 		return;
 	}
 	if (!str_cmp(arg2, "class")) {
