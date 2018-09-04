@@ -1929,7 +1929,7 @@ fread_char (CHAR_DATA * ch, FILE * fp, bool preload)
 	       break;
 
 	  case 'S':
-	       KEY ("School", ch->pcdata->school, fread_number (fp));
+	       KEY ("School", ch->school, fread_number (fp));
 	       KEY ("SD_Charge", ch->pcdata->sd_charge, fread_number (fp));
 	       KEY ("Secondarycolor", ch->pcdata->secondarycolor, fread_number (fp));
 	       KEY ("Sex", ch->sex, fread_number (fp));
