@@ -6023,31 +6023,31 @@ do_skills(CHAR_DATA * ch, char *argument) {
 			"\n\r");
 		if (ch->strikemastery < 10000) {
 			pager_printf_color(ch,
-				"&CSTRIKE MASTERY&B----------&Y[&GNOVICE %t&Y]\n\r", num_punct(novicesrank));
+				"&CSTRIKE MASTERY&B----------&Y[&GNOVICE %t&Y]\n\r", novicesrank);
 		}
 		else {
 			pager_printf_color(ch,
-				"&CSTRIKE MASTERY&B----------&Y[&GAPPRENTICE %t&Y]\n\r", num_punct(appsrank));
+				"&CSTRIKE MASTERY&B----------&Y[&GAPPRENTICE %t&Y]\n\r", appsrank);
 		}
 		pager_printf_color(ch,
 			"\n\r");
 		if (ch->energymastery < 10000) {
 			pager_printf_color(ch,
-				"&CKI MASTERY&B--------------&Y[&GNOVICE %t&Y]\n\r", num_punct(novicekrank));
+				"&CKI MASTERY&B--------------&Y[&GNOVICE %t&Y]\n\r", novicekrank);
 		}
 		else {
 			pager_printf_color(ch,
-				"&CKI MASTERY&B--------------&Y[&GAPPRENTICE %t&Y]\n\r", num_punct(appkrank));
+				"&CKI MASTERY&B--------------&Y[&GAPPRENTICE %t&Y]\n\r", appkrank);
 		}
 		pager_printf_color(ch,
 			"\n\r");
 		if (ch->bodymastery < 10000) {
 			pager_printf_color(ch,
-				"&CBODY MASTERY&B------------&Y[&GNOVICE %t&Y]\n\r", num_punct(novicebrank));
+				"&CBODY MASTERY&B------------&Y[&GNOVICE %t&Y]\n\r", novicebrank);
 		}
 		else {
 			pager_printf_color(ch,
-				"&CBODY MASTERY&B------------&Y[&GAPPRENTICE %t&Y]\n\r", num_punct(appbrank));
+				"&CBODY MASTERY&B------------&Y[&GAPPRENTICE %t&Y]\n\r", appbrank);
 		}
 	}
 	return;
