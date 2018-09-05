@@ -6587,15 +6587,21 @@ do_skills(CHAR_DATA * ch, char *argument) {
 				"&Y   Bruiser Style     Berserk Style        Aggressive Style\n\r");
 			pager_printf_color(ch,
 				"&Y   Hybrid Style      Evasive Style        Defensive Style\n\r");
-			if (ch->pcdata->learned[gsn_haymaker] > 10) {
+			if ((ch->pcdata->learned[gsn_haymaker] > 10)
+				&& (ch->pcdata->learned[gsn_bash] < 10)
+				&& (ch->pcdata->learned[gsn_collide] < 10)) {
 				pager_printf_color(ch,
 				"&Y   Haymaker\n\r");
 			}
-			else if (ch->pcdata->learned[gsn_bash] > 10) {
+			else if ((ch->pcdata->learned[gsn_haymaker] > 10)
+				&& (ch->pcdata->learned[gsn_bash] > 10)
+				&& (ch->pcdata->learned[gsn_collide] < 10)) {
 				pager_printf_color(ch,
 				"&Y   Haymaker          Bash\n\r");
 			}
-			else if (ch->pcdata->learned[gsn_collide] > 10) {
+			else if ((ch->pcdata->learned[gsn_haymaker] > 10)
+				&& (ch->pcdata->learned[gsn_bash] > 10)
+				&& (ch->pcdata->learned[gsn_collide] > 10)) {
 				pager_printf_color(ch,
 				"&Y   Haymaker          Bash                 Collide\n\r");
 			}
