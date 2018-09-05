@@ -6470,30 +6470,7 @@ do_skills(CHAR_DATA * ch, char *argument) {
 		send_to_char("Mobiles don't need to see a skill list.\n\r", ch);
 		return;
 	}
-	if (ch->pcdata->learned[gsn_meteor] > 10)
-		lmeteor = true;
-	if (ch->pcdata->learned[gsn_gigantic_meteor] > 10)
-		lgmeteor = true;
-	if (ch->pcdata->learned[gsn_ecliptic_meteor] ? 10)
-		lemeteor = true;
-	if (ch->pcdata->learned[gsn_haymaker] > 10)
-		lhaymaker = true;
-	if (ch->pcdata->learned[gsn_energybeam] > 10)
-		lebeam = true;
-	if (ch->pcdata->learned[gsn_energy_disc] > 10)
-		ledisc = true;
-	if (ch->pcdata->learned[gsn_crusherball] > 10)
-		lcball = true;
-	if (ch->pcdata->learned[gsn_collide] > 10)
-		lcollide = true;
-	if (ch->pcdata->learned[gsn_concentrated_beam] > 10)
-		lcbeam = true;
-	if (ch->pcdata->learned[gsn_forcewave] > 10)
-		lfwave = true;
-	if (ch->pcdata->learned[gsn_lariat] > 10)
-		llariat = true;
-	
-	
+		
 	novicesrank = (ch->strikemastery / 100);
 	appsrank = (novicesrank / 10);
 	skillsrank = (appsrank / 10);
