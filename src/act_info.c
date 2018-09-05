@@ -4686,12 +4686,9 @@ do_develop(CHAR_DATA * ch, char *argument) {
 	}
 	if (!str_cmp(arg1, "energyball") && !str_cmp(arg2, "energyball")) {
 		if (ch->energymastery >= 1000 && (ch->pcdata->learned[gsn_crusherball] < 10)
-			&& (ch->pcdata->learned[gsn_energybeam] < 10)
 			&& (ch->pcdata->learned[gsn_energy_ball] > 10)) {
 			send_to_char("You developed Crusher Ball!\n\r", ch);
-			send_to_char("You developed Energy Beam!\n\r", ch);
 			ch->pcdata->learned[gsn_crusherball] = 95;
-			ch->pcdata->learned[gsn_energybeam] = 95;
 			return;
 		}
 		else {
@@ -5000,6 +4997,18 @@ do_develop(CHAR_DATA * ch, char *argument) {
 		if ((ch->pcdata->learned[gsn_energy_ball] < 10)) {
 			send_to_char("You developed Energy Ball!\n\r", ch);
 			ch->pcdata->learned[gsn_energy_ball] = 95;
+			return;
+		}
+		else {
+			send_to_char("Regrettably, your effort seems to be wasted.\n\r", ch);
+			return;
+		}
+	}
+	if (!str_cmp(arg1, "energybeam") && arg2[0] == '\0') {
+		if ((ch->pcdata->learned[gsn_energy_ball] > 10)
+			&& (ch->pcdata->learned[gsn_energybeam] < 10)) {
+			send_to_char("You developed Energy Beam!\n\r", ch);
+			ch->pcdata->learned[gsn_energybeam] = 95;
 			return;
 		}
 		else {
