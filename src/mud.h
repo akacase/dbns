@@ -5114,6 +5114,16 @@ DECLARE_DO_FUN(do_worth);
 DECLARE_DO_FUN(do_yell);
 DECLARE_DO_FUN(do_zap);
 DECLARE_DO_FUN(do_zones);
+DECLARE_DO_FUN(do_collide);
+DECLARE_DO_FUN(do_concentrated_beam);
+DECLARE_DO_FUN(do_ecliptic_meteor);
+DECLARE_DO_FUN(do_crusherball);
+DECLARE_DO_FUN(do_energy_disc);
+DECLARE_DO_FUN(do_forcewave);
+DECLARE_DO_FUN(do_gigantic_meteor);
+DECLARE_DO_FUN(do_haymaker);
+DECLARE_DO_FUN(do_lariat);
+DECLARE_DO_FUN(do_meteor);
 DECLARE_DO_FUN(do_potarafuse);		/* skills_dbs.c */
 
 /*//T6*/
