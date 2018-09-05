@@ -2847,18 +2847,12 @@ void do_sting( CHAR_DATA *ch, char *argument )
 void do_bash( CHAR_DATA *ch, char *argument )
 {
 	CHAR_DATA *victim;
-	char 	arg[MAX_INPUT_LENGTH];
 	int 	dam = 0;
 	int		argdam = 0;
 	int		kilimit = 0;
 	float	physmult = 0;
 	float	kicmult = 0;
-	int 	auraColor = AT_YELLOW;
-	float	splitmult = 0;
 
-	one_argument(argument, arg);
-	if (!IS_NPC(ch))
-		auraColor = ch->pcdata->auraColorPowerUp;
 	if (IS_NPC(ch) && is_split(ch)) {
 		if (!ch->master)
 			return;
@@ -2876,183 +2870,36 @@ void do_bash( CHAR_DATA *ch, char *argument )
 	if (!IS_NPC(ch)) {
 		kilimit = ch->train / 10000;
 		physmult = (float) get_curr_str(ch) / 950 + 1;
-		splitmult = ((float) get_curr_str(ch) / 950 + 1) + ((float) get_curr_int(ch) / 4000);
 		kicmult = (float) kilimit / 100 + 1;
 	}
-	if (!str_cmp(arg, "lariat") && (kilimit < 4)) {
-		send_to_char("You're unable to augment your strength enough to do that yet.\n\r", ch);
-		return;
-	}
-	if (!str_cmp(arg, "crusher") && (kilimit < 10)) {
-		send_to_char("You're unable to augment your strength enough to do that yet.\n\r", ch);
-		return;
-	}
-	if (!str_cmp(arg, "meteor") && (kilimit < 30)) {
-		send_to_char("You're unable to augment your strength enough to do that yet.\n\r", ch);
-		return;
-	}
-	if (arg[0] == '\0' && ch->mana < skill_table[gsn_bash]->min_mana) {
+	if (ch->mana < skill_table[gsn_bash]->min_mana) {
 		send_to_char("You don't have enough energy.\n\r", ch);
 		return;
 	}
-	if (!str_cmp(arg, "lariat") && ch->mana < skill_table[gsn_bash]->min_mana * 12) {
-		send_to_char("You don't have enough energy.\n\r", ch);
-		return;
-	}
-	if (!str_cmp(arg, "crusher") && ch->mana < skill_table[gsn_bash]->min_mana * 16) {
-		send_to_char("You don't have enough energy.\n\r", ch);
-		return;
-	}
-	if (!str_cmp(arg, "meteor") && ch->mana < skill_table[gsn_bash]->min_mana * 100) {
-		send_to_char("You don't have enough energy.\n\r", ch);
-		return;
-	}
-	if (ch->focus < skill_table[gsn_bash]->focus) {
-		send_to_char("You need to focus more.\n\r", ch);
-		return;
-	} else
-		ch->focus -= skill_table[gsn_punch]->focus;
 
 	WAIT_STATE(ch, skill_table[gsn_bash]->beats);
 	if (can_use_skill(ch, number_percent(), gsn_bash)) {
 		if (!IS_NPC(ch)) {
-			if (arg[0] == '\0') {
-				argdam = number_range(12, 14) * kicmult;
-				dam = get_attmod(ch, victim) * (argdam * physmult);
-				stat_train(ch, "str", 10);
-				ch->train += 5;
-			}
-			if (!str_cmp(arg, "lariat")) {
-				argdam = number_range(33, 37) * kicmult;
-				dam = get_attmod(ch, victim) * (argdam * physmult);
-				stat_train(ch, "str", 14);
-				ch->train += 16;
-			}
-			if (!str_cmp(arg, "crusher")) {
-				argdam = number_range(33, 37) * kicmult;
-				dam = get_attmod(ch, victim) * (argdam * splitmult);
-				stat_train(ch, "str", 14);
-				stat_train(ch, "int", 7);
-				ch->train += 18;
-			}
-			if (!str_cmp(arg, "meteor")) {
-				argdam = number_range(55, 65) * kicmult;
-				dam = get_attmod(ch, victim) * (argdam * splitmult);
-				stat_train(ch, "str", 28);
-				stat_train(ch, "int", 12);
-				ch->train += 28;
-			}
+			argdam = number_range(10, 12) * kicmult;
+			dam = get_attmod(ch, victim) * (argdam * physmult);
+			stat_train(ch, "str", 10);
+			ch->train += 5;
 		}
 		if (IS_NPC(ch)) {
-			if (arg[0] == '\0')
-				dam = get_attmod(ch, victim) * (number_range(12, 14) + (get_curr_str(ch) / 45));
-			if (!str_cmp(arg, "lariat"))
-				dam = get_attmod(ch, victim) * (number_range(33, 37) + (get_curr_str(ch) / 45));
-			if (!str_cmp(arg, "crusher"))
-				dam = get_attmod(ch, victim) * (number_range(33, 37) + (get_curr_str(ch) / 40));
-			if (!str_cmp(arg, "meteor"))
-				dam = get_attmod(ch, victim) * (number_range(55, 65) + (get_curr_str(ch) / 40));
+			dam = get_attmod(ch, victim) * (number_range(10, 12) + (get_curr_str(ch) / 40));
 		}
 		if (ch->charge > 0)
 			dam = chargeDamMult(ch, dam);
-		if (arg[0] == '\0') {
-			act(AT_YELLOW,
-				"Through a billowing cloud of dust and debris, you tear forward at $N.",
-				ch, NULL, victim, TO_CHAR);
-			act(AT_YELLOW,
-				"You collide your body directly with $N, sending them careening from the impact! &W[$t]",
-				ch, num_punct(dam), victim, TO_CHAR);
-			act(AT_YELLOW,
-				"$n tears forward at you, leaving a billowing cloud of dust and debris in $s wake.", ch,
-				NULL, victim, TO_VICT);
-			act(AT_YELLOW,
-				"$N's body collides directly with you, sending you careening from the impact! &W[$t]",
-				ch, num_punct(dam), victim, TO_VICT);
-			act(AT_YELLOW,
-				"$n tears forward at $N, leaving a billowing cloud of dust and debris in $s wake.", ch,
-				NULL, victim, TO_NOTVICT);
-			act(AT_YELLOW,
-				"$n's body collides directly with $N, sending them careening from the impact! &W[$t]",
-				ch, num_punct(dam), victim, TO_NOTVICT);
-		}
-		if (!str_cmp(arg, "lariat")) {
-			act(AT_YELLOW,
-				"Through a billowing cloud of dust and debris, you tear forward at $N.",
-				ch, NULL, victim, TO_CHAR);
-			act(AT_YELLOW,
-				"Your arm hooks around $N's neck, dragging them with you directly through the terrain! &W[$t]",
-				ch, num_punct(dam), victim, TO_CHAR);
-			act(AT_YELLOW,
-				"$n tears forward at you, leaving a billowing cloud of dust and debris in $s wake.", ch,
-				NULL, victim, TO_VICT);
-			act(AT_YELLOW,
-				"$n's arm hooks around your neck, dragging you directly through the terrain! &W[$t]",
-				ch, num_punct(dam), victim, TO_VICT);
-			act(AT_YELLOW,
-				"$n tears forward at $N, leaving a billowing cloud of dust and debris in $s wake.", ch,
-				NULL, victim, TO_NOTVICT);
-			act(AT_YELLOW,
-				"$n's arm hooks around $N's neck, dragging them directly through the terrain! &W[$t]",
-				ch, num_punct(dam), victim, TO_NOTVICT);
-		}
-		if (!str_cmp(arg, "crusher")) {
-			act(auraColor,
-				"Through a billowing cloud of dust and debris, you tear forward at $N.",
-				ch, NULL, victim, TO_CHAR);
-			act(auraColor,
-				"Your open palm collides directly with $N's chest, carrying $M along with",
-				ch, NULL, victim, TO_CHAR);
-			act(auraColor,
-				"an explosive blast of ki that launches $M into the distance! &W[$t]",
-				ch, num_punct(dam), victim, TO_CHAR);
-			act(auraColor,
-				"$n tears forward at you, leaving a billowing cloud of dust and debris in $s wake.", ch,
-				NULL, victim, TO_VICT);
-			act(auraColor,
-				"$n's open palm collides directly with your chest, carrying you along with'", ch,
-				NULL, victim, TO_VICT);
-			act(auraColor,
-				"an explosive blast of ki that launches you into the distance! &W[$t]",
-				ch, num_punct(dam), victim, TO_VICT);
-			act(auraColor,
-				"$n tears forward at $N, leaving a billowing cloud of dust and debris in $s wake.", ch,
-				NULL, victim, TO_NOTVICT);
-			act(auraColor,
-				"$n's open palm collides directly with $N's chest, carrying $M along with.", ch,
-				NULL, victim, TO_NOTVICT);
-			act(auraColor,
-				"an explosive blast of ki that launches $M into the distance! &W[$t]",
-				ch, num_punct(dam), victim, TO_NOTVICT);
-		}
-		if (!str_cmp(arg, "meteor")) {
-			act(auraColor,
-				"You crash your fist into $N, hammering $M into the splintering earth.",
-				ch, NULL, victim, TO_CHAR);
-			act(auraColor,
-				"An immense mass of crackling energy wreathes your entire body, slowly gathering to your palm.",
-				ch, NULL, victim, TO_CHAR);
-			act(auraColor,
-				"Without remorse, you engulf $N in a gigantic flash of energy! &W[$t]",
-				ch, num_punct(dam), victim, TO_CHAR);
-			act(auraColor,
-				"$n crashes $s fist into you, hammering you into the splintering earth.", ch,
-				NULL, victim, TO_VICT);
-			act(auraColor,
-				"An immense mass of crackling energy wreathes $n's entire body, slowly gathering to &s palm.", ch,
-				NULL, victim, TO_VICT);
-			act(auraColor,
-				"Without remorse, $n engulfs you in a gigantic flash of energy! &W[$t]",
-				ch, num_punct(dam), victim, TO_VICT);
-			act(auraColor,
-				"$n crashes $s fist into $N, hammering $M into the splintering earth.", ch,
-				NULL, victim, TO_NOTVICT);
-			act(auraColor,
-				"An immense mass of crackling energy wreathes $n's entire body, slowly gathering to &s palm.", ch,
-				NULL, victim, TO_NOTVICT);
-			act(auraColor,
-				"Without remorse, $n engulfs $N in a gigantic flash of energy! &W[$t]",
-				ch, num_punct(dam), victim, TO_NOTVICT);
-		}
+
+		act(AT_YELLOW,
+			"You crash directly into $N, knocking them for a loop! &W[$t]",
+			ch, num_punct(dam), victim, TO_CHAR);
+		act(AT_YELLOW,
+			"$n crashes directly into you, knocking you for a loop! &W[$t]",
+			ch, num_punct(dam), victim, TO_VICT);
+		act(AT_YELLOW,
+			"$n crashes directly into $N, knocking them for a loop! &W[$t]",
+			ch, num_punct(dam), victim, TO_NOTVICT);
 		learn_from_success(ch, gsn_bash);
 		global_retcode = damage(ch, victim, dam, TYPE_HIT);
 	}
@@ -3066,22 +2913,8 @@ void do_bash( CHAR_DATA *ch, char *argument )
 		learn_from_failure(ch, gsn_bash);
 		global_retcode = damage(ch, victim, 0, TYPE_HIT);
 	}
-	if (arg[0] == '\0') {
-		ch->mana -= skill_table[gsn_bash]->min_mana;
-		return;
-	}
-	else if (!str_cmp(arg, "lariat")) {
-		ch->mana -= skill_table[gsn_bash]->min_mana * 12;
-		return;
-	}
-	else if (!str_cmp(arg, "crusher")) {
-		ch->mana -= skill_table[gsn_bash]->min_mana * 16;
-		return;
-	}
-	else if (!str_cmp(arg, "meteor")) {
-		ch->mana -= skill_table[gsn_bash]->min_mana * 100;
-		return;
-	}
+	ch->mana -= skill_table[gsn_bash]->min_mana;
+	return;
 }
 
 

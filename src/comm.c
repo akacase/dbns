@@ -2485,6 +2485,19 @@ nanny(DESCRIPTOR_DATA *d, char *argument)
 	ch->pcdata->admintalk = 0;
 	ch->pcdata->age = 18;
 	ch->pcdata->sparcount = 0;
+	ch->pcdata->learned[gsn_dodge] = 95;
+	ch->pcdata->learned[gsn_block] = 95;
+	ch->pcdata->learned[gsn_dcd] = 95;
+	ch->pcdata->learned[gsn_punch] = 95;
+	ch->pcdata->learned[gsn_kick] = 95;
+	ch->pcdata->learned[gsn_energy_ball] = 95;
+	ch->pcdata->learned[gsn_style_evasive] = 95;
+	ch->pcdata->learned[gsn_style_defensive] = 95;
+	ch->pcdata->learned[gsn_style_aggressive] = 95;
+	ch->pcdata->learned[gsn_style_berserk] = 95;
+	ch->pcdata->learned[gsn_meditate] = 95;
+	ch->pcdata->learned[gsn_sense] = 95;
+	ch->pcdata->learned[gsn_suppress] = 95;
 	if (is_saiyan(ch) || is_hb(ch) || is_icer(ch) || is_bio(ch))
 	  ch->pcdata->tail = true;
 	else

@@ -4938,7 +4938,7 @@ do_develop(CHAR_DATA * ch, char *argument) {
 			return;
 		}
 	}
-	if (!str_cmp(arg1, "destructivewave") && !str_cmp(arg2, "forcewave")) {
+	if (!str_cmp(arg1, "forcewave") && !str_cmp(arg2, "forcewave")) {
 		if (ch->energymastery >= 10000 && (ch->pcdata->learned[gsn_shockwave] < 10)
 			&& (ch->pcdata->learned[gsn_destructive_wave] > 10)
 			&& (ch->pcdata->learned[gsn_forcewave] > 10)) {
@@ -6464,13 +6464,35 @@ do_skills(CHAR_DATA * ch, char *argument) {
 	int		masterbrank = 0;
 	int		gmasterbrank = 0;
 	
-	
 	one_argument(argument, arg);
 	
 	if (IS_NPC(ch)) {
 		send_to_char("Mobiles don't need to see a skill list.\n\r", ch);
 		return;
 	}
+	if (ch->pcdata->learned[gsn_meteor] > 10)
+		lmeteor = true;
+	if (ch->pcdata->learned[gsn_gigantic_meteor] > 10)
+		lgmeteor = true;
+	if (ch->pcdata->learned[gsn_ecliptic_meteor] ? 10)
+		lemeteor = true;
+	if (ch->pcdata->learned[gsn_haymaker] > 10)
+		lhaymaker = true;
+	if (ch->pcdata->learned[gsn_energybeam] > 10)
+		lebeam = true;
+	if (ch->pcdata->learned[gsn_energy_disc] > 10)
+		ledisc = true;
+	if (ch->pcdata->learned[gsn_crusherball] > 10)
+		lcball = true;
+	if (ch->pcdata->learned[gsn_collide] > 10)
+		lcollide = true;
+	if (ch->pcdata->learned[gsn_concentrated_beam] > 10)
+		lcbeam = true;
+	if (ch->pcdata->learned[gsn_forcewave] > 10)
+		lfwave = true;
+	if (ch->pcdata->learned[gsn_lariat] > 10)
+		llariat = true;
+	
 	
 	novicesrank = (ch->strikemastery / 100);
 	appsrank = (novicesrank / 10);
@@ -6580,59 +6602,30 @@ do_skills(CHAR_DATA * ch, char *argument) {
 				"&B------------------&CYOUR LEARNED STRIKING SKILLS&B-------------------\n\r");
 			pager_printf_color(ch,
 				"\n\r");
-			if (ch->strikemastery >= 10000000) {
+			pager_printf_color(ch,
+				"&Y   Punch             Kick                 Block\n\r");
+			pager_printf_color(ch,
+				"&Y   Dodge             DCD\n\r");
+			pager_printf_color(ch,
+			pager_printf_color(ch,
+				"&Y   Bruiser Style     Berserk Style        Aggressive Style\n\r");
+			pager_printf_color(ch,
+				"&Y   Hybrid Style      Evasive Style        Defensive Style\n\r");
+			if (ch->pcdata->learned[gsn_haymaker] > 10) {
 				pager_printf_color(ch,
-					"&Y   Punch, Punch Heavy\n\r");
-				pager_printf_color(ch,
-					"&Y   Kick\n\r");
-				pager_printf_color(ch,
-					"&Y   Bash, Bash Heavy, Bash Lariat\n\r");
-				pager_printf_color(ch,
-					"&Y   Bruiser Style\n\r");
+				"&Y   Haymaker\n\r");
 			}
-			else if (ch->strikemastery >= 1000000) {
+			else if (ch->pcdata->learned[gsn_bash] > 10) {
 				pager_printf_color(ch,
-					"&Y   Punch, Punch Heavy\n\r");
-				pager_printf_color(ch,
-					"&Y   Kick\n\r");
-				pager_printf_color(ch,
-					"&Y   Bash, Bash Heavy, Bash Lariat\n\r");
-				pager_printf_color(ch,
-					"&Y   Bruiser Style\n\r");
+				"&Y   Haymaker          Bash\n\r");
 			}
-			else if (ch->strikemastery >= 100000) {
+			else if (ch->pcdata->learned[gsn_collide] > 10) {
 				pager_printf_color(ch,
-					"&Y   Punch, Punch Heavy\n\r");
-				pager_printf_color(ch,
-					"&Y   Kick\n\r");
-				pager_printf_color(ch,
-					"&Y   Bash, Bash Heavy\n\r");
-				pager_printf_color(ch,
-					"&Y   Bruiser Style\n\r");
+				"&Y   Haymaker          Bash                 Collide\n\r");
 			}
-			else if (ch->strikemastery >= 10000) {
+			if (ch->pcdata->learned[gsn_lariat] > 10) {
 				pager_printf_color(ch,
-					"&Y   Punch, Punch Heavy\n\r");
-				pager_printf_color(ch,
-					"&Y   Kick\n\r");
-				pager_printf_color(ch,
-					"&Y   Bash\n\r");
-				pager_printf_color(ch,
-					"&Y   Bruiser Style\n\r");
-			}
-			else if (ch->strikemastery >= 1000) {
-				pager_printf_color(ch,
-					"&Y   Punch, Punch Heavy\n\r");
-				pager_printf_color(ch,
-					"&Y   Kick\n\r");
-				pager_printf_color(ch,
-					"&Y   Bruiser Style\n\r");
-			}
-			else {
-				pager_printf_color(ch,
-					"&Y   Punch\n\r");
-				pager_printf_color(ch,
-					"&Y   Kick\n\r");
+				"&Y   Lariat\n\r");
 			}
 		}
 		if (!str_cmp(arg, "ki")) {
@@ -6640,39 +6633,85 @@ do_skills(CHAR_DATA * ch, char *argument) {
 				"&B------------------&CYOUR LEARNED KI ABILITIES&B-------------------\n\r");
 			pager_printf_color(ch,
 				"\n\r");
-			if (ch->energymastery >= 10000000) {
+			pager_printf_color(ch,
+				"&Y   Energy Ball       Energy Style         Meditate\n\r");
+			pager_printf_color(ch,
+				"&Y   Sense             Suppress             Powerup\n\r");
+			if (ch->pcdata->learned[gsn_crusherball] > 10) {
 				pager_printf_color(ch,
-					"&Y   Energy Desperation\n\r");
-				pager_printf_color(ch,
-					"&Y   Energy Style(Energy Fist)\n\r");
+				"&Y   Crusher Ball\n\r");
 			}
-			else if (ch->energymastery >= 1000000) {
+			else if (ch->pcdata->learned[gsn_meteor] > 10) {
 				pager_printf_color(ch,
-					"&Y   Energy Desperation\n\r");
-				pager_printf_color(ch,
-					"&Y   Energy Style(Energy Fist)\n\r");
+				"&Y   Crusher Ball      Meteor\n\r");
 			}
-			else if (ch->energymastery >= 100000) {
+			else if (ch->pcdata->learned[gsn_gigantic_meteor] > 10) {
 				pager_printf_color(ch,
-					"&Y   Energy Barrage\n\r");
-				pager_printf_color(ch,
-					"&Y   Energy Style(Energy Fist)\n\r");
+				"&Y   Crusher Ball      Meteor               Gigantic Meteor\n\r");
 			}
-			else if (ch->energymastery >= 10000) {
+			if (ch->pcdata->learned[gsn_energybeam] > 10) {
 				pager_printf_color(ch,
-					"&Y   Enhanced Energy Ball\n\r");
-				pager_printf_color(ch,
-					"&Y   Energy Style(Energy Fist)\n\r");
+				"&Y   Energy Beam\n\r");
 			}
-			else if (ch->energymastery >= 1000) {
+			else if (ch->pcdata->learned[gsn_concentrated_beam] > 10) {
 				pager_printf_color(ch,
-					"&Y   Enhanced Energy Ball\n\r");
-				pager_printf_color(ch,
-					"&Y   Energy Style(Energy Fist)\n\r");
+				"&Y   Energy Beam       Concentrated Beam\n\r");
 			}
-			else {
+			else if (ch->pcdata->learned[gsn_kamehameha] > 10) {
 				pager_printf_color(ch,
-					"&Y   Energy Ball\n\r");
+				"&Y   Energy Beam       Concentrated Beam    Kamehameha\n\r");
+			}
+			if (ch->pcdata->learned[gsn_energy_disc] > 10) {
+				pager_printf_color(ch,
+				"&Y   Energy Disc\n\r");
+			}
+			else if (ch->pcdata->learned[gsn_dd] > 10) {
+				pager_printf_color(ch,
+				"&Y   Energy Disc       Destructo Disc\n\r");
+			}
+			if (ch->pcdata->learned[gsn_gallic_gun] > 10) {
+				pager_printf_color(ch,
+				"&Y   Gallic Gun\n\r");
+			}	
+			if (ch->pcdata->learned[gsn_destructive_wave] > 10) {
+				pager_printf_color(ch,
+				"&Y   Destructive Wave\n\r");
+			}
+			if (ch->pcdata->learned[gsn_masenko] > 10) {
+				pager_printf_color(ch,
+				"&Y   Masenko\n\r");
+			}
+			else if (ch->pcdata->learned[gsn_makosen] > 10) {
+				pager_printf_color(ch,
+				"&Y   Masenko           Makosen\n\r");
+			}
+			if (ch->pcdata->learned[gsn_sbc] > 10) {
+				pager_printf_color(ch,
+				"&Y   SBC\n\r");
+			}
+			if (ch->pcdata->learned[gsn_eye_beam] > 10) {
+				pager_printf_color(ch,
+				"&Y   Eye Beam\n\r");
+			}
+			if (ch->pcdata->learned[gsn_finger_beam] > 10) {
+				pager_printf_color(ch,
+				"&Y   Finger Beam\n\r");
+			}
+			if (ch->pcdata->learned[gsn_death_ball] > 10) {
+				pager_printf_color(ch,
+				"&Y   Death Ball\n\r");
+			}
+			if (ch->pcdata->learned[gsn_forcewave] > 10) {
+				pager_printf_color(ch,
+				"&Y   Forcewave\n\r");
+			}
+			if (ch->pcdata->learned[gsn_shockwave] > 10) {
+				pager_printf_color(ch,
+				"&Y   Forcewave         Shockwave\n\r");
+			}
+			if (ch->pcdata->learned[gsn_ecliptic_meteor] > 10) {
+				pager_printf_color(ch,
+				"&Y   Ecliptic Meteor\n\r");
 			}
 		}
 		if (!str_cmp(arg, "body")) {
@@ -6681,7 +6720,7 @@ do_skills(CHAR_DATA * ch, char *argument) {
 			pager_printf_color(ch,
 				"\n\r");
 			pager_printf_color(ch,
-				"Sorry, nothing here! ... yet\n\r");
+				"&YSorry, nothing here! ... yet\n\r");
 		}
 	return;
 }
