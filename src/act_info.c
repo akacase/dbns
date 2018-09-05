@@ -4709,6 +4709,12 @@ do_develop(CHAR_DATA * ch, char *argument) {
 		}
 	}
 	if (!str_cmp(arg1, "meteor") && !str_cmp(arg2, "meteor")) {
+		if ((ch->pcdata->learned[gsn_gigantic_meteor] < 10)) {
+			send_to_char("DEBUG: Gigantic Meteor shows as below 10\n\r", ch);
+		}
+		if ((ch->pcdata->learned[gsn_meteor] > 10)) {
+			send_to_char("DEBUG: Gigantic Meteor shows as above 10\n\r", ch);
+		}
 		if (ch->energymastery >= 10000 && (ch->pcdata->learned[gsn_gigantic_meteor] < 10)
 			&& (ch->pcdata->learned[gsn_meteor] > 10)) {
 			send_to_char("You developed Gigantic Meteor!\n\r", ch);
