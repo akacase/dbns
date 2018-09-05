@@ -4679,6 +4679,7 @@ DECLARE_DO_FUN(do_elevate);
 DECLARE_DO_FUN(do_emote);
 DECLARE_DO_FUN(do_empty);
 DECLARE_DO_FUN(do_energy_ball);
+DECLARE_DO_FUN(do_energybeam);
 DECLARE_DO_FUN(do_enter);
 DECLARE_DO_FUN(do_equipment);
 DECLARE_DO_FUN(do_examine);

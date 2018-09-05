@@ -173,12 +173,14 @@ DO_FUN *skill_function( char *name )
       if ( !str_cmp( name, "do_closehatch"                ))    return do_closehatch;
       if ( !str_cmp( name, "do_cmdtable"                  ))    return do_cmdtable;
       if ( !str_cmp( name, "do_cmenu"                     ))    return do_cmenu;
+      if ( !str_cmp( name, "do_collide"                  ))    return do_collide;
       if ( !str_cmp( name, "do_colorize"                  ))    return do_colorize;
       if ( !str_cmp( name, "do_corpse"                  ))    return do_corpse;
       if ( !str_cmp( name, "do_combat"                    ))    return do_combat;
       if ( !str_cmp( name, "do_commands"                  ))    return do_commands;
       if ( !str_cmp( name, "do_comment"                   ))    return do_comment;
       if ( !str_cmp( name, "do_compare"                   ))    return do_compare;
+      if ( !str_cmp( name, "do_concentrated_beam"                   ))    return do_concentrated_beam;
       if ( !str_cmp( name, "do_config"                    ))    return do_config;
       if ( !str_cmp( name, "do_consider"                  ))    return do_consider;
       if ( !str_cmp( name, "do_cook"                      ))    return do_cook;
@@ -188,6 +190,7 @@ DO_FUN *skill_function( char *name )
       if ( !str_cmp( name, "do_councils"                  ))    return do_councils;
       if ( !str_cmp( name, "do_counciltalk"               ))    return do_counciltalk;
       if ( !str_cmp( name, "do_credits"                   ))    return do_credits;
+      if ( !str_cmp( name, "do_crusherball"                   ))    return do_crusherball;
       if ( !str_cmp( name, "do_cset"                      ))    return do_cset;
       break;
     case 'd':
@@ -235,6 +238,7 @@ DO_FUN *skill_function( char *name )
       if ( !str_cmp( name, "do_duplicate"                 ))    return do_duplicate;
       break;
     case 'e':
+      if ( !str_cmp( name, "do_ecliptic_meteor"			  ))	return do_ecliptic_meteor;
       if ( !str_cmp( name, "do_enhance"			  ))	return do_enhance;
       if ( !str_cmp( name, "do_east"                      ))    return do_east;
       if ( !str_cmp( name, "do_eat"                       ))    return do_eat;
@@ -247,6 +251,8 @@ DO_FUN *skill_function( char *name )
       if ( !str_cmp( name, "do_emote"                     ))    return do_emote;
       if ( !str_cmp( name, "do_empty"                     ))    return do_empty;
       if ( !str_cmp( name, "do_energy_ball"               ))    return do_energy_ball;
+      if ( !str_cmp( name, "do_energybeam"               ))    return do_energybeam;
+      if ( !str_cmp( name, "do_energy_disc"               ))    return do_energy_disc;
       if ( !str_cmp( name, "do_enter"                     ))    return do_enter;
       if ( !str_cmp( name, "do_equipment"                 ))    return do_equipment;
       if ( !str_cmp( name, "do_evilboost"		  ))    return do_evilboost;
@@ -277,6 +283,7 @@ DO_FUN *skill_function( char *name )
       if ( !str_cmp( name, "do_for"                       ))    return do_for;
       if ( !str_cmp( name, "do_force"                     ))    return do_force;
       if ( !str_cmp( name, "do_forceclose"                ))    return do_forceclose;
+      if ( !str_cmp( name, "do_forcewave"                ))    return do_forcewave;
       if ( !str_cmp( name, "do_form_password"             ))    return do_form_password;
       if ( !str_cmp( name, "do_fos"                       ))    return do_fos;
       if ( !str_cmp( name, "do_fprompt"                   ))    return do_fprompt;
@@ -294,6 +301,7 @@ DO_FUN *skill_function( char *name )
       if ( !str_cmp( name, "do_ghost"                     ))    return do_ghost;
       if ( !str_cmp( name, "do_give"                      ))    return do_give;
       if ( !str_cmp( name, "do_giant_size"                ))    return do_giant_size;
+	  if ( !str_cmp( name, "do_gigantic_meteor"                ))    return do_gigantic_meteor;
       if ( !str_cmp( name, "do_glance"                    ))    return do_glance;
       if ( !str_cmp( name, "do_global_boards"             ))    return do_global_boards;
       if ( !str_cmp( name, "do_global_note"               ))    return do_global_note;
@@ -314,6 +322,7 @@ DO_FUN *skill_function( char *name )
       if ( !str_cmp( name, "do_gwhere"                    ))    return do_gwhere;
       break;
     case 'h':
+      if ( !str_cmp( name, "do_haymaker"                  ))    return do_haymaker;
       if ( !str_cmp( name, "do_heaven_splitter_cannon"                    ))    return do_heaven_splitter_cannon;
       if ( !str_cmp( name, "do_hellzone_grenade"                    ))    return do_hellzone_grenade;
       if ( !str_cmp( name, "do_hcchat"                    ))    return do_hcchat;
@@ -372,6 +381,7 @@ DO_FUN *skill_function( char *name )
     case 'l':
       if ( !str_cmp( name, "do_land"                      ))    return do_land;
       if ( !str_cmp( name, "do_languages"                 ))    return do_languages;
+      if ( !str_cmp( name, "do_lariat"                 ))    return do_lariat;
       if ( !str_cmp( name, "do_last"                      ))    return do_last;
       if ( !str_cmp( name, "do_launch"                    ))    return do_launch;
       if ( !str_cmp( name, "do_laws"                      ))    return do_laws;
@@ -391,6 +401,7 @@ DO_FUN *skill_function( char *name )
       if ( !str_cmp( name, "do_low_purge"                 ))    return do_low_purge;
       break;
     case 'm':
+      if ( !str_cmp( name, "do_meteor"		 ))	return do_meteor;
       if ( !str_cmp( name, "do_monkey_gun"		 ))	return do_monkey_gun;
       if ( !str_cmp( name, "do_minion"			 ))	return do_minion;
       if ( !str_cmp( name, "do_makosen"                  ))    return do_makosen;
@@ -960,12 +971,14 @@ char *skill_name( DO_FUN *skill )
   if ( skill == do_closehatch                  )    return "do_closehatch";
   if ( skill == do_cmdtable                    )    return "do_cmdtable";
   if ( skill == do_cmenu                       )    return "do_cmenu";
+  if ( skill == do_collide                    )    return "do_collide";
   if ( skill == do_colorize                    )    return "do_colorize";
   if ( skill == do_corpse                    )    return "do_corpse";
   if ( skill == do_combat                      )    return "do_combat";
   if ( skill == do_commands                    )    return "do_commands";
   if ( skill == do_comment                     )    return "do_comment";
   if ( skill == do_compare                     )    return "do_compare";
+  if ( skill == do_concentrated_beam                     )    return "do_concentrated_beam";
   if ( skill == do_config                      )    return "do_config";
   if ( skill == do_consider                    )    return "do_consider";
   if ( skill == do_cook                        )    return "do_cook";
@@ -975,6 +988,7 @@ char *skill_name( DO_FUN *skill )
   if ( skill == do_councils                    )    return "do_councils";
   if ( skill == do_counciltalk                 )    return "do_counciltalk";
   if ( skill == do_credits                     )    return "do_credits";
+  if ( skill == do_crusherball                     )    return "do_crusherball";
   if ( skill == do_cset                        )    return "do_cset";
   if ( skill == do_dd                          )    return "do_dd";
   if ( skill == do_ddd                         )    return "do_ddd";
@@ -1017,6 +1031,7 @@ char *skill_name( DO_FUN *skill )
   if ( skill == do_eat                         )    return "do_eat";
   if ( skill == do_ech                         )    return "do_ech";
   if ( skill == do_echo                        )    return "do_echo";
+  if ( skill == do_ecliptic_meteor                        )    return "do_ecliptic_meteor";
   if ( skill == do_ehb			   )	return "do_ehb";
   if ( skill == do_electric_shield             )    return "do_electric_shield";
   if ( skill == do_elevate                     )    return "do_elevate";
@@ -1024,6 +1039,8 @@ char *skill_name( DO_FUN *skill )
   if ( skill == do_emote                       )    return "do_emote";
   if ( skill == do_empty                       )    return "do_empty";
   if ( skill == do_energy_ball                 )    return "do_energy_ball";
+  if ( skill == do_energybeam                 )    return "do_energybeam";
+  if ( skill == do_energy_disc                 )    return "do_energy_disc";
   if ( skill == do_enter                       )    return "do_enter";
   if ( skill == do_equipment                   )    return "do_equipment";
   if ( skill == do_evilboost		   )	return "do_evilboost";
@@ -1051,6 +1068,7 @@ char *skill_name( DO_FUN *skill )
   if ( skill == do_for                         )    return "do_for";
   if ( skill == do_force                       )    return "do_force";
   if ( skill == do_forceclose                  )    return "do_forceclose";
+  if ( skill == do_forcewave                  )    return "do_forcewave";
   if ( skill == do_form_password               )    return "do_form_password";
   if ( skill == do_fos                         )    return "do_fos";
   if ( skill == do_fprompt                     )    return "do_fprompt";
@@ -1064,6 +1082,7 @@ char *skill_name( DO_FUN *skill )
   if ( skill == do_ghost                       )    return "do_ghost";
   if ( skill == do_give                        )    return "do_give";
   if ( skill == do_giant_size                  )    return "do_giant_size";
+  if ( skill == do_gigantic_meteor                  )    return "do_gigantic_meteor";
   if ( skill == do_glance                      )    return "do_glance";
   if ( skill == do_global_boards               )    return "do_global_boards";
   if ( skill == do_global_note                 )    return "do_global_note";
@@ -1081,6 +1100,7 @@ char *skill_name( DO_FUN *skill )
   if ( skill == do_guilds                      )    return "do_guilds";
   if ( skill == do_guildtalk                   )    return "do_guildtalk";
   if ( skill == do_gwhere                      )    return "do_gwhere";
+  if ( skill == do_haymaker                      )    return "do_haymaker";
   if ( skill == do_hcchat                      )    return "do_hcchat";
   if ( skill == do_hyper                      )    return "do_hyper";
   if ( skill == do_hedit                       )    return "do_hedit";
@@ -1131,6 +1151,7 @@ char *skill_name( DO_FUN *skill )
   if ( skill == do_ki_heal                     )    return "do_ki_heal";
   if ( skill == do_land                        )    return "do_land";
   if ( skill == do_languages                   )    return "do_languages";
+  if ( skill == do_lariat                   )    return "do_lariat";
   if ( skill == do_last                        )    return "do_last";
   if ( skill == do_launch                      )    return "do_launch";
   if ( skill == do_laws                        )    return "do_laws";
@@ -1170,6 +1191,7 @@ char *skill_name( DO_FUN *skill )
   if ( skill == do_meditate                    )    return "do_meditate";
   if ( skill == do_members                     )    return "do_members";
   if ( skill == do_memory                      )    return "do_memory";
+  if ( skill == do_meteor                      )    return "do_meteor";
   if ( skill == do_mfind                       )    return "do_mfind";
   if ( skill == do_minvoke                     )    return "do_minvoke";
   if ( skill == do_mlist                       )    return "do_mlist";
