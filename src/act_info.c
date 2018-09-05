@@ -6584,7 +6584,6 @@ do_skills(CHAR_DATA * ch, char *argument) {
 			pager_printf_color(ch,
 				"&Y   Dodge             DCD\n\r");
 			pager_printf_color(ch,
-			pager_printf_color(ch,
 				"&Y   Bruiser Style     Berserk Style        Aggressive Style\n\r");
 			pager_printf_color(ch,
 				"&Y   Hybrid Style      Evasive Style        Defensive Style\n\r");
