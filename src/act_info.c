@@ -4684,9 +4684,9 @@ do_develop(CHAR_DATA * ch, char *argument) {
 			return;
 		}
 	}
-	if (!str_cmp(arg1, "energyball") && !str_cmp(arg2, "energyball")) {
-		if (ch->energymastery >= 1000 && (ch->pcdata->learned[gsn_crusherball] < 10)
-			&& (ch->pcdata->learned[gsn_energy_ball] > 10)) {
+	if (!str_cmp(arg1, "energyball") && !str_cmp(arg2, "energyball")
+		&& (ch->pcdata->learned[gsn_energy_ball] > 10)) {
+		if (ch->energymastery >= 1000 && (ch->pcdata->learned[gsn_crusherball] < 10)) {
 			send_to_char("You developed Crusher Ball!\n\r", ch);
 			ch->pcdata->learned[gsn_crusherball] = 95;
 			return;
