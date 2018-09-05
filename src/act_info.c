@@ -4687,7 +4687,7 @@ do_develop(CHAR_DATA * ch, char *argument) {
 	if (!str_cmp(arg1, "energyball") && !str_cmp(arg2, "energyball")) {
 		if (ch->energymastery >= 1000 && (ch->pcdata->learned[gsn_crusherball] < 10)
 			&& (ch->pcdata->learned[gsn_energybeam] < 10)
-			&& (ch->pcdata->learned[gsn_energyball] > 10)) {
+			&& (ch->pcdata->learned[gsn_energy_ball] > 10)) {
 			send_to_char("You developed Crusher Ball!\n\r", ch);
 			send_to_char("You developed Energy Beam!\n\r", ch);
 			ch->pcdata->learned[gsn_crusherball] = 95;
@@ -4738,7 +4738,7 @@ do_develop(CHAR_DATA * ch, char *argument) {
 	if (!str_cmp(arg1, "energybeam") && !str_cmp(arg2, "energyball")) {
 		if (ch->energymastery >= 5000 && (ch->pcdata->learned[gsn_destructive_wave] < 10)
 			&& (ch->pcdata->learned[gsn_energybeam] > 10)
-			&& (ch->pcdata->learned[gsn_energyball] > 10)) {
+			&& (ch->pcdata->learned[gsn_energy_ball] > 10)) {
 			send_to_char("You developed Destructive Wave!\n\r", ch);
 			ch->pcdata->learned[gsn_destructive_wave] = 95;
 			return;
@@ -4751,7 +4751,7 @@ do_develop(CHAR_DATA * ch, char *argument) {
 	if (!str_cmp(arg1, "energyball") && !str_cmp(arg2, "energybeam")) {
 		if (ch->energymastery >= 5000 && (ch->pcdata->learned[gsn_destructive_wave] < 10)
 			&& (ch->pcdata->learned[gsn_energybeam] > 10)
-			&& (ch->pcdata->learned[gsn_energyball] > 10)) {
+			&& (ch->pcdata->learned[gsn_energy_ball] > 10)) {
 			send_to_char("You developed Destructive Wave!\n\r", ch);
 			ch->pcdata->learned[gsn_destructive_wave] = 95;
 			return;
