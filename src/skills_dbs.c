@@ -3119,7 +3119,7 @@ do_punch(CHAR_DATA * ch, char *argument)
 	}
 	if (!IS_NPC(ch)) {
 		kilimit = ch->train / 10000;
-		physmult = (float) get_curr_str(ch) / 1000 + 1;
+		physmult = (float) get_curr_str(ch) / 950 + 1;
 		kicmult = (float) kilimit / 100 + 1;
 	}
 	if (ch->mana < skill_table[gsn_punch]->min_mana) {
@@ -3134,6 +3134,7 @@ do_punch(CHAR_DATA * ch, char *argument)
 			dam = get_attmod(ch, victim) * (argdam * physmult);
 			stat_train(ch, "str", 5);
 			ch->train += 1;
+			ch->strikemastery += 1;
 		}
 		if (IS_NPC(ch)) {
 			dam = get_attmod(ch, victim) * (number_range(2, 4) + (get_curr_str(ch) / 50));
@@ -5018,7 +5019,6 @@ void
 do_energy_ball(CHAR_DATA * ch, char *argument)
 {
 	CHAR_DATA *victim;
-	char 	arg[MAX_INPUT_LENGTH];
 	int 	dam = 0;
 	int		argdam = 0;
 	int		kilimit = 0;
@@ -5026,7 +5026,6 @@ do_energy_ball(CHAR_DATA * ch, char *argument)
 	float	kicmult= 0;
 	
 
-	one_argument(argument, arg);
 	sh_int 	z = get_aura(ch);
 
 	if (IS_NPC(ch) && is_split(ch)) {
@@ -5046,172 +5045,43 @@ do_energy_ball(CHAR_DATA * ch, char *argument)
 		return;
 	}
 	if (!IS_NPC(ch)) {
-		kilimit = ch->train / 2000;
+		kilimit = ch->train / 10000;
 		kimult = (float) get_curr_int(ch) / 1000 + 1;
 		kicmult = (float) kilimit / 100 + 1;
-	}
-	if (!str_cmp(arg, "200") && (kilimit < 1)) {
-		send_to_char("You're unable to control your energy well enough!\n\r", ch);
-		return;
-	}
-	if (!str_cmp(arg, "300") && (kilimit < 2)) {
-		send_to_char("You're unable to control your energy well enough!\n\r", ch);
-		return;
-	}
-	if (!str_cmp(arg, "400") && (kilimit < 3)) {
-		send_to_char("You're unable to control your energy well enough!\n\r", ch);
-		return;
-	}
-	if (!str_cmp(arg, "500") && (kilimit < 4)) {
-		send_to_char("You're unable to control your energy well enough!\n\r", ch);
-		return;
 	}
 	if ((victim = who_fighting(ch)) == NULL) {
 		send_to_char("You aren't fighting anyone.\n\r", ch);
 		return;
 	}
-	if (arg[0] == '\0'
-		|| !str_cmp(arg, "100")) {
-		if (ch->mana < skill_table[gsn_energy_ball]->min_mana) {
-			send_to_char("You don't have enough energy.\n\r", ch);
-			return;
-		}
-	}
-	if (!str_cmp(arg, "50")) {
-			send_to_char("Your energy ball fizzles out in your hand from a lack of ki.\n\r", ch);
-			return;
-	}
-	if (!str_cmp(arg, "200") && ch->mana < (skill_table[gsn_energy_ball]->min_mana) * 4) {
+	if (ch->mana < skill_table[gsn_energy_ball]->min_mana) {
 			send_to_char("You don't have enough energy.\n\r", ch);
 			return;
 	}
-	if (!str_cmp(arg, "300") && ch->mana < (skill_table[gsn_energy_ball]->min_mana) * 8) {
-			send_to_char("You don't have enough energy.\n\r", ch);
-			return;
-	}
-	if (!str_cmp(arg, "400") && ch->mana < (skill_table[gsn_energy_ball]->min_mana) * 12) {
-			send_to_char("You don't have enough energy.\n\r", ch);
-			return;
-	}
-	if (!str_cmp(arg, "500") && ch->mana < (skill_table[gsn_energy_ball]->min_mana) * 16) {
-			send_to_char("You don't have enough energy.\n\r", ch);
-			return;
-	}
-	if (ch->focus < skill_table[gsn_energy_ball]->focus) {
-		send_to_char("You need to focus more.\n\r", ch);
-		return;
-	} else
-		ch->focus -= skill_table[gsn_energy_ball]->focus;
 
 	WAIT_STATE(ch, skill_table[gsn_energy_ball]->beats);
 
 	if (can_use_skill(ch, number_percent(), gsn_energy_ball)) {
 		if (!IS_NPC(ch)) {
-			if (arg[0] == '\0' || !str_cmp(arg, "100"))  {
-				argdam = number_range(2, 4) * kicmult;
-				dam = get_attmod(ch, victim) * (argdam * kimult);
-			}
-			if (!str_cmp(arg, "200")) {
-				argdam = number_range(3, 5) * kicmult;
-				dam = get_attmod(ch, victim) * (argdam * kimult);
-			}
-			if (!str_cmp(arg, "300")) {
-				argdam = number_range(5, 6) * kicmult;
-				dam = get_attmod(ch, victim) * (argdam * kimult);
-			}
-			if (!str_cmp(arg, "400")) {
-				argdam = number_range(7, 8) * kicmult;
-				dam = get_attmod(ch, victim) * (argdam * kimult);
-			}
-			if (!str_cmp(arg, "500")) {
-				argdam = number_range(9, 10) * kicmult;
-				dam = get_attmod(ch, victim) * (argdam * kimult);
-			}
+			argdam = number_range(2, 4) * kicmult;
+			dam = get_attmod(ch, victim) * (argdam * kimult);
+			stat_train(ch, "int", 5);
+			ch->train += 1;
+			ch->energymastery += 1;
 		}
 		if (IS_NPC(ch)) {
-			if (arg[0] == '\0' || !str_cmp(arg, "100"))  {
-				argdam = number_range(2, 4);
-				dam = get_attmod(ch, victim) * (argdam + (get_curr_int(ch) / 50));
-			}
-			if (!str_cmp(arg, "200")) {
-				argdam = number_range(3, 5);
-				dam = get_attmod(ch, victim) * (argdam + (get_curr_int(ch) / 50));
-			}
-			if (!str_cmp(arg, "300")) {
-				argdam = number_range(5, 6);
-				dam = get_attmod(ch, victim) * (argdam + (get_curr_int(ch) / 50));
-			}
-			if (!str_cmp(arg, "400")) {
-				argdam = number_range(7, 8);
-				dam = get_attmod(ch, victim) * (argdam + (get_curr_int(ch) / 50));
-			}
-			if (!str_cmp(arg, "500")) {
-				argdam = number_range(9, 10);
-				dam = get_attmod(ch, victim) * (argdam + (get_curr_int(ch) / 50));
-			}
+			argdam = number_range(2, 4);
+			dam = get_attmod(ch, victim) * (argdam + (get_curr_int(ch) / 50));
 		}
 		if (ch->charge > 0)
 			dam = chargeDamMult(ch, dam);
-		if (arg[0] == '\0' || !str_cmp(arg, "100")) {
-			act(z, "You blast $N with a single energy ball. &W[$t]", ch,
-				num_punct(dam), victim, TO_CHAR);
-			act(z, "$n blasts you with a single energy ball. &W[$t]", ch,
-				num_punct(dam), victim, TO_VICT);
-			act(z, "$n blasts $N with a single energy ball. &W[$t]", ch,
-				num_punct(dam), victim, TO_NOTVICT);
-			if (!IS_NPC(ch)) {
-				stat_train(ch, "int", 5);
-				ch->train += 1;
-			}
-		}
-		if (!str_cmp(arg, "200")) {
-			act(z, "You blast $N with an oversized energy ball. &W[$t]", ch,
-				num_punct(dam), victim, TO_CHAR);
-			act(z, "$n blasts you with an oversized energy ball. &W[$t]", ch,
-				num_punct(dam), victim, TO_VICT);
-			act(z, "$n blasts $N with an oversized energy ball. &W[$t]", ch,
-				num_punct(dam), victim, TO_NOTVICT);
-			if (!IS_NPC(ch)) {
-				stat_train(ch, "int", 6);
-				ch->train += 2;
-			}
-		}
-		if (!str_cmp(arg, "300")) {
-			act(z, "You blast $N with a huge energy ball. &W[$t]", ch,
-				num_punct(dam), victim, TO_CHAR);
-			act(z, "$n blasts you with a huge energy ball. &W[$t]", ch,
-				num_punct(dam), victim, TO_VICT);
-			act(z, "$n blasts $N with a huge energy ball. &W[$t]", ch,
-				num_punct(dam), victim, TO_NOTVICT);
-			if (!IS_NPC(ch)) {
-				stat_train(ch, "int", 7);
-				ch->train += 2;
-			}
-		}
-		if (!str_cmp(arg, "400")) {
-			act(z, "You assail $N with multiple energy blasts. &W[$t]", ch,
-				num_punct(dam), victim, TO_CHAR);
-			act(z, "$n assails you with multiple energy blasts. &W[$t]", ch,
-				num_punct(dam), victim, TO_VICT);
-			act(z, "$n assails $N with multiple energy blasts. &W[$t]", ch,
-				num_punct(dam), victim, TO_NOTVICT);
-			if (!IS_NPC(ch)) {
-				stat_train(ch, "int", 8);
-				ch->train += 3;
-			}
-		}
-		if (!str_cmp(arg, "500")) {
-			act(z, "You dust the sky around $N with a huge number of energy blasts! &W[$t]", ch,
-				num_punct(dam), victim, TO_CHAR);
-			act(z, "$n dusts the sky around you with a huge number of energy blasts! &W[$t]", ch,
-				num_punct(dam), victim, TO_VICT);
-			act(z, "$n dusts the sky around $N with a huge number of energy blasts! &W[$t]", ch,
-				num_punct(dam), victim, TO_NOTVICT);
-			if (!IS_NPC(ch)) {
-				stat_train(ch, "int", 9);
-				ch->train += 4;
-			}
-		}
+			
+		act(z, "You blast $N with a single energy ball. &W[$t]", ch,
+			num_punct(dam), victim, TO_CHAR);
+		act(z, "$n blasts you with a single energy ball. &W[$t]", ch,
+			num_punct(dam), victim, TO_VICT);
+		act(z, "$n blasts $N with a single energy ball. &W[$t]", ch,
+			num_punct(dam), victim, TO_NOTVICT);
+
 		dam = ki_absorb(victim, ch, dam, gsn_energy_ball);
 		learn_from_success(ch, gsn_energy_ball);
 		global_retcode = damage(ch, victim, dam, TYPE_HIT);
@@ -5225,29 +5095,8 @@ do_energy_ball(CHAR_DATA * ch, char *argument)
 		learn_from_failure(ch, gsn_energy_ball);
 		global_retcode = damage(ch, victim, 0, TYPE_HIT);
 	}
-
-	if (!is_android_h(ch))
-		if (arg[0] == '\0'
-			|| !str_cmp(arg, "100")) {
-			ch->mana -= skill_table[gsn_energy_ball]->min_mana;
-			return;
-		}
-		if (!str_cmp(arg, "200")) {
-			ch->mana -= (skill_table[gsn_energy_ball]->min_mana * 4);
-			return;
-		}
-		if (!str_cmp(arg, "300")) {
-			ch->mana -= (skill_table[gsn_energy_ball]->min_mana * 8);
-			return;
-		}
-		if (!str_cmp(arg, "400")) {
-			ch->mana -= (skill_table[gsn_energy_ball]->min_mana * 12);
-			return;
-		}
-		if (!str_cmp(arg, "500")) {
-			ch->mana -= (skill_table[gsn_energy_ball]->min_mana * 16);
-			return;
-		}
+	ch->mana -= skill_table[gsn_energy_ball]->min_mana;
+	return;
 }
 
 void do_energy_disc( CHAR_DATA *ch, char *argument )
@@ -5295,6 +5144,7 @@ void do_energy_disc( CHAR_DATA *ch, char *argument )
 			dam = get_attmod(ch, victim) * (argdam * kimult);
 			stat_train(ch, "int", 10);
 			ch->train += 10;
+			ch->energymastery += 2;
 		}
 		if (IS_NPC(ch)) {
 			dam = get_attmod(ch, victim) * (number_range(12, 14) + (get_curr_int(ch) / 40));
@@ -5316,11 +5166,11 @@ void do_energy_disc( CHAR_DATA *ch, char *argument )
 		global_retcode = damage(ch, victim, dam, TYPE_HIT);
 	}
 	else {
-		act(AT_YELLOW, "You missed $N with your energy beam.", ch,
+		act(AT_YELLOW, "You missed $N with your energy disc.", ch,
 		    NULL, victim, TO_CHAR);
-		act(AT_YELLOW, "$n misses you with an energy beam.", ch, NULL,
+		act(AT_YELLOW, "$n misses you with an energy disc.", ch, NULL,
 		    victim, TO_VICT);
-		act(AT_YELLOW, "$n missed $N with an energy beam.", ch, NULL,
+		act(AT_YELLOW, "$n missed $N with an energy disc.", ch, NULL,
 		    victim, TO_NOTVICT);
 		learn_from_failure(ch, gsn_energy_disc);
 		global_retcode = damage(ch, victim, 0, TYPE_HIT);
@@ -5374,6 +5224,7 @@ void do_forcewave( CHAR_DATA *ch, char *argument )
 			dam = get_attmod(ch, victim) * (argdam * kimult);
 			stat_train(ch, "int", 13);
 			ch->train += 13;
+			ch->energymastery += 4;
 		}
 		if (IS_NPC(ch)) {
 			dam = get_attmod(ch, victim) * (number_range(20, 25) + (get_curr_int(ch) / 40));
@@ -5453,6 +5304,7 @@ void do_concentrated_beam( CHAR_DATA *ch, char *argument )
 			dam = get_attmod(ch, victim) * (argdam * kimult);
 			stat_train(ch, "int", 14);
 			ch->train += 14;
+			ch->energymastery += 3;
 		}
 		if (IS_NPC(ch)) {
 			dam = get_attmod(ch, victim) * (number_range(18, 24) + (get_curr_int(ch) / 40));
@@ -5532,6 +5384,7 @@ void do_energybeam( CHAR_DATA *ch, char *argument )
 			dam = get_attmod(ch, victim) * (argdam * kimult);
 			stat_train(ch, "int", 10);
 			ch->train += 10;
+			ch->energymastery += 2;
 		}
 		if (IS_NPC(ch)) {
 			dam = get_attmod(ch, victim) * (number_range(6, 9) + (get_curr_int(ch) / 40));
@@ -5611,6 +5464,7 @@ void do_lariat( CHAR_DATA *ch, char *argument )
 			dam = get_attmod(ch, victim) * (argdam * physmult);
 			stat_train(ch, "str", 16);
 			ch->train += 16;
+			ch->strikemastery += 5;
 		}
 		if (IS_NPC(ch)) {
 			dam = get_attmod(ch, victim) * (number_range(45, 50) + (get_curr_str(ch) / 40));
@@ -5699,6 +5553,7 @@ void do_ecliptic_meteor( CHAR_DATA *ch, char *argument )
 			dam = get_attmod(ch, victim) * (argdam * kimult);
 			stat_train(ch, "int", 40);
 			ch->train += 40;
+			ch->energymastery += 6;
 		}
 		if (IS_NPC(ch)) {
 			dam = get_attmod(ch, victim) * (number_range(100, 125) + (get_curr_int(ch) / 40));
@@ -5787,6 +5642,7 @@ void do_gigantic_meteor( CHAR_DATA *ch, char *argument )
 			dam = get_attmod(ch, victim) * (argdam * kimult);
 			stat_train(ch, "int", 12);
 			ch->train += 12;
+			ch->energymastery += 5;
 		}
 		if (IS_NPC(ch)) {
 			dam = get_attmod(ch, victim) * (number_range(70, 75) + (get_curr_int(ch) / 40));
@@ -5875,6 +5731,7 @@ void do_meteor( CHAR_DATA *ch, char *argument )
 			dam = get_attmod(ch, victim) * (argdam * kimult);
 			stat_train(ch, "int", 8);
 			ch->train += 8;
+			ch->energymastery += 4;
 		}
 		if (IS_NPC(ch)) {
 			dam = get_attmod(ch, victim) * (number_range(30, 35) + (get_curr_int(ch) / 40));
@@ -5963,6 +5820,7 @@ void do_crusherball( CHAR_DATA *ch, char *argument )
 			dam = get_attmod(ch, victim) * (argdam * kimult);
 			stat_train(ch, "int", 5);
 			ch->train += 5;
+			ch->energymastery += 2;
 		}
 		if (IS_NPC(ch)) {
 			dam = get_attmod(ch, victim) * (number_range(12, 14) + (get_curr_int(ch) / 40));
@@ -6052,6 +5910,7 @@ void do_haymaker( CHAR_DATA *ch, char *argument )
 			dam = get_attmod(ch, victim) * (argdam * physmult);
 			stat_train(ch, "str", 12);
 			ch->train += 12;
+			ch->strikemastery += 2;
 		}
 		if (IS_NPC(ch)) {
 			dam = get_attmod(ch, victim) * (number_range(6, 9) + (get_curr_str(ch) / 40));
@@ -6135,6 +5994,7 @@ void do_collide( CHAR_DATA *ch, char *argument )
 			dam = get_attmod(ch, victim) * (argdam * physmult);
 			stat_train(ch, "str", 14);
 			ch->train += 14;
+			ch->strikemastery += 4;
 		}
 		if (IS_NPC(ch)) {
 			dam = get_attmod(ch, victim) * (number_range(18, 22) + (get_curr_str(ch) / 40));
@@ -6224,6 +6084,7 @@ do_kamehameha(CHAR_DATA * ch, char *argument)
 			dam = get_attmod(ch, victim) * (argdam * kimult);
 			stat_train(ch, "int", 16);
 			ch->train += 16;
+			ch->energymastery += 5;
 		}
 		if (IS_NPC(ch)) {
 			argdam = number_range(50, 60);
@@ -6737,6 +6598,7 @@ do_masenko(CHAR_DATA * ch, char *argument)
 			dam = get_attmod(ch, victim) * (argdam * kimult);
 			stat_train(ch, "int", 14);
 			ch->train += 14;
+			ch->energymastery += 4;
 		}
 		if (IS_NPC(ch))
 			dam = get_attmod(ch, victim) * (number_range(30, 35) + (get_curr_int(ch) / 45));
@@ -6824,6 +6686,7 @@ do_sbc(CHAR_DATA * ch, char *argument)
 			dam = get_attmod(ch, victim) * (argdam * kimult);
 			stat_train(ch, "int", 18);
 			ch->train += 18;
+			ch->energymastery += 5;
 		}
 		if (IS_NPC(ch)) {
 			argdam = number_range(55, 65);
@@ -7326,6 +7189,7 @@ do_dd(CHAR_DATA * ch, char *argument)
 			dam = get_attmod(ch, victim) * (argdam * kimult);
 			stat_train(ch, "int", 13);
 			ch->train += 13;
+			ch->energymastery += 4;
 		}
 		if (IS_NPC(ch))
 			dam = get_attmod(ch, victim) * (number_range(28, 28) + (get_curr_int(ch) / 40));
@@ -8525,6 +8389,7 @@ do_eye_beam(CHAR_DATA * ch, char *argument)
 			dam = get_attmod(ch, victim) * (argdam * kimult);
 			stat_train(ch, "int", 10);
 			ch->train += 10;
+			ch->energymastery += 3;
 		}
 		if (IS_NPC(ch))
 			dam = get_attmod(ch, victim) * (number_range(10, 12) + (get_curr_int(ch) / 45));
@@ -8608,6 +8473,7 @@ do_finger_beam(CHAR_DATA * ch, char *argument)
 			dam = get_attmod(ch, victim) * (argdam * kimult);
 			stat_train(ch, "int", 16);
 			ch->train += 16;
+			ch->energymastery += 5;
 		}
 		if (IS_NPC(ch)) {
 			argdam = number_range(20, 25);
@@ -10712,15 +10578,12 @@ void
 do_destructive_wave(CHAR_DATA * ch, char *argument)
 {
 	CHAR_DATA *victim;
-	char 	arg[MAX_INPUT_LENGTH];
 	int 	dam = 0;
 	int		argdam = 0;
 	int		kilimit = 0;
 	float	kimult = 0;
 	float	kicmult = 0;
 	
-	
-	one_argument(argument, arg);
 	if (IS_NPC(ch) && is_split(ch)) {
 		if (!ch->master)
 			return;
@@ -10747,232 +10610,47 @@ do_destructive_wave(CHAR_DATA * ch, char *argument)
 		kimult = (float) get_curr_int(ch) / 1000 + 1;
 		kicmult = (float) kilimit / 100 + 1;
 	}
-	if (!str_cmp(arg, "200") && (kilimit < 5)) {
-		send_to_char("You're unable to control your energy well enough!\n\r", ch);
-		return;
-	}
-	if (!str_cmp(arg, "300") && (kilimit < 6)) {
-		send_to_char("You're unable to control your energy well enough!\n\r", ch);
-		return;
-	}
-	if (!str_cmp(arg, "400") && (kilimit < 7)) {
-		send_to_char("You're unable to control your energy well enough!\n\r", ch);
-		return;
-	}
-	if (!str_cmp(arg, "500") && (kilimit < 8)) {
-		send_to_char("You're unable to control your energy well enough!\n\r", ch);
-		return;
-	}
-	if (!str_cmp(arg, "50")) {
-		send_to_char("Your destructive wave quickly dissapates from a lack of energy input.\n\r", ch);
-		return;
-	}
-	if (arg[0] == '\0' && ch->mana < skill_table[gsn_destructive_wave]->min_mana) {
-		send_to_char("You don't have enough energy.\n\r", ch);
-		return;
-	}
-	if (!str_cmp(arg, "100") && ch->mana < (skill_table[gsn_destructive_wave]->min_mana)) {
-		send_to_char("You don't have enough energy.\n\r", ch);
-		return;
-	}
-	if (!str_cmp(arg, "200") && ch->mana < (skill_table[gsn_destructive_wave]->min_mana) * 4) {
-		send_to_char("You don't have enough energy.\n\r", ch);
-		return;
-	}
-	if (!str_cmp(arg, "300") && ch->mana < (skill_table[gsn_destructive_wave]->min_mana) * 8) {
-		send_to_char("You don't have enough energy.\n\r", ch);
-		return;
-	}
-	if (!str_cmp(arg, "400") && ch->mana < (skill_table[gsn_destructive_wave]->min_mana) * 12) {
-		send_to_char("You don't have enough energy.\n\r", ch);
-		return;
-	}
-	if (!str_cmp(arg, "500") && ch->mana < (skill_table[gsn_destructive_wave]->min_mana) * 16) {
-		send_to_char("You don't have enough energy.\n\r", ch);
-		return;
-	}
 	if (ch->mana < skill_table[gsn_destructive_wave]->min_mana) {
 		send_to_char("You don't have enough energy.\n\r", ch);
 		return;
 	}
-	if (ch->focus < skill_table[gsn_destructive_wave]->focus) {
-		send_to_char("You need to focus more.\n\r", ch);
-		return;
-	} else
-		ch->focus -= skill_table[gsn_destructive_wave]->focus;
 
 	sh_int 	z = get_aura(ch);
 
 	WAIT_STATE(ch, skill_table[gsn_destructive_wave]->beats);
 	if (can_use_skill(ch, number_percent(), gsn_destructive_wave)) {
 		if (!IS_NPC(ch)) {
-			if (arg[0] == '\0') {
-				argdam = number_range(12, 16) * kicmult;
-				dam = get_attmod(ch, victim) * (argdam * kimult);
-				stat_train(ch, "int", 10);
-				ch->train += 5;
-			}
-			if (!str_cmp(arg, "100")) {
-				argdam = number_range(12, 16) * kicmult;
-				dam = get_attmod(ch, victim) * (argdam * kimult);
-				stat_train(ch, "int", 10);
-				ch->train += 5;
-			}
-			if (!str_cmp(arg, "200")) {
-				argdam = number_range(18, 24) * kicmult;
-				dam = get_attmod(ch, victim) * (argdam * kimult);
-				stat_train(ch, "int", 11);
-				ch->train += 7;	
-			}
-			if (!str_cmp(arg, "300")) {
-				argdam = number_range(26, 30) * kicmult;
-				dam = get_attmod(ch, victim) * (argdam * kimult);
-				stat_train(ch, "int", 12);
-				ch->train += 10;	
-			}
-			if (!str_cmp(arg, "400")) {
-				argdam = number_range(32, 36) * kicmult;
-				dam = get_attmod(ch, victim) * (argdam * kimult);
-				stat_train(ch, "int", 13);
-				ch->train += 13;	
-			}
-			if (!str_cmp(arg, "500")) {
-				argdam = number_range(38, 42) * kicmult;
-				dam = get_attmod(ch, victim) * (argdam * kimult);
-				stat_train(ch, "int", 14);
-				ch->train += 16;	
-			}
-			
+			argdam = number_range(26, 28) * kicmult;
+			dam = get_attmod(ch, victim) * (argdam * kimult);
+			stat_train(ch, "int", 10);
+			ch->train += 5;
+			ch->energymastery += 4;
 		}
 		if (IS_NPC(ch)) {
-			if (arg[0] == '\0') {
-				argdam = number_range(12, 16);
-				dam = get_attmod(ch, victim) * (argdam + (get_curr_int(ch) / 45));
-			}
-			if (!str_cmp(arg, "100")) {
-				argdam = number_range(12, 16);
-				dam = get_attmod(ch, victim) * (argdam + (get_curr_int(ch) / 45));
-			}
-			if (!str_cmp(arg, "200")) {
-				argdam = number_range(18, 24);
-				dam = get_attmod(ch, victim) * (argdam + (get_curr_int(ch) / 45));
-			}
-			if (!str_cmp(arg, "300")) {
-				argdam = number_range(26, 30);
-				dam = get_attmod(ch, victim) * (argdam + (get_curr_int(ch) / 45));			
-			}
-			if (!str_cmp(arg, "400")) {
-				argdam = number_range(32, 36);
-				dam = get_attmod(ch, victim) * (argdam + (get_curr_int(ch) / 45));			
-			}
-			if (!str_cmp(arg, "500")) {
-				argdam = number_range(38, 42);
-				dam = get_attmod(ch, victim) * (argdam + (get_curr_int(ch) / 45));			
-			}
-		
+			argdam = number_range(26, 28);
+			dam = get_attmod(ch, victim) * (argdam + (get_curr_int(ch) / 45));
 		}
 		if (ch->charge > 0)
 			dam = chargeDamMult(ch, dam);
-		if (arg[0] == '\0' || !str_cmp(arg, "100")) {
-			act(z,
-				"You hold one arm straight, palm facing $N, your free hand grasping your forearm to steady your aim.",
-				ch, NULL, victim, TO_CHAR);
-			act(z,
-				"A wave of energy forms in front of your palm, blasting out towards $N. &W[$t]",
-				ch, num_punct(dam), victim, TO_CHAR);
-			act(z,
-				"$n holds one arm straight, palm facing you, $s free hand grasping $s forearm to steady $s aim.",
-				ch, NULL, victim, TO_VICT);
-			act(z,
-				"A wave of energy forms in front of $n's palm, blasting out towards you. &W[$t]",
-				ch, num_punct(dam), victim, TO_VICT);
-			act(z,
-				"$n holds one arm straight, palm facing $N, $s free hand grasping $s forearm to steady $s aim.",
-				ch, NULL, victim, TO_NOTVICT);
-			act(z,
-				"A wave of energy forms in front of $n's palm, blasting out towards $N. &W[$t]",
-				ch, num_punct(dam), victim, TO_NOTVICT);
-		}
-		if (!str_cmp(arg, "200")) {
-			act(z,
-				"You hold one arm straight, palm facing $N, your free hand grasping your forearm to steady your aim.",
-				ch, NULL, victim, TO_CHAR);
-			act(z,
-				"A large wave of energy forms in front of your palm, blasting out towards $N. &W[$t]",
-				ch, num_punct(dam), victim, TO_CHAR);
-			act(z,
-				"$n holds one arm straight, palm facing you, $s free hand grasping $s forearm to steady $s aim.",
-				ch, NULL, victim, TO_VICT);
-			act(z,
-				"A large wave of energy forms in front of $n's palm, blasting out towards you. &W[$t]",
-				ch, num_punct(dam), victim, TO_VICT);
-			act(z,
-				"$n holds one arm straight, palm facing $N, $s free hand grasping $s forearm to steady $s aim.",
-				ch, NULL, victim, TO_NOTVICT);
-			act(z,
-				"A large wave of energy forms in front of $n's palm, blasting out towards $N. &W[$t]",
-				ch, num_punct(dam), victim, TO_NOTVICT);
-		}
-		if (!str_cmp(arg, "300")) {
-			act(z,
-				"You hold one arm straight, palm facing $N, your free hand grasping your forearm to steady your aim.",
-				ch, NULL, victim, TO_CHAR);
-			act(z,
-				"A giant wave of energy forms in front of your palm, blasting out towards $N. &W[$t]",
-				ch, num_punct(dam), victim, TO_CHAR);
-			act(z,
-				"$n holds one arm straight, palm facing you, $s free hand grasping $s forearm to steady $s aim.",
-				ch, NULL, victim, TO_VICT);
-			act(z,
-				"A giant wave of energy forms in front of $n's palm, blasting out towards you. &W[$t]",
-				ch, num_punct(dam), victim, TO_VICT);
-			act(z,
-				"$n holds one arm straight, palm facing $N, $s free hand grasping $s forearm to steady $s aim.",
-				ch, NULL, victim, TO_NOTVICT);
-			act(z,
-				"A giant wave of energy forms in front of $n's palm, blasting out towards $N. &W[$t]",
-				ch, num_punct(dam), victim, TO_NOTVICT);
-		}
-		if (!str_cmp(arg, "400")) {
-			act(z,
-				"You hold one arm straight, palm facing $N, your free hand grasping your forearm to steady your aim.",
-				ch, NULL, victim, TO_CHAR);
-			act(z,
-				"A wave of energy forms in front of your palm, blasting out towards $N. &W[$t]",
-				ch, num_punct(dam), victim, TO_CHAR);
-			act(z,
-				"$n holds one arm straight, palm facing you, $s free hand grasping $s forearm to steady $s aim.",
-				ch, NULL, victim, TO_VICT);
-			act(z,
-				"A wave of energy forms in front of $n's palm, blasting out towards you. &W[$t]",
-				ch, num_punct(dam), victim, TO_VICT);
-			act(z,
-				"$n holds one arm straight, palm facing $N, $s free hand grasping $s forearm to steady $s aim.",
-				ch, NULL, victim, TO_NOTVICT);
-			act(z,
-				"A giant wave of energy forms in front of $n's palm, blasting out towards $N. &W[$t]",
-				ch, num_punct(dam), victim, TO_NOTVICT);
-		}
-		if (!str_cmp(arg, "500")) {
-			act(z,
-				"You hold one arm straight, palm facing $N, your free hand grasping your forearm to steady your aim.",
-				ch, NULL, victim, TO_CHAR);
-			act(z,
-				"A gigantic wave of energy nearly touches the sky, completely engulfing $N! &W[$t]",
-				ch, num_punct(dam), victim, TO_CHAR);
-			act(z,
-				"$n holds one arm straight, palm facing you, $s free hand grasping $s forearm to steady $s aim.",
-				ch, NULL, victim, TO_VICT);
-			act(z,
-				"A gigantic wave of energy nearly touches the sky, completely engulfing you! &W[$t]",
-				ch, num_punct(dam), victim, TO_VICT);
-			act(z,
-				"$n holds one arm straight, palm facing $N, $s free hand grasping $s forearm to steady $s aim.",
-				ch, NULL, victim, TO_NOTVICT);
-			act(z,
-				"A gigantic wave of energy nearly touches the sky, completely engulfing $N! &W[$t]",
-				ch, num_punct(dam), victim, TO_NOTVICT);
-		}
+			
+		act(z,
+			"You hold one arm straight, palm facing $N, your free hand grasping your forearm to steady your aim.",
+			ch, NULL, victim, TO_CHAR);
+		act(z,
+			"A wave of energy forms in front of your palm, blasting out towards $N. &W[$t]",
+			ch, num_punct(dam), victim, TO_CHAR);
+		act(z,
+			"$n holds one arm straight, palm facing you, $s free hand grasping $s forearm to steady $s aim.",
+			ch, NULL, victim, TO_VICT);
+		act(z,
+			"A wave of energy forms in front of $n's palm, blasting out towards you. &W[$t]",
+			ch, num_punct(dam), victim, TO_VICT);
+		act(z,
+			"$n holds one arm straight, palm facing $N, $s free hand grasping $s forearm to steady $s aim.",
+			ch, NULL, victim, TO_NOTVICT);
+		act(z,
+			"A wave of energy forms in front of $n's palm, blasting out towards $N. &W[$t]",
+			ch, num_punct(dam), victim, TO_NOTVICT);
 
 		dam = ki_absorb(victim, ch, dam, gsn_destructive_wave);
 		learn_from_success(ch, gsn_destructive_wave);
@@ -10987,26 +10665,8 @@ do_destructive_wave(CHAR_DATA * ch, char *argument)
 		learn_from_failure(ch, gsn_destructive_wave);
 		global_retcode = damage(ch, victim, 0, TYPE_HIT);
 	}
-	if (arg[0] == '\0' || !str_cmp(arg, "100")) {
-		ch->mana -= skill_table[gsn_destructive_wave]->min_mana;
-		return;
-	}
-	if (!str_cmp(arg, "200")) {
-		ch->mana -= skill_table[gsn_destructive_wave]->min_mana * 4;
-		return;
-	}
-	if (!str_cmp(arg, "300")) {
-		ch->mana -= skill_table[gsn_destructive_wave]->min_mana * 8;
-		return;
-	}
-	if (!str_cmp(arg, "400")) {
-		ch->mana -= skill_table[gsn_destructive_wave]->min_mana * 12;
-		return;
-	}
-	if (!str_cmp(arg, "500")) {
-		ch->mana -= skill_table[gsn_destructive_wave]->min_mana * 16;
-		return;
-	}
+	ch->mana -= skill_table[gsn_destructive_wave]->min_mana;
+	return;
 }
 
 void
@@ -11220,6 +10880,7 @@ do_shockwave(CHAR_DATA * ch, char *argument)
 			dam = get_attmod(ch, victim) * (argdam * kimult);
 			stat_train(ch, "int", 17);
 			ch->train += 17;
+			ch->energymastery += 5;
 		}
 		if (IS_NPC(ch)) {
 			argdam = number_range(45, 65);
@@ -11796,6 +11457,7 @@ do_gallic_gun(CHAR_DATA * ch, char *argument)
 			dam = get_attmod(ch, victim) * (argdam * kimult);
 			stat_train(ch, "int", 16);
 			ch->train += 16;
+			ch->energymastery += 5;
 		}
 		if (IS_NPC(ch)) {
 			argdam = number_range(70, 75);
@@ -12278,6 +11940,7 @@ do_makosen(CHAR_DATA * ch, char *argument)
 			dam = get_attmod(ch, victim) * (argdam * kimult);
 			stat_train(ch, "int", 15);
 			ch->train += 15;
+			ch->energymastery += 4;
 		}
 		if (IS_NPC(ch))
 			dam = get_attmod(ch, victim) * (number_range(35, 40) + (get_curr_int(ch) / 40));

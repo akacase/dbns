@@ -2884,6 +2884,7 @@ void do_bash( CHAR_DATA *ch, char *argument )
 			dam = get_attmod(ch, victim) * (argdam * physmult);
 			stat_train(ch, "str", 10);
 			ch->train += 5;
+			ch->strikemastery += 3;
 		}
 		if (IS_NPC(ch)) {
 			dam = get_attmod(ch, victim) * (number_range(10, 12) + (get_curr_str(ch) / 40));
