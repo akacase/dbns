@@ -6619,35 +6619,49 @@ do_skills(CHAR_DATA * ch, char *argument) {
 				"&Y   Energy Ball       Energy Style         Meditate\n\r");
 			pager_printf_color(ch,
 				"&Y   Sense             Suppress             Powerup\n\r");
-			if (ch->pcdata->learned[gsn_crusherball] > 10) {
+			if ((ch->pcdata->learned[gsn_crusherball] > 10)
+				&& (ch->pcdata->learned[gsn_meteor] < 10)
+				&& (ch->pcdata->learned[gsn_gigantic_meteor] < 10)) {
 				pager_printf_color(ch,
 				"&Y   Crusher Ball\n\r");
 			}
-			else if (ch->pcdata->learned[gsn_meteor] > 10) {
+			else if ((ch->pcdata->learned[gsn_crusherball] > 10)
+				&& (ch->pcdata->learned[gsn_meteor] > 10)
+				&& (ch->pcdata->learned[gsn_gigantic_meteor] < 10)) {
 				pager_printf_color(ch,
 				"&Y   Crusher Ball      Meteor\n\r");
 			}
-			else if (ch->pcdata->learned[gsn_gigantic_meteor] > 10) {
+			else if ((ch->pcdata->learned[gsn_crusherball] > 10)
+				&& (ch->pcdata->learned[gsn_meteor] > 10)
+				&& (ch->pcdata->learned[gsn_gigantic_meteor] > 10)) {
 				pager_printf_color(ch,
 				"&Y   Crusher Ball      Meteor               Gigantic Meteor\n\r");
 			}
-			if (ch->pcdata->learned[gsn_energybeam] > 10) {
+			if ((ch->pcdata->learned[gsn_energybeam] > 10)
+				&& (ch->pcdata->learned[gsn_concentrated_beam] < 10)
+				&& (ch->pcdata->learned[gsn_kamehameha] < 10)) {
 				pager_printf_color(ch,
 				"&Y   Energy Beam\n\r");
 			}
-			else if (ch->pcdata->learned[gsn_concentrated_beam] > 10) {
+			else if ((ch->pcdata->learned[gsn_energybeam] > 10)
+				&& (ch->pcdata->learned[gsn_concentrated_beam] > 10)
+				&& (ch->pcdata->learned[gsn_kamehameha] < 10)) {
 				pager_printf_color(ch,
 				"&Y   Energy Beam       Concentrated Beam\n\r");
 			}
-			else if (ch->pcdata->learned[gsn_kamehameha] > 10) {
+			else if ((ch->pcdata->learned[gsn_energybeam] > 10)
+				&& (ch->pcdata->learned[gsn_concentrated_beam] > 10)
+				&& (ch->pcdata->learned[gsn_kamehameha] > 10)) {
 				pager_printf_color(ch,
 				"&Y   Energy Beam       Concentrated Beam    Kamehameha\n\r");
 			}
-			if (ch->pcdata->learned[gsn_energy_disc] > 10) {
+			if ((ch->pcdata->learned[gsn_energy_disc] > 10)
+				&& (ch->pcdata->learned[gsn_dd] < 10)) {
 				pager_printf_color(ch,
 				"&Y   Energy Disc\n\r");
 			}
-			else if (ch->pcdata->learned[gsn_dd] > 10) {
+			else if ((ch->pcdata->learned[gsn_energy_disc] > 10)
+				&& (ch->pcdata->learned[gsn_dd] > 10)) {
 				pager_printf_color(ch,
 				"&Y   Energy Disc       Destructo Disc\n\r");
 			}
@@ -6659,11 +6673,13 @@ do_skills(CHAR_DATA * ch, char *argument) {
 				pager_printf_color(ch,
 				"&Y   Destructive Wave\n\r");
 			}
-			if (ch->pcdata->learned[gsn_masenko] > 10) {
+			if ((ch->pcdata->learned[gsn_masenko] > 10)
+				&& (ch->pcdata->learned[gsn_makosen] < 10)) {
 				pager_printf_color(ch,
 				"&Y   Masenko\n\r");
 			}
-			else if (ch->pcdata->learned[gsn_makosen] > 10) {
+			else if ((ch->pcdata->learned[gsn_masenko] > 10)
+				&& (ch->pcdata->learned[gsn_makosen] > 10)) {
 				pager_printf_color(ch,
 				"&Y   Masenko           Makosen\n\r");
 			}
@@ -6683,11 +6699,13 @@ do_skills(CHAR_DATA * ch, char *argument) {
 				pager_printf_color(ch,
 				"&Y   Death Ball\n\r");
 			}
-			if (ch->pcdata->learned[gsn_forcewave] > 10) {
+			if ((ch->pcdata->learned[gsn_forcewave] > 10)
+				&& (ch->pcdata->learned[gsn_shockwave] < 10)) {
 				pager_printf_color(ch,
 				"&Y   Forcewave\n\r");
 			}
-			if (ch->pcdata->learned[gsn_shockwave] > 10) {
+			else if ((ch->pcdata->learned[gsn_forcewave] > 10)
+				&& (ch->pcdata->learned[gsn_shockwave] > 10)) {
 				pager_printf_color(ch,
 				"&Y   Forcewave         Shockwave\n\r");
 			}
