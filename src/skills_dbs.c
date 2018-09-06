@@ -7719,7 +7719,7 @@ do_meditate(CHAR_DATA * ch, char *argument)
 			if(!ch->desc)
 				return;
 			hitcheck = number_range(1, 100);
-			if if (hitcheck <= 95) {
+			if (hitcheck <= 95) {
 				send_to_char
 					("&wYou meditate peacefully, collecting energy from the cosmos\n\r",
 					ch);
