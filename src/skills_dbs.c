@@ -5873,11 +5873,10 @@ void do_haymaker( CHAR_DATA *ch, char *argument )
 	float	physmult = 0;
 	float	kicmult = 0;
 	int		kilimit = 0;
+	int		hitcheck = 0;
 
 	if (IS_NPC(ch) && is_split(ch)) {
 		if (!ch->master)
-			return;
-		if (!can_use_skill(ch->master, number_percent(), gsn_haymaker))
 			return;
 	}
 	if (IS_NPC(ch) && IS_AFFECTED(ch, AFF_CHARM)) {
@@ -5885,15 +5884,15 @@ void do_haymaker( CHAR_DATA *ch, char *argument )
 		return;
 	}
 	if (!IS_NPC(ch)
-	    && ch->exp < skill_table[gsn_haymaker]->skill_level[ch->class]) {
-		send_to_char("You can't do that.\n\r", ch);
+	    && (ch->skillhaymaker = 0)) {
+		send_to_char("You're not able to use that skill.\n\r", ch);
 		return;
 	}
 	if ((victim = who_fighting(ch)) == NULL) {
 		send_to_char("You aren't fighting anyone.\n\r", ch);
 		return;
 	}
-	if (ch->mana < skill_table[gsn_haymaker]->min_mana) {
+	if (ch->mana < 10) {
 		send_to_char("You don't have enough energy.\n\r", ch);
 		return;
 	}
@@ -5902,9 +5901,10 @@ void do_haymaker( CHAR_DATA *ch, char *argument )
 		physmult = (float) get_curr_str(ch) / 950 + 1;
 		kicmult = (float) kilimit / 100 + 1;
 	}
+	hitcheck = number_range(1, 100);
 
-	WAIT_STATE(ch, skill_table[gsn_haymaker]->beats);
-	if (can_use_skill(ch, number_percent(), gsn_haymaker)) {
+	WAIT_STATE(ch, 8);
+	if (hitcheck <= 95) {
 		if (!IS_NPC(ch)) {
 			argdam = number_range(6, 9) * kicmult;
 			dam = get_attmod(ch, victim) * (argdam * physmult);
@@ -5937,7 +5937,6 @@ void do_haymaker( CHAR_DATA *ch, char *argument )
 			"$n crashes his fist straight into $N with all $s might, crushing $M into the dirt! &W[$t]",
 			ch, num_punct(dam), victim, TO_NOTVICT);
 		
-		learn_from_success(ch, gsn_haymaker);
 		global_retcode = damage(ch, victim, dam, TYPE_HIT);
 	}
 	else {
@@ -5947,10 +5946,9 @@ void do_haymaker( CHAR_DATA *ch, char *argument )
 		    victim, TO_VICT);
 		act(AT_YELLOW, "$n missed $N with a clumsily thrown haymaker.", ch, NULL,
 		    victim, TO_NOTVICT);
-		learn_from_failure(ch, gsn_haymaker);
 		global_retcode = damage(ch, victim, 0, TYPE_HIT);
 	}
-	ch->mana -= skill_table[gsn_haymaker]->min_mana;
+	ch->mana -= 10;
 	return;
 }
 
