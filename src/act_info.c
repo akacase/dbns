@@ -4306,6 +4306,9 @@ do_practice(CHAR_DATA * ch, char *argument)
 	bool bioPrac = false;
 	int ii = 0;
 
+	send_to_char("This command doesn't do anything now. Try 'develop' instead.\n\r", ch);
+	return;
+	
 	if (IS_NPC(ch))
 		return;
 
@@ -4573,6 +4576,11 @@ do_develop(CHAR_DATA * ch, char *argument)
 	if (IS_NPC(ch)) {
 		send_to_char("Stop that!\n\r", ch);
 		return;
+	}
+	if (arg1[0] == '\0' && arg2[0] == '\0') {
+		send_to_char("Develop what? Some abilities from your 'skills' may be combined together using this command.\n\r", ch);
+		send_to_char("syntax: develop <skill> <skill>; enter the skill name as it appears in your skills list without spaces.\n\r", ch);
+		send_to_char("A failure message indicates combination is possible, but you lack enough Strike/Ki/Body Mastery, or you have already learned it.\n\r", ch);
 	}
 	if (!str_cmp(arg1, "eyebeam") && arg2[0] == '\0') {
 		if (ch->energymastery >= 1000 && (ch->skilleye_beam < 1)) {
@@ -4971,6 +4979,17 @@ do_develop(CHAR_DATA * ch, char *argument)
 		if ((ch->skillpunch < 1)) {
 			send_to_char("You developed Punch!\n\r", ch);
 			ch->skillpunch = 1;
+			return;
+		}
+		else {
+			send_to_char("Regrettably, your effort seems to be wasted.\n\r", ch);
+			return;
+		}
+	}
+	if (!str_cmp(arg1, "energyball") && arg2[0] == '\0') {
+		if ((ch->skillenergy_ball < 1)) {
+			send_to_char("You developed Energy Ball!\n\r", ch);
+			ch->skillenergy_ball = 1;
 			return;
 		}
 		else {
@@ -6211,7 +6230,8 @@ do_alist(CHAR_DATA * ch, char *argument)
 
 	if (IS_NPC(ch))
 		return;
-
+	send_to_char("This command has been replaced. Try checking your 'skills' instead.\n\r", ch);
+	return;
 	for (sn = gsn_first_ability; sn < gsn_first_weapon; sn++) {
 		if ((skill_table[sn]->guild != CLASS_NONE && (!IS_GUILDED(ch)
 		    || (ch->pcdata->
@@ -6337,7 +6357,8 @@ do_slist(CHAR_DATA * ch, char *argument)
 
 	if (IS_NPC(ch))
 		return;
-
+	send_to_char("This command has been replaced. Try checking your 'skills' instead.\n\r", ch);
+	return;
 	for (sn = gsn_first_skill; sn < gsn_first_ability; sn++) {
 		if ((skill_table[sn]->guild != CLASS_NONE && (!IS_GUILDED(ch)
 		    || (ch->pcdata->
@@ -6594,7 +6615,7 @@ do_skills(CHAR_DATA * ch, char *argument) {
 			pager_printf_color(ch,
 				"&Y   Energy Ball       Energy Style         Meditate\n\r");
 			pager_printf_color(ch,
-				"&Y   Sense             Suppress             Powerup\n\r");
+				"&Y   Powerense         Suppress             Powerup\n\r");
 			if ((ch->skillcrusherball >= 1)) {
 				pager_printf_color(ch,
 				"&Y   Crusher Ball\n\r");
