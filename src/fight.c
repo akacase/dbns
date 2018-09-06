@@ -5207,17 +5207,17 @@ damage(CHAR_DATA * ch, CHAR_DATA * victim, int dam, int dt)
 	if (!IS_NPC(victim) && !IS_IMMORTAL(victim)) {
 		if ((victim->pcdata->learned[gsn_ssj] <= 0
 		    && victim->exp < ch->exp)
-		    || (victim->pcdata->learned[gsn_ssj] > 0
-		    && victim->pcdata->learned[gsn_ssj2] <= 0
+		    || (victim->skillssj1 >= 1
+		    && victim->skillssj2 <= 0
 		    && victim->exp < ch->exp)
-		    || (victim->pcdata->learned[gsn_ssj2] > 0
-		    && victim->pcdata->learned[gsn_ssj3] <= 0
+		    || (victim->skillssj2 >= 1
+		    && victim->skillssj3 <= 0
 		    && victim->exp < ch->exp)
-		    || (victim->pcdata->learned[gsn_ssj3] > 0
-		    && victim->pcdata->learned[gsn_ssj4] <= 0
+		    || (victim-skillssj3 >= 1
+		    && victim->skillssgod <= 0
 		    && victim->exp < ch->exp)
-		    || (victim->pcdata->learned[gsn_ssj4] > 0
-		    && victim->pcdata->learned[gsn_sgod] <= 0
+		    || (victim->skillssgod >= 1
+		    && victim->skillssblue <= 0
 		    && victim->exp < ch->exp)) {
 			if (IS_NPC(ch)
 			    || (!IS_NPC(ch) && !xIS_SET(ch->act, PLR_SPAR))) {
@@ -5245,25 +5245,25 @@ damage(CHAR_DATA * ch, CHAR_DATA * victim, int dam, int dt)
 					else
 						victim->rage += 1;
 				}
-				if (victim->pcdata->learned[gsn_ssj] <= 0)
+				if (victim->skillssj1 <= 0)
 				  rage(victim, ch);
-				else if (victim->pcdata->learned[gsn_ssj] > 0
-					 && victim->pcdata->learned[gsn_ssj2] <=
-					 0)
+				else if (victim->skillssj1 >= 1
+					 && victim->skillssj2 <=
+					 1)
 				  rage2(victim, ch);
-				else if (victim->pcdata->learned[gsn_ssj2] >
-					 0
-					 && victim->pcdata->learned[gsn_ssj3] <=
+				else if (victim->skillssj2 >=
+					 1
+					 && victim->skillssj3 <=
 					 0)
 				  rage3(victim, ch);
-				else if (victim->pcdata->learned[gsn_ssj3] >
-					 0
-					 && victim->pcdata->learned[gsn_ssj4] <=
+				else if (victim->skillssj3 >=
+					 1
+					 && victim->skillssgod <=
 					 0)
 				  rage4(victim, ch);
-				else if (victim->pcdata->learned[gsn_ssj4] >
-					 0
-					 && victim->pcdata->learned[gsn_sgod] <=
+				else if (victim->skillssgod >=
+					 1
+					 && victim->skillssblue <=
 					 0)
 				  rage5(victim, ch);
 			}
