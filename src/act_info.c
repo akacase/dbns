@@ -5928,18 +5928,18 @@ do_combat(CHAR_DATA * ch, char *argument)
 			    CMB_NO_HEART) ? "[+] HEART" :
 			    "[-] heart");
 		}
-		if (ch->skilldcd > 0) {
+		if (ch->skilldcd >= 0) {
 			ch_printf(ch, "%-12s\n\r",
 			    IS_SET(ch->pcdata->combatFlags,
 			    CMB_NO_DCD) ? "[-] dcd" : "[+] DCD");
 		}
-		if (ch->skilldodge > 0) {
+		if (ch->skilldodge >= 0) {
 			ch_printf(ch, "%-12s\n\r",
 			    IS_SET(ch->pcdata->combatFlags,
 			    CMB_NO_DODGE) ? "[-] dodge" :
 			    "[+] DODGE");
 		}
-		if (ch->skillblock > 0) {
+		if (ch->skillblock >= 0) {
 			ch_printf(ch, "%-12s\n\r",
 			    IS_SET(ch->pcdata->combatFlags,
 			    CMB_NO_BLOCK) ? "[-] block" :
