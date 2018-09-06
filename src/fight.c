@@ -5166,8 +5166,6 @@ damage(CHAR_DATA * ch, CHAR_DATA * victim, int dam, int dt)
 				check = 100;
 			int		hitcheck = 0;
 			if (!IS_SET(victim->pcdata->combatFlags, CMB_NO_DODGE)) {
-				hitcheck = number_range(1, 100);
-				if (hitcheck <= 95) {
 					if (number_range(1, 100) <= check) {
 						dam = 0;
 						victim->dodge = true;
@@ -5187,13 +5185,9 @@ damage(CHAR_DATA * ch, CHAR_DATA * victim, int dam, int dt)
 						}
 						
 					}
-				}
 			}
 			if (!victim->dodge
-			    && !IS_SET(victim->pcdata->combatFlags,
-			    CMB_NO_BLOCK)) {
-				hitcheck = number_range(1, 100);
-				if (hitcheck <= 95) {
+			    && !IS_SET(victim->pcdata->combatFlags, CMB_NO_BLOCK)) {
 					if (number_range(1, 100) <= check) {
 					  dam = 0;
 					  victim->block = true;
@@ -5213,7 +5207,6 @@ damage(CHAR_DATA * ch, CHAR_DATA * victim, int dam, int dt)
 					  }
 						
 					}
-				}
 			}
 			// train con when taking damage
 			if (dam > 0) {
