@@ -5213,7 +5213,7 @@ damage(CHAR_DATA * ch, CHAR_DATA * victim, int dam, int dt)
 		    || (victim->skillssj2 >= 1
 		    && victim->skillssj3 <= 0
 		    && victim->exp < ch->exp)
-		    || (victim-skillssj3 >= 1
+		    || (victim->skillssj3 >= 1
 		    && victim->skillssgod <= 0
 		    && victim->exp < ch->exp)
 		    || (victim->skillssgod >= 1
