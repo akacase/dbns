@@ -5883,8 +5883,12 @@ void do_haymaker( CHAR_DATA *ch, char *argument )
 		send_to_char("You can't concentrate enough for that.\n\r", ch);
 		return;
 	}
+	if (IS_IMMORTAL(ch)) {
+		pager_printf_color(ch,
+		"DEBUG: Haymaker currently %d]\n\r", ch->skillhaymaker);
+	}
 	if (!IS_NPC(ch)
-	    && (ch->skillhaymaker = 0)) {
+	    && (ch->skillhaymaker < 1)) {
 		send_to_char("You're not able to use that skill.\n\r", ch);
 		return;
 	}
