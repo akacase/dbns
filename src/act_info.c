@@ -6524,7 +6524,6 @@ do_skills(CHAR_DATA * ch, char *argument) {
 		if (ch->strikemastery >= 10000000) {
 			pager_printf_color(ch,
 				"&CSTRIKE MASTERY&B----------&Y[&GGRANDMASTER %d&Y]\n\r", gmastersrank);
-			if (ch->strikemastery >)
 		}
 		else if (ch->strikemastery >= 1000000) {
 			pager_printf_color(ch,
