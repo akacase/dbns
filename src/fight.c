@@ -3806,11 +3806,6 @@ multi_hit(CHAR_DATA * ch, CHAR_DATA * victim, int dt)
 		if (retcode != rNONE || who_fighting(ch) != victim)
 			return retcode;
 	}
-	if (number_percent() < chance) {
-		retcode = one_hit(ch, victim, dt);
-		if (retcode != rNONE || who_fighting(ch) != victim)
-			return retcode;
-	}
 }
 
 /*
