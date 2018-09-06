@@ -6615,7 +6615,7 @@ do_skills(CHAR_DATA * ch, char *argument) {
 			pager_printf_color(ch,
 				"&Y   Energy Ball       Energy Style         Meditate\n\r");
 			pager_printf_color(ch,
-				"&Y   Powerense         Suppress             Powerup\n\r");
+				"&Y   Powersense        Suppress             Powerup\n\r");
 			if ((ch->skillcrusherball >= 1)) {
 				pager_printf_color(ch,
 				"&Y   Crusher Ball\n\r");
