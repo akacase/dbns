@@ -321,7 +321,7 @@ fwrite_char (CHAR_DATA * ch, FILE * fp)
 	 fprintf (fp, "Bruiser_Style           %d\n", ch->skillbruiser_style);
 	 fprintf (fp, "Hybrid_Style           %d\n", ch->skillhybrid_style);
 	 fprintf (fp, "Aggressive_Style           %d\n", ch->skillaggressive_style);
-	 fprintf (fp, "Berserk_Style           %d\n", ch->skillbserserk_style);
+	 fprintf (fp, "Berserk_Style           %d\n", ch->skillberserk_style);
 	 fprintf (fp, "Block           %d\n", ch->skillblock);
 	 fprintf (fp, "Collide           %d\n", ch->skillcollide);
 	 fprintf (fp, "DCD           %d\n", ch->skilldcd);

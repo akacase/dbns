@@ -2490,7 +2490,7 @@ nanny(DESCRIPTOR_DATA *d, char *argument)
 	ch->skillbruiser_style = 95;
 	ch->skillhybrid_style = 95;
 	ch->skillaggressive_style = 95;
-	ch->skillbserserk_style = 95;
+	ch->skillberserk_style = 95;
 	ch->skillblock = 95;
 	ch->skillcollide = 0;
 	ch->skilldcd = 95;
