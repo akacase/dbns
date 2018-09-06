@@ -5171,16 +5171,13 @@ damage(CHAR_DATA * ch, CHAR_DATA * victim, int dam, int dt)
 				check = 1;
 			if (check > 100)
 				check = 100;
-
-			if (victim->pcdata->learned[gsn_dodge] > 0 &&
-			    !IS_SET(victim->pcdata->combatFlags, CMB_NO_DODGE)) {
-				if (can_use_skill
-				    (victim, number_percent(), gsn_dodge)) {
+			int		hitcheck = 0;
+			if (!IS_SET(victim->pcdata->combatFlags, CMB_NO_DODGE)) {
+				hitcheck = number_range(1, 100);
+				if (hitcheck <= 95) {
 					if (number_range(1, 100) <= check) {
 						dam = 0;
 						victim->dodge = true;
-						learn_from_success(victim,
-						    gsn_dodge);
 						if (IS_NPC(ch) && !IS_NPC(victim) && !IS_SET(victim->pcdata->flags, PCFLAG_GAG)) {
 							pager_printf(victim,
 							"&OYou skillfully dodge %s's attack.\n\r",
@@ -5193,25 +5190,20 @@ damage(CHAR_DATA * ch, CHAR_DATA * victim, int dam, int dt)
 						}
                         // train speed stat on dodge success
 						if(!IS_NPC(victim)){
-						  stat_train(victim, "spd", 5);
+						  stat_train(victim, "spd", 8);
 						}
 						
-					} else
-						learn_from_failure(victim,
-						    gsn_dodge);
+					}
 				}
 			}
-			if (victim->pcdata->learned[gsn_block] > 0
-			    && !victim->dodge
+			if (!victim->dodge
 			    && !IS_SET(victim->pcdata->combatFlags,
 			    CMB_NO_BLOCK)) {
-				if (can_use_skill
-				    (victim, number_percent(), gsn_block)) {
+				hitcheck = number_range(1, 100);
+				if (hitcheck <= 95) {
 					if (number_range(1, 100) <= check) {
 					  dam = 0;
 					  victim->block = true;
-					  learn_from_success(victim,
-						    gsn_block);
 						if (IS_NPC(ch) && !IS_NPC(victim) && !IS_SET(victim->pcdata->flags, PCFLAG_GAG)) {
 							pager_printf(victim,
 							"&OYou successfully block %s's attack.\n\r",
@@ -5222,20 +5214,17 @@ damage(CHAR_DATA * ch, CHAR_DATA * victim, int dam, int dt)
 							"&OYou successfully block %s's attack.\n\r",
 							ch->name);	
 						}
-					  // train speed stat on block success
+					  // train con stat on block success
 					  if (!IS_NPC(victim)) {
-					    stat_train(victim, "con", 5);
+					    stat_train(victim, "con", 8);
 					  }
 						
-					} else {
-					  learn_from_failure(victim,
-					      gsn_block);
 					}
 				}
 			}
 			// train con when taking damage
 			if (dam > 0) {
-			  if (dam < 4) {
+			  if (dam < 1) {
 			    stat_train(victim, "con", 3);
 			  }
 			  else if (dam < 10) {

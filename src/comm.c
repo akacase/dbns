@@ -2485,6 +2485,8 @@ nanny(DESCRIPTOR_DATA *d, char *argument)
 	ch->pcdata->admintalk = 0;
 	ch->pcdata->age = 18;
 	ch->pcdata->sparcount = 0;
+	ch->skilldestructive_wave = 0;
+	ch->skillbash = 0;
 	ch->skillhaymaker = 0;
 	ch->skillenergy_style = 1;
 	ch->skillbruiser_style = 1;

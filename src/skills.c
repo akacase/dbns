@@ -2852,15 +2852,19 @@ void do_bash( CHAR_DATA *ch, char *argument )
 	int		kilimit = 0;
 	float	physmult = 0;
 	float	kicmult = 0;
+	int		hitcheck = 0;
 
 	if (IS_NPC(ch) && is_split(ch)) {
 		if (!ch->master)
 			return;
-		if (!can_use_skill(ch->master, number_percent(), gsn_bash))
-			return;
 	}
 	if (IS_NPC(ch) && IS_AFFECTED(ch, AFF_CHARM)) {
 		send_to_char("You can't concentrate enough for that.\n\r", ch);
+		return;
+	}
+	if (!IS_NPC(ch)
+	    && (ch->skillbash < 1)) {
+		send_to_char("You're not able to use that skill.\n\r", ch);
 		return;
 	}
 	if ((victim = who_fighting(ch)) == NULL) {
@@ -2872,13 +2876,14 @@ void do_bash( CHAR_DATA *ch, char *argument )
 		physmult = (float) get_curr_str(ch) / 950 + 1;
 		kicmult = (float) kilimit / 100 + 1;
 	}
-	if (ch->mana < skill_table[gsn_bash]->min_mana) {
+	if (ch->mana < 16) {
 		send_to_char("You don't have enough energy.\n\r", ch);
 		return;
 	}
+	hitcheck = number_range(1, 100);
 
-	WAIT_STATE(ch, skill_table[gsn_bash]->beats);
-	if (can_use_skill(ch, number_percent(), gsn_bash)) {
+	WAIT_STATE(ch, 8);
+	if (hitcheck <= 95) {
 		if (!IS_NPC(ch)) {
 			argdam = number_range(10, 12) * kicmult;
 			dam = get_attmod(ch, victim) * (argdam * physmult);
@@ -2901,7 +2906,6 @@ void do_bash( CHAR_DATA *ch, char *argument )
 		act(AT_YELLOW,
 			"$n crashes directly into $N, knocking them for a loop! &W[$t]",
 			ch, num_punct(dam), victim, TO_NOTVICT);
-		learn_from_success(ch, gsn_bash);
 		global_retcode = damage(ch, victim, dam, TYPE_HIT);
 	}
 	else {
@@ -2911,10 +2915,9 @@ void do_bash( CHAR_DATA *ch, char *argument )
 		    victim, TO_VICT);
 		act(AT_YELLOW, "$n missed $N with a barreling collision.", ch, NULL,
 		    victim, TO_NOTVICT);
-		learn_from_failure(ch, gsn_bash);
 		global_retcode = damage(ch, victim, 0, TYPE_HIT);
 	}
-	ch->mana -= skill_table[gsn_bash]->min_mana;
+	ch->mana -= 16;
 	return;
 }
 

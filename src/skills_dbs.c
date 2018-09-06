@@ -453,7 +453,7 @@ rage(CHAR_DATA * ch, CHAR_DATA * victim)
 	if (!victim->in_room)
 		return;
 
-	if (ch->pcdata->learned[gsn_ssj] > 0)
+	if (ch->skillssj1 >= 1)
 		return;
 
 	if (ch->delay <= 0) {
@@ -470,7 +470,7 @@ rage(CHAR_DATA * ch, CHAR_DATA * victim)
 			return;
 			
 
-		if (ch->pcdata->learned[gsn_ssj] > 0)
+		if (ch->skillssj1 >= 1)
 			return;
 
 		switch (number_range(1, 5)) {
@@ -656,7 +656,7 @@ rage(CHAR_DATA * ch, CHAR_DATA * victim)
 		act(AT_RED, "=-", ch, NULL, victim, TO_VICT);
 		act(AT_RED, "=-", ch, NULL, victim, TO_NOTVICT);
 
-		ch->pcdata->learned[gsn_ssj] = 10;
+		ch->skillssj1 = 1;
 		if (xIS_SET((ch)->affected_by, AFF_KAIOKEN))
 			xREMOVE_BIT((ch)->affected_by, AFF_KAIOKEN);
 		if (xIS_SET((ch)->affected_by, AFF_OOZARU))
@@ -688,8 +688,8 @@ rage2(CHAR_DATA * ch, CHAR_DATA * victim)
 	if (!victim->in_room)
 		return;
 
-	if (ch->pcdata->learned[gsn_ssj2] > 0
-	    && ch->pcdata->learned[gsn_ssj] <= 0)
+	if (ch->skillssj2 >= 1
+	    && ch->skillssj1 = 0)
 		return;
 
 	if (!xIS_SET(ch->affected_by, AFF_SSJ))
@@ -703,6 +703,9 @@ rage2(CHAR_DATA * ch, CHAR_DATA * victim)
 			return;
 			
 		if (ch->train < 2610000)
+			return;
+			
+		if (ch->skillssj2 >= 1)
 			return;
 
 		switch (number_range(1, 5)) {
@@ -873,7 +876,7 @@ rage2(CHAR_DATA * ch, CHAR_DATA * victim)
 		act(AT_RED, "=-", ch, NULL, victim, TO_VICT);
 		act(AT_RED, "=-", ch, NULL, victim, TO_NOTVICT);
 
-		ch->pcdata->learned[gsn_ssj2] = 10;
+		ch->skillssj2 = 1;
 		if (xIS_SET((ch)->affected_by, AFF_KAIOKEN))
 			xREMOVE_BIT((ch)->affected_by, AFF_KAIOKEN);
 		if (xIS_SET((ch)->affected_by, AFF_OOZARU))
@@ -907,9 +910,9 @@ rage3(CHAR_DATA * ch, CHAR_DATA * victim)
 	if (!victim->in_room)
 		return;
 
-	if (ch->pcdata->learned[gsn_ssj3] > 0
-	    && ch->pcdata->learned[gsn_ssj] <= 0
-	    && ch->pcdata->learned[gsn_ssj2] <= 0)
+	if (ch->skillssj3 >= 1
+	    && ch->skillssj1 = 0
+	    && ch->skillssj2 = 0)
 		return;
 
 	if (!xIS_SET(ch->affected_by, AFF_SSJ)
@@ -925,8 +928,8 @@ rage3(CHAR_DATA * ch, CHAR_DATA * victim)
 			
 		if (ch->train < 3510000)
 			return;
-
-		if (ch->pcdata->learned[gsn_ssj3] > 0)
+			
+		if (ch->skillssj3 >= 1)
 			return;
 
 		switch (number_range(1, 5)) {
@@ -1055,7 +1058,7 @@ rage3(CHAR_DATA * ch, CHAR_DATA * victim)
 		act(AT_RED, "=-", ch, NULL, victim, TO_VICT);
 		act(AT_RED, "=-", ch, NULL, victim, TO_NOTVICT);
 
-		ch->pcdata->learned[gsn_ssj3] = 10;
+		ch->skillssj3 = 1;
 		if (xIS_SET((ch)->affected_by, AFF_KAIOKEN))
 			xREMOVE_BIT((ch)->affected_by, AFF_KAIOKEN);
 		if (xIS_SET((ch)->affected_by, AFF_OOZARU))
@@ -1091,10 +1094,10 @@ rage4(CHAR_DATA * ch, CHAR_DATA * victim)
 	if (!victim->in_room)
 		return;
 
-	if (ch->pcdata->learned[gsn_ssj4] > 0
-	    && ch->pcdata->learned[gsn_ssj] <= 0
-	    && ch->pcdata->learned[gsn_ssj2] <= 0
-	    && ch->pcdata->learned[gsn_ssj3] <= 0)
+	if (ch->skillssgod >= 1
+	    && ch->skillssj1 = 0
+	    && ch->skillssj2 = 0
+	    && ch->skillssj3 = 0)
 		return;
 		
 	if (ch->delay <= 0) {
@@ -1106,9 +1109,10 @@ rage4(CHAR_DATA * ch, CHAR_DATA * victim)
 			
 		if (ch->train < 4680000)
 			return;
-
-		if (ch->pcdata->learned[gsn_ssj4] > 0)
+			
+		if (ch->skillssgod >= 1)
 			return;
+
 
 		switch (number_range(1, 5)) {
 		default:
@@ -1251,7 +1255,7 @@ rage4(CHAR_DATA * ch, CHAR_DATA * victim)
 		act(AT_RED, "=-", ch, NULL, victim, TO_VICT);
 		act(AT_RED, "=-", ch, NULL, victim, TO_NOTVICT);
 
-		ch->pcdata->learned[gsn_ssj4] = 10;
+		ch->skillssgod = 1;
 		if (xIS_SET((ch)->affected_by, AFF_KAIOKEN))
 			xREMOVE_BIT((ch)->affected_by, AFF_KAIOKEN);
 		if (xIS_SET((ch)->affected_by, AFF_OOZARU))
@@ -1291,11 +1295,11 @@ rage5(CHAR_DATA * ch, CHAR_DATA * victim)
 	if (!victim->in_room)
 		return;
 
-	if (ch->pcdata->learned[gsn_sgod] > 0
-	    && ch->pcdata->learned[gsn_ssj] <= 0
-	    && ch->pcdata->learned[gsn_ssj2] <= 0
-	    && ch->pcdata->learned[gsn_ssj3] <= 0
-	    && ch->pcdata->learned[gsn_ssj4] <= 0)
+	if (ch->skillssblue >= 1
+	    && ch->skillssj1 = 0
+	    && ch->skillssj2 = 0
+	    && ch->skillssj3 = 0
+	    && ch->skillssgod = 0)
 		return;
 
 	if (ch->delay <= 0) {
@@ -1308,7 +1312,7 @@ rage5(CHAR_DATA * ch, CHAR_DATA * victim)
 		if (ch->train < 5670000)
 			return;
 
-		if (ch->pcdata->learned[gsn_sgod] > 0)
+		if (ch->skillssblue >= 1)
 			return;
 
 		switch (number_range(1, 5)) {
@@ -1450,7 +1454,7 @@ rage5(CHAR_DATA * ch, CHAR_DATA * victim)
 		act(AT_LBLUE, "=-", ch, NULL, victim, TO_VICT);
 		act(AT_LBLUE, "=-", ch, NULL, victim, TO_NOTVICT);
 
-		ch->pcdata->learned[gsn_sgod] = 10;
+		ch->skillssblue = 1;
 		if (xIS_SET((ch)->affected_by, AFF_KAIOKEN))
 			xREMOVE_BIT((ch)->affected_by, AFF_KAIOKEN);
 		if (xIS_SET((ch)->affected_by, AFF_OOZARU))
@@ -3097,11 +3101,10 @@ do_punch(CHAR_DATA * ch, char *argument)
 	int		kilimit = 0;
 	float	physmult = 0;
 	float	kicmult = 0;
-
+	int		hitcheck = 0;
+	
 	if (IS_NPC(ch) && is_split(ch)) {
 		if (!ch->master)
-			return;
-		if (!can_use_skill(ch->master, number_percent(), gsn_punch))
 			return;
 	}
 	if (IS_NPC(ch) && IS_AFFECTED(ch, AFF_CHARM)) {
@@ -3109,8 +3112,8 @@ do_punch(CHAR_DATA * ch, char *argument)
 		return;
 	}
 	if (!IS_NPC(ch)
-	    && ch->exp < skill_table[gsn_punch]->skill_level[ch->class]) {
-		send_to_char("You can't do that.\n\r", ch);
+	    && (ch->skillpunch < 1)) {
+		send_to_char("You're not able to use that skill.\n\r", ch);
 		return;
 	}
 	if ((victim = who_fighting(ch)) == NULL) {
@@ -3122,13 +3125,13 @@ do_punch(CHAR_DATA * ch, char *argument)
 		physmult = (float) get_curr_str(ch) / 950 + 1;
 		kicmult = (float) kilimit / 100 + 1;
 	}
-	if (ch->mana < skill_table[gsn_punch]->min_mana) {
+	if (ch->mana < 1) {
 		send_to_char("You don't have enough energy.\n\r", ch);
 		return;
 	}
-
-	WAIT_STATE(ch, skill_table[gsn_punch]->beats);
-	if (can_use_skill(ch, number_percent(), gsn_punch)) {
+	hitcheck = number_range(1, 100);
+	WAIT_STATE(ch, 6);
+	if (hitcheck <= 95) {
 		if (!IS_NPC(ch)) {
 			argdam = number_range(2, 4) * kicmult;
 			dam = get_attmod(ch, victim) * (argdam * physmult);
@@ -3161,7 +3164,6 @@ do_punch(CHAR_DATA * ch, char *argument)
 			"$n exploits an opening in $N's defense and hammers $S in the stomach! &W[$t]",
 			ch, num_punct(dam), victim, TO_NOTVICT);
 			
-		learn_from_success(ch, gsn_punch);
 		global_retcode = damage(ch, victim, dam, TYPE_HIT);
 	}
 	else {
@@ -3171,10 +3173,9 @@ do_punch(CHAR_DATA * ch, char *argument)
 		    victim, TO_VICT);
 		act(AT_YELLOW, "$n missed $N with a clumsily timed punch.", ch, NULL,
 		    victim, TO_NOTVICT);
-		learn_from_failure(ch, gsn_punch);
 		global_retcode = damage(ch, victim, 0, TYPE_HIT);
 	}
-	ch->mana -= skill_table[gsn_punch]->min_mana;
+	ch->mana -= 1;
 	return;
 }
 
@@ -5024,6 +5025,7 @@ do_energy_ball(CHAR_DATA * ch, char *argument)
 	int		kilimit = 0;
 	float	kimult = 0;
 	float	kicmult= 0;
+	int		hitcheck = 0;
 	
 
 	sh_int 	z = get_aura(ch);
@@ -5031,17 +5033,14 @@ do_energy_ball(CHAR_DATA * ch, char *argument)
 	if (IS_NPC(ch) && is_split(ch)) {
 		if (!ch->master)
 			return;
-		if (!can_use_skill
-		    (ch->master, number_percent(), gsn_energy_ball))
-			return;
 	}
 	if (IS_NPC(ch) && IS_AFFECTED(ch, AFF_CHARM)) {
 		send_to_char("You can't concentrate enough for that.\n\r", ch);
 		return;
 	}
 	if (!IS_NPC(ch)
-	    && ch->exp < skill_table[gsn_energy_ball]->skill_level[ch->class]) {
-		send_to_char("You can't do that.\n\r", ch);
+	    && (ch->skillenergy_ball < 1)) {
+		send_to_char("You're not able to use that skill.\n\r", ch);
 		return;
 	}
 	if (!IS_NPC(ch)) {
@@ -5053,14 +5052,14 @@ do_energy_ball(CHAR_DATA * ch, char *argument)
 		send_to_char("You aren't fighting anyone.\n\r", ch);
 		return;
 	}
-	if (ch->mana < skill_table[gsn_energy_ball]->min_mana) {
+	if (ch->mana < 1) {
 			send_to_char("You don't have enough energy.\n\r", ch);
 			return;
 	}
+	hitcheck = number_range(1, 100);
+	WAIT_STATE(ch, 8);
 
-	WAIT_STATE(ch, skill_table[gsn_energy_ball]->beats);
-
-	if (can_use_skill(ch, number_percent(), gsn_energy_ball)) {
+	if (hitcheck <= 95) {
 		if (!IS_NPC(ch)) {
 			argdam = number_range(2, 4) * kicmult;
 			dam = get_attmod(ch, victim) * (argdam * kimult);
@@ -5082,8 +5081,6 @@ do_energy_ball(CHAR_DATA * ch, char *argument)
 		act(z, "$n blasts $N with a single energy ball. &W[$t]", ch,
 			num_punct(dam), victim, TO_NOTVICT);
 
-		dam = ki_absorb(victim, ch, dam, gsn_energy_ball);
-		learn_from_success(ch, gsn_energy_ball);
 		global_retcode = damage(ch, victim, dam, TYPE_HIT);
 	} else {
 		act(z, "Your energy attack veers wildly off course.", ch, NULL, victim,
@@ -5092,10 +5089,9 @@ do_energy_ball(CHAR_DATA * ch, char *argument)
 		    TO_VICT);
 		act(z, "$n's energy attack sails harmlessly past $N.", ch, NULL, victim,
 		    TO_NOTVICT);
-		learn_from_failure(ch, gsn_energy_ball);
 		global_retcode = damage(ch, victim, 0, TYPE_HIT);
 	}
-	ch->mana -= skill_table[gsn_energy_ball]->min_mana;
+	ch->mana -= 1;
 	return;
 }
 
@@ -5107,11 +5103,10 @@ void do_energy_disc( CHAR_DATA *ch, char *argument )
 	float	kimult = 0;
 	float	kicmult = 0;
 	int		kilimit = 0;
-
+	int		hitcheck = 0;
+	
 	if (IS_NPC(ch) && is_split(ch)) {
 		if (!ch->master)
-			return;
-		if (!can_use_skill(ch->master, number_percent(), gsn_energy_disc))
 			return;
 	}
 	if (IS_NPC(ch) && IS_AFFECTED(ch, AFF_CHARM)) {
@@ -5119,15 +5114,15 @@ void do_energy_disc( CHAR_DATA *ch, char *argument )
 		return;
 	}
 	if (!IS_NPC(ch)
-	    && ch->exp < skill_table[gsn_energy_disc]->skill_level[ch->class]) {
-		send_to_char("You can't do that.\n\r", ch);
+	    && (ch->skillenergy_disc < 1)) {
+		send_to_char("You're not able to use that skill.\n\r", ch);
 		return;
 	}
 	if ((victim = who_fighting(ch)) == NULL) {
 		send_to_char("You aren't fighting anyone.\n\r", ch);
 		return;
 	}
-	if (ch->mana < skill_table[gsn_energy_disc]->min_mana) {
+	if (ch->mana < 15) {
 		send_to_char("You don't have enough energy.\n\r", ch);
 		return;
 	}
@@ -5136,9 +5131,9 @@ void do_energy_disc( CHAR_DATA *ch, char *argument )
 		kimult = (float) get_curr_int(ch) / 1000 + 1;
 		kicmult = (float) kilimit / 100 + 1;
 	}
-
-	WAIT_STATE(ch, skill_table[gsn_energy_disc]->beats);
-	if (can_use_skill(ch, number_percent(), gsn_energy_disc)) {
+	hitcheck = number_range(1, 100);
+	WAIT_STATE(ch, 8);
+	if (hitcheck <= 95) {
 		if (!IS_NPC(ch)) {
 			argdam = number_range(12, 14) * kicmult;
 			dam = get_attmod(ch, victim) * (argdam * kimult);
@@ -5162,7 +5157,6 @@ void do_energy_disc( CHAR_DATA *ch, char *argument )
 			"$n hurls a tiny spinning blade of pure energy straight at $N, creating a deep wound. &W[$t]",
 			ch, num_punct(dam), victim, TO_NOTVICT);
 		
-		learn_from_success(ch, gsn_energy_disc);
 		global_retcode = damage(ch, victim, dam, TYPE_HIT);
 	}
 	else {
@@ -5172,10 +5166,9 @@ void do_energy_disc( CHAR_DATA *ch, char *argument )
 		    victim, TO_VICT);
 		act(AT_YELLOW, "$n missed $N with an energy disc.", ch, NULL,
 		    victim, TO_NOTVICT);
-		learn_from_failure(ch, gsn_energy_disc);
 		global_retcode = damage(ch, victim, 0, TYPE_HIT);
 	}
-	ch->mana -= skill_table[gsn_energy_disc]->min_mana;
+	ch->mana -= 15;
 	return;
 }
 
@@ -5187,11 +5180,10 @@ void do_forcewave( CHAR_DATA *ch, char *argument )
 	float	kimult = 0;
 	float	kicmult = 0;
 	int		kilimit = 0;
+	int		hitcheck = 0;
 
 	if (IS_NPC(ch) && is_split(ch)) {
 		if (!ch->master)
-			return;
-		if (!can_use_skill(ch->master, number_percent(), gsn_forcewave))
 			return;
 	}
 	if (IS_NPC(ch) && IS_AFFECTED(ch, AFF_CHARM)) {
@@ -5199,15 +5191,15 @@ void do_forcewave( CHAR_DATA *ch, char *argument )
 		return;
 	}
 	if (!IS_NPC(ch)
-	    && ch->exp < skill_table[gsn_forcewave]->skill_level[ch->class]) {
-		send_to_char("You can't do that.\n\r", ch);
+	    && (ch->skillenergy_disc < 1)) {
+		send_to_char("You're not able to use that skill.\n\r", ch);
 		return;
 	}
 	if ((victim = who_fighting(ch)) == NULL) {
 		send_to_char("You aren't fighting anyone.\n\r", ch);
 		return;
 	}
-	if (ch->mana < skill_table[gsn_forcewave]->min_mana) {
+	if (ch->mana < 50) {
 		send_to_char("You don't have enough energy.\n\r", ch);
 		return;
 	}
@@ -5216,9 +5208,9 @@ void do_forcewave( CHAR_DATA *ch, char *argument )
 		kimult = (float) get_curr_int(ch) / 1000 + 1;
 		kicmult = (float) kilimit / 100 + 1;
 	}
-
-	WAIT_STATE(ch, skill_table[gsn_forcewave]->beats);
-	if (can_use_skill(ch, number_percent(), gsn_forcewave)) {
+	hitcheck = number_range(1, 100);
+	WAIT_STATE(ch, 8);
+	if (hitcheck <= 95) {
 		if (!IS_NPC(ch)) {
 			argdam = number_range(20, 25) * kicmult;
 			dam = get_attmod(ch, victim) * (argdam * kimult);
@@ -5242,7 +5234,6 @@ void do_forcewave( CHAR_DATA *ch, char *argument )
 			"$n forces $s palm forward, bombarding $N with unseen psionic power. &W[$t]",
 			ch, num_punct(dam), victim, TO_NOTVICT);
 		
-		learn_from_success(ch, gsn_forcewave);
 		global_retcode = damage(ch, victim, dam, TYPE_HIT);
 	}
 	else {
@@ -5252,10 +5243,9 @@ void do_forcewave( CHAR_DATA *ch, char *argument )
 		    victim, TO_VICT);
 		act(AT_YELLOW, "$n missed $N with an invisible wave of force.", ch, NULL,
 		    victim, TO_NOTVICT);
-		learn_from_failure(ch, gsn_forcewave);
 		global_retcode = damage(ch, victim, 0, TYPE_HIT);
 	}
-	ch->mana -= skill_table[gsn_forcewave]->min_mana;
+	ch->mana -= 50;
 	return;
 }
 
@@ -5267,11 +5257,10 @@ void do_concentrated_beam( CHAR_DATA *ch, char *argument )
 	float	kimult = 0;
 	float	kicmult = 0;
 	int		kilimit = 0;
+	int		hitcheck = 0;
 
 	if (IS_NPC(ch) && is_split(ch)) {
 		if (!ch->master)
-			return;
-		if (!can_use_skill(ch->master, number_percent(), gsn_concentrated_beam))
 			return;
 	}
 	if (IS_NPC(ch) && IS_AFFECTED(ch, AFF_CHARM)) {
@@ -5279,15 +5268,15 @@ void do_concentrated_beam( CHAR_DATA *ch, char *argument )
 		return;
 	}
 	if (!IS_NPC(ch)
-	    && ch->exp < skill_table[gsn_concentrated_beam]->skill_level[ch->class]) {
-		send_to_char("You can't do that.\n\r", ch);
+	    && (ch->skillconcentrated_beam < 1)) {
+		send_to_char("You're not able to use that skill.\n\r", ch);
 		return;
 	}
 	if ((victim = who_fighting(ch)) == NULL) {
 		send_to_char("You aren't fighting anyone.\n\r", ch);
 		return;
 	}
-	if (ch->mana < skill_table[gsn_concentrated_beam]->min_mana) {
+	if (ch->mana < 40) {
 		send_to_char("You don't have enough energy.\n\r", ch);
 		return;
 	}
@@ -5296,9 +5285,9 @@ void do_concentrated_beam( CHAR_DATA *ch, char *argument )
 		kimult = (float) get_curr_int(ch) / 1000 + 1;
 		kicmult = (float) kilimit / 100 + 1;
 	}
-
-	WAIT_STATE(ch, skill_table[gsn_concentrated_beam]->beats);
-	if (can_use_skill(ch, number_percent(), gsn_concentrated_beam)) {
+	hitcheck = number_range(1, 100);
+	WAIT_STATE(ch, 8);
+	if (hitcheck <= 95) {
 		if (!IS_NPC(ch)) {
 			argdam = number_range(18, 24) * kicmult;
 			dam = get_attmod(ch, victim) * (argdam * kimult);
@@ -5322,7 +5311,6 @@ void do_concentrated_beam( CHAR_DATA *ch, char *argument )
 			"$n thrusts one palm forward, firing a dangerous beam of concentrated energy at $N. &W[$t]",
 			ch, num_punct(dam), victim, TO_NOTVICT);
 		
-		learn_from_success(ch, gsn_concentrated_beam);
 		global_retcode = damage(ch, victim, dam, TYPE_HIT);
 	}
 	else {
@@ -5332,10 +5320,9 @@ void do_concentrated_beam( CHAR_DATA *ch, char *argument )
 		    victim, TO_VICT);
 		act(AT_YELLOW, "$n missed $N with a concentrated beam.", ch, NULL,
 		    victim, TO_NOTVICT);
-		learn_from_failure(ch, gsn_concentrated_beam);
 		global_retcode = damage(ch, victim, 0, TYPE_HIT);
 	}
-	ch->mana -= skill_table[gsn_concentrated_beam]->min_mana;
+	ch->mana -= 40;
 	return;
 }
 
@@ -5347,11 +5334,10 @@ void do_energybeam( CHAR_DATA *ch, char *argument )
 	float	kimult = 0;
 	float	kicmult = 0;
 	int		kilimit = 0;
-
+	int		hitcheck = 0;
+	
 	if (IS_NPC(ch) && is_split(ch)) {
 		if (!ch->master)
-			return;
-		if (!can_use_skill(ch->master, number_percent(), gsn_energybeam))
 			return;
 	}
 	if (IS_NPC(ch) && IS_AFFECTED(ch, AFF_CHARM)) {
@@ -5359,15 +5345,15 @@ void do_energybeam( CHAR_DATA *ch, char *argument )
 		return;
 	}
 	if (!IS_NPC(ch)
-	    && ch->exp < skill_table[gsn_energybeam]->skill_level[ch->class]) {
-		send_to_char("You can't do that.\n\r", ch);
+	    && (ch->skillenergy_beam < 1)) {
+		send_to_char("You're not able to use that skill.\n\r", ch);
 		return;
 	}
 	if ((victim = who_fighting(ch)) == NULL) {
 		send_to_char("You aren't fighting anyone.\n\r", ch);
 		return;
 	}
-	if (ch->mana < skill_table[gsn_energybeam]->min_mana) {
+	if (ch->mana < 10) {
 		send_to_char("You don't have enough energy.\n\r", ch);
 		return;
 	}
@@ -5376,9 +5362,9 @@ void do_energybeam( CHAR_DATA *ch, char *argument )
 		kimult = (float) get_curr_int(ch) / 1000 + 1;
 		kicmult = (float) kilimit / 100 + 1;
 	}
-
-	WAIT_STATE(ch, skill_table[gsn_energybeam]->beats);
-	if (can_use_skill(ch, number_percent(), gsn_energybeam)) {
+	hitcheck = number_range(1, 100);
+	WAIT_STATE(ch, 8);
+	if (hitcheck <= 95) {
 		if (!IS_NPC(ch)) {
 			argdam = number_range(6, 9) * kicmult;
 			dam = get_attmod(ch, victim) * (argdam * kimult);
@@ -5402,7 +5388,6 @@ void do_energybeam( CHAR_DATA *ch, char *argument )
 			"$n concentrates momentarily, then suddenly blasts $N with a weak beam of energy. &W[$t]",
 			ch, num_punct(dam), victim, TO_NOTVICT);
 		
-		learn_from_success(ch, gsn_energybeam);
 		global_retcode = damage(ch, victim, dam, TYPE_HIT);
 	}
 	else {
@@ -5412,10 +5397,9 @@ void do_energybeam( CHAR_DATA *ch, char *argument )
 		    victim, TO_VICT);
 		act(AT_YELLOW, "$n missed $N with an energy beam.", ch, NULL,
 		    victim, TO_NOTVICT);
-		learn_from_failure(ch, gsn_energybeam);
 		global_retcode = damage(ch, victim, 0, TYPE_HIT);
 	}
-	ch->mana -= skill_table[gsn_energybeam]->min_mana;
+	ch->mana -= 10;
 	return;
 }
 
@@ -5427,11 +5411,10 @@ void do_lariat( CHAR_DATA *ch, char *argument )
 	float	physmult = 0;
 	float	kicmult = 0;
 	int		kilimit = 0;
-
+	int		hitcheck = 0;
+	
 	if (IS_NPC(ch) && is_split(ch)) {
 		if (!ch->master)
-			return;
-		if (!can_use_skill(ch->master, number_percent(), gsn_lariat))
 			return;
 	}
 	if (IS_NPC(ch) && IS_AFFECTED(ch, AFF_CHARM)) {
@@ -5439,15 +5422,15 @@ void do_lariat( CHAR_DATA *ch, char *argument )
 		return;
 	}
 	if (!IS_NPC(ch)
-	    && ch->exp < skill_table[gsn_lariat]->skill_level[ch->class]) {
-		send_to_char("You can't do that.\n\r", ch);
+	    && (ch->skilllariat < 1)) {
+		send_to_char("You're not able to use that skill.\n\r", ch);
 		return;
 	}
 	if ((victim = who_fighting(ch)) == NULL) {
 		send_to_char("You aren't fighting anyone.\n\r", ch);
 		return;
 	}
-	if (ch->mana < skill_table[gsn_lariat]->min_mana) {
+	if (ch->mana < 80) {
 		send_to_char("You don't have enough energy.\n\r", ch);
 		return;
 	}
@@ -5456,9 +5439,9 @@ void do_lariat( CHAR_DATA *ch, char *argument )
 		physmult = (float) get_curr_str(ch) / 950 + 1;
 		kicmult = (float) kilimit / 100 + 1;
 	}
-
-	WAIT_STATE(ch, skill_table[gsn_lariat]->beats);
-	if (can_use_skill(ch, number_percent(), gsn_lariat)) {
+	hitcheck = number_range(1, 100);
+	WAIT_STATE(ch, 8);
+	if (hitcheck <= 95) {
 		if (!IS_NPC(ch)) {
 			argdam = number_range(45, 50) * kicmult;
 			dam = get_attmod(ch, victim) * (argdam * physmult);
@@ -5491,7 +5474,6 @@ void do_lariat( CHAR_DATA *ch, char *argument )
 			"$n's arm hooks around $N's neck, dragging them directly through the terrain! &W[$t]",
 			ch, num_punct(dam), victim, TO_NOTVICT);
 		
-		learn_from_success(ch, gsn_lariat);
 		global_retcode = damage(ch, victim, dam, TYPE_HIT);
 	}
 	else {
@@ -5501,10 +5483,9 @@ void do_lariat( CHAR_DATA *ch, char *argument )
 		    victim, TO_VICT);
 		act(AT_YELLOW, "$n missed $N with a lariat.", ch, NULL,
 		    victim, TO_NOTVICT);
-		learn_from_failure(ch, gsn_lariat);
 		global_retcode = damage(ch, victim, 0, TYPE_HIT);
 	}
-	ch->mana -= skill_table[gsn_lariat]->min_mana;
+	ch->mana -= 80;
 	return;
 }
 
@@ -5516,11 +5497,10 @@ void do_ecliptic_meteor( CHAR_DATA *ch, char *argument )
 	float	kimult = 0;
 	float	kicmult = 0;
 	int		kilimit = 0;
-
+	int		hitcheck = 0;
+	
 	if (IS_NPC(ch) && is_split(ch)) {
 		if (!ch->master)
-			return;
-		if (!can_use_skill(ch->master, number_percent(), gsn_ecliptic_meteor))
 			return;
 	}
 	if (IS_NPC(ch) && IS_AFFECTED(ch, AFF_CHARM)) {
@@ -5528,15 +5508,15 @@ void do_ecliptic_meteor( CHAR_DATA *ch, char *argument )
 		return;
 	}
 	if (!IS_NPC(ch)
-	    && ch->exp < skill_table[gsn_ecliptic_meteor]->skill_level[ch->class]) {
-		send_to_char("You can't do that.\n\r", ch);
+	    && (ch->skillecliptic_meteor < 1)) {
+		send_to_char("You're not able to use that skill.\n\r", ch);
 		return;
 	}
 	if ((victim = who_fighting(ch)) == NULL) {
 		send_to_char("You aren't fighting anyone.\n\r", ch);
 		return;
 	}
-	if (ch->mana < skill_table[gsn_ecliptic_meteor]->min_mana) {
+	if (ch->mana < 1000) {
 		send_to_char("You don't have enough energy.\n\r", ch);
 		return;
 	}
@@ -5545,9 +5525,9 @@ void do_ecliptic_meteor( CHAR_DATA *ch, char *argument )
 		kimult = (float) get_curr_int(ch) / 1000 + 1;
 		kicmult = (float) kilimit / 100 + 1;
 	}
-
-	WAIT_STATE(ch, skill_table[gsn_ecliptic_meteor]->beats);
-	if (can_use_skill(ch, number_percent(), gsn_ecliptic_meteor)) {
+	hitcheck = number_range(1, 100);
+	WAIT_STATE(ch, 8);
+	if (hitcheck <= 95) {
 		if (!IS_NPC(ch)) {
 			argdam = number_range(100, 125) * kicmult;
 			dam = get_attmod(ch, victim) * (argdam * kimult);
@@ -5580,7 +5560,6 @@ void do_ecliptic_meteor( CHAR_DATA *ch, char *argument )
 			"An immense ball of energy forms above $n, eclipsing the sky before consuming $N! &W[$t]",
 			ch, num_punct(dam), victim, TO_NOTVICT);
 		
-		learn_from_success(ch, gsn_ecliptic_meteor);
 		global_retcode = damage(ch, victim, dam, TYPE_HIT);
 	}
 	else {
@@ -5590,10 +5569,9 @@ void do_ecliptic_meteor( CHAR_DATA *ch, char *argument )
 		    victim, TO_VICT);
 		act(AT_YELLOW, "$n missed $N with an Ecliptic Meteor ... somehow.", ch, NULL,
 		    victim, TO_NOTVICT);
-		learn_from_failure(ch, gsn_ecliptic_meteor);
 		global_retcode = damage(ch, victim, 0, TYPE_HIT);
 	}
-	ch->mana -= skill_table[gsn_ecliptic_meteor]->min_mana;
+	ch->mana -= 1000;
 	return;
 }
 
@@ -5605,11 +5583,10 @@ void do_gigantic_meteor( CHAR_DATA *ch, char *argument )
 	float	kimult = 0;
 	float	kicmult = 0;
 	int		kilimit = 0;
-
+	int		hitcheck = 0;
+	
 	if (IS_NPC(ch) && is_split(ch)) {
 		if (!ch->master)
-			return;
-		if (!can_use_skill(ch->master, number_percent(), gsn_gigantic_meteor))
 			return;
 	}
 	if (IS_NPC(ch) && IS_AFFECTED(ch, AFF_CHARM)) {
@@ -5617,15 +5594,15 @@ void do_gigantic_meteor( CHAR_DATA *ch, char *argument )
 		return;
 	}
 	if (!IS_NPC(ch)
-	    && ch->exp < skill_table[gsn_gigantic_meteor]->skill_level[ch->class]) {
-		send_to_char("You can't do that.\n\r", ch);
+	    && (ch->skillgigantic_meteor < 1)) {
+		send_to_char("You're not able to use that skill.\n\r", ch);
 		return;
 	}
 	if ((victim = who_fighting(ch)) == NULL) {
 		send_to_char("You aren't fighting anyone.\n\r", ch);
 		return;
 	}
-	if (ch->mana < skill_table[gsn_gigantic_meteor]->min_mana) {
+	if (ch->mana < 250) {
 		send_to_char("You don't have enough energy.\n\r", ch);
 		return;
 	}
@@ -5634,9 +5611,9 @@ void do_gigantic_meteor( CHAR_DATA *ch, char *argument )
 		kimult = (float) get_curr_int(ch) / 1000 + 1;
 		kicmult = (float) kilimit / 100 + 1;
 	}
-
-	WAIT_STATE(ch, skill_table[gsn_gigantic_meteor]->beats);
-	if (can_use_skill(ch, number_percent(), gsn_gigantic_meteor)) {
+	hitcheck = number_range(1, 100);
+	WAIT_STATE(ch, 8);
+	if (hitcheck <= 95) {
 		if (!IS_NPC(ch)) {
 			argdam = number_range(70, 75) * kicmult;
 			dam = get_attmod(ch, victim) * (argdam * kimult);
@@ -5669,7 +5646,6 @@ void do_gigantic_meteor( CHAR_DATA *ch, char *argument )
 			"A giant ball of energy forms above $n, trapping $N in a massive explosion! &W[$t]",
 			ch, num_punct(dam), victim, TO_NOTVICT);
 		
-		learn_from_success(ch, gsn_gigantic_meteor);
 		global_retcode = damage(ch, victim, dam, TYPE_HIT);
 	}
 	else {
@@ -5679,10 +5655,9 @@ void do_gigantic_meteor( CHAR_DATA *ch, char *argument )
 		    victim, TO_VICT);
 		act(AT_YELLOW, "$n missed $N with a Gigantic Meteor ... somehow.", ch, NULL,
 		    victim, TO_NOTVICT);
-		learn_from_failure(ch, gsn_gigantic_meteor);
 		global_retcode = damage(ch, victim, 0, TYPE_HIT);
 	}
-	ch->mana -= skill_table[gsn_gigantic_meteor]->min_mana;
+	ch->mana -= 250;
 	return;
 }
 
@@ -5694,11 +5669,10 @@ void do_meteor( CHAR_DATA *ch, char *argument )
 	float	kimult = 0;
 	float	kicmult = 0;
 	int		kilimit = 0;
-
+	int		hitcheck = 0;
+	
 	if (IS_NPC(ch) && is_split(ch)) {
 		if (!ch->master)
-			return;
-		if (!can_use_skill(ch->master, number_percent(), gsn_meteor))
 			return;
 	}
 	if (IS_NPC(ch) && IS_AFFECTED(ch, AFF_CHARM)) {
@@ -5706,15 +5680,15 @@ void do_meteor( CHAR_DATA *ch, char *argument )
 		return;
 	}
 	if (!IS_NPC(ch)
-	    && ch->exp < skill_table[gsn_meteor]->skill_level[ch->class]) {
-		send_to_char("You can't do that.\n\r", ch);
+	    && (ch->skillmeteor < 1)) {
+		send_to_char("You're not able to use that skill.\n\r", ch);
 		return;
 	}
 	if ((victim = who_fighting(ch)) == NULL) {
 		send_to_char("You aren't fighting anyone.\n\r", ch);
 		return;
 	}
-	if (ch->mana < skill_table[gsn_meteor]->min_mana) {
+	if (ch->mana < 125) {
 		send_to_char("You don't have enough energy.\n\r", ch);
 		return;
 	}
@@ -5723,9 +5697,9 @@ void do_meteor( CHAR_DATA *ch, char *argument )
 		kimult = (float) get_curr_int(ch) / 1000 + 1;
 		kicmult = (float) kilimit / 100 + 1;
 	}
-
-	WAIT_STATE(ch, skill_table[gsn_meteor]->beats);
-	if (can_use_skill(ch, number_percent(), gsn_meteor)) {
+	hitcheck = number_range(1, 100);
+	WAIT_STATE(ch, 8);
+	if (hitcheck <= 95) {
 		if (!IS_NPC(ch)) {
 			argdam = number_range(30, 35) * kicmult;
 			dam = get_attmod(ch, victim) * (argdam * kimult);
@@ -5758,7 +5732,6 @@ void do_meteor( CHAR_DATA *ch, char *argument )
 			"$n crashes $s palm into $N, detonating the blast and sending $N flying! &W[$t]",
 			ch, num_punct(dam), victim, TO_NOTVICT);
 		
-		learn_from_success(ch, gsn_meteor);
 		global_retcode = damage(ch, victim, dam, TYPE_HIT);
 	}
 	else {
@@ -5768,10 +5741,9 @@ void do_meteor( CHAR_DATA *ch, char *argument )
 		    victim, TO_VICT);
 		act(AT_YELLOW, "$n missed $N with a meteor attack.", ch, NULL,
 		    victim, TO_NOTVICT);
-		learn_from_failure(ch, gsn_meteor);
 		global_retcode = damage(ch, victim, 0, TYPE_HIT);
 	}
-	ch->mana -= skill_table[gsn_meteor]->min_mana;
+	ch->mana -= 125;
 	return;
 }
 
@@ -5783,11 +5755,10 @@ void do_crusherball( CHAR_DATA *ch, char *argument )
 	float	kimult = 0;
 	float	kicmult = 0;
 	int		kilimit = 0;
-
+	int		hitcheck = 0;
+	
 	if (IS_NPC(ch) && is_split(ch)) {
 		if (!ch->master)
-			return;
-		if (!can_use_skill(ch->master, number_percent(), gsn_crusherball))
 			return;
 	}
 	if (IS_NPC(ch) && IS_AFFECTED(ch, AFF_CHARM)) {
@@ -5795,15 +5766,15 @@ void do_crusherball( CHAR_DATA *ch, char *argument )
 		return;
 	}
 	if (!IS_NPC(ch)
-	    && ch->exp < skill_table[gsn_crusherball]->skill_level[ch->class]) {
-		send_to_char("You can't do that.\n\r", ch);
+	    && (ch->skillcrusherball < 1)) {
+		send_to_char("You're not able to use that skill.\n\r", ch);
 		return;
 	}
 	if ((victim = who_fighting(ch)) == NULL) {
 		send_to_char("You aren't fighting anyone.\n\r", ch);
 		return;
 	}
-	if (ch->mana < skill_table[gsn_crusherball]->min_mana) {
+	if (ch->mana < 15) {
 		send_to_char("You don't have enough energy.\n\r", ch);
 		return;
 	}
@@ -5812,9 +5783,9 @@ void do_crusherball( CHAR_DATA *ch, char *argument )
 		kimult = (float) get_curr_int(ch) / 1000 + 1;
 		kicmult = (float) kilimit / 100 + 1;
 	}
-
-	WAIT_STATE(ch, skill_table[gsn_crusherball]->beats);
-	if (can_use_skill(ch, number_percent(), gsn_crusherball)) {
+	hitcheck = number_range(1, 100);
+	WAIT_STATE(ch, 8);
+	if (hitcheck <= 95) {
 		if (!IS_NPC(ch)) {
 			argdam = number_range(12, 14) * kicmult;
 			dam = get_attmod(ch, victim) * (argdam * kimult);
@@ -5847,7 +5818,6 @@ void do_crusherball( CHAR_DATA *ch, char *argument )
 			"$n hurls an oversized ball of seething energy directly into $N! &W[$t]",
 			ch, num_punct(dam), victim, TO_NOTVICT);
 		
-		learn_from_success(ch, gsn_crusherball);
 		global_retcode = damage(ch, victim, dam, TYPE_HIT);
 	}
 	else {
@@ -5857,10 +5827,9 @@ void do_crusherball( CHAR_DATA *ch, char *argument )
 		    victim, TO_VICT);
 		act(AT_YELLOW, "$n missed $N with a Crusher Ball.", ch, NULL,
 		    victim, TO_NOTVICT);
-		learn_from_failure(ch, gsn_crusherball);
 		global_retcode = damage(ch, victim, 0, TYPE_HIT);
 	}
-	ch->mana -= skill_table[gsn_crusherball]->min_mana;
+	ch->mana -= 15;
 	return;
 }
 
@@ -5882,10 +5851,6 @@ void do_haymaker( CHAR_DATA *ch, char *argument )
 	if (IS_NPC(ch) && IS_AFFECTED(ch, AFF_CHARM)) {
 		send_to_char("You can't concentrate enough for that.\n\r", ch);
 		return;
-	}
-	if (IS_IMMORTAL(ch)) {
-		pager_printf_color(ch,
-		"DEBUG: Haymaker currently %d\n\r", ch->skillhaymaker);
 	}
 	if (!IS_NPC(ch)
 	    && (ch->skillhaymaker < 1)) {
@@ -5964,22 +5929,26 @@ void do_collide( CHAR_DATA *ch, char *argument )
 	float	physmult = 0;
 	float	kicmult = 0;
 	int		kilimit = 0;
-
+	int		hitcheck = 0;
+	
 	if (IS_NPC(ch) && is_split(ch)) {
 		if (!ch->master)
-			return;
-		if (!can_use_skill(ch->master, number_percent(), gsn_collide))
 			return;
 	}
 	if (IS_NPC(ch) && IS_AFFECTED(ch, AFF_CHARM)) {
 		send_to_char("You can't concentrate enough for that.\n\r", ch);
 		return;
 	}
+	if (!IS_NPC(ch)
+	    && (ch->skillcollide < 1)) {
+		send_to_char("You're not able to use that skill.\n\r", ch);
+		return;
+	}
 	if ((victim = who_fighting(ch)) == NULL) {
 		send_to_char("You aren't fighting anyone.\n\r", ch);
 		return;
 	}
-	if (ch->mana < skill_table[gsn_collide]->min_mana) {
+	if (ch->mana < 25) {
 		send_to_char("You don't have enough energy.\n\r", ch);
 		return;
 	}
@@ -5988,9 +5957,9 @@ void do_collide( CHAR_DATA *ch, char *argument )
 		physmult = (float) get_curr_str(ch) / 950 + 1;
 		kicmult = (float) kilimit / 100 + 1;
 	}
-
-	WAIT_STATE(ch, skill_table[gsn_collide]->beats);
-	if (can_use_skill(ch, number_percent(), gsn_collide)) {
+	hitcheck = number_range(1, 100);
+	WAIT_STATE(ch, 8);
+	if (hitcheck <= 95) {
 		if (!IS_NPC(ch)) {
 			argdam = number_range(18, 22) * kicmult;
 			dam = get_attmod(ch, victim) * (argdam * physmult);
@@ -6023,7 +5992,6 @@ void do_collide( CHAR_DATA *ch, char *argument )
 			"$n's body collides directly with $N, sending them careening from the impact! &W[$t]",
 			ch, num_punct(dam), victim, TO_NOTVICT);
 		
-		learn_from_success(ch, gsn_collide);
 		global_retcode = damage(ch, victim, dam, TYPE_HIT);
 	}
 	else {
@@ -6033,10 +6001,9 @@ void do_collide( CHAR_DATA *ch, char *argument )
 		    victim, TO_VICT);
 		act(AT_YELLOW, "$n missed $N with a barreling collision.", ch, NULL,
 		    victim, TO_NOTVICT);
-		learn_from_failure(ch, gsn_collide);
 		global_retcode = damage(ch, victim, 0, TYPE_HIT);
 	}
-	ch->mana -= skill_table[gsn_collide]->min_mana;
+	ch->mana -= 25;
 	return;
 }
 
@@ -6048,12 +6015,10 @@ do_kamehameha(CHAR_DATA * ch, char *argument)
 	float	kimult = 0;
 	float	kicmult = 0;
 	int		kilimit = 0;
-
+	int		hitcheck = 0;
+	
 	if (IS_NPC(ch) && is_split(ch)) {
 		if (!ch->master)
-			return;
-		if (!can_use_skill
-		    (ch->master, number_percent(), gsn_kamehameha))
 			return;
 	}
 	if (IS_NPC(ch) && IS_AFFECTED(ch, AFF_CHARM)) {
@@ -6061,8 +6026,8 @@ do_kamehameha(CHAR_DATA * ch, char *argument)
 		return;
 	}
 	if (!IS_NPC(ch)
-	    && ch->exp < skill_table[gsn_kamehameha]->skill_level[ch->class]) {
-		send_to_char("You can't do that.\n\r", ch);
+	    && (ch->skillkamehameha < 1)) {
+		send_to_char("You're not able to use that skill.\n\r", ch);
 		return;
 	}
 	if (!IS_NPC(ch)) {
@@ -6074,13 +6039,13 @@ do_kamehameha(CHAR_DATA * ch, char *argument)
 		send_to_char("You aren't fighting anyone.\n\r", ch);
 		return;
 	}
-	if (ch->mana < skill_table[gsn_kamehameha]->min_mana) {
+	if (ch->mana < 100) {
 		send_to_char("You don't have enough energy.\n\r", ch);
 		return;
 	}
-
-	WAIT_STATE(ch, skill_table[gsn_kamehameha]->beats);
-	if (can_use_skill(ch, number_percent(), gsn_kamehameha)) {
+	hitcheck = number_range(1, 100);
+	WAIT_STATE(ch, 8);
+	if (hitcheck <= 95) {
 		if (!IS_NPC(ch)) {
 			argdam = number_range(50, 60) * kicmult;
 			dam = get_attmod(ch, victim) * (argdam * kimult);
@@ -6115,8 +6080,6 @@ do_kamehameha(CHAR_DATA * ch, char *argument)
 			"$n pushes $s hands forward, throwing a blue beam at $N. &W[$t]",
 			ch, num_punct(dam), victim, TO_NOTVICT);
 
-		dam = ki_absorb(victim, ch, dam, gsn_kamehameha);
-		learn_from_success(ch, gsn_kamehameha);
 		global_retcode = damage(ch, victim, dam, TYPE_HIT);
 	} else {
 		act(AT_LBLUE, "You missed $N with your kamehameha.", ch, NULL,
@@ -6125,10 +6088,9 @@ do_kamehameha(CHAR_DATA * ch, char *argument)
 		    victim, TO_VICT);
 		act(AT_LBLUE, "$n missed $N with a kamehameha.", ch, NULL,
 		    victim, TO_NOTVICT);
-		learn_from_failure(ch, gsn_kamehameha);
 		global_retcode = damage(ch, victim, 0, TYPE_HIT);
 	}
-	ch->mana -= skill_table[gsn_kamehameha]->min_mana;
+	ch->mana -= 100;
 	return;
 }
 
@@ -6558,11 +6520,10 @@ do_masenko(CHAR_DATA * ch, char *argument)
 	float	kimult = 0;
 	float	kicmult = 0;
 	int		kilimit = 0;
-
+	int		hitcheck = 0;
+	
 	if (IS_NPC(ch) && is_split(ch)) {
 		if (!ch->master)
-			return;
-		if (!can_use_skill(ch->master, number_percent(), gsn_masenko))
 			return;
 	}
 	if (IS_NPC(ch) && IS_AFFECTED(ch, AFF_CHARM)) {
@@ -6570,8 +6531,8 @@ do_masenko(CHAR_DATA * ch, char *argument)
 		return;
 	}
 	if (!IS_NPC(ch)
-	    && ch->exp < skill_table[gsn_masenko]->skill_level[ch->class]) {
-		send_to_char("You can't do that.\n\r", ch);
+	    && (ch->skillmasenko < 1)) {
+		send_to_char("You're not able to use that skill.\n\r", ch);
 		return;
 	}
 	if ((victim = who_fighting(ch)) == NULL) {
@@ -6583,18 +6544,13 @@ do_masenko(CHAR_DATA * ch, char *argument)
 		kimult = (float) get_curr_int(ch) / 1000 + 1;
 		kicmult = (float) kilimit / 100 + 1;
 	}
-	if (ch->mana < skill_table[gsn_masenko]->min_mana) {
+	if (ch->mana < 60) {
 		send_to_char("You don't have enough energy.\n\r", ch);
 		return;
 	}
-	if (ch->focus < skill_table[gsn_masenko]->focus) {
-		send_to_char("You need to focus more.\n\r", ch);
-		return;
-	} else
-		ch->focus -= skill_table[gsn_masenko]->focus;
-
-	WAIT_STATE(ch, skill_table[gsn_masenko]->beats);
-	if (can_use_skill(ch, number_percent(), gsn_masenko)) {
+	hitcheck = number_range(1, 100);
+	WAIT_STATE(ch, 8);
+	if (hitcheck <= 95) {
 		if (!IS_NPC(ch)) {
 			argdam = number_range(30, 35) * kicmult;
 			dam = get_attmod(ch, victim) * (argdam * kimult);
@@ -6625,8 +6581,6 @@ do_masenko(CHAR_DATA * ch, char *argument)
 		    "$n throws $s hands at $N sending a yellow beam at $N, hitting $M in the chest. &W[$t]",
 		    ch, num_punct(dam), victim, TO_NOTVICT);
 
-		dam = ki_absorb(victim, ch, dam, gsn_masenko);
-		learn_from_success(ch, gsn_masenko);
 		global_retcode = damage(ch, victim, dam, TYPE_HIT);
 	} else {
 		act(AT_YELLOW, "You missed $N with your masenko blast.", ch,
@@ -6635,10 +6589,9 @@ do_masenko(CHAR_DATA * ch, char *argument)
 		    victim, TO_VICT);
 		act(AT_YELLOW, "$n missed $N with a masenko blast.", ch, NULL,
 		    victim, TO_NOTVICT);
-		learn_from_failure(ch, gsn_masenko);
 		global_retcode = damage(ch, victim, 0, TYPE_HIT);
 	}
-	ch->mana -= skill_table[gsn_masenko]->min_mana;
+	ch->mana -= 60;
 	return;
 }
 
@@ -6651,11 +6604,10 @@ do_sbc(CHAR_DATA * ch, char *argument)
 	int		kilimit = 0;
 	float	kimult = 0;
 	float	kicmult = 0;
+	int		hitcheck = 0;
 	
 	if (IS_NPC(ch) && is_split(ch)) {
 		if (!ch->master)
-			return;
-		if (!can_use_skill(ch->master, number_percent(), gsn_sbc))
 			return;
 	}
 	if (IS_NPC(ch) && IS_AFFECTED(ch, AFF_CHARM)) {
@@ -6663,8 +6615,8 @@ do_sbc(CHAR_DATA * ch, char *argument)
 		return;
 	}
 	if (!IS_NPC(ch)
-	    && ch->exp < skill_table[gsn_sbc]->skill_level[ch->class]) {
-		send_to_char("You can't do that.\n\r", ch);
+	    && (ch->skillenergy_disc < 1)) {
+		send_to_char("You're not able to use that skill.\n\r", ch);
 		return;
 	}
 	if ((victim = who_fighting(ch)) == NULL) {
@@ -6676,13 +6628,13 @@ do_sbc(CHAR_DATA * ch, char *argument)
 		kimult = (float) get_curr_int(ch) / 1000 + 1;
 		kicmult = (float) kilimit / 100 + 1;
 	}
-	if (ch->mana < skill_table[gsn_sbc]->min_mana) {
+	if (ch->mana < 110) {
 		send_to_char("You don't have enough energy.\n\r", ch);
 		return;
 	}
-
-	WAIT_STATE(ch, skill_table[gsn_sbc]->beats);
-	if (can_use_skill(ch, number_percent(), gsn_sbc)) {
+	hitcheck = number_range(1, 100);
+	WAIT_STATE(ch, 8);
+	if (hitcheck <= 95) {
 		if (!IS_NPC(ch)) {
 			argdam = number_range(55, 65) * kicmult;
 			dam = get_attmod(ch, victim) * (argdam * kimult);
@@ -6716,8 +6668,6 @@ do_sbc(CHAR_DATA * ch, char *argument)
 			"sending out a corkscrew beam. &W[$t]", ch, num_punct(dam),
 			victim, TO_NOTVICT);
 			
-		dam = ki_absorb(victim, ch, dam, gsn_sbc);
-		learn_from_success(ch, gsn_sbc);
 		global_retcode = damage(ch, victim, dam, TYPE_HIT);
 	} else {
 		act(AT_YELLOW, "You missed $N with your special beam cannon.",
@@ -6726,10 +6676,9 @@ do_sbc(CHAR_DATA * ch, char *argument)
 		    NULL, victim, TO_VICT);
 		act(AT_YELLOW, "$n missed $N with a special beam cannon.", ch,
 		    NULL, victim, TO_NOTVICT);
-		learn_from_failure(ch, gsn_sbc);
 		global_retcode = damage(ch, victim, 0, TYPE_HIT);
 	}
-	ch->mana -= skill_table[gsn_sbc]->min_mana;
+	ch->mana -= 110;
 	return;
 }
 
@@ -7154,11 +7103,10 @@ do_dd(CHAR_DATA * ch, char *argument)
 	int		kilimit = 0;
 	float	kimult = 0;
 	float	kicmult = 0;
-
+	int		hitcheck = 0;
+	
 	if (IS_NPC(ch) && is_split(ch)) {
 		if (!ch->master)
-			return;
-		if (!can_use_skill(ch->master, number_percent(), gsn_dd))
 			return;
 	}
 	if (IS_NPC(ch) && IS_AFFECTED(ch, AFF_CHARM)) {
@@ -7166,8 +7114,8 @@ do_dd(CHAR_DATA * ch, char *argument)
 		return;
 	}
 	if (!IS_NPC(ch)
-	    && ch->exp < skill_table[gsn_dd]->skill_level[ch->class]) {
-		send_to_char("You can't do that.\n\r", ch);
+	    && (ch->skilldestructo_disc < 1)) {
+		send_to_char("You're not able to use that skill.\n\r", ch);
 		return;
 	}
 	if ((victim = who_fighting(ch)) == NULL) {
@@ -7179,13 +7127,13 @@ do_dd(CHAR_DATA * ch, char *argument)
 		kimult = (float) get_curr_int(ch) / 1000 + 1;
 		kicmult = (float) kilimit / 100 + 1;
 	}
-	if (ch->mana < skill_table[gsn_dd]->min_mana) {
+	if (ch->mana < 55) {
 		send_to_char("You don't have enough energy.\n\r", ch);
 		return;
 	}
-
-	WAIT_STATE(ch, skill_table[gsn_dd]->beats);
-	if (can_use_skill(ch, number_percent(), gsn_dd)) {
+	hitcheck = number_range(1, 100);
+	WAIT_STATE(ch, 8);
+	if (hitcheck <= 95) {
 		if (!IS_NPC(ch)) {
 			argdam = number_range(28, 28) * kicmult;
 			dam = get_attmod(ch, victim) * (argdam * kimult);
@@ -7219,7 +7167,6 @@ do_dd(CHAR_DATA * ch, char *argument)
 		    "slices through the air on its way to $N. &W[$t]", ch,
 		    num_punct(dam), victim, TO_NOTVICT);
 
-		learn_from_success(ch, gsn_dd);
 		global_retcode = damage(ch, victim, dam, TYPE_HIT);
 	} else {
 		act(AT_YELLOW, "You missed $N with your destructo disk.", ch,
@@ -7228,11 +7175,10 @@ do_dd(CHAR_DATA * ch, char *argument)
 		    NULL, victim, TO_VICT);
 		act(AT_YELLOW, "$n missed $N with a destructo disk.", ch, NULL,
 		    victim, TO_NOTVICT);
-		learn_from_failure(ch, gsn_dd);
 		global_retcode = damage(ch, victim, 0, TYPE_HIT);
 	}
 	if (!is_android_h(ch))
-		ch->mana -= skill_table[gsn_dd]->min_mana;
+		ch->mana -= 55;
 	return;
 }
 
@@ -7320,18 +7266,14 @@ do_suppress(CHAR_DATA * ch, char *argument)
 	CHAR_DATA *och;
 	CHAR_DATA *och_next;
 	long double arg = 0;
-
-	if (IS_NPC(ch) && !is_split(ch)) {
-		send_to_char("huh?.\n\r", ch);
+	int		hitcheck = 0;
+	
+	if (IS_NPC(ch)) {
+		send_to_char("huh?\n\r", ch);
 		return;
 	}
-	if (IS_AFFECTED(ch, AFF_BIOJR) && IS_NPC(ch))
-		return;
 
-	if (wearing_chip(ch)) {
-		ch_printf(ch, "You can't while you have a chip installed.\n\r");
-		return;
-	}
+
 	if (argument[0] != '\0') {
 		arg = is_number(argument) ? atof(argument) : -1;
 		if (atof(argument) < -1 && arg == -1)
@@ -7354,19 +7296,15 @@ do_suppress(CHAR_DATA * ch, char *argument)
 		send_to_char("Okay.  Suppress level set.\n\r", ch);
 		return;
 	}
-	if (ch->mana < skill_table[gsn_suppress]->min_mana) {
-		send_to_char("You don't have enough energy.\n\r", ch);
-		return;
-	}
 	if (ch->position == POS_EVASIVE || ch->position == POS_DEFENSIVE
 	    || ch->position == POS_AGGRESSIVE || ch->position == POS_BERSERK
 	    || ch->position == POS_FIGHTING) {
 		send_to_char("You can't suppress while in battle.\n\r", ch);
 		return;
 	}
-	WAIT_STATE(ch, skill_table[gsn_suppress]->beats);
-
-	if (can_use_skill(ch, number_percent(), gsn_suppress)) {
+	WAIT_STATE(ch, 8);
+	hitcheck = number_range(1, 100);
+	if (hitcheck <= 100) {
 		if (ch->exp != ch->pl && xIS_SET(ch->affected_by, AFF_OOZARU)) {
 			send_to_char("You can't while you are an Oozaru.\n\r",
 			    ch);
@@ -7494,7 +7432,6 @@ do_suppress(CHAR_DATA * ch, char *argument)
 
 		heart_calc(ch, "");
 		if (!IS_NPC(ch)) {
-			learn_from_success(ch, gsn_suppress);
 			if (is_splitformed(ch)) {
 				for (och = first_char; och; och = och_next) {
 					och_next = och->next;
@@ -7521,10 +7458,8 @@ do_suppress(CHAR_DATA * ch, char *argument)
 	} else {
 		act(AT_SKILL, "You try but can't seem to suppress your power.",
 		    ch, NULL, NULL, TO_CHAR);
-		learn_from_failure(ch, gsn_suppress);
 	}
 
-	ch->mana -= skill_table[gsn_suppress]->min_mana;
 	transStatRemove(ch);
 	return;
 
@@ -7538,7 +7473,8 @@ do_meditate(CHAR_DATA * ch, char *argument)
 	long double xp_gain = 0;
 	int statComb = 0;
 	int increase = 0;
-
+	int		hitcheck = 0;
+	
 	if (IS_NPC(ch))
 		return;
 
@@ -7554,7 +7490,7 @@ do_meditate(CHAR_DATA * ch, char *argument)
 		return;
 	}
 	
-	right = (float) ch->pcdata->learned[gsn_meditate] / 100;
+	right = (float) 95 / 100;
 
 	if (ch->fighting) {
 		send_to_char("&wYou can't concentrate enough for that.\n\r",
@@ -7594,11 +7530,11 @@ do_meditate(CHAR_DATA * ch, char *argument)
 			}
 			if(!ch->desc)
 				return;
-			if (can_use_skill(ch, number_percent(), gsn_meditate)) {
+			hitcheck = number_range(1, 100);
+			if (hitcheck <= 95) {
 				send_to_char
 					("&wYou meditate peacefully, collecting energy from the cosmos\n\r",
 					ch);
-				learn_from_success(ch, gsn_meditate);
 				if (!IS_NPC(ch)) {
 					if (is_kaio(ch) || is_namek(ch)) {
 						stat_train(ch, "int", 90);
@@ -7758,7 +7694,6 @@ do_meditate(CHAR_DATA * ch, char *argument)
 				send_to_char
 					("&wYou spend several minutes in deep concentration, but fail to collect much energy.\n\r",
 					ch);
-				learn_from_failure(ch, gsn_meditate);
 				ch->mana += 5;
 				if (ch->mana > ch->max_mana)
 					ch->mana = ch->max_mana;
@@ -7783,11 +7718,11 @@ do_meditate(CHAR_DATA * ch, char *argument)
 			}
 			if(!ch->desc)
 				return;
-			if (can_use_skill(ch, number_percent(), gsn_meditate)) {
+			hitcheck = number_range(1, 100);
+			if if (hitcheck <= 95) {
 				send_to_char
 					("&wYou meditate peacefully, collecting energy from the cosmos\n\r",
 					ch);
-				learn_from_success(ch, gsn_meditate);
 				if (!IS_NPC(ch)) {
 					if (is_kaio(ch) || is_namek(ch)) {
 						stat_train(ch, "int", 45);
@@ -7947,7 +7882,6 @@ do_meditate(CHAR_DATA * ch, char *argument)
 				send_to_char
 					("&wYou spend several minutes in deep concentration, but fail to collect much energy.\n\r",
 					ch);
-				learn_from_failure(ch, gsn_meditate);
 				ch->mana += 5;
 				if (ch->mana > ch->max_mana)
 					ch->mana = ch->max_mana;
@@ -8104,17 +8038,16 @@ do_sense(CHAR_DATA * ch, char *argument)
 	CHAR_DATA *victim;
 	char   *msg;
 	long double diff;
-
+	int		hitcheck = 0;
+	
 	one_argument(argument, arg);
 
 	if (arg[0] == '\0') {
-		send_to_char("Sense whos power?\n\r", ch);
+		send_to_char("Sense whose power?\n\r", ch);
 		return;
 	}
 	if (IS_NPC(ch) && is_split(ch)) {
 		if (!ch->master)
-			return;
-		if (!can_use_skill(ch->master, number_percent(), gsn_sense))
 			return;
 	}
 	if ((victim = get_char_room(ch, arg)) == NULL) {
@@ -8134,8 +8067,9 @@ do_sense(CHAR_DATA * ch, char *argument)
 		    himher(ch, false));
 		return;
 	}
-	WAIT_STATE(ch, skill_table[gsn_sense]->beats);
-	if (can_use_skill(ch, number_percent(), gsn_sense)) {
+	hitcheck = number_range(1, 100);	
+	WAIT_STATE(ch, 8);
+	if (hitcheck <= 100) {
 		if (!IS_NPC(victim))
 			diff = (long double) victim->pl / ch->pl * 10;
 		else
@@ -8184,12 +8118,10 @@ do_sense(CHAR_DATA * ch, char *argument)
 			msg = "$N's power is too monstrous for you to even comprehend.";
 			
 		act(AT_CONSIDER, msg, ch, NULL, victim, TO_CHAR);
-		learn_from_success(ch, gsn_sense);
 	} else {
 		pager_printf_color(ch,
 		    "You try, but you sense nothing from %s.\n\r",
 		    himher(victim, false));
-		learn_from_failure(ch, gsn_sense);
 	}
 
 	return;
@@ -8269,89 +8201,16 @@ do_ddd(CHAR_DATA * ch, char *argument)
 void
 do_death_ball(CHAR_DATA * ch, char *argument)
 {
-    CHAR_DATA *victim;
-    int 	dam = 0;
-
-    if (IS_NPC(ch) && is_split(ch)) {
-        if (!ch->master)
-            return;
-        if (!can_use_skill(ch->master, number_percent(), gsn_death_ball))
-            return;
-    }
-    if (IS_NPC(ch) && IS_AFFECTED(ch, AFF_CHARM)) {
-        send_to_char("You can't concentrate enough for that.\n\r", ch);
-        return;
-    }
-    if (!IS_NPC(ch)
-        && ch->exp < skill_table[gsn_death_ball]->skill_level[ch->class]) {
-        send_to_char("You can't do that.\n\r", ch);
-        return;
-    }
-    if ((victim = who_fighting(ch)) == NULL) {
-        send_to_char("You aren't fighting anyone.\n\r", ch);
-        return;
-    }
-    if (ch->mana < skill_table[gsn_death_ball]->min_mana) {
-        send_to_char("You don't have enough energy.\n\r", ch);
-        return;
-    }
-    if (ch->focus < skill_table[gsn_death_ball]->focus) {
-        send_to_char("You need to focus more.\n\r", ch);
-        return;
-    }
-    else
-        ch->focus -= skill_table[gsn_death_ball]->focus;
-
-    WAIT_STATE(ch, skill_table[gsn_death_ball]->beats);
-    if (can_use_skill(ch, number_percent(), gsn_death_ball)) {
-        dam = get_attmod(ch, victim) * (number_range(55, 65) + (get_curr_int(ch) / 20));
-        if (ch->charge > 0)
-            dam = chargeDamMult(ch, dam);
-
-        act(AT_ORANGE,
-            "You raise your arm to the heavens, palm open. A swirling vortex of hellish light gathers into a ball, hovering lifelessly above. You point, effortlessly, at $N sending them to their impending demise. &W[$t]",
-            ch, num_punct(dam), victim, TO_CHAR);
-        act(AT_ORANGE,
-            "$n raises $m arm to the heavens, palm open. A swirling vortex of hellish light gathers into a ball, hovering lifelessly above. $n points effortlessly, sending you to your impending demise. &W[$t]",
-            ch, num_punct(dam), victim, TO_VICT);
-        act(AT_ORANGE,
-            "$n raises $m arm to the heavens, palm open. A swirling vortex of hellish light gathers into a ball, hovering lifelessly above. $n points effortlessly, at $N sending them to their impending demise. &W[$t]",
-            ch, num_punct(dam), victim, TO_NOTVICT);
-        learn_from_success(ch, gsn_death_ball);
-        global_retcode = damage(ch, victim, dam, TYPE_HIT);
-        if (!IS_NPC(ch)) {
-            stat_train(ch, "int", 12);
-			ch->train += 3;
-        }
-    }
-    else {
-        act(AT_ORANGE, "You missed $N with your death ball.", ch, NULL,
-            victim, TO_CHAR);
-        act(AT_ORANGE, "$n misses you with $s death ball.", ch, NULL,
-            victim, TO_VICT);
-        act(AT_ORANGE, "$n missed $N with a death ball.", ch, NULL,
-            victim, TO_NOTVICT);
-        learn_from_failure(ch, gsn_death_ball);
-        global_retcode = damage(ch, victim, 0, TYPE_HIT);
-    }
-    ch->mana -= skill_table[gsn_death_ball]->min_mana;
-    return;
-}
-
-void
-do_eye_beam(CHAR_DATA * ch, char *argument)
-{
 	CHAR_DATA *victim;
 	int 	dam = 0;
 	int		argdam = 0;
 	int		kilimit = 0;
 	float	kimult = 0;
 	float	kicmult = 0;
+	int		hitcheck = 0;
 
 	if (IS_NPC(ch) && is_split(ch)) {
 		if (!ch->master)
-			return;
-		if (!can_use_skill(ch->master, number_percent(), gsn_eye_beam))
 			return;
 	}
 	if (IS_NPC(ch) && IS_AFFECTED(ch, AFF_CHARM)) {
@@ -8359,8 +8218,8 @@ do_eye_beam(CHAR_DATA * ch, char *argument)
 		return;
 	}
 	if (!IS_NPC(ch)
-	    && ch->exp < skill_table[gsn_eye_beam]->skill_level[ch->class]) {
-		send_to_char("You can't do that.\n\r", ch);
+	    && (ch->skilldeath_ball < 1)) {
+		send_to_char("You're not able to use that skill.\n\r", ch);
 		return;
 	}
 	if ((victim = who_fighting(ch)) == NULL) {
@@ -8372,20 +8231,93 @@ do_eye_beam(CHAR_DATA * ch, char *argument)
 		kimult = (float) get_curr_int(ch) / 1000 + 1;
 		kicmult = (float) kilimit / 100 + 1;
 	}
-	if (ch->mana < skill_table[gsn_eye_beam]->min_mana) {
+	if (ch->mana < 1000) {
 		send_to_char("You don't have enough energy.\n\r", ch);
 		return;
 	}
-	if (ch->focus < skill_table[gsn_eye_beam]->focus) {
-		send_to_char("You need to focus more.\n\r", ch);
+	hitcheck = number_range(1, 100);
+
+	WAIT_STATE(ch, 8);
+	if (hitcheck <= 95) {
+		if (!IS_NPC(ch)) {
+			argdam = number_range(100, 125) * kicmult;
+			dam = get_attmod(ch, victim) * (argdam * kimult);
+			stat_train(ch, "int", 40);
+			ch->train += 40;
+			ch->energymastery += 6;
+		}
+		if (IS_NPC(ch)) {
+			dam = get_attmod(ch, victim) * (number_range(100, 125) + (get_curr_int(ch) / 40));
+		}
+		if (ch->charge > 0)
+			dam = chargeDamMult(ch, dam);
+
+        act(AT_ORANGE,
+            "You raise your arm to the heavens, palm open. A swirling vortex of hellish light gathers into a ball, hovering lifelessly above. You point effortlessly at $N, sending them to their impending demise. &W[$t]",
+            ch, num_punct(dam), victim, TO_CHAR);
+        act(AT_ORANGE,
+            "$n raises $m arm to the heavens, palm open. A swirling vortex of hellish light gathers into a ball, hovering lifelessly above. $n points effortlessly, sending you to your impending demise. &W[$t]",
+            ch, num_punct(dam), victim, TO_VICT);
+        act(AT_ORANGE,
+            "$n raises $m arm to the heavens, palm open. A swirling vortex of hellish light gathers into a ball, hovering lifelessly above. $n points effortlessly at $N, sending them to their impending demise. &W[$t]",
+            ch, num_punct(dam), victim, TO_NOTVICT);
+        global_retcode = damage(ch, victim, dam, TYPE_HIT);
+	}
+	else {
+		act(AT_YELLOW, "You missed $N with a death ball.", ch,
+		    NULL, victim, TO_CHAR);
+		act(AT_YELLOW, "$n misses you with a death ball.", ch, NULL,
+		    victim, TO_VICT);
+		act(AT_YELLOW, "$n missed $N with a death ball.", ch, NULL,
+		    victim, TO_NOTVICT);
+		global_retcode = damage(ch, victim, 0, TYPE_HIT);
+	}
+	ch->mana -= 1000;
+	return;
+}
+
+void
+do_eye_beam(CHAR_DATA * ch, char *argument)
+{
+	CHAR_DATA *victim;
+	int 	dam = 0;
+	int		argdam = 0;
+	int		kilimit = 0;
+	float	kimult = 0;
+	float	kicmult = 0;
+	int		hitcheck = 0;
+	
+	if (IS_NPC(ch) && is_split(ch)) {
+		if (!ch->master)
+			return;
+	}
+	if (IS_NPC(ch) && IS_AFFECTED(ch, AFF_CHARM)) {
+		send_to_char("You can't concentrate enough for that.\n\r", ch);
 		return;
-	} else
-		ch->focus -= skill_table[gsn_eye_beam]->focus;
+	}
+	if (!IS_NPC(ch)
+	    && (ch->skilleye_beam < 1)) {
+		send_to_char("You're not able to use that skill.\n\r", ch);
+		return;
+	}
+	if ((victim = who_fighting(ch)) == NULL) {
+		send_to_char("You aren't fighting anyone.\n\r", ch);
+		return;
+	}
+	if (!IS_NPC(ch)) {
+		kilimit = ch->train / 10000;
+		kimult = (float) get_curr_int(ch) / 1000 + 1;
+		kicmult = (float) kilimit / 100 + 1;
+	}
+	if (ch->mana < 12) {
+		send_to_char("You don't have enough energy.\n\r", ch);
+		return;
+	}
 
 	sh_int 	z = get_aura(ch);
-
-	WAIT_STATE(ch, skill_table[gsn_eye_beam]->beats);
-	if (can_use_skill(ch, number_percent(), gsn_eye_beam)) {
+	hitcheck = number_range(1, 100);
+	WAIT_STATE(ch, 8);
+	if (hitcheck <= 95) {
 		if (!IS_NPC(ch)) {
 			argdam = number_range(12, 14) * kicmult;
 			dam = get_attmod(ch, victim) * (argdam * kimult);
@@ -8394,7 +8326,7 @@ do_eye_beam(CHAR_DATA * ch, char *argument)
 			ch->energymastery += 3;
 		}
 		if (IS_NPC(ch))
-			dam = get_attmod(ch, victim) * (number_range(10, 12) + (get_curr_int(ch) / 45));
+			dam = get_attmod(ch, victim) * (number_range(12, 14) + (get_curr_int(ch) / 40));
 		if (ch->charge > 0)
 			dam = chargeDamMult(ch, dam);
 		act(z,
@@ -8407,8 +8339,6 @@ do_eye_beam(CHAR_DATA * ch, char *argument)
 		    "$n's eyes begin to glow as two beams shoot out from them at $N. &W[$t]",
 		    ch, num_punct(dam), victim, TO_NOTVICT);
 
-		dam = ki_absorb(victim, ch, dam, gsn_eye_beam);
-		learn_from_success(ch, gsn_eye_beam);
 		global_retcode = damage(ch, victim, dam, TYPE_HIT);
 	} else {
 		act(z, "You missed $N with your eye beam.", ch, NULL, victim,
@@ -8417,12 +8347,11 @@ do_eye_beam(CHAR_DATA * ch, char *argument)
 		    TO_VICT);
 		act(z, "$n missed $N with a eye beam.", ch, NULL, victim,
 		    TO_NOTVICT);
-		learn_from_failure(ch, gsn_eye_beam);
 		global_retcode = damage(ch, victim, 0, TYPE_HIT);
 	}
 
 	if (!is_android_h(ch))
-		ch->mana -= skill_table[gsn_eye_beam]->min_mana;
+		ch->mana -= 12;
 	return;
 }
 
@@ -8435,12 +8364,10 @@ do_finger_beam(CHAR_DATA * ch, char *argument)
 	int		kilimit = 0;
 	float	kimult = 0;
 	float	kicmult = 0;
-
+	int		hitcheck = 0;
+	
 	if (IS_NPC(ch) && is_split(ch)) {
 		if (!ch->master)
-			return;
-		if (!can_use_skill
-		    (ch->master, number_percent(), gsn_finger_beam))
 			return;
 	}
 	if (IS_NPC(ch) && IS_AFFECTED(ch, AFF_CHARM)) {
@@ -8448,8 +8375,8 @@ do_finger_beam(CHAR_DATA * ch, char *argument)
 		return;
 	}
 	if (!IS_NPC(ch)
-	    && ch->exp < skill_table[gsn_finger_beam]->skill_level[ch->class]) {
-		send_to_char("You can't do that.\n\r", ch);
+	    && (ch->skillfinger_beam < 1)) {
+		send_to_char("You're not able to use that skill.\n\r", ch);
 		return;
 	}
 	if ((victim = who_fighting(ch)) == NULL) {
@@ -8461,15 +8388,15 @@ do_finger_beam(CHAR_DATA * ch, char *argument)
 		kimult = (float) get_curr_int(ch) / 1000 + 1;
 		kicmult = (float) kilimit / 100 + 1;
 	}
-	if (ch->mana < skill_table[gsn_finger_beam]->min_mana) {
+	if (ch->mana < 75) {
 		send_to_char("You don't have enough energy.\n\r", ch);
 		return;
 	}
 
 	sh_int 	z = get_aura(ch);
-
-	WAIT_STATE(ch, skill_table[gsn_finger_beam]->beats);
-	if (can_use_skill(ch, number_percent(), gsn_finger_beam)) {
+	hitcheck = number_range(1, 100);
+	WAIT_STATE(ch, 8);
+	if (hitcheck <= 95) {
 		if (!IS_NPC(ch)) {
 			argdam = number_range(60, 65) * kicmult;
 			dam = get_attmod(ch, victim) * (argdam * kimult);
@@ -8478,9 +8405,9 @@ do_finger_beam(CHAR_DATA * ch, char *argument)
 			ch->energymastery += 5;
 		}
 		if (IS_NPC(ch)) {
-			argdam = number_range(20, 25);
+			argdam = number_range(60, 65);
 			dam = get_attmod(ch, victim) * (argdam + (get_curr_int(ch) / 40));
-			}
+		}
 		if (ch->charge > 0)
 			dam = chargeDamMult(ch, dam);
 		act(z,
@@ -8493,8 +8420,6 @@ do_finger_beam(CHAR_DATA * ch, char *argument)
 		    "$n points $s hand towards $N, firing a deadly beam of energy from the tip of $s finger. &W[$t]",
 		    ch, num_punct(dam), victim, TO_NOTVICT);
 
-		dam = ki_absorb(victim, ch, dam, gsn_finger_beam);
-		learn_from_success(ch, gsn_finger_beam);
 		global_retcode = damage(ch, victim, dam, TYPE_HIT);
 	} else {
 		act(z, "You missed $N with your finger beam.", ch, NULL, victim,
@@ -8503,10 +8428,9 @@ do_finger_beam(CHAR_DATA * ch, char *argument)
 		    TO_VICT);
 		act(z, "$n missed $N with a finger beam.", ch, NULL, victim,
 		    TO_NOTVICT);
-		learn_from_failure(ch, gsn_finger_beam);
 		global_retcode = damage(ch, victim, 0, TYPE_HIT);
 	}
-	ch->mana -= (skill_table[gsn_finger_beam]->min_mana);
+	ch->mana -= 75;
 	return;
 }
 
@@ -9036,19 +8960,17 @@ do_instant_trans(CHAR_DATA * ch, char *argument)
 	CHAR_DATA *fch;
 	CHAR_DATA *fch_next;
 	ROOM_INDEX_DATA *prev_room;
-
-	if (!str_cmp(get_race(ch), "kaio")) {
-		if (ch->mana < (skill_table[gsn_instant_trans]->min_mana / 5)) {
-			send_to_char("You don't have enough energy.\n\r", ch);
-			return;
-		}
-	} else {
-		if (ch->mana < skill_table[gsn_instant_trans]->min_mana) {
-			send_to_char("You don't have enough energy.\n\r", ch);
-			return;
-		}
+	int		hitcheck = 0;
+	
+	if (!IS_NPC(ch)
+	    && (ch->skillinstant_trans < 1)) {
+		send_to_char("You're not able to use that skill.\n\r", ch);
+		return;
 	}
-
+	if (ch->mana < 5000) {
+		send_to_char("You don't have enough energy.\n\r", ch);
+		return;
+	}
 	if (IS_NPC(ch))
 		return;
 
@@ -9067,7 +8989,7 @@ do_instant_trans(CHAR_DATA * ch, char *argument)
 		    "&RThis room is blocking your ability to de-materialize.\n\r");
 		return;
 	}
-	WAIT_STATE(ch, skill_table[gsn_instant_trans]->beats);
+	WAIT_STATE(ch, 8);
 
 	if ((victim = get_char_ki_world(ch, argument)) == NULL
 	    || !can_astral(ch, victim)
@@ -9104,8 +9026,8 @@ do_instant_trans(CHAR_DATA * ch, char *argument)
 		    "You can't IT to someone that is following you!\n\r");
 		return;
 	}
-	if (can_use_skill(ch, number_percent(), gsn_instant_trans)) {
-		learn_from_success(ch, gsn_instant_trans);
+	hitcheck = number_range(1, 100);
+	if (hitcheck <= 95) {
 		act(AT_MAGIC, "You disappear in a flash of light!", ch, NULL,
 		    NULL, TO_CHAR);
 		act(AT_MAGIC, "$n disappears in a flash of light!", ch, NULL,
@@ -9141,17 +9063,16 @@ do_instant_trans(CHAR_DATA * ch, char *argument)
 		    TO_ROOM);
 		do_look(ch, "auto");
 	} else {
-		learn_from_failure(ch, gsn_instant_trans);
 		send_to_char
-		    ("&BYou can't seem to sense their energy anywhere.\n\r",
+		    ("&BYou disappear momentarily, but reappear in the same spot, failing to control your energy.\n\r",
 		    ch);
 	}
 	if (!is_android_h(ch)) {
 		if (is_kaio(ch))
 			ch->mana -=
-			    (skill_table[gsn_instant_trans]->min_mana / 5);
+			    (5000 / 5);
 		else
-			ch->mana -= skill_table[gsn_instant_trans]->min_mana;
+			ch->mana -= 5000;
 	}
 	return;
 
@@ -10585,12 +10506,10 @@ do_destructive_wave(CHAR_DATA * ch, char *argument)
 	int		kilimit = 0;
 	float	kimult = 0;
 	float	kicmult = 0;
+	int		hitcheck = 0;
 	
 	if (IS_NPC(ch) && is_split(ch)) {
 		if (!ch->master)
-			return;
-		if (!can_use_skill
-		    (ch->master, number_percent(), gsn_destructive_wave))
 			return;
 	}
 	if (IS_NPC(ch) && IS_AFFECTED(ch, AFF_CHARM)) {
@@ -10598,9 +10517,8 @@ do_destructive_wave(CHAR_DATA * ch, char *argument)
 		return;
 	}
 	if (!IS_NPC(ch)
-	    && ch->exp <
-	    skill_table[gsn_destructive_wave]->skill_level[ch->class]) {
-		send_to_char("You can't do that.\n\r", ch);
+	    && (ch->skilldestructive_wave < 1)) {
+		send_to_char("You're not able to use that skill.\n\r", ch);
 		return;
 	}
 	if ((victim = who_fighting(ch)) == NULL) {
@@ -10612,15 +10530,15 @@ do_destructive_wave(CHAR_DATA * ch, char *argument)
 		kimult = (float) get_curr_int(ch) / 1000 + 1;
 		kicmult = (float) kilimit / 100 + 1;
 	}
-	if (ch->mana < skill_table[gsn_destructive_wave]->min_mana) {
+	if (ch->mana < 60) {
 		send_to_char("You don't have enough energy.\n\r", ch);
 		return;
 	}
 
 	sh_int 	z = get_aura(ch);
-
-	WAIT_STATE(ch, skill_table[gsn_destructive_wave]->beats);
-	if (can_use_skill(ch, number_percent(), gsn_destructive_wave)) {
+	hitcheck = number_range(1, 100);
+	WAIT_STATE(ch, 8);
+	if (hitcheck <= 95) {
 		if (!IS_NPC(ch)) {
 			argdam = number_range(26, 28) * kicmult;
 			dam = get_attmod(ch, victim) * (argdam * kimult);
@@ -10654,8 +10572,6 @@ do_destructive_wave(CHAR_DATA * ch, char *argument)
 			"A wave of energy forms in front of $n's palm, blasting out towards $N. &W[$t]",
 			ch, num_punct(dam), victim, TO_NOTVICT);
 
-		dam = ki_absorb(victim, ch, dam, gsn_destructive_wave);
-		learn_from_success(ch, gsn_destructive_wave);
 		global_retcode = damage(ch, victim, dam, TYPE_HIT);
 	} else {
 		act(z, "You missed $N with your destructive wave attack.", ch,
@@ -10664,10 +10580,9 @@ do_destructive_wave(CHAR_DATA * ch, char *argument)
 		    NULL, victim, TO_VICT);
 		act(z, "$n missed $N with a destructive wave attack.", ch, NULL,
 		    victim, TO_NOTVICT);
-		learn_from_failure(ch, gsn_destructive_wave);
 		global_retcode = damage(ch, victim, 0, TYPE_HIT);
 	}
-	ch->mana -= skill_table[gsn_destructive_wave]->min_mana;
+	ch->mana -= 60;
 	return;
 }
 
@@ -10843,11 +10758,10 @@ do_shockwave(CHAR_DATA * ch, char *argument)
 	int		kilimit = 0;
 	float	kimult = 0;
 	float	kicmult = 0;
-
+	int		hitcheck = 0;
+	
 	if (IS_NPC(ch) && is_split(ch)) {
 		if (!ch->master)
-			return;
-		if (!can_use_skill(ch->master, number_percent(), gsn_shockwave))
 			return;
 	}
 	if (IS_NPC(ch) && IS_AFFECTED(ch, AFF_CHARM)) {
@@ -10855,8 +10769,8 @@ do_shockwave(CHAR_DATA * ch, char *argument)
 		return;
 	}
 	if (!IS_NPC(ch)
-	    && ch->exp < skill_table[gsn_shockwave]->skill_level[ch->class]) {
-		send_to_char("You can't do that.\n\r", ch);
+	    && (ch->skillshockwave < 1)) {
+		send_to_char("You're not able to use that skill.\n\r", ch);
 		return;
 	}
 	if ((victim = who_fighting(ch)) == NULL) {
@@ -10868,15 +10782,15 @@ do_shockwave(CHAR_DATA * ch, char *argument)
 		kimult = (float) get_curr_int(ch) / 1000 + 1;
 		kicmult = (float) kilimit / 100 + 1;
 	}
-	if (ch->mana < (skill_table[gsn_shockwave]->min_mana)) {
+	if (ch->mana < 70) {
 		send_to_char("You don't have enough energy.\n\r", ch);
 		return;
 	}
 
 	sh_int 	z = get_aura(ch);
-
-	WAIT_STATE(ch, skill_table[gsn_shockwave]->beats);
-	if (can_use_skill(ch, number_percent(), gsn_shockwave)) {
+	hitcheck = number_range(1, 100);
+	WAIT_STATE(ch, 8);
+	if (hitcheck <= 95) {
 		if (!IS_NPC(ch)) {
 			argdam = number_range(45, 65) * kicmult;
 			dam = get_attmod(ch, victim) * (argdam * kimult);
@@ -10909,8 +10823,6 @@ do_shockwave(CHAR_DATA * ch, char *argument)
 		    "$n screams out as $e throws one arm foward, firing a shockwave of invisible energy at $N. &W[$t]",
 		    ch, num_punct(dam), victim, TO_NOTVICT);
 
-		dam = ki_absorb(victim, ch, dam, gsn_shockwave);
-		learn_from_success(ch, gsn_shockwave);
 		global_retcode = damage(ch, victim, dam, TYPE_HIT);
 	} else {
 		act(z, "You missed $N with your shockwave.", ch, NULL, victim,
@@ -10919,10 +10831,9 @@ do_shockwave(CHAR_DATA * ch, char *argument)
 		    TO_VICT);
 		act(z, "$n missed $N with a shockwave.", ch, NULL, victim,
 		    TO_NOTVICT);
-		learn_from_failure(ch, gsn_shockwave);
 		global_retcode = damage(ch, victim, 0, TYPE_HIT);
 	}
-	ch->mana -= skill_table[gsn_kamehameha]->min_mana;
+	ch->mana -= 70;
 	return;
 }
 
@@ -11421,12 +11332,10 @@ do_gallic_gun(CHAR_DATA * ch, char *argument)
 	float	kimult = 0;
 	float	kicmult = 0;
 	int		kilimit = 0;
-
+	int		hitcheck = 0;
+	
 	if (IS_NPC(ch) && is_split(ch)) {
 		if (!ch->master)
-			return;
-		if (!can_use_skill
-		    (ch->master, number_percent(), gsn_gallic_gun))
 			return;
 	}
 	if (IS_NPC(ch) && IS_AFFECTED(ch, AFF_CHARM)) {
@@ -11434,8 +11343,8 @@ do_gallic_gun(CHAR_DATA * ch, char *argument)
 		return;
 	}
 	if (!IS_NPC(ch)
-	    && ch->exp < skill_table[gsn_gallic_gun]->skill_level[ch->class]) {
-		send_to_char("You can't do that.\n\r", ch);
+	    && (ch->skillgallic_gun < 1)) {
+		send_to_char("You're not able to use that skill.\n\r", ch);
 		return;
 	}
 	if (!IS_NPC(ch)) {
@@ -11447,13 +11356,13 @@ do_gallic_gun(CHAR_DATA * ch, char *argument)
 		send_to_char("You aren't fighting anyone.\n\r", ch);
 		return;
 	}
-	if (ch->mana < skill_table[gsn_gallic_gun]->min_mana) {
+	if (ch->mana < 125) {
 		send_to_char("You don't have enough energy.\n\r", ch);
 		return;
 	}
-
-	WAIT_STATE(ch, skill_table[gsn_gallic_gun]->beats);
-	if (can_use_skill(ch, number_percent(), gsn_gallic_gun)) {
+	hitcheck = number_range(1, 100);
+	WAIT_STATE(ch, 8);
+	if (hitcheck <= 95) {
 		if (!IS_NPC(ch)) {
 			argdam = number_range(70, 75) * kicmult;
 			dam = get_attmod(ch, victim) * (argdam * kimult);
@@ -11488,8 +11397,6 @@ do_gallic_gun(CHAR_DATA * ch, char *argument)
 		    "$n thrusts both hands towards $N, a beam of ki blasting from $s purple aura, screaming, 'Gallic Gun...FIRE! &W[$t]",
 		    ch, num_punct(dam), victim, TO_NOTVICT);
 
-		dam = ki_absorb(victim, ch, dam, gsn_gallic_gun);
-		learn_from_success(ch, gsn_gallic_gun);
 		global_retcode = damage(ch, victim, dam, TYPE_HIT);
 	} else {
 		act(AT_LBLUE, "You missed $N with your Gallic Gun.", ch, NULL,
@@ -11498,10 +11405,9 @@ do_gallic_gun(CHAR_DATA * ch, char *argument)
 		    victim, TO_VICT);
 		act(AT_LBLUE, "$n missed $N with a Gallic Gun.", ch, NULL,
 		    victim, TO_NOTVICT);
-		learn_from_failure(ch, gsn_gallic_gun);
 		global_retcode = damage(ch, victim, 0, TYPE_HIT);
 	}
-	ch->mana -= skill_table[gsn_gallic_gun]->min_mana;
+	ch->mana -= 125;
 	return;
 }
 
@@ -11900,11 +11806,10 @@ do_makosen(CHAR_DATA * ch, char *argument)
 	float	kimult = 0;
 	float	kicmult = 0;
 	int		kilimit = 0;
-
+	int		hitcheck = 0;
+	
 	if (IS_NPC(ch) && is_split(ch)) {
 		if (!ch->master)
-			return;
-		if (!can_use_skill(ch->master, number_percent(), gsn_makosen))
 			return;
 	}
 	if (IS_NPC(ch) && IS_AFFECTED(ch, AFF_CHARM)) {
@@ -11912,8 +11817,8 @@ do_makosen(CHAR_DATA * ch, char *argument)
 		return;
 	}
 	if (!IS_NPC(ch)
-	    && ch->exp < skill_table[gsn_makosen]->skill_level[ch->class]) {
-		send_to_char("You can't do that.\n\r", ch);
+	    && (ch->skillmakosen < 1)) {
+		send_to_char("You're not able to use that skill.\n\r", ch);
 		return;
 	}
 	if ((victim = who_fighting(ch)) == NULL) {
@@ -11925,18 +11830,13 @@ do_makosen(CHAR_DATA * ch, char *argument)
 		kimult = (float) get_curr_int(ch) / 1000 + 1;
 		kicmult = (float) kilimit / 100 + 1;
 	}
-	if (ch->mana < skill_table[gsn_makosen]->min_mana) {
+	if (ch->mana < 60) {
 		send_to_char("You don't have enough energy.\n\r", ch);
 		return;
 	}
-	if (ch->focus < skill_table[gsn_makosen]->focus) {
-		send_to_char("You need to focus more.\n\r", ch);
-		return;
-	} else
-		ch->focus -= skill_table[gsn_makosen]->focus;
-
-	WAIT_STATE(ch, skill_table[gsn_makosen]->beats);
-	if (can_use_skill(ch, number_percent(), gsn_makosen)) {
+	hitcheck = number_range(1, 100);
+	WAIT_STATE(ch, 8);
+	if (hitcheck <= 95) {
 		if (!IS_NPC(ch)) {
 			argdam = number_range(35, 40) * kicmult;
 			dam = get_attmod(ch, victim) * (argdam * kimult);
@@ -11967,8 +11867,6 @@ do_makosen(CHAR_DATA * ch, char *argument)
 		    "'Makosen!'  $n thrusts $s hands in front of $m, firing a thin beam of energy towards $N. &W[$t]",
 		    ch, num_punct(dam), victim, TO_NOTVICT);
 
-		dam = ki_absorb(victim, ch, dam, gsn_makosen);
-		learn_from_success(ch, gsn_makosen);
 		global_retcode = damage(ch, victim, dam, TYPE_HIT);
 	} else {
 		act(AT_YELLOW, "You missed $N with your makosen blast.", ch,
@@ -11977,10 +11875,9 @@ do_makosen(CHAR_DATA * ch, char *argument)
 		    victim, TO_VICT);
 		act(AT_YELLOW, "$n missed $N with a makosen blast.", ch, NULL,
 		    victim, TO_NOTVICT);
-		learn_from_failure(ch, gsn_makosen);
 		global_retcode = damage(ch, victim, 0, TYPE_HIT);
 	}
-	ch->mana -= skill_table[gsn_makosen]->min_mana;
+	ch->mana -= 60;
 	return;
 }
 

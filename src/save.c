@@ -316,6 +316,8 @@ fwrite_char (CHAR_DATA * ch, FILE * fp)
        (ch->in_room == get_room_index (ROOM_VNUM_LIMBO)
 	 && ch->was_in_room) ? ch->was_in_room->vnum : ch->in_room->vnum);
      fprintf (fp, "Worth           %lld\n", ch->worth);
+	 fprintf (fp, "Destructive_Wave           %d\n", ch->skilldestructive_wave);
+	 fprintf (fp, "Bash           %d\n", ch->skillbash);
 	 fprintf (fp, "Haymaker           %d\n", ch->skillhaymaker);
 	 fprintf (fp, "Energy_Style           %d\n", ch->skillenergy_style);
 	 fprintf (fp, "Bruiser_Style           %d\n", ch->skillbruiser_style);
@@ -1459,6 +1461,7 @@ fread_char (CHAR_DATA * ch, FILE * fp, bool preload)
 	  case 'B':
 	       KEY ("Bamfin", ch->pcdata->bamfin, fread_string_nohash (fp));
 	       KEY ("Bamfout", ch->pcdata->bamfout, fread_string_nohash (fp));
+	       KEY ("Bash", ch->skillbash, fread_number (fp));
 	       KEY ("BodyMastery", ch->bodymastery, fread_number (fp));
 	       KEY ("BodyRank", ch->bodyrank, fread_number (fp));
 		   KEY ("Bruiser_Style", ch->skillbruiser_style, fread_number (fp));
@@ -1622,6 +1625,7 @@ fread_char (CHAR_DATA * ch, FILE * fp, bool preload)
 	  case 'D':
 	       KEY ("Damroll", ch->damroll, fread_number (fp));
 	       KEY ("Deaf", ch->deaf, fread_bitvector (fp));
+	       KEY ("Destructive_Wave", ch->skilldestructive_wave, fread_number (fp));
 	       KEY ("DCD", ch->skilldcd, fread_number (fp));
 	       KEY ("Defensive_Style", ch->skilldefensive_style, fread_number (fp));
 	       KEY ("Dodge", ch->skilldodge, fread_number (fp));
