@@ -688,8 +688,8 @@ rage2(CHAR_DATA * ch, CHAR_DATA * victim)
 	if (!victim->in_room)
 		return;
 
-	if (ch->skillssj2 >= 1
-	    && ch->skillssj1 = 0)
+	if ((ch->skillssj2 >= 1)
+	    && (ch->skillssj1 = 0))
 		return;
 
 	if (!xIS_SET(ch->affected_by, AFF_SSJ))
@@ -910,9 +910,9 @@ rage3(CHAR_DATA * ch, CHAR_DATA * victim)
 	if (!victim->in_room)
 		return;
 
-	if (ch->skillssj3 >= 1
-	    && ch->skillssj1 = 0
-	    && ch->skillssj2 = 0)
+	if ((ch->skillssj3 >= 1)
+	    && (ch->skillssj1 = 0)
+	    && (ch->skillssj2 = 0))
 		return;
 
 	if (!xIS_SET(ch->affected_by, AFF_SSJ)
@@ -1094,10 +1094,10 @@ rage4(CHAR_DATA * ch, CHAR_DATA * victim)
 	if (!victim->in_room)
 		return;
 
-	if (ch->skillssgod >= 1
-	    && ch->skillssj1 = 0
-	    && ch->skillssj2 = 0
-	    && ch->skillssj3 = 0)
+	if ((ch->skillssgod >= 1)
+	    && (ch->skillssj1 = 0)
+	    && (ch->skillssj2 = 0)
+	    && (ch->skillssj3 = 0))
 		return;
 		
 	if (ch->delay <= 0) {
@@ -1295,11 +1295,11 @@ rage5(CHAR_DATA * ch, CHAR_DATA * victim)
 	if (!victim->in_room)
 		return;
 
-	if (ch->skillssblue >= 1
-	    && ch->skillssj1 = 0
-	    && ch->skillssj2 = 0
-	    && ch->skillssj3 = 0
-	    && ch->skillssgod = 0)
+	if ((ch->skillssblue >= 1)
+	    && (ch->skillssj1 = 0)
+	    && (ch->skillssj2 = 0)
+	    && (ch->skillssj3 = 0)
+	    && (ch->skillssgod = 0))
 		return;
 
 	if (ch->delay <= 0) {
