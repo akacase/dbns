@@ -1333,7 +1333,7 @@ violence_update(void)
 							act( AT_YELLOW, "Your giant muscles tremble, emitting waves of tumultuous energy.", ch, NULL, NULL, TO_CHAR );
 							act( AT_YELLOW, "$n's giant muscles tremble, emitting waves of tumultuous energy.", ch, NULL, NULL, TO_NOTVICT );
 						}
-						if ((plmod >= 200) && (ch->skillssj2] >= 1)) {
+						if ((plmod >= 200) && (ch->skillssj2 >= 1)) {
 							xSET_BIT((ch)->affected_by, AFF_SSJ2);
 							xREMOVE_BIT((ch)->affected_by, AFF_POWERCHANNEL);
 							act( AT_YELLOW, "Your muscles shrink, but in an intense explosion of rage your power grows nonetheless, sending arcing bolts of energy from your body.", ch, NULL, NULL, TO_CHAR );
