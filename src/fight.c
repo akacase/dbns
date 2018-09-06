@@ -3330,7 +3330,7 @@ violence_update(void)
 			if (ch->skillblock >= 0 &&
 			    !IS_SET(ch->pcdata->combatFlags, CMB_NO_BLOCK))
 				div += 5;
-			if (ch->skilldcd] >= 0 &&
+			if (ch->skilldcd >= 0 &&
 			    !IS_SET(ch->pcdata->combatFlags, CMB_NO_DCD))
 				div += 40;
 
