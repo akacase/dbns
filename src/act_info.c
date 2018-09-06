@@ -6545,6 +6545,8 @@ do_skills(CHAR_DATA * ch, char *argument) {
 			pager_printf_color(ch,
 				"&CSTRIKE MASTERY&B----------&Y[&GNOVICE %d&Y]\n\r", novicesrank);
 		}
+		if (IS_IMMORTAL(ch))
+			pager_printf_color(ch, "DEBUG: Strike Percent set to %d\n\r", strikepercent);
 			if (strikepercent = 99 )
 				pager_printf_color(ch, "&cPROGRESS: &O[&G|||||||||&R-&O]\n\r");
 			else if (strikepercent = 98 )
