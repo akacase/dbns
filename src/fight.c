@@ -1211,8 +1211,8 @@ violence_update(void)
 								ch->pcdata->haircolor = 3;
 							}
 						}
-						if (plmod >= 30
-							&& ch->skillssj1 < 1) {
+						if ((plmod >= 30)
+							&& (ch->skillssj1 < 1)) {
 							ch->pl = (ch->exp * 30);
 							act( auraColor, "The raging torrent of ki fades but your power remains.", ch, NULL, NULL, TO_CHAR );
 							act( auraColor, "$n's raging torrent of ki fades away but $s power remains.", ch, NULL, NULL, TO_NOTVICT );
@@ -1272,7 +1272,7 @@ violence_update(void)
 							act( AT_YELLOW, "Your golden aura churns with scattering rays of light.", ch, NULL, NULL, TO_CHAR );
 							act( AT_YELLOW, "$n's golden aura churns with scattering rays of light.", ch, NULL, NULL, TO_NOTVICT );
 						}
-						if ((ch->pl / ch->exp) >= 65) {
+						if ((plmod >= 65) {
 							xSET_BIT((ch)->affected_by, AFF_USSJ);
 							xREMOVE_BIT((ch)->affected_by, AFF_POWERCHANNEL);
 							act( AT_YELLOW, "Your muscles bulge, and with a sudden burst of power you ascend beyond the reaches of any mere Super Saiyan.", ch, NULL, NULL, TO_CHAR );
@@ -1304,7 +1304,7 @@ violence_update(void)
 							act( AT_YELLOW, "Crackling bolts of energy build in your aura, impure, but powerful as your muscles swell.", ch, NULL, NULL, TO_CHAR );
 							act( AT_YELLOW, "Crackling bolts of impure energy dance in $n's raging aura, $s muscles swelling to incredible sizes.", ch, NULL, NULL, TO_NOTVICT );
 						}
-						if ((ch->pl / ch->exp) >= 100) {
+						if (plmod >= 100) {
 							xSET_BIT((ch)->affected_by, AFF_USSJ2);
 							xREMOVE_BIT((ch)->affected_by, AFF_POWERCHANNEL);
 							act( AT_YELLOW, "Your muscles expand to inhuman sizes, engorging yourself with energy!", ch, NULL, NULL, TO_CHAR );
@@ -1336,7 +1336,7 @@ violence_update(void)
 							act( AT_YELLOW, "Your giant muscles tremble, emitting waves of tumultuous energy.", ch, NULL, NULL, TO_CHAR );
 							act( AT_YELLOW, "$n's giant muscles tremble, emitting waves of tumultuous energy.", ch, NULL, NULL, TO_NOTVICT );
 						}
-						if ((ch->pl / ch->exp) >= 200
+						if ((plmod >= 200)
 							&& (ch->skillssj2] >= 1)) {
 							xSET_BIT((ch)->affected_by, AFF_SSJ2);
 							xREMOVE_BIT((ch)->affected_by, AFF_POWERCHANNEL);
@@ -1371,7 +1371,7 @@ violence_update(void)
 							act( AT_YELLOW, "You howl with fury as your energy builds, constant strikes of crackling energy suffusing the air.", ch, NULL, NULL, TO_CHAR );
 							act( AT_YELLOW, "$n howls with fury, constant strikes of crackling energy suffusing the air.", ch, NULL, NULL, TO_NOTVICT );
 						}
-						if ((ch->pl / ch->exp) >= 300
+						if ((plmod >= 300)
 							&& (ch->skillssj3 >= 1)) {
 							xSET_BIT((ch)->affected_by, AFF_SSJ3);
 							xREMOVE_BIT((ch)->affected_by, AFF_POWERCHANNEL);
@@ -1406,8 +1406,8 @@ violence_update(void)
 							act( AT_YELLOW, "The colours of the world seem to fade away against the brilliant light of your aura.", ch, NULL, NULL, TO_CHAR );
 							act( AT_YELLOW, "The colours of the world seem to fade away against the brilliant light of $n's aura.", ch, NULL, NULL, TO_NOTVICT );
 						}
-						if ((ch->pl / ch->exp) >= 450
-							&& ch->skillssgod >= 1) {
+						if ((plmod >= 450)
+							&& (ch->skillssgod >= 1)) {
 							xSET_BIT((ch)->affected_by, AFF_SSJ4);
 							xREMOVE_BIT((ch)->affected_by, AFF_POWERCHANNEL);
 							act( AT_RED, "Your aura fades and your hair and eyes return to normal. However, in the next instant something inside you changes.", ch, NULL, NULL, TO_CHAR );
@@ -1442,8 +1442,8 @@ violence_update(void)
 							act( AT_RED, "You stand perfectly calm, your power increasing by the second.", ch, NULL, NULL, TO_CHAR );
 							act( AT_RED, "$n stands perfectly calm, and yet with every second $s power grows.", ch, NULL, NULL, TO_NOTVICT );
 						}
-						if (plmod >= 600
-							&& ch->skillssblue >= 1) {
+						if ((plmod >= 600)
+							&& (ch->skillssblue >= 1)) {
 							xSET_BIT((ch)->affected_by, AFF_SGOD);
 							xREMOVE_BIT((ch)->affected_by, AFF_POWERCHANNEL);
 							act( AT_LBLUE, "Harnessing the secrets of your God Ki, you kindle the flame deep within and surge with newfound power.", ch, NULL, NULL, TO_CHAR );
