@@ -3324,13 +3324,13 @@ violence_update(void)
 		if (!IS_NPC(ch)) {
 			int div = 0;
 
-			if (ch->pcdata->learned[gsn_dodge] > 0 &&
+			if (ch->skilldodge >= 0 &&
 			    !IS_SET(ch->pcdata->combatFlags, CMB_NO_DODGE))
 				div += 5;
-			if (ch->pcdata->learned[gsn_block] > 0 &&
+			if (ch->skillblock >= 0 &&
 			    !IS_SET(ch->pcdata->combatFlags, CMB_NO_BLOCK))
 				div += 5;
-			if (ch->pcdata->learned[gsn_dcd] > 0 &&
+			if (ch->skilldcd] >= 0 &&
 			    !IS_SET(ch->pcdata->combatFlags, CMB_NO_DCD))
 				div += 40;
 
