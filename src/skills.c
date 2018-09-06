@@ -5119,53 +5119,28 @@ void do_style( CHAR_DATA *ch, char *argument )
 			return;
 		}
 	}
-    else if( !str_prefix(arg, "evasive") ){
-      if( ch->exp < skill_table[gsn_style_evasive]->skill_level[ch->class])
-      {
-         send_to_char( "You have not yet learned enough to fight evasively.\n\r",ch);
-         return;
-      }
-      WAIT_STATE( ch, skill_table[gsn_style_evasive]->beats );
-      if (ch->style == STYLE_EVASIVE)
-      {
+    else if( !str_prefix(arg, "evasive") ) {
+      WAIT_STATE( ch, 8);
+      if (ch->style == STYLE_EVASIVE) {
          send_to_char( "You are already evasive.\n\r",ch);
          return;
       }
-      if( number_percent() < LEARNED(ch, gsn_style_evasive) ){
-          /* success */
-	  if(ch->fighting){
-             ch->position = POS_EVASIVE;
-             learn_from_success(ch,gsn_style_evasive);
-	     if ( IS_PKILL( ch ) )
-		act( AT_ACTION, "$n falls back into an evasive stance.",
-                  ch, NULL, NULL, TO_ROOM );
-          }
-          ch->style = STYLE_EVASIVE;
-          send_to_char( "You adopt an evasive fighting style.\n\r",ch);
-          return;
-      } else {
-          /* failure */
-          learn_from_failure(ch, gsn_style_evasive);
-          send_to_char( "You nearly trip in a lame attempt to adopt an evasive fighting style.\n\r",ch);
-	  return;
-      }
-    } else if( !str_prefix(arg, "defensive")){
-      if( ch->exp < skill_table[gsn_style_defensive]->skill_level[ch->class])
-      {
-         send_to_char( "You have not yet learned enough to fight defensively.\n\r",ch);
-         return;
-      }
-      WAIT_STATE( ch, skill_table[gsn_style_defensive]->beats );
-      if (ch->style == STYLE_DEFENSIVE)
-      {
+	  if(ch->fighting) {
+		ch->position = POS_EVASIVE;
+		if ( IS_PKILL( ch ) )
+			act( AT_ACTION, "$n falls back into an evasive stance.", ch, NULL, NULL, TO_ROOM );
+	  }
+		ch->style = STYLE_EVASIVE;
+		send_to_char( "You adopt an evasive fighting style.\n\r",ch);
+		return;
+    } else if( !str_prefix(arg, "defensive")) {
+      WAIT_STATE( ch, 8);
+      if (ch->style == STYLE_DEFENSIVE) {
          send_to_char( "You are already defensive.\n\r",ch);
          return;
       }
-      if( number_percent() < LEARNED(ch, gsn_style_defensive) ){
-          /* success */
 	  if(ch->fighting) {
              ch->position = POS_DEFENSIVE;
-             learn_from_success(ch,gsn_style_defensive);
 	     if ( IS_PKILL( ch ) )
 		act( AT_ACTION, "$n moves into a defensive posture.",
                   ch, NULL, NULL, TO_ROOM );
@@ -5173,18 +5148,10 @@ void do_style( CHAR_DATA *ch, char *argument )
           ch->style = STYLE_DEFENSIVE;
           send_to_char( "You adopt a defensive fighting style.\n\r",ch);
           return;
-      } else {
-          /* failure */
-          learn_from_failure(ch, gsn_style_defensive);
-          send_to_char( "You nearly trip in a lame attempt to adopt a defensive fighting style.\n\r",ch);
-	  return;
-      }
     }
-	else if( !str_prefix(arg,"standard"))
-	{
-		WAIT_STATE( ch, skill_table[gsn_style_standard]->beats );
-      if (ch->style == STYLE_FIGHTING)
-      {
+	else if( !str_prefix(arg,"standard")) {
+		WAIT_STATE( ch, 8 );
+      if (ch->style == STYLE_FIGHTING) {
          send_to_char( "You are already standard.\n\r",ch);
          return;
       }
@@ -5197,23 +5164,14 @@ void do_style( CHAR_DATA *ch, char *argument )
 		send_to_char( "You adopt a standard fighting style.\n\r",ch);
 		return;
    }
-   else if( !str_prefix(arg,"aggressive")){
-      if( ch->exp < skill_table[gsn_style_aggressive]->skill_level[ch->class])
-      {
-         send_to_char( "You have not yet learned enough to fight aggressively.\n\r",ch);
-         return;
-      }
-      WAIT_STATE( ch, skill_table[gsn_style_aggressive]->beats );
-      if (ch->style == STYLE_AGGRESSIVE)
-      {
+   else if( !str_prefix(arg,"aggressive")) {
+      WAIT_STATE( ch, 8 );
+      if (ch->style == STYLE_AGGRESSIVE) {
          send_to_char( "You are already aggressive.\n\r",ch);
          return;
       }
-      if( number_percent() < LEARNED(ch, gsn_style_aggressive) ){
-          /* success */
 	  if(ch->fighting) {
              ch->position = POS_AGGRESSIVE;
-             learn_from_success(ch,gsn_style_aggressive);
 	      if ( IS_PKILL( ch ) )
 		act( AT_ACTION, "$n assumes an aggressive stance.",
                   ch, NULL, NULL, TO_ROOM );
@@ -5221,29 +5179,14 @@ void do_style( CHAR_DATA *ch, char *argument )
           ch->style = STYLE_AGGRESSIVE;
           send_to_char( "You adopt an aggressive fighting style.\n\r",ch);
           return;
-      } else {
-          /* failure */
-          learn_from_failure(ch, gsn_style_aggressive);
-          send_to_char( "You nearly trip in a lame attempt to adopt an aggressive fighting style.\n\r",ch);
-	  return;
-      }
-    } else if( !str_prefix(arg,"berserk")){
-      if( ch->exp < skill_table[gsn_style_berserk]->skill_level[ch->class])
-      {
-         send_to_char( "You have not yet learned enough to fight berserk.\n\r",ch);
-         return;
-      }
-      WAIT_STATE( ch, skill_table[gsn_style_berserk]->beats );
-      if (ch->style == STYLE_BERSERK)
-      {
+    } else if( !str_prefix(arg,"berserk")) {
+      WAIT_STATE( ch, 8 );
+      if (ch->style == STYLE_BERSERK) {
          send_to_char( "You are already berserk.\n\r",ch);
          return;
       }
-      if( number_percent() < LEARNED(ch, gsn_style_berserk) ){
-          /* success */
 	  if(ch->fighting) {
              ch->position = POS_BERSERK;
-             learn_from_success(ch,gsn_style_berserk);
 	     if ( IS_PKILL( ch ) )
 		act( AT_ACTION, "$n moves into a berserk posture.",
                   ch, NULL, NULL, TO_ROOM );
@@ -5251,13 +5194,7 @@ void do_style( CHAR_DATA *ch, char *argument )
           ch->style = STYLE_BERSERK;
           send_to_char( "You adopt a berserk fighting style.\n\r",ch);
           return;
-      } else {
-          /* failure */
-          learn_from_failure(ch, gsn_style_berserk);
-          send_to_char( "You nearly trip in a lame attempt to adopt a berserk fighting style.\n\r",ch);
-	  return;
-      }
-    }
+	}
 
     send_to_char( "Adopt which fighting style?\n\r",ch);
 

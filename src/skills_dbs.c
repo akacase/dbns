@@ -5885,7 +5885,7 @@ void do_haymaker( CHAR_DATA *ch, char *argument )
 	}
 	if (IS_IMMORTAL(ch)) {
 		pager_printf_color(ch,
-		"DEBUG: Haymaker currently %d]\n\r", ch->skillhaymaker);
+		"DEBUG: Haymaker currently %d\n\r", ch->skillhaymaker);
 	}
 	if (!IS_NPC(ch)
 	    && (ch->skillhaymaker < 1)) {

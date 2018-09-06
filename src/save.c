@@ -1344,6 +1344,7 @@ fread_char (CHAR_DATA * ch, FILE * fp, bool preload)
 	       KEY ("Absorb_Pc", ch->pcdata->absorb_pc, fread_number (fp));
 	       KEY ("Absorb_Mob", ch->pcdata->absorb_mob, fread_number (fp));
 	       KEY ("Absorb_Pl_Mod", ch->pcdata->absorb_pl_mod, fread_number (fp));
+		   KEY ("Aggressive_Style", ch->skillaggressive_style, fread_number (fp));
 
 	       KEY ("Act", ch->act, fread_bitvector (fp));
 	       KEY ("AffectedBy", ch->affected_by, fread_bitvector (fp));
@@ -1460,6 +1461,12 @@ fread_char (CHAR_DATA * ch, FILE * fp, bool preload)
 	       KEY ("Bamfout", ch->pcdata->bamfout, fread_string_nohash (fp));
 	       KEY ("BodyMastery", ch->bodymastery, fread_number (fp));
 	       KEY ("BodyRank", ch->bodyrank, fread_number (fp));
+		   KEY ("Bruiser_Style", ch->skillbruiser_style, fread_number (fp));
+	       KEY ("Berserk_Style", ch->skillberserk_style, fread_number (fp));
+	       KEY ("Block", ch->skillblock, fread_number (fp));
+	       KEY ("BBK", ch->skillbbk, fread_number (fp));
+	       KEY ("Burning_Attack", ch->skillburning_attack, fread_number (fp));
+	       KEY ("Blast_Zone", ch->skillblast_zone, fread_number (fp));
 	       /* Read in board status */
 	       if (!str_cmp (word, "Boards")) {
 		    int i, num = fread_number (fp);	/* number of boards saved */
@@ -1531,6 +1538,9 @@ fread_char (CHAR_DATA * ch, FILE * fp, bool preload)
 	       KEY ("Class", ch->class, fread_number (fp));
 	       KEY ("CombatFlags", ch->pcdata->combatFlags, fread_number (fp));
 	       KEY ("Corespl", ch->corespl, fread_number_ld (fp));
+	       KEY ("Collide", ch->skillcollide, fread_number (fp));
+	       KEY ("Concentrated_Beam", ch->skillconcentrated_beam, fread_number (fp));
+	       KEY ("Crusherball", ch->skillcrusherball, fread_number (fp));
 	       if (!str_cmp (word, "Cores")) {
 		    int fm_core = fread_number (fp);
 		    int e_core = fread_number (fp);
@@ -1612,6 +1622,11 @@ fread_char (CHAR_DATA * ch, FILE * fp, bool preload)
 	  case 'D':
 	       KEY ("Damroll", ch->damroll, fread_number (fp));
 	       KEY ("Deaf", ch->deaf, fread_bitvector (fp));
+	       KEY ("DCD", ch->skilldcd, fread_number (fp));
+	       KEY ("Defensive_Style", ch->skilldefensive_style, fread_number (fp));
+	       KEY ("Dodge", ch->skilldodge, fread_number (fp));
+	       KEY ("Death_Ball", ch->skilldeath_ball, fread_number (fp));
+	       KEY ("Destructo_Disc", ch->skilldestructo_disc, fread_number (fp));
 	       if (!strcmp (word, "Deity")) {
 		    ch->pcdata->deity_name = fread_string (fp);
 
@@ -1654,6 +1669,10 @@ fread_char (CHAR_DATA * ch, FILE * fp, bool preload)
 	       KEY ("Fusionflags", ch->fusionflags, fread_number (fp));
 	       KEY ("Fusions", ch->fusions, fread_number (fp));
 	       KEY ("Fusiontimer", ch->fusiontimer, fread_number (fp));
+	       KEY ("Final_Flash", ch->skillfinal_flash, fread_number (fp));
+	       KEY ("Finger_Beam", ch->skillfinger_beam, fread_number (fp));
+	       KEY ("Forcewave", ch->skillforcewave, fread_number (fp));
+	       KEY ("Finishing_Buster", ch->skillfinishing_buster, fread_number (fp));
 	       if (!strcmp (word, "Fused")) {
 		    fMatch = true;
 		    x1 = fread_number (fp);
@@ -1663,6 +1682,8 @@ fread_char (CHAR_DATA * ch, FILE * fp, bool preload)
 	       break;
 
 	  case 'G':
+	       KEY ("Gallic_Gun", ch->skillgallic_gun, fread_number (fp));
+	       KEY ("Gigantic_Meteor", ch->skillgigantic_meteor, fread_number (fp));
 	       KEY ("Ghost", ch->pcdata->ghost_level, fread_number (fp));
 	       KEY ("Glory", ch->pcdata->quest_curr, fread_number (fp));
 	       KEY ("Gold", ch->gold, fread_number (fp));
@@ -1692,6 +1713,11 @@ fread_char (CHAR_DATA * ch, FILE * fp, bool preload)
 	       break;
 
 	  case 'H':
+	       KEY ("Haymaker", ch->skillhaymaker, fread_number (fp));
+	       KEY ("Hybrid_Style", ch->skillhybrid_style, fread_number (fp));
+	       KEY ("Heaven_Splitter", ch->skillheaven_splitter, fread_number (fp));
+	       KEY ("Hells_Flash", ch->skillhells_flash, fread_number (fp));
+	       KEY ("Hellzone_Grenade", ch->skillhellzone_grenade, fread_number (fp));
 	       KEY ("HeartPL", ch->heart_pl, fread_number_ld (fp));
 	       KEY ("Height", ch->height, fread_number (fp));
 	       KEY ("HBTCLeft", ch->pcdata->HBTCTimeLeft, fread_number (fp));
@@ -1724,6 +1750,7 @@ fread_char (CHAR_DATA * ch, FILE * fp, bool preload)
 	       break;
 
 	  case 'I':
+	       KEY ("Instant_Transmission", ch->skillinstant_trans, fread_number (fp));
 	       KEY ("ICQ", ch->pcdata->icq, fread_number (fp));
 	       if (!strcmp (word, "Ignored")) {
 		    char *temp;
@@ -1775,6 +1802,11 @@ fread_char (CHAR_DATA * ch, FILE * fp, bool preload)
 	       break;
 
 	  case 'K':
+	       KEY ("Kaio_Create", ch->skillkaio_create, fread_number (fp));
+	       KEY ("Kaioken", ch->skillkaioken, fread_number (fp));
+	       KEY ("Kamehameha", ch->skillkamehameha, fread_number (fp));
+	       KEY ("Ki_Absorb", ch->skillki_absorb, fread_number (fp));
+	       KEY ("Ki_Heal", ch->skillki_heal, fread_number (fp));
 	       KEY ("Kairank", ch->kairank, fread_number (fp));
 	       KEY ("KaiTimer", ch->pcdata->eKTimer, fread_number (fp));
 	       KEY ("KaiMessage", ch->pcdata->kaiRestoreMsg, fread_string_nohash (fp));
@@ -1790,7 +1822,7 @@ fread_char (CHAR_DATA * ch, FILE * fp, bool preload)
 	       break;
 
 	  case 'L':
-
+	       KEY ("Lariat", ch->skilllariat, fread_number (fp));
 	       KEY ("LastOn", ch->pcdata->lastlogon, fread_number (fp));
 	       if (!strcmp (word, "LastIntrest")) {
 		    line = fread_line (fp);
@@ -1829,6 +1861,13 @@ fread_char (CHAR_DATA * ch, FILE * fp, bool preload)
 	       break;
 
 	  case 'M':
+	       KEY ("Meditate", ch->skillmeditate, fread_number (fp));
+	       KEY ("Makosen", ch->skillmakosen, fread_number (fp));
+	       KEY ("Masenko", ch->skillmasenko, fread_number (fp));
+	       KEY ("Meteor", ch->skillmeteor, fread_number (fp));
+	       KEY ("Multidisc", ch->skillmultidisc, fread_number (fp));
+	       KEY ("Multi_Eye_Beam", ch->skillmulti_eye_beam, fread_number (fp));
+	       KEY ("Multi_Finger_Beam", ch->skillmulti_finger_beam, fread_number (fp));
 	       KEY ("MaxEnergy", ch->max_energy, fread_number (fp));
 	       KEY ("MaxPrac", ch->max_prac, fread_number (fp));
 	       KEY ("MaxTrain", ch->max_train, fread_number (fp));
@@ -1882,6 +1921,7 @@ fread_char (CHAR_DATA * ch, FILE * fp, bool preload)
 
 	       break;
 	  case 'O':
+	       KEY ("Oozaru_Mouth_Cannon", ch->skillmonkey_cannon, fread_number (fp));
 	       KEY ("Orignaleyes", ch->pcdata->orignaleyes, fread_number (fp));
 	       KEY ("Orignalhaircolor", ch->pcdata->orignalhaircolor,
 		 fread_number (fp));
@@ -1894,6 +1934,8 @@ fread_char (CHAR_DATA * ch, FILE * fp, bool preload)
 	       break;
 
 	  case 'P':
+	       KEY ("Punch", ch->skillpunch, fread_number (fp));
+	       KEY ("Psionic_Blast", ch->skillpsionic_blast, fread_number (fp));
 	       KEY ("Pagerlen", ch->pcdata->pagerlen, fread_number (fp));
 	       KEY ("Password", ch->pcdata->pwd, fread_string_nohash (fp));
 	       if (!strcmp (word, "PermTStats")) {
@@ -2005,62 +2047,12 @@ fread_char (CHAR_DATA * ch, FILE * fp, bool preload)
 	       KEY ("Style", ch->style, fread_number (fp));
 	       KEY ("Suppress", ch->pcdata->suppress, fread_number_ld (fp));
 	       KEY ("Susceptible", ch->susceptible, fread_number (fp));
-	       KEY ("Haymaker", ch->skillhaymaker, fread_number (fp));
-	       KEY ("Energy_Style", ch->skillenergy_style, fread_number (fp));
-	       KEY ("Bruiser_Style", ch->skillbruiser_style, fread_number (fp));
-	       KEY ("Hybrid_Style", ch->skillhybrid_style, fread_number (fp));
-	       KEY ("Aggressive_Style", ch->skillaggressive_style, fread_number (fp));
-	       KEY ("Berserk_Style", ch->skillberserk_style, fread_number (fp));
-	       KEY ("Block", ch->skillblock, fread_number (fp));
-	       KEY ("Collide", ch->skillcollide, fread_number (fp));
-	       KEY ("DCD", ch->skilldcd, fread_number (fp));
-	       KEY ("Defensive_Style", ch->skilldefensive_style, fread_number (fp));
-	       KEY ("Dodge", ch->skilldodge, fread_number (fp));
-	       KEY ("Evasive_Style", ch->skillevasive_style, fread_number (fp));
-	       KEY ("Lariat", ch->skilllariat, fread_number (fp));
-	       KEY ("Punch", ch->skillpunch, fread_number (fp));
-	       KEY ("Meditate", ch->skillmeditate, fread_number (fp));
 	       KEY ("Standard_Style", ch->skillstandard_style, fread_number (fp));
 	       KEY ("SSJ1", ch->skillssj1, fread_number (fp));
 	       KEY ("SSJ2", ch->skillssj2, fread_number (fp));
 	       KEY ("SSJ3", ch->skillssj3, fread_number (fp));
 	       KEY ("SSGOD", ch->skillssgod, fread_number (fp));
 	       KEY ("SSBLUE", ch->skillssblue, fread_number (fp));
-	       KEY ("Ultra_Instinct", ch->skillultra_instinct, fread_number (fp));
-	       KEY ("BBK", ch->skillbbk, fread_number (fp));
-	       KEY ("Burning_Attack", ch->skillburning_attack, fread_number (fp));
-	       KEY ("Concentrated_Beam", ch->skillconcentrated_beam, fread_number (fp));
-	       KEY ("Blast_Zone", ch->skillblast_zone, fread_number (fp));
-	       KEY ("Crusherball", ch->skillcrusherball, fread_number (fp));
-	       KEY ("Death_Ball", ch->skilldeath_ball, fread_number (fp));
-	       KEY ("Destructo_Disc", ch->skilldestructo_disc, fread_number (fp));
-	       KEY ("Ecliptic_Meteor", ch->skillecliptic_meteor, fread_number (fp));
-	       KEY ("Energy_Ball", ch->skillenergy_ball, fread_number (fp));
-	       KEY ("Energy_Beam", ch->skillenergy_beam, fread_number (fp));
-	       KEY ("Energy_Disc", ch->skillenergy_disc, fread_number (fp));
-	       KEY ("Final_Flash", ch->skillfinal_flash, fread_number (fp));
-	       KEY ("Finger_Beam", ch->skillfinger_beam, fread_number (fp));
-	       KEY ("Forcewave", ch->skillforcewave, fread_number (fp));
-	       KEY ("Gallic_Gun", ch->skillgallic_gun, fread_number (fp));
-	       KEY ("Finishing_Buster", ch->skillfinishing_buster, fread_number (fp));
-	       KEY ("Gigantic_Meteor", ch->skillgigantic_meteor, fread_number (fp));
-	       KEY ("Heaven_Splitter", ch->skillheaven_splitter, fread_number (fp));
-	       KEY ("Hells_Flash", ch->skillhells_flash, fread_number (fp));
-	       KEY ("Hellzone_Grenade", ch->skillhellzone_grenade, fread_number (fp));
-	       KEY ("Instant_Transmission", ch->skillinstant_trans, fread_number (fp));
-	       KEY ("Kaio_Create", ch->skillkaio_create, fread_number (fp));
-	       KEY ("Kaioken", ch->skillkaioken, fread_number (fp));
-	       KEY ("Kamehameha", ch->skillkamehameha, fread_number (fp));
-	       KEY ("Ki_Absorb", ch->skillki_absorb, fread_number (fp));
-	       KEY ("Ki_Heal", ch->skillki_heal, fread_number (fp));
-	       KEY ("Makosen", ch->skillmakosen, fread_number (fp));
-	       KEY ("Masenko", ch->skillmasenko, fread_number (fp));
-	       KEY ("Meteor", ch->skillmeteor, fread_number (fp));
-	       KEY ("Multidisc", ch->skillmultidisc, fread_number (fp));
-	       KEY ("Multi_Eye_Beam", ch->skillmulti_eye_beam, fread_number (fp));
-	       KEY ("Oozaru_Mouth_Cannon", ch->skillmonkey_cannon, fread_number (fp));
-	       KEY ("Psionic_Blast", ch->skillpsionic_blast, fread_number (fp));
-	       KEY ("Multi_Finger_Beam", ch->skillmulti_finger_beam, fread_number (fp));
 	       KEY ("Sense", ch->skillsense, fread_number (fp));
 	       KEY ("Shockwave", ch->skillshockwave, fread_number (fp));
 	       KEY ("Special_Beam_Cannon", ch->skillsbc, fread_number (fp));
@@ -2253,6 +2245,12 @@ fread_char (CHAR_DATA * ch, FILE * fp, bool preload)
 	       KEY ("Evilmod", ch->evilmod, fread_number (fp));
 	       KEY ("Exp", ch->exp, fread_number_ld (fp));
 	       KEY ("Eyes", ch->pcdata->eyes, fread_number (fp));
+	       KEY ("Energy_Style", ch->skillenergy_style, fread_number (fp));
+	       KEY ("Evasive_Style", ch->skillevasive_style, fread_number (fp));
+	       KEY ("Ecliptic_Meteor", ch->skillecliptic_meteor, fread_number (fp));
+	       KEY ("Energy_Ball", ch->skillenergy_ball, fread_number (fp));
+	       KEY ("Energy_Beam", ch->skillenergy_beam, fread_number (fp));
+	       KEY ("Energy_Disc", ch->skillenergy_disc, fread_number (fp));
 	       break;
 
 	  case 'T':
@@ -2307,6 +2305,7 @@ fread_char (CHAR_DATA * ch, FILE * fp, bool preload)
 
 	  case 'U':
 	       KEY ("UpgradeL", ch->pcdata->upgradeL, fread_number (fp));
+	       KEY ("Ultra_Instinct", ch->skillultra_instinct, fread_number (fp));
 	       break;
 
 	  case 'V':
