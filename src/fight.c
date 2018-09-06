@@ -5205,7 +5205,7 @@ damage(CHAR_DATA * ch, CHAR_DATA * victim, int dam, int dt)
 	heart_calc(victim, "");
 
 	if (!IS_NPC(victim) && !IS_IMMORTAL(victim)) {
-		if ((victim->pcdata->learned[gsn_ssj] <= 0
+		if ((victim->skillssj1 <= 0
 		    && victim->exp < ch->exp)
 		    || (victim->skillssj1 >= 1
 		    && victim->skillssj2 <= 0
