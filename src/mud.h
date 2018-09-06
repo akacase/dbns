@@ -2664,6 +2664,7 @@ struct char_data {
 	int 	max_mana;
 	int 	max_energy;
 /* Entries for hardcoded skill tree */
+	sh_int	skilleye_beam;
 	sh_int	skilldestructive_wave;
 	sh_int	skillbash;
 	sh_int	skillhaymaker;
