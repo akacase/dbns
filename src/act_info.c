@@ -5008,6 +5008,10 @@ do_develop(CHAR_DATA * ch, char *argument)
 			return;
 		}
 	}
+	if (!str_cmp(arg1, "sorry,nothinghere!...yet") && arg2[0] == '\0') {
+			send_to_char("What're you, some kinda wise guy?\n\r", ch);
+			return;
+	}
 }
 
 void
@@ -6466,6 +6470,9 @@ do_skills(CHAR_DATA * ch, char *argument) {
 	int		expertbrank = 0;
 	int		masterbrank = 0;
 	int		gmasterbrank = 0;
+	int		strikepercent;
+	int		kipercent;
+	int		bodypercent;
 	
 	one_argument(argument, arg);
 	
@@ -6494,6 +6501,20 @@ do_skills(CHAR_DATA * ch, char *argument) {
 	expertbrank = (skillbrank / 10);
 	masterbrank = (expertbrank / 10);
 	gmasterbrank = (masterbrank / 10);
+	
+	if (ch->strikemastery < 1000)
+		strikepercent = (100 * ch->strikemastery) / 1000;
+	else if (ch->strikemastery < 10000)
+		strikepercent = (100 * ch->strikemastery) / 10000;
+	else if (ch->strikemastery < 100000)
+		strikepercent = (100 * ch->strikemastery) / 100000;
+	else if (ch->strikemastery < 1000000)
+		strikepercent = (100 * ch->strikemastery) / 1000000;
+	else if (ch->strikemastery < 10000000)
+		strikepercent = (100 * ch->strikemastery) / 10000000;
+	else if (ch->strikemastery < 100000000)
+		strikepercent = (100 * ch->strikemastery) / 100000000;
+
 
 	if (argument[0] == '\0') {
 		pager_printf_color(ch,
@@ -6503,6 +6524,7 @@ do_skills(CHAR_DATA * ch, char *argument) {
 		if (ch->strikemastery >= 10000000) {
 			pager_printf_color(ch,
 				"&CSTRIKE MASTERY&B----------&Y[&GGRANDMASTER %d&Y]\n\r", gmastersrank);
+			if (ch->strikemastery >)
 		}
 		else if (ch->strikemastery >= 1000000) {
 			pager_printf_color(ch,
@@ -6524,6 +6546,215 @@ do_skills(CHAR_DATA * ch, char *argument) {
 			pager_printf_color(ch,
 				"&CSTRIKE MASTERY&B----------&Y[&GNOVICE %d&Y]\n\r", novicesrank);
 		}
+			if (strikepercent = 99 )
+				pager_printf_color(ch, "&cPROGRESS: &O[&G|||||||||&R-&O]\n\r");
+			else if (strikepercent = 98 )
+				pager_printf_color(ch, "&cPROGRESS: &O[&G||||||||&R--&O]\n\r");
+			else if (strikepercent = 97 )
+				pager_printf_color(ch, "&cPROGRESS: &O[&G|||||||&R---&O]\n\r");
+			else if (strikepercent = 96 )
+				pager_printf_color(ch, "&cPROGRESS: &O[&G||||||&R----&O]\n\r");
+			else if (strikepercent = 95 )
+				pager_printf_color(ch, "&cPROGRESS: &O[&G|||||&R-----&O]\n\r");
+			else if (strikepercent = 94 )
+				pager_printf_color(ch, "&cPROGRESS: &O[&G||||&R------&O]\n\r");
+			else if (strikepercent = 93 )
+				pager_printf_color(ch, "&cPROGRESS: &O[&G|||&R-------&O]\n\r");
+			else if (strikepercent = 92 )
+				pager_printf_color(ch, "&cPROGRESS: &O[&G||&R--------&O]\n\r");
+			else if (strikepercent = 91 )
+				pager_printf_color(ch, "&cPROGRESS: &O[&G|&R---------&O]\n\r");
+			else if (strikepercent = 90 )
+				pager_printf_color(ch, "&cPROGRESS: &O[&R----------&O]\n\r");
+			
+			else if (strikepercent = 89 )
+				pager_printf_color(ch, "&cPROGRESS: &O[&G|||||||||&R-&O]\n\r");
+			else if (strikepercent = 88 )
+				pager_printf_color(ch, "&cPROGRESS: &O[&G||||||||&R--&O]\n\r");
+			else if (strikepercent = 87 )
+				pager_printf_color(ch, "&cPROGRESS: &O[&G|||||||&R---&O]\n\r");
+			else if (strikepercent = 86 )
+				pager_printf_color(ch, "&cPROGRESS: &O[&G||||||&R----&O]\n\r");
+			else if (strikepercent = 85 )
+				pager_printf_color(ch, "&cPROGRESS: &O[&G|||||&R-----&O]\n\r");
+			else if (strikepercent = 84 )
+				pager_printf_color(ch, "&cPROGRESS: &O[&G||||&R------&O]\n\r");
+			else if (strikepercent = 83 )
+				pager_printf_color(ch, "&cPROGRESS: &O[&G|||&R-------&O]\n\r");
+			else if (strikepercent = 82 )
+				pager_printf_color(ch, "&cPROGRESS: &O[&G||&R--------&O]\n\r");
+			else if (strikepercent = 81 )
+				pager_printf_color(ch, "&cPROGRESS: &O[&G|&R---------&O]\n\r");
+			else if (strikepercent = 80 )
+				pager_printf_color(ch, "&cPROGRESS: &O[&R----------&O]\n\r");
+				
+			else if (strikepercent = 79 )
+				pager_printf_color(ch, "&cPROGRESS: &O[&G|||||||||&R-&O]\n\r");
+			else if (strikepercent = 78 )
+				pager_printf_color(ch, "&cPROGRESS: &O[&G||||||||&R--&O]\n\r");
+			else if (strikepercent = 77 )
+				pager_printf_color(ch, "&cPROGRESS: &O[&G|||||||&R---&O]\n\r");
+			else if (strikepercent = 76 )
+				pager_printf_color(ch, "&cPROGRESS: &O[&G||||||&R----&O]\n\r");
+			else if (strikepercent = 75 )
+				pager_printf_color(ch, "&cPROGRESS: &O[&G|||||&R-----&O]\n\r");
+			else if (strikepercent = 74 )
+				pager_printf_color(ch, "&cPROGRESS: &O[&G||||&R------&O]\n\r");
+			else if (strikepercent = 73 )
+				pager_printf_color(ch, "&cPROGRESS: &O[&G|||&R-------&O]\n\r");
+			else if (strikepercent = 72 )
+				pager_printf_color(ch, "&cPROGRESS: &O[&G||&R--------&O]\n\r");
+			else if (strikepercent = 71 )
+				pager_printf_color(ch, "&cPROGRESS: &O[&G|&R---------&O]\n\r");
+			else if (strikepercent = 70 )
+				pager_printf_color(ch, "&cPROGRESS: &O[&R----------&O]\n\r");
+				
+			else if (strikepercent = 69 )
+				pager_printf_color(ch, "&cPROGRESS: &O[&G|||||||||&R-&O]\n\r");
+			else if (strikepercent = 68 )
+				pager_printf_color(ch, "&cPROGRESS: &O[&G||||||||&R--&O]\n\r");
+			else if (strikepercent = 67 )
+				pager_printf_color(ch, "&cPROGRESS: &O[&G|||||||&R---&O]\n\r");
+			else if (strikepercent = 66 )
+				pager_printf_color(ch, "&cPROGRESS: &O[&G||||||&R----&O]\n\r");
+			else if (strikepercent = 65 )
+				pager_printf_color(ch, "&cPROGRESS: &O[&G|||||&R-----&O]\n\r");
+			else if (strikepercent = 64 )
+				pager_printf_color(ch, "&cPROGRESS: &O[&G||||&R------&O]\n\r");
+			else if (strikepercent = 63 )
+				pager_printf_color(ch, "&cPROGRESS: &O[&G|||&R-------&O]\n\r");
+			else if (strikepercent = 62 )
+				pager_printf_color(ch, "&cPROGRESS: &O[&G||&R--------&O]\n\r");
+			else if (strikepercent = 61 )
+				pager_printf_color(ch, "&cPROGRESS: &O[&G|&R---------&O]\n\r");
+			else if (strikepercent = 60 )
+				pager_printf_color(ch, "&cPROGRESS: &O[&R----------&O]\n\r");
+				
+			else if (strikepercent = 59 )
+				pager_printf_color(ch, "&cPROGRESS: &O[&G|||||||||&R-&O]\n\r");
+			else if (strikepercent = 58 )
+				pager_printf_color(ch, "&cPROGRESS: &O[&G||||||||&R--&O]\n\r");
+			else if (strikepercent = 57 )
+				pager_printf_color(ch, "&cPROGRESS: &O[&G|||||||&R---&O]\n\r");
+			else if (strikepercent = 56 )
+				pager_printf_color(ch, "&cPROGRESS: &O[&G||||||&R----&O]\n\r");
+			else if (strikepercent = 55 )
+				pager_printf_color(ch, "&cPROGRESS: &O[&G|||||&R-----&O]\n\r");
+			else if (strikepercent = 54 )
+				pager_printf_color(ch, "&cPROGRESS: &O[&G||||&R------&O]\n\r");
+			else if (strikepercent = 53 )
+				pager_printf_color(ch, "&cPROGRESS: &O[&G|||&R-------&O]\n\r");
+			else if (strikepercent = 52 )
+				pager_printf_color(ch, "&cPROGRESS: &O[&G||&R--------&O]\n\r");
+			else if (strikepercent = 51 )
+				pager_printf_color(ch, "&cPROGRESS: &O[&G|&R---------&O]\n\r");
+			else if (strikepercent = 50 )
+				pager_printf_color(ch, "&cPROGRESS: &O[&R----------&O]\n\r");
+
+			else if (strikepercent = 49 )
+				pager_printf_color(ch, "&cPROGRESS: &O[&G|||||||||&R-&O]\n\r");
+			else if (strikepercent = 48 )
+				pager_printf_color(ch, "&cPROGRESS: &O[&G||||||||&R--&O]\n\r");
+			else if (strikepercent = 47 )
+				pager_printf_color(ch, "&cPROGRESS: &O[&G|||||||&R---&O]\n\r");
+			else if (strikepercent = 46 )
+				pager_printf_color(ch, "&cPROGRESS: &O[&G||||||&R----&O]\n\r");
+			else if (strikepercent = 45 )
+				pager_printf_color(ch, "&cPROGRESS: &O[&G|||||&R-----&O]\n\r");
+			else if (strikepercent = 44 )
+				pager_printf_color(ch, "&cPROGRESS: &O[&G||||&R------&O]\n\r");
+			else if (strikepercent = 43 )
+				pager_printf_color(ch, "&cPROGRESS: &O[&G|||&R-------&O]\n\r");
+			else if (strikepercent = 42 )
+				pager_printf_color(ch, "&cPROGRESS: &O[&G||&R--------&O]\n\r");
+			else if (strikepercent = 41 )
+				pager_printf_color(ch, "&cPROGRESS: &O[&G|&R---------&O]\n\r");
+			else if (strikepercent = 40 )
+				pager_printf_color(ch, "&cPROGRESS: &O[&R----------&O]\n\r");
+
+			else if (strikepercent = 39 )
+				pager_printf_color(ch, "&cPROGRESS: &O[&G|||||||||&R-&O]\n\r");
+			else if (strikepercent = 38 )
+				pager_printf_color(ch, "&cPROGRESS: &O[&G||||||||&R--&O]\n\r");
+			else if (strikepercent = 37 )
+				pager_printf_color(ch, "&cPROGRESS: &O[&G|||||||&R---&O]\n\r");
+			else if (strikepercent = 36 )
+				pager_printf_color(ch, "&cPROGRESS: &O[&G||||||&R----&O]\n\r");
+			else if (strikepercent = 35 )
+				pager_printf_color(ch, "&cPROGRESS: &O[&G|||||&R-----&O]\n\r");
+			else if (strikepercent = 34 )
+				pager_printf_color(ch, "&cPROGRESS: &O[&G||||&R------&O]\n\r");
+			else if (strikepercent = 33 )
+				pager_printf_color(ch, "&cPROGRESS: &O[&G|||&R-------&O]\n\r");
+			else if (strikepercent = 32 )
+				pager_printf_color(ch, "&cPROGRESS: &O[&G||&R--------&O]\n\r");
+			else if (strikepercent = 31 )
+				pager_printf_color(ch, "&cPROGRESS: &O[&G|&R---------&O]\n\r");
+			else if (strikepercent = 30 )
+				pager_printf_color(ch, "&cPROGRESS: &O[&R----------&O]\n\r");
+				
+			else if (strikepercent = 29 )
+				pager_printf_color(ch, "&cPROGRESS: &O[&G|||||||||&R-&O]\n\r");
+			else if (strikepercent = 28 )
+				pager_printf_color(ch, "&cPROGRESS: &O[&G||||||||&R--&O]\n\r");
+			else if (strikepercent = 27 )
+				pager_printf_color(ch, "&cPROGRESS: &O[&G|||||||&R---&O]\n\r");
+			else if (strikepercent = 26 )
+				pager_printf_color(ch, "&cPROGRESS: &O[&G||||||&R----&O]\n\r");
+			else if (strikepercent = 25 )
+				pager_printf_color(ch, "&cPROGRESS: &O[&G|||||&R-----&O]\n\r");
+			else if (strikepercent = 24 )
+				pager_printf_color(ch, "&cPROGRESS: &O[&G||||&R------&O]\n\r");
+			else if (strikepercent = 23 )
+				pager_printf_color(ch, "&cPROGRESS: &O[&G|||&R-------&O]\n\r");
+			else if (strikepercent = 22 )
+				pager_printf_color(ch, "&cPROGRESS: &O[&G||&R--------&O]\n\r");
+			else if (strikepercent = 21 )
+				pager_printf_color(ch, "&cPROGRESS: &O[&G|&R---------&O]\n\r");
+			else if (strikepercent = 20 )
+				pager_printf_color(ch, "&cPROGRESS: &O[&R----------&O]\n\r");
+				
+			else if (strikepercent = 19 )
+				pager_printf_color(ch, "&cPROGRESS: &O[&G|||||||||&R-&O]\n\r");
+			else if (strikepercent = 18 )
+				pager_printf_color(ch, "&cPROGRESS: &O[&G||||||||&R--&O]\n\r");
+			else if (strikepercent = 17 )
+				pager_printf_color(ch, "&cPROGRESS: &O[&G|||||||&R---&O]\n\r");
+			else if (strikepercent = 16 )
+				pager_printf_color(ch, "&cPROGRESS: &O[&G||||||&R----&O]\n\r");
+			else if (strikepercent = 15 )
+				pager_printf_color(ch, "&cPROGRESS: &O[&G|||||&R-----&O]\n\r");
+			else if (strikepercent = 14 )
+				pager_printf_color(ch, "&cPROGRESS: &O[&G||||&R------&O]\n\r");
+			else if (strikepercent = 13 )
+				pager_printf_color(ch, "&cPROGRESS: &O[&G|||&R-------&O]\n\r");
+			else if (strikepercent = 12 )
+				pager_printf_color(ch, "&cPROGRESS: &O[&G||&R--------&O]\n\r");
+			else if (strikepercent = 11 )
+				pager_printf_color(ch, "&cPROGRESS: &O[&G|&R---------&O]\n\r");
+			else if (strikepercent = 10 )
+				pager_printf_color(ch, "&cPROGRESS: &O[&R----------&O]\n\r");
+
+			else if (strikepercent = 9 )
+				pager_printf_color(ch, "&cPROGRESS: &O[&G|||||||||&R-&O]\n\r");
+			else if (strikepercent = 8 )
+				pager_printf_color(ch, "&cPROGRESS: &O[&G||||||||&R--&O]\n\r");
+			else if (strikepercent = 7 )
+				pager_printf_color(ch, "&cPROGRESS: &O[&G|||||||&R---&O]\n\r");
+			else if (strikepercent = 6 )
+				pager_printf_color(ch, "&cPROGRESS: &O[&G||||||&R----&O]\n\r");
+			else if (strikepercent = 5 )
+				pager_printf_color(ch, "&cPROGRESS: &O[&G|||||&R-----&O]\n\r");
+			else if (strikepercent = 4 )
+				pager_printf_color(ch, "&cPROGRESS: &O[&G||||&R------&O]\n\r");
+			else if (strikepercent = 3 )
+				pager_printf_color(ch, "&cPROGRESS: &O[&G|||&R-------&O]\n\r");
+			else if (strikepercent = 2 )
+				pager_printf_color(ch, "&cPROGRESS: &O[&G||&R--------&O]\n\r");
+			else if (strikepercent = 1 )
+				pager_printf_color(ch, "&cPROGRESS: &O[&G|&R---------&O]\n\r");
+			else if (strikepercent < 1 )
+				pager_printf_color(ch, "&cPROGRESS: &O[&R----------&O]\n\r");
 		pager_printf_color(ch,
 			"\n\r");
 		if (ch->energymastery >= 10000000) {
