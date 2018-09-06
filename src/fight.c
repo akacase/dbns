@@ -1198,7 +1198,7 @@ violence_update(void)
 						ch->powerup += 1;
 						transStatApply(ch, powerupstr, powerupspd, powerupint, powerupcon);
 						if (plmod >= 30
-							&& ch->pcdata->learned[gsn_ssj] > 0) {
+							&& (ch->skillssj1 >= 1)) {
 							xSET_BIT((ch)->affected_by, AFF_SSJ);
 							xREMOVE_BIT((ch)->affected_by, AFF_POWERCHANNEL);
 							act( AT_YELLOW, "Your eyes turn blue, your hair flashes blonde and a fiery golden aura erupts around you!", ch, NULL, NULL, TO_CHAR );
@@ -1212,7 +1212,7 @@ violence_update(void)
 							}
 						}
 						if (plmod >= 30
-							&& ch->pcdata->learned[gsn_ssj] <= 0) {
+							&& ch->skillssj1 < 1) {
 							ch->pl = (ch->exp * 30);
 							act( auraColor, "The raging torrent of ki fades but your power remains.", ch, NULL, NULL, TO_CHAR );
 							act( auraColor, "$n's raging torrent of ki fades away but $s power remains.", ch, NULL, NULL, TO_NOTVICT );
@@ -1241,7 +1241,7 @@ violence_update(void)
 							act( auraColor, "$n's body glows faintly.", ch, NULL, NULL, TO_NOTVICT );
 						}
 						if ((ch->pl / ch->exp) >= 30
-							&& ch->pcdata->learned[gsn_ssj] <= 0) {
+							&& (ch->skillssj1 < 1)) {
 							ch->pl = (ch->exp * 30);
 							act( auraColor, "The raging torrent of ki fades, but your power remains.", ch, NULL, NULL, TO_CHAR );
 							act( auraColor, "$n's raging torrent of ki fades away, but $s power remains.", ch, NULL, NULL, TO_NOTVICT );
@@ -1337,7 +1337,7 @@ violence_update(void)
 							act( AT_YELLOW, "$n's giant muscles tremble, emitting waves of tumultuous energy.", ch, NULL, NULL, TO_NOTVICT );
 						}
 						if ((ch->pl / ch->exp) >= 200
-							&& ch->pcdata->learned[gsn_ssj2] > 0) {
+							&& (ch->skillssj2] >= 1)) {
 							xSET_BIT((ch)->affected_by, AFF_SSJ2);
 							xREMOVE_BIT((ch)->affected_by, AFF_POWERCHANNEL);
 							act( AT_YELLOW, "Your muscles shrink, but in an intense explosion of rage your power grows nonetheless, sending arcing bolts of energy from your body.", ch, NULL, NULL, TO_CHAR );
@@ -1372,7 +1372,7 @@ violence_update(void)
 							act( AT_YELLOW, "$n howls with fury, constant strikes of crackling energy suffusing the air.", ch, NULL, NULL, TO_NOTVICT );
 						}
 						if ((ch->pl / ch->exp) >= 300
-							&& ch->pcdata->learned[gsn_ssj3] > 0) {
+							&& (ch->skillssj3 >= 1)) {
 							xSET_BIT((ch)->affected_by, AFF_SSJ3);
 							xREMOVE_BIT((ch)->affected_by, AFF_POWERCHANNEL);
 							act(AT_YELLOW, "An earth-shattering burst of energy expands your aura. Your eyebrows disappear and your hair lengthens, flowing down your back.", ch, NULL, NULL, TO_CHAR);
@@ -1407,7 +1407,7 @@ violence_update(void)
 							act( AT_YELLOW, "The colours of the world seem to fade away against the brilliant light of $n's aura.", ch, NULL, NULL, TO_NOTVICT );
 						}
 						if ((ch->pl / ch->exp) >= 450
-							&& ch->pcdata->learned[gsn_ssj4] > 0) {
+							&& ch->skillssgod >= 1) {
 							xSET_BIT((ch)->affected_by, AFF_SSJ4);
 							xREMOVE_BIT((ch)->affected_by, AFF_POWERCHANNEL);
 							act( AT_RED, "Your aura fades and your hair and eyes return to normal. However, in the next instant something inside you changes.", ch, NULL, NULL, TO_CHAR );
@@ -1443,7 +1443,7 @@ violence_update(void)
 							act( AT_RED, "$n stands perfectly calm, and yet with every second $s power grows.", ch, NULL, NULL, TO_NOTVICT );
 						}
 						if (plmod >= 600
-							&& ch->pcdata->learned[gsn_sgod] > 0) {
+							&& ch->skillssblue >= 1) {
 							xSET_BIT((ch)->affected_by, AFF_SGOD);
 							xREMOVE_BIT((ch)->affected_by, AFF_POWERCHANNEL);
 							act( AT_LBLUE, "Harnessing the secrets of your God Ki, you kindle the flame deep within and surge with newfound power.", ch, NULL, NULL, TO_CHAR );
