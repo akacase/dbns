@@ -316,11 +316,11 @@ fwrite_char (CHAR_DATA * ch, FILE * fp)
        (ch->in_room == get_room_index (ROOM_VNUM_LIMBO)
 	 && ch->was_in_room) ? ch->was_in_room->vnum : ch->in_room->vnum);
      fprintf (fp, "Worth           %lld\n", ch->worth);
-	 fprintf (fp, "Energy_ballpower           %d\n", ch->energy_ballpower;
-	 fprintf (fp, "Energy_balleffic           %d\n", ch->energy_balleffic;
-	 fprintf (fp, "Sptotal           %d\n", ch->sptotal;
-	 fprintf (fp, "Spgain           %d\n", ch->spgain;
-	 fprintf (fp, "Spallocated           %d\n", ch->spallocated;
+	 fprintf (fp, "Energy_ballpower           %d\n", ch->energy_ballpower);
+	 fprintf (fp, "Energy_balleffic           %d\n", ch->energy_balleffic);
+	 fprintf (fp, "Sptotal           %d\n", ch->sptotal);
+	 fprintf (fp, "Spgain           %d\n", ch->spgain);
+	 fprintf (fp, "Spallocated           %d\n", ch->spallocated);
 	 fprintf (fp, "Destructive_Wave           %d\n", ch->skilldestructive_wave);
 	 fprintf (fp, "Bash           %d\n", ch->skillbash);
 	 fprintf (fp, "Haymaker           %d\n", ch->skillhaymaker);
