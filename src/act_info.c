@@ -6549,81 +6549,81 @@ do_skills(CHAR_DATA * ch, char *argument) {
 			"\n\r");
 		if (ch->strikemastery >= 10000000) {
 			pager_printf_color(ch,
-				"&CSTRIKE MASTERY&B----------&Y[&GGRANDMASTER %d&Y]\n\r", gmastersrank);
+				"&CSTRIKE MASTERY&B-------------&Y[&GGRANDMASTER %d&Y]\n\r", gmastersrank);
 		}
 		else if (ch->strikemastery >= 1000000) {
 			pager_printf_color(ch,
-				"&CSTRIKE MASTERY&B----------&Y[&GMASTER %d&Y]\n\r", mastersrank);
+				"&CSTRIKE MASTERY&B-------------&Y[&GMASTER %d&Y]\n\r", mastersrank);
 		}
 		else if (ch->strikemastery >= 100000) {
 			pager_printf_color(ch,
-				"&CSTRIKE MASTERY&B----------&Y[&GEXPERT %d&Y]\n\r", expertsrank);
+				"&CSTRIKE MASTERY&B-------------&Y[&GEXPERT %d&Y]\n\r", expertsrank);
 		}
 		else if (ch->strikemastery >= 10000) {
 			pager_printf_color(ch,
-				"&CSTRIKE MASTERY&B----------&Y[&GSKILLED %d&Y]\n\r", skillsrank);
+				"&CSTRIKE MASTERY&B-------------&Y[&GSKILLED %d&Y]\n\r", skillsrank);
 		}
 		else if (ch->strikemastery >= 1000) {
 			pager_printf_color(ch,
-				"&CSTRIKE MASTERY&B----------&Y[&GAPPRENTICE %d&Y]\n\r", appsrank);
+				"&CSTRIKE MASTERY&B-------------&Y[&GAPPRENTICE %d&Y]\n\r", appsrank);
 		}
 		else {
 			pager_printf_color(ch,
-				"&CSTRIKE MASTERY&B----------&Y[&GNOVICE %d&Y]\n\r", novicesrank);
+				"&CSTRIKE MASTERY&B-------------&Y[&GNOVICE %d&Y]\n\r", novicesrank);
 		}
 		pager_printf_color(ch, "&cTOTAL RANK PROGRESS: &O[&G%d%&O]\n\r", strikepercent);
 		pager_printf_color(ch,
 			"\n\r");
 		if (ch->energymastery >= 10000000) {
 			pager_printf_color(ch,
-				"&CKI MASTERY&B--------------&Y[&GGRANDMASTER %d&Y]\n\r", gmasterkrank);
+				"&CKI MASTERY&B-----------------&Y[&GGRANDMASTER %d&Y]\n\r", gmasterkrank);
 		}
 		else if (ch->energymastery >= 1000000) {
 			pager_printf_color(ch,
-				"&CKI MASTERY&B--------------&Y[&GMASTER %d&Y]\n\r", masterkrank);
+				"&CKI MASTERY&B-----------------&Y[&GMASTER %d&Y]\n\r", masterkrank);
 		}
 		else if (ch->energymastery >= 100000) {
 			pager_printf_color(ch,
-				"&CKI MASTERY&B--------------&Y[&GEXPERT %d&Y]\n\r", expertkrank);
+				"&CKI MASTERY&B-----------------&Y[&GEXPERT %d&Y]\n\r", expertkrank);
 		}
 		else if (ch->energymastery >= 10000) {
 			pager_printf_color(ch,
-				"&CKI MASTERY&B--------------&Y[&GSKILLED %d&Y]\n\r", skillkrank);
+				"&CKI MASTERY&B-----------------&Y[&GSKILLED %d&Y]\n\r", skillkrank);
 		}
 		else if (ch->energymastery >= 1000) {
 			pager_printf_color(ch,
-				"&CKI MASTERY&B--------------&Y[&GAPPRENTICE %d&Y]\n\r", appkrank);
+				"&CKI MASTERY&B-----------------&Y[&GAPPRENTICE %d&Y]\n\r", appkrank);
 		}
 		else {
 			pager_printf_color(ch,
-				"&CKI MASTERY&B--------------&Y[&GNOVICE %d&Y]\n\r", novicekrank);
+				"&CKI MASTERY&B-----------------&Y[&GNOVICE %d&Y]\n\r", novicekrank);
 		}
 		pager_printf_color(ch, "&cTOTAL RANK PROGRESS: &O[&G%d%&O]\n\r", kipercent);
 		pager_printf_color(ch,
 			"\n\r");
 		if (ch->bodymastery >= 10000000) {
 			pager_printf_color(ch,
-				"&CBODY MASTERY&B------------&Y[&GGRANDMASTER %d&Y]\n\r", gmasterbrank);
+				"&CBODY MASTERY&B---------------&Y[&GGRANDMASTER %d&Y]\n\r", gmasterbrank);
 		}
 		else if (ch->bodymastery >= 1000000) {
 			pager_printf_color(ch,
-				"&CBODY MASTERY&B------------&Y[&GMASTER %d&Y]\n\r", masterbrank);
+				"&CBODY MASTERY&B---------------&Y[&GMASTER %d&Y]\n\r", masterbrank);
 		}
 		else if (ch->bodymastery >= 100000) {
 			pager_printf_color(ch,
-				"&CBODY MASTERY&B------------&Y[&GEXPERT %d&Y]\n\r", expertbrank);
+				"&CBODY MASTERY&B---------------&Y[&GEXPERT %d&Y]\n\r", expertbrank);
 		}
 		else if (ch->bodymastery >= 10000) {
 			pager_printf_color(ch,
-				"&CBODY MASTERY&B------------&Y[&GSKILLED %d&Y]\n\r", skillbrank);
+				"&CBODY MASTERY&B---------------&Y[&GSKILLED %d&Y]\n\r", skillbrank);
 		}
 		else if (ch->bodymastery >= 1000) {
 			pager_printf_color(ch,
-				"&CBODY MASTERY&B------------&Y[&GAPPRENTICE %d&Y]\n\r", appbrank);
+				"&CBODY MASTERY&B---------------&Y[&GAPPRENTICE %d&Y]\n\r", appbrank);
 		}
 		else {
 			pager_printf_color(ch,
-				"&CBODY MASTERY&B------------&Y[&GNOVICE %d&Y]\n\r", novicebrank);
+				"&CBODY MASTERY&B---------------&Y[&GNOVICE %d&Y]\n\r", novicebrank);
 		}
 		pager_printf_color(ch, "&cTOTAL RANK PROGRESS: &O[&G%d%&O]\n\r", bodypercent);
 	}

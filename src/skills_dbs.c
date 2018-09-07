@@ -5021,6 +5021,9 @@ do_research(CHAR_DATA * ch, char *argument)
 {
 	char 	arg1[MAX_INPUT_LENGTH];
 	char 	arg2[MAX_INPUT_LENGTH];
+	int		spremaining = 0;
+	int		spcostpow = 0;
+	int		spcosteff = 0;
 	
 	argument = one_argument(argument, arg1);
 	argument = one_argument(argument, arg2);
@@ -5028,6 +5031,55 @@ do_research(CHAR_DATA * ch, char *argument)
 	if (IS_NPC(ch)) {
 		send_to_char("Stop that!\n\r", ch);
 		return;
+	}
+	spremaining = (ch->sptotal - ch->spallocated);
+	if (arg1[0] == '\0' && arg2[0] == '\0') {
+		pager_printf_color(ch, "Research what? You currently have %d Skill Points\n\r", spremaining);
+		send_to_char("syntax: research <skill> <field>\n\r", ch);
+		send_to_char("\n\r", ch);
+		send_to_char("Field being one of:\n\r", ch);
+		send_to_char("   power   efficiency\n\r", ch);
+		return;
+	}
+	if (arg2[0] == '\0') {
+		pager_printf_color(ch, "Research what? You currently have %d Skill Points\n\r", spremaining);
+		send_to_char("syntax: research <skill> <field>\n\r", ch);
+		send_to_char("\n\r", ch);
+		send_to_char("Field being one of:\n\r", ch);
+		send_to_char("   power   efficiency\n\r", ch);
+		return;
+	}
+	if (!str_cmp(arg1, "energyball")) {
+		if (!str_cmp(arg2, "power")) {
+			spcostpow = (ch->energy_ballpower * 5);
+			if (spcostpow < 5)
+				spcostpow = 5;
+			if (spremaining < spcostpow) {
+				send_to_char("You don't have enough SP to do that.\n\r", ch);
+				return;
+			}
+			else {
+				send_to_char("The power of your Energy Ball has increased!\n\r", ch);
+				ch->energy_ballpower += 1;
+				ch->spallocated += spcostpow;
+				return;
+			}		
+		}
+		if (!str_cmp(arg2, "efficiency")) {
+			spcosteff = (ch->energy_balleffic * 5);
+			if (spcosteff < 5)
+				spcosteff = 5;
+			if (spremaining < spcosteff) {
+				send_to_char("You don't have enough SP to do that.\n\r", ch);
+				return;
+			}
+			else {
+				send_to_char("The Ki efficiency of your Energy Ball has increased!\n\r", ch);
+				ch->energy_balleffic += 1;
+				ch->spallocated += spcosteff;
+				return;
+			}		
+		}
 	}
 	return;
 }
