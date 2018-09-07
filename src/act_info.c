@@ -6625,7 +6625,7 @@ do_skills(CHAR_DATA * ch, char *argument) {
 			pager_printf_color(ch,
 				"&CBODY MASTERY&B------------&Y[&GNOVICE %d&Y]\n\r", novicebrank);
 		}
-		pager_printf_color(ch, "&cTOTAL RANK PROGRESS: &O[&G%d%&O]\n\r", kipercent);
+		pager_printf_color(ch, "&cTOTAL RANK PROGRESS: &O[&G%d%&O]\n\r", bodypercent);
 	}
 		if (!str_cmp(arg, "strike")) {
 			pager_printf_color(ch,
