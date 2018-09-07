@@ -6516,7 +6516,7 @@ do_skills(CHAR_DATA * ch, char *argument) {
 		strikepercent = (100 * ch->strikemastery) / 100000000;
 		
 	if (ch->energymastery < 1000)
-		kipercent = (100 * ch->energyemastery) / 1000;
+		kipercent = (100 * ch->energymastery) / 1000;
 	else if (ch->energymastery < 10000)
 		kipercent = (100 * ch->energymastery) / 10000;
 	else if (ch->energymastery < 100000)
