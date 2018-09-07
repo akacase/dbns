@@ -6471,8 +6471,8 @@ do_skills(CHAR_DATA * ch, char *argument) {
 	int		masterbrank = 0;
 	int		gmasterbrank = 0;
 	int		strikepercent = 0;
-	int		kipercent;
-	int		bodypercent;
+	int		kipercent = 0;
+	int		bodypercent = 0;
 	
 	one_argument(argument, arg);
 	
@@ -6514,6 +6514,32 @@ do_skills(CHAR_DATA * ch, char *argument) {
 		strikepercent = (100 * ch->strikemastery) / 10000000;
 	else if (ch->strikemastery < 100000000)
 		strikepercent = (100 * ch->strikemastery) / 100000000;
+		
+	if (ch->energymastery < 1000)
+		kipercent = (100 * ch->energyemastery) / 1000;
+	else if (ch->energymastery < 10000)
+		kipercent = (100 * ch->energymastery) / 10000;
+	else if (ch->energymastery < 100000)
+		kipercent = (100 * ch->energymastery) / 100000;
+	else if (ch->energymastery < 1000000)
+		kipercent = (100 * ch->energymastery) / 1000000;
+	else if (ch->energymastery < 10000000)
+		kipercent = (100 * ch->energymastery) / 10000000;
+	else if (ch->energymastery < 100000000)
+		kipercent = (100 * ch->energymastery) / 100000000;
+		
+	if (ch->bodymastery < 1000)
+		bodypercent = (100 * ch->bodymastery) / 1000;
+	else if (ch->bodymastery < 10000)
+		bodypercent = (100 * ch->bodymastery) / 10000;
+	else if (ch->bodymastery < 100000)
+		bodypercent = (100 * ch->bodymastery) / 100000;
+	else if (ch->bodymastery < 1000000)
+		bodypercent = (100 * ch->bodymastery) / 1000000;
+	else if (ch->bodymastery < 10000000)
+		bodypercent = (100 * ch->bodymastery) / 10000000;
+	else if (ch->strikemastery < 100000000)
+		bodypercent = (100 * ch->bodymastery) / 100000000;
 
 
 	if (argument[0] == '\0') {
@@ -6545,7 +6571,7 @@ do_skills(CHAR_DATA * ch, char *argument) {
 			pager_printf_color(ch,
 				"&CSTRIKE MASTERY&B----------&Y[&GNOVICE %d&Y]\n\r", novicesrank);
 		}
-		pager_printf_color(ch, "&cPROGRESS: &O[&G%d&O]\n\r", strikepercent);
+		pager_printf_color(ch, "&cTOTAL RANK PROGRESS: &O[&G%d%&O]\n\r", strikepercent);
 		pager_printf_color(ch,
 			"\n\r");
 		if (ch->energymastery >= 10000000) {
@@ -6572,6 +6598,7 @@ do_skills(CHAR_DATA * ch, char *argument) {
 			pager_printf_color(ch,
 				"&CKI MASTERY&B--------------&Y[&GNOVICE %d&Y]\n\r", novicekrank);
 		}
+		pager_printf_color(ch, "&cTOTAL RANK PROGRESS: &O[&G%d%&O]\n\r", kipercent);
 		pager_printf_color(ch,
 			"\n\r");
 		if (ch->bodymastery >= 10000000) {
@@ -6598,6 +6625,7 @@ do_skills(CHAR_DATA * ch, char *argument) {
 			pager_printf_color(ch,
 				"&CBODY MASTERY&B------------&Y[&GNOVICE %d&Y]\n\r", novicebrank);
 		}
+		pager_printf_color(ch, "&cTOTAL RANK PROGRESS: &O[&G%d%&O]\n\r", kipercent);
 	}
 		if (!str_cmp(arg, "strike")) {
 			pager_printf_color(ch,
