@@ -1199,7 +1199,7 @@ violence_update(void)
 						ch->pl *= 1.30;
 						ch->powerup += 1;
 						transStatApply(ch, powerupstr, powerupspd, powerupint, powerupcon);
-						if (plmod >= 30 && saiyanTotal < 4000) {
+						if (plmod >= 30 && saiyanTotal > 4000) {
 							xSET_BIT((ch)->affected_by, AFF_SSJ);
 							xREMOVE_BIT((ch)->affected_by, AFF_POWERCHANNEL);
 							act( AT_YELLOW, "Your eyes turn blue, your hair flashes blonde and a fiery golden aura erupts around you!", ch, NULL, NULL, TO_CHAR );
