@@ -1191,13 +1191,15 @@ violence_update(void)
 				sixcon = ch->perm_con;
 				sevencon = ch->perm_con * 1.25;
 				if (!xIS_SET((ch)->affected_by, AFF_SSJ)) {
+					int saiyanTotal = 0;
 					safemaximum = ((get_curr_int(ch) * 0.03) + 1);
+					saiyanTotal = ((ch->perm_str * 2) + (ch->perm_dex * 2) + (ch->perm_int) + (ch->perm_con * 2));
 					if (ch->powerup < safemaximum) {
 						
 						ch->pl *= 1.30;
 						ch->powerup += 1;
 						transStatApply(ch, powerupstr, powerupspd, powerupint, powerupcon);
-						if ((plmod >= 30) && (ch->skillssj1 >= 1)) {
+						if (plmod >= 30 && saiyanTotal < 4000) {
 							xSET_BIT((ch)->affected_by, AFF_SSJ);
 							xREMOVE_BIT((ch)->affected_by, AFF_POWERCHANNEL);
 							act( AT_YELLOW, "Your eyes turn blue, your hair flashes blonde and a fiery golden aura erupts around you!", ch, NULL, NULL, TO_CHAR );
@@ -1210,7 +1212,7 @@ violence_update(void)
 								ch->pcdata->haircolor = 3;
 							}
 						}
-						if ((plmod >= 30) && (ch->skillssj1 < 1)) {
+						if ((plmod >= 30) && (saiyanTotal < 4000) {
 							ch->pl = (ch->exp * 30);
 							act( auraColor, "The raging torrent of ki fades but your power remains.", ch, NULL, NULL, TO_CHAR );
 							act( auraColor, "$n's raging torrent of ki fades away but $s power remains.", ch, NULL, NULL, TO_NOTVICT );
@@ -1238,7 +1240,7 @@ violence_update(void)
 							act( auraColor, "Your body glows faintly.", ch, NULL, NULL, TO_CHAR );
 							act( auraColor, "$n's body glows faintly.", ch, NULL, NULL, TO_NOTVICT );
 						}
-						if ((plmod >= 30) && (ch->skillssj1 < 1)) {
+						if ((plmod >= 30) && (saiyanTotal < 4000)) {
 							ch->pl = (ch->exp * 30);
 							act( auraColor, "The raging torrent of ki fades, but your power remains.", ch, NULL, NULL, TO_CHAR );
 							act( auraColor, "$n's raging torrent of ki fades away, but $s power remains.", ch, NULL, NULL, TO_NOTVICT );
@@ -1333,7 +1335,7 @@ violence_update(void)
 							act( AT_YELLOW, "Your giant muscles tremble, emitting waves of tumultuous energy.", ch, NULL, NULL, TO_CHAR );
 							act( AT_YELLOW, "$n's giant muscles tremble, emitting waves of tumultuous energy.", ch, NULL, NULL, TO_NOTVICT );
 						}
-						if ((plmod >= 200) && (ch->skillssj2 >= 1)) {
+						if (plmod >= 200) {
 							xSET_BIT((ch)->affected_by, AFF_SSJ2);
 							xREMOVE_BIT((ch)->affected_by, AFF_POWERCHANNEL);
 							act( AT_YELLOW, "Your muscles shrink, but in an intense explosion of rage your power grows nonetheless, sending arcing bolts of energy from your body.", ch, NULL, NULL, TO_CHAR );
@@ -1367,7 +1369,7 @@ violence_update(void)
 							act( AT_YELLOW, "You howl with fury as your energy builds, constant strikes of crackling energy suffusing the air.", ch, NULL, NULL, TO_CHAR );
 							act( AT_YELLOW, "$n howls with fury, constant strikes of crackling energy suffusing the air.", ch, NULL, NULL, TO_NOTVICT );
 						}
-						if ((plmod >= 300) && (ch->skillssj3 >= 1)) {
+						if (plmod >= 300) {
 							xSET_BIT((ch)->affected_by, AFF_SSJ3);
 							xREMOVE_BIT((ch)->affected_by, AFF_POWERCHANNEL);
 							act(AT_YELLOW, "An earth-shattering burst of energy expands your aura. Your eyebrows disappear and your hair lengthens, flowing down your back.", ch, NULL, NULL, TO_CHAR);
@@ -1401,7 +1403,7 @@ violence_update(void)
 							act( AT_YELLOW, "The colours of the world seem to fade away against the brilliant light of your aura.", ch, NULL, NULL, TO_CHAR );
 							act( AT_YELLOW, "The colours of the world seem to fade away against the brilliant light of $n's aura.", ch, NULL, NULL, TO_NOTVICT );
 						}
-						if ((plmod >= 450) && (ch->skillssgod >= 1)) {
+						if (plmod >= 450) {
 							xSET_BIT((ch)->affected_by, AFF_SSJ4);
 							xREMOVE_BIT((ch)->affected_by, AFF_POWERCHANNEL);
 							act( AT_RED, "Your aura fades and your hair and eyes return to normal. However, in the next instant something inside you changes.", ch, NULL, NULL, TO_CHAR );
@@ -1436,7 +1438,7 @@ violence_update(void)
 							act( AT_RED, "You stand perfectly calm, your power increasing by the second.", ch, NULL, NULL, TO_CHAR );
 							act( AT_RED, "$n stands perfectly calm, and yet with every second $s power grows.", ch, NULL, NULL, TO_NOTVICT );
 						}
-						if ((plmod >= 600) && (ch->skillssblue >= 1)) {
+						if (plmod >= 600) {
 							xSET_BIT((ch)->affected_by, AFF_SGOD);
 							xREMOVE_BIT((ch)->affected_by, AFF_POWERCHANNEL);
 							act( AT_LBLUE, "Harnessing the secrets of your God Ki, you kindle the flame deep within and surge with newfound power.", ch, NULL, NULL, TO_CHAR );

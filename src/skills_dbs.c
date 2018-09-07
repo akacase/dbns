@@ -440,7 +440,7 @@ transStatApply(CHAR_DATA * ch, int strMod, int spdMod, int intMod,
 void
 rage(CHAR_DATA * ch, CHAR_DATA * victim)
 {
-
+	return;
 	if (!ch->desc)
 		return;
 
@@ -676,7 +676,7 @@ rage(CHAR_DATA * ch, CHAR_DATA * victim)
 void
 rage2(CHAR_DATA * ch, CHAR_DATA * victim)
 {
-	
+	return;
 	if (!ch->desc)
 		return;
 	if (!victim)
@@ -898,7 +898,7 @@ rage2(CHAR_DATA * ch, CHAR_DATA * victim)
 void
 rage3(CHAR_DATA * ch, CHAR_DATA * victim)
 {
-
+	return;
 	if (!ch->desc)
 		return;
 	if (!victim)
@@ -1082,7 +1082,7 @@ rage3(CHAR_DATA * ch, CHAR_DATA * victim)
 void
 rage4(CHAR_DATA * ch, CHAR_DATA * victim)
 {
-	
+	return;
 	if (!ch->desc)
 		return;
 	if (!victim)
@@ -1283,7 +1283,7 @@ rage4(CHAR_DATA * ch, CHAR_DATA * victim)
 void
 rage5(CHAR_DATA * ch, CHAR_DATA * victim)
 {
-	
+	return;
 	if (!ch->desc)
 		return;
 	if (!victim)
@@ -1968,7 +1968,7 @@ void do_powerup(CHAR_DATA *ch, char *argument)
 				send_to_char("You don't even HAVE Saiyan blood, you clown.\n\r", ch);
 				return;
 			}
-			else if (ch->pcdata->learned[gsn_ssj2] < 10) {
+			else if (ch->train < 2610000) {
 				send_to_char("You lack enough control over your power to transform instantly.\n\r", ch);
 				return;
 			}
@@ -2001,7 +2001,7 @@ void do_powerup(CHAR_DATA *ch, char *argument)
 				send_to_char("You don't even HAVE Saiyan blood, you clown.\n\r", ch);
 				return;
 			}
-			else if (ch->pcdata->learned[gsn_ssj3] < 10) {
+			else if (ch->train < 3510000) {
 				send_to_char("You lack enough control over your power to transform instantly.\n\r", ch);
 				return;
 			}
@@ -2042,7 +2042,7 @@ void do_powerup(CHAR_DATA *ch, char *argument)
 				send_to_char("You don't even HAVE Saiyan blood, you clown.\n\r", ch);
 				return;
 			}
-			else if (ch->pcdata->learned[gsn_ssj4] < 10) {
+			else if (ch->train < 4680000) {
 				send_to_char("You lack enough control over your power to transform instantly.\n\r", ch);
 				return;
 			}
@@ -2081,7 +2081,7 @@ void do_powerup(CHAR_DATA *ch, char *argument)
 				send_to_char("You don't even HAVE Saiyan blood, you clown.\n\r", ch);
 				return;
 			}
-			else if (ch->pcdata->learned[gsn_sgod] < 10) {
+			else if (ch->train < 5670000) {
 				send_to_char("You lack enough control over your power to transform instantly.\n\r", ch);
 				return;
 			}
