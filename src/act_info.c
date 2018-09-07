@@ -6506,6 +6506,9 @@ do_skills(CHAR_DATA * ch, char *argument) {
 	expertbrank = (skillbrank / 10);
 	masterbrank = (expertbrank / 10);
 	gmasterbrank = (masterbrank / 10);
+	kilimit = ch->train / 10000;
+	kimult = (float) get_curr_int(ch) / 1000 + 1;
+	kicmult = (float) kilimit / 100 + 1;
 	
 	if (ch->strikemastery < 1000)
 		strikepercent = (100 * ch->strikemastery) / 1000;
@@ -6758,7 +6761,7 @@ do_skills(CHAR_DATA * ch, char *argument) {
 		}
 		if (!str_cmp(arg, "energyball")) {
 			pager_printf_color(ch,
-				"&B------------------&CYENERGY BALL&B-------------------\n\r");
+				"&B------------------&CENERGY BALL&B-------------------\n\r");
 			pager_printf_color(ch,
 				"\n\r");
 			if (ch->skillenergy_ball >= 1) {
@@ -6771,9 +6774,9 @@ do_skills(CHAR_DATA * ch, char *argument) {
 				pager_printf_color(ch,
 					"\n\r");
 				pager_printf_color(ch,
-					"            &CPOWER INVESTED : &Y[&G%d&Y]\n\r", ch->energy_ballpower);
+					" &YPOWER INVESTED : &Y[&G%d&Y]\n\r", ch->energy_ballpower);
 				pager_printf_color(ch,
-					"            &CEFFICIENCY     : &Y[&G%d&Y]\n\r", ch->energy_balleffic);
+					" &YEFFICIENCY     : &Y[&G%d&Y]\n\r", ch->energy_balleffic);
 				pager_printf_color(ch,
 					"&CAverage Base Damage: &Y3\n\r");
 				pager_printf_color(ch,
