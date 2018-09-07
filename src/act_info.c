@@ -6473,6 +6473,11 @@ do_skills(CHAR_DATA * ch, char *argument) {
 	int		strikepercent = 0;
 	int		kipercent = 0;
 	int		bodypercent = 0;
+	int 	dam = 0;
+	int		argdam = 0;
+	int		kilimit = 0;
+	float	kimult = 0;
+	float	kicmult= 0;
 	
 	one_argument(argument, arg);
 	
@@ -6751,6 +6756,35 @@ do_skills(CHAR_DATA * ch, char *argument) {
 			pager_printf_color(ch,
 				"&YSorry, nothing here! ... yet\n\r");
 		}
+		if (!str_cmp(arg, "energyball")) {
+			pager_printf_color(ch,
+				"&B------------------&CYENERGY BALL&B-------------------\n\r");
+			pager_printf_color(ch,
+				"\n\r");
+			if (ch->skillenergy_ball >= 1) {
+				argdam = (3 + ch->energy_ballpower) * kicmult);
+				dam = 1 * (argdam * kimult);
+				pager_printf_color(ch,
+					" &CThe most basic of energy attacks. A tiny ball of energy,\n\r");
+				pager_printf_color(ch,
+					"&Churled at speed at an opponent.\n\r");
+				pager_printf_color(ch,
+					"\n\r");
+				pager_printf_color(ch,
+					"            &CPOWER INVESTED : &Y[&G%d&Y]\n\r", ch->energy_ballpower);
+				pager_printf_color(ch,
+					"            &CEFFICIENCY     : &Y[&G%d&Y]\n\r", ch->energy_balleffic);
+				pager_printf_color(ch,
+					"&CAverage Base Damage: &Y3\n\r");
+				pager_printf_color(ch,
+					"&CYour Average Damage: &Y%d\n\r", dam);
+			}
+			else {
+				pager_printf_color(ch,
+					"&YYou can't view detailed skill information for a skill you don't know!\n\r");
+			}
+		}
+		
 	return;
 }
 
