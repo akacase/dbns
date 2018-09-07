@@ -6762,7 +6762,7 @@ do_skills(CHAR_DATA * ch, char *argument) {
 			pager_printf_color(ch,
 				"\n\r");
 			if (ch->skillenergy_ball >= 1) {
-				argdam = (3 + ch->energy_ballpower) * kicmult);
+				argdam = ((3 + ch->energy_ballpower) * kicmult);
 				dam = 1 * (argdam * kimult);
 				pager_printf_color(ch,
 					" &CThe most basic of energy attacks. A tiny ball of energy,\n\r");
