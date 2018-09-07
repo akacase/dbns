@@ -1212,7 +1212,7 @@ violence_update(void)
 								ch->pcdata->haircolor = 3;
 							}
 						}
-						if ((plmod >= 30) && (saiyanTotal < 4000) {
+						if ((plmod >= 30) && (saiyanTotal < 4000)) {
 							ch->pl = (ch->exp * 30);
 							act( auraColor, "The raging torrent of ki fades but your power remains.", ch, NULL, NULL, TO_CHAR );
 							act( auraColor, "$n's raging torrent of ki fades away but $s power remains.", ch, NULL, NULL, TO_NOTVICT );
