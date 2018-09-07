@@ -6470,7 +6470,7 @@ do_skills(CHAR_DATA * ch, char *argument) {
 	int		expertbrank = 0;
 	int		masterbrank = 0;
 	int		gmasterbrank = 0;
-	int		strikepercent;
+	int		strikepercent = 0;
 	int		kipercent;
 	int		bodypercent;
 	
