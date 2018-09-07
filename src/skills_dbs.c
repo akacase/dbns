@@ -5017,6 +5017,22 @@ do_fly(CHAR_DATA * ch, char *argument)
 }
 
 void
+do_research(CHAR_DATA * ch, char *argument)
+{
+	char 	arg1[MAX_INPUT_LENGTH];
+	char 	arg2[MAX_INPUT_LENGTH];
+	
+	argument = one_argument(argument, arg1);
+	argument = one_argument(argument, arg2);
+	
+	if (IS_NPC(ch)) {
+		send_to_char("Stop that!\n\r", ch);
+		return;
+	}
+	return;
+}
+
+void
 do_energy_ball(CHAR_DATA * ch, char *argument)
 {
 	CHAR_DATA *victim;
@@ -5061,11 +5077,22 @@ do_energy_ball(CHAR_DATA * ch, char *argument)
 
 	if (hitcheck <= 95) {
 		if (!IS_NPC(ch)) {
-			argdam = number_range(2, 4) * kicmult;
+			argdam = ((number_range(2, 4) + ch->energy_ballpower) * kicmult);
 			dam = get_attmod(ch, victim) * (argdam * kimult);
 			stat_train(ch, "int", 5);
 			ch->train += 1;
 			ch->energymastery += 1;
+			if (IS_IMMORTAL(ch)) {
+				if (ch->energymastery >= (ch->spgain * 10)) {
+					send_to_char("You've gained additional SP!\n\r", ch);
+					ch->sptotal += 5;
+					ch->spgain += 1;
+					pager_printf_color(ch,
+						"DEBUG: SP total is now %d\n\r", ch->sptotal);
+					pager_printf_color(ch,
+						"DEBUG: Number of total SP gains is now %d\n\r", ch->spgain);
+				}
+			}
 		}
 		if (IS_NPC(ch)) {
 			argdam = number_range(2, 4);

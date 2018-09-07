@@ -316,6 +316,11 @@ fwrite_char (CHAR_DATA * ch, FILE * fp)
        (ch->in_room == get_room_index (ROOM_VNUM_LIMBO)
 	 && ch->was_in_room) ? ch->was_in_room->vnum : ch->in_room->vnum);
      fprintf (fp, "Worth           %lld\n", ch->worth);
+	 fprintf (fp, "Energy_ballpower           %d\n", ch->energy_ballpower;
+	 fprintf (fp, "Energy_balleffic           %d\n", ch->energy_balleffic;
+	 fprintf (fp, "Sptotal           %d\n", ch->sptotal;
+	 fprintf (fp, "Spgain           %d\n", ch->spgain;
+	 fprintf (fp, "Spallocated           %d\n", ch->spallocated;
 	 fprintf (fp, "Destructive_Wave           %d\n", ch->skilldestructive_wave);
 	 fprintf (fp, "Bash           %d\n", ch->skillbash);
 	 fprintf (fp, "Haymaker           %d\n", ch->skillhaymaker);
@@ -2038,6 +2043,9 @@ fread_char (CHAR_DATA * ch, FILE * fp, bool preload)
 
 	  case 'S':
 	       KEY ("School", ch->school, fread_number (fp));
+	       KEY ("Sptotal", ch->sptotal, fread_number (fp));
+	       KEY ("Spgain", ch->spgain, fread_number (fp));
+	       KEY ("Spallocated", ch->spallocated, fread_number (fp));
 	       KEY ("SD_Charge", ch->pcdata->sd_charge, fread_number (fp));
 	       KEY ("Secondarycolor", ch->pcdata->secondarycolor, fread_number (fp));
 	       KEY ("Sex", ch->sex, fread_number (fp));
@@ -2255,6 +2263,8 @@ fread_char (CHAR_DATA * ch, FILE * fp, bool preload)
 	       KEY ("Energy_Ball", ch->skillenergy_ball, fread_number (fp));
 	       KEY ("Energy_Beam", ch->skillenergy_beam, fread_number (fp));
 	       KEY ("Energy_Disc", ch->skillenergy_disc, fread_number (fp));
+	       KEY ("Energy_ballpower", ch->energy_ballpower, fread_number (fp));
+	       KEY ("Energy_balleffic", ch->energy_balleffic, fread_number (fp));
 	       break;
 
 	  case 'T':

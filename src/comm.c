@@ -2460,6 +2460,11 @@ nanny(DESCRIPTOR_DATA *d, char *argument)
 	ch->gravAcc = 1;
 	ch->gravSetting = 1;
 	ch->gravExp = 1000;
+	ch->energy_ballpower = 0;
+	ch->energy_balleffic = 0;
+	ch->sptotal = 0;
+	ch->spgain = 0;
+	ch->spallocated = 0;
 	ch->school = 0;
 	ch->strikemastery = 0;
 	ch->strikerank = 0;

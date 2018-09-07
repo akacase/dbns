@@ -2663,6 +2663,12 @@ struct char_data {
 	int 	mana;
 	int 	max_mana;
 	int 	max_energy;
+	int		sptotal;
+	int		spgain;
+	int		spallocated;
+/* Entries for increasing skill power */
+	int		energy_ballpower;
+	int		energy_balleffic;
 /* Entries for hardcoded skill tree */
 	sh_int	skilleye_beam;
 	sh_int	skilldestructive_wave;
@@ -5184,6 +5190,7 @@ DECLARE_DO_FUN(do_worth);
 DECLARE_DO_FUN(do_yell);
 DECLARE_DO_FUN(do_zap);
 DECLARE_DO_FUN(do_zones);
+DECLARE_DO_FUN(do_research);
 DECLARE_DO_FUN(do_collide);
 DECLARE_DO_FUN(do_concentrated_beam);
 DECLARE_DO_FUN(do_ecliptic_meteor);

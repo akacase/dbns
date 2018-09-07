@@ -595,6 +595,7 @@ DO_FUN *skill_function( char *name )
       if ( !str_cmp( name, "do_revert_mystic"		  ))    return do_revert_mystic;
       if ( !str_cmp( name, "do_roleplay"                  ))    return do_roleplay;
       if ( !str_cmp( name, "do_reqbio"                    ))    return do_reqbio;
+      if ( !str_cmp( name, "do_research"		  ))	return do_research;
       if ( !str_cmp( name, "do_resetalliances"		  ))	return do_resetalliances;
       if ( !str_cmp( name, "do_racetalk"                  ))    return do_racetalk;
       if ( !str_cmp( name, "do_radar"                     ))    return do_radar;
@@ -1350,6 +1351,7 @@ char *skill_name( DO_FUN *skill )
   if ( skill == do_roleplay                    )    return "do_roleplay";
   if ( skill == do_racetalk                    )    return "do_racetalk";
   if ( skill == do_reqbio                      )    return "do_reqbio";
+  if ( skill == do_research		   )	return "do_research";
   if ( skill == do_resetalliances		   )	return "do_resetalliances";
   if ( skill == do_radar                       )    return "do_radar";
   if ( skill == do_rank                        )    return "do_rank";
