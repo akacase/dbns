@@ -6552,52 +6552,52 @@ do_skills(CHAR_DATA * ch, char *argument) {
 				|| (strikepercent = 39) || (strikepercent = 29) || (strikepercent = 19)
 				|| (strikepercent = 9))
 				pager_printf_color(ch, "&cPROGRESS: &O[&G|||||||||&R-&O]\n\r");
-			else if ((strikepercent = 98) || (strikepercent = 88) || (strikepercent = 78)
+			if ((strikepercent = 98) || (strikepercent = 88) || (strikepercent = 78)
 				|| (strikepercent = 68) || (strikepercent = 58) || (strikepercent = 48)
 				|| (strikepercent = 38) || (strikepercent = 28) || (strikepercent = 18)
 				|| (strikepercent = 8))
 				pager_printf_color(ch, "&cPROGRESS: &O[&G||||||||&R--&O]\n\r");
-			else if ((strikepercent = 97) || (strikepercent = 87) || (strikepercent = 77)
+			if ((strikepercent = 97) || (strikepercent = 87) || (strikepercent = 77)
 				|| (strikepercent = 67) || (strikepercent = 57) || (strikepercent = 47)
 				|| (strikepercent = 37) || (strikepercent = 27) || (strikepercent = 17)
 				|| (strikepercent = 7))
 				pager_printf_color(ch, "&cPROGRESS: &O[&G|||||||&R---&O]\n\r");
-			else if ((strikepercent = 96) || (strikepercent = 86) || (strikepercent = 76)
+			if ((strikepercent = 96) || (strikepercent = 86) || (strikepercent = 76)
 				|| (strikepercent = 66) || (strikepercent = 56) || (strikepercent = 46)
 				|| (strikepercent = 36) || (strikepercent = 26) || (strikepercent = 16)
 				|| (strikepercent = 6))
 				pager_printf_color(ch, "&cPROGRESS: &O[&G||||||&R----&O]\n\r");
-			else if ((strikepercent = 95) || (strikepercent = 85) || (strikepercent = 75)
+			if ((strikepercent = 95) || (strikepercent = 85) || (strikepercent = 75)
 				|| (strikepercent = 65) || (strikepercent = 55) || (strikepercent = 45)
 				|| (strikepercent = 35) || (strikepercent = 25) || (strikepercent = 15)
 				|| (strikepercent = 5))
 				pager_printf_color(ch, "&cPROGRESS: &O[&G|||||&R-----&O]\n\r");
-			else if ((strikepercent = 94) || (strikepercent = 84) || (strikepercent = 74)
+			if ((strikepercent = 94) || (strikepercent = 84) || (strikepercent = 74)
 				|| (strikepercent = 64) || (strikepercent = 54) || (strikepercent = 44)
 				|| (strikepercent = 34) || (strikepercent = 24) || (strikepercent = 14)
 				|| (strikepercent = 4))
 				pager_printf_color(ch, "&cPROGRESS: &O[&G||||&R------&O]\n\r");
-			else if ((strikepercent = 93) || (strikepercent = 83) || (strikepercent = 73)
+			if ((strikepercent = 93) || (strikepercent = 83) || (strikepercent = 73)
 				|| (strikepercent = 63) || (strikepercent = 53) || (strikepercent = 43)
 				|| (strikepercent = 33) || (strikepercent = 23) || (strikepercent = 13)
 				|| (strikepercent = 3))
 				pager_printf_color(ch, "&cPROGRESS: &O[&G|||&R-------&O]\n\r");
-			else if ((strikepercent = 92) || (strikepercent = 82) || (strikepercent = 72)
+			if ((strikepercent = 92) || (strikepercent = 82) || (strikepercent = 72)
 				|| (strikepercent = 62) || (strikepercent = 52) || (strikepercent = 42)
 				|| (strikepercent = 32) || (strikepercent = 22) || (strikepercent = 12)
 				|| (strikepercent = 2))
 				pager_printf_color(ch, "&cPROGRESS: &O[&G||&R--------&O]\n\r");
-			else if ((strikepercent = 91) || (strikepercent = 81) || (strikepercent = 71)
+			if ((strikepercent = 91) || (strikepercent = 81) || (strikepercent = 71)
 				|| (strikepercent = 61) || (strikepercent = 51) || (strikepercent = 41)
 				|| (strikepercent = 31) || (strikepercent = 21) || (strikepercent = 11)
 				|| (strikepercent = 1))
 				pager_printf_color(ch, "&cPROGRESS: &O[&G|&R---------&O]\n\r");
-			else if ((strikepercent = 90) || (strikepercent = 80) || (strikepercent = 70)
+			if ((strikepercent = 90) || (strikepercent = 80) || (strikepercent = 70)
 				|| (strikepercent = 60) || (strikepercent = 50) || (strikepercent = 40)
 				|| (strikepercent = 30) || (strikepercent = 20) || (strikepercent = 10)
 				|| (strikepercent < 1))
 				pager_printf_color(ch, "&cPROGRESS: &O[&R----------&O]\n\r");
-			else if (strikepercent < 10)
+			if (strikepercent < 10)
 				pager_printf_color(ch, "&cPROGRESS: &O[&R----------&O]\n\r");
 		pager_printf_color(ch,
 			"\n\r");
