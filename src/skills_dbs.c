@@ -5166,6 +5166,9 @@ do_research(CHAR_DATA * ch, char *argument)
 		send_to_char("Stop that!\n\r", ch);
 		return;
 	}
+	if (IS_IMMORTAL(ch))
+		pager_printf_color(ch, "DEBUG: weighted training is currently %dx Earth's Gravity\n\r", weightedtraining(ch));
+		
 	spremaining = (ch->sptotal - ch->spallocated);
 	if (arg1[0] == '\0' && arg2[0] == '\0') {
 		pager_printf_color(ch, "Research what? You currently have %d Skill Points\n\r", spremaining);
