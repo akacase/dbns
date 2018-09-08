@@ -2844,7 +2844,8 @@ void do_sting( CHAR_DATA *ch, char *argument )
     return;
 }
 
-void do_bash( CHAR_DATA *ch, char *argument )
+/*
+ void newskilltemplate( CHAR_DATA *ch, char *argument )
 {
 	CHAR_DATA *victim;
 	int 	dam = 0;
@@ -2853,6 +2854,7 @@ void do_bash( CHAR_DATA *ch, char *argument )
 	float	physmult = 0;
 	float	kicmult = 0;
 	int		hitcheck = 0;
+	int		adjcost = 0;
 
 	if (IS_NPC(ch) && is_split(ch)) {
 		if (!ch->master)
@@ -2876,20 +2878,34 @@ void do_bash( CHAR_DATA *ch, char *argument )
 		physmult = (float) get_curr_str(ch) / 950 + 1;
 		kicmult = (float) kilimit / 100 + 1;
 	}
-	if (ch->mana < 16) {
-		send_to_char("You don't have enough energy.\n\r", ch);
-		return;
+	if (!IS_NPC(ch)) {
+		adjcost = 16 * (ch->bashpower - ch->basheffic);
+		if (adjcost < 16)
+			adjcost = 16;
+	}
+	else {
+		adjcost = 1;
+	}
+	if (ch->mana < adjcost) {
+			send_to_char("You don't have enough energy.\n\r", ch);
+			return;
 	}
 	hitcheck = number_range(1, 100);
 
 	WAIT_STATE(ch, 8);
 	if (hitcheck <= 95) {
 		if (!IS_NPC(ch)) {
-			argdam = number_range(10, 12) * kicmult;
+			argdam = ((number_range(10, 12) + ch->bashpower) * kicmult);
 			dam = get_attmod(ch, victim) * (argdam * physmult);
 			stat_train(ch, "str", 10);
 			ch->train += 5;
 			ch->strikemastery += 3;
+			if (ch->energymastery >= (ch->kspgain * 100)) {
+				pager_printf_color(ch,
+					"&CYou gained 5 Skill Points!\n\r");
+				ch->sptotal += 5;
+				ch->kspgain += 1;
+				}
 		}
 		if (IS_NPC(ch)) {
 			dam = get_attmod(ch, victim) * (number_range(10, 12) + (get_curr_str(ch) / 40));
@@ -2917,7 +2933,104 @@ void do_bash( CHAR_DATA *ch, char *argument )
 		    victim, TO_NOTVICT);
 		global_retcode = damage(ch, victim, 0, TYPE_HIT);
 	}
-	ch->mana -= 16;
+	ch->mana -= adjcost;
+	return;
+}
+ 
+
+
+*/
+
+
+void do_bash( CHAR_DATA *ch, char *argument )
+{
+	CHAR_DATA *victim;
+	int 	dam = 0;
+	int		argdam = 0;
+	int		kilimit = 0;
+	float	physmult = 0;
+	float	kicmult = 0;
+	int		hitcheck = 0;
+	int		adjcost = 0;
+
+	if (IS_NPC(ch) && is_split(ch)) {
+		if (!ch->master)
+			return;
+	}
+	if (IS_NPC(ch) && IS_AFFECTED(ch, AFF_CHARM)) {
+		send_to_char("You can't concentrate enough for that.\n\r", ch);
+		return;
+	}
+	if (!IS_NPC(ch)
+	    && (ch->skillbash < 1)) {
+		send_to_char("You're not able to use that skill.\n\r", ch);
+		return;
+	}
+	if ((victim = who_fighting(ch)) == NULL) {
+		send_to_char("You aren't fighting anyone.\n\r", ch);
+		return;
+	}
+	if (!IS_NPC(ch)) {
+		kilimit = ch->train / 10000;
+		physmult = (float) get_curr_str(ch) / 950 + 1;
+		kicmult = (float) kilimit / 100 + 1;
+	}
+	if (!IS_NPC(ch)) {
+		adjcost = 16 * (ch->bashpower - ch->basheffic);
+		if (adjcost < 16)
+			adjcost = 16;
+	}
+	else {
+		adjcost = 1;
+	}
+	if (ch->mana < adjcost) {
+			send_to_char("You don't have enough energy.\n\r", ch);
+			return;
+	}
+	hitcheck = number_range(1, 100);
+
+	WAIT_STATE(ch, 8);
+	if (hitcheck <= 95) {
+		if (!IS_NPC(ch)) {
+			argdam = ((number_range(10, 12) + ch->bashpower) * kicmult);
+			dam = get_attmod(ch, victim) * (argdam * physmult);
+			stat_train(ch, "str", 10);
+			ch->train += 5;
+			ch->strikemastery += 3;
+			if (ch->strikemastery >= (ch->sspgain * 100)) {
+				pager_printf_color(ch,
+					"&CYou gained 5 Skill Points!\n\r");
+				ch->sptotal += 5;
+				ch->sspgain += 1;
+				}
+		}
+		if (IS_NPC(ch)) {
+			dam = get_attmod(ch, victim) * (number_range(10, 12) + (get_curr_str(ch) / 40));
+		}
+		if (ch->charge > 0)
+			dam = chargeDamMult(ch, dam);
+
+		act(AT_YELLOW,
+			"You crash directly into $N, knocking them for a loop! &W[$t]",
+			ch, num_punct(dam), victim, TO_CHAR);
+		act(AT_YELLOW,
+			"$n crashes directly into you, knocking you for a loop! &W[$t]",
+			ch, num_punct(dam), victim, TO_VICT);
+		act(AT_YELLOW,
+			"$n crashes directly into $N, knocking them for a loop! &W[$t]",
+			ch, num_punct(dam), victim, TO_NOTVICT);
+		global_retcode = damage(ch, victim, dam, TYPE_HIT);
+	}
+	else {
+		act(AT_YELLOW, "You missed $N with a barreling collision.", ch,
+		    NULL, victim, TO_CHAR);
+		act(AT_YELLOW, "$n misses you with a barreling collision.", ch, NULL,
+		    victim, TO_VICT);
+		act(AT_YELLOW, "$n missed $N with a barreling collision.", ch, NULL,
+		    victim, TO_NOTVICT);
+		global_retcode = damage(ch, victim, 0, TYPE_HIT);
+	}
+	ch->mana -= adjcost;
 	return;
 }
 

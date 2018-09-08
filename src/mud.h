@@ -2667,8 +2667,68 @@ struct char_data {
 	int		spgain;
 	int		spallocated;
 /* Entries for increasing skill power */
-	int		energy_ballpower;
-	int		energy_balleffic;
+	int	bashpower;
+	int	basheffic;
+	int	crusherballpower;
+	int	crusherballeffic;
+	int	collidepower;
+	int	collideeffic;
+	int	concentrated_beampower;
+	int	concentrated_beameffic;
+
+	int	death_ballpower;
+	int	death_balleffic;
+	int	destructo_discpower;
+	int	destrcuto_disceffic;
+	int	destructive_wavepower;
+	int	destructive_waveeffic;
+
+	int	ecliptic_meteorpower;
+	int	ecliptic_meteoreffic;
+	int	energybeampower;
+	int	energybeameffic;
+	int	eye_beampower;
+	int	eye_beameffic;
+	int	energy_discpower;
+	int	energy_disceffic;
+
+	int	finger_beampower;
+	int	finger_beameffic;
+	int	forcewavepower;
+	int	forcewaveeffic;
+
+	int	gigantic_meteorpower;
+	int	gigantic_meteoreffic;
+	int	gallic_gunpower;
+	int	gallic_guneffic;
+
+	int	haymakerpower;
+	int	haymakereffic;
+
+	int	kamehamehapower;
+	int	kamehamehaeffic;
+	int	kspgain;
+
+	int	lariatpower;
+	int	lariateffic;
+
+	int	meteorpower;
+	int	meteoreffic;
+	int	masenkopower;
+	int	masenkoeffic;
+	int	makosenpower;
+	int	makoseneffic;
+
+	int	punchpower;
+	int	puncheffic;
+
+	int	sbcpower;
+	int	sbceffic;
+	int	shockwavepower;
+	int	shockwaveeffic;
+	int	sspgain;	
+	int	energy_ballpower;
+	int	energy_balleffic;
 /* Entries for hardcoded skill tree */
 	sh_int	skilleye_beam;
 	sh_int	skilldestructive_wave;

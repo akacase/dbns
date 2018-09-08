@@ -316,8 +316,58 @@ fwrite_char (CHAR_DATA * ch, FILE * fp)
        (ch->in_room == get_room_index (ROOM_VNUM_LIMBO)
 	 && ch->was_in_room) ? ch->was_in_room->vnum : ch->in_room->vnum);
      fprintf (fp, "Worth           %lld\n", ch->worth);
+	 fprintf (fp, "Sspgain           %d\n", ch->sspgain;
+	 fprintf (fp, "Kspgain           %d\n", ch->kspgain;
 	 fprintf (fp, "Energy_ballpower           %d\n", ch->energy_ballpower);
 	 fprintf (fp, "Energy_balleffic           %d\n", ch->energy_balleffic);
+	 fprintf (fp, "Crusherballpower           %d\n", ch->crusherballpower ;
+	 fprintf (fp, "Crusherballeffic           %d\n", ch->crusherballeffic;
+	 fprintf (fp, "Meteorpower           %d\n", ch->meteorpower;
+	 fprintf (fp, "Meteoreffic           %d\n", ch->meteoreffic;
+	 fprintf (fp, "Gigantic_meteorpower           %d\n", ch->gigantic_meteorpower;
+	 fprintf (fp, "Gigantic_meteoreffic           %d\n", ch->gigantic_meteoreffic;
+	 fprintf (fp, "Ecliptic_meteorpower           %d\n", ch->ecliptic_meteorpower;
+	 fprintf (fp, "Ecliptic_meteoreffic           %d\n", ch->ecliptic_meteoreffic;
+	 fprintf (fp, "Death_ballpower           %d\n", ch->death_ballpower;
+	 fprintf (fp, "Death_balleffic           %d\n", ch->death_balleffic;
+	 fprintf (fp, "Energybeampower           %d\n", ch->energybeampower;
+	 fprintf (fp, "Energybeameffic           %d\n", ch->energybeameffic;
+	 fprintf (fp, "Eye_beampower           %d\n", ch->eye_beampower;
+	 fprintf (fp, "Eye_beameffic           %d\n", ch->eye_beameffic;
+	 fprintf (fp, "Masenkopower           %d\n", ch->masenkopower;
+	 fprintf (fp, "Masenkoeffic           %d\n", ch->masenkoeffic;
+	 fprintf (fp, "Makosenpower           %d\n", ch->makosenpower;
+	 fprintf (fp, "Makoseneffic           %d\n", ch->makoseneffic;
+	 fprintf (fp, "Sbcpower           %d\n", ch->sbcpower;
+	 fprintf (fp, "Sbceffic           %d\n", ch->sbceffic;
+	 fprintf (fp, "Concentrated_beampower           %d\n", ch->concentrated_beampower;
+	 fprintf (fp, "Concentrated_beameffic           %d\n", ch->concentrated_beameffic;
+	 fprintf (fp, "Kamehamehapower           %d\n", ch->kamehamehapower;
+	 fprintf (fp, "Kamehamehaeffic           %d\n", ch->kamehamehaeffic;
+	 fprintf (fp, "Gallic_gunpower           %d\n", ch->gallic_gunpower;
+	 fprintf (fp, "Gallic_guneffic           %d\n", ch->gallic_guneffic;
+	 fprintf (fp, "Finger_beampower           %d\n", ch->finger_beampower;
+	 fprintf (fp, "Finger_beameffic           %d\n", ch->finger_beameffic;
+	 fprintf (fp, "Destructo_discpower           %d\n", ch->destructo_discpower;
+	 fprintf (fp, "Destructo_disceffic           %d\n", ch->destructo_disceffic;
+	 fprintf (fp, "Destructive_wavepower           %d\n", ch->destructive_wavepower;
+	 fprintf (fp, "Destructive_waveeffic           %d\n", ch->destructive_waveeffic;
+	 fprintf (fp, "Forcewavepower           %d\n", ch->forcewavepower;
+	 fprintf (fp, "Forcewaveeffic           %d\n", ch->forcewaveeffic;
+	 fprintf (fp, "Shockwavepower           %d\n", ch->shockwavepower;
+	 fprintf (fp, "Shockwaveeffic           %d\n", ch->shockwaveeffic;
+	 fprintf (fp, "Energy_discpower           %d\n", ch->energy_discpower;
+	 fprintf (fp, "Energy_disceffic           %d\n", ch->energy_disceffic;
+	 fprintf (fp, "Punchpower           %d\n", ch->punchpower;
+	 fprintf (fp, "Puncheffic           %d\n", ch->puncheffic;
+	 fprintf (fp, "Haymakerpower           %d\n", ch->haymakerpower;
+	 fprintf (fp, "Haymakereffic           %d\n", ch->haymakereffic;
+	 fprintf (fp, "Bashpower           %d\n", ch->bashpower;
+	 fprintf (fp, "Basheffic           %d\n", ch->basheffic;
+	 fprintf (fp, "Collidepower           %d\n", ch->collidepower;
+	 fprintf (fp, "Collideeffic           %d\n", ch->collideeffic;
+	 fprintf (fp, "Lariatpower           %d\n", ch->lariatpower;
+	 fprintf (fp, "Lariateffic           %d\n", ch->lariateffic;
 	 fprintf (fp, "Sptotal           %d\n", ch->sptotal);
 	 fprintf (fp, "Spgain           %d\n", ch->spgain);
 	 fprintf (fp, "Spallocated           %d\n", ch->spallocated);
@@ -1467,6 +1517,8 @@ fread_char (CHAR_DATA * ch, FILE * fp, bool preload)
 	       KEY ("Bamfin", ch->pcdata->bamfin, fread_string_nohash (fp));
 	       KEY ("Bamfout", ch->pcdata->bamfout, fread_string_nohash (fp));
 	       KEY ("Bash", ch->skillbash, fread_number (fp));
+		   KEY ("Bashpower", ch->bashpower, fread_number (fp));
+		   KEY ("Basheffic", ch->basheffic, fread_number (fp));
 	       KEY ("BodyMastery", ch->bodymastery, fread_number (fp));
 	       KEY ("BodyRank", ch->bodyrank, fread_number (fp));
 		   KEY ("Bruiser_Style", ch->skillbruiser_style, fread_number (fp));
@@ -1549,6 +1601,12 @@ fread_char (CHAR_DATA * ch, FILE * fp, bool preload)
 	       KEY ("Collide", ch->skillcollide, fread_number (fp));
 	       KEY ("Concentrated_Beam", ch->skillconcentrated_beam, fread_number (fp));
 	       KEY ("Crusherball", ch->skillcrusherball, fread_number (fp));
+		   KEY ("Crusherballpower", ch->crusherballpower, fread_number (fp));
+		   KEY ("Crusherballeffic", ch->crusherballeffic, fread_number (fp));
+		   KEY ("Collidepower", ch->collidepower, fread_number (fp));
+		   KEY ("Collideeffic", ch->collideeffic, fread_number (fp));
+		   KEY ("Concentrated_beampower", ch->concentrated_beampower, fread_number (fp));
+		   KEY ("Concentrated_beameffic", ch->concentrated_beameffic, fread_number (fp));
 	       if (!str_cmp (word, "Cores")) {
 		    int fm_core = fread_number (fp);
 		    int e_core = fread_number (fp);
@@ -1636,6 +1694,12 @@ fread_char (CHAR_DATA * ch, FILE * fp, bool preload)
 	       KEY ("Dodge", ch->skilldodge, fread_number (fp));
 	       KEY ("Death_Ball", ch->skilldeath_ball, fread_number (fp));
 	       KEY ("Destructo_Disc", ch->skilldestructo_disc, fread_number (fp));
+		   KEY ("Death_ballpower", ch->death_ballpower, fread_number (fp));
+		   KEY ("Death_balleffic", ch->death_balleffic, fread_number (fp));
+		   KEY ("Destructo_discpower", ch->destructo_discpower, fread_number (fp));
+		   KEY ("Destructo_disceffic", ch->destructo_disceffic, fread_number (fp));
+		   KEY ("Destructive_wavepower", ch->destructive_wavepower, fread_number (fp));
+		   KEY ("Destructive_waveeffic", ch->destructive_waveeffic, fread_number (fp));
 	       if (!strcmp (word, "Deity")) {
 		    ch->pcdata->deity_name = fread_string (fp);
 
@@ -1682,6 +1746,10 @@ fread_char (CHAR_DATA * ch, FILE * fp, bool preload)
 	       KEY ("Finger_Beam", ch->skillfinger_beam, fread_number (fp));
 	       KEY ("Forcewave", ch->skillforcewave, fread_number (fp));
 	       KEY ("Finishing_Buster", ch->skillfinishing_buster, fread_number (fp));
+		   KEY ("Finger_beampower", ch->finger_beampower, fread_number (fp));
+		   KEY ("Finger_beameffic", ch->finger_beameffic, fread_number (fp));
+		   KEY ("Forcewavepower", ch->forcewavepower, fread_number (fp));
+		   KEY ("Forcewaveeffic", ch->forcewaveeffic, fread_number (fp));
 	       if (!strcmp (word, "Fused")) {
 		    fMatch = true;
 		    x1 = fread_number (fp);
@@ -1691,6 +1759,10 @@ fread_char (CHAR_DATA * ch, FILE * fp, bool preload)
 	       break;
 
 	  case 'G':
+		   KEY ("Gigantic_meteorpower", ch->gigantic_meteorpower, fread_number (fp));
+		   KEY ("Gigantic_meteoreffic", ch->gigantic_meteoreffic, fread_number (fp));
+		   KEY ("Gallic_gunpower", ch->gallic_gunpower, fread_number (fp));
+		   KEY ("Gallic_guneffic", ch->gallic_guneffic, fread_number (fp));
 	       KEY ("Gallic_Gun", ch->skillgallic_gun, fread_number (fp));
 	       KEY ("Gigantic_Meteor", ch->skillgigantic_meteor, fread_number (fp));
 	       KEY ("Ghost", ch->pcdata->ghost_level, fread_number (fp));
@@ -1723,6 +1795,8 @@ fread_char (CHAR_DATA * ch, FILE * fp, bool preload)
 
 	  case 'H':
 	       KEY ("Haymaker", ch->skillhaymaker, fread_number (fp));
+		   KEY ("Haymakerpower", ch->haymakerpower, fread_number (fp));
+		   KEY ("Haymakereffic", ch->haymakereffic, fread_number (fp));
 	       KEY ("Hybrid_Style", ch->skillhybrid_style, fread_number (fp));
 	       KEY ("Heaven_Splitter", ch->skillheaven_splitter, fread_number (fp));
 	       KEY ("Hells_Flash", ch->skillhells_flash, fread_number (fp));
@@ -1814,6 +1888,9 @@ fread_char (CHAR_DATA * ch, FILE * fp, bool preload)
 	       KEY ("Kaio_Create", ch->skillkaio_create, fread_number (fp));
 	       KEY ("Kaioken", ch->skillkaioken, fread_number (fp));
 	       KEY ("Kamehameha", ch->skillkamehameha, fread_number (fp));
+		   KEY ("Kamehamehapower", ch->kamehamehapower, fread_number (fp));
+		   KEY ("Kamehamehaeffic", ch->kamehamehaeffic, fread_number (fp));
+		   KEY ("Kspgain", ch->kspgain, fread_number (fp));
 	       KEY ("Ki_Absorb", ch->skillki_absorb, fread_number (fp));
 	       KEY ("Ki_Heal", ch->skillki_heal, fread_number (fp));
 	       KEY ("Kairank", ch->kairank, fread_number (fp));
@@ -1832,6 +1909,8 @@ fread_char (CHAR_DATA * ch, FILE * fp, bool preload)
 
 	  case 'L':
 	       KEY ("Lariat", ch->skilllariat, fread_number (fp));
+		   KEY ("Lariatpower", ch->lariatpower, fread_number (fp));
+		   KEY ("Lariateffic", ch->lariateffic, fread_number (fp));
 	       KEY ("LastOn", ch->pcdata->lastlogon, fread_number (fp));
 	       if (!strcmp (word, "LastIntrest")) {
 		    line = fread_line (fp);
@@ -1874,6 +1953,12 @@ fread_char (CHAR_DATA * ch, FILE * fp, bool preload)
 	       KEY ("Makosen", ch->skillmakosen, fread_number (fp));
 	       KEY ("Masenko", ch->skillmasenko, fread_number (fp));
 	       KEY ("Meteor", ch->skillmeteor, fread_number (fp));
+		   KEY ("Meteorpower", ch->meteorpower, fread_number (fp));
+		   KEY ("Meteoreffic", ch->meteoreffic, fread_number (fp));
+		   KEY ("Masenkopower", ch->masenkopower, fread_number (fp));
+		   KEY ("Masenkoeffic", ch->masenkoeffic, fread_number (fp));
+		   KEY ("Makosenpower", ch->makosenpower, fread_number (fp));
+		   KEY ("Makoseneffic", ch->makoseneffic, fread_number (fp));
 	       KEY ("Multidisc", ch->skillmultidisc, fread_number (fp));
 	       KEY ("Multi_Eye_Beam", ch->skillmulti_eye_beam, fread_number (fp));
 	       KEY ("Multi_Finger_Beam", ch->skillmulti_finger_beam, fread_number (fp));
@@ -1944,6 +2029,8 @@ fread_char (CHAR_DATA * ch, FILE * fp, bool preload)
 
 	  case 'P':
 	       KEY ("Punch", ch->skillpunch, fread_number (fp));
+		   KEY ("Punchpower", ch->punchpower, fread_number (fp));
+		   KEY ("Puncheffic", ch->puncheffic, fread_number (fp));
 	       KEY ("Psionic_Blast", ch->skillpsionic_blast, fread_number (fp));
 	       KEY ("Pagerlen", ch->pcdata->pagerlen, fread_number (fp));
 	       KEY ("Password", ch->pcdata->pwd, fread_string_nohash (fp));
@@ -2045,6 +2132,11 @@ fread_char (CHAR_DATA * ch, FILE * fp, bool preload)
 	       KEY ("School", ch->school, fread_number (fp));
 	       KEY ("Sptotal", ch->sptotal, fread_number (fp));
 	       KEY ("Spgain", ch->spgain, fread_number (fp));
+		   KEY ("Sbcpower", ch->sbcpower, fread_number (fp));
+		   KEY ("Sbceffic", ch->sbceffic, fread_number (fp));
+		   KEY ("Shockwavepower", ch->shockwavepower, fread_number (fp));
+		   KEY ("Shockwaveeffic", ch->shockwaveeffic, fread_number (fp));
+		   KEY ("Sspgain", ch->sspgain, fread_number (fp));
 	       KEY ("Spallocated", ch->spallocated, fread_number (fp));
 	       KEY ("SD_Charge", ch->pcdata->sd_charge, fread_number (fp));
 	       KEY ("Secondarycolor", ch->pcdata->secondarycolor, fread_number (fp));
@@ -2265,6 +2357,14 @@ fread_char (CHAR_DATA * ch, FILE * fp, bool preload)
 	       KEY ("Energy_Disc", ch->skillenergy_disc, fread_number (fp));
 	       KEY ("Energy_ballpower", ch->energy_ballpower, fread_number (fp));
 	       KEY ("Energy_balleffic", ch->energy_balleffic, fread_number (fp));
+		   KEY ("Ecliptic_meteorpower", ch->ecliptic_meteorpower, fread_number (fp));
+		   KEY ("Ecliptic_meteoreffic", ch->ecliptic_meteoreffic, fread_number (fp));
+		   KEY ("Energybeampower", ch->energybeampower, fread_number (fp));
+		   KEY ("Energybeameffic", ch->energybeameffic, fread_number (fp));
+		   KEY ("Eye_beampower", ch->eye_beampower, fread_number (fp));
+		   KEY ("Eye_beameffic", ch->eye_beameffic, fread_number (fp));
+		   KEY ("Energy_discpower", ch->energy_discpower, fread_number (fp));
+		   KEY ("Energy_disceffic", ch->energy_disceffic, fread_number (fp));
 	       break;
 
 	  case 'T':

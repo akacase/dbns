@@ -3102,6 +3102,7 @@ do_punch(CHAR_DATA * ch, char *argument)
 	float	physmult = 0;
 	float	kicmult = 0;
 	int		hitcheck = 0;
+	int		adjcost = 0;
 	
 	if (IS_NPC(ch) && is_split(ch)) {
 		if (!ch->master)
@@ -3125,19 +3126,33 @@ do_punch(CHAR_DATA * ch, char *argument)
 		physmult = (float) get_curr_str(ch) / 950 + 1;
 		kicmult = (float) kilimit / 100 + 1;
 	}
-	if (ch->mana < 1) {
-		send_to_char("You don't have enough energy.\n\r", ch);
-		return;
+	if (!IS_NPC(ch)) {
+		adjcost = 1 * (ch->punchpower - ch->puncheffic);
+		if (adjcost < 1)
+			adjcost = 1;
+	}
+	else {
+		adjcost = 1;
+	}
+	if (ch->mana < adjcost) {
+			send_to_char("You don't have enough energy.\n\r", ch);
+			return;
 	}
 	hitcheck = number_range(1, 100);
 	WAIT_STATE(ch, 6);
 	if (hitcheck <= 95) {
 		if (!IS_NPC(ch)) {
-			argdam = number_range(2, 4) * kicmult;
+			argdam = ((number_range(2, 4) + ch->punchpower) * kicmult);
 			dam = get_attmod(ch, victim) * (argdam * physmult);
 			stat_train(ch, "str", 5);
 			ch->train += 1;
 			ch->strikemastery += 1;
+			if (ch->strikemastery >= (ch->sspgain * 100)) {
+				pager_printf_color(ch,
+					"&CYou gained 5 Skill Points!\n\r");
+				ch->sptotal += 5;
+				ch->sspgain += 1;
+				}
 		}
 		if (IS_NPC(ch)) {
 			dam = get_attmod(ch, victim) * (number_range(2, 4) + (get_curr_str(ch) / 50));
@@ -3175,7 +3190,7 @@ do_punch(CHAR_DATA * ch, char *argument)
 		    victim, TO_NOTVICT);
 		global_retcode = damage(ch, victim, 0, TYPE_HIT);
 	}
-	ch->mana -= 1;
+	ch->mana -= adjcost;
 	return;
 }
 
@@ -5050,6 +5065,10 @@ do_research(CHAR_DATA * ch, char *argument)
 		return;
 	}
 	if (!str_cmp(arg1, "energyball")) {
+		if (ch->skillenergy_ball < 1) {
+			send_to_char("You can't research a skill you don't even know!\n\r", ch);
+			return;
+		}
 		if (!str_cmp(arg2, "power")) {
 			spcostpow = (ch->energy_ballpower * 5);
 			if (spcostpow < 5)
@@ -5081,6 +5100,870 @@ do_research(CHAR_DATA * ch, char *argument)
 			}		
 		}
 	}
+	if (!str_cmp(arg1, "crusherball")) {
+		if (ch->skillcrusherball < 1) {
+			send_to_char("You can't research a skill you don't even know!\n\r", ch);
+			return;
+		}
+		if (!str_cmp(arg2, "power")) {
+			spcostpow = (ch->crusherballpower * 10);
+			if (spcostpow < 10)
+				spcostpow = 10;
+			if (spremaining < spcostpow) {
+				send_to_char("You don't have enough SP to do that.\n\r", ch);
+				return;
+			}
+			else {
+				send_to_char("The power of your Crusher Ball has increased!\n\r", ch);
+				ch->crusherballpower += 1;
+				ch->spallocated += spcostpow;
+				return;
+			}		
+		}
+		if (!str_cmp(arg2, "efficiency")) {
+			spcosteff = (ch->crusherballeffic * 10);
+			if (spcosteff < 10)
+				spcosteff = 10;
+			if (spremaining < spcosteff) {
+				send_to_char("You don't have enough SP to do that.\n\r", ch);
+				return;
+			}
+			else {
+				send_to_char("The Ki efficiency of your Crusher Ball has increased!\n\r", ch);
+				ch->crusherballeffic += 1;
+				ch->spallocated += spcosteff;
+				return;
+			}		
+		}
+	}
+	if (!str_cmp(arg1, "meteor")) {
+		if (ch->skillmeteor < 1) {
+			send_to_char("You can't research a skill you don't even know!\n\r", ch);
+			return;
+		}
+		if (!str_cmp(arg2, "power")) {
+			spcostpow = (ch->meteorpower * 15);
+			if (spcostpow < 15)
+				spcostpow = 15;
+			if (spremaining < spcostpow) {
+				send_to_char("You don't have enough SP to do that.\n\r", ch);
+				return;
+			}
+			else {
+				send_to_char("The power of your Meteor has increased!\n\r", ch);
+				ch->meteorpower += 1;
+				ch->spallocated += spcostpow;
+				return;
+			}		
+		}
+		if (!str_cmp(arg2, "efficiency")) {
+			spcosteff = (ch->meteoreffic * 15);
+			if (spcosteff < 15)
+				spcosteff = 15;
+			if (spremaining < spcosteff) {
+				send_to_char("You don't have enough SP to do that.\n\r", ch);
+				return;
+			}
+			else {
+				send_to_char("The Ki efficiency of your Meteor has increased!\n\r", ch);
+				ch->meteoreffic += 1;
+				ch->spallocated += spcosteff;
+				return;
+			}		
+		}
+	}
+	if (!str_cmp(arg1, "giganticmeteor")) {
+		if (ch->skillgigantic_meteor < 1) {
+			send_to_char("You can't research a skill you don't even know!\n\r", ch);
+			return;
+		}
+		if (!str_cmp(arg2, "power")) {
+			spcostpow = (ch->gigantic_meteorpower * 20);
+			if (spcostpow < 20)
+				spcostpow = 20;
+			if (spremaining < spcostpow) {
+				send_to_char("You don't have enough SP to do that.\n\r", ch);
+				return;
+			}
+			else {
+				send_to_char("The power of your Gigantic Meteor has increased!\n\r", ch);
+				ch->gigantic_meteorpower += 1;
+				ch->spallocated += spcostpow;
+				return;
+			}		
+		}
+		if (!str_cmp(arg2, "efficiency")) {
+			spcosteff = (ch->gigantic_meteoreffic * 20);
+			if (spcosteff < 20)
+				spcosteff = 20;
+			if (spremaining < spcosteff) {
+				send_to_char("You don't have enough SP to do that.\n\r", ch);
+				return;
+			}
+			else {
+				send_to_char("The Ki efficiency of your Gigantic Meteor has increased!\n\r", ch);
+				ch->gigantic_meteoreffic += 1;
+				ch->spallocated += spcosteff;
+				return;
+			}		
+		}
+	}
+	if (!str_cmp(arg1, "eclipticmeteor")) {
+		if (ch->skillecliptic_meteor < 1) {
+			send_to_char("You can't research a skill you don't even know!\n\r", ch);
+			return;
+		}
+		if (!str_cmp(arg2, "power")) {
+			spcostpow = (ch->ecliptic_meteorpower * 25);
+			if (spcostpow < 25)
+				spcostpow = 25;
+			if (spremaining < spcostpow) {
+				send_to_char("You don't have enough SP to do that.\n\r", ch);
+				return;
+			}
+			else {
+				send_to_char("The power of your Ecliptic Meteor has increased!\n\r", ch);
+				ch->ecliptic_meteorpower += 1;
+				ch->spallocated += spcostpow;
+				return;
+			}		
+		}
+		if (!str_cmp(arg2, "efficiency")) {
+			spcosteff = (ch->ecliptic_meteoreffic * 25);
+			if (spcosteff < 25)
+				spcosteff = 25;
+			if (spremaining < spcosteff) {
+				send_to_char("You don't have enough SP to do that.\n\r", ch);
+				return;
+			}
+			else {
+				send_to_char("The Ki efficiency of your Ecliptic Meteor has increased!\n\r", ch);
+				ch->ecliptic_meteoreffic += 1;
+				ch->spallocated += spcosteff;
+				return;
+			}		
+		}
+	}
+	if (!str_cmp(arg1, "deathball")) {
+		if (ch->skilldeath_ball < 1) {
+			send_to_char("You can't research a skill you don't even know!\n\r", ch);
+			return;
+		}
+		if (!str_cmp(arg2, "power")) {
+			spcostpow = (ch->death_ballpower * 25);
+			if (spcostpow < 25)
+				spcostpow = 25;
+			if (spremaining < spcostpow) {
+				send_to_char("You don't have enough SP to do that.\n\r", ch);
+				return;
+			}
+			else {
+				send_to_char("The power of your Death Ball has increased!\n\r", ch);
+				ch->death_ballpower += 1;
+				ch->spallocated += spcostpow;
+				return;
+			}		
+		}
+		if (!str_cmp(arg2, "efficiency")) {
+			spcosteff = (ch->death_balleffic * 25);
+			if (spcosteff < 25)
+				spcosteff = 25;
+			if (spremaining < spcosteff) {
+				send_to_char("You don't have enough SP to do that.\n\r", ch);
+				return;
+			}
+			else {
+				send_to_char("The Ki efficiency of your Death Ball has increased!\n\r", ch);
+				ch->death_balleffic += 1;
+				ch->spallocated += spcosteff;
+				return;
+			}		
+		}
+	}
+	if (!str_cmp(arg1, "energybeam")) {
+		if (ch->skillenergy_beam < 1) {
+			send_to_char("You can't research a skill you don't even know!\n\r", ch);
+			return;
+		}
+		if (!str_cmp(arg2, "power")) {
+			spcostpow = (ch->energybeampower * 10);
+			if (spcostpow < 10)
+				spcostpow = 10;
+			if (spremaining < spcostpow) {
+				send_to_char("You don't have enough SP to do that.\n\r", ch);
+				return;
+			}
+			else {
+				send_to_char("The power of your Energy Beam has increased!\n\r", ch);
+				ch->energybeampower += 1;
+				ch->spallocated += spcostpow;
+				return;
+			}		
+		}
+		if (!str_cmp(arg2, "efficiency")) {
+			spcosteff = (ch->energybeameffic * 10);
+			if (spcosteff < 10)
+				spcosteff = 10;
+			if (spremaining < spcosteff) {
+				send_to_char("You don't have enough SP to do that.\n\r", ch);
+				return;
+			}
+			else {
+				send_to_char("The Ki efficiency of your Energy Beam has increased!\n\r", ch);
+				ch->energybeameffic += 1;
+				ch->spallocated += spcosteff;
+				return;
+			}		
+		}
+	}
+	if (!str_cmp(arg1, "concentratedbeam")) {
+		if (ch->skillconcentrated_beam < 1) {
+			send_to_char("You can't research a skill you don't even know!\n\r", ch);
+			return;
+		}
+		if (!str_cmp(arg2, "power")) {
+			spcostpow = (ch->concentrated_beampower * 10);
+			if (spcostpow < 10)
+				spcostpow = 10;
+			if (spremaining < spcostpow) {
+				send_to_char("You don't have enough SP to do that.\n\r", ch);
+				return;
+			}
+			else {
+				send_to_char("The power of your Concentrated Beam has increased!\n\r", ch);
+				ch->concentrated_beampower += 1;
+				ch->spallocated += spcostpow;
+				return;
+			}		
+		}
+		if (!str_cmp(arg2, "efficiency")) {
+			spcosteff = (ch->concentrated_beameffic * 10);
+			if (spcosteff < 10)
+				spcosteff = 10;
+			if (spremaining < spcosteff) {
+				send_to_char("You don't have enough SP to do that.\n\r", ch);
+				return;
+			}
+			else {
+				send_to_char("The Ki efficiency of your Concentrated Beam has increased!\n\r", ch);
+				ch->concentrated_beameffic += 1;
+				ch->spallocated += spcosteff;
+				return;
+			}
+		}
+	}
+	if (!str_cmp(arg1, "punch")) {
+		if (ch->skillpunch < 1) {
+			send_to_char("You can't research a skill you don't even know!\n\r", ch);
+			return;
+		}
+		if (!str_cmp(arg2, "power")) {
+			spcostpow = (ch->punchpower * 5);
+			if (spcostpow < 5)
+				spcostpow = 5;
+			if (spremaining < spcostpow) {
+				send_to_char("You don't have enough SP to do that.\n\r", ch);
+				return;
+			}
+			else {
+				send_to_char("The power of your Punch has increased!\n\r", ch);
+				ch->punchpower += 1;
+				ch->spallocated += spcostpow;
+				return;
+			}		
+		}
+		if (!str_cmp(arg2, "efficiency")) {
+			spcosteff = (ch->puncheffic * 5);
+			if (spcosteff < 5)
+				spcosteff = 5;
+			if (spremaining < spcosteff) {
+				send_to_char("You don't have enough SP to do that.\n\r", ch);
+				return;
+			}
+			else {
+				send_to_char("The Ki efficiency of your Punch has increased!\n\r", ch);
+				ch->puncheffic += 1;
+				ch->spallocated += spcosteff;
+				return;
+			}		
+		}
+	}
+	if (!str_cmp(arg1, "haymaker")) {
+		if (ch->skillhaymaker < 1) {
+			send_to_char("You can't research a skill you don't even know!\n\r", ch);
+			return;
+		}
+		if (!str_cmp(arg2, "power")) {
+			spcostpow = (ch->energy_ballpower * 10);
+			if (spcostpow < 10)
+				spcostpow = 10;
+			if (spremaining < spcostpow) {
+				send_to_char("You don't have enough SP to do that.\n\r", ch);
+				return;
+			}
+			else {
+				send_to_char("The power of your Haymaker has increased!\n\r", ch);
+				ch->energy_ballpower += 1;
+				ch->spallocated += spcostpow;
+				return;
+			}		
+		}
+		if (!str_cmp(arg2, "efficiency")) {
+			spcosteff = (ch->energy_balleffic * 10);
+			if (spcosteff < 10)
+				spcosteff = 10;
+			if (spremaining < spcosteff) {
+				send_to_char("You don't have enough SP to do that.\n\r", ch);
+				return;
+			}
+			else {
+				send_to_char("The Ki efficiency of your Haymaker has increased!\n\r", ch);
+				ch->energy_balleffic += 1;
+				ch->spallocated += spcosteff;
+				return;
+			}		
+		}
+	}
+	if (!str_cmp(arg1, "bash")) {
+		if (ch->skillbash < 1) {
+			send_to_char("You can't research a skill you don't even know!\n\r", ch);
+			return;
+		}
+		if (!str_cmp(arg2, "power")) {
+			spcostpow = (ch->bashpower * 10);
+			if (spcostpow < 10)
+				spcostpow = 10;
+			if (spremaining < spcostpow) {
+				send_to_char("You don't have enough SP to do that.\n\r", ch);
+				return;
+			}
+			else {
+				send_to_char("The power of your Bash has increased!\n\r", ch);
+				ch->bashpower += 1;
+				ch->spallocated += spcostpow;
+				return;
+			}		
+		}
+		if (!str_cmp(arg2, "efficiency")) {
+			spcosteff = (ch->basheffic * 10);
+			if (spcosteff < 10)
+				spcosteff = 10;
+			if (spremaining < spcosteff) {
+				send_to_char("You don't have enough SP to do that.\n\r", ch);
+				return;
+			}
+			else {
+				send_to_char("The Ki efficiency of your Bash has increased!\n\r", ch);
+				ch->basheffic += 1;
+				ch->spallocated += spcosteff;
+				return;
+			}		
+		}
+	}
+	if (!str_cmp(arg1, "collide")) {
+		if (ch->skillcollide < 1) {
+			send_to_char("You can't research a skill you don't even know!\n\r", ch);
+			return;
+		}
+		if (!str_cmp(arg2, "power")) {
+			spcostpow = (ch->collidepower * 15);
+			if (spcostpow < 15)
+				spcostpow = 15;
+			if (spremaining < spcostpow) {
+				send_to_char("You don't have enough SP to do that.\n\r", ch);
+				return;
+			}
+			else {
+				send_to_char("The power of your Collide has increased!\n\r", ch);
+				ch->collidepower += 1;
+				ch->spallocated += spcostpow;
+				return;
+			}		
+		}
+		if (!str_cmp(arg2, "efficiency")) {
+			spcosteff = (ch->collideeffic * 15);
+			if (spcosteff < 15)
+				spcosteff = 15;
+			if (spremaining < spcosteff) {
+				send_to_char("You don't have enough SP to do that.\n\r", ch);
+				return;
+			}
+			else {
+				send_to_char("The Ki efficiency of your Collide has increased!\n\r", ch);
+				ch->collideeffic += 1;
+				ch->spallocated += spcosteff;
+				return;
+			}		
+		}
+	}
+	if (!str_cmp(arg1, "lariat")) {
+		if (ch->skilllariat < 1) {
+			send_to_char("You can't research a skill you don't even know!\n\r", ch);
+			return;
+		}
+		if (!str_cmp(arg2, "power")) {
+			spcostpow = (ch->lariatpower * 20);
+			if (spcostpow < 20)
+				spcostpow = 20;
+			if (spremaining < spcostpow) {
+				send_to_char("You don't have enough SP to do that.\n\r", ch);
+				return;
+			}
+			else {
+				send_to_char("The power of your Lariat has increased!\n\r", ch);
+				ch->lariatpower += 1;
+				ch->spallocated += spcostpow;
+				return;
+			}		
+		}
+		if (!str_cmp(arg2, "efficiency")) {
+			spcosteff = (ch->lariateffic * 20);
+			if (spcosteff < 20)
+				spcosteff = 20;
+			if (spremaining < spcosteff) {
+				send_to_char("You don't have enough SP to do that.\n\r", ch);
+				return;
+			}
+			else {
+				send_to_char("The Ki efficiency of your Lariat has increased!\n\r", ch);
+				ch->lariateffic += 1;
+				ch->spallocated += spcosteff;
+				return;
+			}		
+		}
+	}
+	if (!str_cmp(arg1, "eyebeam")) {
+		if (ch->skilleye_beam < 1) {
+			send_to_char("You can't research a skill you don't even know!\n\r", ch);
+			return;
+		}
+		if (!str_cmp(arg2, "power")) {
+			spcostpow = (ch->eye_beampower * 10);
+			if (spcostpow < 10)
+				spcostpow = 10;
+			if (spremaining < spcostpow) {
+				send_to_char("You don't have enough SP to do that.\n\r", ch);
+				return;
+			}
+			else {
+				send_to_char("The power of your Eyebeam has increased!\n\r", ch);
+				ch->eye_beampower += 1;
+				ch->spallocated += spcostpow;
+				return;
+			}		
+		}
+		if (!str_cmp(arg2, "efficiency")) {
+			spcosteff = (ch->eye_beameffic * 10);
+			if (spcosteff < 10)
+				spcosteff = 10;
+			if (spremaining < spcosteff) {
+				send_to_char("You don't have enough SP to do that.\n\r", ch);
+				return;
+			}
+			else {
+				send_to_char("The Ki efficiency of your Eyebeam has increased!\n\r", ch);
+				ch->eye_beameffic += 1;
+				ch->spallocated += spcosteff;
+				return;
+			}		
+		}
+	}
+	if (!str_cmp(arg1, "energydisc")) {
+		if (ch->skillenergy_disc < 1) {
+			send_to_char("You can't research a skill you don't even know!\n\r", ch);
+			return;
+		}
+		if (!str_cmp(arg2, "power")) {
+			spcostpow = (ch->energy_discpower * 10);
+			if (spcostpow < 10)
+				spcostpow = 10;
+			if (spremaining < spcostpow) {
+				send_to_char("You don't have enough SP to do that.\n\r", ch);
+				return;
+			}
+			else {
+				send_to_char("The power of your Energy Disc has increased!\n\r", ch);
+				ch->energy_discpower += 1;
+				ch->spallocated += spcostpow;
+				return;
+			}
+		}
+		if (!str_cmp(arg2, "efficiency")) {
+			spcosteff = (ch->energy_disceffic * 10);
+			if (spcosteff < 10)
+				spcosteff = 10;
+			if (spremaining < spcosteff) {
+				send_to_char("You don't have enough SP to do that.\n\r", ch);
+				return;
+			}
+			else {
+				send_to_char("The Ki efficiency of your Energy Disc has increased!\n\r", ch);
+				ch->energy_disceffic += 1;
+				ch->spallocated += spcosteff;
+				return;
+			}		
+		}
+	}
+	if (!str_cmp(arg1, "destructivewave")) {
+		if (ch->skilldestructive_wave < 1) {
+			send_to_char("You can't research a skill you don't even know!\n\r", ch);
+			return;
+		}
+		if (!str_cmp(arg2, "power")) {
+			spcostpow = (ch->destructive_wavepower * 15);
+			if (spcostpow < 15)
+				spcostpow = 15;
+			if (spremaining < spcostpow) {
+				send_to_char("You don't have enough SP to do that.\n\r", ch);
+				return;
+			}
+			else {
+				send_to_char("The power of your Destructive Wave has increased!\n\r", ch);
+				ch->destructive_wavepower += 1;
+				ch->spallocated += spcostpow;
+				return;
+			}		
+		}
+		if (!str_cmp(arg2, "efficiency")) {
+			spcosteff = (ch->destructive_waveeffic * 15);
+			if (spcosteff < 15)
+				spcosteff = 15;
+			if (spremaining < spcosteff) {
+				send_to_char("You don't have enough SP to do that.\n\r", ch);
+				return;
+			}
+			else {
+				send_to_char("The Ki efficiency of your Destructive Wave has increased!\n\r", ch);
+				ch->destructive_waveeffic += 1;
+				ch->spallocated += spcosteff;
+				return;
+			}		
+		}
+	}
+	if (!str_cmp(arg1, "forcewave")) {
+		if (ch->skillhaymaker < 1) {
+			send_to_char("You can't research a skill you don't even know!\n\r", ch);
+			return;
+		}
+		if (!str_cmp(arg2, "power")) {
+			spcostpow = (ch->forcewavepower * 15);
+			if (spcostpow < 15)
+				spcostpow = 15;
+			if (spremaining < spcostpow) {
+				send_to_char("You don't have enough SP to do that.\n\r", ch);
+				return;
+			}
+			else {
+				send_to_char("The power of your Forcewave has increased!\n\r", ch);
+				ch->forcewavepower += 1;
+				ch->spallocated += spcostpow;
+				return;
+			}		
+		}
+		if (!str_cmp(arg2, "efficiency")) {
+			spcosteff = (ch->forcewaveeffic * 15);
+			if (spcosteff < 15)
+				spcosteff = 15;
+			if (spremaining < spcosteff) {
+				send_to_char("You don't have enough SP to do that.\n\r", ch);
+				return;
+			}
+			else {
+				send_to_char("The Ki efficiency of your Forcewave has increased!\n\r", ch);
+				ch->forcewaveeffic += 1;
+				ch->spallocated += spcosteff;
+				return;
+			}		
+		}
+	}
+	if (!str_cmp(arg1, "destructodisc")) {
+		if (ch->skilldestructo_disc < 1) {
+			send_to_char("You can't research a skill you don't even know!\n\r", ch);
+			return;
+		}
+		if (!str_cmp(arg2, "power")) {
+			spcostpow = (ch->destructo_discpower * 15);
+			if (spcostpow < 15)
+				spcostpow = 15;
+			if (spremaining < spcostpow) {
+				send_to_char("You don't have enough SP to do that.\n\r", ch);
+				return;
+			}
+			else {
+				send_to_char("The power of your Destructo Disc has increased!\n\r", ch);
+				ch->destructo_discpower += 1;
+				ch->spallocated += spcostpow;
+				return;
+			}		
+		}
+		if (!str_cmp(arg2, "efficiency")) {
+			spcosteff = (ch->destructo_disceffic * 15);
+			if (spcosteff < 15)
+				spcosteff = 15;
+			if (spremaining < spcosteff) {
+				send_to_char("You don't have enough SP to do that.\n\r", ch);
+				return;
+			}
+			else {
+				send_to_char("The Ki efficiency of your Destructo Disc has increased!\n\r", ch);
+				ch->destructo_disceffic += 1;
+				ch->spallocated += spcosteff;
+				return;
+			}		
+		}
+	}
+	if (!str_cmp(arg1, "masenko")) {
+		if (ch->skillmasenko < 1) {
+			send_to_char("You can't research a skill you don't even know!\n\r", ch);
+			return;
+		}
+		if (!str_cmp(arg2, "power")) {
+			spcostpow = (ch->masenkopower * 15);
+			if (spcostpow < 15)
+				spcostpow = 15;
+			if (spremaining < spcostpow) {
+				send_to_char("You don't have enough SP to do that.\n\r", ch);
+				return;
+			}
+			else {
+				send_to_char("The power of your Masenko has increased!\n\r", ch);
+				ch->masenkopower += 1;
+				ch->spallocated += spcostpow;
+				return;
+			}		
+		}
+		if (!str_cmp(arg2, "efficiency")) {
+			spcosteff = (ch->masenkoeffic * 15);
+			if (spcosteff < 15)
+				spcosteff = 15;
+			if (spremaining < spcosteff) {
+				send_to_char("You don't have enough SP to do that.\n\r", ch);
+				return;
+			}
+			else {
+				send_to_char("The Ki efficiency of your Masenko has increased!\n\r", ch);
+				ch->masenkoeffic += 1;
+				ch->spallocated += spcosteff;
+				return;
+			}		
+		}
+	}
+	if (!str_cmp(arg1, "makosen")) {
+		if (ch->skillmakosen < 1) {
+			send_to_char("You can't research a skill you don't even know!\n\r", ch);
+			return;
+		}
+		if (!str_cmp(arg2, "power")) {
+			spcostpow = (ch->makosenpower * 15);
+			if (spcostpow < 15)
+				spcostpow = 15;
+			if (spremaining < spcostpow) {
+				send_to_char("You don't have enough SP to do that.\n\r", ch);
+				return;
+			}
+			else {
+				send_to_char("The power of your Makosen has increased!\n\r", ch);
+				ch->makosenpower += 1;
+				ch->spallocated += spcostpow;
+				return;
+			}		
+		}
+		if (!str_cmp(arg2, "efficiency")) {
+			spcosteff = (ch->makoseneffic * 15);
+			if (spcosteff < 15)
+				spcosteff = 15;
+			if (spremaining < spcosteff) {
+				send_to_char("You don't have enough SP to do that.\n\r", ch);
+				return;
+			}
+			else {
+				send_to_char("The Ki efficiency of your Makosen has increased!\n\r", ch);
+				ch->makoseneffic += 1;
+				ch->spallocated += spcosteff;
+				return;
+			}		
+		}
+	}
+	if (!str_cmp(arg1, "sbc")) {
+		if (ch->skillsbc < 1) {
+			send_to_char("You can't research a skill you don't even know!\n\r", ch);
+			return;
+		}
+		if (!str_cmp(arg2, "power")) {
+			spcostpow = (ch->sbcpower * 20);
+			if (spcostpow < 20)
+				spcostpow = 20;
+			if (spremaining < spcostpow) {
+				send_to_char("You don't have enough SP to do that.\n\r", ch);
+				return;
+			}
+			else {
+				send_to_char("The power of your Special Beam Cannon has increased!\n\r", ch);
+				ch->sbcpower += 1;
+				ch->spallocated += spcostpow;
+				return;
+			}		
+		}
+		if (!str_cmp(arg2, "efficiency")) {
+			spcosteff = (ch->sbceffic * 20);
+			if (spcosteff < 20)
+				spcosteff = 20;
+			if (spremaining < spcosteff) {
+				send_to_char("You don't have enough SP to do that.\n\r", ch);
+				return;
+			}
+			else {
+				send_to_char("The Ki efficiency of your Special Beam Cannon has increased!\n\r", ch);
+				ch->sbceffic += 1;
+				ch->spallocated += spcosteff;
+				return;
+			}		
+		}
+	}
+	if (!str_cmp(arg1, "fingerbeam")) {
+		if (ch->skillfinger_beam < 1) {
+			send_to_char("You can't research a skill you don't even know!\n\r", ch);
+			return;
+		}
+		if (!str_cmp(arg2, "power")) {
+			spcostpow = (ch->finger_beampower * 20);
+			if (spcostpow < 20)
+				spcostpow = 20;
+			if (spremaining < spcostpow) {
+				send_to_char("You don't have enough SP to do that.\n\r", ch);
+				return;
+			}
+			else {
+				send_to_char("The power of your Finger Beam has increased!\n\r", ch);
+				ch->finger_beampower += 1;
+				ch->spallocated += spcostpow;
+				return;
+			}		
+		}
+		if (!str_cmp(arg2, "efficiency")) {
+			spcosteff = (ch->finger_beameffic * 20);
+			if (spcosteff < 20)
+				spcosteff = 20;
+			if (spremaining < spcosteff) {
+				send_to_char("You don't have enough SP to do that.\n\r", ch);
+				return;
+			}
+			else {
+				send_to_char("The Ki efficiency of your Finger Beam has increased!\n\r", ch);
+				ch->finger_beameffic += 1;
+				ch->spallocated += spcosteff;
+				return;
+			}		
+		}
+	}
+	if (!str_cmp(arg1, "kamehameha")) {
+		if (ch->skillkamehameha < 1) {
+			send_to_char("You can't research a skill you don't even know!\n\r", ch);
+			return;
+		}
+		if (!str_cmp(arg2, "power")) {
+			spcostpow = (ch->kamehamehapower * 20);
+			if (spcostpow < 20)
+				spcostpow = 20;
+			if (spremaining < spcostpow) {
+				send_to_char("You don't have enough SP to do that.\n\r", ch);
+				return;
+			}
+			else {
+				send_to_char("The power of your Kamehameha has increased!\n\r", ch);
+				ch->kamehamehapower += 1;
+				ch->spallocated += spcostpow;
+				return;
+			}		
+		}
+		if (!str_cmp(arg2, "efficiency")) {
+			spcosteff = (ch->kamehamehaeffic * 20);
+			if (spcosteff < 20)
+				spcosteff = 20;
+			if (spremaining < spcosteff) {
+				send_to_char("You don't have enough SP to do that.\n\r", ch);
+				return;
+			}
+			else {
+				send_to_char("The Ki efficiency of your Kamehameha has increased!\n\r", ch);
+				ch->kamehamehaeffic += 1;
+				ch->spallocated += spcosteff;
+				return;
+			}		
+		}
+	}
+	if (!str_cmp(arg1, "shockwave")) {
+		if (ch->skillshockwave < 1) {
+			send_to_char("You can't research a skill you don't even know!\n\r", ch);
+			return;
+		}
+		if (!str_cmp(arg2, "power")) {
+			spcostpow = (ch->shockwavepower * 20);
+			if (spcostpow < 20)
+				spcostpow = 20;
+			if (spremaining < spcostpow) {
+				send_to_char("You don't have enough SP to do that.\n\r", ch);
+				return;
+			}
+			else {
+				send_to_char("The power of your Shockwave has increased!\n\r", ch);
+				ch->shockwavepower += 1;
+				ch->spallocated += spcostpow;
+				return;
+			}		
+		}
+		if (!str_cmp(arg2, "efficiency")) {
+			spcosteff = (ch->shockwaveeffic * 20);
+			if (spcosteff < 20)
+				spcosteff = 20;
+			if (spremaining < spcosteff) {
+				send_to_char("You don't have enough SP to do that.\n\r", ch);
+				return;
+			}
+			else {
+				send_to_char("The Ki efficiency of your Shockwave has increased!\n\r", ch);
+				ch->shockwaveeffic += 1;
+				ch->spallocated += spcosteff;
+				return;
+			}		
+		}
+	}
+	if (!str_cmp(arg1, "gallicgun")) {
+		if (ch->skillgallic_gun < 1) {
+			send_to_char("You can't research a skill you don't even know!\n\r", ch);
+			return;
+		}
+		if (!str_cmp(arg2, "power")) {
+			spcostpow = (ch->gallic_gunpower * 20);
+			if (spcostpow < 20)
+				spcostpow = 20;
+			if (spremaining < spcostpow) {
+				send_to_char("You don't have enough SP to do that.\n\r", ch);
+				return;
+			}
+			else {
+				send_to_char("The power of your Gallic Gun has increased!\n\r", ch);
+				ch->gallic_gunpower += 1;
+				ch->spallocated += spcostpow;
+				return;
+			}		
+		}
+		if (!str_cmp(arg2, "efficiency")) {
+			spcosteff = (ch->gallic_guneffic * 20);
+			if (spcosteff < 20)
+				spcosteff = 20;
+			if (spremaining < spcosteff) {
+				send_to_char("You don't have enough SP to do that.\n\r", ch);
+				return;
+			}
+			else {
+				send_to_char("The Ki efficiency of your Gallic Gun has increased!\n\r", ch);
+				ch->gallic_guneffic += 1;
+				ch->spallocated += spcosteff;
+				return;
+			}		
+		}
+	}
 	return;
 }
 
@@ -5094,6 +5977,7 @@ do_energy_ball(CHAR_DATA * ch, char *argument)
 	float	kimult = 0;
 	float	kicmult= 0;
 	int		hitcheck = 0;
+	int		adjcost = 0;
 	
 
 	sh_int 	z = get_aura(ch);
@@ -5120,7 +6004,15 @@ do_energy_ball(CHAR_DATA * ch, char *argument)
 		send_to_char("You aren't fighting anyone.\n\r", ch);
 		return;
 	}
-	if (ch->mana < 1) {
+	if (!IS_NPC(ch)) {
+		adjcost = 1 * (ch->energy_ballpower - ch->energy_balleffic);
+		if (adjcost < 1)
+			adjcost = 1;
+	}
+	else {
+		adjcost = 1;
+	}
+	if (ch->mana < adjcost) {
 			send_to_char("You don't have enough energy.\n\r", ch);
 			return;
 	}
@@ -5134,15 +6026,11 @@ do_energy_ball(CHAR_DATA * ch, char *argument)
 			stat_train(ch, "int", 5);
 			ch->train += 1;
 			ch->energymastery += 1;
-			if (IS_IMMORTAL(ch)) {
-				if (ch->energymastery >= (ch->spgain * 10)) {
-					send_to_char("You've gained additional SP!\n\r", ch);
-					ch->sptotal += 5;
-					ch->spgain += 1;
-					pager_printf_color(ch,
-						"DEBUG: SP total is now %d\n\r", ch->sptotal);
-					pager_printf_color(ch,
-						"DEBUG: Number of total SP gains is now %d\n\r", ch->spgain);
+			if (ch->energymastery >= (ch->kspgain * 100)) {
+				pager_printf_color(ch,
+					"&CYou gained 5 Skill Points!&D\n\r");
+				ch->sptotal += 5;
+				ch->kspgain += 1;
 				}
 			}
 		}
@@ -5170,7 +6058,7 @@ do_energy_ball(CHAR_DATA * ch, char *argument)
 		    TO_NOTVICT);
 		global_retcode = damage(ch, victim, 0, TYPE_HIT);
 	}
-	ch->mana -= 1;
+	ch->mana -= adjcost;
 	return;
 }
 
@@ -5183,6 +6071,7 @@ void do_energy_disc( CHAR_DATA *ch, char *argument )
 	float	kicmult = 0;
 	int		kilimit = 0;
 	int		hitcheck = 0;
+	int		adjcost = 0;
 	
 	if (IS_NPC(ch) && is_split(ch)) {
 		if (!ch->master)
@@ -5201,9 +6090,17 @@ void do_energy_disc( CHAR_DATA *ch, char *argument )
 		send_to_char("You aren't fighting anyone.\n\r", ch);
 		return;
 	}
-	if (ch->mana < 15) {
-		send_to_char("You don't have enough energy.\n\r", ch);
-		return;
+	if (!IS_NPC(ch)) {
+		adjcost = 15 * (ch->energy_discpower - ch->energy_disceffic);
+		if (adjcost < 15)
+			adjcost = 15;
+	}
+	else {
+		adjcost = 1;
+	}
+	if (ch->mana < adjcost) {
+			send_to_char("You don't have enough energy.\n\r", ch);
+			return;
 	}
 	if (!IS_NPC(ch)) {
 		kilimit = ch->train / 10000;
@@ -5214,11 +6111,17 @@ void do_energy_disc( CHAR_DATA *ch, char *argument )
 	WAIT_STATE(ch, 8);
 	if (hitcheck <= 95) {
 		if (!IS_NPC(ch)) {
-			argdam = number_range(12, 14) * kicmult;
+			argdam = ((number_range(12, 14) + ch->energy_discpower) * kicmult);
 			dam = get_attmod(ch, victim) * (argdam * kimult);
 			stat_train(ch, "int", 10);
 			ch->train += 10;
 			ch->energymastery += 2;
+			if (ch->energymastery >= (ch->kspgain * 100)) {
+				pager_printf_color(ch,
+					"&CYou gained 5 Skill Points!&D\n\r");
+				ch->sptotal += 5;
+				ch->kspgain += 1;
+				}
 		}
 		if (IS_NPC(ch)) {
 			dam = get_attmod(ch, victim) * (number_range(12, 14) + (get_curr_int(ch) / 40));
@@ -5247,7 +6150,7 @@ void do_energy_disc( CHAR_DATA *ch, char *argument )
 		    victim, TO_NOTVICT);
 		global_retcode = damage(ch, victim, 0, TYPE_HIT);
 	}
-	ch->mana -= 15;
+	ch->mana -= adjcost;
 	return;
 }
 
@@ -5260,6 +6163,7 @@ void do_forcewave( CHAR_DATA *ch, char *argument )
 	float	kicmult = 0;
 	int		kilimit = 0;
 	int		hitcheck = 0;
+	int		adjcost = 0;
 
 	if (IS_NPC(ch) && is_split(ch)) {
 		if (!ch->master)
@@ -5278,9 +6182,17 @@ void do_forcewave( CHAR_DATA *ch, char *argument )
 		send_to_char("You aren't fighting anyone.\n\r", ch);
 		return;
 	}
-	if (ch->mana < 50) {
-		send_to_char("You don't have enough energy.\n\r", ch);
-		return;
+	if (!IS_NPC(ch)) {
+		adjcost = 50 * (ch->forcewavepower - ch->forcewaveeffic);
+		if (adjcost < 50)
+			adjcost = 50;
+	}
+	else {
+		adjcost = 1;
+	}
+	if (ch->mana < adjcost) {
+			send_to_char("You don't have enough energy.\n\r", ch);
+			return;
 	}
 	if (!IS_NPC(ch)) {
 		kilimit = ch->train / 10000;
@@ -5291,11 +6203,17 @@ void do_forcewave( CHAR_DATA *ch, char *argument )
 	WAIT_STATE(ch, 8);
 	if (hitcheck <= 95) {
 		if (!IS_NPC(ch)) {
-			argdam = number_range(20, 25) * kicmult;
+			argdam = ((number_range(20, 25) + (ch->forcewavepower * 2)) * kicmult);
 			dam = get_attmod(ch, victim) * (argdam * kimult);
 			stat_train(ch, "int", 13);
 			ch->train += 13;
 			ch->energymastery += 4;
+			if (ch->energymastery >= (ch->kspgain * 100)) {
+				pager_printf_color(ch,
+					"&CYou gained 5 Skill Points!\n\r");
+				ch->sptotal += 5;
+				ch->kspgain += 1;
+				}
 		}
 		if (IS_NPC(ch)) {
 			dam = get_attmod(ch, victim) * (number_range(20, 25) + (get_curr_int(ch) / 40));
@@ -5324,7 +6242,7 @@ void do_forcewave( CHAR_DATA *ch, char *argument )
 		    victim, TO_NOTVICT);
 		global_retcode = damage(ch, victim, 0, TYPE_HIT);
 	}
-	ch->mana -= 50;
+	ch->mana -= adjcost;
 	return;
 }
 
@@ -5337,6 +6255,7 @@ void do_concentrated_beam( CHAR_DATA *ch, char *argument )
 	float	kicmult = 0;
 	int		kilimit = 0;
 	int		hitcheck = 0;
+	int		adjcost = 0;
 
 	if (IS_NPC(ch) && is_split(ch)) {
 		if (!ch->master)
@@ -5355,9 +6274,17 @@ void do_concentrated_beam( CHAR_DATA *ch, char *argument )
 		send_to_char("You aren't fighting anyone.\n\r", ch);
 		return;
 	}
-	if (ch->mana < 40) {
-		send_to_char("You don't have enough energy.\n\r", ch);
-		return;
+	if (!IS_NPC(ch)) {
+		adjcost = 40 * (ch->concentrated_beampower - ch->concentrated_beameffic);
+		if (adjcost < 40)
+			adjcost = 40;
+	}
+	else {
+		adjcost = 1;
+	}
+	if (ch->mana < adjcost) {
+			send_to_char("You don't have enough energy.\n\r", ch);
+			return;
 	}
 	if (!IS_NPC(ch)) {
 		kilimit = ch->train / 10000;
@@ -5368,11 +6295,17 @@ void do_concentrated_beam( CHAR_DATA *ch, char *argument )
 	WAIT_STATE(ch, 8);
 	if (hitcheck <= 95) {
 		if (!IS_NPC(ch)) {
-			argdam = number_range(18, 24) * kicmult;
+			argdam = ((number_range(18, 24) + (ch->concentrated_beampower * 2)) * kicmult);
 			dam = get_attmod(ch, victim) * (argdam * kimult);
 			stat_train(ch, "int", 14);
 			ch->train += 14;
 			ch->energymastery += 3;
+			if (ch->energymastery >= (ch->kspgain * 100)) {
+				pager_printf_color(ch,
+					"&CYou gained 5 Skill Points!\n\r");
+				ch->sptotal += 5;
+				ch->kspgain += 1;
+				}
 		}
 		if (IS_NPC(ch)) {
 			dam = get_attmod(ch, victim) * (number_range(18, 24) + (get_curr_int(ch) / 40));
@@ -5401,7 +6334,7 @@ void do_concentrated_beam( CHAR_DATA *ch, char *argument )
 		    victim, TO_NOTVICT);
 		global_retcode = damage(ch, victim, 0, TYPE_HIT);
 	}
-	ch->mana -= 40;
+	ch->mana -= adjcost;
 	return;
 }
 
@@ -5414,6 +6347,7 @@ void do_energybeam( CHAR_DATA *ch, char *argument )
 	float	kicmult = 0;
 	int		kilimit = 0;
 	int		hitcheck = 0;
+	int		adjcost = 0;
 	
 	if (IS_NPC(ch) && is_split(ch)) {
 		if (!ch->master)
@@ -5432,9 +6366,17 @@ void do_energybeam( CHAR_DATA *ch, char *argument )
 		send_to_char("You aren't fighting anyone.\n\r", ch);
 		return;
 	}
-	if (ch->mana < 10) {
-		send_to_char("You don't have enough energy.\n\r", ch);
-		return;
+	if (!IS_NPC(ch)) {
+		adjcost = 10 * (ch->energybeampower - ch->energybeameffic);
+		if (adjcost < 10)
+			adjcost = 10;
+	}
+	else {
+		adjcost = 1;
+	}
+	if (ch->mana < adjcost) {
+			send_to_char("You don't have enough energy.\n\r", ch);
+			return;
 	}
 	if (!IS_NPC(ch)) {
 		kilimit = ch->train / 10000;
@@ -5445,11 +6387,17 @@ void do_energybeam( CHAR_DATA *ch, char *argument )
 	WAIT_STATE(ch, 8);
 	if (hitcheck <= 95) {
 		if (!IS_NPC(ch)) {
-			argdam = number_range(6, 9) * kicmult;
+			argdam = ((number_range(6, 9) + ch->energybeampower) * kicmult);
 			dam = get_attmod(ch, victim) * (argdam * kimult);
 			stat_train(ch, "int", 10);
 			ch->train += 10;
 			ch->energymastery += 2;
+			if (ch->energymastery >= (ch->kspgain * 100)) {
+				pager_printf_color(ch,
+					"&CYou gained 5 Skill Points!\n\r");
+				ch->sptotal += 5;
+				ch->kspgain += 1;
+				}
 		}
 		if (IS_NPC(ch)) {
 			dam = get_attmod(ch, victim) * (number_range(6, 9) + (get_curr_int(ch) / 40));
@@ -5478,7 +6426,7 @@ void do_energybeam( CHAR_DATA *ch, char *argument )
 		    victim, TO_NOTVICT);
 		global_retcode = damage(ch, victim, 0, TYPE_HIT);
 	}
-	ch->mana -= 10;
+	ch->mana -= adjcost;
 	return;
 }
 
@@ -5491,6 +6439,7 @@ void do_lariat( CHAR_DATA *ch, char *argument )
 	float	kicmult = 0;
 	int		kilimit = 0;
 	int		hitcheck = 0;
+	int		adjcost = 0;
 	
 	if (IS_NPC(ch) && is_split(ch)) {
 		if (!ch->master)
@@ -5509,9 +6458,17 @@ void do_lariat( CHAR_DATA *ch, char *argument )
 		send_to_char("You aren't fighting anyone.\n\r", ch);
 		return;
 	}
-	if (ch->mana < 80) {
-		send_to_char("You don't have enough energy.\n\r", ch);
-		return;
+	if (!IS_NPC(ch)) {
+		adjcost = 80 * (ch->lariatpower - ch->lariateffic);
+		if (adjcost < 80)
+			adjcost = 80;
+	}
+	else {
+		adjcost = 1;
+	}
+	if (ch->mana < adjcost) {
+			send_to_char("You don't have enough energy.\n\r", ch);
+			return;
 	}
 	if (!IS_NPC(ch)) {
 		kilimit = ch->train / 10000;
@@ -5522,11 +6479,17 @@ void do_lariat( CHAR_DATA *ch, char *argument )
 	WAIT_STATE(ch, 8);
 	if (hitcheck <= 95) {
 		if (!IS_NPC(ch)) {
-			argdam = number_range(45, 50) * kicmult;
+			argdam = ((number_range(45, 50) + (ch->lariatpower * 4)) * kicmult);
 			dam = get_attmod(ch, victim) * (argdam * physmult);
 			stat_train(ch, "str", 16);
 			ch->train += 16;
 			ch->strikemastery += 5;
+			if (ch->strikemastery >= (ch->sspgain * 100)) {
+				pager_printf_color(ch,
+					"&CYou gained 5 Skill Points!\n\r");
+				ch->sptotal += 5;
+				ch->sspgain += 1;
+				}
 		}
 		if (IS_NPC(ch)) {
 			dam = get_attmod(ch, victim) * (number_range(45, 50) + (get_curr_str(ch) / 40));
@@ -5564,7 +6527,7 @@ void do_lariat( CHAR_DATA *ch, char *argument )
 		    victim, TO_NOTVICT);
 		global_retcode = damage(ch, victim, 0, TYPE_HIT);
 	}
-	ch->mana -= 80;
+	ch->mana -= adjcost;
 	return;
 }
 
@@ -5577,6 +6540,7 @@ void do_ecliptic_meteor( CHAR_DATA *ch, char *argument )
 	float	kicmult = 0;
 	int		kilimit = 0;
 	int		hitcheck = 0;
+	int		adjcost = 0;
 	
 	if (IS_NPC(ch) && is_split(ch)) {
 		if (!ch->master)
@@ -5595,9 +6559,17 @@ void do_ecliptic_meteor( CHAR_DATA *ch, char *argument )
 		send_to_char("You aren't fighting anyone.\n\r", ch);
 		return;
 	}
-	if (ch->mana < 1000) {
-		send_to_char("You don't have enough energy.\n\r", ch);
-		return;
+	if (!IS_NPC(ch)) {
+		adjcost = 1000 * (ch->ecliptic_meteorpower - ch->ecliptic_meteoreffic);
+		if (adjcost < 1000)
+			adjcost = 1000;
+	}
+	else {
+		adjcost = 1;
+	}
+	if (ch->mana < adjcost) {
+			send_to_char("You don't have enough energy.\n\r", ch);
+			return;
 	}
 	if (!IS_NPC(ch)) {
 		kilimit = ch->train / 10000;
@@ -5608,11 +6580,17 @@ void do_ecliptic_meteor( CHAR_DATA *ch, char *argument )
 	WAIT_STATE(ch, 8);
 	if (hitcheck <= 95) {
 		if (!IS_NPC(ch)) {
-			argdam = number_range(100, 125) * kicmult;
+			argdam = ((number_range(100, 125) + (ch->ecliptic_meteorpower * 11)) * kicmult);
 			dam = get_attmod(ch, victim) * (argdam * kimult);
 			stat_train(ch, "int", 40);
 			ch->train += 40;
 			ch->energymastery += 6;
+			if (ch->energymastery >= (ch->kspgain * 100)) {
+				pager_printf_color(ch,
+					"&CYou gained 5 Skill Points!\n\r");
+				ch->sptotal += 5;
+				ch->kspgain += 1;
+				}
 		}
 		if (IS_NPC(ch)) {
 			dam = get_attmod(ch, victim) * (number_range(100, 125) + (get_curr_int(ch) / 40));
@@ -5650,7 +6628,7 @@ void do_ecliptic_meteor( CHAR_DATA *ch, char *argument )
 		    victim, TO_NOTVICT);
 		global_retcode = damage(ch, victim, 0, TYPE_HIT);
 	}
-	ch->mana -= 1000;
+	ch->mana -= adjcost;
 	return;
 }
 
@@ -5663,6 +6641,7 @@ void do_gigantic_meteor( CHAR_DATA *ch, char *argument )
 	float	kicmult = 0;
 	int		kilimit = 0;
 	int		hitcheck = 0;
+	int		adjcost = 0;
 	
 	if (IS_NPC(ch) && is_split(ch)) {
 		if (!ch->master)
@@ -5681,9 +6660,17 @@ void do_gigantic_meteor( CHAR_DATA *ch, char *argument )
 		send_to_char("You aren't fighting anyone.\n\r", ch);
 		return;
 	}
-	if (ch->mana < 250) {
-		send_to_char("You don't have enough energy.\n\r", ch);
-		return;
+	if (!IS_NPC(ch)) {
+		adjcost = 250 * (ch->gigantic_meteorpower - ch->gigantic_meteoreffic);
+		if (adjcost < 250)
+			adjcost = 250;
+	}
+	else {
+		adjcost = 1;
+	}
+	if (ch->mana < adjcost) {
+			send_to_char("You don't have enough energy.\n\r", ch);
+			return;
 	}
 	if (!IS_NPC(ch)) {
 		kilimit = ch->train / 10000;
@@ -5694,11 +6681,17 @@ void do_gigantic_meteor( CHAR_DATA *ch, char *argument )
 	WAIT_STATE(ch, 8);
 	if (hitcheck <= 95) {
 		if (!IS_NPC(ch)) {
-			argdam = number_range(70, 75) * kicmult;
+			argdam = ((number_range(70, 75) + (ch->gigantic_meteorpower * 7)) * kicmult);
 			dam = get_attmod(ch, victim) * (argdam * kimult);
 			stat_train(ch, "int", 12);
 			ch->train += 12;
 			ch->energymastery += 5;
+			if (ch->energymastery >= (ch->kspgain * 100)) {
+				pager_printf_color(ch,
+					"&CYou gained 5 Skill Points!\n\r");
+				ch->sptotal += 5;
+				ch->kspgain += 1;
+				}
 		}
 		if (IS_NPC(ch)) {
 			dam = get_attmod(ch, victim) * (number_range(70, 75) + (get_curr_int(ch) / 40));
@@ -5736,7 +6729,7 @@ void do_gigantic_meteor( CHAR_DATA *ch, char *argument )
 		    victim, TO_NOTVICT);
 		global_retcode = damage(ch, victim, 0, TYPE_HIT);
 	}
-	ch->mana -= 250;
+	ch->mana -= adjcost;
 	return;
 }
 
@@ -5749,6 +6742,7 @@ void do_meteor( CHAR_DATA *ch, char *argument )
 	float	kicmult = 0;
 	int		kilimit = 0;
 	int		hitcheck = 0;
+	int		adjcost = 0;
 	
 	if (IS_NPC(ch) && is_split(ch)) {
 		if (!ch->master)
@@ -5767,9 +6761,17 @@ void do_meteor( CHAR_DATA *ch, char *argument )
 		send_to_char("You aren't fighting anyone.\n\r", ch);
 		return;
 	}
-	if (ch->mana < 125) {
-		send_to_char("You don't have enough energy.\n\r", ch);
-		return;
+	if (!IS_NPC(ch)) {
+		adjcost = 125 * (ch->meteorpower - ch->meteoreffic);
+		if (adjcost < 125)
+			adjcost = 125;
+	}
+	else {
+		adjcost = 1;
+	}
+	if (ch->mana < adjcost) {
+			send_to_char("You don't have enough energy.\n\r", ch);
+			return;
 	}
 	if (!IS_NPC(ch)) {
 		kilimit = ch->train / 10000;
@@ -5780,11 +6782,17 @@ void do_meteor( CHAR_DATA *ch, char *argument )
 	WAIT_STATE(ch, 8);
 	if (hitcheck <= 95) {
 		if (!IS_NPC(ch)) {
-			argdam = number_range(30, 35) * kicmult;
+			argdam = ((number_range(30, 35) + (ch->meteorpower * 3)) * kicmult);
 			dam = get_attmod(ch, victim) * (argdam * kimult);
 			stat_train(ch, "int", 8);
 			ch->train += 8;
 			ch->energymastery += 4;
+			if (ch->energymastery >= (ch->kspgain * 100)) {
+				pager_printf_color(ch,
+					"&CYou gained 5 Skill Points!\n\r");
+				ch->sptotal += 5;
+				ch->kspgain += 1;
+				}
 		}
 		if (IS_NPC(ch)) {
 			dam = get_attmod(ch, victim) * (number_range(30, 35) + (get_curr_int(ch) / 40));
@@ -5822,7 +6830,7 @@ void do_meteor( CHAR_DATA *ch, char *argument )
 		    victim, TO_NOTVICT);
 		global_retcode = damage(ch, victim, 0, TYPE_HIT);
 	}
-	ch->mana -= 125;
+	ch->mana -= adjcost;
 	return;
 }
 
@@ -5835,6 +6843,7 @@ void do_crusherball( CHAR_DATA *ch, char *argument )
 	float	kicmult = 0;
 	int		kilimit = 0;
 	int		hitcheck = 0;
+	int		adjcost = 0;
 	
 	if (IS_NPC(ch) && is_split(ch)) {
 		if (!ch->master)
@@ -5853,9 +6862,17 @@ void do_crusherball( CHAR_DATA *ch, char *argument )
 		send_to_char("You aren't fighting anyone.\n\r", ch);
 		return;
 	}
-	if (ch->mana < 15) {
-		send_to_char("You don't have enough energy.\n\r", ch);
-		return;
+	if (!IS_NPC(ch)) {
+		adjcost = 15 * (ch->crusherballpower - ch->crusherballeffic);
+		if (adjcost < 15)
+			adjcost = 15;
+	}
+	else {
+		adjcost = 1;
+	}
+	if (ch->mana < adjcost) {
+			send_to_char("You don't have enough energy.\n\r", ch);
+			return;
 	}
 	if (!IS_NPC(ch)) {
 		kilimit = ch->train / 10000;
@@ -5866,11 +6883,17 @@ void do_crusherball( CHAR_DATA *ch, char *argument )
 	WAIT_STATE(ch, 8);
 	if (hitcheck <= 95) {
 		if (!IS_NPC(ch)) {
-			argdam = number_range(12, 14) * kicmult;
+			argdam = ((number_range(12, 14) + ch->crusherballpower) * kicmult);
 			dam = get_attmod(ch, victim) * (argdam * kimult);
 			stat_train(ch, "int", 5);
 			ch->train += 5;
 			ch->energymastery += 2;
+			if (ch->energymastery >= (ch->kspgain * 100)) {
+				pager_printf_color(ch,
+					"&CYou gained 5 Skill Points!\n\r");
+				ch->sptotal += 5;
+				ch->kspgain += 1;
+				}
 		}
 		if (IS_NPC(ch)) {
 			dam = get_attmod(ch, victim) * (number_range(12, 14) + (get_curr_int(ch) / 40));
@@ -5908,7 +6931,7 @@ void do_crusherball( CHAR_DATA *ch, char *argument )
 		    victim, TO_NOTVICT);
 		global_retcode = damage(ch, victim, 0, TYPE_HIT);
 	}
-	ch->mana -= 15;
+	ch->mana -= adjcost;
 	return;
 }
 
@@ -5922,6 +6945,7 @@ void do_haymaker( CHAR_DATA *ch, char *argument )
 	float	kicmult = 0;
 	int		kilimit = 0;
 	int		hitcheck = 0;
+	int		adjcost = 0;
 
 	if (IS_NPC(ch) && is_split(ch)) {
 		if (!ch->master)
@@ -5940,9 +6964,17 @@ void do_haymaker( CHAR_DATA *ch, char *argument )
 		send_to_char("You aren't fighting anyone.\n\r", ch);
 		return;
 	}
-	if (ch->mana < 10) {
-		send_to_char("You don't have enough energy.\n\r", ch);
-		return;
+	if (!IS_NPC(ch)) {
+		adjcost = 10 * (ch->haymakerpower - ch->haymakereffic);
+		if (adjcost < 10)
+			adjcost = 10;
+	}
+	else {
+		adjcost = 1;
+	}
+	if (ch->mana < adjcost) {
+			send_to_char("You don't have enough energy.\n\r", ch);
+			return;
 	}
 	if (!IS_NPC(ch)) {
 		kilimit = ch->train / 10000;
@@ -5954,11 +6986,17 @@ void do_haymaker( CHAR_DATA *ch, char *argument )
 	WAIT_STATE(ch, 8);
 	if (hitcheck <= 95) {
 		if (!IS_NPC(ch)) {
-			argdam = number_range(6, 9) * kicmult;
+			argdam = ((number_range(6, 9) + ch->haymakerpower) * kicmult);
 			dam = get_attmod(ch, victim) * (argdam * physmult);
 			stat_train(ch, "str", 12);
 			ch->train += 12;
 			ch->strikemastery += 2;
+			if (ch->strikemastery >= (ch->sspgain * 100)) {
+				pager_printf_color(ch,
+					"&CYou gained 5 Skill Points!\n\r");
+				ch->sptotal += 5;
+				ch->sspgain += 1;
+				}
 		}
 		if (IS_NPC(ch)) {
 			dam = get_attmod(ch, victim) * (number_range(6, 9) + (get_curr_str(ch) / 40));
@@ -5996,7 +7034,7 @@ void do_haymaker( CHAR_DATA *ch, char *argument )
 		    victim, TO_NOTVICT);
 		global_retcode = damage(ch, victim, 0, TYPE_HIT);
 	}
-	ch->mana -= 10;
+	ch->mana -= adjcost;
 	return;
 }
 
@@ -6009,6 +7047,7 @@ void do_collide( CHAR_DATA *ch, char *argument )
 	float	kicmult = 0;
 	int		kilimit = 0;
 	int		hitcheck = 0;
+	int		adjcost = 0;
 	
 	if (IS_NPC(ch) && is_split(ch)) {
 		if (!ch->master)
@@ -6027,9 +7066,17 @@ void do_collide( CHAR_DATA *ch, char *argument )
 		send_to_char("You aren't fighting anyone.\n\r", ch);
 		return;
 	}
-	if (ch->mana < 25) {
-		send_to_char("You don't have enough energy.\n\r", ch);
-		return;
+	if (!IS_NPC(ch)) {
+		adjcost = 25 * (ch->collidepower - ch->collideeffic);
+		if (adjcost < 25)
+			adjcost = 25;
+	}
+	else {
+		adjcost = 1;
+	}
+	if (ch->mana < adjcost) {
+			send_to_char("You don't have enough energy.\n\r", ch);
+			return;
 	}
 	if (!IS_NPC(ch)) {
 		kilimit = ch->train / 10000;
@@ -6040,11 +7087,17 @@ void do_collide( CHAR_DATA *ch, char *argument )
 	WAIT_STATE(ch, 8);
 	if (hitcheck <= 95) {
 		if (!IS_NPC(ch)) {
-			argdam = number_range(18, 22) * kicmult;
+			argdam = ((number_range(18, 22) + (ch->collidepower * 2)) * kicmult);
 			dam = get_attmod(ch, victim) * (argdam * physmult);
 			stat_train(ch, "str", 14);
 			ch->train += 14;
 			ch->strikemastery += 4;
+			if (ch->strikemastery >= (ch->sspgain * 100)) {
+				pager_printf_color(ch,
+					"&CYou gained 5 Skill Points!\n\r");
+				ch->sptotal += 5;
+				ch->sspgain += 1;
+				}
 		}
 		if (IS_NPC(ch)) {
 			dam = get_attmod(ch, victim) * (number_range(18, 22) + (get_curr_str(ch) / 40));
@@ -6082,10 +7135,11 @@ void do_collide( CHAR_DATA *ch, char *argument )
 		    victim, TO_NOTVICT);
 		global_retcode = damage(ch, victim, 0, TYPE_HIT);
 	}
-	ch->mana -= 25;
+	ch->mana -= adjcost;
 	return;
 }
 
+void
 do_kamehameha(CHAR_DATA * ch, char *argument)
 {
 	CHAR_DATA *victim;
@@ -6095,6 +7149,7 @@ do_kamehameha(CHAR_DATA * ch, char *argument)
 	float	kicmult = 0;
 	int		kilimit = 0;
 	int		hitcheck = 0;
+	int		adjcost = 0;
 	
 	if (IS_NPC(ch) && is_split(ch)) {
 		if (!ch->master)
@@ -6118,19 +7173,33 @@ do_kamehameha(CHAR_DATA * ch, char *argument)
 		send_to_char("You aren't fighting anyone.\n\r", ch);
 		return;
 	}
-	if (ch->mana < 100) {
-		send_to_char("You don't have enough energy.\n\r", ch);
-		return;
+	if (!IS_NPC(ch)) {
+		adjcost = 100 * (ch->kamehamehapower - ch->kamehamehaeffic);
+		if (adjcost < 100)
+			adjcost = 100;
+	}
+	else {
+		adjcost = 1;
+	}
+	if (ch->mana < adjcost) {
+			send_to_char("You don't have enough energy.\n\r", ch);
+			return;
 	}
 	hitcheck = number_range(1, 100);
 	WAIT_STATE(ch, 8);
 	if (hitcheck <= 95) {
 		if (!IS_NPC(ch)) {
-			argdam = number_range(50, 60) * kicmult;
+			argdam = ((number_range(50, 60) + (ch->kamehamehapower * 5)) * kicmult);
 			dam = get_attmod(ch, victim) * (argdam * kimult);
 			stat_train(ch, "int", 16);
 			ch->train += 16;
 			ch->energymastery += 5;
+			if (ch->energymastery >= (ch->kspgain * 100)) {
+				pager_printf_color(ch,
+					"&CYou gained 5 Skill Points!\n\r");
+				ch->sptotal += 5;
+				ch->kspgain += 1;
+				}
 		}
 		if (IS_NPC(ch)) {
 			argdam = number_range(50, 60);
@@ -6169,7 +7238,7 @@ do_kamehameha(CHAR_DATA * ch, char *argument)
 		    victim, TO_NOTVICT);
 		global_retcode = damage(ch, victim, 0, TYPE_HIT);
 	}
-	ch->mana -= 100;
+	ch->mana -= adjcost;
 	return;
 }
 
@@ -6600,6 +7669,7 @@ do_masenko(CHAR_DATA * ch, char *argument)
 	float	kicmult = 0;
 	int		kilimit = 0;
 	int		hitcheck = 0;
+	int		adjcost = 0;
 	
 	if (IS_NPC(ch) && is_split(ch)) {
 		if (!ch->master)
@@ -6623,19 +7693,33 @@ do_masenko(CHAR_DATA * ch, char *argument)
 		kimult = (float) get_curr_int(ch) / 1000 + 1;
 		kicmult = (float) kilimit / 100 + 1;
 	}
-	if (ch->mana < 60) {
-		send_to_char("You don't have enough energy.\n\r", ch);
-		return;
+	if (!IS_NPC(ch)) {
+		adjcost = 60 * (ch->masenkopower - ch->masenkoeffic);
+		if (adjcost < 60)
+			adjcost = 60;
+	}
+	else {
+		adjcost = 1;
+	}
+	if (ch->mana < adjcost) {
+			send_to_char("You don't have enough energy.\n\r", ch);
+			return;
 	}
 	hitcheck = number_range(1, 100);
 	WAIT_STATE(ch, 8);
 	if (hitcheck <= 95) {
 		if (!IS_NPC(ch)) {
-			argdam = number_range(30, 35) * kicmult;
+			argdam = ((number_range(30, 35) + (ch->masenkopower * 3)) * kicmult);
 			dam = get_attmod(ch, victim) * (argdam * kimult);
 			stat_train(ch, "int", 14);
 			ch->train += 14;
 			ch->energymastery += 4;
+			if (ch->energymastery >= (ch->kspgain * 100)) {
+				pager_printf_color(ch,
+					"&CYou gained 5 Skill Points!\n\r");
+				ch->sptotal += 5;
+				ch->kspgain += 1;
+				}
 		}
 		if (IS_NPC(ch))
 			dam = get_attmod(ch, victim) * (number_range(30, 35) + (get_curr_int(ch) / 45));
@@ -6670,7 +7754,7 @@ do_masenko(CHAR_DATA * ch, char *argument)
 		    victim, TO_NOTVICT);
 		global_retcode = damage(ch, victim, 0, TYPE_HIT);
 	}
-	ch->mana -= 60;
+	ch->mana -= adjcost;
 	return;
 }
 
@@ -6684,6 +7768,7 @@ do_sbc(CHAR_DATA * ch, char *argument)
 	float	kimult = 0;
 	float	kicmult = 0;
 	int		hitcheck = 0;
+	int		adjcost = 0;
 	
 	if (IS_NPC(ch) && is_split(ch)) {
 		if (!ch->master)
@@ -6707,19 +7792,33 @@ do_sbc(CHAR_DATA * ch, char *argument)
 		kimult = (float) get_curr_int(ch) / 1000 + 1;
 		kicmult = (float) kilimit / 100 + 1;
 	}
-	if (ch->mana < 110) {
-		send_to_char("You don't have enough energy.\n\r", ch);
-		return;
+	if (!IS_NPC(ch)) {
+		adjcost = 110 * (ch->sbcpower - ch->sbceffic);
+		if (adjcost < 110)
+			adjcost = 110;
+	}
+	else {
+		adjcost = 1;
+	}
+	if (ch->mana < adjcost) {
+			send_to_char("You don't have enough energy.\n\r", ch);
+			return;
 	}
 	hitcheck = number_range(1, 100);
 	WAIT_STATE(ch, 8);
 	if (hitcheck <= 95) {
 		if (!IS_NPC(ch)) {
-			argdam = number_range(55, 65) * kicmult;
+			argdam = ((number_range(55, 65) + (ch->sbcpower * 5)) * kicmult);
 			dam = get_attmod(ch, victim) * (argdam * kimult);
 			stat_train(ch, "int", 18);
 			ch->train += 18;
 			ch->energymastery += 5;
+			if (ch->energymastery >= (ch->kspgain * 100)) {
+				pager_printf_color(ch,
+					"&CYou gained 5 Skill Points!\n\r");
+				ch->sptotal += 5;
+				ch->kspgain += 1;
+				}
 		}
 		if (IS_NPC(ch)) {
 			argdam = number_range(55, 65);
@@ -6757,7 +7856,7 @@ do_sbc(CHAR_DATA * ch, char *argument)
 		    NULL, victim, TO_NOTVICT);
 		global_retcode = damage(ch, victim, 0, TYPE_HIT);
 	}
-	ch->mana -= 110;
+	ch->mana -= adjcost;
 	return;
 }
 
@@ -7183,6 +8282,7 @@ do_dd(CHAR_DATA * ch, char *argument)
 	float	kimult = 0;
 	float	kicmult = 0;
 	int		hitcheck = 0;
+	int		adjcost = 0;
 	
 	if (IS_NPC(ch) && is_split(ch)) {
 		if (!ch->master)
@@ -7206,19 +8306,33 @@ do_dd(CHAR_DATA * ch, char *argument)
 		kimult = (float) get_curr_int(ch) / 1000 + 1;
 		kicmult = (float) kilimit / 100 + 1;
 	}
-	if (ch->mana < 55) {
-		send_to_char("You don't have enough energy.\n\r", ch);
-		return;
+	if (!IS_NPC(ch)) {
+		adjcost = 55 * (ch->destructo_discpower - ch->destructo_disceffic);
+		if (adjcost < 55)
+			adjcost = 55;
+	}
+	else {
+		adjcost = 1;
+	}
+	if (ch->mana < adjcost) {
+			send_to_char("You don't have enough energy.\n\r", ch);
+			return;
 	}
 	hitcheck = number_range(1, 100);
 	WAIT_STATE(ch, 8);
 	if (hitcheck <= 95) {
 		if (!IS_NPC(ch)) {
-			argdam = number_range(28, 28) * kicmult;
+			argdam = ((number_range(28, 28) + (ch->destructo_discpower * 2)) * kicmult);
 			dam = get_attmod(ch, victim) * (argdam * kimult);
 			stat_train(ch, "int", 13);
 			ch->train += 13;
 			ch->energymastery += 4;
+			if (ch->energymastery >= (ch->kspgain * 100)) {
+				pager_printf_color(ch,
+					"&CYou gained 5 Skill Points!\n\r");
+				ch->sptotal += 5;
+				ch->kspgain += 1;
+				}
 		}
 		if (IS_NPC(ch))
 			dam = get_attmod(ch, victim) * (number_range(28, 28) + (get_curr_int(ch) / 40));
@@ -7257,7 +8371,7 @@ do_dd(CHAR_DATA * ch, char *argument)
 		global_retcode = damage(ch, victim, 0, TYPE_HIT);
 	}
 	if (!is_android_h(ch))
-		ch->mana -= 55;
+		ch->mana -= adjcost;
 	return;
 }
 
@@ -8287,6 +9401,7 @@ do_death_ball(CHAR_DATA * ch, char *argument)
 	float	kimult = 0;
 	float	kicmult = 0;
 	int		hitcheck = 0;
+	int		adjcost = 0;
 
 	if (IS_NPC(ch) && is_split(ch)) {
 		if (!ch->master)
@@ -8310,20 +9425,34 @@ do_death_ball(CHAR_DATA * ch, char *argument)
 		kimult = (float) get_curr_int(ch) / 1000 + 1;
 		kicmult = (float) kilimit / 100 + 1;
 	}
-	if (ch->mana < 1000) {
-		send_to_char("You don't have enough energy.\n\r", ch);
-		return;
+	if (!IS_NPC(ch)) {
+		adjcost = 1000 * (ch->death_ballpower - ch->death_balleffic);
+		if (adjcost < 1000)
+			adjcost = 1000;
+	}
+	else {
+		adjcost = 1;
+	}
+	if (ch->mana < adjcost) {
+			send_to_char("You don't have enough energy.\n\r", ch);
+			return;
 	}
 	hitcheck = number_range(1, 100);
 
 	WAIT_STATE(ch, 8);
 	if (hitcheck <= 95) {
 		if (!IS_NPC(ch)) {
-			argdam = number_range(100, 125) * kicmult;
+			argdam = ((number_range(100, 125) + (ch->death_ballpower * 11)) * kicmult);
 			dam = get_attmod(ch, victim) * (argdam * kimult);
 			stat_train(ch, "int", 40);
 			ch->train += 40;
 			ch->energymastery += 6;
+			if (ch->energymastery >= (ch->kspgain * 100)) {
+				pager_printf_color(ch,
+					"&CYou gained 5 Skill Points!\n\r");
+				ch->sptotal += 5;
+				ch->kspgain += 1;
+				}
 		}
 		if (IS_NPC(ch)) {
 			dam = get_attmod(ch, victim) * (number_range(100, 125) + (get_curr_int(ch) / 40));
@@ -8351,7 +9480,7 @@ do_death_ball(CHAR_DATA * ch, char *argument)
 		    victim, TO_NOTVICT);
 		global_retcode = damage(ch, victim, 0, TYPE_HIT);
 	}
-	ch->mana -= 1000;
+	ch->mana -= adjcost;
 	return;
 }
 
@@ -8365,6 +9494,7 @@ do_eye_beam(CHAR_DATA * ch, char *argument)
 	float	kimult = 0;
 	float	kicmult = 0;
 	int		hitcheck = 0;
+	int		adjcost = 0;
 	
 	if (IS_NPC(ch) && is_split(ch)) {
 		if (!ch->master)
@@ -8388,9 +9518,17 @@ do_eye_beam(CHAR_DATA * ch, char *argument)
 		kimult = (float) get_curr_int(ch) / 1000 + 1;
 		kicmult = (float) kilimit / 100 + 1;
 	}
-	if (ch->mana < 12) {
-		send_to_char("You don't have enough energy.\n\r", ch);
-		return;
+	if (!IS_NPC(ch)) {
+		adjcost = 12 * (ch->eye_beampower - ch->eye_beameffic);
+		if (adjcost < 12)
+			adjcost = 12;
+	}
+	else {
+		adjcost = 1;
+	}
+	if (ch->mana < adjcost) {
+			send_to_char("You don't have enough energy.\n\r", ch);
+			return;
 	}
 
 	sh_int 	z = get_aura(ch);
@@ -8398,11 +9536,17 @@ do_eye_beam(CHAR_DATA * ch, char *argument)
 	WAIT_STATE(ch, 8);
 	if (hitcheck <= 95) {
 		if (!IS_NPC(ch)) {
-			argdam = number_range(12, 14) * kicmult;
+			argdam = ((number_range(12, 14) + ch->eye_beampower) * kicmult);
 			dam = get_attmod(ch, victim) * (argdam * kimult);
 			stat_train(ch, "int", 10);
 			ch->train += 10;
 			ch->energymastery += 3;
+			if (ch->energymastery >= (ch->kspgain * 100)) {
+				pager_printf_color(ch,
+					"&CYou gained 5 Skill Points!\n\r");
+				ch->sptotal += 5;
+				ch->kspgain += 1;
+				}
 		}
 		if (IS_NPC(ch))
 			dam = get_attmod(ch, victim) * (number_range(12, 14) + (get_curr_int(ch) / 40));
@@ -8428,9 +9572,7 @@ do_eye_beam(CHAR_DATA * ch, char *argument)
 		    TO_NOTVICT);
 		global_retcode = damage(ch, victim, 0, TYPE_HIT);
 	}
-
-	if (!is_android_h(ch))
-		ch->mana -= 12;
+	ch->mana -= adjcost;
 	return;
 }
 
@@ -8444,6 +9586,7 @@ do_finger_beam(CHAR_DATA * ch, char *argument)
 	float	kimult = 0;
 	float	kicmult = 0;
 	int		hitcheck = 0;
+	int		adjcost = 0;
 	
 	if (IS_NPC(ch) && is_split(ch)) {
 		if (!ch->master)
@@ -8467,9 +9610,17 @@ do_finger_beam(CHAR_DATA * ch, char *argument)
 		kimult = (float) get_curr_int(ch) / 1000 + 1;
 		kicmult = (float) kilimit / 100 + 1;
 	}
-	if (ch->mana < 75) {
-		send_to_char("You don't have enough energy.\n\r", ch);
-		return;
+	if (!IS_NPC(ch)) {
+		adjcost = 75 * (ch->finger_beampower - ch->finger_beameffic);
+		if (adjcost < 75)
+			adjcost = 75;
+	}
+	else {
+		adjcost = 1;
+	}
+	if (ch->mana < adjcost) {
+			send_to_char("You don't have enough energy.\n\r", ch);
+			return;
 	}
 
 	sh_int 	z = get_aura(ch);
@@ -8477,7 +9628,7 @@ do_finger_beam(CHAR_DATA * ch, char *argument)
 	WAIT_STATE(ch, 8);
 	if (hitcheck <= 95) {
 		if (!IS_NPC(ch)) {
-			argdam = number_range(60, 65) * kicmult;
+			argdam = ((number_range(60, 65) + (ch->finger_beampower * 6)) * kicmult);
 			dam = get_attmod(ch, victim) * (argdam * kimult);
 			stat_train(ch, "int", 16);
 			ch->train += 16;
@@ -8509,7 +9660,7 @@ do_finger_beam(CHAR_DATA * ch, char *argument)
 		    TO_NOTVICT);
 		global_retcode = damage(ch, victim, 0, TYPE_HIT);
 	}
-	ch->mana -= 75;
+	ch->mana -= adjcost;
 	return;
 }
 
@@ -10586,6 +11737,7 @@ do_destructive_wave(CHAR_DATA * ch, char *argument)
 	float	kimult = 0;
 	float	kicmult = 0;
 	int		hitcheck = 0;
+	int		adjcost = 0;
 	
 	if (IS_NPC(ch) && is_split(ch)) {
 		if (!ch->master)
@@ -10609,9 +11761,17 @@ do_destructive_wave(CHAR_DATA * ch, char *argument)
 		kimult = (float) get_curr_int(ch) / 1000 + 1;
 		kicmult = (float) kilimit / 100 + 1;
 	}
-	if (ch->mana < 60) {
-		send_to_char("You don't have enough energy.\n\r", ch);
-		return;
+	if (!IS_NPC(ch)) {
+		adjcost = 60 * (ch->destructive_wavepower - ch->destructive_waveeffic);
+		if (adjcost < 60)
+			adjcost = 60;
+	}
+	else {
+		adjcost = 1;
+	}
+	if (ch->mana < adjcost) {
+			send_to_char("You don't have enough energy.\n\r", ch);
+			return;
 	}
 
 	sh_int 	z = get_aura(ch);
@@ -10619,11 +11779,17 @@ do_destructive_wave(CHAR_DATA * ch, char *argument)
 	WAIT_STATE(ch, 8);
 	if (hitcheck <= 95) {
 		if (!IS_NPC(ch)) {
-			argdam = number_range(26, 28) * kicmult;
+			argdam = ((number_range(26, 28) + (ch->destructive_wavepower * 2)) * kicmult);
 			dam = get_attmod(ch, victim) * (argdam * kimult);
 			stat_train(ch, "int", 10);
 			ch->train += 5;
 			ch->energymastery += 4;
+			if (ch->energymastery >= (ch->kspgain * 100)) {
+				pager_printf_color(ch,
+					"&CYou gained 5 Skill Points!\n\r");
+				ch->sptotal += 5;
+				ch->kspgain += 1;
+				}
 		}
 		if (IS_NPC(ch)) {
 			argdam = number_range(26, 28);
@@ -10661,7 +11827,7 @@ do_destructive_wave(CHAR_DATA * ch, char *argument)
 		    victim, TO_NOTVICT);
 		global_retcode = damage(ch, victim, 0, TYPE_HIT);
 	}
-	ch->mana -= 60;
+	ch->mana -= adjcost;
 	return;
 }
 
@@ -10838,6 +12004,7 @@ do_shockwave(CHAR_DATA * ch, char *argument)
 	float	kimult = 0;
 	float	kicmult = 0;
 	int		hitcheck = 0;
+	int		adjcost = 0;
 	
 	if (IS_NPC(ch) && is_split(ch)) {
 		if (!ch->master)
@@ -10861,9 +12028,17 @@ do_shockwave(CHAR_DATA * ch, char *argument)
 		kimult = (float) get_curr_int(ch) / 1000 + 1;
 		kicmult = (float) kilimit / 100 + 1;
 	}
-	if (ch->mana < 70) {
-		send_to_char("You don't have enough energy.\n\r", ch);
-		return;
+	if (!IS_NPC(ch)) {
+		adjcost = 70 * (ch->shockwavepower - ch->shockwaveeffic);
+		if (adjcost < 70)
+			adjcost = 70;
+	}
+	else {
+		adjcost = 1;
+	}
+	if (ch->mana < adjcost) {
+			send_to_char("You don't have enough energy.\n\r", ch);
+			return;
 	}
 
 	sh_int 	z = get_aura(ch);
@@ -10871,11 +12046,17 @@ do_shockwave(CHAR_DATA * ch, char *argument)
 	WAIT_STATE(ch, 8);
 	if (hitcheck <= 95) {
 		if (!IS_NPC(ch)) {
-			argdam = number_range(45, 65) * kicmult;
+			argdam = ((number_range(45, 65) + (ch->shockwavepower * 5)) * kicmult);
 			dam = get_attmod(ch, victim) * (argdam * kimult);
 			stat_train(ch, "int", 17);
 			ch->train += 17;
 			ch->energymastery += 5;
+			if (ch->energymastery >= (ch->kspgain * 100)) {
+				pager_printf_color(ch,
+					"&CYou gained 5 Skill Points!\n\r");
+				ch->sptotal += 5;
+				ch->kspgain += 1;
+				}
 		}
 		if (IS_NPC(ch)) {
 			argdam = number_range(45, 65);
@@ -10912,7 +12093,7 @@ do_shockwave(CHAR_DATA * ch, char *argument)
 		    TO_NOTVICT);
 		global_retcode = damage(ch, victim, 0, TYPE_HIT);
 	}
-	ch->mana -= 70;
+	ch->mana -= adjcost;
 	return;
 }
 
@@ -11412,6 +12593,7 @@ do_gallic_gun(CHAR_DATA * ch, char *argument)
 	float	kicmult = 0;
 	int		kilimit = 0;
 	int		hitcheck = 0;
+	int		adjcost = 0;
 	
 	if (IS_NPC(ch) && is_split(ch)) {
 		if (!ch->master)
@@ -11435,19 +12617,33 @@ do_gallic_gun(CHAR_DATA * ch, char *argument)
 		send_to_char("You aren't fighting anyone.\n\r", ch);
 		return;
 	}
-	if (ch->mana < 125) {
-		send_to_char("You don't have enough energy.\n\r", ch);
-		return;
+	if (!IS_NPC(ch)) {
+		adjcost = 125 * (ch->gallic_gunpower - ch->gallic_guneffic);
+		if (adjcost < 125)
+			adjcost = 125;
+	}
+	else {
+		adjcost = 1;
+	}
+	if (ch->mana < adjcost) {
+			send_to_char("You don't have enough energy.\n\r", ch);
+			return;
 	}
 	hitcheck = number_range(1, 100);
 	WAIT_STATE(ch, 8);
 	if (hitcheck <= 95) {
 		if (!IS_NPC(ch)) {
-			argdam = number_range(70, 75) * kicmult;
+			argdam = ((number_range(70, 75) + (ch->gallic_gunpower * 7)) * kicmult);
 			dam = get_attmod(ch, victim) * (argdam * kimult);
 			stat_train(ch, "int", 16);
 			ch->train += 16;
 			ch->energymastery += 5;
+			if (ch->energymastery >= (ch->kspgain * 100)) {
+				pager_printf_color(ch,
+					"&CYou gained 5 Skill Points!\n\r");
+				ch->sptotal += 5;
+				ch->kspgain += 1;
+				}
 		}
 		if (IS_NPC(ch)) {
 			argdam = number_range(70, 75);
@@ -11486,7 +12682,7 @@ do_gallic_gun(CHAR_DATA * ch, char *argument)
 		    victim, TO_NOTVICT);
 		global_retcode = damage(ch, victim, 0, TYPE_HIT);
 	}
-	ch->mana -= 125;
+	ch->mana -= adjcost;
 	return;
 }
 
@@ -11886,6 +13082,7 @@ do_makosen(CHAR_DATA * ch, char *argument)
 	float	kicmult = 0;
 	int		kilimit = 0;
 	int		hitcheck = 0;
+	int		adjcost = 0;
 	
 	if (IS_NPC(ch) && is_split(ch)) {
 		if (!ch->master)
@@ -11909,19 +13106,33 @@ do_makosen(CHAR_DATA * ch, char *argument)
 		kimult = (float) get_curr_int(ch) / 1000 + 1;
 		kicmult = (float) kilimit / 100 + 1;
 	}
-	if (ch->mana < 60) {
-		send_to_char("You don't have enough energy.\n\r", ch);
-		return;
+	if (!IS_NPC(ch)) {
+		adjcost = 60 * (ch->makosenpower - ch->makoseneffic);
+		if (adjcost < 60)
+			adjcost = 60;
+	}
+	else {
+		adjcost = 1;
+	}
+	if (ch->mana < adjcost) {
+			send_to_char("You don't have enough energy.\n\r", ch);
+			return;
 	}
 	hitcheck = number_range(1, 100);
 	WAIT_STATE(ch, 8);
 	if (hitcheck <= 95) {
 		if (!IS_NPC(ch)) {
-			argdam = number_range(35, 40) * kicmult;
+			argdam = ((number_range(35, 40) + (ch->makosenpower * 3)) * kicmult);
 			dam = get_attmod(ch, victim) * (argdam * kimult);
 			stat_train(ch, "int", 15);
 			ch->train += 15;
 			ch->energymastery += 4;
+			if (ch->energymastery >= (ch->kspgain * 100)) {
+				pager_printf_color(ch,
+					"&CYou gained 5 Skill Points!\n\r");
+				ch->sptotal += 5;
+				ch->kspgain += 1;
+				}
 		}
 		if (IS_NPC(ch))
 			dam = get_attmod(ch, victim) * (number_range(35, 40) + (get_curr_int(ch) / 40));
@@ -11956,7 +13167,7 @@ do_makosen(CHAR_DATA * ch, char *argument)
 		    victim, TO_NOTVICT);
 		global_retcode = damage(ch, victim, 0, TYPE_HIT);
 	}
-	ch->mana -= 60;
+	ch->mana -= adjcost;
 	return;
 }
 

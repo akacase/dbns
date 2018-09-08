@@ -4583,7 +4583,11 @@ do_develop(CHAR_DATA * ch, char *argument)
 		send_to_char("A failure message indicates combination is possible, but you lack enough Strike/Ki/Body Mastery, or you have already learned it.\n\r", ch);
 	}
 	if (!str_cmp(arg1, "eyebeam") && arg2[0] == '\0') {
-		if (ch->energymastery >= 1000 && (ch->skilleye_beam < 1)) {
+		if ((ch->energy_ballpower + ch->energy_balleffic) >= 9) {
+			if (ch->skilleye_beam > 1) {
+				send_to_char("You already know that skill.\n\r", ch);
+				return;
+			}
 			send_to_char("You developed Eye Beam!\n\r", ch);
 			ch->skilleye_beam = 1;
 			return;
@@ -4635,8 +4639,11 @@ do_develop(CHAR_DATA * ch, char *argument)
 		return;
 	}
 	if (!str_cmp(arg1, "punch") && !str_cmp(arg2, "punch")) {
-		if (ch->strikemastery >= 1000 && (ch->skillhaymaker < 1)
-			&& (ch->skillpunch >= 1)) {
+		if ((ch->punchpower + ch->puncheffic) >= 6) {
+			if (ch->skillhaymaker > 1) {
+				send_to_char("You already know that skill.\n\r", ch);
+				return;
+			}
 			send_to_char("Harnessing the wisdom of experience, you develop your way of the fist.\n\r", ch);
 			send_to_char("You developed Haymaker!\n\r", ch);
 			ch->skillhaymaker = 1;
@@ -4648,8 +4655,11 @@ do_develop(CHAR_DATA * ch, char *argument)
 		}
 	}
 	if (!str_cmp(arg1, "haymaker") && !str_cmp(arg2, "haymaker")) {
-		if (ch->strikemastery >= 5000 && (ch->skillbash < 1)
-			&& (ch->skillhaymaker >= 1)) {
+		if ((ch->haymakerpower + ch->haymakereffic) >= 6) {
+			if (ch->skillbash > 1) {
+				send_to_char("You already know that skill.\n\r", ch);
+				return;
+			}
 			send_to_char("You've discovered a new way to use your powerful body to your advantage.\n\r", ch);
 			send_to_char("You developed Bash!\n\r", ch);
 			ch->skillbash = 1;
@@ -4661,8 +4671,11 @@ do_develop(CHAR_DATA * ch, char *argument)
 		}
 	}
 	if (!str_cmp(arg1, "bash") && !str_cmp(arg2, "bash")) {
-		if (ch->strikemastery >= 50000 && (ch->skillcollide < 1)
-			&& (ch->skillbash >= 1)) {
+		if ((ch->bashpower + ch->basheffic) >= 6)  {
+			if (ch->skillcollide > 1) {
+				send_to_char("You already know that skill.\n\r", ch);
+				return;
+			}
 			send_to_char("Strengthening your body, you've learned to use yourself as a more effective battering ram.\n\r", ch);
 			send_to_char("You developed Collide!\n\r", ch);
 			ch->skillcollide = 1;
@@ -4674,8 +4687,11 @@ do_develop(CHAR_DATA * ch, char *argument)
 		}
 	}
 	if (!str_cmp(arg1, "collide") && !str_cmp(arg2, "collide")) {
-		if (ch->strikemastery >= 100000 && (ch->skilllariat < 1)
-			&& (ch->skillcollide >= 1)) {
+		if ((ch->collidepower + ch->collideeffic) >= 6) {
+			if (ch->skilllariat > 1) {
+				send_to_char("You already know that skill.\n\r", ch);
+				return;
+			}
 			send_to_char("You developed Lariat!\n\r", ch);
 			ch->skilllariat = 1;
 			return;
@@ -4686,9 +4702,15 @@ do_develop(CHAR_DATA * ch, char *argument)
 		}
 	}
 	if (!str_cmp(arg1, "energyball") && !str_cmp(arg2, "energyball")) {
-		if (ch->energymastery >= 1000 && (ch->skillcrusherball < 1)
-			&& (ch->skillenergy_beam < 1)
-			&& (ch->skillenergy_ball >= 1)) {
+		if ((ch->energy_ballpower + ch->energy_balleffic) >= 6) {
+			if (ch->skillcrusherball > 1) {
+				send_to_char("You already know that skill.\n\r", ch);
+				return;
+			}
+			if (ch->skillenergy_beam > 1) {
+				send_to_char("You already know that skill.\n\r", ch);
+				return;
+			}
 			send_to_char("You developed Crusher Ball!\n\r", ch);
 			send_to_char("You developed Energy Beam!\n\r", ch);
 			ch->skillcrusherball = 1;
@@ -4701,8 +4723,11 @@ do_develop(CHAR_DATA * ch, char *argument)
 		}
 	}
 	if (!str_cmp(arg1, "crusherball") && !str_cmp(arg2, "crusherball")) {
-		if (ch->energymastery >= 50000 && (ch->skillmeteor < 1)
-			&& (ch->skillcrusherball >= 1)) {
+		if ((ch->crusherballpower + ch->crusherballeffic) >= 6) {
+			if (ch->skillmeteor > 1) {
+				send_to_char("You already know that skill.\n\r", ch);
+				return;
+			}
 			send_to_char("You developed Meteor!\n\r", ch);
 			ch->skillmeteor = 1;
 			return;
@@ -4713,8 +4738,11 @@ do_develop(CHAR_DATA * ch, char *argument)
 		}
 	}
 	if (!str_cmp(arg1, "meteor") && !str_cmp(arg2, "meteor")) {
-		if (ch->energymastery >= 100000 && (ch->skillgigantic_meteor < 1)
-			&& (ch->skillmeteor >= 1)) {
+		if ((ch->meteorpower + ch->meteoreffic) >= 6) {
+			if (ch->skillgigantic_meteor > 1) {
+				send_to_char("You already know that skill.\n\r", ch);
+				return;
+			}
 			send_to_char("You developed Gigantic Meteor!\n\r", ch);
 			ch->skillgigantic_meteor = 1;
 			return;
@@ -4725,8 +4753,11 @@ do_develop(CHAR_DATA * ch, char *argument)
 		}
 	}
 	if (!str_cmp(arg1, "giganticmeteor") && !str_cmp(arg2, "giganticmeteor")) {
-		if (ch->energymastery >= 150000 && (ch->skillecliptic_meteor < 1)
-			&& (ch->skillgigantic_meteor >= 1)) {
+		if ((ch->gigantic_meteorpower + ch->gigantic_meteoreffic) >= 6) {
+			if (ch->skillecliptic_meteor > 1) {
+				send_to_char("You already know that skill.\n\r", ch);
+				return;
+			}
 			send_to_char("You developed Ecliptic Meteor!\n\r", ch);
 			ch->skillecliptic_meteor = 1;
 			return;
@@ -4737,9 +4768,11 @@ do_develop(CHAR_DATA * ch, char *argument)
 		}
 	}
 	if (!str_cmp(arg1, "energybeam") && !str_cmp(arg2, "energyball")) {
-		if (ch->energymastery >= 50000 && (ch->skilldestructive_wave < 1)
-			&& (ch->skillenergy_beam >= 1)
-			&& (ch->skillenergy_ball >= 1)) {
+		if ((ch->energybeampower + ch->energybeameffic) >= 6) {
+			if (ch->skilldestructive_wave > 1) {
+				send_to_char("You already know that skill.\n\r", ch);
+				return;
+			}
 			send_to_char("You developed Destructive Wave!\n\r", ch);
 			ch->skilldestructive_wave = 1;
 			return;
@@ -4750,9 +4783,11 @@ do_develop(CHAR_DATA * ch, char *argument)
 		}
 	}
 	if (!str_cmp(arg1, "energyball") && !str_cmp(arg2, "energybeam")) {
-		if (ch->energymastery >= 50000 && (ch->skilldestructive_wave < 10)
-			&& (ch->skillenergy_beam >= 1)
-			&& (ch->skillenergy_ball >= 1)) {
+		if ((ch->energybeampower + ch->energybeameffic) >= 6) {
+			if (ch->skilldestructive_wave > 1) {
+				send_to_char("You already know that skill.\n\r", ch);
+				return;
+			}
 			send_to_char("You developed Destructive Wave!\n\r", ch);
 			ch->skilldestructive_wave = 1;
 			return;
@@ -4763,10 +4798,13 @@ do_develop(CHAR_DATA * ch, char *argument)
 		}
 	}
 	if (!str_cmp(arg1, "energybeam") && !str_cmp(arg2, "energybeam")) {
-		if (ch->energymastery >= 50000 && (ch->skillconcentrated_beam < 1)
-			&& (ch->skillenergy_beam >= 1)) {
+		if ((ch->energybeampower + ch->energybeameffic) >= 6) {
+			if (ch->skillconcentrated_beam > 1) {
+				send_to_char("You already know that skill.\n\r", ch);
+				return;
+			}
 			send_to_char("You developed Concentrated Beam!\n\r", ch);
-			ch->skillconcentrated_beam =1;
+			ch->skillconcentrated_beam = 1;
 			return;
 		}
 		else {
@@ -4775,9 +4813,11 @@ do_develop(CHAR_DATA * ch, char *argument)
 		}
 	}
 	if (!str_cmp(arg1, "destructivewave") && !str_cmp(arg2, "energybeam")) {
-		if (ch->energymastery >= 60000 && (ch->skillmasenko < 1)
-			&& (ch->skilldestructive_wave >= 1)
-			&& (ch->skillenergy_beam >= 1)) {
+		if ((ch->destructive_wavepower + ch->destructive_waveeffic) >= 6) {
+			if (ch->skillmasenko > 1) {
+				send_to_char("You already know that skill.\n\r", ch);
+				return;
+			}
 			send_to_char("You developed Masenko!\n\r", ch);
 			ch->skillmasenko = 1;
 			return;
@@ -4788,9 +4828,11 @@ do_develop(CHAR_DATA * ch, char *argument)
 		}
 	}
 	if (!str_cmp(arg1, "energybeam") && !str_cmp(arg2, "destructivewave")) {
-		if (ch->energymastery >= 60000 && (ch->skillmasenko < 1)
-			&& (ch->skillenergy_beam >= 1)
-			&& (ch->skilldestructive_wave >= 1)) {
+		if ((ch->destructive_wavepower + ch->destructive_waveeffic) >= 6) {
+			if (ch->skillmasenko > 1) {
+				send_to_char("You already know that skill.\n\r", ch);
+				return;
+			}
 			send_to_char("You developed Masenko!\n\r", ch);
 			ch->skillmasenko = 1;
 			return;
@@ -4801,8 +4843,11 @@ do_develop(CHAR_DATA * ch, char *argument)
 		}
 	}
 	if (!str_cmp(arg1, "masenko") && !str_cmp(arg2, "masenko")) {
-		if (ch->energymastery >= 75000 && (ch->skillmakosen < 1)
-			&& (ch->skillmasenko >= 1)) {
+		if ((ch->masenkopower + ch->masenkoeffic) >= 6) {
+			if (ch->skillmakosen > 1) {
+				send_to_char("You already know that skill.\n\r", ch);
+				return;
+			}
 			send_to_char("You developed Makosen!\n\r", ch);
 			ch->skillmakosen = 1;
 			return;
@@ -4813,9 +4858,12 @@ do_develop(CHAR_DATA * ch, char *argument)
 		}
 	}
 	if (!str_cmp(arg1, "makosen") && !str_cmp(arg2, "concentratedbeam")) {
-		if (ch->energymastery >= 100000 && (ch->skillsbc < 1)
-			&& (ch->skillmakosen >= 1)
-			&& (ch->skillconcentrated_beam >= 1)) {
+		if (((ch->makosenpower + ch->makoseneffic) >= 4)
+			&& ((ch->concentrated_beampower + ch->concentrated_beameffic) >= 5)) {
+			if (ch->skillsbc > 1) {
+				send_to_char("You already know that skill.\n\r", ch);
+				return;
+			}
 			send_to_char("You developed Special Beam Cannon!\n\r", ch);
 			ch->skillsbc = 1;
 			return;
@@ -4826,9 +4874,12 @@ do_develop(CHAR_DATA * ch, char *argument)
 		}
 	}
 	if (!str_cmp(arg1, "concentratedbeam") && !str_cmp(arg2, "makosen")) {
-		if (ch->energymastery >= 100000 && (ch->skillsbc < 1)
-			&& (ch->skillmakosen >= 1)
-			&& (ch->skillconcentrated_beam >= 1)) {
+		if (((ch->makosenpower + ch->makoseneffic) >= 4)
+			&& ((ch->concentrated_beampower + ch->concentrated_beameffic) >= 5)) {
+			if (ch->skillsbc > 1) {
+				send_to_char("You already know that skill.\n\r", ch);
+				return;
+			}
 			send_to_char("You developed Special Beam Cannon!\n\r", ch);
 			ch->skillsbc = 1;
 			return;
@@ -4839,8 +4890,11 @@ do_develop(CHAR_DATA * ch, char *argument)
 		}
 	}
 	if (!str_cmp(arg1, "concentratedbeam") && !str_cmp(arg2, "concentratedbeam")) {
-		if (ch->energymastery >= 100000 && (ch->skillkamehameha < 1)
-			&& (ch->skillconcentrated_beam >= 1)) {
+		if ((ch->concentrated_beampower + ch->concentrated_beameffic) >= 6) {
+			if (ch->skillkamehameha > 1) {
+				send_to_char("You already know that skill.\n\r", ch);
+				return;
+			}
 			send_to_char("You developed Kamehameha!\n\r", ch);
 			ch->skillkamehameha = 1;
 			return;
@@ -4851,9 +4905,11 @@ do_develop(CHAR_DATA * ch, char *argument)
 		}
 	}
 	if (!str_cmp(arg1, "concentratedbeam") && !str_cmp(arg2, "energybeam")) {
-		if (ch->energymastery >= 100000 && (ch->skillgallic_gun < 1)
-			&& (ch->skillenergy_beam >= 1)
-			&& (ch->skillconcentrated_beam > 10)) {
+		if ((ch->concentrated_beampower + ch->concentrated_beameffic) >= 6) {
+			if (ch->skillgallic_gun > 1) {
+				send_to_char("You already know that skill.\n\r", ch);
+				return;
+			}
 			send_to_char("You developed Gallic Gun!\n\r", ch);
 			ch->skillgallic_gun = 1;
 			return;
@@ -4864,9 +4920,11 @@ do_develop(CHAR_DATA * ch, char *argument)
 		}
 	}
 	if (!str_cmp(arg1, "energybeam") && !str_cmp(arg2, "concentratedbeam")) {
-		if (ch->energymastery >= 100000 && (ch->skillgallic_gun < 1)
-			&& (ch->skillenergy_beam >= 1)
-			&& (ch->skillconcentrated_beam > 10)) {
+		if ((ch->concentrated_beampower + ch->concentrated_beameffic) >= 6) {
+			if (ch->skillgallic_gun > 1) {
+				send_to_char("You already know that skill.\n\r", ch);
+				return;
+			}
 			send_to_char("You developed Gallic Gun!\n\r", ch);
 			ch->skillgallic_gun = 1;
 			return;
@@ -4877,9 +4935,11 @@ do_develop(CHAR_DATA * ch, char *argument)
 		}
 	}
 	if (!str_cmp(arg1, "eyebeam") && !str_cmp(arg2, "energybeam")) {
-		if (ch->energymastery >= 100000 && (ch->skillfinger_beam < 1)
-			&& (ch->skillenergy_beam >= 1)
-			&& (ch->skilleye_beam >= 1)) {
+		if ((ch->eye_beampower + ch->eye_beameffic + ch->energybeampower + ch->energybeameffic) >= 40) {
+			if (ch->skillfinger_beam > 1) {
+				send_to_char("You already know that skill.\n\r", ch);
+				return;
+			}
 			send_to_char("You developed Finger Beam!\n\r", ch);
 			ch->skillfinger_beam = 1;
 			return;
@@ -4890,9 +4950,11 @@ do_develop(CHAR_DATA * ch, char *argument)
 		}
 	}
 	if (!str_cmp(arg1, "energybeam") && !str_cmp(arg2, "eyebeam")) {
-		if (ch->energymastery >= 100000 && (ch->skillfinger_beam < 1)
-			&& (ch->skillenergy_beam >= 1)
-			&& (ch->skilleye_beam >= 1)) {
+		if ((ch->eye_beampower + ch->eye_beameffic + ch->energybeampower + ch->energybeameffic) >= 40) {
+			if (ch->skillfinger_beam > 1) {
+				send_to_char("You already know that skill.\n\r", ch);
+				return;
+			}
 			send_to_char("You developed Finger Beam!\n\r", ch);
 			ch->skillfinger_beam = 1;
 			return;
@@ -4903,9 +4965,11 @@ do_develop(CHAR_DATA * ch, char *argument)
 		}
 	}
 	if (!str_cmp(arg1, "fingerbeam") && !str_cmp(arg2, "crusherball")) {
-		if (ch->energymastery >= 150000 && (ch->skilldeath_ball < 1)
-			&& (ch->skillfinger_beam >= 1)
-			&& (ch->skillcrusherball >= 1)) {
+		if ((ch->finger_beampower + ch->finger_beameffic) >= 6) {
+			if (ch->skilldeath_ball > 1) {
+				send_to_char("You already know that skill.\n\r", ch);
+				return;
+			}
 			send_to_char("You developed Death Ball!\n\r", ch);
 			ch->skilldeath_ball = 1;
 			return;
@@ -4916,9 +4980,11 @@ do_develop(CHAR_DATA * ch, char *argument)
 		}
 	}
 	if (!str_cmp(arg1, "crusherball") && !str_cmp(arg2, "fingerbeam")) {
-		if (ch->energymastery >= 150000 && (ch->skilldeath_ball < 1)
-			&& (ch->skillfinger_beam >= 1)
-			&& (ch->skillcrusherball >= 1)) {
+		if ((ch->finger_beampower + ch->finger_beameffic) >= 6) {
+			if (ch->skilldeath_ball > 1) {
+				send_to_char("You already know that skill.\n\r", ch);
+				return;
+			}
 			send_to_char("You developed Death Ball!\n\r", ch);
 			ch->skilldeath_ball = 1;
 			return;
@@ -4929,7 +4995,11 @@ do_develop(CHAR_DATA * ch, char *argument)
 		}
 	}
 	if (!str_cmp(arg1, "forcewave") && arg2[0] == '\0') {
-		if (ch->energymastery >= 50000 && (ch->skillforcewave < 1)) {
+		if ((ch->energybeampower + ch->energybeameffic) >= 6) {
+			if (ch->forcewave > 1) {
+				send_to_char("You already know that skill.\n\r", ch);
+				return;
+			}
 			send_to_char("You developed Forcewave!\n\r", ch);
 			ch->skillforcewave = 1;
 			return;
@@ -4940,9 +5010,11 @@ do_develop(CHAR_DATA * ch, char *argument)
 		}
 	}
 	if (!str_cmp(arg1, "forcewave") && !str_cmp(arg2, "forcewave")) {
-		if (ch->energymastery >= 100000 && (ch->skillshockwave < 1)
-			&& (ch->skilldestructive_wave >= 1)
-			&& (ch->skillforcewave >= 1)) {
+		if ((ch->forcewavepower + ch->forcewaveeffic) >= 6) {
+			if (ch->skillshockwave > 1) {
+				send_to_char("You already know that skill.\n\r", ch);
+				return;
+			}
 			send_to_char("You developed Shockwave!\n\r", ch);
 			ch->skillshockwave = 1;
 			return;
@@ -4953,7 +5025,11 @@ do_develop(CHAR_DATA * ch, char *argument)
 		}
 	}
 	if (!str_cmp(arg1, "energydisc") && arg2[0] == '\0') {
-		if (ch->energymastery >= 10000 && (ch->skillenergy_disc < 1)) {
+		if (ch->skillenergy_beam >= 1) {
+			if (ch->skillenergy_disc > 1) {
+				send_to_char("You already know that skill.\n\r", ch);
+				return;
+			}
 			send_to_char("You developed Energy Disc!\n\r", ch);
 			ch->skillenergy_disc = 1;
 			return;
@@ -4964,8 +5040,11 @@ do_develop(CHAR_DATA * ch, char *argument)
 		}
 	}
 	if (!str_cmp(arg1, "energydisc") && !str_cmp(arg2, "energydisc")) {
-		if (ch->energymastery >= 50000 && (ch->skilldestructo_disc < 1)
-			&& (ch->skillenergy_disc >= 1)) {
+		if ((ch->energy_discpower + ch->energy_disceffic) >= 6) {
+			if (ch->skilldestructo_disc > 1) {
+				send_to_char("You already know that skill.\n\r", ch);
+				return;
+			}
 			send_to_char("You developed Destructo Disc!\n\r", ch);
 			ch->skilldestructo_disc = 1;
 			return;
@@ -4982,7 +5061,7 @@ do_develop(CHAR_DATA * ch, char *argument)
 			return;
 		}
 		else {
-			send_to_char("Regrettably, your effort seems to be wasted.\n\r", ch);
+			send_to_char("You already know that skill.\n\r", ch);
 			return;
 		}
 	}
@@ -4993,18 +5072,7 @@ do_develop(CHAR_DATA * ch, char *argument)
 			return;
 		}
 		else {
-			send_to_char("Regrettably, your effort seems to be wasted.\n\r", ch);
-			return;
-		}
-	}
-	if (!str_cmp(arg1, "energyball") && arg2[0] == '\0') {
-		if ((ch->skillenergy_ball < 1)) {
-			send_to_char("You developed Energy Ball!\n\r", ch);
-			ch->skillenergy_ball = 1;
-			return;
-		}
-		else {
-			send_to_char("Regrettably, your effort seems to be wasted.\n\r", ch);
+			send_to_char("You already know that skill.\n\r", ch);
 			return;
 		}
 	}
@@ -6777,6 +6845,8 @@ do_skills(CHAR_DATA * ch, char *argument) {
 					" &YPOWER INVESTED : &Y[&G%d&Y]\n\r", ch->energy_ballpower);
 				pager_printf_color(ch,
 					" &YEFFICIENCY     : &Y[&G%d&Y]\n\r", ch->energy_balleffic);
+				pager_printf_color(ch,
+					"\n\r");
 				pager_printf_color(ch,
 					"&CAverage Base Damage: &Y3\n\r");
 				pager_printf_color(ch,
