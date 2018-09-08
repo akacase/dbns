@@ -2576,7 +2576,7 @@ nanny(DESCRIPTOR_DATA *d, char *argument)
 	ch->skilldeath_ball = 0;
 	ch->skilldestructo_disc = 0;
 	ch->skillecliptic_meteor = 0;
-	ch->skillenergy_ball = 95;
+	ch->skillenergy_ball = 1;
 	ch->skillenergy_beam = 0;
 	ch->skillenergy_disc = 0;
 	ch->skillfinal_flash = 0;
@@ -2602,7 +2602,7 @@ nanny(DESCRIPTOR_DATA *d, char *argument)
 	ch->skillmonkey_cannon = 0;
 	ch->skillpsionic_blast = 0;
 	ch->skillmulti_finger_beam = 0;
-	ch->skillsense = 0;
+	ch->skillsense = 1;
 	ch->skillshockwave = 0;
 	ch->skillsbc = 0;
 	ch->skillspirit_ball = 0;
