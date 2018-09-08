@@ -2652,7 +2652,7 @@ violence_update(void)
 					acc = ((ch->gravExp / 1000) + 1);
 					if (acc < 1)
 						acc = 1;
-					if (weightedtraining(ch) < acc) {
+					if (weightedtraining(ch) > acc) {
 						damrange = number_range(1, 3);
 						gravdam = weightedtraining(ch) * damrange;
 						if (ch->mana - gravdam > 0) {
