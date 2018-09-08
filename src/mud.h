@@ -2679,7 +2679,7 @@ struct char_data {
 	int	death_ballpower;
 	int	death_balleffic;
 	int	destructo_discpower;
-	int	destrcuto_disceffic;
+	int	destructo_disceffic;
 	int	destructive_wavepower;
 	int	destructive_waveeffic;
 
