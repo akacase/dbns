@@ -2666,20 +2666,14 @@ violence_update(void)
 						else if (ch->mana - gravdam <= 0) {
 							ch->mana = 0;
 							ch->hit -= (gravdam / 3);
-							act( AT_RED, "Sweat is pouring off you! Maybe you should take off all this extra weight ...", ch, NULL, NULL, TO_CHAR );
+							if (ch->hit - (gravdam / 3) < 0)
+								ch->hit = 1;
+							act( AT_RED, "You heave for breath.", ch, NULL, NULL, TO_CHAR );
 							if (ch->desc)
 								ch->gravExp += 6;
-							if (ch->hit - (gravdam / 3) < 0) {
-								update_pos(ch);
-								if (ch->position == POS_DEAD) {
-									ch->gravSetting = acc;
-									act( AT_RED, "You expend the last of your energy, collapsing dead.", ch, NULL, NULL, TO_CHAR );
-									act( AT_RED, "$n collapses, DEAD, $s body exhausted from the weight of $s training gear.", ch, NULL, NULL, TO_NOTVICT );
-									sprintf( buf, "%s collapses under the weight of their training gear", ch->name );
-									do_info(ch, buf);
-									raw_kill(ch, ch);
-								}
-							}
+								stat_train(ch, "str", 2);
+								stat_train(ch, "spd", 2);
+								stat_train(ch, "con", 2);
 						}
 					}
 				}
