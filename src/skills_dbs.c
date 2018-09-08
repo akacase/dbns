@@ -6033,7 +6033,6 @@ do_energy_ball(CHAR_DATA * ch, char *argument)
 				ch->kspgain += 1;
 				}
 			}
-		}
 		if (IS_NPC(ch)) {
 			argdam = number_range(2, 4);
 			dam = get_attmod(ch, victim) * (argdam + (get_curr_int(ch) / 50));
