@@ -7059,7 +7059,7 @@ do_skills(CHAR_DATA * ch, char *argument) {
 			pager_printf_color(ch,
 				"\n\r");
 			if (ch->skilleye_beam >= 1) {
-				argdam = (13 + ch->eye_beampower) * kicmult);
+				argdam = (13 + ch->eye_beampower) * kicmult;
 				dam = 1 * (argdam * kimult);
 				pager_printf_color(ch,
 					" &CA beam of energy fired from the eyes, designed to\n\r");
