@@ -628,6 +628,7 @@ DO_FUN *skill_function( char *name )
       if ( !str_cmp( name, "do_reset"                     ))    return do_reset;
       if ( !str_cmp( name, "do_resetship"                 ))    return do_resetship;
       if ( !str_cmp( name, "do_residence"                 ))    return do_residence;
+      if ( !str_cmp( name, "do_respec"                      ))    return do_respec;
       if ( !str_cmp( name, "do_rest"                      ))    return do_rest;
       if ( !str_cmp( name, "do_restore"                   ))    return do_restore;
       if ( !str_cmp( name, "do_restoretime"               ))    return do_restoretime;
@@ -1383,6 +1384,7 @@ char *skill_name( DO_FUN *skill )
   if ( skill == do_reset                       )    return "do_reset";
   if ( skill == do_resetship                   )    return "do_resetship";
   if ( skill == do_residence                   )    return "do_residence";
+  if ( skill == do_respec                        )    return "do_respec";
   if ( skill == do_rest                        )    return "do_rest";
   if ( skill == do_restore                     )    return "do_restore";
   if ( skill == do_restoretime                 )    return "do_restoretime";

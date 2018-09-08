@@ -6545,7 +6545,8 @@ do_skills(CHAR_DATA * ch, char *argument) {
 	int		argdam = 0;
 	int		kilimit = 0;
 	float	kimult = 0;
-	float	kicmult= 0;
+	float	kicmult = 0;
+	float	physmult = 0;
 	
 	one_argument(argument, arg);
 	
@@ -6577,6 +6578,7 @@ do_skills(CHAR_DATA * ch, char *argument) {
 	kilimit = ch->train / 10000;
 	kimult = (float) get_curr_int(ch) / 1000 + 1;
 	kicmult = (float) kilimit / 100 + 1;
+	physmult = (float) get_curr_str(ch) / 950 + 1;
 	
 	if (ch->strikemastery < 1000)
 		strikepercent = (100 * ch->strikemastery) / 1000;
@@ -6833,7 +6835,7 @@ do_skills(CHAR_DATA * ch, char *argument) {
 			pager_printf_color(ch,
 				"\n\r");
 			if (ch->skillenergy_ball >= 1) {
-				argdam = ((3 + ch->energy_ballpower) * kicmult);
+				argdam = (3 + ch->energy_ballpower) * kicmult;
 				dam = 1 * (argdam * kimult);
 				pager_printf_color(ch,
 					" &CThe most basic of energy attacks. A tiny ball of energy,\n\r");
@@ -6848,6 +6850,8 @@ do_skills(CHAR_DATA * ch, char *argument) {
 				pager_printf_color(ch,
 					"\n\r");
 				pager_printf_color(ch,
+					"&CAttack Class: Blast(Sphere)\n\r");
+				pager_printf_color(ch,
 					"&CAverage Base Damage: &Y3\n\r");
 				pager_printf_color(ch,
 					"&CYour Average Damage: &Y%d\n\r", dam);
@@ -6857,6 +6861,721 @@ do_skills(CHAR_DATA * ch, char *argument) {
 					"&YYou can't view detailed skill information for a skill you don't know!\n\r");
 			}
 		}
+		if (!str_cmp(arg, "crusherball")) {
+			pager_printf_color(ch,
+				"&B------------------&CCRUSHER BALL&B-------------------\n\r");
+			pager_printf_color(ch,
+				"\n\r");
+			if (ch->skillcrusherball >= 1) {
+				argdam = (13 + ch->crusherballpower) * kicmult;
+				dam = 1 * (argdam * kimult);
+				pager_printf_color(ch,
+					" &CA more powerful Energy Ball, focused and thrown\n\r");
+				pager_printf_color(ch,
+					"&Cwith great force.\n\r");
+				pager_printf_color(ch,
+					"\n\r");
+				pager_printf_color(ch,
+					" &YPOWER INVESTED : &Y[&G%d&Y]\n\r", ch->crusherballpower);
+				pager_printf_color(ch,
+					" &YEFFICIENCY     : &Y[&G%d&Y]\n\r", ch->crusherballeffic);
+				pager_printf_color(ch,
+					"\n\r");
+				pager_printf_color(ch,
+					"&CAttack Class: Blast(Sphere)\n\r");
+				pager_printf_color(ch,
+					"&CAverage Base Damage: &Y13\n\r");
+				pager_printf_color(ch,
+					"&CYour Average Damage: &Y%d\n\r", dam);
+			}
+			else {
+				pager_printf_color(ch,
+					"&YYou can't view detailed skill information for a skill you don't know!\n\r");
+			}
+		}
+		if (!str_cmp(arg, "meteor")) {
+			pager_printf_color(ch,
+				"&B------------------&CMETEOR&B-------------------\n\r");
+			pager_printf_color(ch,
+				"\n\r");
+			if (ch->skillmeteor >= 1) {
+				argdam = (33 + (ch->meteorpower * 3)) * kicmult;
+				dam = 1 * (argdam * kimult);
+				pager_printf_color(ch,
+					" &CA recklessly enormous gathering of energy, used to\n\r");
+				pager_printf_color(ch,
+					"&Cexplosive effect at the expense of efficiency.\n\r");
+				pager_printf_color(ch,
+					"\n\r");
+				pager_printf_color(ch,
+					" &YPOWER INVESTED : &Y[&G%d&Y]\n\r", ch->meteorpower);
+				pager_printf_color(ch,
+					" &YEFFICIENCY     : &Y[&G%d&Y]\n\r", ch->meteoreffic);
+				pager_printf_color(ch,
+					"\n\r");
+				pager_printf_color(ch,
+					"&CAttack Class: Blast(Sphere)\n\r");
+				pager_printf_color(ch,
+					"&CAverage Base Damage: &Y33\n\r");
+				pager_printf_color(ch,
+					"&CYour Average Damage: &Y%d\n\r", dam);
+			}
+			else {
+				pager_printf_color(ch,
+					"&YYou can't view detailed skill information for a skill you don't know!\n\r");
+			}
+		}
+		if (!str_cmp(arg, "giganticmeteor")) {
+			pager_printf_color(ch,
+				"&B------------------&CGIGANTIC METEOR&B-------------------\n\r");
+			pager_printf_color(ch,
+				"\n\r");
+			if (ch->skillgigantic_meteor >= 1) {
+				argdam = (73 + (ch->gigantic_meteorpower * 7)) * kicmult;
+				dam = 1 * (argdam * kimult);
+				pager_printf_color(ch,
+					" &CFew exist who wouldn't cower at the sight of an energy\n\r");
+				pager_printf_color(ch,
+					"&Cmass this gigantic. Further exemplifies raw power.\n\r");
+				pager_printf_color(ch,
+					"\n\r");
+				pager_printf_color(ch,
+					" &YPOWER INVESTED : &Y[&G%d&Y]\n\r", ch->gigantic_meteorpower);
+				pager_printf_color(ch,
+					" &YEFFICIENCY     : &Y[&G%d&Y]\n\r", ch->gigantic_meteoreffic);
+				pager_printf_color(ch,
+					"\n\r");
+				pager_printf_color(ch,
+					"&CAttack Class: Blast(Sphere)\n\r");
+				pager_printf_color(ch,
+					"&CAverage Base Damage: &Y73\n\r");
+				pager_printf_color(ch,
+					"&CYour Average Damage: &Y%d\n\r", dam);
+			}
+			else {
+				pager_printf_color(ch,
+					"&YYou can't view detailed skill information for a skill you don't know!\n\r");
+			}
+		}
+		if (!str_cmp(arg, "eclipticmeteor")) {
+			pager_printf_color(ch,
+				"&B------------------&CECLIPTIC METEOR&B-------------------\n\r");
+			pager_printf_color(ch,
+				"\n\r");
+			if (ch->skillecliptic_meteor >= 1) {
+				argdam = (113 + (ch->ecliptic_meteorpower * 11)) * kicmult;
+				dam = 1 * (argdam * kimult);
+				pager_printf_color(ch,
+					" &CA terrifying mass that blots out the sun, fully capable\n\r");
+				pager_printf_color(ch,
+					"&Cof wiping out entire solar systems.\n\r");
+				pager_printf_color(ch,
+					"\n\r");
+				pager_printf_color(ch,
+					" &YPOWER INVESTED : &Y[&G%d&Y]\n\r", ch->ecliptic_meteorpower);
+				pager_printf_color(ch,
+					" &YEFFICIENCY     : &Y[&G%d&Y]\n\r", ch->ecliptic_meteoreffic);
+				pager_printf_color(ch,
+					"\n\r");
+				pager_printf_color(ch,
+					"&CAttack Class: Blast(Sphere)\n\r");
+				pager_printf_color(ch,
+					"&CAverage Base Damage: &Y113\n\r");
+				pager_printf_color(ch,
+					"&CYour Average Damage: &Y%d\n\r", dam);
+			}
+			else {
+				pager_printf_color(ch,
+					"&YYou can't view detailed skill information for a skill you don't know!\n\r");
+			}
+		}
+		if (!str_cmp(arg, "deathball")) {
+			pager_printf_color(ch,
+				"&B------------------&CDEATH BALL&B-------------------\n\r");
+			pager_printf_color(ch,
+				"\n\r");
+			if (ch->skilldeath_ball >= 1) {
+				argdam = (113 + (ch->death_ballpower * 11)) * kicmult;
+				dam = 1 * (argdam * kimult);
+				pager_printf_color(ch,
+					" &CA compact sphere of dark energy, and deceptively so.\n\r");
+				pager_printf_color(ch,
+					"&CIn reality, its size speaks little to its sheer\n\r");
+				pager_printf_color(ch,
+					"&Cdestructive power.\n\r");
+				pager_printf_color(ch,
+					"\n\r");
+				pager_printf_color(ch,
+					" &YPOWER INVESTED : &Y[&G%d&Y]\n\r", ch->death_ballpower);
+				pager_printf_color(ch,
+					" &YEFFICIENCY     : &Y[&G%d&Y]\n\r", ch->death_balleffic);
+				pager_printf_color(ch,
+					"\n\r");
+				pager_printf_color(ch,
+					"&CAttack Class: Tyrant\n\r");
+				pager_printf_color(ch,
+					"&CAverage Base Damage: &Y113\n\r");
+				pager_printf_color(ch,
+					"&CYour Average Damage: &Y%d\n\r", dam);
+			}
+			else {
+				pager_printf_color(ch,
+					"&YYou can't view detailed skill information for a skill you don't know!\n\r");
+			}
+		}
+		if (!str_cmp(arg, "energybeam")) {
+			pager_printf_color(ch,
+				"&B------------------&CENERGY BEAM&B-------------------\n\r");
+			pager_printf_color(ch,
+				"\n\r");
+			if (ch->skillenergy_beam >= 1) {
+				argdam = (7 + ch->energybeampower) * kicmult;
+				dam = 1 * (argdam * kimult);
+				pager_printf_color(ch,
+					" &CA beam of pure energy, typically fired from one hand.\n\r");
+				pager_printf_color(ch,
+					"\n\r");
+				pager_printf_color(ch,
+					" &YPOWER INVESTED : &Y[&G%d&Y]\n\r", ch->energybeampower);
+				pager_printf_color(ch,
+					" &YEFFICIENCY     : &Y[&G%d&Y]\n\r", ch->energybeameffic);
+				pager_printf_color(ch,
+					"\n\r");
+				pager_printf_color(ch,
+					"&CAttack Class: Beam\n\r");
+				pager_printf_color(ch,
+					"&CAverage Base Damage: &Y7\n\r");
+				pager_printf_color(ch,
+					"&CYour Average Damage: &Y%d\n\r", dam);
+			}
+			else {
+				pager_printf_color(ch,
+					"&YYou can't view detailed skill information for a skill you don't know!\n\r");
+			}
+		}
+		if (!str_cmp(arg, "eyebeam")) {
+			pager_printf_color(ch,
+				"&B------------------&CEYE BEAM&B-------------------\n\r");
+			pager_printf_color(ch,
+				"\n\r");
+			if (ch->skilleye_beam >= 1) {
+				argdam = (13 + ch->eye_beampower) * kicmult);
+				dam = 1 * (argdam * kimult);
+				pager_printf_color(ch,
+					" &CA beam of energy fired from the eyes, designed to\n\r");
+				pager_printf_color(ch,
+					"&Cdeceive opponents caught unaware.\n\r");
+				pager_printf_color(ch,
+					"\n\r");
+				pager_printf_color(ch,
+					" &YPOWER INVESTED : &Y[&G%d&Y]\n\r", ch->eye_beampower);
+				pager_printf_color(ch,
+					" &YEFFICIENCY     : &Y[&G%d&Y]\n\r", ch->eye_beameffic);
+				pager_printf_color(ch,
+					"\n\r");
+				pager_printf_color(ch,
+					"&CAttack Class: Tyrant\n\r");
+				pager_printf_color(ch,
+					"&CAverage Base Damage: &Y13\n\r");
+				pager_printf_color(ch,
+					"&CYour Average Damage: &Y%d\n\r", dam);
+			}
+			else {
+				pager_printf_color(ch,
+					"&YYou can't view detailed skill information for a skill you don't know!\n\r");
+			}
+		}
+		if (!str_cmp(arg, "masenko")) {
+			pager_printf_color(ch,
+				"&B------------------&CMASENKO&B-------------------\n\r");
+			pager_printf_color(ch,
+				"\n\r");
+			if (ch->skillmasenko >= 1) {
+				argdam = (34 + (ch->masenkopower * 3)) * kicmult;
+				dam = 1 * (argdam * kimult);
+				pager_printf_color(ch,
+					" &CA flash of energy charged in the hands overhead,\n\r");
+				pager_printf_color(ch,
+					"&Cthen fired forward with admirable destructive power.\n\r");
+				pager_printf_color(ch,
+					"\n\r");
+				pager_printf_color(ch,
+					" &YPOWER INVESTED : &Y[&G%d&Y]\n\r", ch->masenkopower);
+				pager_printf_color(ch,
+					" &YEFFICIENCY     : &Y[&G%d&Y]\n\r", ch->masenkoeffic);
+				pager_printf_color(ch,
+					"\n\r");
+				pager_printf_color(ch,
+					"&CAttack Class: Beam(Devil)\n\r");
+				pager_printf_color(ch,
+					"&CAverage Base Damage: &Y34\n\r");
+				pager_printf_color(ch,
+					"&CYour Average Damage: &Y%d\n\r", dam);
+			}
+			else {
+				pager_printf_color(ch,
+					"&YYou can't view detailed skill information for a skill you don't know!\n\r");
+			}
+		}
+		if (!str_cmp(arg, "makosen")) {
+			pager_printf_color(ch,
+				"&B------------------&CMAKOSEN&B-------------------\n\r");
+			pager_printf_color(ch,
+				"\n\r");
+			if (ch->skillmakosen >= 1) {
+				argdam = (41 + (ch->makosenpower * 4)) * kicmult;
+				dam = 1 * (argdam * kimult);
+				pager_printf_color(ch,
+					" &CA more powerful version of the Masenko, charged\n\r");
+				pager_printf_color(ch,
+					"&Cin the hands at the side of the body. Originally\n\r");
+				pager_printf_color(ch,
+					"&Cdeveloped to contend with the Kamehameha, its power\n\r");
+				pager_printf_color(ch,
+					"&Cis great, but leaves much to be desired.\n\r");
+				pager_printf_color(ch,
+					"\n\r");
+				pager_printf_color(ch,
+					" &YPOWER INVESTED : &Y[&G%d&Y]\n\r", ch->makosenpower);
+				pager_printf_color(ch,
+					" &YEFFICIENCY     : &Y[&G%d&Y]\n\r", ch->makoseneffic);
+				pager_printf_color(ch,
+					"\n\r");
+				pager_printf_color(ch,
+					"&CAttack Class: Beam(Devil)\n\r");
+				pager_printf_color(ch,
+					"&CAverage Base Damage: &Y41\n\r");
+				pager_printf_color(ch,
+					"&CYour Average Damage: &Y%d\n\r", dam);
+			}
+			else {
+				pager_printf_color(ch,
+					"&YYou can't view detailed skill information for a skill you don't know!\n\r");
+			}
+		}
+		if (!str_cmp(arg, "sbc")) {
+			pager_printf_color(ch,
+				"&B------------------&CSPECIAL BEAM CANNON&B-------------------\n\r");
+			pager_printf_color(ch,
+				"\n\r");
+			if (ch->skillsbc >= 1) {
+				argdam = (60 + (ch->sbcpower * 5)) * kicmult;
+				dam = 1 * (argdam * kimult);
+				pager_printf_color(ch,
+					" &CA deadly, spiral corkscrew beam charged to obscene\n\r");
+				pager_printf_color(ch,
+					"&Clevels before firing. Has power enough to bore a hole\n\r");
+				pager_printf_color(ch,
+					"&Cthrough even the strongest opponents.\n\r");
+				pager_printf_color(ch,
+					"\n\r");
+				pager_printf_color(ch,
+					" &YPOWER INVESTED : &Y[&G%d&Y]\n\r", ch->sbcpower);
+				pager_printf_color(ch,
+					" &YEFFICIENCY     : &Y[&G%d&Y]\n\r", ch->sbceffic);
+				pager_printf_color(ch,
+					"\n\r");
+				pager_printf_color(ch,
+					"&CAttack Class: Beam(Devil)\n\r");
+				pager_printf_color(ch,
+					"&CAverage Base Damage: &Y60\n\r");
+				pager_printf_color(ch,
+					"&CYour Average Damage: &Y%d\n\r", dam);
+			}
+			else {
+				pager_printf_color(ch,
+					"&YYou can't view detailed skill information for a skill you don't know!\n\r");
+			}
+		}
+		if (!str_cmp(arg, "concentratedbeam")) {
+			pager_printf_color(ch,
+				"&B------------------&CCONCENTRATED BEAM&B-------------------\n\r");
+			pager_printf_color(ch,
+				"\n\r");
+			if (ch->skillconcentrated_beam >= 1) {
+				argdam = (21 + (ch->concentrated_beampower * 2)) * kicmult;
+				dam = 1 * (argdam * kimult);
+				pager_printf_color(ch,
+					" &CThe natural evolution of an Energy Beam, wider and with\n\r");
+				pager_printf_color(ch,
+					"&Cfar greater potential destructive power.\n\r");
+				pager_printf_color(ch,
+					"\n\r");
+				pager_printf_color(ch,
+					" &YPOWER INVESTED : &Y[&G%d&Y]\n\r", ch->concentrated_beampower);
+				pager_printf_color(ch,
+					" &YEFFICIENCY     : &Y[&G%d&Y]\n\r", ch->concentrated_beameffic);
+				pager_printf_color(ch,
+					"\n\r");
+				pager_printf_color(ch,
+					"&CAttack Class: Beam\n\r");
+				pager_printf_color(ch,
+					"&CAverage Base Damage: &Y21\n\r");
+				pager_printf_color(ch,
+					"&CYour Average Damage: &Y%d\n\r", dam);
+			}
+			else {
+				pager_printf_color(ch,
+					"&YYou can't view detailed skill information for a skill you don't know!\n\r");
+			}
+		}
+		if (!str_cmp(arg, "kamehameha")) {
+			pager_printf_color(ch,
+				"&B------------------&CKAMEHAMEHA&B-------------------\n\r");
+			pager_printf_color(ch,
+				"\n\r");
+			if (ch->skillkamehameha >= 1) {
+				argdam = (55 + (ch->kamehamehapower * 5)) * kicmult;
+				dam = 1 * (argdam * kimult);
+				pager_printf_color(ch,
+					" &CThe iconic blue-white beam, charged and fired from both\n\r");
+				pager_printf_color(ch,
+					"&Chands with incredible force and precision.\n\r");
+				pager_printf_color(ch,
+					"\n\r");
+				pager_printf_color(ch,
+					" &YPOWER INVESTED : &Y[&G%d&Y]\n\r", ch->kamehamehapower);
+				pager_printf_color(ch,
+					" &YEFFICIENCY     : &Y[&G%d&Y]\n\r", ch->kamehamehaeffic);
+				pager_printf_color(ch,
+					"\n\r");
+				pager_printf_color(ch,
+					"&CAttack Class: Beam\n\r");
+				pager_printf_color(ch,
+					"&CAverage Base Damage: &Y55\n\r");
+				pager_printf_color(ch,
+					"&CYour Average Damage: &Y%d\n\r", dam);
+			}
+			else {
+				pager_printf_color(ch,
+					"&YYou can't view detailed skill information for a skill you don't know!\n\r");
+			}
+		}
+		if (!str_cmp(arg, "gallicgun")) {
+			pager_printf_color(ch,
+				"&B------------------&CGALLIC GUN&B-------------------\n\r");
+			pager_printf_color(ch,
+				"\n\r");
+			if (ch->skillgallic_gun >= 1) {
+				argdam = (73 + (ch->gallic_gunpower * 5)) * kicmult;
+				dam = 1 * (argdam * kimult);
+				pager_printf_color(ch,
+					" &CA beam charged with reckless abandon in both hands,\n\r");
+				pager_printf_color(ch,
+					"&Cfavoring destructive power over all else.\n\r");
+				pager_printf_color(ch,
+					"\n\r");
+				pager_printf_color(ch,
+					" &YPOWER INVESTED : &Y[&G%d&Y]\n\r", ch->gallic_gunpower);
+				pager_printf_color(ch,
+					" &YEFFICIENCY     : &Y[&G%d&Y]\n\r", ch->gallic_guneffic);
+				pager_printf_color(ch,
+					"\n\r");
+				pager_printf_color(ch,
+					"&CAttack Class: Beam\n\r");
+				pager_printf_color(ch,
+					"&CAverage Base Damage: &Y73\n\r");
+				pager_printf_color(ch,
+					"&CYour Average Damage: &Y%d\n\r", dam);
+			}
+			else {
+				pager_printf_color(ch,
+					"&YYou can't view detailed skill information for a skill you don't know!\n\r");
+			}
+		}
+		if (!str_cmp(arg, "fingerbeam")) {
+			pager_printf_color(ch,
+				"&B------------------&CFINGER BEAM&B-------------------\n\r");
+			pager_printf_color(ch,
+				"\n\r");
+			if (ch->skillfinger_beam >= 1) {
+				argdam = (65 + (ch->finger_beampower * 5)) * kicmult;
+				dam = 1 * (argdam * kimult);
+				pager_printf_color(ch,
+					" &CDesigned to toy with one's opponents, this attack\n\r");
+				pager_printf_color(ch,
+					"&Cfires razor thin beams of energy from the fingertips,\n\r");
+				pager_printf_color(ch,
+					"&Ceasily targeting(or intentionally missing) vital organs.\n\r");
+				pager_printf_color(ch,
+					"\n\r");
+				pager_printf_color(ch,
+					" &YPOWER INVESTED : &Y[&G%d&Y]\n\r", ch->finger_beampower);
+				pager_printf_color(ch,
+					" &YEFFICIENCY     : &Y[&G%d&Y]\n\r", ch->finger_beameffic);
+				pager_printf_color(ch,
+					"\n\r");
+				pager_printf_color(ch,
+					"&CAttack Class: Tyrant\n\r");
+				pager_printf_color(ch,
+					"&CAverage Base Damage: &Y65\n\r");
+				pager_printf_color(ch,
+					"&CYour Average Damage: &Y%d\n\r", dam);
+			}
+			else {
+				pager_printf_color(ch,
+					"&YYou can't view detailed skill information for a skill you don't know!\n\r");
+			}
+		}
+		if (!str_cmp(arg, "destructodisc")) {
+			pager_printf_color(ch,
+				"&B------------------&CDESTRUCTO DISC&B-------------------\n\r");
+			pager_printf_color(ch,
+				"\n\r");
+			if (ch->skilldestructo_disc >= 1) {
+				argdam = (28 + (ch->destructo_discpower * 2)) * kicmult;
+				dam = 1 * (argdam * kimult);
+				pager_printf_color(ch,
+					" &CA rotating sawblade of pure energy, able to cleanly\n\r");
+				pager_printf_color(ch,
+					"&Ccut even the toughest materials(and people) directly\n\r");
+				pager_printf_color(ch,
+					"&Cin half. Causes reliable damage.\n\r");
+				pager_printf_color(ch,
+					"\n\r");
+				pager_printf_color(ch,
+					" &YPOWER INVESTED : &Y[&G%d&Y]\n\r", ch->destructo_discpower);
+				pager_printf_color(ch,
+					" &YEFFICIENCY     : &Y[&G%d&Y]\n\r", ch->destructo_disceffic);
+				pager_printf_color(ch,
+					"\n\r");
+				pager_printf_color(ch,
+					"&CAttack Class: Energy Blade\n\r");
+				pager_printf_color(ch,
+					"&CAverage Base Damage: &Y28\n\r");
+				pager_printf_color(ch,
+					"&CYour Average Damage: &Y%d\n\r", dam);
+			}
+			else {
+				pager_printf_color(ch,
+					"&YYou can't view detailed skill information for a skill you don't know!\n\r");
+			}
+		}
+		if (!str_cmp(arg, "destructivewave")) {
+			pager_printf_color(ch,
+				"&B------------------&CDESTRUCTIVE WAVE&B-------------------\n\r");
+			pager_printf_color(ch,
+				"\n\r");
+			if (ch->skilldestructive_wave >= 1) {
+				argdam = (27 + (ch->destructive_wavepower * 2)) * kicmult;
+				dam = 1 * (argdam * kimult);
+				pager_printf_color(ch,
+					" &CA gigantic blast of energy fired directly forward,\n\r");
+				pager_printf_color(ch,
+					"&Ccovering a wide area.\n\r");
+				pager_printf_color(ch,
+					"\n\r");
+				pager_printf_color(ch,
+					" &YPOWER INVESTED : &Y[&G%d&Y]\n\r", ch->destructive_wavepower);
+				pager_printf_color(ch,
+					" &YEFFICIENCY     : &Y[&G%d&Y]\n\r", ch->destructive_waveeffic);
+				pager_printf_color(ch,
+					"\n\r");
+				pager_printf_color(ch,
+					"&CAttack Class: Blast(Wide)\n\r");
+				pager_printf_color(ch,
+					"&CAverage Base Damage: &Y27\n\r");
+				pager_printf_color(ch,
+					"&CYour Average Damage: &Y%d\n\r", dam);
+			}
+			else {
+				pager_printf_color(ch,
+					"&YYou can't view detailed skill information for a skill you don't know!\n\r");
+			}
+		}
+		if (!str_cmp(arg, "energydisc")) {
+			pager_printf_color(ch,
+				"&B------------------&CENERGY DISC&B-------------------\n\r");
+			pager_printf_color(ch,
+				"\n\r");
+			if (ch->skillenergy_disc >= 1) {
+				argdam = (13 + ch->energy_discpower) * kicmult;
+				dam = 1 * (argdam * kimult);
+				pager_printf_color(ch,
+					" &CA blade of energy, quick to throw and quick\n\r");
+				pager_printf_color(ch,
+					"&Cto slice deep wounds in any target.\n\r");
+				pager_printf_color(ch,
+					"\n\r");
+				pager_printf_color(ch,
+					" &YPOWER INVESTED : &Y[&G%d&Y]\n\r", ch->energy_discpower);
+				pager_printf_color(ch,
+					" &YEFFICIENCY     : &Y[&G%d&Y]\n\r", ch->energy_disceffic);
+				pager_printf_color(ch,
+					"\n\r");
+				pager_printf_color(ch,
+					"&CAttack Class: Energy Blade\n\r");
+				pager_printf_color(ch,
+					"&CAverage Base Damage: &Y13\n\r");
+				pager_printf_color(ch,
+					"&CYour Average Damage: &Y%d\n\r", dam);
+			}
+			else {
+				pager_printf_color(ch,
+					"&YYou can't view detailed skill information for a skill you don't know!\n\r");
+			}
+		}
+		if (!str_cmp(arg, "punch")) {
+			pager_printf_color(ch,
+				"&B------------------&CPUNCH&B-------------------\n\r");
+			pager_printf_color(ch,
+				"\n\r");
+			if (ch->skillpunch >= 1) {
+				argdam = (3 + ch->punchpower) * kicmult;
+				dam = 1 * (argdam * physmult);
+				pager_printf_color(ch,
+					" &CA punch. You won't get very far if you don't\n\r");
+				pager_printf_color(ch,
+					"&Cknow what this is!\n\r");
+				pager_printf_color(ch,
+					"\n\r");
+				pager_printf_color(ch,
+					" &YPOWER INVESTED : &Y[&G%d&Y]\n\r", ch->punchpower);
+				pager_printf_color(ch,
+					" &YEFFICIENCY     : &Y[&G%d&Y]\n\r", ch->puncheffic);
+				pager_printf_color(ch,
+					"\n\r");
+				pager_printf_color(ch,
+					"&CAttack Class: Melee(Upperbody)\n\r");
+				pager_printf_color(ch,
+					"&CAverage Base Damage: &Y3\n\r");
+				pager_printf_color(ch,
+					"&CYour Average Damage: &Y%d\n\r", dam);
+			}
+			else {
+				pager_printf_color(ch,
+					"&YYou can't view detailed skill information for a skill you don't know!\n\r");
+			}
+		}
+		if (!str_cmp(arg, "haymaker")) {
+			pager_printf_color(ch,
+				"&B------------------&CHAYMAKER&B-------------------\n\r");
+			pager_printf_color(ch,
+				"\n\r");
+			if (ch->skillhaymaker >= 1) {
+				argdam = (7 + ch->haymakerpower) * kicmult;
+				dam = 1 * (argdam * physmult);
+				pager_printf_color(ch,
+					" &CA mighty punch, thrown with as much weight behind\n\r");
+				pager_printf_color(ch,
+					"&Cit as possible.\n\r");
+				pager_printf_color(ch,
+					"\n\r");
+				pager_printf_color(ch,
+					" &YPOWER INVESTED : &Y[&G%d&Y]\n\r", ch->haymakerpower);
+				pager_printf_color(ch,
+					" &YEFFICIENCY     : &Y[&G%d&Y]\n\r", ch->haymakereffic);
+				pager_printf_color(ch,
+					"\n\r");
+				pager_printf_color(ch,
+					"&CAttack Class: Melee(Upperbody)\n\r");
+				pager_printf_color(ch,
+					"&CAverage Base Damage: &Y7\n\r");
+				pager_printf_color(ch,
+					"&CYour Average Damage: &Y%d\n\r", dam);
+			}
+			else {
+				pager_printf_color(ch,
+					"&YYou can't view detailed skill information for a skill you don't know!\n\r");
+			}
+		}
+		if (!str_cmp(arg, "bash")) {
+			pager_printf_color(ch,
+				"&B------------------&CBASH&B-------------------\n\r");
+			pager_printf_color(ch,
+				"\n\r");
+			if (ch->skillbash >= 1) {
+				argdam = (11 + ch->bashpower) * kicmult;
+				dam = 1 * (argdam * physmult);
+				pager_printf_color(ch,
+					" &CA 'technique' using one's bulk to crush their\n\r");
+				pager_printf_color(ch,
+					"&Copponent in a headlong collision.\n\r");
+				pager_printf_color(ch,
+					"\n\r");
+				pager_printf_color(ch,
+					" &YPOWER INVESTED : &Y[&G%d&Y]\n\r", ch->bashpower);
+				pager_printf_color(ch,
+					" &YEFFICIENCY     : &Y[&G%d&Y]\n\r", ch->basheffic);
+				pager_printf_color(ch,
+					"\n\r");
+				pager_printf_color(ch,
+					"&CAttack Class: Melee(Upperbody)\n\r");
+				pager_printf_color(ch,
+					"&CAverage Base Damage: &Y11\n\r");
+				pager_printf_color(ch,
+					"&CYour Average Damage: &Y%d\n\r", dam);
+			}
+			else {
+				pager_printf_color(ch,
+					"&YYou can't view detailed skill information for a skill you don't know!\n\r");
+			}
+		}
+		if (!str_cmp(arg, "collide")) {
+			pager_printf_color(ch,
+				"&B------------------&CCOLLIDE&B-------------------\n\r");
+			pager_printf_color(ch,
+				"\n\r");
+			if (ch->skillcollide >= 1) {
+				argdam = (20 + (ch->collidepower * 2)) * kicmult;
+				dam = 1 * (argdam * physmult);
+				pager_printf_color(ch,
+					" &CThe user accelerates to incredible speed, then\n\r");
+				pager_printf_color(ch,
+					"&Ccollides directly with their unfortunate opponent.\n\r");
+				pager_printf_color(ch,
+					"\n\r");
+				pager_printf_color(ch,
+					" &YPOWER INVESTED : &Y[&G%d&Y]\n\r", ch->collidepower);
+				pager_printf_color(ch,
+					" &YEFFICIENCY     : &Y[&G%d&Y]\n\r", ch->collideeffic);
+				pager_printf_color(ch,
+					"\n\r");
+				pager_printf_color(ch,
+					"&CAttack Class: Melee(Upperbody)\n\r");
+				pager_printf_color(ch,
+					"&CAverage Base Damage: &Y20\n\r");
+				pager_printf_color(ch,
+					"&CYour Average Damage: &Y%d\n\r", dam);
+			}
+			else {
+				pager_printf_color(ch,
+					"&YYou can't view detailed skill information for a skill you don't know!\n\r");
+			}
+		}
+		if (!str_cmp(arg, "lariat")) {
+			pager_printf_color(ch,
+				"&B------------------&CLARIAT&B-------------------\n\r");
+			pager_printf_color(ch,
+				"\n\r");
+			if (ch->skilllariat >= 1) {
+				argdam = (47 + (ch->lariatpower * 4)) * kicmult;
+				dam = 1 * (argdam * physmult);
+				pager_printf_color(ch,
+					" &CHooking an arm around the opponent's neck in a clotheline,\n\r");
+				pager_printf_color(ch,
+					"&Cthe two share a lovely trip directly through the terrain.\n\r");
+				pager_printf_color(ch,
+					"\n\r");
+				pager_printf_color(ch,
+					" &YPOWER INVESTED : &Y[&G%d&Y]\n\r", ch->lariatpower);
+				pager_printf_color(ch,
+					" &YEFFICIENCY     : &Y[&G%d&Y]\n\r", ch->lariateffic);
+				pager_printf_color(ch,
+					"\n\r");
+				pager_printf_color(ch,
+					"&CAttack Class: Melee(Upperbody)\n\r");
+				pager_printf_color(ch,
+					"&CAverage Base Damage: &Y47\n\r");
+				pager_printf_color(ch,
+					"&CYour Average Damage: &Y%d\n\r", dam);
+			}
+			else {
+				pager_printf_color(ch,
+					"&YYou can't view detailed skill information for a skill you don't know!\n\r");
+			}
+		}
+
 		
 	return;
 }

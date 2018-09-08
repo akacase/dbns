@@ -5032,6 +5032,80 @@ do_fly(CHAR_DATA * ch, char *argument)
 }
 
 void
+do_respec(CHAR_DATA * ch, char *argument)
+{
+	char	arg[MAX_INPUT_LENGTH];
+	
+	argument = one_argument(argument, arg);
+	
+	if (IS_NPC(ch)) {
+		send_to_char("Stop that!\n\r", ch);
+		return;
+	}
+	
+	if (arg[0] == '\0') {
+		send_to_char("This command will reset ALL currently allocated SP at no cost.\n\r", ch);
+		send_to_char("If you're certain you want to do this, type 'respec now'.\n\r", ch);
+		return;
+	}
+	if (!str_cmp(arg, "now")) {
+		ch->spallocated = 0;
+		ch->energy_ballpower = 0;
+		ch->energy_balleffic = 0;
+		ch->crusherballpower = 0;
+		ch->crusherballeffic = 0;
+		ch->meteorpower = 0;
+		ch->meteoreffic = 0;
+		ch->gigantic_meteorpower = 0;
+		ch->gigantic_meteoreffic = 0;
+		ch->ecliptic_meteorpower = 0;
+		ch->ecliptic_meteoreffic = 0;
+		ch->death_ballpower = 0;
+		ch->death_balleffic = 0;
+		ch->energybeampower = 0;
+		ch->energybeameffic = 0;
+		ch->eye_beampower = 0;
+		ch->eye_beameffic = 0;
+		ch->masenkopower = 0;
+		ch->masenkoeffic = 0;
+		ch->makosenpower = 0;
+		ch->makoseneffic = 0;
+		ch->sbcpower = 0;
+		ch->sbceffic = 0;
+		ch->concentrated_beampower = 0;
+		ch->concentrated_beameffic = 0;
+		ch->kamehamehapower = 0;
+		ch->kamehamehaeffic = 0;
+		ch->gallic_gunpower = 0;
+		ch->gallic_guneffic = 0;
+		ch->finger_beampower = 0;
+		ch->finger_beameffic = 0;
+		ch->destructo_discpower = 0;
+		ch->destructo_disceffic = 0;
+		ch->destructive_wavepower = 0;
+		ch->destructive_waveeffic = 0;
+		ch->forcewavepower = 0;
+		ch->forcewaveeffic = 0;
+		ch->shockwavepower = 0;
+		ch->shockwaveeffic = 0;
+		ch->energy_discpower = 0;
+		ch->energy_disceffic = 0;
+		ch->punchpower = 0;
+		ch->puncheffic = 0;
+		ch->haymakerpower = 0;
+		ch->haymakereffic = 0;
+		ch->bashpower = 0;
+		ch->basheffic = 0;
+		ch->collidepower = 0;
+		ch->collideeffic = 0;
+		ch->lariatpower = 0;
+		ch->lariateffic = 0;
+		send_to_char("Done.\n\r", ch);
+		return;
+	}
+}
+
+void
 do_research(CHAR_DATA * ch, char *argument)
 {
 	char 	arg1[MAX_INPUT_LENGTH];
@@ -13121,7 +13195,7 @@ do_makosen(CHAR_DATA * ch, char *argument)
 	WAIT_STATE(ch, 8);
 	if (hitcheck <= 95) {
 		if (!IS_NPC(ch)) {
-			argdam = ((number_range(35, 40) + (ch->makosenpower * 3)) * kicmult);
+			argdam = ((number_range(40, 42) + (ch->makosenpower * 4)) * kicmult);
 			dam = get_attmod(ch, victim) * (argdam * kimult);
 			stat_train(ch, "int", 15);
 			ch->train += 15;

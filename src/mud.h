@@ -5250,6 +5250,7 @@ DECLARE_DO_FUN(do_worth);
 DECLARE_DO_FUN(do_yell);
 DECLARE_DO_FUN(do_zap);
 DECLARE_DO_FUN(do_zones);
+DECLARE_DO_FUN(do_respec);
 DECLARE_DO_FUN(do_research);
 DECLARE_DO_FUN(do_collide);
 DECLARE_DO_FUN(do_concentrated_beam);
