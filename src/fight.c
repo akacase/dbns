@@ -2152,7 +2152,7 @@ violence_update(void)
 				}
 			}
 		}
-		/* Gravity area/room effects and bonus combat stats */
+		/* Gravity area/room effects and bonus combat stats, weighted clothing */
 		if (!IS_NPC(ch)) {
 			if (xIS_SET((ch)->in_room->room_flags, ROOM_GRAV10)
 			|| xIS_SET((ch)->in_room->room_flags, ROOM_GRAV50)
@@ -2642,6 +2642,47 @@ violence_update(void)
 				}
 			}
 			else {
+				if (weightedtraining(ch) > 0) {
+					int gravdam = 0;
+					int damrange = 0;
+					int safediff = 0;
+					int acc = 0;
+					int gravres = 0;
+					
+					acc = ((ch->gravExp / 1000) + 1);
+					if (acc < 1)
+						acc = 1;
+					if (weightedtraining(ch) < acc) {
+						damrange = number_range(1, 3);
+						gravdam = weightedtraining(ch) * damrange;
+						if (ch->mana - gravdam > 0) {
+							ch->mana -= gravdam;
+							if (ch->desc)
+								ch->gravExp += 6;
+								stat_train(ch, "str", 2);
+								stat_train(ch, "spd", 2);
+								stat_train(ch, "con", 2);
+						}
+						else if (ch->mana - gravdam <= 0) {
+							ch->mana = 0;
+							ch->hit -= (gravdam / 3);
+							act( AT_RED, "Sweat is pouring off you! Maybe you should take off all this extra weight ...", ch, NULL, NULL, TO_CHAR );
+							if (ch->desc)
+								ch->gravExp += 6;
+							if (ch->hit - (gravdam / 3) < 0) {
+								update_pos(ch);
+								if (ch->position == POS_DEAD) {
+									ch->gravSetting = acc;
+									act( AT_RED, "You expend the last of your energy, collapsing dead.", ch, NULL, NULL, TO_CHAR );
+									act( AT_RED, "$n collapses, DEAD, $s body exhausted from the weight of $s training gear.", ch, NULL, NULL, TO_NOTVICT );
+									sprintf( buf, "%s collapses under the weight of their training gear", ch->name );
+									do_info(ch, buf);
+									raw_kill(ch, ch);
+								}
+							}
+						}
+					}
+				}
 				if (ch->position == POS_FIGHTING) {
 					stat_train(ch, "str", 5);
 					stat_train(ch, "spd", 5);

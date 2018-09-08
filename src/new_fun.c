@@ -104,11 +104,35 @@ bool is_splitformed(CHAR_DATA *ch)
 }
 
 
+double weightedtraining(CHAR_DATA *ch)
+{
+    OBJ_DATA *obj;
+    int iWear;
+	double weightinc = 0;
+
+	if (IS_NPC(ch))
+		return 0;
+
+    for ( iWear = 0; iWear < MAX_WEAR; iWear++ )
+    {
+	for ( obj = ch->first_carrying; obj; obj = obj->next_content )
+	   if ( obj->wear_loc == iWear )
+	   {
+			if (obj->item_type == ITEM_ARMOR && obj->value[3] > 0)
+				weightinc += obj->value[3];
+	   }
+    }
+
+	return weightinc;
+}
+
 double weightedClothingPlMod(CHAR_DATA *ch)
 {
     OBJ_DATA *obj;
     int iWear;
 	double plMod = 0;
+	
+	return 0;
 
 	if (IS_NPC(ch))
 		return 0;

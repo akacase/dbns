@@ -5765,6 +5765,7 @@ args((const char *argument, int channel,
 	char   *get_clan_rank args((CHAR_DATA * ch));
 	char   *abbNumLD args((long double number));
 	bool is_splitformed args((CHAR_DATA * ch));
+	double weightedtraining args((CHAR_DATA *ch));
 	double weightedClothingPlMod args((CHAR_DATA * ch));
 	void update_plHiscore args((CHAR_DATA * ch));
 	bool can_pk args((CHAR_DATA * ch));
