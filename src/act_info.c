@@ -4996,7 +4996,7 @@ do_develop(CHAR_DATA * ch, char *argument)
 	}
 	if (!str_cmp(arg1, "forcewave") && arg2[0] == '\0') {
 		if ((ch->energybeampower + ch->energybeameffic) >= 6) {
-			if (ch->forcewave > 1) {
+			if (ch->skillforcewave > 1) {
 				send_to_char("You already know that skill.\n\r", ch);
 				return;
 			}
