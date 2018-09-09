@@ -2684,6 +2684,7 @@ create_mobile(MOB_INDEX_DATA * pMobIndex)
 	  mob->hitplus = 1;
 	
 	mob->max_hit = mob->hitplus;
+	mob->hit = mob->hitplus;
 	/* lets put things back the way they used to be! -Thoric */
 	mob->gold = pMobIndex->gold;
 	if (mob->gold > -1)

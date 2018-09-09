@@ -3176,7 +3176,7 @@ do_punch(CHAR_DATA * ch, char *argument)
 			"$n carefully studies $N's movements.", ch,
 			NULL, victim, TO_NOTVICT);
 		act(AT_YELLOW,
-			"$n exploits an opening in $N's defense and hammers $S in the stomach! &W[$t]",
+			"$n exploits an opening in $N's defense and hammers $M in the stomach! &W[$t]",
 			ch, num_punct(dam), victim, TO_NOTVICT);
 			
 		global_retcode = damage(ch, victim, dam, TYPE_HIT);
