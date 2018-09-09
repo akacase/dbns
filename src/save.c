@@ -333,6 +333,7 @@ fwrite_char (CHAR_DATA * ch, FILE * fp)
 	 fprintf (fp, "Energybeampower           %d\n", ch->energybeampower);
 	 fprintf (fp, "Energybeameffic           %d\n", ch->energybeameffic);
 	 fprintf (fp, "Eye_beampower           %d\n", ch->eye_beampower);
+	 fprintf (fp, "Eye_beam           %d\n", ch->skilleye_beam);
 	 fprintf (fp, "Eye_beameffic           %d\n", ch->eye_beameffic);
 	 fprintf (fp, "Masenkopower           %d\n", ch->masenkopower);
 	 fprintf (fp, "Masenkoeffic           %d\n", ch->masenkoeffic);
@@ -2361,6 +2362,7 @@ fread_char (CHAR_DATA * ch, FILE * fp, bool preload)
 		   KEY ("Ecliptic_meteoreffic", ch->ecliptic_meteoreffic, fread_number (fp));
 		   KEY ("Energybeampower", ch->energybeampower, fread_number (fp));
 		   KEY ("Energybeameffic", ch->energybeameffic, fread_number (fp));
+		   KEY ("Eye_beam", ch->skilleye_beam, fread_number (fp));
 		   KEY ("Eye_beampower", ch->eye_beampower, fread_number (fp));
 		   KEY ("Eye_beameffic", ch->eye_beameffic, fread_number (fp));
 		   KEY ("Energy_discpower", ch->energy_discpower, fread_number (fp));
