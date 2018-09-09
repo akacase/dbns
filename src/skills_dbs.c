@@ -5763,7 +5763,7 @@ do_research(CHAR_DATA * ch, char *argument)
 		}
 	}
 	if (!str_cmp(arg1, "forcewave")) {
-		if (ch->skillhaymaker < 1) {
+		if (ch->skillforcewave < 1) {
 			send_to_char("You can't research a skill you don't even know!\n\r", ch);
 			return;
 		}
