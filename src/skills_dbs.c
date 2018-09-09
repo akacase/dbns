@@ -5516,7 +5516,7 @@ do_research(CHAR_DATA * ch, char *argument)
 			return;
 		}
 		if (!str_cmp(arg2, "power")) {
-			spcostpow = (ch->energy_ballpower * 10);
+			spcostpow = (ch->haymakerpower * 10);
 			if (spcostpow < 10)
 				spcostpow = 10;
 			if (spremaining < spcostpow) {
@@ -5525,13 +5525,13 @@ do_research(CHAR_DATA * ch, char *argument)
 			}
 			else {
 				send_to_char("The power of your Haymaker has increased!\n\r", ch);
-				ch->energy_ballpower += 1;
+				ch->haymakerpower += 1;
 				ch->spallocated += spcostpow;
 				return;
 			}		
 		}
 		if (!str_cmp(arg2, "efficiency")) {
-			spcosteff = (ch->energy_balleffic * 10);
+			spcosteff = (ch->haymakereffic * 10);
 			if (spcosteff < 10)
 				spcosteff = 10;
 			if (spremaining < spcosteff) {
@@ -5540,7 +5540,7 @@ do_research(CHAR_DATA * ch, char *argument)
 			}
 			else {
 				send_to_char("The Ki efficiency of your Haymaker has increased!\n\r", ch);
-				ch->energy_balleffic += 1;
+				ch->haymakereffic += 1;
 				ch->spallocated += spcosteff;
 				return;
 			}		
