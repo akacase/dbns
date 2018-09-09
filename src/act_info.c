@@ -7575,6 +7575,70 @@ do_skills(CHAR_DATA * ch, char *argument) {
 					"&YYou can't view detailed skill information for a skill you don't know!\n\r");
 			}
 		}
+		if (!str_cmp(arg, "forcewave")) {
+			pager_printf_color(ch,
+				"&B------------------&CFORCEWAVE&B-------------------\n\r");
+			pager_printf_color(ch,
+				"\n\r");
+			if (ch->skillforcewave >= 1) {
+				argdam = (23 + (ch->forcewavepower * 2)) * kicmult;
+				dam = 1 * (argdam * kimult);
+				pager_printf_color(ch,
+					" &CA psionic blast of energy, capable of lifting entire\n\r");
+				pager_printf_color(ch,
+					"&Cbuildings with a thought, or destroying them.\n\r");
+				pager_printf_color(ch,
+					"\n\r");
+				pager_printf_color(ch,
+					" &YPOWER INVESTED : &Y[&G%d&Y]\n\r", ch->forcewavepower);
+				pager_printf_color(ch,
+					" &YEFFICIENCY     : &Y[&G%d&Y]\n\r", ch->forcewaveeffic);
+				pager_printf_color(ch,
+					"\n\r");
+				pager_printf_color(ch,
+					"&CAttack Class: Psionic\n\r");
+				pager_printf_color(ch,
+					"&CAverage Base Damage: &Y23\n\r");
+				pager_printf_color(ch,
+					"&CYour Average Damage: &Y%d\n\r", dam);
+			}
+			else {
+				pager_printf_color(ch,
+					"&YYou can't view detailed skill information for a skill you don't know!\n\r");
+			}
+		}
+		if (!str_cmp(arg, "shockwave")) {
+			pager_printf_color(ch,
+				"&B------------------&CSHOCKWAVE&B-------------------\n\r");
+			pager_printf_color(ch,
+				"\n\r");
+			if (ch->skillshockwave >= 1) {
+				argdam = (55 + (ch->shockwavepower * 5)) * kicmult;
+				dam = 1 * (argdam * kimult);
+				pager_printf_color(ch,
+					" &CPsionic forces powerful enough to crack planets\n\r");
+				pager_printf_color(ch,
+					"&Cin twain.\n\r");
+				pager_printf_color(ch,
+					"\n\r");
+				pager_printf_color(ch,
+					" &YPOWER INVESTED : &Y[&G%d&Y]\n\r", ch->shockwavepower);
+				pager_printf_color(ch,
+					" &YEFFICIENCY     : &Y[&G%d&Y]\n\r", ch->shockwaveeffic);
+				pager_printf_color(ch,
+					"\n\r");
+				pager_printf_color(ch,
+					"&CAttack Class: Psionic\n\r");
+				pager_printf_color(ch,
+					"&CAverage Base Damage: &Y55\n\r");
+				pager_printf_color(ch,
+					"&CYour Average Damage: &Y%d\n\r", dam);
+			}
+			else {
+				pager_printf_color(ch,
+					"&YYou can't view detailed skill information for a skill you don't know!\n\r");
+			}
+		}
 
 		
 	return;
