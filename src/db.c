@@ -519,7 +519,7 @@ boot_db()
 	sysdata.morph_opt = 1;
 	sysdata.save_pets = 0;
 	sysdata.pk_loot = 1;
-	sysdata.stall_hiscores = 0;
+	sysdata.stall_hiscores = 1;
 	sysdata.rpChannel = 0;
 	sysdata.save_flags = SV_DEATH | SV_PASSCHG | SV_AUTO
 	    | SV_PUT | SV_DROP | SV_GIVE

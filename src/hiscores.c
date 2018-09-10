@@ -298,8 +298,7 @@ void do_hiscore( CHAR_DATA *ch, char *argument )
 
 	if (sysdata.stall_hiscores)
 	{
-		pager_printf(ch, "Hiscore tables are disabled, most likely due to a bug.\n\r");
-		pager_printf(ch, "Please notify an Admin of this on the 'bug' message board.\n\r");
+		pager_printf(ch, "Hiscore tables are disabled to allow players to hide their true power from one another.\n\r");
 		return;
 	}
 
