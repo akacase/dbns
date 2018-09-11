@@ -4165,7 +4165,7 @@ void do_exercise(CHAR_DATA *ch, char *argument)
 			return;
 		}
 	}
-	else if (!str_cmp(arg, "pushup")) {
+	if (!str_cmp(arg, "pushup")) {
 
 		if (xIS_SET((ch)->affected_by, AFF_EXPUSHUPS) || xIS_SET((ch)->affected_by, AFF_EXSHADOWBOXING)
 		|| xIS_SET((ch)->affected_by, AFF_EXENDURING)) {
@@ -4179,7 +4179,7 @@ void do_exercise(CHAR_DATA *ch, char *argument)
 			return;
 		}
 	}
-	else if (!str_cmp(arg, "shadowbox")) {
+	if (!str_cmp(arg, "shadowbox")) {
 
 		if (xIS_SET((ch)->affected_by, AFF_EXPUSHUPS) || xIS_SET((ch)->affected_by, AFF_EXSHADOWBOXING)
 		|| xIS_SET((ch)->affected_by, AFF_EXENDURING)) {
@@ -4193,7 +4193,7 @@ void do_exercise(CHAR_DATA *ch, char *argument)
 			return;
 		}
 	}
-	else if (!str_cmp(arg, "endure")) {
+	if (!str_cmp(arg, "endure")) {
 
 		if (xIS_SET((ch)->affected_by, AFF_EXPUSHUPS) || xIS_SET((ch)->affected_by, AFF_EXSHADOWBOXING)
 		|| xIS_SET((ch)->affected_by, AFF_EXENDURING)) {
@@ -4207,7 +4207,7 @@ void do_exercise(CHAR_DATA *ch, char *argument)
 			return;
 		}
 	}
-	else if (!str_cmp(arg, "stop")) {
+	if (!str_cmp(arg, "stop")) {
 		if (xIS_SET((ch)->affected_by, AFF_EXPUSHUPS)) {
 			xREMOVE_BIT((ch)->affected_by, AFF_EXPUSHUPS);
 			act(AT_WHITE, "You take a break and stop training.", ch, NULL, NULL, TO_CHAR);
@@ -4236,7 +4236,7 @@ void do_exercise(CHAR_DATA *ch, char *argument)
 		ch->exintensity = 0;
 		return;
 	}
-	else if (!str_cmp(arg, "intensely")) {
+	if (!str_cmp(arg, "intensely")) {
 		send_to_char("You adjust to an intense rate of exercise.\n\r", ch);
 		ch->exintensity = 1;
 		return;
