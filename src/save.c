@@ -317,6 +317,7 @@ fwrite_char (CHAR_DATA * ch, FILE * fp)
 	 && ch->was_in_room) ? ch->was_in_room->vnum : ch->in_room->vnum);
      fprintf (fp, "Worth           %lld\n", ch->worth);
 	 fprintf (fp, "Sspgain           %d\n", ch->sspgain);
+	 fprintf (fp, "Exintensity           %d\n", ch->exintensity);
 	 fprintf (fp, "Kspgain           %d\n", ch->kspgain);
 	 fprintf (fp, "Energy_ballpower           %d\n", ch->energy_ballpower);
 	 fprintf (fp, "Energy_balleffic           %d\n", ch->energy_balleffic);
@@ -2367,6 +2368,7 @@ fread_char (CHAR_DATA * ch, FILE * fp, bool preload)
 		   KEY ("Eye_beameffic", ch->eye_beameffic, fread_number (fp));
 		   KEY ("Energy_discpower", ch->energy_discpower, fread_number (fp));
 		   KEY ("Energy_disceffic", ch->energy_disceffic, fread_number (fp));
+		   KEY ("Exintensity", ch->exintensity, fread_number (fp));
 	       break;
 
 	  case 'T':

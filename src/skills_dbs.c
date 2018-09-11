@@ -8793,9 +8793,11 @@ do_meditate(CHAR_DATA * ch, char *argument)
 		return;
 
 	// check for current gravity training effects
-	if(IS_AFFECTED(ch, AFF_PUSHUPS) || IS_AFFECTED(ch, AFF_SHADOWBOXING) ||
-	   IS_AFFECTED(ch, AFF_ENDURING) || IS_AFFECTED(ch, AFF_MEDITATION)) {
-	  send_to_char("You cannot meditate while gravity training.\n\r", ch);
+	if(IS_AFFECTED(ch, AFF_PUSHUPS) || IS_AFFECTED(ch, AFF_SHADOWBOXING)
+	|| IS_AFFECTED(ch, AFF_ENDURING) || IS_AFFECTED(ch, AFF_MEDITATION)
+	|| IS_AFFECTED(ch, AFF_EXPUSHUPS) || IS_AFFECTED(ch, AFF_EXSHADOWBOXING) 
+	|| IS_AFFECTED(ch, AFF_EXENDURING)) {
+	  send_to_char("You can't seem to focus while you're this busy!\n\r", ch);
 	  return;
 	}
 	// check if user is powering up

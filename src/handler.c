@@ -942,7 +942,7 @@ update_aris(CHAR_DATA * ch)
 	int 	aff_ab, aff_ac, aff_ad, aff_ae, aff_af, aff_ag, aff_ah;
 	int 	aff_ai, aff_aj, aff_ak, aff_al, aff_am, aff_an;
 	int		aff_ao, aff_ap, aff_aq, aff_ar, aff_as, aff_at, aff_au;
-	int		aff_av, aff_aw, aff_ax, aff_ay;
+	int		aff_av, aff_aw, aff_ax, aff_ay, aff_az, aff_ba, aff_bb;
 
 	if (IS_NPC(ch) || IS_IMMORTAL(ch))
 		return;
@@ -1002,6 +1002,9 @@ update_aris(CHAR_DATA * ch)
 	aff_aw = IS_AFFECTED(ch, AFF_ENERGYFIST);
 	aff_ax = IS_AFFECTED(ch, AFF_HYBRIDSTYLE);
 	aff_ay = IS_AFFECTED(ch, AFF_BRUISERSTYLE);
+	aff_az = IS_AFFECTED(ch, AFF_EXPUSHUPS);
+	aff_ba = IS_AFFECTED(ch, AFF_EXSHADOWBOXING);
+	aff_bb = IS_AFFECTED(ch, AFF_EXENDURING);
 
 	xCLEAR_BITS(ch->affected_by);
 	ch->resistant = 0;
@@ -1168,6 +1171,12 @@ update_aris(CHAR_DATA * ch)
 		xSET_BIT((ch)->affected_by, AFF_HYBRIDSTYLE);
 	if (aff_ay)
 		xSET_BIT((ch)->affected_by, AFF_BRUISERSTYLE);
+	if (aff_az)
+		xSET_BIT((ch)->affected_by, AFF_EXPUNCH);
+	if (aff_ba)
+		xSET_BIT((ch)->affected_by, AFF_EXSHADOWBOXING);
+	if (aff_bb)
+		xSET_BIT((ch)->affected_by, AFF_EXENDURING);
 	return;
 }
 
@@ -3248,6 +3257,12 @@ affect_bit_name(EXT_BV * vector)
 	buf[0] = '\0';
 	if (xIS_SET(*vector, AFF_BLIND))
 		strcat(buf, " blind");
+	if (xIS_SET(*vector, AFF_EXPUSHUPS))
+		strcat(buf, " expushups");
+	if (xIS_SET(*vector, AFF_EXSHADOWBOXING))
+		strcat(buf, " exshadowboxing");
+	if (xIS_SET(*vector, AFF_EXENDURING))
+		strcat(buf, " exenduring");
 	if (xIS_SET(*vector, AFF_PUSHUPS))
 		strcat(buf, " pushups");
 	if (xIS_SET(*vector, AFF_SHADOWBOXING))

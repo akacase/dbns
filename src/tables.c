@@ -238,6 +238,7 @@ DO_FUN *skill_function( char *name )
       if ( !str_cmp( name, "do_duplicate"                 ))    return do_duplicate;
       break;
     case 'e':
+      if ( !str_cmp( name, "do_exercise"			  ))	return do_exercise;
       if ( !str_cmp( name, "do_ecliptic_meteor"			  ))	return do_ecliptic_meteor;
       if ( !str_cmp( name, "do_enhance"			  ))	return do_enhance;
       if ( !str_cmp( name, "do_east"                      ))    return do_east;
@@ -1049,6 +1050,7 @@ char *skill_name( DO_FUN *skill )
   if ( skill == do_evilsurge		   )	return "do_evilsurge";
   if ( skill == do_eviloverload		   )	return "do_eviloverload";
   if ( skill == do_examine                     )    return "do_examine";
+  if ( skill == do_exercise                     )    return "do_exercise";
   if ( skill == do_exits                       )    return "do_exits";
   if ( skill == do_eye_beam                    )    return "do_eye_beam";
   if ( skill == do_evolve                        )    return "do_evolve";

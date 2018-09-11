@@ -4134,6 +4134,131 @@ do_consider(CHAR_DATA * ch, char *argument)
 	act(AT_CONSIDER, msg, ch, NULL, victim, TO_CHAR);
 }
 
+void do_exercise(CHAR_DATA *ch, char *argument)
+{
+	char arg[MAX_INPUT_LENGTH];
+
+	one_argument(argument, arg);
+	
+	if (IS_NPC(ch))
+		return;
+		
+	if (ch->position != POS_RESTING) {
+		send_to_char("You should get into a resting position first.\n\r", ch);
+		return;
+	}
+	if (xIS_SET((ch)->in_room->room_flags, ROOM_HTANKS)) {
+		send_to_char("This room is a bit too relaxing ...\n\r", ch);
+		return;
+	}
+	if (arg[0] == '\0') {
+		send_to_char("Exercise how? Available exercises are 'exercise pushup', 'shadowbox', 'endure'.\n\r", ch);
+		send_to_char("Note that 'endure' will have no effect at your body's natural weight.\n\r", ch);
+		if (ch->exintensity = 0) {
+			send_to_char("You're currently prepared for a steady workout.\n\r", ch);
+		}
+		else if (ch->exintensity = 1) {
+			send_to_char("You're currently prepared for an intense workout.\n\r", ch);
+		}
+		send_to_char("To change this intensity, enter 'exercise steadily' or 'intensely'.\n\r", ch);
+		return;
+	}
+	if (!str_cmp(arg, "pushup")) {
+
+		if (xIS_SET((ch)->affected_by, AFF_EXPUSHUPS) || xIS_SET((ch)->affected_by, AFF_EXSHADOWBOXING)
+		|| xIS_SET((ch)->affected_by, AFF_EXENDURING)) {
+			send_to_char("You're already working out. Use 'exercise stop' before trying something else.\n\r", ch);
+			return;
+		}
+		else {
+			xSET_BIT((ch)->affected_by, AFF_EXPUSHUPS);
+			act(AT_WHITE, "You drop into a neutral pushup position.", ch, NULL, NULL, TO_CHAR);
+			act(AT_WHITE, "$n drops into a neutral pushup position.", ch, NULL, NULL, TO_NOTVICT);
+			return;
+		}
+	} else if (!str_cmp(arg, "shadowbox")) {
+
+		if (xIS_SET((ch)->affected_by, AFF_EXPUSHUPS) || xIS_SET((ch)->affected_by, AFF_EXSHADOWBOXING)
+		|| xIS_SET((ch)->affected_by, AFF_EXENDURING)) {
+			send_to_char("You're already working out. Use 'exercise stop' before trying something else.\n\r", ch);
+			return;
+		}
+		else {
+			xSET_BIT((ch)->affected_by, AFF_EXSHADOWBOXING);
+			act(AT_WHITE, "You limber up and get ready to shadowbox.", ch, NULL, NULL, TO_CHAR);
+			act(AT_WHITE, "$n limbers up and gets ready to shadowbox.", ch, NULL, NULL, TO_NOTVICT);
+			return;
+		}
+	} else if (!str_cmp(arg, "endure")) {
+
+		if (xIS_SET((ch)->affected_by, AFF_EXPUSHUPS) || xIS_SET((ch)->affected_by, AFF_EXSHADOWBOXING)
+		|| xIS_SET((ch)->affected_by, AFF_EXENDURING)) {
+			send_to_char("You're already working out. Use 'exercise stop' before trying something else.\n\r", ch);
+			return;
+		}
+		else {
+			xSET_BIT((ch)->affected_by, AFF_EXENDURING);
+			act(AT_WHITE, "You lower your defenses, preparing to endure the elements with nothing but guts and elbow grease.", ch, NULL, NULL, TO_CHAR);
+			act(AT_WHITE, "$n lowers $s defenses, preparing to endure the elements with nothing but guts and elbow grease.", ch, NULL, NULL, TO_NOTVICT);
+			return;
+		}
+	} else if (!str_cmp(arg, "stop")) {
+		if (xIS_SET((ch)->affected_by, AFF_EXPUSHUPS)) {
+			xREMOVE_BIT((ch)->affected_by, AFF_EXPUSHUPS);
+			act(AT_WHITE, "You take a break and stop training.", ch, NULL, NULL, TO_CHAR);
+			act(AT_WHITE, "$n takes a break and stops training.", ch, NULL, NULL, TO_NOTVICT);
+			return;
+		}
+		if (xIS_SET((ch)->affected_by, AFF_EXSHADOWBOXING)) {
+			xREMOVE_BIT((ch)->affected_by, AFF_EXSHADOWBOXING);
+			act(AT_WHITE, "You take a break and stop training.", ch, NULL, NULL, TO_CHAR);
+			act(AT_WHITE, "$n takes a break and stops training.", ch, NULL, NULL, TO_NOTVICT);
+			return;
+		}
+		if (xIS_SET((ch)->affected_by, AFF_EXENDURING)) {
+			xREMOVE_BIT((ch)->affected_by, AFF_EXENDURING);
+			act(AT_WHITE, "You take a break and stop training.", ch, NULL, NULL, TO_CHAR);
+			act(AT_WHITE, "$n takes a break and stops training.", ch, NULL, NULL, TO_NOTVICT);
+			return;
+		}
+		else {
+			send_to_char("Stop what? You're not doing anything.\n\r", ch);
+			return;
+		}
+	} else if (!str_cmp(arg, "steadily")) {
+		if (ch->exintensity != 0) {
+			send_to_char("You prepare to exercise at a steady rate.\n\r", ch);
+			ch->exintensity = 0;
+			return;
+		}
+		else {
+			send_to_char("You're already prepared for a steady workout.\n\r", ch);
+			return;
+		}
+	} else if (!str_cmp(arg, "intensely")) {
+		if (ch->exintensity = 0) {
+			send_to_char("You prepare for an intense workout.\n\r", ch);
+			ch->exintensity = 1;
+			return;
+		}
+		else {
+			send_to_char("You're already prepared for an intense workout.\n\r", ch);
+			return;
+		}
+	} else {
+	    send_to_char("Exercise how? Activities are: pushup, shadowbox, endure.\n\r", ch);
+		send_to_char("Note that 'endure' will have no effect at your body's natural weight.\n\r", ch);
+		if (ch->exintensity = 0) {
+			send_to_char("You're currently prepared for a steady workout.\n\r", ch);
+		}
+		else if (ch->exintensity = 1) {
+			send_to_char("You're currently prepared for an intense workout.\n\r", ch);
+		}
+		send_to_char("To change this intensity, enter 'exercise steadily' or 'intensely'.\n\r", ch);
+	    return;
+	}
+}
+
 void do_train(CHAR_DATA *ch, char *argument)
 {
         char arg[MAX_INPUT_LENGTH];

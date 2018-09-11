@@ -2642,6 +2642,8 @@ violence_update(void)
 				}
 			}
 			else {
+				if (!xIS_SET((ch)->in_room->room_flags, ROOM_GRAV))
+					ch->gravSetting = 1;
 				if (weightedtraining(ch) > 0) {
 					int gravdam = 0;
 					int damrange = 0;
@@ -2711,6 +2713,174 @@ violence_update(void)
 					ch->train += 3;
 				}
 			}
+		}
+		if (xIS_SET((ch)->affected_by, AFF_EXPUSHUPS) && ch->position != POS_RESTING
+			&& ch->position != POS_DEAD) {
+			
+			xREMOVE_BIT((ch)->affected_by, AFF_EXPUSHUPS);
+			send_to_char("Your workout is cut short.\n\r", ch);
+		}
+		if (xIS_SET((ch)->affected_by, AFF_EXSHADOWBOXING) && ch->position != POS_RESTING
+			&& ch->position != POS_DEAD) {
+			
+			xREMOVE_BIT((ch)->affected_by, AFF_EXSHADOWBOXING);
+			send_to_char("Your workout is cut short.\n\r", ch);
+		}
+		if (xIS_SET((ch)->affected_by, AFF_EXENDURING) && ch->position != POS_RESTING
+			&& ch->position != POS_DEAD) {
+			
+			xREMOVE_BIT((ch)->affected_by, AFF_EXENDURING);
+			send_to_char("Your workout is cut short.\n\r", ch);
+		}
+		/* New exercise system */
+		if (xIS_SET((ch)->affected_by, AFF_EXPUSHUPS)) {
+		  if(!ch->desc)
+			xREMOVE_BIT((ch)->affected_by, AFF_EXPUSHUPS);
+			
+		  char buf[MAX_STRING_LENGTH];
+		  int trainmessage = 0;
+		  long double xp_gain = 0;
+		  long double base_xp = 0;
+		  int increase = 0;
+		  int gravdam = 0;
+		  int damrange = 0;
+		  int statbonus = 0;
+		  int breakbonus = 0;
+		  double playerweight = 0;
+		  double addedweight = 0;
+		  double totalgrav = 0;
+            
+		  if (ch->exintensity = 0) {
+			increase = number_range(1, 3);
+			damrange = number_range(1, 3);
+		  }
+		  else if (ch->exintensity = 1) {
+			increase = number_range(3, 9);
+			damrange = number_range(5, 15);
+		  }
+		  
+		  addedweight = (double) weightedtraining(ch) / 100000;
+		  playerweight = (double) 1 + addedweight;
+		  totalgrav = (double) ch->gravSetting * playerweight;
+		
+		  trainmessage = number_range(1, 100);
+		  gravdam = totalgrav * damrange);
+		  statbonus = (totalgrav / 10) + 15;
+		  if (ch->extensity = 1)
+			  statbonus += statbonus * 1.5;
+		  breakbonus = statbonus * 2;
+
+		  if (trainmessage < 65) {
+		    base_xp = (long double)increase / 12 * totalgrav;
+			xp_gain = (long double)base_xp;
+			gain_exp(ch, xp_gain);
+			if (xp_gain > 1) {
+				sprintf(buf, "Your power level increases by %s points.", num_punct(xp_gain));
+				act(AT_HIT, buf, ch, NULL, NULL, TO_CHAR);
+			}
+			else {
+				sprintf(buf, "Your power level increases very slightly.", NULL);
+				act(AT_HIT, buf, ch, NULL, NULL, TO_CHAR);
+			}
+		    stat_train(ch, "str", statbonus);
+			if (ch->mana - gravdam > 0)
+				ch->mana -= gravdam;
+			else if (ch->mana - gravdam <= 0) {
+				ch->mana = 0;
+				ch->hit -= (gravdam / 3);
+				act( AT_RED, "Your joints pop and creak ominously.", ch, NULL, NULL, TO_CHAR );
+				if (ch->hit - (gravdam / 3) < 0) {
+					update_pos(ch);
+					if (ch->position == POS_DEAD) {
+						if (totalgrav > 1) {
+							act( AT_RED, "Your body has been crushed!", ch, NULL, NULL, TO_CHAR );
+							act( AT_RED, "$n collapses, DEAD, $s body crushed under intense gravity.", ch, NULL, NULL, TO_NOTVICT );
+							sprintf( buf, "%s is crushed into a pancake under intense gravity", ch->name );
+						}
+						else {
+							act( AT_RED, "Your body gives out from exhaustion ...", ch, NULL, NULL, TO_CHAR );
+							act( AT_RED, "$n collapses, DEAD, $s body completely exhausted.", ch, NULL, NULL, TO_NOTVICT );
+							sprintf( buf, "%s's body gives out from exhaustion'", ch->name );
+						}
+						do_info(ch, buf);
+						raw_kill(ch, ch);
+					}
+				}
+			}
+		  }
+		  if (trainmessage >= 65 && trainmessage < 99) {
+		    base_xp = (long double)increase / 12 * totalgrav;
+			xp_gain = (long double)base_xp;
+		    gain_exp(ch, xp_gain);
+		    pager_printf(ch, "&GYou perform a push-up in %d times gravity, your strength steadily building.\n\r", totalgrav);
+			if (xp_gain > 1) {
+				sprintf(buf, "Your power level increases by %s points.", num_punct(xp_gain));
+				act(AT_HIT, buf, ch, NULL, NULL, TO_CHAR);
+			}
+			else {
+				sprintf(buf, "Your power level increases very slightly.", NULL);
+				act(AT_HIT, buf, ch, NULL, NULL, TO_CHAR);
+			}
+		    stat_train(ch, "str", statbonus);
+			if (ch->mana - gravdam > 0)
+				ch->mana -= gravdam;
+			else if (ch->mana - gravdam <= 0) {
+				ch->mana = 0;
+				ch->hit -= (gravdam / 3);
+				act( AT_RED, "Your bones pop and creak ominously.", ch, NULL, NULL, TO_CHAR );
+				if (ch->hit - (gravdam / 3) < 0) {
+					update_pos(ch);
+					if (ch->position == POS_DEAD) {
+						if (totalgrav > 1) {
+							act( AT_RED, "Your body has been crushed!", ch, NULL, NULL, TO_CHAR );
+							act( AT_RED, "$n collapses, DEAD, $s body crushed under intense gravity.", ch, NULL, NULL, TO_NOTVICT );
+							sprintf( buf, "%s is crushed into a pancake under intense gravity", ch->name );
+						}
+						else {
+							act( AT_RED, "Your body gives out from exhaustion ...", ch, NULL, NULL, TO_CHAR );
+							act( AT_RED, "$n collapses, DEAD, $s body completely exhausted.", ch, NULL, NULL, TO_NOTVICT );
+							sprintf( buf, "%s's body gives out from exhaustion'", ch->name );
+						}
+						do_info(ch, buf);
+						raw_kill(ch, ch);
+					}
+				}
+			}
+		  }
+		  if (trainmessage >= 99) {
+		    base_xp = (long double)increase / 12 * totalgrav;
+			xp_gain = (long double)base_xp;
+		    gain_exp(ch, xp_gain);
+		    pager_printf(ch, "&GPushing past your normal limits, you perform a series of one-armed push-ups!\n\r", totalgrav);
+		    act(AT_WHITE, "$n does a set of one-armed pushups in rapid-fire succession.", ch, NULL, NULL, TO_NOTVICT);
+			sprintf(buf, "Your power level suddenly increases by %s points.", num_punct(xp_gain));
+		    act(AT_HIT, buf, ch, NULL, NULL, TO_CHAR);
+		    stat_train(ch, "str", breakbonus);
+			if (ch->mana - gravdam > 0)
+				ch->mana -= gravdam;
+			else if (ch->mana - gravdam <= 0) {
+				ch->mana = 0;
+				ch->hit -= (gravdam / 3);
+				act( AT_RED, "Your bones pop and creak ominously.", ch, NULL, NULL, TO_CHAR );
+				if (ch->hit - (gravdam / 3) < 0) {
+					update_pos(ch);
+					if (ch->position == POS_DEAD) {
+						if (totalgrav > 1) {
+							act( AT_RED, "Your body has been crushed!", ch, NULL, NULL, TO_CHAR );
+							act( AT_RED, "$n collapses, DEAD, $s body crushed under intense gravity.", ch, NULL, NULL, TO_NOTVICT );
+							sprintf( buf, "%s is crushed into a pancake under intense gravity", ch->name );
+						}
+						else {
+							act( AT_RED, "Your body gives out from exhaustion ...", ch, NULL, NULL, TO_CHAR );
+							act( AT_RED, "$n collapses, DEAD, $s body completely exhausted.", ch, NULL, NULL, TO_NOTVICT );
+							sprintf( buf, "%s's body gives out from exhaustion'", ch->name );
+						}
+						do_info(ch, buf);
+						raw_kill(ch, ch);
+					}
+				}
+			}
+		  }
 		}
 		/* New Gravity Training */
 		if (xIS_SET((ch)->affected_by, AFF_PUSHUPS) && !xIS_SET((ch)->in_room->room_flags, ROOM_GRAV)) {
