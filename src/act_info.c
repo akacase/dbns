@@ -4157,7 +4157,7 @@ void do_exercise(CHAR_DATA *ch, char *argument)
 		if (ch->exintensity = 0) {
 			send_to_char("You're currently prepared for a steady workout.\n\r", ch);
 		}
-		else if (ch->exintensity = 1) {
+		if (ch->exintensity = 1) {
 			send_to_char("You're currently prepared for an intense workout.\n\r", ch);
 		}
 		send_to_char("To change this intensity, enter 'exercise steadily' or 'intensely'.\n\r", ch);

@@ -10422,11 +10422,13 @@ do_godstat(CHAR_DATA * ch, char *argument)
 	pager_printf(ch,
 		"School: %d", victim->school);
 	pager_printf(ch,
-		"Strike Mastery: %d", victim->strikemastery);
+		"Strike Mastery: %d ", victim->strikemastery);
 	pager_printf(ch,
-		"Ki Mastery: %d", victim->energymastery);
+		"Ki Mastery: %d ", victim->energymastery);
 	pager_printf(ch,
-		"Body Mastery: %d", victim->bodymastery);
+		"Body Mastery: %d\n\r", victim->bodymastery);
+	pager_printf(ch,
+		"Exercise Intensity: %d\n\r", victim->exintensity);
 	send_to_pager("&w&D\n\r", ch);
 }
 
