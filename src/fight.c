@@ -2812,7 +2812,7 @@ violence_update(void)
 		    base_xp = (long double)increase / 12 * totalgrav;
 			xp_gain = (long double)base_xp;
 		    gain_exp(ch, xp_gain);
-		    pager_printf(ch, "&GYou perform a push-up in %d times gravity, your strength steadily building.\n\r", totalgrav);
+		    pager_printf(ch, "&GYou perform a push-up, your strength steadily building.\n\r");
 			if (xp_gain > 1) {
 				sprintf(buf, "Your power level increases by %s points.", num_punct(xp_gain));
 				act(AT_HIT, buf, ch, NULL, NULL, TO_CHAR);
@@ -2851,7 +2851,7 @@ violence_update(void)
 		    base_xp = (long double)increase / 12 * totalgrav;
 			xp_gain = (long double)base_xp;
 		    gain_exp(ch, xp_gain);
-		    pager_printf(ch, "&GPushing past your normal limits, you perform a series of one-armed push-ups!\n\r", totalgrav);
+		    pager_printf(ch, "&GPushing past your normal limits, you perform a series of one-armed push-ups!\n\r");
 		    act(AT_WHITE, "$n does a set of one-armed pushups in rapid-fire succession.", ch, NULL, NULL, TO_NOTVICT);
 			sprintf(buf, "Your power level suddenly increases by %s points.", num_punct(xp_gain));
 		    act(AT_HIT, buf, ch, NULL, NULL, TO_CHAR);

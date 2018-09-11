@@ -4226,7 +4226,7 @@ void do_exercise(CHAR_DATA *ch, char *argument)
 			return;
 		}
 	} else if (!str_cmp(arg, "steadily")) {
-		if (ch->exintensity != 0) {
+		if (ch->exintensity = 1) {
 			send_to_char("You prepare to exercise at a steady rate.\n\r", ch);
 			ch->exintensity = 0;
 			return;
