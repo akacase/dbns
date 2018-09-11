@@ -1172,7 +1172,7 @@ update_aris(CHAR_DATA * ch)
 	if (aff_ay)
 		xSET_BIT((ch)->affected_by, AFF_BRUISERSTYLE);
 	if (aff_az)
-		xSET_BIT((ch)->affected_by, AFF_EXPUNCH);
+		xSET_BIT((ch)->affected_by, AFF_EXPUSHUPS);
 	if (aff_ba)
 		xSET_BIT((ch)->affected_by, AFF_EXSHADOWBOXING);
 	if (aff_bb)
