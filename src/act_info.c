@@ -4235,17 +4235,6 @@ void do_exercise(CHAR_DATA *ch, char *argument)
 			send_to_char("Stop what? You're not doing anything.\n\r", ch);
 			return;
 		}
-	} else {
-	    send_to_char("Exercise how? Activities are: pushup, shadowbox, endure.\n\r", ch);
-		send_to_char("Note that 'endure' will have no effect at your body's natural weight.\n\r", ch);
-		if (ch->exintensity = 0) {
-			send_to_char("You're currently prepared for a steady workout.\n\r", ch);
-		}
-		else if (ch->exintensity = 1) {
-			send_to_char("You're currently prepared for an intense workout.\n\r", ch);
-		}
-		send_to_char("To change this intensity, enter 'exercise steadily' or 'intensely'.\n\r", ch);
-	    return;
 	}
 }
 
