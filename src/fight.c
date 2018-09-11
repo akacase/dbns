@@ -2766,7 +2766,7 @@ violence_update(void)
 		  trainmessage = number_range(1, 100);
 		  gravdam = totalgrav * damrange);
 		  statbonus = (totalgrav / 10) + 15;
-		  if (ch->extensity = 1)
+		  if (ch->exintensity = 1)
 			  statbonus += statbonus * 1.5;
 		  breakbonus = statbonus * 2;
 
