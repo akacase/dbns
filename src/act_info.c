@@ -4164,26 +4164,14 @@ void do_exercise(CHAR_DATA *ch, char *argument)
 		return;
 	}
 	if (!str_cmp(arg, "steadily")) {
-		if (ch->exintensity = 0) {
-			send_to_char("You're already prepared for a steady workout.\n\r", ch);
-			return;
-		}
-		if (ch->exintensity = 1) {
-			send_to_char("You prepare to exercise at a steady rate.\n\r", ch);
-			ch->exintensity = 0;
-			return;
-		}
+		send_to_char("You adjust to a steady rate of exercise.\n\r", ch);
+		ch->exintensity = 0;
+		return;
 	}
 	if (!str_cmp(arg, "intensely")) {
-		if (ch->exintensity = 1) {
-			send_to_char("You're already prepared for an intense workout.\n\r", ch);
-			return;
-		}
-		if (ch->exintensity = 0) {
-			send_to_char("You prepare for an intense workout.\n\r", ch);
-			ch->exintensity = 1;
-			return;
-		}
+		send_to_char("You adjust to an intense rate of exercise.\n\r", ch);
+		ch->exintensity = 1;
+		return;
 	}
 	if (!str_cmp(arg, "pushup")) {
 
