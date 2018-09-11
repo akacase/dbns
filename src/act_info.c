@@ -4156,24 +4156,26 @@ void do_exercise(CHAR_DATA *ch, char *argument)
 		send_to_char("Note that 'endure' will have no effect at your body's natural weight.\n\r", ch);
 		if (ch->exintensity = 0) {
 			send_to_char("You're currently prepared for a steady workout.\n\r", ch);
+			send_to_char("To change this intensity, enter 'exercise steadily' or 'intensely'.\n\r", ch);
+			return;
 		}
 		if (ch->exintensity = 1) {
 			send_to_char("You're currently prepared for an intense workout.\n\r", ch);
+			send_to_char("To change this intensity, enter 'exercise steadily' or 'intensely'.\n\r", ch);
+			return;
 		}
-		send_to_char("To change this intensity, enter 'exercise steadily' or 'intensely'.\n\r", ch);
-		return;
 	}
-	if (!str_cmp(arg, "steadily")) {
+	else if (!str_cmp(arg, "steadily")) {
 		send_to_char("You adjust to a steady rate of exercise.\n\r", ch);
 		ch->exintensity = 0;
 		return;
 	}
-	if (!str_cmp(arg, "intensely")) {
+	else if (!str_cmp(arg, "intensely")) {
 		send_to_char("You adjust to an intense rate of exercise.\n\r", ch);
 		ch->exintensity = 1;
 		return;
 	}
-	if (!str_cmp(arg, "pushup")) {
+	else if (!str_cmp(arg, "pushup")) {
 
 		if (xIS_SET((ch)->affected_by, AFF_EXPUSHUPS) || xIS_SET((ch)->affected_by, AFF_EXSHADOWBOXING)
 		|| xIS_SET((ch)->affected_by, AFF_EXENDURING)) {
