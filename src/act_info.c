@@ -4154,16 +4154,7 @@ void do_exercise(CHAR_DATA *ch, char *argument)
 	else if (arg[0] == '\0') {
 		send_to_char("Exercise how? Available exercises are 'exercise pushup', 'shadowbox', 'endure'.\n\r", ch);
 		send_to_char("Note that 'endure' will have no effect at your body's natural weight.\n\r", ch);
-		if (ch->exintensity = 0) {
-			send_to_char("You're currently prepared for a steady workout.\n\r", ch);
-			send_to_char("To change this intensity, enter 'exercise steadily' or 'intensely'.\n\r", ch);
-			return;
-		}
-		if (ch->exintensity = 1) {
-			send_to_char("You're currently prepared for an intense workout.\n\r", ch);
-			send_to_char("To change this intensity, enter 'exercise steadily' or 'intensely'.\n\r", ch);
-			return;
-		}
+		send_to_char("To select a workout intensity, enter 'exercise steadily' or 'intensely'.\n\r", ch);
 	}
 	if (!str_cmp(arg, "steadily")) {
 		send_to_char("You adjust to a steady rate of exercise.\n\r", ch);
