@@ -4583,7 +4583,7 @@ do_develop(CHAR_DATA * ch, char *argument)
 		send_to_char("A failure message indicates combination is possible, but you lack enough Strike/Ki/Body Mastery, or you have already learned it.\n\r", ch);
 	}
 	if (!str_cmp(arg1, "eyebeam") && arg2[0] == '\0') {
-		if (ch->skilleye_beam > 1) {
+		if (ch->skilleye_beam >= 1) {
 				send_to_char("You already know that skill.\n\r", ch);
 				return;
 		}
@@ -4639,7 +4639,7 @@ do_develop(CHAR_DATA * ch, char *argument)
 		return;
 	}
 	if (!str_cmp(arg1, "punch") && !str_cmp(arg2, "punch")) {
-		if (ch->skillhaymaker > 1) {
+		if (ch->skillhaymaker >= 1) {
 				send_to_char("You already know that skill.\n\r", ch);
 				return;
 		}
@@ -4655,7 +4655,7 @@ do_develop(CHAR_DATA * ch, char *argument)
 		}
 	}
 	if (!str_cmp(arg1, "haymaker") && !str_cmp(arg2, "haymaker")) {
-		if (ch->skillbash > 1) {
+		if (ch->skillbash >= 1) {
 			send_to_char("You already know that skill.\n\r", ch);
 			return;
 		}
@@ -4671,7 +4671,7 @@ do_develop(CHAR_DATA * ch, char *argument)
 		}
 	}
 	if (!str_cmp(arg1, "bash") && !str_cmp(arg2, "bash")) {
-		if (ch->skillcollide > 1) {
+		if (ch->skillcollide >= 1) {
 			send_to_char("You already know that skill.\n\r", ch);
 			return;
 		}
@@ -4687,7 +4687,7 @@ do_develop(CHAR_DATA * ch, char *argument)
 		}
 	}
 	if (!str_cmp(arg1, "collide") && !str_cmp(arg2, "collide")) {
-		if (ch->skilllariat > 1) {
+		if (ch->skilllariat >= 1) {
 			send_to_char("You already know that skill.\n\r", ch);
 			return;
 		}
@@ -4702,11 +4702,11 @@ do_develop(CHAR_DATA * ch, char *argument)
 		}
 	}
 	if (!str_cmp(arg1, "energyball") && !str_cmp(arg2, "energyball")) {
-		if (ch->skillcrusherball > 1) {
+		if (ch->skillcrusherball >= 1) {
 			send_to_char("You already know that skill.\n\r", ch);
 			return;
 		}
-		if (ch->skillenergy_beam > 1) {
+		if (ch->skillenergy_beam >= 1) {
 			send_to_char("You already know that skill.\n\r", ch);
 			return;
 		}
@@ -4723,7 +4723,7 @@ do_develop(CHAR_DATA * ch, char *argument)
 		}
 	}
 	if (!str_cmp(arg1, "crusherball") && !str_cmp(arg2, "crusherball")) {
-		if (ch->skillmeteor > 1) {
+		if (ch->skillmeteor >= 1) {
 			send_to_char("You already know that skill.\n\r", ch);
 			return;
 		}
@@ -4738,7 +4738,7 @@ do_develop(CHAR_DATA * ch, char *argument)
 		}
 	}
 	if (!str_cmp(arg1, "meteor") && !str_cmp(arg2, "meteor")) {
-		if (ch->skillgigantic_meteor > 1) {
+		if (ch->skillgigantic_meteor >= 1) {
 			send_to_char("You already know that skill.\n\r", ch);
 			return;
 		}
@@ -4753,7 +4753,7 @@ do_develop(CHAR_DATA * ch, char *argument)
 		}
 	}
 	if (!str_cmp(arg1, "giganticmeteor") && !str_cmp(arg2, "giganticmeteor")) {
-		if (ch->skillecliptic_meteor > 1) {
+		if (ch->skillecliptic_meteor >= 1) {
 			send_to_char("You already know that skill.\n\r", ch);
 			return;
 		}
@@ -4768,7 +4768,7 @@ do_develop(CHAR_DATA * ch, char *argument)
 		}
 	}
 	if (!str_cmp(arg1, "energybeam") && !str_cmp(arg2, "energyball")) {
-		if (ch->skilldestructive_wave > 1) {
+		if (ch->skilldestructive_wave >= 1) {
 			send_to_char("You already know that skill.\n\r", ch);
 			return;
 		}
@@ -4783,7 +4783,7 @@ do_develop(CHAR_DATA * ch, char *argument)
 		}
 	}
 	if (!str_cmp(arg1, "energyball") && !str_cmp(arg2, "energybeam")) {
-		if (ch->skilldestructive_wave > 1) {
+		if (ch->skilldestructive_wave >= 1) {
 			send_to_char("You already know that skill.\n\r", ch);
 			return;
 		}
@@ -4798,7 +4798,7 @@ do_develop(CHAR_DATA * ch, char *argument)
 		}
 	}
 	if (!str_cmp(arg1, "energybeam") && !str_cmp(arg2, "energybeam")) {
-		if (ch->skillconcentrated_beam > 1) {
+		if (ch->skillconcentrated_beam >= 1) {
 			send_to_char("You already know that skill.\n\r", ch);
 			return;
 		}
@@ -4813,7 +4813,7 @@ do_develop(CHAR_DATA * ch, char *argument)
 		}
 	}
 	if (!str_cmp(arg1, "destructivewave") && !str_cmp(arg2, "energybeam")) {
-		if (ch->skillmasenko > 1) {
+		if (ch->skillmasenko >= 1) {
 			send_to_char("You already know that skill.\n\r", ch);
 			return;
 		}
@@ -4828,7 +4828,7 @@ do_develop(CHAR_DATA * ch, char *argument)
 		}
 	}
 	if (!str_cmp(arg1, "energybeam") && !str_cmp(arg2, "destructivewave")) {
-		if (ch->skillmasenko > 1) {
+		if (ch->skillmasenko >= 1) {
 			send_to_char("You already know that skill.\n\r", ch);
 			return;
 		}
@@ -4843,7 +4843,7 @@ do_develop(CHAR_DATA * ch, char *argument)
 		}
 	}
 	if (!str_cmp(arg1, "masenko") && !str_cmp(arg2, "masenko")) {
-		if (ch->skillmakosen > 1) {
+		if (ch->skillmakosen >= 1) {
 			send_to_char("You already know that skill.\n\r", ch);
 			return;
 		}
@@ -4858,7 +4858,7 @@ do_develop(CHAR_DATA * ch, char *argument)
 		}
 	}
 	if (!str_cmp(arg1, "makosen") && !str_cmp(arg2, "concentratedbeam")) {
-		if (ch->skillsbc > 1) {
+		if (ch->skillsbc >= 1) {
 			send_to_char("You already know that skill.\n\r", ch);
 			return;
 			}
@@ -4874,7 +4874,7 @@ do_develop(CHAR_DATA * ch, char *argument)
 		}
 	}
 	if (!str_cmp(arg1, "concentratedbeam") && !str_cmp(arg2, "makosen")) {
-		if (ch->skillsbc > 1) {
+		if (ch->skillsbc >= 1) {
 			send_to_char("You already know that skill.\n\r", ch);
 			return;
 		}
@@ -4890,7 +4890,7 @@ do_develop(CHAR_DATA * ch, char *argument)
 		}
 	}
 	if (!str_cmp(arg1, "concentratedbeam") && !str_cmp(arg2, "concentratedbeam")) {
-		if (ch->skillkamehameha > 1) {
+		if (ch->skillkamehameha >= 1) {
 			send_to_char("You already know that skill.\n\r", ch);
 			return;
 		}
@@ -4905,7 +4905,7 @@ do_develop(CHAR_DATA * ch, char *argument)
 		}
 	}
 	if (!str_cmp(arg1, "concentratedbeam") && !str_cmp(arg2, "energybeam")) {
-		if (ch->skillgallic_gun > 1) {
+		if (ch->skillgallic_gun >= 1) {
 			send_to_char("You already know that skill.\n\r", ch);
 			return;
 		}
@@ -4920,7 +4920,7 @@ do_develop(CHAR_DATA * ch, char *argument)
 		}
 	}
 	if (!str_cmp(arg1, "energybeam") && !str_cmp(arg2, "concentratedbeam")) {
-		if (ch->skillgallic_gun > 1) {
+		if (ch->skillgallic_gun >= 1) {
 			send_to_char("You already know that skill.\n\r", ch);
 			return;
 		}
@@ -4935,7 +4935,7 @@ do_develop(CHAR_DATA * ch, char *argument)
 		}
 	}
 	if (!str_cmp(arg1, "eyebeam") && !str_cmp(arg2, "energybeam")) {
-		if (ch->skillfinger_beam > 1) {
+		if (ch->skillfinger_beam >= 1) {
 			send_to_char("You already know that skill.\n\r", ch);
 			return;
 		}
@@ -4950,7 +4950,7 @@ do_develop(CHAR_DATA * ch, char *argument)
 		}
 	}
 	if (!str_cmp(arg1, "energybeam") && !str_cmp(arg2, "eyebeam")) {
-		if (ch->skillfinger_beam > 1) {
+		if (ch->skillfinger_beam >= 1) {
 			send_to_char("You already know that skill.\n\r", ch);
 			return;
 		}
@@ -4965,7 +4965,7 @@ do_develop(CHAR_DATA * ch, char *argument)
 		}
 	}
 	if (!str_cmp(arg1, "fingerbeam") && !str_cmp(arg2, "crusherball")) {
-		if (ch->skilldeath_ball > 1) {
+		if (ch->skilldeath_ball >= 1) {
 			send_to_char("You already know that skill.\n\r", ch);
 			return;
 		}
@@ -4980,7 +4980,7 @@ do_develop(CHAR_DATA * ch, char *argument)
 		}
 	}
 	if (!str_cmp(arg1, "crusherball") && !str_cmp(arg2, "fingerbeam")) {
-		if (ch->skilldeath_ball > 1) {
+		if (ch->skilldeath_ball >= 1) {
 			send_to_char("You already know that skill.\n\r", ch);
 			return;
 		}
@@ -4995,7 +4995,7 @@ do_develop(CHAR_DATA * ch, char *argument)
 		}
 	}
 	if (!str_cmp(arg1, "forcewave") && arg2[0] == '\0') {
-		if (ch->skillforcewave > 1) {
+		if (ch->skillforcewave >= 1) {
 			send_to_char("You already know that skill.\n\r", ch);
 			return;
 		}
@@ -5010,7 +5010,7 @@ do_develop(CHAR_DATA * ch, char *argument)
 		}
 	}
 	if (!str_cmp(arg1, "forcewave") && !str_cmp(arg2, "forcewave")) {
-		if (ch->skillshockwave > 1) {
+		if (ch->skillshockwave >= 1) {
 			send_to_char("You already know that skill.\n\r", ch);
 			return;
 		}
@@ -5025,7 +5025,7 @@ do_develop(CHAR_DATA * ch, char *argument)
 		}
 	}
 	if (!str_cmp(arg1, "energydisc") && arg2[0] == '\0') {
-		if (ch->skillenergy_disc > 1) {
+		if (ch->skillenergy_disc >= 1) {
 			send_to_char("You already know that skill.\n\r", ch);
 			return;
 		}
@@ -5040,7 +5040,7 @@ do_develop(CHAR_DATA * ch, char *argument)
 		}
 	}
 	if (!str_cmp(arg1, "energydisc") && !str_cmp(arg2, "energydisc")) {
-		if (ch->skilldestructo_disc > 1) {
+		if (ch->skilldestructo_disc >= 1) {
 			send_to_char("You already know that skill.\n\r", ch);
 			return;
 		}
