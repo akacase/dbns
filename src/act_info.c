@@ -4139,8 +4139,8 @@ void do_exercise(CHAR_DATA *ch, char *argument)
 	char arg1[MAX_INPUT_LENGTH];
 	char arg2[MAX_INPUT_LENGTH];
 
-	one_argument(argument, arg1);
-	one_argument(argument, arg2);
+	argument = one_argument(argument, arg1);
+	argument = one_argument(argument, arg2);
 	
 	if (IS_NPC(ch))
 		return;
@@ -4153,7 +4153,7 @@ void do_exercise(CHAR_DATA *ch, char *argument)
 		send_to_char("This room is a bit too relaxing ...\n\r", ch);
 		return;
 	}
-	else if (arg1[0] == '\0') {
+	else if (arg1[0] == '\0' && arg2[0] == '\0') {
 		send_to_char("Exercise how? Available exercises are 'exercise pushup', 'shadowbox', 'endure'.\n\r", ch);
 		send_to_char("Note that 'endure' will have no effect at your body's natural weight.\n\r", ch);
 		if (ch->exintensity == 0) {
@@ -4167,7 +4167,7 @@ void do_exercise(CHAR_DATA *ch, char *argument)
 			return;
 		}
 	}
-	else if (!str_cmp(arg1, "pushup")) {
+	else if (!str_cmp(arg1, "pushup") && arg2[0] == '\0') {
 
 		if (xIS_SET((ch)->affected_by, AFF_EXPUSHUPS) || xIS_SET((ch)->affected_by, AFF_EXSHADOWBOXING)
 		|| xIS_SET((ch)->affected_by, AFF_EXENDURING)) {
@@ -4181,7 +4181,7 @@ void do_exercise(CHAR_DATA *ch, char *argument)
 			return;
 		}
 	}
-	else if (!str_cmp(arg1, "shadowbox")) {
+	else if (!str_cmp(arg1, "shadowbox") && arg2[0] == '\0') {
 
 		if (xIS_SET((ch)->affected_by, AFF_EXPUSHUPS) || xIS_SET((ch)->affected_by, AFF_EXSHADOWBOXING)
 		|| xIS_SET((ch)->affected_by, AFF_EXENDURING)) {
@@ -4195,7 +4195,7 @@ void do_exercise(CHAR_DATA *ch, char *argument)
 			return;
 		}
 	}
-	else if (!str_cmp(arg1, "endure")) {
+	else if (!str_cmp(arg1, "endure") && arg2[0] == '\0') {
 
 		if (xIS_SET((ch)->affected_by, AFF_EXPUSHUPS) || xIS_SET((ch)->affected_by, AFF_EXSHADOWBOXING)
 		|| xIS_SET((ch)->affected_by, AFF_EXENDURING)) {
@@ -4209,7 +4209,7 @@ void do_exercise(CHAR_DATA *ch, char *argument)
 			return;
 		}
 	}
-	else if (!str_cmp(arg1, "stop")) {
+	else if (!str_cmp(arg1, "stop") && arg2[0] == '\0') {
 		if (xIS_SET((ch)->affected_by, AFF_EXPUSHUPS)) {
 			xREMOVE_BIT((ch)->affected_by, AFF_EXPUSHUPS);
 			act(AT_WHITE, "You take a break and stop training.", ch, NULL, NULL, TO_CHAR);
@@ -4233,7 +4233,11 @@ void do_exercise(CHAR_DATA *ch, char *argument)
 			return;
 		}
 	}
-	else if (!str_cmp(arg1, "intensity")) {
+	if (!str_cmp(arg1, "intensity") && arg2[0] == '\0') {
+			send_to_char("Switch to which level of intensity? steady, intense\n\r", ch);
+			return;
+	}
+	if (!str_cmp(arg1, "intensity")) {
 		if (!str_cmp(arg2, "steady")) {
 			send_to_char("You adjust to a steady rate of exercise.\n\r", ch);
 			ch->exintensity = 0;
