@@ -4165,16 +4165,6 @@ void do_exercise(CHAR_DATA *ch, char *argument)
 			return;
 		}
 	}
-	if (!str_cmp(arg, "steadily")) {
-		send_to_char("You adjust to a steady rate of exercise.\n\r", ch);
-		ch->exintensity = 0;
-		return;
-	}
-	else if (!str_cmp(arg, "intensely")) {
-		send_to_char("You adjust to an intense rate of exercise.\n\r", ch);
-		ch->exintensity = 1;
-		return;
-	}
 	else if (!str_cmp(arg, "pushup")) {
 
 		if (xIS_SET((ch)->affected_by, AFF_EXPUSHUPS) || xIS_SET((ch)->affected_by, AFF_EXSHADOWBOXING)
@@ -4240,6 +4230,16 @@ void do_exercise(CHAR_DATA *ch, char *argument)
 			send_to_char("Stop what? You're not doing anything.\n\r", ch);
 			return;
 		}
+	}
+	if (!str_cmp(arg, "steadily")) {
+		send_to_char("You adjust to a steady rate of exercise.\n\r", ch);
+		ch->exintensity = 0;
+		return;
+	}
+	else if (!str_cmp(arg, "intensely")) {
+		send_to_char("You adjust to an intense rate of exercise.\n\r", ch);
+		ch->exintensity = 1;
+		return;
 	}
 	return;
 }
