@@ -4142,14 +4142,28 @@ void do_exercise(CHAR_DATA *ch, char *argument)
 	
 	if (IS_NPC(ch))
 		return;
-		
+	
 	if (ch->position != POS_RESTING) {
 		send_to_char("You should get into a resting position first.\n\r", ch);
 		return;
 	}
-	if (xIS_SET((ch)->in_room->room_flags, ROOM_HTANKS)) {
+	else if (xIS_SET((ch)->in_room->room_flags, ROOM_HTANKS)) {
 		send_to_char("This room is a bit too relaxing ...\n\r", ch);
 		return;
+	}
+	else if (arg[0] == '\0') {
+		send_to_char("Exercise how? Available exercises are 'exercise pushup', 'shadowbox', 'endure'.\n\r", ch);
+		send_to_char("Note that 'endure' will have no effect at your body's natural weight.\n\r", ch);
+		if (ch->exintensity = 0) {
+			send_to_char("You're currently prepared for a steady workout.\n\r", ch);
+			send_to_char("To change this intensity, enter 'exercise steadily' or 'intensely'.\n\r", ch);
+			return;
+		}
+		if (ch->exintensity = 1) {
+			send_to_char("You're currently prepared for an intense workout.\n\r", ch);
+			send_to_char("To change this intensity, enter 'exercise steadily' or 'intensely'.\n\r", ch);
+			return;
+		}
 	}
 	if (!str_cmp(arg, "steadily")) {
 		send_to_char("You adjust to a steady rate of exercise.\n\r", ch);

@@ -9756,6 +9756,12 @@ do_finger_beam(CHAR_DATA * ch, char *argument)
 			stat_train(ch, "int", 16);
 			ch->train += 16;
 			ch->energymastery += 5;
+			if (ch->energymastery >= (ch->kspgain * 100)) {
+				pager_printf_color(ch,
+					"&CYou gained 5 Skill Points!\n\r");
+				ch->sptotal += 5;
+				ch->kspgain += 1;
+				}
 		}
 		if (IS_NPC(ch)) {
 			argdam = number_range(60, 65);
