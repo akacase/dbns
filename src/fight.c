@@ -2764,7 +2764,7 @@ violence_update(void)
 		  totalgrav = (double) ch->gravSetting * playerweight;
 		
 		  trainmessage = number_range(1, 100);
-		  gravdam = totalgrav * damrange);
+		  gravdam = totalgrav * damrange;
 		  statbonus = (totalgrav / 10) + 15;
 		  if (ch->exintensity = 1)
 			  statbonus += statbonus * 1.5;
