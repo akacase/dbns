@@ -4238,6 +4238,7 @@ void do_exercise(CHAR_DATA *ch, char *argument)
 			return;
 		}
 	}
+	return;
 }
 
 void do_train(CHAR_DATA *ch, char *argument)
