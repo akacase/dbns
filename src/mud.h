@@ -2666,7 +2666,7 @@ struct char_data {
 	int		sptotal;
 	int		spgain;
 	int		spallocated;
-	sh_int	exintensity;
+	int		exintensity;
 /* Entries for increasing skill power */
 	int	bashpower;
 	int	basheffic;
