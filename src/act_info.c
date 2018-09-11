@@ -4163,6 +4163,28 @@ void do_exercise(CHAR_DATA *ch, char *argument)
 		send_to_char("To change this intensity, enter 'exercise steadily' or 'intensely'.\n\r", ch);
 		return;
 	}
+	if (!str_cmp(arg, "steadily")) {
+		if (ch->exintensity = 0) {
+			send_to_char("You're already prepared for a steady workout.\n\r", ch);
+			return;
+		}
+		if (ch->exintensity = 1) {
+			send_to_char("You prepare to exercise at a steady rate.\n\r", ch);
+			ch->exintensity = 0;
+			return;
+		}
+	}
+	if (!str_cmp(arg, "intensely")) {
+		if (ch->exintensity = 1) {
+			send_to_char("You're already prepared for an intense workout.\n\r", ch);
+			return;
+		}
+		if (ch->exintensity = 0) {
+			send_to_char("You prepare for an intense workout.\n\r", ch);
+			ch->exintensity = 1;
+			return;
+		}
+	}
 	if (!str_cmp(arg, "pushup")) {
 
 		if (xIS_SET((ch)->affected_by, AFF_EXPUSHUPS) || xIS_SET((ch)->affected_by, AFF_EXSHADOWBOXING)
@@ -4223,26 +4245,6 @@ void do_exercise(CHAR_DATA *ch, char *argument)
 		}
 		else {
 			send_to_char("Stop what? You're not doing anything.\n\r", ch);
-			return;
-		}
-	} else if (!str_cmp(arg, "steadily")) {
-		if (ch->exintensity = 1) {
-			send_to_char("You prepare to exercise at a steady rate.\n\r", ch);
-			ch->exintensity = 0;
-			return;
-		}
-		else {
-			send_to_char("You're already prepared for a steady workout.\n\r", ch);
-			return;
-		}
-	} else if (!str_cmp(arg, "intensely")) {
-		if (ch->exintensity = 0) {
-			send_to_char("You prepare for an intense workout.\n\r", ch);
-			ch->exintensity = 1;
-			return;
-		}
-		else {
-			send_to_char("You're already prepared for an intense workout.\n\r", ch);
 			return;
 		}
 	} else {
