@@ -3265,7 +3265,7 @@ affect_bit_name(EXT_BV * vector)
 		strcat(buf, " intexpushups");
 	if (xIS_SET(*vector, AFF_INTEXSHADOWBOXING))
 		strcat(buf, " intexshadowboxing");
-	if (xIS_SET(*vector, AFF_INTEXPENDURING))
+	if (xIS_SET(*vector, AFF_INTEXENDURING))
 		strcat(buf, " intexenduring");
 	if (xIS_SET(*vector, AFF_EXPUSHUPS))
 		strcat(buf, " expushups");
