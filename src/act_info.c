@@ -4143,7 +4143,7 @@ void do_intensity(CHAR_DATA *ch, char *argument)
 		if (IS_NPC(ch))
 			return;
 		
-		if (arg1[0] == '\0') {
+		if (arg[0] == '\0') {
 			send_to_char("Change intensity level to what? steady, intense\n\r", ch);
 			send_to_char("For now, this command only affects exercises.\n\r", ch);
 			return;
