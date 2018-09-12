@@ -1181,6 +1181,12 @@ update_aris(CHAR_DATA * ch)
 		xSET_BIT((ch)->affected_by, AFF_EXSHADOWBOXING);
 	if (aff_bb)
 		xSET_BIT((ch)->affected_by, AFF_EXENDURING);
+	if (aff_bc)
+		xSET_BIT((ch)->affected_by, AFF_INTEXPUSHUPS);
+	if (aff_bd)
+		xSET_BIT((ch)->affected_by, AFF_INTEXSHADOWBOXING);
+	if (aff_be)
+		xSET_BIT((ch)->affected_by, AFF_INTEXENDURING);
 	return;
 }
 
