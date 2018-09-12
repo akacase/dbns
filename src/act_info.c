@@ -4186,7 +4186,7 @@ void do_exercise(CHAR_DATA *ch, char *argument)
 	}
 	else if (arg1[0] == '\0') {
 		send_to_char("Exercise how? Available exercises are 'exercise pushup', 'shadowbox', 'endure'.\n\r", ch);
-		send_to_char("To increase the intensity, example syntax: exercise pushup intensely\n\r", ch);
+		send_to_char("To increase the intensity--example syntax: exercise pushup intensely\n\r", ch);
 		send_to_char("Note that 'endure' will have no effect at your body's natural weight.\n\r", ch);
 		return;
 	}
@@ -4318,13 +4318,47 @@ void do_exercise(CHAR_DATA *ch, char *argument)
 	}
 	else {
 		send_to_char("Exercise how? Available exercises are 'exercise pushup', 'shadowbox', 'endure'.\n\r", ch);
-		send_to_char("To increase the intensity, example syntax: exercise pushup intensely\n\r", ch);
+		send_to_char("To increase the intensity--example syntax: exercise pushup intensely\n\r", ch);
 		send_to_char("Note that 'endure' will have no effect at your body's natural weight.\n\r", ch);
 		return;
 	}
 }
 
 void do_train(CHAR_DATA *ch, char *argument)
+{
+        char arg[MAX_INPUT_LENGTH];
+		int 	value = 0;
+
+	one_argument(argument, arg);
+	value = is_number(arg) ? atoi(arg) : -1;
+	if (atoi(arg) < -1 && value == -1)
+		value = atoi(arg);
+	
+	if (IS_NPC(ch))
+		return;
+	if (!xIS_SET((ch)->in_room->room_flags, ROOM_GRAV)) {
+		send_to_char("This doesn't appear to be a gravity chamber...\n\r", ch);
+		return;
+	}
+	if (arg[0] == '\0') {
+		send_to_char("The level of gravity is now manually controlled.\n\r", ch);
+		send_to_char("To select a level, enter 'gravity <#>'\n\r", ch);
+		send_to_char("Bear in mind, the weight of your equipment will also be multiplied by the amount.\n\r", ch);
+		pager_printf(ch, "&wThe machine is currently set to %d times gravity.\n\r", ch->gravSetting);
+		return;
+	}
+	else {
+		if (value < 1 || value > 10000) {
+			ch_printf(ch, "Gravity Range is 1 to 10000.\n\r");
+			return;
+		}
+		ch->gravSetting = value;
+		return;
+	}
+}
+
+/*
+void do_oldtrain(CHAR_DATA *ch, char *argument)
 {
         char arg[MAX_INPUT_LENGTH];
 		int acc = 0;
@@ -4480,6 +4514,7 @@ void do_train(CHAR_DATA *ch, char *argument)
 	    return;
 	}
 }
+*/
 
 /*
  * Place any skill types you don't want them to be able to practice
