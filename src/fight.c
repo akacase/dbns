@@ -2732,7 +2732,7 @@ violence_update(void)
 			xREMOVE_BIT((ch)->affected_by, AFF_EXENDURING);
 			send_to_char("Your workout is cut short.\n\r", ch);
 		}
-		if (xIS_SET((ch)->affected_by, AFF_INEXPUSHUPS) && ch->position != POS_RESTING
+		if (xIS_SET((ch)->affected_by, AFF_INTEXPUSHUPS) && ch->position != POS_RESTING
 			&& ch->position != POS_DEAD) {
 			
 			xREMOVE_BIT((ch)->affected_by, AFF_INTEXPUSHUPS);
