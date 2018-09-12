@@ -2764,6 +2764,7 @@ violence_update(void)
 				act( AT_RED, "Your joints pop and creak ominously.", ch, NULL, NULL, TO_CHAR );
 				if (ch->hit - (gravdam / 3) < 0) {
 					update_pos(ch);
+					ch->exp -= xp_gain;
 					if (ch->position == POS_DEAD) {
 						if (totalgrav > 1) {
 							act( AT_RED, "Your body has been crushed!", ch, NULL, NULL, TO_CHAR );
@@ -2803,6 +2804,7 @@ violence_update(void)
 				act( AT_RED, "Your bones pop and creak ominously.", ch, NULL, NULL, TO_CHAR );
 				if (ch->hit - (gravdam / 3) < 0) {
 					update_pos(ch);
+					ch->exp -= xp_gain;
 					if (ch->position == POS_DEAD) {
 						if (totalgrav > 1) {
 							act( AT_RED, "Your body has been crushed!", ch, NULL, NULL, TO_CHAR );
@@ -2837,6 +2839,7 @@ violence_update(void)
 				act( AT_RED, "Your bones pop and creak ominously.", ch, NULL, NULL, TO_CHAR );
 				if (ch->hit - (gravdam / 3) < 0) {
 					update_pos(ch);
+					ch->exp -= xp_gain;
 					if (ch->position == POS_DEAD) {
 						if (totalgrav > 1) {
 							act( AT_RED, "Your body has been crushed!", ch, NULL, NULL, TO_CHAR );
@@ -2906,6 +2909,7 @@ violence_update(void)
 				act( AT_RED, "Your joints pop and creak ominously.", ch, NULL, NULL, TO_CHAR );
 				if (ch->hit - (gravdam / 3) < 0) {
 					update_pos(ch);
+					ch->exp -= xp_gain;
 					if (ch->position == POS_DEAD) {
 						if (totalgrav > 1) {
 							act( AT_RED, "Your body has been crushed!", ch, NULL, NULL, TO_CHAR );
@@ -2945,6 +2949,7 @@ violence_update(void)
 				act( AT_RED, "Your bones pop and creak ominously.", ch, NULL, NULL, TO_CHAR );
 				if (ch->hit - (gravdam / 3) < 0) {
 					update_pos(ch);
+					ch->exp -= xp_gain;
 					if (ch->position == POS_DEAD) {
 						if (totalgrav > 1) {
 							act( AT_RED, "Your body has been crushed!", ch, NULL, NULL, TO_CHAR );
@@ -2979,6 +2984,7 @@ violence_update(void)
 				act( AT_RED, "Your bones pop and creak ominously.", ch, NULL, NULL, TO_CHAR );
 				if (ch->hit - (gravdam / 3) < 0) {
 					update_pos(ch);
+					ch->exp -= xp_gain;
 					if (ch->position == POS_DEAD) {
 						if (totalgrav > 1) {
 							act( AT_RED, "Your body has been crushed!", ch, NULL, NULL, TO_CHAR );
@@ -3047,6 +3053,7 @@ violence_update(void)
 				act( AT_RED, "Your joints pop and creak ominously.", ch, NULL, NULL, TO_CHAR );
 				if (ch->hit - (gravdam / 3) < 0) {
 					update_pos(ch);
+					ch->exp -= xp_gain;
 					if (ch->position == POS_DEAD) {
 						if (totalgrav > 1) {
 							act( AT_RED, "Your body has been crushed!", ch, NULL, NULL, TO_CHAR );
@@ -3086,6 +3093,7 @@ violence_update(void)
 				act( AT_RED, "Your bones pop and creak ominously.", ch, NULL, NULL, TO_CHAR );
 				if (ch->hit - (gravdam / 3) < 0) {
 					update_pos(ch);
+					ch->exp -= xp_gain;
 					if (ch->position == POS_DEAD) {
 						if (totalgrav > 1) {
 							act( AT_RED, "Your body has been crushed!", ch, NULL, NULL, TO_CHAR );
@@ -3120,6 +3128,7 @@ violence_update(void)
 				act( AT_RED, "Your bones pop and creak ominously.", ch, NULL, NULL, TO_CHAR );
 				if (ch->hit - (gravdam / 3) < 0) {
 					update_pos(ch);
+					ch->exp -= xp_gain;
 					if (ch->position == POS_DEAD) {
 						if (totalgrav > 1) {
 							act( AT_RED, "Your body has been crushed!", ch, NULL, NULL, TO_CHAR );
@@ -3189,6 +3198,7 @@ violence_update(void)
 				act( AT_RED, "Your joints pop and creak ominously.", ch, NULL, NULL, TO_CHAR );
 				if (ch->hit - (gravdam / 3) < 0) {
 					update_pos(ch);
+					ch->exp -= xp_gain;
 					if (ch->position == POS_DEAD) {
 						if (totalgrav > 1) {
 							act( AT_RED, "Your body has been crushed!", ch, NULL, NULL, TO_CHAR );
@@ -3228,6 +3238,7 @@ violence_update(void)
 				act( AT_RED, "Your bones pop and creak ominously.", ch, NULL, NULL, TO_CHAR );
 				if (ch->hit - (gravdam / 3) < 0) {
 					update_pos(ch);
+					ch->exp -= xp_gain;
 					if (ch->position == POS_DEAD) {
 						if (totalgrav > 1) {
 							act( AT_RED, "Your body has been crushed!", ch, NULL, NULL, TO_CHAR );
@@ -3262,6 +3273,7 @@ violence_update(void)
 				act( AT_RED, "Your bones pop and creak ominously.", ch, NULL, NULL, TO_CHAR );
 				if (ch->hit - (gravdam / 3) < 0) {
 					update_pos(ch);
+					ch->exp -= xp_gain;
 					if (ch->position == POS_DEAD) {
 						if (totalgrav > 1) {
 							act( AT_RED, "Your body has been crushed!", ch, NULL, NULL, TO_CHAR );
@@ -3330,6 +3342,7 @@ violence_update(void)
 				act( AT_RED, "Your joints pop and creak ominously.", ch, NULL, NULL, TO_CHAR );
 				if (ch->hit - (gravdam / 3) < 0) {
 					update_pos(ch);
+					ch->exp -= xp_gain;
 					if (ch->position == POS_DEAD) {
 						if (totalgrav > 1) {
 							act( AT_RED, "Your body has been crushed!", ch, NULL, NULL, TO_CHAR );
@@ -3369,6 +3382,7 @@ violence_update(void)
 				act( AT_RED, "Your bones pop and creak ominously.", ch, NULL, NULL, TO_CHAR );
 				if (ch->hit - (gravdam / 3) < 0) {
 					update_pos(ch);
+					ch->exp -= xp_gain;
 					if (ch->position == POS_DEAD) {
 						if (totalgrav > 1) {
 							act( AT_RED, "Your body has been crushed!", ch, NULL, NULL, TO_CHAR );
@@ -3403,6 +3417,7 @@ violence_update(void)
 				act( AT_RED, "Your bones pop and creak ominously.", ch, NULL, NULL, TO_CHAR );
 				if (ch->hit - (gravdam / 3) < 0) {
 					update_pos(ch);
+					ch->exp -= xp_gain;
 					if (ch->position == POS_DEAD) {
 						if (totalgrav > 1) {
 							act( AT_RED, "Your body has been crushed!", ch, NULL, NULL, TO_CHAR );
@@ -3472,6 +3487,7 @@ violence_update(void)
 				act( AT_RED, "Your joints pop and creak ominously.", ch, NULL, NULL, TO_CHAR );
 				if (ch->hit - (gravdam / 3) < 0) {
 					update_pos(ch);
+					ch->exp -= xp_gain;
 					if (ch->position == POS_DEAD) {
 						if (totalgrav > 1) {
 							act( AT_RED, "Your body has been crushed!", ch, NULL, NULL, TO_CHAR );
@@ -3511,6 +3527,7 @@ violence_update(void)
 				act( AT_RED, "Your bones pop and creak ominously.", ch, NULL, NULL, TO_CHAR );
 				if (ch->hit - (gravdam / 3) < 0) {
 					update_pos(ch);
+					ch->exp -= xp_gain;
 					if (ch->position == POS_DEAD) {
 						if (totalgrav > 1) {
 							act( AT_RED, "Your body has been crushed!", ch, NULL, NULL, TO_CHAR );
@@ -3545,6 +3562,7 @@ violence_update(void)
 				act( AT_RED, "Your bones pop and creak ominously.", ch, NULL, NULL, TO_CHAR );
 				if (ch->hit - (gravdam / 3) < 0) {
 					update_pos(ch);
+					ch->exp -= xp_gain;
 					if (ch->position == POS_DEAD) {
 						if (totalgrav > 1) {
 							act( AT_RED, "Your body has been crushed!", ch, NULL, NULL, TO_CHAR );
