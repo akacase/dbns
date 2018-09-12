@@ -8796,7 +8796,9 @@ do_meditate(CHAR_DATA * ch, char *argument)
 	if(IS_AFFECTED(ch, AFF_PUSHUPS) || IS_AFFECTED(ch, AFF_SHADOWBOXING)
 	|| IS_AFFECTED(ch, AFF_ENDURING) || IS_AFFECTED(ch, AFF_MEDITATION)
 	|| IS_AFFECTED(ch, AFF_EXPUSHUPS) || IS_AFFECTED(ch, AFF_EXSHADOWBOXING) 
-	|| IS_AFFECTED(ch, AFF_EXENDURING)) {
+	|| IS_AFFECTED(ch, AFF_EXENDURING)
+	|| IS_AFFECTED(ch, AFF_INTEXPUSHUPS) || IS_AFFECTED(ch, AFF_INTEXSHADOWBOXING) 
+	|| IS_AFFECTED(ch, AFF_INTEXENDURING)) {
 	  send_to_char("You can't seem to focus while you're this busy!\n\r", ch);
 	  return;
 	}
