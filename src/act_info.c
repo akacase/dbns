@@ -4138,6 +4138,7 @@ void do_exercise(CHAR_DATA *ch, char *argument)
 {
 	char arg1[MAX_INPUT_LENGTH];
 	char arg2[MAX_INPUT_LENGTH];
+	int	intensity = 0;
 
 	argument = one_argument(argument, arg1);
 	argument = one_argument(argument, arg2);
@@ -4156,12 +4157,12 @@ void do_exercise(CHAR_DATA *ch, char *argument)
 	else if (arg1[0] == '\0' && arg2[0] == '\0') {
 		send_to_char("Exercise how? Available exercises are 'exercise pushup', 'shadowbox', 'endure'.\n\r", ch);
 		send_to_char("Note that 'endure' will have no effect at your body's natural weight.\n\r", ch);
-		if (ch->exintensity == 0) {
+		if (intensity == 0) {
 			send_to_char("You're currently prepared for a steady workout.\n\r", ch);
 			send_to_char("To change this intensity, enter 'exercise steadily' or 'intensely'.\n\r", ch);
 			return;
 		}
-		if (ch->exintensity == 1) {
+		if (intensity == 1) {
 			send_to_char("You're currently prepared for an intense workout.\n\r", ch);
 			send_to_char("To change this intensity, enter 'exercise steadily' or 'intensely'.\n\r", ch);
 			return;
@@ -4178,7 +4179,7 @@ void do_exercise(CHAR_DATA *ch, char *argument)
 			xSET_BIT((ch)->affected_by, AFF_EXPUSHUPS);
 			act(AT_WHITE, "You drop into a neutral pushup position.", ch, NULL, NULL, TO_CHAR);
 			act(AT_WHITE, "$n drops into a neutral pushup position.", ch, NULL, NULL, TO_NOTVICT);
-			ch->exintensity = 0;
+			intensity == 0;
 			return;
 		}
 	}
@@ -4193,7 +4194,7 @@ void do_exercise(CHAR_DATA *ch, char *argument)
 			xSET_BIT((ch)->affected_by, AFF_EXPUSHUPS);
 			act(AT_WHITE, "You drop into a neutral pushup position.", ch, NULL, NULL, TO_CHAR);
 			act(AT_WHITE, "$n drops into a neutral pushup position.", ch, NULL, NULL, TO_NOTVICT);
-			ch->exintensity = 1;
+			intensity == 1;
 			return;
 		}
 	}
@@ -4208,7 +4209,7 @@ void do_exercise(CHAR_DATA *ch, char *argument)
 			xSET_BIT((ch)->affected_by, AFF_EXSHADOWBOXING);
 			act(AT_WHITE, "You limber up and get ready to shadowbox.", ch, NULL, NULL, TO_CHAR);
 			act(AT_WHITE, "$n limbers up and gets ready to shadowbox.", ch, NULL, NULL, TO_NOTVICT);
-			ch->exintensity = 0;
+			intensity == 0;
 			return;
 		}
 	}
@@ -4223,7 +4224,7 @@ void do_exercise(CHAR_DATA *ch, char *argument)
 			xSET_BIT((ch)->affected_by, AFF_EXSHADOWBOXING);
 			act(AT_WHITE, "You limber up and get ready to shadowbox.", ch, NULL, NULL, TO_CHAR);
 			act(AT_WHITE, "$n limbers up and gets ready to shadowbox.", ch, NULL, NULL, TO_NOTVICT);
-			ch->exintensity = 1;
+			intensity == 1;
 			return;
 		}
 	}
@@ -4238,7 +4239,7 @@ void do_exercise(CHAR_DATA *ch, char *argument)
 			xSET_BIT((ch)->affected_by, AFF_EXENDURING);
 			act(AT_WHITE, "You lower your defenses, preparing to endure the elements with nothing but guts and elbow grease.", ch, NULL, NULL, TO_CHAR);
 			act(AT_WHITE, "$n lowers $s defenses, preparing to endure the elements with nothing but guts and elbow grease.", ch, NULL, NULL, TO_NOTVICT);
-			ch->exintensity = 0;
+			intensity == 0;
 			return;
 		}
 	}
@@ -4253,7 +4254,7 @@ void do_exercise(CHAR_DATA *ch, char *argument)
 			xSET_BIT((ch)->affected_by, AFF_EXENDURING);
 			act(AT_WHITE, "You lower your defenses, preparing to endure the elements with nothing but guts and elbow grease.", ch, NULL, NULL, TO_CHAR);
 			act(AT_WHITE, "$n lowers $s defenses, preparing to endure the elements with nothing but guts and elbow grease.", ch, NULL, NULL, TO_NOTVICT);
-			ch->exintensity = 1;
+			intensity == 1;
 			return;
 		}
 	}

@@ -2749,12 +2749,14 @@ violence_update(void)
 		  double playerweight = 0;
 		  double addedweight = 0;
 		  double totalgrav = 0;
-            
-		  if (ch->exintensity = 0) {
+		  int	intensity = 0;
+			
+		  intensity = ch->exintensity;
+		  if (intensity == 0) {
 			increase = number_range(1, 3);
 			damrange = number_range(1, 3);
 		  }
-		  else if (ch->exintensity = 1) {
+		  else if (intensity == 1) {
 			increase = number_range(3, 9);
 			damrange = number_range(5, 15);
 		  }
@@ -2766,7 +2768,7 @@ violence_update(void)
 		  trainmessage = number_range(1, 100);
 		  gravdam = totalgrav * damrange;
 		  statbonus = (totalgrav / 10) + 15;
-		  if (ch->exintensity = 1)
+		  if (intensity == 1)
 			  statbonus += statbonus * 1.5;
 		  breakbonus = statbonus * 2;
 
