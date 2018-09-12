@@ -4186,6 +4186,7 @@ void do_exercise(CHAR_DATA *ch, char *argument)
 	}
 	else if (arg1[0] == '\0') {
 		send_to_char("Exercise how? Available exercises are 'exercise pushup', 'shadowbox', 'endure'.\n\r", ch);
+		send_to_char("To increase the intensity, example syntax: exercise pushup intensely\n\r", ch);
 		send_to_char("Note that 'endure' will have no effect at your body's natural weight.\n\r", ch);
 		return;
 	}
