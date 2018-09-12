@@ -4148,12 +4148,12 @@ void do_intensity(CHAR_DATA *ch, char *argument)
 			send_to_char("For now, this command only affects exercises.\n\r", ch);
 			return;
 		}
-		else if (!str_cmp(arg1, "steady")) {
+		else if (!str_cmp(arg, "steady")) {
 			send_to_char("Done.\n\r", ch);
 			ch->exintensity = 0;
 			return;
 		}
-		else if (!str_cmp(arg1, "intense")) {
+		else if (!str_cmp(arg, "intense")) {
 			send_to_char("Done.\n\r", ch);
 			ch->exintensity = 1;
 			return;
