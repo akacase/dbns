@@ -364,6 +364,7 @@ DO_FUN *skill_function( char *name )
       if ( !str_cmp( name, "do_installarea"               ))    return do_installarea;
       if ( !str_cmp( name, "do_instaroom"                 ))    return do_instaroom;
       if ( !str_cmp( name, "do_instazone"                 ))    return do_instazone;
+      if ( !str_cmp( name, "do_intensity"                 ))    return do_intensity;
       if ( !str_cmp( name, "do_inventory"                 ))    return do_inventory;
       if ( !str_cmp( name, "do_invis"                     ))    return do_invis;
       if ( !str_cmp( name, "do_ipcompare"                 ))    return do_ipcompare;
@@ -1141,6 +1142,7 @@ char *skill_name( DO_FUN *skill )
   if ( skill == do_installarea                 )    return "do_installarea";
   if ( skill == do_instaroom                   )    return "do_instaroom";
   if ( skill == do_instazone                   )    return "do_instazone";
+  if ( skill == do_intensity                   )    return "do_intensity";
   if ( skill == do_inventory                   )    return "do_inventory";
   if ( skill == do_invis                       )    return "do_invis";
   if ( skill == do_ipcompare                   )    return "do_ipcompare";

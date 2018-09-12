@@ -4898,6 +4898,7 @@ DECLARE_DO_FUN(do_induct);
 DECLARE_DO_FUN(do_installarea);
 DECLARE_DO_FUN(do_instaroom);
 DECLARE_DO_FUN(do_instazone);
+DECLARE_DO_FUN(do_intensity);
 DECLARE_DO_FUN(do_inventory);
 DECLARE_DO_FUN(do_invis);
 DECLARE_DO_FUN(do_ipcompare);
