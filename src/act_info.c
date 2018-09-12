@@ -4353,6 +4353,7 @@ void do_train(CHAR_DATA *ch, char *argument)
 			return;
 		}
 		ch->gravSetting = value;
+		pager_printf(ch, "&GYou set the machine to %dx gravity.\n\r", value);
 		return;
 	}
 }
