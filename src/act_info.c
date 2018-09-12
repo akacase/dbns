@@ -4178,6 +4178,22 @@ void do_exercise(CHAR_DATA *ch, char *argument)
 			xSET_BIT((ch)->affected_by, AFF_EXPUSHUPS);
 			act(AT_WHITE, "You drop into a neutral pushup position.", ch, NULL, NULL, TO_CHAR);
 			act(AT_WHITE, "$n drops into a neutral pushup position.", ch, NULL, NULL, TO_NOTVICT);
+			ch->exintensity = 0;
+			return;
+		}
+	}
+	else if (!str_cmp(arg1, "pushup") && !str_cmp(arg2, "intensely")) {
+
+		if (xIS_SET((ch)->affected_by, AFF_EXPUSHUPS) || xIS_SET((ch)->affected_by, AFF_EXSHADOWBOXING)
+		|| xIS_SET((ch)->affected_by, AFF_EXENDURING)) {
+			send_to_char("You're already working out. Use 'exercise stop' before trying something else.\n\r", ch);
+			return;
+		}
+		else {
+			xSET_BIT((ch)->affected_by, AFF_EXPUSHUPS);
+			act(AT_WHITE, "You drop into a neutral pushup position.", ch, NULL, NULL, TO_CHAR);
+			act(AT_WHITE, "$n drops into a neutral pushup position.", ch, NULL, NULL, TO_NOTVICT);
+			ch->exintensity = 1;
 			return;
 		}
 	}
@@ -4192,6 +4208,22 @@ void do_exercise(CHAR_DATA *ch, char *argument)
 			xSET_BIT((ch)->affected_by, AFF_EXSHADOWBOXING);
 			act(AT_WHITE, "You limber up and get ready to shadowbox.", ch, NULL, NULL, TO_CHAR);
 			act(AT_WHITE, "$n limbers up and gets ready to shadowbox.", ch, NULL, NULL, TO_NOTVICT);
+			ch->exintensity = 0;
+			return;
+		}
+	}
+	else if (!str_cmp(arg1, "shadowbox") && !str_cmp(arg2, "intensely")) {
+
+		if (xIS_SET((ch)->affected_by, AFF_EXPUSHUPS) || xIS_SET((ch)->affected_by, AFF_EXSHADOWBOXING)
+		|| xIS_SET((ch)->affected_by, AFF_EXENDURING)) {
+			send_to_char("You're already working out. Use 'exercise stop' before trying something else.\n\r", ch);
+			return;
+		}
+		else {
+			xSET_BIT((ch)->affected_by, AFF_EXSHADOWBOXING);
+			act(AT_WHITE, "You limber up and get ready to shadowbox.", ch, NULL, NULL, TO_CHAR);
+			act(AT_WHITE, "$n limbers up and gets ready to shadowbox.", ch, NULL, NULL, TO_NOTVICT);
+			ch->exintensity = 1;
 			return;
 		}
 	}
@@ -4206,6 +4238,22 @@ void do_exercise(CHAR_DATA *ch, char *argument)
 			xSET_BIT((ch)->affected_by, AFF_EXENDURING);
 			act(AT_WHITE, "You lower your defenses, preparing to endure the elements with nothing but guts and elbow grease.", ch, NULL, NULL, TO_CHAR);
 			act(AT_WHITE, "$n lowers $s defenses, preparing to endure the elements with nothing but guts and elbow grease.", ch, NULL, NULL, TO_NOTVICT);
+			ch->exintensity = 0;
+			return;
+		}
+	}
+	else if (!str_cmp(arg1, "endure") && !str_cmp(arg2, "intensely")) {
+
+		if (xIS_SET((ch)->affected_by, AFF_EXPUSHUPS) || xIS_SET((ch)->affected_by, AFF_EXSHADOWBOXING)
+		|| xIS_SET((ch)->affected_by, AFF_EXENDURING)) {
+			send_to_char("You're already working out. Use 'exercise stop' before trying something else.\n\r", ch);
+			return;
+		}
+		else {
+			xSET_BIT((ch)->affected_by, AFF_EXENDURING);
+			act(AT_WHITE, "You lower your defenses, preparing to endure the elements with nothing but guts and elbow grease.", ch, NULL, NULL, TO_CHAR);
+			act(AT_WHITE, "$n lowers $s defenses, preparing to endure the elements with nothing but guts and elbow grease.", ch, NULL, NULL, TO_NOTVICT);
+			ch->exintensity = 1;
 			return;
 		}
 	}
@@ -4230,22 +4278,6 @@ void do_exercise(CHAR_DATA *ch, char *argument)
 		}
 		else {
 			send_to_char("Stop what? You're not doing anything.\n\r", ch);
-			return;
-		}
-	}
-	if (!str_cmp(arg1, "intensity") && arg2[0] == '\0') {
-			send_to_char("Switch to which level of intensity? steady, intense\n\r", ch);
-			return;
-	}
-	if (!str_cmp(arg1, "intensity")) {
-		if (!str_cmp(arg2, "steady")) {
-			send_to_char("You adjust to a steady rate of exercise.\n\r", ch);
-			ch->exintensity = 0;
-			return;
-		}
-		else if (!str_cmp(arg2, "intense")) {
-			send_to_char("You adjust to an intense rate of exercise.\n\r", ch);
-			ch->exintensity = 1;
 			return;
 		}
 	}
