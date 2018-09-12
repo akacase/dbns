@@ -178,7 +178,8 @@ char   *const a_flags[] =
 	"multiform", "ussj", "ussj2", "extreme", "thin", "super", "kid", "mystic",
 	"superandroid", "noglobaldrop", "makeostar", "evilboost", "evilsurge",
 	"eviloverload", "biojr", "goldenoozaru", "pushups", "shadowboxing", "enduring",
-	"meditation", "powerchannel", "overchannel", "safemax"
+	"meditation", "powerchannel", "overchannel", "safemax", "expushups", "exshadowboxing", "exenduring",
+	"intexpushups", "intexshadowboxing", "intexenduring"
 };
 
 char   *const act_flags[] =
