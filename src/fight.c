@@ -3044,7 +3044,7 @@ violence_update(void)
 				sprintf(buf, "Your power level increases very slightly.", NULL);
 				act(AT_HIT, buf, ch, NULL, NULL, TO_CHAR);
 			}
-		    stat_train(ch, "str", statbonus);
+		    stat_train(ch, "spd", statbonus);
 			if (ch->mana - gravdam > 0)
 				ch->mana -= gravdam;
 			else if (ch->mana - gravdam <= 0) {
@@ -3084,7 +3084,7 @@ violence_update(void)
 				sprintf(buf, "Your power level increases very slightly.", NULL);
 				act(AT_HIT, buf, ch, NULL, NULL, TO_CHAR);
 			}
-		    stat_train(ch, "str", statbonus);
+		    stat_train(ch, "spd", statbonus);
 			if (ch->mana - gravdam > 0)
 				ch->mana -= gravdam;
 			else if (ch->mana - gravdam <= 0) {
@@ -3119,7 +3119,7 @@ violence_update(void)
 		    act(AT_WHITE, "$n explodes into an elaborate punch-punch combo.", ch, NULL, NULL, TO_NOTVICT);
 			sprintf(buf, "Your power level suddenly increases by %s points.", num_punct(xp_gain));
 		    act(AT_HIT, buf, ch, NULL, NULL, TO_CHAR);
-		    stat_train(ch, "str", breakbonus);
+		    stat_train(ch, "spd", breakbonus);
 			if (ch->mana - gravdam > 0)
 				ch->mana -= gravdam;
 			else if (ch->mana - gravdam <= 0) {
@@ -3189,7 +3189,7 @@ violence_update(void)
 				sprintf(buf, "Your power level increases very slightly.", NULL);
 				act(AT_HIT, buf, ch, NULL, NULL, TO_CHAR);
 			}
-		    stat_train(ch, "str", statbonus);
+		    stat_train(ch, "spd", statbonus);
 			if (ch->mana - gravdam > 0)
 				ch->mana -= gravdam;
 			else if (ch->mana - gravdam <= 0) {
@@ -3229,7 +3229,7 @@ violence_update(void)
 				sprintf(buf, "Your power level increases very slightly.", NULL);
 				act(AT_HIT, buf, ch, NULL, NULL, TO_CHAR);
 			}
-		    stat_train(ch, "str", statbonus);
+		    stat_train(ch, "spd", statbonus);
 			if (ch->mana - gravdam > 0)
 				ch->mana -= gravdam;
 			else if (ch->mana - gravdam <= 0) {
@@ -3264,7 +3264,7 @@ violence_update(void)
 		    act(AT_WHITE, "$n explodes into an elaborate punch-punch combo.", ch, NULL, NULL, TO_NOTVICT);
 			sprintf(buf, "Your power level suddenly increases by %s points.", num_punct(xp_gain));
 		    act(AT_HIT, buf, ch, NULL, NULL, TO_CHAR);
-		    stat_train(ch, "str", breakbonus);
+		    stat_train(ch, "spd", breakbonus);
 			if (ch->mana - gravdam > 0)
 				ch->mana -= gravdam;
 			else if (ch->mana - gravdam <= 0) {
@@ -3333,7 +3333,7 @@ violence_update(void)
 				sprintf(buf, "Your power level increases very slightly.", NULL);
 				act(AT_HIT, buf, ch, NULL, NULL, TO_CHAR);
 			}
-		    stat_train(ch, "str", statbonus);
+		    stat_train(ch, "con", statbonus);
 			if (ch->mana - gravdam > 0)
 				ch->mana -= gravdam;
 			else if (ch->mana - gravdam <= 0) {
@@ -3373,7 +3373,7 @@ violence_update(void)
 				sprintf(buf, "Your power level increases very slightly.", NULL);
 				act(AT_HIT, buf, ch, NULL, NULL, TO_CHAR);
 			}
-		    stat_train(ch, "str", statbonus);
+		    stat_train(ch, "con", statbonus);
 			if (ch->mana - gravdam > 0)
 				ch->mana -= gravdam;
 			else if (ch->mana - gravdam <= 0) {
@@ -3408,7 +3408,7 @@ violence_update(void)
 		    act(AT_WHITE, "$n pushes through exhaustion, barely carrying on.", ch, NULL, NULL, TO_NOTVICT);
 			sprintf(buf, "Your power level suddenly increases by %s points.", num_punct(xp_gain));
 		    act(AT_HIT, buf, ch, NULL, NULL, TO_CHAR);
-		    stat_train(ch, "str", breakbonus);
+		    stat_train(ch, "con", breakbonus);
 			if (ch->mana - gravdam > 0)
 				ch->mana -= gravdam;
 			else if (ch->mana - gravdam <= 0) {
@@ -3478,7 +3478,7 @@ violence_update(void)
 				sprintf(buf, "Your power level increases very slightly.", NULL);
 				act(AT_HIT, buf, ch, NULL, NULL, TO_CHAR);
 			}
-		    stat_train(ch, "str", statbonus);
+		    stat_train(ch, "con", statbonus);
 			if (ch->mana - gravdam > 0)
 				ch->mana -= gravdam;
 			else if (ch->mana - gravdam <= 0) {
@@ -3518,7 +3518,7 @@ violence_update(void)
 				sprintf(buf, "Your power level increases very slightly.", NULL);
 				act(AT_HIT, buf, ch, NULL, NULL, TO_CHAR);
 			}
-		    stat_train(ch, "str", statbonus);
+		    stat_train(ch, "con", statbonus);
 			if (ch->mana - gravdam > 0)
 				ch->mana -= gravdam;
 			else if (ch->mana - gravdam <= 0) {
@@ -3553,7 +3553,7 @@ violence_update(void)
 		    act(AT_WHITE, "$n pushes through exhaustion, barely carrying on.", ch, NULL, NULL, TO_NOTVICT);
 			sprintf(buf, "Your power level suddenly increases by %s points.", num_punct(xp_gain));
 		    act(AT_HIT, buf, ch, NULL, NULL, TO_CHAR);
-		    stat_train(ch, "str", breakbonus);
+		    stat_train(ch, "con", breakbonus);
 			if (ch->mana - gravdam > 0)
 				ch->mana -= gravdam;
 			else if (ch->mana - gravdam <= 0) {
