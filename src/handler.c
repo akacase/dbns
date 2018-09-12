@@ -943,6 +943,7 @@ update_aris(CHAR_DATA * ch)
 	int 	aff_ai, aff_aj, aff_ak, aff_al, aff_am, aff_an;
 	int		aff_ao, aff_ap, aff_aq, aff_ar, aff_as, aff_at, aff_au;
 	int		aff_av, aff_aw, aff_ax, aff_ay, aff_az, aff_ba, aff_bb;
+	int		aff_bc, aff_bd, aff_be;
 
 	if (IS_NPC(ch) || IS_IMMORTAL(ch))
 		return;
@@ -1005,6 +1006,9 @@ update_aris(CHAR_DATA * ch)
 	aff_az = IS_AFFECTED(ch, AFF_EXPUSHUPS);
 	aff_ba = IS_AFFECTED(ch, AFF_EXSHADOWBOXING);
 	aff_bb = IS_AFFECTED(ch, AFF_EXENDURING);
+	aff_bc = IS_AFFECTED(ch, AFF_INTEXPUSHUPS);
+	aff_bd = IS_AFFECTED(ch, AFF_INTEXSHADOWBOXING);
+	aff_be = IS_AFFECTED(ch, AFF_INTEXENDURING);
 
 	xCLEAR_BITS(ch->affected_by);
 	ch->resistant = 0;
@@ -3257,6 +3261,12 @@ affect_bit_name(EXT_BV * vector)
 	buf[0] = '\0';
 	if (xIS_SET(*vector, AFF_BLIND))
 		strcat(buf, " blind");
+	if (xIS_SET(*vector, AFF_INTEXPUSHUPS))
+		strcat(buf, " intexpushups");
+	if (xIS_SET(*vector, AFF_INTEXSHADOWBOXING))
+		strcat(buf, " intexshadowboxing");
+	if (xIS_SET(*vector, AFF_INTEXPENDURING))
+		strcat(buf, " intexenduring");
 	if (xIS_SET(*vector, AFF_EXPUSHUPS))
 		strcat(buf, " expushups");
 	if (xIS_SET(*vector, AFF_EXSHADOWBOXING))
