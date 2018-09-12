@@ -2642,6 +2642,9 @@ violence_update(void)
 				}
 			}
 			else {
+				if (!xIS_SET((ch)->in_room->room_flags, ROOM_GRAV)) {
+					ch->gravSetting = 1;
+				}
 				if (ch->position == POS_FIGHTING) {
 					stat_train(ch, "str", 5);
 					stat_train(ch, "spd", 5);
