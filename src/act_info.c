@@ -4168,7 +4168,9 @@ void do_intensity(CHAR_DATA *ch, char *argument)
 void do_exercise(CHAR_DATA *ch, char *argument)
 {
 	char arg1[MAX_INPUT_LENGTH];
-
+	int intensity = 0;
+	
+	intensity = ch->exintensity;
 	argument = one_argument(argument, arg1);
 	
 	if (IS_NPC(ch))
@@ -4185,12 +4187,12 @@ void do_exercise(CHAR_DATA *ch, char *argument)
 	else if (arg1[0] == '\0') {
 		send_to_char("Exercise how? Available exercises are 'exercise pushup', 'shadowbox', 'endure'.\n\r", ch);
 		send_to_char("Note that 'endure' will have no effect at your body's natural weight.\n\r", ch);
-		if (ch->exintensity = 0) {
+		if (intensity = 0) {
 			send_to_char("You're currently prepared for a steady workout.\n\r", ch);
 			send_to_char("To change this intensity, enter 'exercise steadily' or 'intensely'.\n\r", ch);
 			return;
 		}
-		if (ch->exintensity = 1) {
+		if (intensity = 1) {
 			send_to_char("You're currently prepared for an intense workout.\n\r", ch);
 			send_to_char("To change this intensity, enter 'exercise steadily' or 'intensely'.\n\r", ch);
 			return;
@@ -4265,12 +4267,12 @@ void do_exercise(CHAR_DATA *ch, char *argument)
 	else {
 		send_to_char("Exercise how? Available exercises are 'exercise pushup', 'shadowbox', 'endure'.\n\r", ch);
 		send_to_char("Note that 'endure' will have no effect at your body's natural weight.\n\r", ch);
-		if (ch->exintensity = 0) {
+		if (intensity = 0) {
 			send_to_char("You're currently prepared for a steady workout.\n\r", ch);
 			send_to_char("To change this intensity, enter 'exercise steadily' or 'intensely'.\n\r", ch);
 			return;
 		}
-		if (ch->exintensity = 1) {
+		if (intensity = 1) {
 			send_to_char("You're currently prepared for an intense workout.\n\r", ch);
 			send_to_char("To change this intensity, enter 'exercise steadily' or 'intensely'.\n\r", ch);
 			return;
