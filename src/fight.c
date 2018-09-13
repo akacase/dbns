@@ -2154,15 +2154,15 @@ violence_update(void)
 		}
 		/* Gravity area/room effects and bonus combat stats, weighted clothing */
 		if (!IS_NPC(ch)) {
-			double 	totalrgrav = 0;
-			double 	addedrweight = 0;
-			double 	playerrweight = 0;
+			double totalrgrav = 0;
+			double addedrweight = 0;
+			double playerrweight = 0;
 			double	weightstatmult = 0;
-			double	weightstat = 0;
+			int	weightstat = 0;
 			double	weighttrainmult = 0;
-			double	weighttrain = 0;
-			int		damrange = 0;
-			int		gravdam = 0;
+			int	weighttrain = 0;
+			int	damrange = 0;
+			int	gravdam = 0;
 			
 			
 			damrange = number_range(1, 3);
@@ -2171,9 +2171,9 @@ violence_update(void)
 			playerrweight = (double) 1 + addedrweight;
 			totalrgrav = (double) ch->gravSetting * playerrweight;
 			weightstatmult = (double) ((double)totalrgrav / 50) + 1;
-			weightstat = (double) 5 * weightstatmult;
+			weightstat = 5 * weightstatmult;
 			weighttrainmult = (double) ((double)totalrgrav / 50) + 1;
-			weighttrain = (double) 5 * weighttrainmult;
+			weighttrain = 5 * weighttrainmult;
 			
 			if (totalrgrav > 1) {
 				gravdam = damrange * totalrgrav;
