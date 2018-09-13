@@ -5162,7 +5162,7 @@ ris_damage(CHAR_DATA * ch, int dam, int ris)
  * fight training
  */
 void
-stat_train(CHAR_DATA * ch, char *stat, double *modifier)
+stat_train(CHAR_DATA * ch, char *stat, int *modifier)
 {
 	int 	*tAbility;
 	int 	*pAbility;
@@ -5174,18 +5174,21 @@ stat_train(CHAR_DATA * ch, char *stat, double *modifier)
 	int 	gainMod = 0;
 	double	weightstatmult = 0;
 	double	weightstat = 0;
+	double	inputnumber = 0;
+	
+	if (modifier > 0) {
+		inputnumber = modifier;
+	} else {
+		inputnumber = 5;
+	}
 	
 	addedrweight = (double) weightedtraining(ch) / 100000;
 	playerrweight = (double) 1 + addedrweight;
 	totalrgrav = (double) ch->gravSetting * playerrweight;
 	weightstatmult = (double) ((double)totalrgrav / 50) + 1;
-	weightstat = (double) modifier * weightstatmult;
+	weightstat = (double) inputnumber * weightstatmult;
 	
-	if (modifier > 0) {
-	  gainMod = modifier;
-	} else {
-	  gainMod = 5;
-	}
+	gainMod = weightstat;
 	
 	fightIncrease = (number_range(1,2) * gainMod);
 	
