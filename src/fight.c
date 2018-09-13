@@ -5245,7 +5245,6 @@ exercise_train(CHAR_DATA * ch, char *stat, int *modifier)
 	int *pAbility;
 	int *permTstat;
 	int fightIncrease = 0;
-	int	
 	int gainMod = 0;
 	if(modifier > 0) {
 	  gainMod = modifier;
