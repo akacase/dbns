@@ -2158,6 +2158,8 @@ violence_update(void)
 			double addedrweight = 0;
 			double playerrweight = 0;
 			double	weighttrainmult = 0;
+			double	weightstatmult = 0;
+			int	weightstat = 0;
 			int	weighttrain = 0;
 			int	damrange = 0;
 			int	gravdam = 0;
@@ -2170,6 +2172,8 @@ violence_update(void)
 			totalrgrav = (double) ch->gravSetting * playerrweight;
 			weighttrainmult = (double) ((double)totalrgrav / 50) + 1;
 			weighttrain = 5 * weighttrainmult;
+			weightstatmult = (double) ((double)totalrgrav / 50) + 1;
+			weightstat = 5 * weightstatmult;
 			
 			if (totalrgrav > 1) {
 				gravdam = damrange * totalrgrav;
@@ -2241,10 +2245,10 @@ violence_update(void)
 			|| ch->position == POS_BERSERK
 			|| ch->position == POS_DEFENSIVE
 			|| ch->position == POS_EVASIVE) {
-				stat_train(ch, "str", 5);
-				stat_train(ch, "spd", 5);
-				stat_train(ch, "con", 5);
-				stat_train(ch, "int", 5);
+				stat_train(ch, "str", weightstat);
+				stat_train(ch, "spd", weightstat);
+				stat_train(ch, "con", weightstat);
+				stat_train(ch, "int", weightstat);
 				ch->train += weighttrain;
 				ch->mana -= gravdam;
 				if ((ch->mana - gravdam) < 0)
@@ -5164,31 +5168,18 @@ ris_damage(CHAR_DATA * ch, int dam, int ris)
 void
 stat_train(CHAR_DATA * ch, char *stat, int *modifier)
 {
-	int 	*tAbility;
-	int 	*pAbility;
-	int 	*permTstat;
-	int 	fightIncrease = 0;
-	double	addedrweight = 0;
-	double	playerrweight = 0;
-	double	totalrgrav = 0;
-	int 	gainMod = 0;
-	double	weightstatmult = 0;
-	double		weightstat = 0;
-	
-	addedrweight = (double) weightedtraining(ch) / 100000;
-	playerrweight = (double) 1 + addedrweight;
-	totalrgrav = (double) ch->gravSetting * playerrweight;
-	weightstatmult = (double) ((double)totalrgrav / 50) + 1;
-	weightstat = (double) 1 + ((double)modifier * weightstatmult);
-	
-	if (weightstat > 0) {
-	  gainMod = weightstat;
+	int *tAbility;
+	int *pAbility;
+	int *permTstat;
+	int fightIncrease = 0;
+	int gainMod = 0;
+	if(modifier > 0) {
+	  gainMod = modifier;
 	} else {
 	  gainMod = 5;
 	}
 	
 	fightIncrease = (number_range(1,2) * gainMod);
-	
 
 	if ( stat == "str" )
 	{
