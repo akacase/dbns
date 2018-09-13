@@ -2157,8 +2157,6 @@ violence_update(void)
 			double totalrgrav = 0;
 			double addedrweight = 0;
 			double playerrweight = 0;
-			double	weightstatmult = 0;
-			int	weightstat = 0;
 			double	weighttrainmult = 0;
 			int	weighttrain = 0;
 			int	damrange = 0;
@@ -2170,8 +2168,6 @@ violence_update(void)
 			addedrweight = (double) weightedtraining(ch) / 100000;
 			playerrweight = (double) 1 + addedrweight;
 			totalrgrav = (double) ch->gravSetting * playerrweight;
-			weightstatmult = (double) ((double)totalrgrav / 50) + 1;
-			weightstat = 5 * weightstatmult;
 			weighttrainmult = (double) ((double)totalrgrav / 50) + 1;
 			weighttrain = 5 * weighttrainmult;
 			
@@ -2245,10 +2241,10 @@ violence_update(void)
 			|| ch->position == POS_BERSERK
 			|| ch->position == POS_DEFENSIVE
 			|| ch->position == POS_EVASIVE) {
-				stat_train(ch, "str", weightstat);
-				stat_train(ch, "spd", weightstat);
-				stat_train(ch, "con", weightstat);
-				stat_train(ch, "int", weightstat);
+				stat_train(ch, "str", 5);
+				stat_train(ch, "spd", 5);
+				stat_train(ch, "con", 5);
+				stat_train(ch, "int", 5);
 				ch->train += weighttrain;
 				ch->mana -= gravdam;
 				if ((ch->mana - gravdam) < 0)
@@ -2333,7 +2329,7 @@ violence_update(void)
 				sprintf(buf, "Your power level increases very slightly.", NULL);
 				act(AT_HIT, buf, ch, NULL, NULL, TO_CHAR);
 			}
-		    stat_train(ch, "str", statbonus);
+		    exercise_train(ch, "str", statbonus);
 			if (ch->mana - gravdam > 0)
 				ch->mana -= gravdam;
 			else if (ch->mana - gravdam <= 0) {
@@ -2373,7 +2369,7 @@ violence_update(void)
 				sprintf(buf, "Your power level increases very slightly.", NULL);
 				act(AT_HIT, buf, ch, NULL, NULL, TO_CHAR);
 			}
-		    stat_train(ch, "str", statbonus);
+		    exercise_train(ch, "str", statbonus);
 			if (ch->mana - gravdam > 0)
 				ch->mana -= gravdam;
 			else if (ch->mana - gravdam <= 0) {
@@ -2408,7 +2404,7 @@ violence_update(void)
 		    act(AT_WHITE, "$n does a set of one-armed pushups in rapid-fire succession.", ch, NULL, NULL, TO_NOTVICT);
 			sprintf(buf, "Your power level suddenly increases by %s points.", num_punct(xp_gain));
 		    act(AT_HIT, buf, ch, NULL, NULL, TO_CHAR);
-		    stat_train(ch, "str", breakbonus);
+		    exercise_train(ch, "str", breakbonus);
 			if (ch->mana - gravdam > 0)
 				ch->mana -= gravdam;
 			else if (ch->mana - gravdam <= 0) {
@@ -2483,7 +2479,7 @@ violence_update(void)
 				sprintf(buf, "Your power level increases very slightly.", NULL);
 				act(AT_HIT, buf, ch, NULL, NULL, TO_CHAR);
 			}
-		    stat_train(ch, "str", statbonus);
+		    exercise_train(ch, "str", statbonus);
 			if (ch->mana - gravdam > 0)
 				ch->mana -= gravdam;
 			else if (ch->mana - gravdam <= 0) {
@@ -2523,7 +2519,7 @@ violence_update(void)
 				sprintf(buf, "Your power level increases very slightly.", NULL);
 				act(AT_HIT, buf, ch, NULL, NULL, TO_CHAR);
 			}
-		    stat_train(ch, "str", statbonus);
+		    exercise_train(ch, "str", statbonus);
 			if (ch->mana - gravdam > 0)
 				ch->mana -= gravdam;
 			else if (ch->mana - gravdam <= 0) {
@@ -2558,7 +2554,7 @@ violence_update(void)
 		    act(AT_WHITE, "$n does a set of one-armed pushups in rapid-fire succession.", ch, NULL, NULL, TO_NOTVICT);
 			sprintf(buf, "Your power level suddenly increases by %s points.", num_punct(xp_gain));
 		    act(AT_HIT, buf, ch, NULL, NULL, TO_CHAR);
-		    stat_train(ch, "str", breakbonus);
+		    exercise_train(ch, "str", breakbonus);
 			if (ch->mana - gravdam > 0)
 				ch->mana -= gravdam;
 			else if (ch->mana - gravdam <= 0) {
@@ -2628,7 +2624,7 @@ violence_update(void)
 				sprintf(buf, "Your power level increases very slightly.", NULL);
 				act(AT_HIT, buf, ch, NULL, NULL, TO_CHAR);
 			}
-		    stat_train(ch, "spd", statbonus);
+		    exercise_train(ch, "spd", statbonus);
 			if (ch->mana - gravdam > 0)
 				ch->mana -= gravdam;
 			else if (ch->mana - gravdam <= 0) {
@@ -2668,7 +2664,7 @@ violence_update(void)
 				sprintf(buf, "Your power level increases very slightly.", NULL);
 				act(AT_HIT, buf, ch, NULL, NULL, TO_CHAR);
 			}
-		    stat_train(ch, "spd", statbonus);
+		    exercise_train(ch, "spd", statbonus);
 			if (ch->mana - gravdam > 0)
 				ch->mana -= gravdam;
 			else if (ch->mana - gravdam <= 0) {
@@ -2703,7 +2699,7 @@ violence_update(void)
 		    act(AT_WHITE, "$n explodes into an elaborate punch-punch combo.", ch, NULL, NULL, TO_NOTVICT);
 			sprintf(buf, "Your power level suddenly increases by %s points.", num_punct(xp_gain));
 		    act(AT_HIT, buf, ch, NULL, NULL, TO_CHAR);
-		    stat_train(ch, "spd", breakbonus);
+		    exercise_train(ch, "spd", breakbonus);
 			if (ch->mana - gravdam > 0)
 				ch->mana -= gravdam;
 			else if (ch->mana - gravdam <= 0) {
@@ -2777,7 +2773,7 @@ violence_update(void)
 				sprintf(buf, "Your power level increases very slightly.", NULL);
 				act(AT_HIT, buf, ch, NULL, NULL, TO_CHAR);
 			}
-		    stat_train(ch, "spd", statbonus);
+			exercise_train(ch, "spd", statbonus);
 			if (ch->mana - gravdam > 0)
 				ch->mana -= gravdam;
 			else if (ch->mana - gravdam <= 0) {
@@ -2817,7 +2813,7 @@ violence_update(void)
 				sprintf(buf, "Your power level increases very slightly.", NULL);
 				act(AT_HIT, buf, ch, NULL, NULL, TO_CHAR);
 			}
-		    stat_train(ch, "spd", statbonus);
+		    exercise_train(ch, "spd", statbonus);
 			if (ch->mana - gravdam > 0)
 				ch->mana -= gravdam;
 			else if (ch->mana - gravdam <= 0) {
@@ -2852,7 +2848,7 @@ violence_update(void)
 		    act(AT_WHITE, "$n explodes into an elaborate punch-punch combo.", ch, NULL, NULL, TO_NOTVICT);
 			sprintf(buf, "Your power level suddenly increases by %s points.", num_punct(xp_gain));
 		    act(AT_HIT, buf, ch, NULL, NULL, TO_CHAR);
-		    stat_train(ch, "spd", breakbonus);
+		    exercise_train(ch, "spd", breakbonus);
 			if (ch->mana - gravdam > 0)
 				ch->mana -= gravdam;
 			else if (ch->mana - gravdam <= 0) {
@@ -2922,7 +2918,7 @@ violence_update(void)
 				sprintf(buf, "Your power level increases very slightly.", NULL);
 				act(AT_HIT, buf, ch, NULL, NULL, TO_CHAR);
 			}
-		    stat_train(ch, "con", statbonus);
+		    exercise_train(ch, "con", statbonus);
 			if (ch->mana - gravdam > 0)
 				ch->mana -= gravdam;
 			else if (ch->mana - gravdam <= 0) {
@@ -2962,7 +2958,7 @@ violence_update(void)
 				sprintf(buf, "Your power level increases very slightly.", NULL);
 				act(AT_HIT, buf, ch, NULL, NULL, TO_CHAR);
 			}
-		    stat_train(ch, "con", statbonus);
+		    exercise_train(ch, "con", statbonus);
 			if (ch->mana - gravdam > 0)
 				ch->mana -= gravdam;
 			else if (ch->mana - gravdam <= 0) {
@@ -2997,7 +2993,7 @@ violence_update(void)
 		    act(AT_WHITE, "$n pushes through exhaustion, barely carrying on.", ch, NULL, NULL, TO_NOTVICT);
 			sprintf(buf, "Your power level suddenly increases by %s points.", num_punct(xp_gain));
 		    act(AT_HIT, buf, ch, NULL, NULL, TO_CHAR);
-		    stat_train(ch, "con", breakbonus);
+		    exercise_train(ch, "con", breakbonus);
 			if (ch->mana - gravdam > 0)
 				ch->mana -= gravdam;
 			else if (ch->mana - gravdam <= 0) {
@@ -3071,7 +3067,7 @@ violence_update(void)
 				sprintf(buf, "Your power level increases very slightly.", NULL);
 				act(AT_HIT, buf, ch, NULL, NULL, TO_CHAR);
 			}
-		    stat_train(ch, "con", statbonus);
+		    exercise_train(ch, "con", statbonus);
 			if (ch->mana - gravdam > 0)
 				ch->mana -= gravdam;
 			else if (ch->mana - gravdam <= 0) {
@@ -3111,7 +3107,7 @@ violence_update(void)
 				sprintf(buf, "Your power level increases very slightly.", NULL);
 				act(AT_HIT, buf, ch, NULL, NULL, TO_CHAR);
 			}
-		    stat_train(ch, "con", statbonus);
+		    exercise_train(ch, "con", statbonus);
 			if (ch->mana - gravdam > 0)
 				ch->mana -= gravdam;
 			else if (ch->mana - gravdam <= 0) {
@@ -3146,7 +3142,7 @@ violence_update(void)
 		    act(AT_WHITE, "$n pushes through exhaustion, barely carrying on.", ch, NULL, NULL, TO_NOTVICT);
 			sprintf(buf, "Your power level suddenly increases by %s points.", num_punct(xp_gain));
 		    act(AT_HIT, buf, ch, NULL, NULL, TO_CHAR);
-		    stat_train(ch, "con", breakbonus);
+		    exercise_train(ch, "con", breakbonus);
 			if (ch->mana - gravdam > 0)
 				ch->mana -= gravdam;
 			else if (ch->mana - gravdam <= 0) {
@@ -5168,10 +5164,88 @@ ris_damage(CHAR_DATA * ch, int dam, int ris)
 void
 stat_train(CHAR_DATA * ch, char *stat, int *modifier)
 {
+	int 	*tAbility;
+	int 	*pAbility;
+	int 	*permTstat;
+	int 	fightIncrease = 0;
+	double	addedrweight = 0;
+	double	playerrweight = 0;
+	double	totalrgrav = 0;
+	int 	gainMod = 0;
+	double	weightstatmult = 0;
+	int		weightstat = 0;
+	
+	addedrweight = (double) weightedtraining(ch) / 100000;
+	playerrweight = (double) 1 + addedrweight;
+	totalrgrav = (double) ch->gravSetting * playerrweight;
+	weightstatmult = (double) ((double)totalrgrav / 50) + 1;
+	weightstat = modifier * weightstatmult;
+	
+	if (weightstat > 0) {
+	  gainMod = weightstat;
+	} else {
+	  gainMod = 5;
+	}
+	
+	fightIncrease = (number_range(1,2) * gainMod);
+	
+
+	if ( stat == "str" )
+	{
+	    tAbility = &ch->pcdata->tStr;
+	    pAbility = &ch->perm_str;
+	    permTstat = &ch->pcdata->permTstr;
+	}
+	else if ( stat == "int" )
+	{
+	    tAbility = &ch->pcdata->tInt;
+	    pAbility = &ch->perm_int;
+	    permTstat = &ch->pcdata->permTint;
+	}
+	else if ( stat == "spd" )
+	{
+	    tAbility = &ch->pcdata->tSpd;
+	    pAbility = &ch->perm_dex;
+	    permTstat = &ch->pcdata->permTspd;
+	}
+	else if ( stat == "con" )
+	{
+	    tAbility = &ch->pcdata->tCon;
+	    pAbility = &ch->perm_con;
+	    permTstat = &ch->pcdata->permTcon;
+	}
+
+	*tAbility += fightIncrease;
+
+	if ( *tAbility >= 1000 && *permTstat < 2000000000 ) {
+	    *tAbility = 0;
+	    *pAbility += 1;
+	    *permTstat += 1;
+	    if( stat == "str") {
+	        send_to_char( "&CYou feel your strength improving!&D\n\r", ch);
+	    }
+	    if( stat == "spd") {
+                send_to_char( "&CYou feel your speed improving!&D\n\r", ch);
+            }
+	    if( stat == "int") {
+                send_to_char( "&CYou feel your intelligence improving!&D\n\r", ch);
+            }
+            if( stat == "con") {
+                send_to_char( "&CYou feel your constitution improving!&D\n\r", ch);
+            }
+	} else if (*permTstat >= 2000000000 && *tAbility >= 999) {
+	    *tAbility = 999;
+	}
+}
+
+void
+exercise_train(CHAR_DATA * ch, char *stat, int *modifier)
+{
 	int *tAbility;
 	int *pAbility;
 	int *permTstat;
 	int fightIncrease = 0;
+	int	
 	int gainMod = 0;
 	if(modifier > 0) {
 	  gainMod = modifier;
