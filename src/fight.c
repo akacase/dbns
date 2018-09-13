@@ -5162,7 +5162,7 @@ ris_damage(CHAR_DATA * ch, int dam, int ris)
  * fight training
  */
 void
-stat_train(CHAR_DATA * ch, char *stat, int *modifier)
+stat_train(CHAR_DATA * ch, char *stat, double *modifier)
 {
 	int 	*tAbility;
 	int 	*pAbility;
