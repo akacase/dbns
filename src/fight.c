@@ -2749,7 +2749,7 @@ violence_update(void)
 		
 		  trainmessage = number_range(1, 100);
 		  gravdam = totalgrav * damrange;
-		  statbonus = (totalgrav / 10) + 15;
+		  statbonus = (totalgrav / 10) + 25;
 		  breakbonus = statbonus * 2;
 
 		  if (trainmessage < 65) {
@@ -2898,7 +2898,7 @@ violence_update(void)
 		
 		  trainmessage = number_range(1, 100);
 		  gravdam = totalgrav * damrange;
-		  statbonus = (totalgrav / 10) + 15;
+		  statbonus = (totalgrav / 10) + 25;
 		  statbonus = statbonus * 1.5;
 		  breakbonus = statbonus * 2;
 
@@ -3044,7 +3044,7 @@ violence_update(void)
 		
 		  trainmessage = number_range(1, 100);
 		  gravdam = totalgrav * damrange;
-		  statbonus = (totalgrav / 10) + 15;
+		  statbonus = (totalgrav / 10) + 25;
 		  breakbonus = statbonus * 2;
 
 		  if (trainmessage < 65) {
@@ -3192,7 +3192,7 @@ violence_update(void)
 		
 		  trainmessage = number_range(1, 100);
 		  gravdam = totalgrav * damrange;
-		  statbonus = (totalgrav / 10) + 15;
+		  statbonus = (totalgrav / 10) + 25;
 		  statbonus = statbonus * 1.5;
 		  breakbonus = statbonus * 2;
 
@@ -3338,7 +3338,7 @@ violence_update(void)
 		
 		  trainmessage = number_range(1, 100);
 		  gravdam = totalgrav * damrange;
-		  statbonus = (totalgrav / 10) + 15;
+		  statbonus = (totalgrav / 10) + 25;
 		  breakbonus = statbonus * 2;
 
 		  if (trainmessage < 65) {
@@ -3486,7 +3486,7 @@ violence_update(void)
 		
 		  trainmessage = number_range(1, 100);
 		  gravdam = totalgrav * damrange;
-		  statbonus = (totalgrav / 10) + 15;
+		  statbonus = (totalgrav / 10) + 25;
 		  statbonus = statbonus * 1.5;
 		  breakbonus = statbonus * 2;
 
