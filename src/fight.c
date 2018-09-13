@@ -5179,7 +5179,7 @@ stat_train(CHAR_DATA * ch, char *stat, int *modifier)
 	playerrweight = (double) 1 + addedrweight;
 	totalrgrav = (double) ch->gravSetting * playerrweight;
 	weightstatmult = (double) ((double)totalrgrav / 50) + 1;
-	weightstat = modifier * weightstatmult;
+	weightstat = (double) modifier * weightstatmult;
 	
 	if (modifier > 0) {
 	  gainMod = modifier;
