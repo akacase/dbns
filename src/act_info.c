@@ -4175,6 +4175,48 @@ void do_exercise(CHAR_DATA *ch, char *argument)
 	
 	if (IS_NPC(ch))
 		return;
+	if (!str_cmp(arg1, "stop")) {
+		if (xIS_SET((ch)->affected_by, AFF_EXPUSHUPS)) {
+			xREMOVE_BIT((ch)->affected_by, AFF_EXPUSHUPS);
+			act(AT_WHITE, "You take a break and stop training.", ch, NULL, NULL, TO_CHAR);
+			act(AT_WHITE, "$n takes a break and stops training.", ch, NULL, NULL, TO_NOTVICT);
+			return;
+		}
+		if (xIS_SET((ch)->affected_by, AFF_INTEXPUSHUPS)) {
+			xREMOVE_BIT((ch)->affected_by, AFF_INTEXPUSHUPS);
+			act(AT_WHITE, "You take a break and stop training.", ch, NULL, NULL, TO_CHAR);
+			act(AT_WHITE, "$n takes a break and stops training.", ch, NULL, NULL, TO_NOTVICT);
+			return;
+		}
+		if (xIS_SET((ch)->affected_by, AFF_EXSHADOWBOXING)) {
+			xREMOVE_BIT((ch)->affected_by, AFF_EXSHADOWBOXING);
+			act(AT_WHITE, "You take a break and stop training.", ch, NULL, NULL, TO_CHAR);
+			act(AT_WHITE, "$n takes a break and stops training.", ch, NULL, NULL, TO_NOTVICT);
+			return;
+		}
+		if (xIS_SET((ch)->affected_by, AFF_INTEXSHADOWBOXING)) {
+			xREMOVE_BIT((ch)->affected_by, AFF_INTEXSHADOWBOXING);
+			act(AT_WHITE, "You take a break and stop training.", ch, NULL, NULL, TO_CHAR);
+			act(AT_WHITE, "$n takes a break and stops training.", ch, NULL, NULL, TO_NOTVICT);
+			return;
+		}
+		if (xIS_SET((ch)->affected_by, AFF_EXENDURING)) {
+			xREMOVE_BIT((ch)->affected_by, AFF_EXENDURING);
+			act(AT_WHITE, "You take a break and stop training.", ch, NULL, NULL, TO_CHAR);
+			act(AT_WHITE, "$n takes a break and stops training.", ch, NULL, NULL, TO_NOTVICT);
+			return;
+		}
+		if (xIS_SET((ch)->affected_by, AFF_INTEXENDURING)) {
+			xREMOVE_BIT((ch)->affected_by, AFF_INTEXENDURING);
+			act(AT_WHITE, "You take a break and stop training.", ch, NULL, NULL, TO_CHAR);
+			act(AT_WHITE, "$n takes a break and stops training.", ch, NULL, NULL, TO_NOTVICT);
+			return;
+		}
+		else {
+			send_to_char("Stop what? You're not doing anything.\n\r", ch);
+			return;
+		}
+	}
 	if (ch->workoutstrain >= 900) {
 		send_to_char("You're still far too exhausted to consider any kind of exercise.\n\r", ch);
 		return;
@@ -4274,48 +4316,6 @@ void do_exercise(CHAR_DATA *ch, char *argument)
 			xSET_BIT((ch)->affected_by, AFF_INTEXENDURING);
 			act(AT_WHITE, "You lower your defenses to nothing, welcoming death.", ch, NULL, NULL, TO_CHAR);
 			act(AT_WHITE, "$n lowers $s defenses to nothing, welcoming death.", ch, NULL, NULL, TO_NOTVICT);
-			return;
-		}
-	}
-	else if (!str_cmp(arg1, "stop")) {
-		if (xIS_SET((ch)->affected_by, AFF_EXPUSHUPS)) {
-			xREMOVE_BIT((ch)->affected_by, AFF_EXPUSHUPS);
-			act(AT_WHITE, "You take a break and stop training.", ch, NULL, NULL, TO_CHAR);
-			act(AT_WHITE, "$n takes a break and stops training.", ch, NULL, NULL, TO_NOTVICT);
-			return;
-		}
-		if (xIS_SET((ch)->affected_by, AFF_INTEXPUSHUPS)) {
-			xREMOVE_BIT((ch)->affected_by, AFF_INTEXPUSHUPS);
-			act(AT_WHITE, "You take a break and stop training.", ch, NULL, NULL, TO_CHAR);
-			act(AT_WHITE, "$n takes a break and stops training.", ch, NULL, NULL, TO_NOTVICT);
-			return;
-		}
-		if (xIS_SET((ch)->affected_by, AFF_EXSHADOWBOXING)) {
-			xREMOVE_BIT((ch)->affected_by, AFF_EXSHADOWBOXING);
-			act(AT_WHITE, "You take a break and stop training.", ch, NULL, NULL, TO_CHAR);
-			act(AT_WHITE, "$n takes a break and stops training.", ch, NULL, NULL, TO_NOTVICT);
-			return;
-		}
-		if (xIS_SET((ch)->affected_by, AFF_INTEXSHADOWBOXING)) {
-			xREMOVE_BIT((ch)->affected_by, AFF_INTEXSHADOWBOXING);
-			act(AT_WHITE, "You take a break and stop training.", ch, NULL, NULL, TO_CHAR);
-			act(AT_WHITE, "$n takes a break and stops training.", ch, NULL, NULL, TO_NOTVICT);
-			return;
-		}
-		if (xIS_SET((ch)->affected_by, AFF_EXENDURING)) {
-			xREMOVE_BIT((ch)->affected_by, AFF_EXENDURING);
-			act(AT_WHITE, "You take a break and stop training.", ch, NULL, NULL, TO_CHAR);
-			act(AT_WHITE, "$n takes a break and stops training.", ch, NULL, NULL, TO_NOTVICT);
-			return;
-		}
-		if (xIS_SET((ch)->affected_by, AFF_INTEXENDURING)) {
-			xREMOVE_BIT((ch)->affected_by, AFF_INTEXENDURING);
-			act(AT_WHITE, "You take a break and stop training.", ch, NULL, NULL, TO_CHAR);
-			act(AT_WHITE, "$n takes a break and stops training.", ch, NULL, NULL, TO_NOTVICT);
-			return;
-		}
-		else {
-			send_to_char("Stop what? You're not doing anything.\n\r", ch);
 			return;
 		}
 	}
