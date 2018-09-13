@@ -8806,12 +8806,12 @@ do_meditate(CHAR_DATA * ch, char *argument)
 	weighttrainmult = (double) ((double)totalrgrav / 50) + 1;
 	if (is_kaio(ch) || is_namek(ch)) {	
 		weighttrain = 30 * weighttrainmult;
-		weightstatmult = (double) ((double)totalrgrav / 100) + 1;
+		weightstatmult = (double) ((double)totalrgrav / 200) + 1;
 		weightstat = 60 * weightstatmult;
 	}
 	else {
 		weighttrain = 26 * weighttrainmult;
-		weightstatmult = (double) ((double)totalrgrav / 100) + 1;
+		weightstatmult = (double) ((double)totalrgrav / 200) + 1;
 		weightstat = 50 * weightstatmult;
 	}
 	// check for current gravity training effects
