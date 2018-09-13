@@ -5173,7 +5173,7 @@ stat_train(CHAR_DATA * ch, char *stat, int *modifier)
 	double	totalrgrav = 0;
 	int 	gainMod = 0;
 	double	weightstatmult = 0;
-	int		weightstat = 0;
+	double		weightstat = 0;
 	
 	addedrweight = (double) weightedtraining(ch) / 100000;
 	playerrweight = (double) 1 + addedrweight;
