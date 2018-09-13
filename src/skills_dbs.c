@@ -6600,7 +6600,7 @@ void do_lariat( CHAR_DATA *ch, char *argument )
 	WAIT_STATE(ch, 8);
 	if (hitcheck <= 95) {
 		if (!IS_NPC(ch)) {
-			argdam = ((number_range(45, 50) + (ch->lariatpower * 4)) * kicmult);
+			argdam = ((number_range(45, 50) + (ch->lariatpower * 5)) * kicmult);
 			dam = get_attmod(ch, victim) * (argdam * physmult);
 			stat_train(ch, "str", 16);
 			ch->train += 16;
@@ -8785,13 +8785,35 @@ do_meditate(CHAR_DATA * ch, char *argument)
 	float 	left = 0;
 	float 	right = 0;
 	long double xp_gain = 0;
-	int statComb = 0;
-	int increase = 0;
+	int 	statComb = 0;
+	int 	increase = 0;
 	int		hitcheck = 0;
+	double	weighttrainmult = 0;
+	double	weightstatmult = 0;
+	int		weightstat = 0;
+	int		weighttrain = 0;
+	double 	totalrgrav = 0;
+	double	addedrweight = 0;
+	double	playerrweight = 0;
 	
 	if (IS_NPC(ch))
 		return;
 
+	
+	addedrweight = (double) weightedtraining(ch) / 100000;
+	playerrweight = (double) 1 + addedrweight;
+	totalrgrav = (double) ch->gravSetting * playerrweight;
+	weighttrainmult = (double) ((double)totalrgrav / 50) + 1;
+	if (is_kaio(ch) || is_namek(ch)) {	
+		weighttrain = 30 * weighttrainmult;
+		weightstatmult = (double) ((double)totalrgrav / 50) + 1;
+		weightstat = 90 * weightstatmult;
+	}
+	else {
+		weighttrain = 26 * weighttrainmult;
+		weightstatmult = (double) ((double)totalrgrav / 50) + 1;
+		weightstat = 80 * weightstatmult;
+	}
 	// check for current gravity training effects
 	if(IS_AFFECTED(ch, AFF_PUSHUPS) || IS_AFFECTED(ch, AFF_SHADOWBOXING)
 	|| IS_AFFECTED(ch, AFF_ENDURING) || IS_AFFECTED(ch, AFF_MEDITATION)
@@ -8801,6 +8823,11 @@ do_meditate(CHAR_DATA * ch, char *argument)
 	|| IS_AFFECTED(ch, AFF_INTEXENDURING)) {
 	  send_to_char("You can't seem to focus while you're this busy!\n\r", ch);
 	  return;
+	}
+	if (xIS_SET((ch)->in_room->room_flags, ROOM_GRAV)) {
+		send_to_char("You're not currently able to meditate in a gravity chamber due to a potential exploit. Sorry!\n\r", ch);
+		send_to_char("This will be fixed soon. -Zerhyn\n\r", ch);
+		return;
 	}
 	// check if user is powering up
 	if(IS_AFFECTED(ch, AFF_POWERCHANNEL)) {
@@ -8854,157 +8881,19 @@ do_meditate(CHAR_DATA * ch, char *argument)
 					("&wYou meditate peacefully, collecting energy from the cosmos\n\r",
 					ch);
 				if (!IS_NPC(ch)) {
-					if (is_kaio(ch) || is_namek(ch)) {
-						stat_train(ch, "int", 90);
-						statComb = ((get_curr_str(ch) + get_curr_dex(ch) + get_curr_int(ch) + get_curr_con(ch)) - 39);
-						increase = number_range(1,3);
-						xp_gain = (long double)increase / 150 * statComb;
-						gain_exp(ch, xp_gain);
-						ch->mana += (float) right / 19 * ch->max_mana;
-						ch->mana += 10;
-						ch->train += 7;
-						if (xIS_SET((ch)->in_room->room_flags, ROOM_GRAV10)) {
-							stat_train(ch, "int", 15);
-							stat_train(ch, "con", 15);
-							ch->train += 28;
-						}
-						else if (xIS_SET((ch)->in_room->room_flags, ROOM_GRAV50)) {
-							stat_train(ch, "int", 15);
-							stat_train(ch, "con", 15);
-							ch->train += 48;
-						}
-						else if (xIS_SET((ch)->in_room->room_flags, ROOM_GRAV100)) {
-							stat_train(ch, "int", 15);
-							stat_train(ch, "con", 15);
-							ch->train += 64;
-						}
-						else if (xIS_SET((ch)->in_room->room_flags, ROOM_GRAV200)) {
-							stat_train(ch, "int", 15);
-							stat_train(ch, "con", 15);
-							ch->train += 72;
-						}						
-						else if (xIS_SET((ch)->in_room->room_flags, ROOM_GRAV300)) {
-							stat_train(ch, "int", 15);
-							stat_train(ch, "con", 15);
-							ch->train += 80;
-						}						
-						else if (xIS_SET((ch)->in_room->room_flags, ROOM_GRAV400)) {
-							stat_train(ch, "int", 15);
-							stat_train(ch, "con", 15);
-							ch->train += 88;
-						}						
-						else if (xIS_SET((ch)->in_room->room_flags, ROOM_GRAV500)) {
-							stat_train(ch, "int", 15);
-							stat_train(ch, "con", 15);
-							ch->train += 96;
-						}						
-						else if (xIS_SET((ch)->in_room->room_flags, ROOM_GRAV600)) {
-							stat_train(ch, "int", 15);
-							stat_train(ch, "con", 15);
-							ch->train += 104;
-						}						
-						else if (xIS_SET((ch)->in_room->room_flags, ROOM_GRAV700)) {
-							stat_train(ch, "int", 15);
-							stat_train(ch, "con", 15);
-							ch->train += 112;
-						}						
-						else if (xIS_SET((ch)->in_room->room_flags, ROOM_GRAV800)) {
-							stat_train(ch, "int", 15);
-							stat_train(ch, "con", 15);
-							ch->train += 120;
-						}
-						else if (xIS_SET((ch)->in_room->room_flags, ROOM_GRAV900)) {
-							stat_train(ch, "int", 15);
-							stat_train(ch, "con", 15);
-							ch->train += 128;
-						}
-						else if (xIS_SET((ch)->in_room->room_flags, ROOM_GRAV1000)) {
-							stat_train(ch, "int", 15);
-							stat_train(ch, "con", 15);
-							ch->train += 136;
-						}
-						if (ch->mana > ch->max_mana) {
-							ch->mana = ch->max_mana;
-							send_to_char
-								("&wYour excess energy dissipates back into the cosmos\n\r",
-								ch);
-						}
-					}
-					else {
-						stat_train(ch, "int", 60);
-						statComb = ((get_curr_str(ch) + get_curr_dex(ch) + get_curr_int(ch) + get_curr_con(ch)) - 39);
-						increase = number_range(1,3);
-						xp_gain = (long double)increase / 200 * statComb;
-						gain_exp(ch, xp_gain);
-						ch->mana += (float) right / 19 * ch->max_mana;
-						ch->mana += 10;
-						ch->train += 6;
-						if (xIS_SET((ch)->in_room->room_flags, ROOM_GRAV10)) {
-							stat_train(ch, "int", 12);
-							stat_train(ch, "con", 12);
-							ch->train += 24;
-						}
-						else if (xIS_SET((ch)->in_room->room_flags, ROOM_GRAV50)) {
-							stat_train(ch, "int", 12);
-							stat_train(ch, "con", 12);
-							ch->train += 48;
-						}
-						else if (xIS_SET((ch)->in_room->room_flags, ROOM_GRAV100)) {
-							stat_train(ch, "int", 12);
-							stat_train(ch, "con", 12);
-							ch->train += 56;
-						}
-						else if (xIS_SET((ch)->in_room->room_flags, ROOM_GRAV200)) {
-							stat_train(ch, "int", 12);
-							stat_train(ch, "con", 12);
-							ch->train += 64;
-						}						
-						else if (xIS_SET((ch)->in_room->room_flags, ROOM_GRAV300)) {
-							stat_train(ch, "int", 12);
-							stat_train(ch, "con", 12);
-							ch->train += 72;
-						}						
-						else if (xIS_SET((ch)->in_room->room_flags, ROOM_GRAV400)) {
-							stat_train(ch, "int", 12);
-							stat_train(ch, "con", 12);
-							ch->train += 80;
-						}						
-						else if (xIS_SET((ch)->in_room->room_flags, ROOM_GRAV500)) {
-							stat_train(ch, "int", 12);
-							stat_train(ch, "con", 12);
-							ch->train += 88;
-						}						
-						else if (xIS_SET((ch)->in_room->room_flags, ROOM_GRAV600)) {
-							stat_train(ch, "int", 12);
-							stat_train(ch, "con", 12);
-							ch->train += 96;
-						}						
-						else if (xIS_SET((ch)->in_room->room_flags, ROOM_GRAV700)) {
-							stat_train(ch, "int", 12);
-							stat_train(ch, "con", 12);
-							ch->train += 104;
-						}						
-						else if (xIS_SET((ch)->in_room->room_flags, ROOM_GRAV800)) {
-							stat_train(ch, "int", 12);
-							stat_train(ch, "con", 12);
-							ch->train += 112;
-						}
-						else if (xIS_SET((ch)->in_room->room_flags, ROOM_GRAV900)) {
-							stat_train(ch, "int", 12);
-							stat_train(ch, "con", 12);
-							ch->train += 120;
-						}
-						else if (xIS_SET((ch)->in_room->room_flags, ROOM_GRAV1000)) {
-							stat_train(ch, "int", 12);
-							stat_train(ch, "con", 12);
-							ch->train += 128;
-						}
-						if (ch->mana > ch->max_mana) {
-							ch->mana = ch->max_mana;
-							send_to_char
-								("&wYour excess energy dissipates back into the cosmos\n\r",
-								ch);
-						}
+					stat_train(ch, "int", weightstat);
+					statComb = ((get_curr_str(ch) + get_curr_dex(ch) + get_curr_int(ch) + get_curr_con(ch)) - 39);
+					increase = number_range(1,3);
+					xp_gain = (long double)increase / 150 * statComb;
+					gain_exp(ch, xp_gain);
+					ch->mana += (float) right / 19 * ch->max_mana;
+					ch->mana += 10;
+					ch->train += weighttrain;
+					if (ch->mana > ch->max_mana) {
+						ch->mana = ch->max_mana;
+						send_to_char
+							("&wYour excess energy dissipates back into the cosmos\n\r",
+							ch);
 					}
 				}
 			}
@@ -9042,157 +8931,19 @@ do_meditate(CHAR_DATA * ch, char *argument)
 					("&wYou meditate peacefully, collecting energy from the cosmos\n\r",
 					ch);
 				if (!IS_NPC(ch)) {
-					if (is_kaio(ch) || is_namek(ch)) {
-						stat_train(ch, "int", 45);
-						statComb = ((get_curr_str(ch) + get_curr_dex(ch) + get_curr_int(ch) + get_curr_con(ch)) - 39);
-						increase = number_range(1,3);
-						xp_gain = (long double)increase / 150 * statComb;
-						gain_exp(ch, xp_gain);
-						ch->mana += (float) right / 19 * ch->max_mana;
-						ch->mana += 10;
-						ch->train += 7;
-						if (xIS_SET((ch)->in_room->room_flags, ROOM_GRAV10)) {
-							stat_train(ch, "int", 15);
-							stat_train(ch, "con", 15);
-							ch->train += 28;
-						}
-						else if (xIS_SET((ch)->in_room->room_flags, ROOM_GRAV50)) {
-							stat_train(ch, "int", 15);
-							stat_train(ch, "con", 15);
-							ch->train += 48;
-						}
-						else if (xIS_SET((ch)->in_room->room_flags, ROOM_GRAV100)) {
-							stat_train(ch, "int", 15);
-							stat_train(ch, "con", 15);
-							ch->train += 64;
-						}
-						else if (xIS_SET((ch)->in_room->room_flags, ROOM_GRAV200)) {
-							stat_train(ch, "int", 15);
-							stat_train(ch, "con", 15);
-							ch->train += 72;
-						}						
-						else if (xIS_SET((ch)->in_room->room_flags, ROOM_GRAV300)) {
-							stat_train(ch, "int", 15);
-							stat_train(ch, "con", 15);
-							ch->train += 80;
-						}						
-						else if (xIS_SET((ch)->in_room->room_flags, ROOM_GRAV400)) {
-							stat_train(ch, "int", 15);
-							stat_train(ch, "con", 15);
-							ch->train += 88;
-						}						
-						else if (xIS_SET((ch)->in_room->room_flags, ROOM_GRAV500)) {
-							stat_train(ch, "int", 15);
-							stat_train(ch, "con", 15);
-							ch->train += 96;
-						}						
-						else if (xIS_SET((ch)->in_room->room_flags, ROOM_GRAV600)) {
-							stat_train(ch, "int", 15);
-							stat_train(ch, "con", 15);
-							ch->train += 104;
-						}						
-						else if (xIS_SET((ch)->in_room->room_flags, ROOM_GRAV700)) {
-							stat_train(ch, "int", 15);
-							stat_train(ch, "con", 15);
-							ch->train += 112;
-						}						
-						else if (xIS_SET((ch)->in_room->room_flags, ROOM_GRAV800)) {
-							stat_train(ch, "int", 15);
-							stat_train(ch, "con", 15);
-							ch->train += 120;
-						}
-						else if (xIS_SET((ch)->in_room->room_flags, ROOM_GRAV900)) {
-							stat_train(ch, "int", 15);
-							stat_train(ch, "con", 15);
-							ch->train += 128;
-						}
-						else if (xIS_SET((ch)->in_room->room_flags, ROOM_GRAV1000)) {
-							stat_train(ch, "int", 15);
-							stat_train(ch, "con", 15);
-							ch->train += 136;
-						}
-						else if (ch->mana > ch->max_mana) {
-							ch->mana = ch->max_mana;
-							send_to_char
-								("&wYour excess energy dissipates back into the cosmos\n\r",
-								ch);
-						}
-					}
-					else {
-						stat_train(ch, "int", 30);
-						statComb = ((get_curr_str(ch) + get_curr_dex(ch) + get_curr_int(ch) + get_curr_con(ch)) - 39);
-						increase = number_range(1,3);
-						xp_gain = (long double)increase / 200 * statComb;
-						gain_exp(ch, xp_gain);
-						ch->mana += (float) right / 19 * ch->max_mana;
-						ch->mana += 10;
-						ch->train += 6;
-						if (xIS_SET((ch)->in_room->room_flags, ROOM_GRAV10)) {
-							stat_train(ch, "int", 12);
-							stat_train(ch, "con", 12);
-							ch->train += 24;
-						}
-						else if (xIS_SET((ch)->in_room->room_flags, ROOM_GRAV50)) {
-							stat_train(ch, "int", 12);
-							stat_train(ch, "con", 12);
-							ch->train += 48;
-						}
-						else if (xIS_SET((ch)->in_room->room_flags, ROOM_GRAV100)) {
-							stat_train(ch, "int", 12);
-							stat_train(ch, "con", 12);
-							ch->train += 56;
-						}
-						else if (xIS_SET((ch)->in_room->room_flags, ROOM_GRAV200)) {
-							stat_train(ch, "int", 12);
-							stat_train(ch, "con", 12);
-							ch->train += 64;
-						}						
-						else if (xIS_SET((ch)->in_room->room_flags, ROOM_GRAV300)) {
-							stat_train(ch, "int", 12);
-							stat_train(ch, "con", 12);
-							ch->train += 72;
-						}						
-						else if (xIS_SET((ch)->in_room->room_flags, ROOM_GRAV400)) {
-							stat_train(ch, "int", 12);
-							stat_train(ch, "con", 12);
-							ch->train += 80;
-						}						
-						else if (xIS_SET((ch)->in_room->room_flags, ROOM_GRAV500)) {
-							stat_train(ch, "int", 12);
-							stat_train(ch, "con", 12);
-							ch->train += 88;
-						}						
-						else if (xIS_SET((ch)->in_room->room_flags, ROOM_GRAV600)) {
-							stat_train(ch, "int", 12);
-							stat_train(ch, "con", 12);
-							ch->train += 96;
-						}						
-						else if (xIS_SET((ch)->in_room->room_flags, ROOM_GRAV700)) {
-							stat_train(ch, "int", 12);
-							stat_train(ch, "con", 12);
-							ch->train += 104;
-						}						
-						else if (xIS_SET((ch)->in_room->room_flags, ROOM_GRAV800)) {
-							stat_train(ch, "int", 12);
-							stat_train(ch, "con", 12);
-							ch->train += 112;
-						}
-						else if (xIS_SET((ch)->in_room->room_flags, ROOM_GRAV900)) {
-							stat_train(ch, "int", 12);
-							stat_train(ch, "con", 12);
-							ch->train += 120;
-						}
-						else if (xIS_SET((ch)->in_room->room_flags, ROOM_GRAV1000)) {
-							stat_train(ch, "int", 12);
-							stat_train(ch, "con", 12);
-							ch->train += 128;
-						}
-						if (ch->mana > ch->max_mana) {
-							ch->mana = ch->max_mana;
-							send_to_char
-								("&wYour excess energy dissipates back into the cosmos\n\r",
-								ch);
-						}
+					stat_train(ch, "int", weightstat);
+					statComb = ((get_curr_str(ch) + get_curr_dex(ch) + get_curr_int(ch) + get_curr_con(ch)) - 39);
+					increase = number_range(1,3);
+					xp_gain = (long double)increase / 150 * statComb;
+					gain_exp(ch, xp_gain);
+					ch->mana += (float) right / 19 * ch->max_mana;
+					ch->mana += 10;
+					ch->train += weighttrain;
+					if (ch->mana > ch->max_mana) {
+						ch->mana = ch->max_mana;
+						send_to_char
+							("&wYour excess energy dissipates back into the cosmos\n\r",
+							ch);
 					}
 				}
 			}
