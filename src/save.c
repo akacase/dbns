@@ -316,6 +316,7 @@ fwrite_char (CHAR_DATA * ch, FILE * fp)
        (ch->in_room == get_room_index (ROOM_VNUM_LIMBO)
 	 && ch->was_in_room) ? ch->was_in_room->vnum : ch->in_room->vnum);
      fprintf (fp, "Worth           %lld\n", ch->worth);
+	 fprintf (fp, "Workoutstrain           %d\n", ch->workoutstrain);
 	 fprintf (fp, "Sspgain           %d\n", ch->sspgain);
 	 fprintf (fp, "Exintensity           %d\n", ch->exintensity);
 	 fprintf (fp, "Kspgain           %d\n", ch->kspgain);
@@ -2443,6 +2444,7 @@ fread_char (CHAR_DATA * ch, FILE * fp, bool preload)
 	  case 'W':
 	       KEY ("Worth", ch->worth, fread_number_ll(fp));
 	       KEY ("Weight", ch->weight, fread_number (fp));
+	       KEY ("Workoutstrain", ch->workoutstrain, fread_number (fp));
 	       if (!strcmp (word, "Weapon")) {
 		    int sn;
 		    int value;

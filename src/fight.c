@@ -2154,6 +2154,12 @@ violence_update(void)
 		}
 		/* Gravity area/room effects and bonus combat stats, weighted clothing */
 		if (!IS_NPC(ch)) {
+			if ((ch->workoutstrain - 2) < 0) {
+				ch->workoutstrain = 0;
+			}
+			else {
+				ch->workoutstrain -= 2;
+			}
 			if (xIS_SET((ch)->in_room->room_flags, ROOM_GRAV10)
 			|| xIS_SET((ch)->in_room->room_flags, ROOM_GRAV50)
 			|| xIS_SET((ch)->in_room->room_flags, ROOM_GRAV100)
@@ -2864,7 +2870,12 @@ violence_update(void)
 		if (xIS_SET((ch)->affected_by, AFF_INTEXPUSHUPS)) {
 		  if(!ch->desc)
 			xREMOVE_BIT((ch)->affected_by, AFF_INTEXPUSHUPS);
+		  if (ch->workoutstrain > 1000) {
+			xREMOVE_BIT((ch)->affected_by, AFF_INTEXPUSHUPS);
+			pager_printf(ch, "&WRunning out of steam, you take a break from training so intensely.\n\r");
+		  }
 			
+			  
 		  char buf[MAX_STRING_LENGTH];
 		  int trainmessage = 0;
 		  long double xp_gain = 0;
@@ -2879,7 +2890,7 @@ violence_update(void)
 		  double totalgrav = 0;
 			
 			increase = number_range(3, 9);
-			damrange = number_range(5, 15);
+			damrange = number_range(3, 9);
 		  
 		  addedweight = (double) weightedtraining(ch) / 100000;
 		  playerweight = (double) 1 + addedweight;
@@ -2892,7 +2903,7 @@ violence_update(void)
 		  breakbonus = statbonus * 2;
 
 		  if (trainmessage < 65) {
-		    base_xp = (long double)increase / 12 * totalgrav;
+		    base_xp = (long double)increase / 6 * totalgrav;
 			xp_gain = (long double)base_xp;
 			gain_exp(ch, xp_gain);
 			if (xp_gain > 1) {
@@ -2931,7 +2942,7 @@ violence_update(void)
 			}
 		  }
 		  if (trainmessage >= 65 && trainmessage < 99) {
-		    base_xp = (long double)increase / 12 * totalgrav;
+		    base_xp = (long double)increase / 6 * totalgrav;
 			xp_gain = (long double)base_xp;
 		    gain_exp(ch, xp_gain);
 		    pager_printf(ch, "&GYou perform a push-up, your strength steadily building.\n\r");
@@ -2971,7 +2982,7 @@ violence_update(void)
 			}
 		  }
 		  if (trainmessage >= 99) {
-		    base_xp = (long double)increase / 12 * totalgrav;
+		    base_xp = (long double)increase / 6 * totalgrav;
 			xp_gain = (long double)base_xp;
 		    gain_exp(ch, xp_gain);
 		    pager_printf(ch, "&GPushing past your normal limits, you perform a series of one-armed push-ups!\n\r");
@@ -3005,6 +3016,7 @@ violence_update(void)
 				}
 			}
 		  }
+		  ch->workoutstrain += 20;
 		}
 		if (xIS_SET((ch)->affected_by, AFF_EXSHADOWBOXING)) {
 		  if(!ch->desc)
@@ -3153,6 +3165,10 @@ violence_update(void)
 		if (xIS_SET((ch)->affected_by, AFF_INTEXSHADOWBOXING)) {
 		  if(!ch->desc)
 			xREMOVE_BIT((ch)->affected_by, AFF_INTEXSHADOWBOXING);
+		  if (ch->workoutstrain > 1000) {
+			xREMOVE_BIT((ch)->affected_by, AFF_INTEXSHADOWBOXING);
+			pager_printf(ch, "&WRunning out of steam, you take a break from training so intensely.\n\r");
+		  }
 			
 		  char buf[MAX_STRING_LENGTH];
 		  int trainmessage = 0;
@@ -3168,7 +3184,7 @@ violence_update(void)
 		  double totalgrav = 0;
 			
 			increase = number_range(3, 9);
-			damrange = number_range(5, 15);
+			damrange = number_range(3, 9);
 		  
 		  addedweight = (double) weightedtraining(ch) / 100000;
 		  playerweight = (double) 1 + addedweight;
@@ -3181,7 +3197,7 @@ violence_update(void)
 		  breakbonus = statbonus * 2;
 
 		  if (trainmessage < 65) {
-		    base_xp = (long double)increase / 12 * totalgrav;
+		    base_xp = (long double)increase / 6 * totalgrav;
 			xp_gain = (long double)base_xp;
 			gain_exp(ch, xp_gain);
 			if (xp_gain > 1) {
@@ -3220,7 +3236,7 @@ violence_update(void)
 			}
 		  }
 		  if (trainmessage >= 65 && trainmessage < 99) {
-		    base_xp = (long double)increase / 12 * totalgrav;
+		    base_xp = (long double)increase / 6 * totalgrav;
 			xp_gain = (long double)base_xp;
 		    gain_exp(ch, xp_gain);
 		    pager_printf(ch, "&GYou jab repeatedly at the air, dancing from foot to foot.\n\r");
@@ -3260,7 +3276,7 @@ violence_update(void)
 			}
 		  }
 		  if (trainmessage >= 99) {
-		    base_xp = (long double)increase / 12 * totalgrav;
+		    base_xp = (long double)increase / 6 * totalgrav;
 			xp_gain = (long double)base_xp;
 		    gain_exp(ch, xp_gain);
 		    pager_printf(ch, "&GYou explode into an elaborate combo, firing punch after punch through a rush of insight!\n\r");
@@ -3294,6 +3310,7 @@ violence_update(void)
 				}
 			}
 		  }
+		  ch->workoutstrain += 20;
 		}
 		if (xIS_SET((ch)->affected_by, AFF_EXENDURING)) {
 		  if(!ch->desc)
@@ -3442,6 +3459,10 @@ violence_update(void)
 		if (xIS_SET((ch)->affected_by, AFF_INTEXENDURING)) {
 		  if(!ch->desc)
 			xREMOVE_BIT((ch)->affected_by, AFF_INTEXENDURING);
+		  if (ch->workoutstrain > 1000) {
+			xREMOVE_BIT((ch)->affected_by, AFF_INTEXENDURING);
+			pager_printf(ch, "&WRunning out of steam, you take a break from training so intensely.\n\r");
+		  }
 			
 		  char buf[MAX_STRING_LENGTH];
 		  int trainmessage = 0;
@@ -3457,7 +3478,7 @@ violence_update(void)
 		  double totalgrav = 0;
 			
 			increase = number_range(3, 9);
-			damrange = number_range(5, 15);
+			damrange = number_range(3, 9);
 		  
 		  addedweight = (double) weightedtraining(ch) / 100000;
 		  playerweight = (double) 1 + addedweight;
@@ -3470,7 +3491,7 @@ violence_update(void)
 		  breakbonus = statbonus * 2;
 
 		  if (trainmessage < 65) {
-		    base_xp = (long double)increase / 12 * totalgrav;
+		    base_xp = (long double)increase / 6 * totalgrav;
 			xp_gain = (long double)base_xp;
 			gain_exp(ch, xp_gain);
 			if (xp_gain > 1) {
@@ -3509,7 +3530,7 @@ violence_update(void)
 			}
 		  }
 		  if (trainmessage >= 65 && trainmessage < 99) {
-		    base_xp = (long double)increase / 12 * totalgrav;
+		    base_xp = (long double)increase / 6 * totalgrav;
 			xp_gain = (long double)base_xp;
 		    gain_exp(ch, xp_gain);
 		    pager_printf(ch, "&GYou feel heavy, struggling to carry your own weight without ki regulation.\n\r");
@@ -3549,7 +3570,7 @@ violence_update(void)
 			}
 		  }
 		  if (trainmessage >= 99) {
-		    base_xp = (long double)increase / 12 * totalgrav;
+		    base_xp = (long double)increase / 6 * totalgrav;
 			xp_gain = (long double)base_xp;
 		    gain_exp(ch, xp_gain);
 		    pager_printf(ch, "&GYou push through exhaustion, barely carrying on.\n\r");
@@ -3583,6 +3604,7 @@ violence_update(void)
 				}
 			}
 		  }
+		  ch->workoutstrain += 20;
 		}
 		/* New Gravity Training */
 		if (xIS_SET((ch)->affected_by, AFF_PUSHUPS) && !xIS_SET((ch)->in_room->room_flags, ROOM_GRAV)) {
