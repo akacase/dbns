@@ -2154,6 +2154,31 @@ violence_update(void)
 		}
 		/* Gravity area/room effects and bonus combat stats, weighted clothing */
 		if (!IS_NPC(ch)) {
+			double totalrgrav = 0;
+			double addedrweight = 0;
+			double playerrweight = 0;
+			int	weightstatmult = 0;
+			int	weightstat = 0;
+			int	weighttrainmult = 0;
+			int	weighttrain = 0;
+			int	damrange = 0;
+			int	gravdam = 0;
+			
+			
+			damrange = number_range(1, 3);
+			
+			addedrweight = (double) weightedtraining(ch) / 100000;
+			playerrweight = (double) 1 + addedrweight;
+			totalrgrav = (double) ch->gravSetting * playerrweight;
+			weightstatmult = (totalrgrav / 50) + 1;
+			weightstat = 5 * weightstatmult;
+			weighttrainmult = (totalrgrav / 50) + 1;
+			weighttrain = 5 * weighttrainmult;
+			
+			if (totalrgrav > 1) {
+				gravdam = damrange * totalrgrav;
+			}
+			
 			if ((ch->workoutstrain - 2) < 0) {
 				ch->workoutstrain = 0;
 			}
@@ -2172,518 +2197,62 @@ violence_update(void)
 			|| xIS_SET((ch)->in_room->room_flags, ROOM_GRAV800)
 			|| xIS_SET((ch)->in_room->room_flags, ROOM_GRAV900)
 			|| xIS_SET((ch)->in_room->room_flags, ROOM_GRAV1000)) {
-				int gravdam = 0;
-				int damrange = 0;
-				int safediff = 0;
-				int resdiff = 0;
-				int acc = 0;
-				int gravres = 0;
 			
 				if (xIS_SET((ch)->in_room->room_flags, ROOM_GRAV10)) {
 					ch->gravSetting = 10;
-					if (ch->position == POS_FIGHTING) {
-						stat_train(ch, "str", 7);
-						stat_train(ch, "spd", 7);
-						stat_train(ch, "con", 7);
-						stat_train(ch, "int", 7);
-						ch->train += 4;
-					}
-					if (ch->position == POS_AGGRESSIVE) {
-						stat_train(ch, "str", 8);
-						stat_train(ch, "spd", 7);
-						stat_train(ch, "con", 7);
-						stat_train(ch, "int", 6);
-						ch->train += 4;
-					}
-					if (ch->position == POS_BERSERK) {
-						stat_train(ch, "str", 14);
-						stat_train(ch, "spd", 7);
-						stat_train(ch, "con", 7);
-						ch->train += 4;
-					}
-					if (ch->position == POS_DEFENSIVE) {
-						stat_train(ch, "str", 4);
-						stat_train(ch, "spd", 7);
-						stat_train(ch, "con", 10);
-						stat_train(ch, "int", 7);
-						ch->train += 4;
-					}
-					if (ch->position == POS_EVASIVE) {
-						stat_train(ch, "spd", 9);
-						stat_train(ch, "con", 7);
-						stat_train(ch, "int", 12);
-						ch->train += 4;
-					}
 				}
 				else if (xIS_SET((ch)->in_room->room_flags, ROOM_GRAV50)) {
 					ch->gravSetting = 50;
-					if (ch->position == POS_FIGHTING) {
-						stat_train(ch, "str", 10);
-						stat_train(ch, "spd", 10);
-						stat_train(ch, "con", 10);
-						stat_train(ch, "int", 10);
-						ch->train += 4;
-					}
-					if (ch->position == POS_AGGRESSIVE) {
-						stat_train(ch, "str", 12);
-						stat_train(ch, "spd", 10);
-						stat_train(ch, "con", 10);
-						stat_train(ch, "int", 8);
-						ch->train += 4;
-					}
-					if (ch->position == POS_BERSERK) {
-						stat_train(ch, "str", 20);
-						stat_train(ch, "spd", 10);
-						stat_train(ch, "con", 10);
-						ch->train += 4;
-					}
-					if (ch->position == POS_DEFENSIVE) {
-						stat_train(ch, "str", 5);
-						stat_train(ch, "spd", 10);
-						stat_train(ch, "con", 16);
-						stat_train(ch, "int", 9);
-						ch->train += 4;
-					}
-					if (ch->position == POS_EVASIVE) {
-						stat_train(ch, "spd", 14);
-						stat_train(ch, "con", 10);
-						stat_train(ch, "int", 16);
-						ch->train += 4;
-					}
 				}
 				else if (xIS_SET((ch)->in_room->room_flags, ROOM_GRAV100)) {
 					ch->gravSetting = 100;
-					if (ch->position == POS_FIGHTING) {
-						stat_train(ch, "str", 12);
-						stat_train(ch, "spd", 12);
-						stat_train(ch, "con", 12);
-						stat_train(ch, "int", 12);
-						ch->train += 4;
-					}
-					if (ch->position == POS_AGGRESSIVE) {
-						stat_train(ch, "str", 14);
-						stat_train(ch, "spd", 12);
-						stat_train(ch, "con", 12);
-						stat_train(ch, "int", 10);
-						ch->train += 4;
-					}
-					if (ch->position == POS_BERSERK) {
-						stat_train(ch, "str", 24);
-						stat_train(ch, "spd", 12);
-						stat_train(ch, "con", 12);
-						ch->train += 4;
-					}
-					if (ch->position == POS_DEFENSIVE) {
-						stat_train(ch, "str", 6);
-						stat_train(ch, "spd", 12);
-						stat_train(ch, "con", 18);
-						stat_train(ch, "int", 12);
-						ch->train += 4;
-					}
-					if (ch->position == POS_EVASIVE) {
-						stat_train(ch, "spd", 16);
-						stat_train(ch, "con", 12);
-						stat_train(ch, "int", 20);
-						ch->train += 4;
-					}
 				}
 				else if (xIS_SET((ch)->in_room->room_flags, ROOM_GRAV200)) {
 					ch->gravSetting = 200;
-					if (ch->position == POS_FIGHTING) {
-						stat_train(ch, "str", 14);
-						stat_train(ch, "spd", 14);
-						stat_train(ch, "con", 14);
-						stat_train(ch, "int", 14);
-						ch->train += 5;
-					}
-					if (ch->position == POS_AGGRESSIVE) {
-						stat_train(ch, "str", 16);
-						stat_train(ch, "spd", 14);
-						stat_train(ch, "con", 14);
-						stat_train(ch, "int", 12);
-						ch->train += 5;
-					}
-					if (ch->position == POS_BERSERK) {
-						stat_train(ch, "str", 28);
-						stat_train(ch, "spd", 14);
-						stat_train(ch, "con", 14);
-						ch->train += 5;
-					}
-					if (ch->position == POS_DEFENSIVE) {
-						stat_train(ch, "str", 8);
-						stat_train(ch, "spd", 14);
-						stat_train(ch, "con", 20);
-						stat_train(ch, "int", 14);
-						ch->train += 5;
-					}
-					if (ch->position == POS_EVASIVE) {
-						stat_train(ch, "spd", 18);
-						stat_train(ch, "con", 14);
-						stat_train(ch, "int", 24);
-						ch->train += 5;
-					}
 				}
 				else if (xIS_SET((ch)->in_room->room_flags, ROOM_GRAV300)) {
 					ch->gravSetting = 300;
-					if (ch->position == POS_FIGHTING) {
-						stat_train(ch, "str", 15);
-						stat_train(ch, "spd", 15);
-						stat_train(ch, "con", 15);
-						stat_train(ch, "int", 15);
-						ch->train += 5;
-					}
-					if (ch->position == POS_AGGRESSIVE) {
-						stat_train(ch, "str", 17);
-						stat_train(ch, "spd", 15);
-						stat_train(ch, "con", 15);
-						stat_train(ch, "int", 13);
-						ch->train += 5;
-					}
-					if (ch->position == POS_BERSERK) {
-						stat_train(ch, "str", 30);
-						stat_train(ch, "spd", 15);
-						stat_train(ch, "con", 15);
-						ch->train += 5;
-					}
-					if (ch->position == POS_DEFENSIVE) {
-						stat_train(ch, "str", 9);
-						stat_train(ch, "spd", 15);
-						stat_train(ch, "con", 21);
-						stat_train(ch, "int", 15);
-						ch->train += 5;
-					}
-					if (ch->position == POS_EVASIVE) {
-						stat_train(ch, "spd", 19);
-						stat_train(ch, "con", 15);
-						stat_train(ch, "int", 26);
-						ch->train += 5;
-					}
 				}
 				else if (xIS_SET((ch)->in_room->room_flags, ROOM_GRAV400)) {
 					ch->gravSetting = 400;
-					if (ch->position == POS_FIGHTING) {
-						stat_train(ch, "str", 16);
-						stat_train(ch, "spd", 16);
-						stat_train(ch, "con", 16);
-						stat_train(ch, "int", 16);
-						ch->train += 5;
-					}
-					if (ch->position == POS_AGGRESSIVE) {
-						stat_train(ch, "str", 18);
-						stat_train(ch, "spd", 16);
-						stat_train(ch, "con", 16);
-						stat_train(ch, "int", 15);
-						ch->train += 5;
-					}
-					if (ch->position == POS_BERSERK) {
-						stat_train(ch, "str", 32);
-						stat_train(ch, "spd", 16);
-						stat_train(ch, "con", 16);
-						ch->train += 5;
-					}
-					if (ch->position == POS_DEFENSIVE) {
-						stat_train(ch, "str", 10);
-						stat_train(ch, "spd", 16);
-						stat_train(ch, "con", 22);
-						stat_train(ch, "int", 16);
-						ch->train += 5;
-					}
-					if (ch->position == POS_EVASIVE) {
-						stat_train(ch, "spd", 20);
-						stat_train(ch, "con", 16);
-						stat_train(ch, "int", 28);
-						ch->train += 5;
-					}
 				}
 				else if (xIS_SET((ch)->in_room->room_flags, ROOM_GRAV500)) {
 					ch->gravSetting = 500;
-					if (ch->position == POS_FIGHTING) {
-						stat_train(ch, "str", 17);
-						stat_train(ch, "spd", 17);
-						stat_train(ch, "con", 17);
-						stat_train(ch, "int", 17);
-						ch->train += 6;
-					}
-					if (ch->position == POS_AGGRESSIVE) {
-						stat_train(ch, "str", 18);
-						stat_train(ch, "spd", 17);
-						stat_train(ch, "con", 17);
-						stat_train(ch, "int", 16);
-						ch->train += 6;
-					}
-					if (ch->position == POS_BERSERK) {
-						stat_train(ch, "str", 34);
-						stat_train(ch, "spd", 17);
-						stat_train(ch, "con", 17);
-						ch->train += 6;
-					}
-					if (ch->position == POS_DEFENSIVE) {
-						stat_train(ch, "str", 11);
-						stat_train(ch, "spd", 17);
-						stat_train(ch, "con", 23);
-						stat_train(ch, "int", 17);
-						ch->train += 6;
-					}
-					if (ch->position == POS_EVASIVE) {
-						stat_train(ch, "spd", 21);
-						stat_train(ch, "con", 17);
-						stat_train(ch, "int", 30);
-						ch->train += 6;
-					}
 				}
 				else if (xIS_SET((ch)->in_room->room_flags, ROOM_GRAV600)) {
 					ch->gravSetting = 600;
-					if (ch->position == POS_FIGHTING) {
-						stat_train(ch, "str", 18);
-						stat_train(ch, "spd", 18);
-						stat_train(ch, "con", 18);
-						stat_train(ch, "int", 18);
-						ch->train += 6;
-					}
-					if (ch->position == POS_AGGRESSIVE) {
-						stat_train(ch, "str", 19);
-						stat_train(ch, "spd", 18);
-						stat_train(ch, "con", 18);
-						stat_train(ch, "int", 17);
-						ch->train += 6;
-					}
-					if (ch->position == POS_BERSERK) {
-						stat_train(ch, "str", 36);
-						stat_train(ch, "spd", 18);
-						stat_train(ch, "con", 18);
-						ch->train += 6;
-					}
-					if (ch->position == POS_DEFENSIVE) {
-						stat_train(ch, "str", 12);
-						stat_train(ch, "spd", 18);
-						stat_train(ch, "con", 24);
-						stat_train(ch, "int", 18);
-						ch->train += 6;
-					}
-					if (ch->position == POS_EVASIVE) {
-						stat_train(ch, "spd", 22);
-						stat_train(ch, "con", 18);
-						stat_train(ch, "int", 32);
-						ch->train += 6;
-					}
 				}
 				else if (xIS_SET((ch)->in_room->room_flags, ROOM_GRAV700)) {
 					ch->gravSetting = 700;
-					if (ch->position == POS_FIGHTING) {
-						stat_train(ch, "str", 19);
-						stat_train(ch, "spd", 19);
-						stat_train(ch, "con", 19);
-						stat_train(ch, "int", 19);
-						ch->train += 6;
-					}
-					if (ch->position == POS_AGGRESSIVE) {
-						stat_train(ch, "str", 20);
-						stat_train(ch, "spd", 19);
-						stat_train(ch, "con", 19);
-						stat_train(ch, "int", 18);
-						ch->train += 6;
-					}
-					if (ch->position == POS_BERSERK) {
-						stat_train(ch, "str", 38);
-						stat_train(ch, "spd", 19);
-						stat_train(ch, "con", 19);
-						ch->train += 6;
-					}
-					if (ch->position == POS_DEFENSIVE) {
-						stat_train(ch, "str", 13);
-						stat_train(ch, "spd", 19);
-						stat_train(ch, "con", 25);
-						stat_train(ch, "int", 19);
-						ch->train += 6;
-					}
-					if (ch->position == POS_EVASIVE) {
-						stat_train(ch, "spd", 23);
-						stat_train(ch, "con", 19);
-						stat_train(ch, "int", 34);
-						ch->train += 6;
-					}
 				}
 				else if (xIS_SET((ch)->in_room->room_flags, ROOM_GRAV800)) {
 					ch->gravSetting = 800;
-					if (ch->position == POS_FIGHTING) {
-						stat_train(ch, "str", 20);
-						stat_train(ch, "spd", 20);
-						stat_train(ch, "con", 20);
-						stat_train(ch, "int", 20);
-						ch->train += 6;
-					}
-					if (ch->position == POS_AGGRESSIVE) {
-						stat_train(ch, "str", 21);
-						stat_train(ch, "spd", 20);
-						stat_train(ch, "con", 20);
-						stat_train(ch, "int", 19);
-						ch->train += 6;
-					}
-					if (ch->position == POS_BERSERK) {
-						stat_train(ch, "str", 40);
-						stat_train(ch, "spd", 20);
-						stat_train(ch, "con", 20);
-						ch->train += 6;
-					}
-					if (ch->position == POS_DEFENSIVE) {
-						stat_train(ch, "str", 14);
-						stat_train(ch, "spd", 20);
-						stat_train(ch, "con", 26);
-						stat_train(ch, "int", 20);
-						ch->train += 6;
-					}
-					if (ch->position == POS_EVASIVE) {
-						stat_train(ch, "spd", 24);
-						stat_train(ch, "con", 20);
-						stat_train(ch, "int", 36);
-						ch->train += 6;
-					}
 				}
 				else if (xIS_SET((ch)->in_room->room_flags, ROOM_GRAV900)) {
 					ch->gravSetting = 900;
-					if (ch->position == POS_FIGHTING) {
-						stat_train(ch, "str", 21);
-						stat_train(ch, "spd", 21);
-						stat_train(ch, "con", 21);
-						stat_train(ch, "int", 21);
-						ch->train += 6;
-					}
-					if (ch->position == POS_AGGRESSIVE) {
-						stat_train(ch, "str", 22);
-						stat_train(ch, "spd", 21);
-						stat_train(ch, "con", 21);
-						stat_train(ch, "int", 20);
-						ch->train += 6;
-					}
-					if (ch->position == POS_BERSERK) {
-						stat_train(ch, "str", 42);
-						stat_train(ch, "spd", 21);
-						stat_train(ch, "con", 21);
-						ch->train += 6;
-					}
-					if (ch->position == POS_DEFENSIVE) {
-						stat_train(ch, "str", 15);
-						stat_train(ch, "spd", 21);
-						stat_train(ch, "con", 27);
-						stat_train(ch, "int", 21);
-						ch->train += 6;
-					}
-					if (ch->position == POS_EVASIVE) {
-						stat_train(ch, "spd", 25);
-						stat_train(ch, "con", 21);
-						stat_train(ch, "int", 38);
-						ch->train += 6;
-					}
 				}
 				else if (xIS_SET((ch)->in_room->room_flags, ROOM_GRAV1000)) {
 					ch->gravSetting = 1000;
-					if (ch->position == POS_FIGHTING) {
-						stat_train(ch, "str", 22);
-						stat_train(ch, "spd", 22);
-						stat_train(ch, "con", 22);
-						stat_train(ch, "int", 22);
-						ch->train += 6;
-					}
-					if (ch->position == POS_AGGRESSIVE) {
-						stat_train(ch, "str", 23);
-						stat_train(ch, "spd", 22);
-						stat_train(ch, "con", 22);
-						stat_train(ch, "int", 21);
-						ch->train += 6;
-					}
-					if (ch->position == POS_BERSERK) {
-						stat_train(ch, "str", 44);
-						stat_train(ch, "spd", 22);
-						stat_train(ch, "con", 22);
-						ch->train += 6;
-					}
-					if (ch->position == POS_DEFENSIVE) {
-						stat_train(ch, "str", 16);
-						stat_train(ch, "spd", 22);
-						stat_train(ch, "con", 28);
-						stat_train(ch, "int", 22);
-						ch->train += 6;
-					}
-					if (ch->position == POS_EVASIVE) {
-						stat_train(ch, "spd", 26);
-						stat_train(ch, "con", 22);
-						stat_train(ch, "int", 40);
-						ch->train += 6;
-					}
-				}
-				acc = ((ch->gravExp / 1000) + 1);
-				if (acc < 1)
-					acc = 1;
-				damrange = number_range(1, 3);
-				gravres = (get_curr_con(ch) / 500) + 1;
-				safediff = ((ch->gravSetting - acc) + 2);
-				if (safediff < 1)
-					safediff = 1;
-				resdiff = (safediff - gravres);
-				if (resdiff < 1)
-					resdiff = 1;
-				gravdam = (pow(resdiff, 3) * damrange);
-				if (ch->mana - gravdam > 0) {
-					ch->mana -= gravdam;
-					if (ch->desc)
-						ch->gravExp += 3;
-				}
-				else if (ch->mana - gravdam <= 0) {
-					ch->mana = 0;
-					ch->hit -= (gravdam / 3);
-					act( AT_RED, "Your bones pop and creak ominously.", ch, NULL, NULL, TO_CHAR );
-					if (ch->desc)
-						ch->gravExp += 3;
-					if (ch->hit - (gravdam / 3) < 0) {
-						update_pos(ch);
-						if (ch->position == POS_DEAD) {
-							ch->gravSetting = acc;
-							act( AT_RED, "Your body has been crushed!", ch, NULL, NULL, TO_CHAR );
-							act( AT_RED, "$n collapses, DEAD, $s body crushed under intense gravity.", ch, NULL, NULL, TO_NOTVICT );
-							sprintf( buf, "%s is crushed into a pancake under intense gravity", ch->name );
-							do_info(ch, buf);
-							raw_kill(ch, ch);
-						}
-					}
 				}
 			}
 			else {
 				if (!xIS_SET((ch)->in_room->room_flags, ROOM_GRAV)) {
 					ch->gravSetting = 1;
 				}
-				if (ch->position == POS_FIGHTING) {
-					stat_train(ch, "str", 5);
-					stat_train(ch, "spd", 5);
-					stat_train(ch, "con", 5);
-					stat_train(ch, "int", 5);
-					ch->train += 3;
-				}
-				if (ch->position == POS_AGGRESSIVE) {
-					stat_train(ch, "str", 6);
-					stat_train(ch, "spd", 5);
-					stat_train(ch, "con", 5);
-					stat_train(ch, "int", 4);
-					ch->train += 3;
-				}
-				if (ch->position == POS_BERSERK) {
-					stat_train(ch, "str", 10);
-					stat_train(ch, "spd", 5);
-					stat_train(ch, "con", 5);
-					ch->train += 3;
-				}
-				if (ch->position == POS_DEFENSIVE) {
-					stat_train(ch, "str", 2);
-					stat_train(ch, "spd", 5);
-					stat_train(ch, "con", 8);
-					stat_train(ch, "int", 5);
-					ch->train += 3;
-				}
-				if (ch->position == POS_EVASIVE) {
-					stat_train(ch, "spd", 7);
-					stat_train(ch, "con", 5);
-					stat_train(ch, "int", 8);
-					ch->train += 3;
-				}
+			}
+			if (ch->position == POS_FIGHTING
+			|| ch->position == POS_AGGRESSIVE
+			|| ch->position == POS_BERSERK
+			|| ch->position == POS_DEFENSIVE
+			|| ch->position == POS_EVASIVE) {
+				stat_train(ch, "str", weightstat);
+				stat_train(ch, "spd", weightstat);
+				stat_train(ch, "con", weightstat);
+				stat_train(ch, "int", weightstat);
+				ch->train += weighttrain;
+				ch->mana -= gravdam;
+				if ((ch->mana - gravdam) < 0)
+					ch->mana = 0;
 			}
 		}
 		if (xIS_SET((ch)->affected_by, AFF_EXPUSHUPS) && ch->position != POS_RESTING
