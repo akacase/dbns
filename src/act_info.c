@@ -4175,7 +4175,10 @@ void do_exercise(CHAR_DATA *ch, char *argument)
 	
 	if (IS_NPC(ch))
 		return;
-	
+	if (ch->workoutstrain >= 900) {
+		send_to_char("You're still far too exhausted to consider any kind of exercise.\n\r", ch);
+		return;
+	}
 	if (ch->position != POS_RESTING) {
 		send_to_char("You should get into a resting position first.\n\r", ch);
 		return;
