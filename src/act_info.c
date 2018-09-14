@@ -124,6 +124,7 @@ show_compass_dir(CHAR_DATA * ch)
 		pager_printf_color(ch, "&G%2s&G     %s&G     %-2s&G\n\r",
 		    compass_dir[cDir[9]], compass_dir[cDir[2]],
 		    compass_dir[cDir[8]]);
+		pager_printf_color(ch, "&G%d atmosphere(s) detected.&G\n\r", ch->gravSetting);
 	}
 }
 

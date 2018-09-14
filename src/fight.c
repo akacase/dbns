@@ -5734,10 +5734,7 @@ damage(CHAR_DATA * ch, CHAR_DATA * victim, int dam, int dt)
 			}
 			// train con when taking damage
 			if (dam > 0) {
-			  if (dam < 1) {
-			    stat_train(victim, "con", 3);
-			  }
-			  else if (dam < 10) {
+			  if (dam < 10) {
 			    stat_train(victim, "con", 5);
 			  }
 			  else if (dam < 20) {
