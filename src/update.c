@@ -540,22 +540,6 @@ hit_gain(CHAR_DATA * ch)
 		gain += get_curr_con(ch);
 	else
 		gain += get_curr_con(ch) / 1.5;
-	if (!IS_NPC(ch)) {
-		if (xIS_SET((ch)->in_room->room_flags, ROOM_GRAV10)
-			|| xIS_SET((ch)->in_room->room_flags, ROOM_GRAV50)
-			|| xIS_SET((ch)->in_room->room_flags, ROOM_GRAV100)
-			|| xIS_SET((ch)->in_room->room_flags, ROOM_GRAV200)
-			|| xIS_SET((ch)->in_room->room_flags, ROOM_GRAV300)
-			|| xIS_SET((ch)->in_room->room_flags, ROOM_GRAV400)
-			|| xIS_SET((ch)->in_room->room_flags, ROOM_GRAV500)
-			|| xIS_SET((ch)->in_room->room_flags, ROOM_GRAV600)
-			|| xIS_SET((ch)->in_room->room_flags, ROOM_GRAV700)
-			|| xIS_SET((ch)->in_room->room_flags, ROOM_GRAV800)
-			|| xIS_SET((ch)->in_room->room_flags, ROOM_GRAV900)
-			|| xIS_SET((ch)->in_room->room_flags, ROOM_GRAV1000)) {
-				gain = 0;
-		}
-	}
 
 	return UMIN(gain, ch->max_hit - ch->hit);
 }
