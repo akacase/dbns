@@ -2710,6 +2710,7 @@ struct char_data {
 	int	kamehamehapower;
 	int	kamehamehaeffic;
 	int	kspgain;
+	int	bspgain;
 
 	int	lariatpower;
 	int	lariateffic;
@@ -2720,6 +2721,7 @@ struct char_data {
 	int	masenkoeffic;
 	int	makosenpower;
 	int	makoseneffic;
+	int	vigoreffec;
 
 	int	punchpower;
 	int	puncheffic;
@@ -2797,6 +2799,7 @@ struct char_data {
 	sh_int	skillspirit_ball;
 	sh_int	skillspirit_bomb;
 	sh_int	skillsuppress;
+	sh_int	skillvigor;
 	
 	
 	

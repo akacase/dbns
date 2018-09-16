@@ -2163,6 +2163,7 @@ violence_update(void)
 			int	weighttrain = 0;
 			int	damrange = 0;
 			int	gravdam = 0;
+			int	vigormod = 0;
 			
 			
 			damrange = number_range(1, 3);
@@ -2175,15 +2176,26 @@ violence_update(void)
 			weightstatmult = (double) ((double)totalrgrav / 50) + 1;
 			weightstat = 5 * weightstatmult;
 			
+			vigormod = ch->vigoreffec + 2;
+			
 			if (totalrgrav > 1) {
 				gravdam = damrange * totalrgrav;
 			}
-			
-			if ((ch->workoutstrain - 2) < 0) {
+			if ((ch->workoutstrain - vigormod) <= 0) {
+			send_to_char("You have fully recovered from your intense workout.\n\r", ch);
+			}
+			if ((ch->workoutstrain - vigormod) < 0) {
 				ch->workoutstrain = 0;
 			}
 			else {
-				ch->workoutstrain -= 2;
+				ch->workoutstrain -= vigormod;
+				ch->bodymastery += 1;
+				if (ch->bodymastery >= (ch->bspgain * 100)) {
+					pager_printf_color(ch,
+						"&CYou gained 5 Skill Points!\n\r");
+					ch->sptotal += 5;
+					ch->bspgain += 1;
+				}
 			}
 			if (xIS_SET((ch)->in_room->room_flags, ROOM_GRAV10)
 			|| xIS_SET((ch)->in_room->room_flags, ROOM_GRAV50)

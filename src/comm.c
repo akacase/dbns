@@ -2518,6 +2518,7 @@ nanny(DESCRIPTOR_DATA *d, char *argument)
 	
 	ch->sspgain = 0;
 	ch->kspgain = 0;
+	ch->bspgain = 0;
 	
 	ch->spallocated = 0;
 	ch->school = 0;
@@ -2610,6 +2611,8 @@ nanny(DESCRIPTOR_DATA *d, char *argument)
 	ch->skillspirit_ball = 0;
 	ch->skillspirit_bomb = 0;
 	ch->skillsuppress = 0;
+	ch->skillvigor = 0;
+	ch->vigoreffec = 0;
 	if (is_saiyan(ch) || is_hb(ch) || is_icer(ch) || is_bio(ch))
 	  ch->pcdata->tail = true;
 	else

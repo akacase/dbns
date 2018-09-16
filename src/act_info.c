@@ -4827,6 +4827,17 @@ do_develop(CHAR_DATA * ch, char *argument)
 			return;
 		}
 	}
+	if (!str_cmp(arg1, "vigor") && arg2[0] == '\0') {
+		if (ch->skillvigor < 1) {
+			send_to_char("You developed Vigor!\n\r", ch);
+			ch->skillvigor = 1;
+			return;
+		}
+		else {
+			send_to_char("Regrettably, your effort seems to be wasted.\n\r", ch);
+			return;
+		}
+	}
 	if (!str_cmp(arg1, "dodge") && arg2[0] == '\0') {
 		if (ch->skilldodge < 1) {
 			send_to_char("You developed Dodge!\n\r", ch);
@@ -7056,8 +7067,10 @@ do_skills(CHAR_DATA * ch, char *argument) {
 				"&B------------------&CYOUR INNATE ABILITIES&B-------------------\n\r");
 			pager_printf_color(ch,
 				"\n\r");
-			pager_printf_color(ch,
-				"&YSorry, nothing here! ... yet\n\r");
+			if ((ch->skillvigor >= 1)) {
+				pager_printf_color(ch,
+				"&Y   Vigor\n\r");
+			}
 		}
 		if (!str_cmp(arg, "energyball")) {
 			pager_printf_color(ch,
@@ -7863,6 +7876,30 @@ do_skills(CHAR_DATA * ch, char *argument) {
 					"&CAverage Base Damage: &Y55\n\r");
 				pager_printf_color(ch,
 					"&CYour Average Damage: &Y%d\n\r", dam);
+			}
+			else {
+				pager_printf_color(ch,
+					"&YYou can't view detailed skill information for a skill you don't know!\n\r");
+			}
+		}
+		if (!str_cmp(arg, "vigor")) {
+			int	vigordisplaymult = 0;
+			
+			vigordisplaymult = ch->vigoreffec * 50;
+			
+			pager_printf_color(ch,
+				"&B------------------&CVIGOR&B-------------------\n\r");
+			pager_printf_color(ch,
+				"\n\r");
+			if (ch->skillvigor >= 1) {
+				pager_printf_color(ch,
+					" &CYour ability to recover from strain and injuries\n\r");
+				pager_printf_color(ch,
+					"&Csuffered during intense training.\n\r");
+				pager_printf_color(ch,
+					"\n\r");
+				pager_printf_color(ch,
+					" &YTRAINING COOLDOWN RATE : &Y[&G+%d%&Y]\n\r", vigordisplaymult);
 			}
 			else {
 				pager_printf_color(ch,

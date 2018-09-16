@@ -5186,6 +5186,31 @@ do_research(CHAR_DATA * ch, char *argument)
 		send_to_char("   power   efficiency\n\r", ch);
 		return;
 	}
+	if (!str_cmp(arg1, "vigor")) {
+		if (ch->skillenergy_ball < 1) {
+			send_to_char("You can't research a skill you don't even know!\n\r", ch);
+			return;
+		}
+		if (!str_cmp(arg2, "power")) {
+			spcostpow = (ch->vigoreffec * 100);
+			if (spcostpow < 100)
+				spcostpow = 100;
+			if (spremaining < spcostpow) {
+				send_to_char("You don't have enough SP to do that.\n\r", ch);
+				return;
+			}
+			else {
+				send_to_char("Your Vigor overflows!\n\r", ch);
+				ch->vigoreffec += 1;
+				ch->spallocated += spcostpow;
+				return;
+			}		
+		}
+		if (!str_cmp(arg2, "efficiency")) {
+			send_to_char("You may only increase the 'power' of Vigor.\n\r", ch);
+			return;
+		}
+	}
 	if (!str_cmp(arg1, "energyball")) {
 		if (ch->skillenergy_ball < 1) {
 			send_to_char("You can't research a skill you don't even know!\n\r", ch);

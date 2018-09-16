@@ -317,9 +317,12 @@ fwrite_char (CHAR_DATA * ch, FILE * fp)
 	 && ch->was_in_room) ? ch->was_in_room->vnum : ch->in_room->vnum);
      fprintf (fp, "Worth           %lld\n", ch->worth);
 	 fprintf (fp, "Workoutstrain           %d\n", ch->workoutstrain);
+	 fprintf (fp, "Skillvigor           %d\n", ch->skillvigor);
+	 fprintf (fp, "Vigoreffec           %d\n", ch->vigoreffec);
 	 fprintf (fp, "Sspgain           %d\n", ch->sspgain);
 	 fprintf (fp, "Exintensity           %d\n", ch->exintensity);
 	 fprintf (fp, "Kspgain           %d\n", ch->kspgain);
+	 fprintf (fp, "Bspgain           %d\n", ch->bspgain);
 	 fprintf (fp, "Energy_ballpower           %d\n", ch->energy_ballpower);
 	 fprintf (fp, "Energy_balleffic           %d\n", ch->energy_balleffic);
 	 fprintf (fp, "Crusherballpower           %d\n", ch->crusherballpower);
@@ -1572,6 +1575,7 @@ fread_char (CHAR_DATA * ch, FILE * fp, bool preload)
 	       KEY ("Bck_name", ch->bck_name, fread_string (fp));
 	       KEY ("Bck_pl", ch->bck_pl, fread_number_ld (fp));
 	       KEY ("Bck_race", ch->bck_race, fread_number (fp));
+		   KEY ("Bspgain", ch->bspgain, fread_number (fp));
 	       break;
 
 	  case 'C':
@@ -2166,6 +2170,7 @@ fread_char (CHAR_DATA * ch, FILE * fp, bool preload)
 	       KEY ("Spirit_Ball", ch->skillspirit_ball, fread_number (fp));
 	       KEY ("Spirit_Bomb", ch->skillspirit_bomb, fread_number (fp));
 	       KEY ("SkillSuppress", ch->skillsuppress, fread_number (fp));
+	       KEY ("Skillvigor", ch->skillvigor, fread_number (fp));
 	       if (!strcmp (word, "SavingThrow")) {
 		    ch->saving_wand = fread_number (fp);
 		    ch->saving_poison_death = ch->saving_wand;
@@ -2428,6 +2433,7 @@ fread_char (CHAR_DATA * ch, FILE * fp, bool preload)
 	       break;
 
 	  case 'V':
+	       KEY ("Vigoreffec", ch->vigoreffec, fread_number (fp));
 	       if (!strcmp (word, "Vnum")) {
 		    ch->pIndexData = get_mob_index (fread_number (fp));
 		    fMatch = true;
