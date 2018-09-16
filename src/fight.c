@@ -2181,9 +2181,6 @@ violence_update(void)
 			if (totalrgrav > 1) {
 				gravdam = damrange * totalrgrav;
 			}
-			if ((ch->workoutstrain - vigormod) <= 0) {
-			send_to_char("You have fully recovered from your intense workout.\n\r", ch);
-			}
 			if ((ch->workoutstrain - vigormod) < 0) {
 				ch->workoutstrain = 0;
 			}
