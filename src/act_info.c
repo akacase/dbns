@@ -6788,6 +6788,7 @@ do_skills(CHAR_DATA * ch, char *argument) {
 	float	kimult = 0;
 	float	kicmult = 0;
 	float	physmult = 0;
+	float	smastery = 0;
 	
 	one_argument(argument, arg);
 	
@@ -7073,12 +7074,13 @@ do_skills(CHAR_DATA * ch, char *argument) {
 			}
 		}
 		if (!str_cmp(arg, "energyball")) {
+			smastery = (float) ch->masteryenergy_ball / 1000;
 			pager_printf_color(ch,
 				"&B------------------&CENERGY BALL&B-------------------\n\r");
 			pager_printf_color(ch,
 				"\n\r");
 			if (ch->skillenergy_ball >= 1) {
-				argdam = (3 + ch->energy_ballpower) * kicmult;
+				argdam = (3 + ch->energy_ballpower) * (kicmult + smastery);
 				dam = 1 * (argdam * kimult);
 				pager_printf_color(ch,
 					" &CThe most basic of energy attacks. A tiny ball of energy,\n\r");
@@ -7105,12 +7107,13 @@ do_skills(CHAR_DATA * ch, char *argument) {
 			}
 		}
 		if (!str_cmp(arg, "crusherball")) {
+			smastery = (float) ch->masterycrusherball / 1000;
 			pager_printf_color(ch,
 				"&B------------------&CCRUSHER BALL&B-------------------\n\r");
 			pager_printf_color(ch,
 				"\n\r");
 			if (ch->skillcrusherball >= 1) {
-				argdam = (13 + ch->crusherballpower) * kicmult;
+				argdam = (13 + ch->crusherballpower) * (kicmult + smastery);
 				dam = 1 * (argdam * kimult);
 				pager_printf_color(ch,
 					" &CA more powerful Energy Ball, focused and thrown\n\r");
@@ -7137,12 +7140,13 @@ do_skills(CHAR_DATA * ch, char *argument) {
 			}
 		}
 		if (!str_cmp(arg, "meteor")) {
+			smastery = (float) ch->masterymeteor / 1000;
 			pager_printf_color(ch,
 				"&B------------------&CMETEOR&B-------------------\n\r");
 			pager_printf_color(ch,
 				"\n\r");
 			if (ch->skillmeteor >= 1) {
-				argdam = (33 + (ch->meteorpower * 3)) * kicmult;
+				argdam = (33 + (ch->meteorpower * 3)) * (kicmult + smastery);
 				dam = 1 * (argdam * kimult);
 				pager_printf_color(ch,
 					" &CA recklessly enormous gathering of energy, used to\n\r");
@@ -7169,12 +7173,13 @@ do_skills(CHAR_DATA * ch, char *argument) {
 			}
 		}
 		if (!str_cmp(arg, "giganticmeteor")) {
+			smastery = (float) ch->masterygigantic_meteor / 1000;
 			pager_printf_color(ch,
 				"&B------------------&CGIGANTIC METEOR&B-------------------\n\r");
 			pager_printf_color(ch,
 				"\n\r");
 			if (ch->skillgigantic_meteor >= 1) {
-				argdam = (73 + (ch->gigantic_meteorpower * 7)) * kicmult;
+				argdam = (73 + (ch->gigantic_meteorpower * 7)) * (kicmult + smastery);
 				dam = 1 * (argdam * kimult);
 				pager_printf_color(ch,
 					" &CFew exist who wouldn't cower at the sight of an energy\n\r");
@@ -7201,12 +7206,13 @@ do_skills(CHAR_DATA * ch, char *argument) {
 			}
 		}
 		if (!str_cmp(arg, "eclipticmeteor")) {
+			smastery = (float) ch->masteryecliptic_meteor / 1000;
 			pager_printf_color(ch,
 				"&B------------------&CECLIPTIC METEOR&B-------------------\n\r");
 			pager_printf_color(ch,
 				"\n\r");
 			if (ch->skillecliptic_meteor >= 1) {
-				argdam = (113 + (ch->ecliptic_meteorpower * 11)) * kicmult;
+				argdam = (113 + (ch->ecliptic_meteorpower * 11)) * (kicmult + smastery);
 				dam = 1 * (argdam * kimult);
 				pager_printf_color(ch,
 					" &CA terrifying mass that blots out the sun, fully capable\n\r");
@@ -7233,12 +7239,13 @@ do_skills(CHAR_DATA * ch, char *argument) {
 			}
 		}
 		if (!str_cmp(arg, "deathball")) {
+			smastery = (float) ch->masterydeath_ball / 1000;
 			pager_printf_color(ch,
 				"&B------------------&CDEATH BALL&B-------------------\n\r");
 			pager_printf_color(ch,
 				"\n\r");
 			if (ch->skilldeath_ball >= 1) {
-				argdam = (113 + (ch->death_ballpower * 11)) * kicmult;
+				argdam = (113 + (ch->death_ballpower * 11)) * (kicmult + smastery);
 				dam = 1 * (argdam * kimult);
 				pager_printf_color(ch,
 					" &CA compact sphere of dark energy, and deceptively so.\n\r");
@@ -7267,12 +7274,13 @@ do_skills(CHAR_DATA * ch, char *argument) {
 			}
 		}
 		if (!str_cmp(arg, "energybeam")) {
+			smastery = (float) ch->masteryenergybeam / 1000;
 			pager_printf_color(ch,
 				"&B------------------&CENERGY BEAM&B-------------------\n\r");
 			pager_printf_color(ch,
 				"\n\r");
 			if (ch->skillenergy_beam >= 1) {
-				argdam = (7 + ch->energybeampower) * kicmult;
+				argdam = (7 + ch->energybeampower) * (kicmult + smastery);
 				dam = 1 * (argdam * kimult);
 				pager_printf_color(ch,
 					" &CA beam of pure energy, typically fired from one hand.\n\r");
@@ -7297,12 +7305,13 @@ do_skills(CHAR_DATA * ch, char *argument) {
 			}
 		}
 		if (!str_cmp(arg, "eyebeam")) {
+			smastery = (float) ch->masteryeye_beam / 1000;
 			pager_printf_color(ch,
 				"&B------------------&CEYE BEAM&B-------------------\n\r");
 			pager_printf_color(ch,
 				"\n\r");
 			if (ch->skilleye_beam >= 1) {
-				argdam = (13 + ch->eye_beampower) * kicmult;
+				argdam = (13 + ch->eye_beampower) * (kicmult + smastery);
 				dam = 1 * (argdam * kimult);
 				pager_printf_color(ch,
 					" &CA beam of energy fired from the eyes, designed to\n\r");
@@ -7329,12 +7338,13 @@ do_skills(CHAR_DATA * ch, char *argument) {
 			}
 		}
 		if (!str_cmp(arg, "masenko")) {
+			smastery = (float) ch->masterymasenko / 1000;
 			pager_printf_color(ch,
 				"&B------------------&CMASENKO&B-------------------\n\r");
 			pager_printf_color(ch,
 				"\n\r");
 			if (ch->skillmasenko >= 1) {
-				argdam = (34 + (ch->masenkopower * 3)) * kicmult;
+				argdam = (34 + (ch->masenkopower * 3)) * (kicmult + smastery);
 				dam = 1 * (argdam * kimult);
 				pager_printf_color(ch,
 					" &CA flash of energy charged in the hands overhead,\n\r");
@@ -7361,12 +7371,13 @@ do_skills(CHAR_DATA * ch, char *argument) {
 			}
 		}
 		if (!str_cmp(arg, "makosen")) {
+			smastery = (float) ch->masterymakosen / 1000;
 			pager_printf_color(ch,
 				"&B------------------&CMAKOSEN&B-------------------\n\r");
 			pager_printf_color(ch,
 				"\n\r");
 			if (ch->skillmakosen >= 1) {
-				argdam = (41 + (ch->makosenpower * 4)) * kicmult;
+				argdam = (41 + (ch->makosenpower * 4)) * (kicmult + smastery);
 				dam = 1 * (argdam * kimult);
 				pager_printf_color(ch,
 					" &CA more powerful version of the Masenko, charged\n\r");
@@ -7397,12 +7408,13 @@ do_skills(CHAR_DATA * ch, char *argument) {
 			}
 		}
 		if (!str_cmp(arg, "sbc")) {
+			smastery = (float) ch->masterysbc / 1000;
 			pager_printf_color(ch,
 				"&B------------------&CSPECIAL BEAM CANNON&B-------------------\n\r");
 			pager_printf_color(ch,
 				"\n\r");
 			if (ch->skillsbc >= 1) {
-				argdam = (60 + (ch->sbcpower * 5)) * kicmult;
+				argdam = (60 + (ch->sbcpower * 5)) * (kicmult + smastery);
 				dam = 1 * (argdam * kimult);
 				pager_printf_color(ch,
 					" &CA deadly, spiral corkscrew beam charged to obscene\n\r");
@@ -7431,12 +7443,13 @@ do_skills(CHAR_DATA * ch, char *argument) {
 			}
 		}
 		if (!str_cmp(arg, "concentratedbeam")) {
+			smastery = (float) ch->masteryconcentrated_beam / 1000;
 			pager_printf_color(ch,
 				"&B------------------&CCONCENTRATED BEAM&B-------------------\n\r");
 			pager_printf_color(ch,
 				"\n\r");
 			if (ch->skillconcentrated_beam >= 1) {
-				argdam = (21 + (ch->concentrated_beampower * 2)) * kicmult;
+				argdam = (21 + (ch->concentrated_beampower * 2)) * (kicmult + smastery);
 				dam = 1 * (argdam * kimult);
 				pager_printf_color(ch,
 					" &CThe natural evolution of an Energy Beam, wider and with\n\r");
@@ -7463,12 +7476,13 @@ do_skills(CHAR_DATA * ch, char *argument) {
 			}
 		}
 		if (!str_cmp(arg, "kamehameha")) {
+			smastery = (float) ch->masterykamehameha / 1000;
 			pager_printf_color(ch,
 				"&B------------------&CKAMEHAMEHA&B-------------------\n\r");
 			pager_printf_color(ch,
 				"\n\r");
 			if (ch->skillkamehameha >= 1) {
-				argdam = (55 + (ch->kamehamehapower * 5)) * kicmult;
+				argdam = (55 + (ch->kamehamehapower * 5)) * (kicmult + smastery);
 				dam = 1 * (argdam * kimult);
 				pager_printf_color(ch,
 					" &CThe iconic blue-white beam, charged and fired from both\n\r");
@@ -7495,12 +7509,13 @@ do_skills(CHAR_DATA * ch, char *argument) {
 			}
 		}
 		if (!str_cmp(arg, "gallicgun")) {
+			smastery = (float) ch->masterygallic_gun / 1000;
 			pager_printf_color(ch,
 				"&B------------------&CGALLIC GUN&B-------------------\n\r");
 			pager_printf_color(ch,
 				"\n\r");
 			if (ch->skillgallic_gun >= 1) {
-				argdam = (73 + (ch->gallic_gunpower * 5)) * kicmult;
+				argdam = (73 + (ch->gallic_gunpower * 5)) * (kicmult + smastery);
 				dam = 1 * (argdam * kimult);
 				pager_printf_color(ch,
 					" &CA beam charged with reckless abandon in both hands,\n\r");
@@ -7527,12 +7542,13 @@ do_skills(CHAR_DATA * ch, char *argument) {
 			}
 		}
 		if (!str_cmp(arg, "fingerbeam")) {
+			smastery = (float) ch->masteryfinger_beam / 1000;
 			pager_printf_color(ch,
 				"&B------------------&CFINGER BEAM&B-------------------\n\r");
 			pager_printf_color(ch,
 				"\n\r");
 			if (ch->skillfinger_beam >= 1) {
-				argdam = (65 + (ch->finger_beampower * 5)) * kicmult;
+				argdam = (65 + (ch->finger_beampower * 5)) * (kicmult + smastery);
 				dam = 1 * (argdam * kimult);
 				pager_printf_color(ch,
 					" &CDesigned to toy with one's opponents, this attack\n\r");
@@ -7561,12 +7577,13 @@ do_skills(CHAR_DATA * ch, char *argument) {
 			}
 		}
 		if (!str_cmp(arg, "destructodisc")) {
+			smastery = (float) ch->masterydestructo_disc / 1000;
 			pager_printf_color(ch,
 				"&B------------------&CDESTRUCTO DISC&B-------------------\n\r");
 			pager_printf_color(ch,
 				"\n\r");
 			if (ch->skilldestructo_disc >= 1) {
-				argdam = (28 + (ch->destructo_discpower * 2)) * kicmult;
+				argdam = (28 + (ch->destructo_discpower * 2)) * (kicmult + smastery);
 				dam = 1 * (argdam * kimult);
 				pager_printf_color(ch,
 					" &CA rotating sawblade of pure energy, able to cleanly\n\r");
@@ -7595,12 +7612,13 @@ do_skills(CHAR_DATA * ch, char *argument) {
 			}
 		}
 		if (!str_cmp(arg, "destructivewave")) {
+			smastery = (float) ch->masterydestructive_wave / 1000;
 			pager_printf_color(ch,
 				"&B------------------&CDESTRUCTIVE WAVE&B-------------------\n\r");
 			pager_printf_color(ch,
 				"\n\r");
 			if (ch->skilldestructive_wave >= 1) {
-				argdam = (27 + (ch->destructive_wavepower * 2)) * kicmult;
+				argdam = (27 + (ch->destructive_wavepower * 2)) * (kicmult + smastery);
 				dam = 1 * (argdam * kimult);
 				pager_printf_color(ch,
 					" &CA gigantic blast of energy fired directly forward,\n\r");
@@ -7627,12 +7645,13 @@ do_skills(CHAR_DATA * ch, char *argument) {
 			}
 		}
 		if (!str_cmp(arg, "energydisc")) {
+			smastery = (float) ch->masteryenergy_disc / 1000;
 			pager_printf_color(ch,
 				"&B------------------&CENERGY DISC&B-------------------\n\r");
 			pager_printf_color(ch,
 				"\n\r");
 			if (ch->skillenergy_disc >= 1) {
-				argdam = (13 + ch->energy_discpower) * kicmult;
+				argdam = (13 + ch->energy_discpower) * (kicmult + smastery);
 				dam = 1 * (argdam * kimult);
 				pager_printf_color(ch,
 					" &CA blade of energy, quick to throw and quick\n\r");
@@ -7659,12 +7678,13 @@ do_skills(CHAR_DATA * ch, char *argument) {
 			}
 		}
 		if (!str_cmp(arg, "punch")) {
+			smastery = (float) ch->masterypunch / 1000;
 			pager_printf_color(ch,
 				"&B------------------&CPUNCH&B-------------------\n\r");
 			pager_printf_color(ch,
 				"\n\r");
 			if (ch->skillpunch >= 1) {
-				argdam = (3 + ch->punchpower) * kicmult;
+				argdam = (3 + ch->punchpower) * (kicmult + smastery);
 				dam = 1 * (argdam * physmult);
 				pager_printf_color(ch,
 					" &CA punch. You won't get very far if you don't\n\r");
@@ -7691,12 +7711,13 @@ do_skills(CHAR_DATA * ch, char *argument) {
 			}
 		}
 		if (!str_cmp(arg, "haymaker")) {
+			smastery = (float) ch->masteryhaymaker / 1000;
 			pager_printf_color(ch,
 				"&B------------------&CHAYMAKER&B-------------------\n\r");
 			pager_printf_color(ch,
 				"\n\r");
 			if (ch->skillhaymaker >= 1) {
-				argdam = (7 + ch->haymakerpower) * kicmult;
+				argdam = (7 + ch->haymakerpower) * (kicmult + smastery);
 				dam = 1 * (argdam * physmult);
 				pager_printf_color(ch,
 					" &CA mighty punch, thrown with as much weight behind\n\r");
@@ -7723,12 +7744,13 @@ do_skills(CHAR_DATA * ch, char *argument) {
 			}
 		}
 		if (!str_cmp(arg, "bash")) {
+			smastery = (float) ch->masterybash / 1000;
 			pager_printf_color(ch,
 				"&B------------------&CBASH&B-------------------\n\r");
 			pager_printf_color(ch,
 				"\n\r");
 			if (ch->skillbash >= 1) {
-				argdam = (11 + ch->bashpower) * kicmult;
+				argdam = (11 + ch->bashpower) * (kicmult + smastery);
 				dam = 1 * (argdam * physmult);
 				pager_printf_color(ch,
 					" &CA 'technique' using one's bulk to crush their\n\r");
@@ -7755,12 +7777,13 @@ do_skills(CHAR_DATA * ch, char *argument) {
 			}
 		}
 		if (!str_cmp(arg, "collide")) {
+			smastery = (float) ch->masterycollide / 1000;
 			pager_printf_color(ch,
 				"&B------------------&CCOLLIDE&B-------------------\n\r");
 			pager_printf_color(ch,
 				"\n\r");
 			if (ch->skillcollide >= 1) {
-				argdam = (20 + (ch->collidepower * 2)) * kicmult;
+				argdam = (20 + (ch->collidepower * 2)) * (kicmult + smastery);
 				dam = 1 * (argdam * physmult);
 				pager_printf_color(ch,
 					" &CThe user accelerates to incredible speed, then\n\r");
@@ -7787,12 +7810,13 @@ do_skills(CHAR_DATA * ch, char *argument) {
 			}
 		}
 		if (!str_cmp(arg, "lariat")) {
+			smastery = (float) ch->masterylariat / 1000;
 			pager_printf_color(ch,
 				"&B------------------&CLARIAT&B-------------------\n\r");
 			pager_printf_color(ch,
 				"\n\r");
 			if (ch->skilllariat >= 1) {
-				argdam = (47 + (ch->lariatpower * 4)) * kicmult;
+				argdam = (47 + (ch->lariatpower * 4)) * (kicmult + smastery);
 				dam = 1 * (argdam * physmult);
 				pager_printf_color(ch,
 					" &CHooking an arm around the opponent's neck in a clotheline,\n\r");
@@ -7819,12 +7843,13 @@ do_skills(CHAR_DATA * ch, char *argument) {
 			}
 		}
 		if (!str_cmp(arg, "forcewave")) {
+			smastery = (float) ch->masteryforcewave / 1000;
 			pager_printf_color(ch,
 				"&B------------------&CFORCEWAVE&B-------------------\n\r");
 			pager_printf_color(ch,
 				"\n\r");
 			if (ch->skillforcewave >= 1) {
-				argdam = (23 + (ch->forcewavepower * 2)) * kicmult;
+				argdam = (23 + (ch->forcewavepower * 2)) * (kicmult + smastery);
 				dam = 1 * (argdam * kimult);
 				pager_printf_color(ch,
 					" &CA psionic blast of energy, capable of lifting entire\n\r");
@@ -7851,12 +7876,13 @@ do_skills(CHAR_DATA * ch, char *argument) {
 			}
 		}
 		if (!str_cmp(arg, "shockwave")) {
+			smastery = (float) ch->masteryshockwave / 1000;
 			pager_printf_color(ch,
 				"&B------------------&CSHOCKWAVE&B-------------------\n\r");
 			pager_printf_color(ch,
 				"\n\r");
 			if (ch->skillshockwave >= 1) {
-				argdam = (55 + (ch->shockwavepower * 5)) * kicmult;
+				argdam = (55 + (ch->shockwavepower * 5)) * (kicmult + smastery);
 				dam = 1 * (argdam * kimult);
 				pager_printf_color(ch,
 					" &CPsionic forces powerful enough to crack planets\n\r");

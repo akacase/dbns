@@ -2952,6 +2952,7 @@ void do_bash( CHAR_DATA *ch, char *argument )
 	float	kicmult = 0;
 	int		hitcheck = 0;
 	int		adjcost = 0;
+	float	smastery = 0;
 
 	if (IS_NPC(ch) && is_split(ch)) {
 		if (!ch->master)
@@ -2974,6 +2975,7 @@ void do_bash( CHAR_DATA *ch, char *argument )
 		kilimit = ch->train / 10000;
 		physmult = (float) get_curr_str(ch) / 950 + 1;
 		kicmult = (float) kilimit / 100 + 1;
+		smastery = (float) ch->masterybash / 1000;
 	}
 	if (!IS_NPC(ch)) {
 		adjcost = 16 * (ch->bashpower - ch->basheffic);
@@ -2992,17 +2994,19 @@ void do_bash( CHAR_DATA *ch, char *argument )
 	WAIT_STATE(ch, 8);
 	if (hitcheck <= 95) {
 		if (!IS_NPC(ch)) {
-			argdam = ((number_range(10, 12) + ch->bashpower) * kicmult);
+			argdam = ((number_range(10, 12) + ch->bashpower) * (kicmult + smastery));
 			dam = get_attmod(ch, victim) * (argdam * physmult);
 			stat_train(ch, "str", 10);
 			ch->train += 5;
 			ch->strikemastery += 3;
+			ch->masterybash += 1;
 			if (ch->strikemastery >= (ch->sspgain * 100)) {
 				pager_printf_color(ch,
 					"&CYou gained 5 Skill Points!\n\r");
 				ch->sptotal += 5;
 				ch->sspgain += 1;
-				}
+			}
+			
 		}
 		if (IS_NPC(ch)) {
 			dam = get_attmod(ch, victim) * (number_range(10, 12) + (get_curr_str(ch) / 40));

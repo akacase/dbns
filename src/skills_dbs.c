@@ -3103,6 +3103,7 @@ do_punch(CHAR_DATA * ch, char *argument)
 	float	kicmult = 0;
 	int		hitcheck = 0;
 	int		adjcost = 0;
+	float	smastery = 0;
 	
 	if (IS_NPC(ch) && is_split(ch)) {
 		if (!ch->master)
@@ -3125,6 +3126,7 @@ do_punch(CHAR_DATA * ch, char *argument)
 		kilimit = ch->train / 10000;
 		physmult = (float) get_curr_str(ch) / 950 + 1;
 		kicmult = (float) kilimit / 100 + 1;
+		smastery = (float) ch->masterypunch / 1000;
 	}
 	if (!IS_NPC(ch)) {
 		adjcost = 1 * (ch->punchpower - ch->puncheffic);
@@ -3142,10 +3144,11 @@ do_punch(CHAR_DATA * ch, char *argument)
 	WAIT_STATE(ch, 6);
 	if (hitcheck <= 95) {
 		if (!IS_NPC(ch)) {
-			argdam = ((number_range(2, 4) + ch->punchpower) * kicmult);
+			argdam = ((number_range(2, 4) + ch->punchpower) * (kicmult + smastery));
 			dam = get_attmod(ch, victim) * (argdam * physmult);
 			stat_train(ch, "str", 5);
 			ch->train += 1;
+			ch->masterypunch += 1;
 			ch->strikemastery += 1;
 			if (ch->strikemastery >= (ch->sspgain * 100)) {
 				pager_printf_color(ch,
@@ -6126,6 +6129,7 @@ do_energy_ball(CHAR_DATA * ch, char *argument)
 	float	kicmult= 0;
 	int		hitcheck = 0;
 	int		adjcost = 0;
+	float	smastery = 0;
 	
 
 	sh_int 	z = get_aura(ch);
@@ -6147,6 +6151,7 @@ do_energy_ball(CHAR_DATA * ch, char *argument)
 		kilimit = ch->train / 10000;
 		kimult = (float) get_curr_int(ch) / 1000 + 1;
 		kicmult = (float) kilimit / 100 + 1;
+		smastery = (float) ch->masteryenergy_ball / 1000;
 	}
 	if ((victim = who_fighting(ch)) == NULL) {
 		send_to_char("You aren't fighting anyone.\n\r", ch);
@@ -6169,10 +6174,11 @@ do_energy_ball(CHAR_DATA * ch, char *argument)
 
 	if (hitcheck <= 95) {
 		if (!IS_NPC(ch)) {
-			argdam = ((number_range(2, 4) + ch->energy_ballpower) * kicmult);
+			argdam = ((number_range(2, 4) + ch->energy_ballpower) * (kicmult + smastery));
 			dam = get_attmod(ch, victim) * (argdam * kimult);
 			stat_train(ch, "int", 5);
 			ch->train += 1;
+			ch->masteryenergy_ball += 1;
 			ch->energymastery += 1;
 			if (ch->energymastery >= (ch->kspgain * 100)) {
 				pager_printf_color(ch,
@@ -6219,6 +6225,7 @@ void do_energy_disc( CHAR_DATA *ch, char *argument )
 	int		kilimit = 0;
 	int		hitcheck = 0;
 	int		adjcost = 0;
+	float	smastery = 0;
 	
 	if (IS_NPC(ch) && is_split(ch)) {
 		if (!ch->master)
@@ -6253,15 +6260,17 @@ void do_energy_disc( CHAR_DATA *ch, char *argument )
 		kilimit = ch->train / 10000;
 		kimult = (float) get_curr_int(ch) / 1000 + 1;
 		kicmult = (float) kilimit / 100 + 1;
+		smastery = (float) ch->masteryenergy_disc / 1000;
 	}
 	hitcheck = number_range(1, 100);
 	WAIT_STATE(ch, 8);
 	if (hitcheck <= 95) {
 		if (!IS_NPC(ch)) {
-			argdam = ((number_range(12, 14) + ch->energy_discpower) * kicmult);
+			argdam = ((number_range(12, 14) + ch->energy_discpower) * (kicmult + smastery));
 			dam = get_attmod(ch, victim) * (argdam * kimult);
 			stat_train(ch, "int", 10);
 			ch->train += 10;
+			ch->masteryenergy_disc += 1;
 			ch->energymastery += 2;
 			if (ch->energymastery >= (ch->kspgain * 100)) {
 				pager_printf_color(ch,
@@ -6311,6 +6320,7 @@ void do_forcewave( CHAR_DATA *ch, char *argument )
 	int		kilimit = 0;
 	int		hitcheck = 0;
 	int		adjcost = 0;
+	float	smastery = 0;
 
 	if (IS_NPC(ch) && is_split(ch)) {
 		if (!ch->master)
@@ -6345,15 +6355,17 @@ void do_forcewave( CHAR_DATA *ch, char *argument )
 		kilimit = ch->train / 10000;
 		kimult = (float) get_curr_int(ch) / 1000 + 1;
 		kicmult = (float) kilimit / 100 + 1;
+		smastery = (float) ch->masteryforcewave / 1000;
 	}
 	hitcheck = number_range(1, 100);
 	WAIT_STATE(ch, 8);
 	if (hitcheck <= 95) {
 		if (!IS_NPC(ch)) {
-			argdam = ((number_range(20, 25) + (ch->forcewavepower * 2)) * kicmult);
+			argdam = ((number_range(20, 25) + (ch->forcewavepower * 2)) * (kicmult + smastery));
 			dam = get_attmod(ch, victim) * (argdam * kimult);
 			stat_train(ch, "int", 13);
 			ch->train += 13;
+			ch->masteryforcewave += 1;
 			ch->energymastery += 4;
 			if (ch->energymastery >= (ch->kspgain * 100)) {
 				pager_printf_color(ch,
@@ -6403,6 +6415,7 @@ void do_concentrated_beam( CHAR_DATA *ch, char *argument )
 	int		kilimit = 0;
 	int		hitcheck = 0;
 	int		adjcost = 0;
+	float	smastery = 0;
 
 	if (IS_NPC(ch) && is_split(ch)) {
 		if (!ch->master)
@@ -6437,16 +6450,18 @@ void do_concentrated_beam( CHAR_DATA *ch, char *argument )
 		kilimit = ch->train / 10000;
 		kimult = (float) get_curr_int(ch) / 1000 + 1;
 		kicmult = (float) kilimit / 100 + 1;
+		smastery = (float) ch->masteryconcentrated_beam / 1000;
 	}
 	hitcheck = number_range(1, 100);
 	WAIT_STATE(ch, 8);
 	if (hitcheck <= 95) {
 		if (!IS_NPC(ch)) {
-			argdam = ((number_range(18, 24) + (ch->concentrated_beampower * 2)) * kicmult);
+			argdam = ((number_range(18, 24) + (ch->concentrated_beampower * 2)) * (kicmult + smastery));
 			dam = get_attmod(ch, victim) * (argdam * kimult);
 			stat_train(ch, "int", 14);
 			ch->train += 14;
 			ch->energymastery += 3;
+			ch->masteryconcentrated_beam += 1;
 			if (ch->energymastery >= (ch->kspgain * 100)) {
 				pager_printf_color(ch,
 					"&CYou gained 5 Skill Points!\n\r");
@@ -6495,6 +6510,7 @@ void do_energybeam( CHAR_DATA *ch, char *argument )
 	int		kilimit = 0;
 	int		hitcheck = 0;
 	int		adjcost = 0;
+	float	smastery = 0;
 	
 	if (IS_NPC(ch) && is_split(ch)) {
 		if (!ch->master)
@@ -6529,15 +6545,17 @@ void do_energybeam( CHAR_DATA *ch, char *argument )
 		kilimit = ch->train / 10000;
 		kimult = (float) get_curr_int(ch) / 1000 + 1;
 		kicmult = (float) kilimit / 100 + 1;
+		smastery = (float) ch->masteryenergybeam / 1000;
 	}
 	hitcheck = number_range(1, 100);
 	WAIT_STATE(ch, 8);
 	if (hitcheck <= 95) {
 		if (!IS_NPC(ch)) {
-			argdam = ((number_range(6, 9) + ch->energybeampower) * kicmult);
+			argdam = ((number_range(6, 9) + ch->energybeampower) * (kicmult + smastery));
 			dam = get_attmod(ch, victim) * (argdam * kimult);
 			stat_train(ch, "int", 10);
 			ch->train += 10;
+			ch->masteryenergybeam += 1;
 			ch->energymastery += 2;
 			if (ch->energymastery >= (ch->kspgain * 100)) {
 				pager_printf_color(ch,
@@ -6587,6 +6605,7 @@ void do_lariat( CHAR_DATA *ch, char *argument )
 	int		kilimit = 0;
 	int		hitcheck = 0;
 	int		adjcost = 0;
+	float	smastery = 0;
 	
 	if (IS_NPC(ch) && is_split(ch)) {
 		if (!ch->master)
@@ -6621,15 +6640,17 @@ void do_lariat( CHAR_DATA *ch, char *argument )
 		kilimit = ch->train / 10000;
 		physmult = (float) get_curr_str(ch) / 950 + 1;
 		kicmult = (float) kilimit / 100 + 1;
+		smastery = (float) ch->masterylariat / 1000;
 	}
 	hitcheck = number_range(1, 100);
 	WAIT_STATE(ch, 8);
 	if (hitcheck <= 95) {
 		if (!IS_NPC(ch)) {
-			argdam = ((number_range(45, 50) + (ch->lariatpower * 5)) * kicmult);
+			argdam = ((number_range(45, 50) + (ch->lariatpower * 5)) * (kicmult + smastery));
 			dam = get_attmod(ch, victim) * (argdam * physmult);
 			stat_train(ch, "str", 16);
 			ch->train += 16;
+			ch->masterylariat += 1;
 			ch->strikemastery += 5;
 			if (ch->strikemastery >= (ch->sspgain * 100)) {
 				pager_printf_color(ch,
@@ -6688,6 +6709,7 @@ void do_ecliptic_meteor( CHAR_DATA *ch, char *argument )
 	int		kilimit = 0;
 	int		hitcheck = 0;
 	int		adjcost = 0;
+	float	smastery = 0;
 	
 	if (IS_NPC(ch) && is_split(ch)) {
 		if (!ch->master)
@@ -6722,15 +6744,17 @@ void do_ecliptic_meteor( CHAR_DATA *ch, char *argument )
 		kilimit = ch->train / 10000;
 		kimult = (float) get_curr_int(ch) / 1000 + 1;
 		kicmult = (float) kilimit / 100 + 1;
+		smastery = (float) ch->masteryecliptic_meteor / 1000;
 	}
 	hitcheck = number_range(1, 100);
 	WAIT_STATE(ch, 8);
 	if (hitcheck <= 95) {
 		if (!IS_NPC(ch)) {
-			argdam = ((number_range(100, 125) + (ch->ecliptic_meteorpower * 11)) * kicmult);
+			argdam = ((number_range(100, 125) + (ch->ecliptic_meteorpower * 11)) * (kicmult + smastery));
 			dam = get_attmod(ch, victim) * (argdam * kimult);
 			stat_train(ch, "int", 40);
 			ch->train += 40;
+			ch->masteryecliptic_meteor += 1;
 			ch->energymastery += 6;
 			if (ch->energymastery >= (ch->kspgain * 100)) {
 				pager_printf_color(ch,
@@ -6789,6 +6813,7 @@ void do_gigantic_meteor( CHAR_DATA *ch, char *argument )
 	int		kilimit = 0;
 	int		hitcheck = 0;
 	int		adjcost = 0;
+	float	smastery = 0;
 	
 	if (IS_NPC(ch) && is_split(ch)) {
 		if (!ch->master)
@@ -6823,15 +6848,17 @@ void do_gigantic_meteor( CHAR_DATA *ch, char *argument )
 		kilimit = ch->train / 10000;
 		kimult = (float) get_curr_int(ch) / 1000 + 1;
 		kicmult = (float) kilimit / 100 + 1;
+		smastery = (float) ch->masterygigantic_meteor / 1000;
 	}
 	hitcheck = number_range(1, 100);
 	WAIT_STATE(ch, 8);
 	if (hitcheck <= 95) {
 		if (!IS_NPC(ch)) {
-			argdam = ((number_range(70, 75) + (ch->gigantic_meteorpower * 7)) * kicmult);
+			argdam = ((number_range(70, 75) + (ch->gigantic_meteorpower * 7)) * (kicmult + smastery));
 			dam = get_attmod(ch, victim) * (argdam * kimult);
 			stat_train(ch, "int", 12);
 			ch->train += 12;
+			ch->masterygigantic_meteor += 1;
 			ch->energymastery += 5;
 			if (ch->energymastery >= (ch->kspgain * 100)) {
 				pager_printf_color(ch,
@@ -6890,6 +6917,7 @@ void do_meteor( CHAR_DATA *ch, char *argument )
 	int		kilimit = 0;
 	int		hitcheck = 0;
 	int		adjcost = 0;
+	float	smastery = 0;
 	
 	if (IS_NPC(ch) && is_split(ch)) {
 		if (!ch->master)
@@ -6924,15 +6952,17 @@ void do_meteor( CHAR_DATA *ch, char *argument )
 		kilimit = ch->train / 10000;
 		kimult = (float) get_curr_int(ch) / 1000 + 1;
 		kicmult = (float) kilimit / 100 + 1;
+		smastery = (float) ch->masterymeteor / 1000;
 	}
 	hitcheck = number_range(1, 100);
 	WAIT_STATE(ch, 8);
 	if (hitcheck <= 95) {
 		if (!IS_NPC(ch)) {
-			argdam = ((number_range(30, 35) + (ch->meteorpower * 3)) * kicmult);
+			argdam = ((number_range(30, 35) + (ch->meteorpower * 3)) * (kicmult + smastery));
 			dam = get_attmod(ch, victim) * (argdam * kimult);
 			stat_train(ch, "int", 8);
 			ch->train += 8;
+			ch->masterymeteor += 1;
 			ch->energymastery += 4;
 			if (ch->energymastery >= (ch->kspgain * 100)) {
 				pager_printf_color(ch,
@@ -6991,6 +7021,7 @@ void do_crusherball( CHAR_DATA *ch, char *argument )
 	int		kilimit = 0;
 	int		hitcheck = 0;
 	int		adjcost = 0;
+	float	smastery = 0;
 	
 	if (IS_NPC(ch) && is_split(ch)) {
 		if (!ch->master)
@@ -7025,15 +7056,17 @@ void do_crusherball( CHAR_DATA *ch, char *argument )
 		kilimit = ch->train / 10000;
 		kimult = (float) get_curr_int(ch) / 1000 + 1;
 		kicmult = (float) kilimit / 100 + 1;
+		smastery = (float) ch->masterycrusherball / 1000;
 	}
 	hitcheck = number_range(1, 100);
 	WAIT_STATE(ch, 8);
 	if (hitcheck <= 95) {
 		if (!IS_NPC(ch)) {
-			argdam = ((number_range(12, 14) + ch->crusherballpower) * kicmult);
+			argdam = ((number_range(12, 14) + ch->crusherballpower) * (kicmult + smastery));
 			dam = get_attmod(ch, victim) * (argdam * kimult);
 			stat_train(ch, "int", 5);
 			ch->train += 5;
+			ch->masterycrusherball += 1;
 			ch->energymastery += 2;
 			if (ch->energymastery >= (ch->kspgain * 100)) {
 				pager_printf_color(ch,
@@ -7093,6 +7126,7 @@ void do_haymaker( CHAR_DATA *ch, char *argument )
 	int		kilimit = 0;
 	int		hitcheck = 0;
 	int		adjcost = 0;
+	float	smastery = 0;
 
 	if (IS_NPC(ch) && is_split(ch)) {
 		if (!ch->master)
@@ -7127,16 +7161,18 @@ void do_haymaker( CHAR_DATA *ch, char *argument )
 		kilimit = ch->train / 10000;
 		physmult = (float) get_curr_str(ch) / 950 + 1;
 		kicmult = (float) kilimit / 100 + 1;
+		smastery = (float) ch->masteryhaymaker / 1000;
 	}
 	hitcheck = number_range(1, 100);
 
 	WAIT_STATE(ch, 8);
 	if (hitcheck <= 95) {
 		if (!IS_NPC(ch)) {
-			argdam = ((number_range(6, 9) + ch->haymakerpower) * kicmult);
+			argdam = ((number_range(6, 9) + ch->haymakerpower) * (kicmult + smastery));
 			dam = get_attmod(ch, victim) * (argdam * physmult);
 			stat_train(ch, "str", 12);
 			ch->train += 12;
+			ch->masteryhaymaker += 1;
 			ch->strikemastery += 2;
 			if (ch->strikemastery >= (ch->sspgain * 100)) {
 				pager_printf_color(ch,
@@ -7195,6 +7231,7 @@ void do_collide( CHAR_DATA *ch, char *argument )
 	int		kilimit = 0;
 	int		hitcheck = 0;
 	int		adjcost = 0;
+	float	smastery = 0;
 	
 	if (IS_NPC(ch) && is_split(ch)) {
 		if (!ch->master)
@@ -7229,15 +7266,17 @@ void do_collide( CHAR_DATA *ch, char *argument )
 		kilimit = ch->train / 10000;
 		physmult = (float) get_curr_str(ch) / 950 + 1;
 		kicmult = (float) kilimit / 100 + 1;
+		smastery = (float) ch->masterycollide / 1000;
 	}
 	hitcheck = number_range(1, 100);
 	WAIT_STATE(ch, 8);
 	if (hitcheck <= 95) {
 		if (!IS_NPC(ch)) {
-			argdam = ((number_range(18, 22) + (ch->collidepower * 2)) * kicmult);
+			argdam = ((number_range(18, 22) + (ch->collidepower * 2)) * (kicmult + smastery));
 			dam = get_attmod(ch, victim) * (argdam * physmult);
 			stat_train(ch, "str", 14);
 			ch->train += 14;
+			ch->masterycollide += 1;
 			ch->strikemastery += 4;
 			if (ch->strikemastery >= (ch->sspgain * 100)) {
 				pager_printf_color(ch,
@@ -7297,6 +7336,7 @@ do_kamehameha(CHAR_DATA * ch, char *argument)
 	int		kilimit = 0;
 	int		hitcheck = 0;
 	int		adjcost = 0;
+	float	smastery = 0;
 	
 	if (IS_NPC(ch) && is_split(ch)) {
 		if (!ch->master)
@@ -7315,6 +7355,7 @@ do_kamehameha(CHAR_DATA * ch, char *argument)
 		kilimit = ch->train / 10000;
 		kimult = (float) get_curr_int(ch) / 1000 + 1;
 		kicmult = (float) kilimit / 100 + 1;
+		smastery = (float) ch->masterykamehameha / 1000;
 	}
 	if ((victim = who_fighting(ch)) == NULL) {
 		send_to_char("You aren't fighting anyone.\n\r", ch);
@@ -7336,10 +7377,11 @@ do_kamehameha(CHAR_DATA * ch, char *argument)
 	WAIT_STATE(ch, 8);
 	if (hitcheck <= 95) {
 		if (!IS_NPC(ch)) {
-			argdam = ((number_range(50, 60) + (ch->kamehamehapower * 5)) * kicmult);
+			argdam = ((number_range(50, 60) + (ch->kamehamehapower * 5)) * (kicmult + smastery));
 			dam = get_attmod(ch, victim) * (argdam * kimult);
 			stat_train(ch, "int", 16);
 			ch->train += 16;
+			ch->masterykamehameha += 1;
 			ch->energymastery += 5;
 			if (ch->energymastery >= (ch->kspgain * 100)) {
 				pager_printf_color(ch,
@@ -7817,6 +7859,7 @@ do_masenko(CHAR_DATA * ch, char *argument)
 	int		kilimit = 0;
 	int		hitcheck = 0;
 	int		adjcost = 0;
+	float	smastery = 0;
 	
 	if (IS_NPC(ch) && is_split(ch)) {
 		if (!ch->master)
@@ -7839,6 +7882,7 @@ do_masenko(CHAR_DATA * ch, char *argument)
 		kilimit = ch->train / 10000;
 		kimult = (float) get_curr_int(ch) / 1000 + 1;
 		kicmult = (float) kilimit / 100 + 1;
+		smastery = (float) ch->masterymasenko / 1000;
 	}
 	if (!IS_NPC(ch)) {
 		adjcost = 60 * (ch->masenkopower - ch->masenkoeffic);
@@ -7856,10 +7900,11 @@ do_masenko(CHAR_DATA * ch, char *argument)
 	WAIT_STATE(ch, 8);
 	if (hitcheck <= 95) {
 		if (!IS_NPC(ch)) {
-			argdam = ((number_range(30, 35) + (ch->masenkopower * 3)) * kicmult);
+			argdam = ((number_range(30, 35) + (ch->masenkopower * 3)) * (kicmult + smastery));
 			dam = get_attmod(ch, victim) * (argdam * kimult);
 			stat_train(ch, "int", 14);
 			ch->train += 14;
+			ch->masterymasenko += 1;
 			ch->energymastery += 4;
 			if (ch->energymastery >= (ch->kspgain * 100)) {
 				pager_printf_color(ch,
@@ -7916,6 +7961,7 @@ do_sbc(CHAR_DATA * ch, char *argument)
 	float	kicmult = 0;
 	int		hitcheck = 0;
 	int		adjcost = 0;
+	float	smastery = 0;
 	
 	if (IS_NPC(ch) && is_split(ch)) {
 		if (!ch->master)
@@ -7938,6 +7984,7 @@ do_sbc(CHAR_DATA * ch, char *argument)
 		kilimit = ch->train / 10000;
 		kimult = (float) get_curr_int(ch) / 1000 + 1;
 		kicmult = (float) kilimit / 100 + 1;
+		smastery = (float) ch->masterysbc / 1000;
 	}
 	if (!IS_NPC(ch)) {
 		adjcost = 110 * (ch->sbcpower - ch->sbceffic);
@@ -7955,10 +8002,11 @@ do_sbc(CHAR_DATA * ch, char *argument)
 	WAIT_STATE(ch, 8);
 	if (hitcheck <= 95) {
 		if (!IS_NPC(ch)) {
-			argdam = ((number_range(55, 65) + (ch->sbcpower * 5)) * kicmult);
+			argdam = ((number_range(55, 65) + (ch->sbcpower * 5)) * (kicmult + smastery));
 			dam = get_attmod(ch, victim) * (argdam * kimult);
 			stat_train(ch, "int", 18);
 			ch->train += 18;
+			ch->masterysbc += 1;
 			ch->energymastery += 5;
 			if (ch->energymastery >= (ch->kspgain * 100)) {
 				pager_printf_color(ch,
@@ -8430,6 +8478,7 @@ do_dd(CHAR_DATA * ch, char *argument)
 	float	kicmult = 0;
 	int		hitcheck = 0;
 	int		adjcost = 0;
+	float	smastery = 0;
 	
 	if (IS_NPC(ch) && is_split(ch)) {
 		if (!ch->master)
@@ -8452,6 +8501,7 @@ do_dd(CHAR_DATA * ch, char *argument)
 		kilimit = ch->train / 10000;
 		kimult = (float) get_curr_int(ch) / 1000 + 1;
 		kicmult = (float) kilimit / 100 + 1;
+		smastery = (float) ch->masterydestructo_disc / 1000;
 	}
 	if (!IS_NPC(ch)) {
 		adjcost = 55 * (ch->destructo_discpower - ch->destructo_disceffic);
@@ -8469,10 +8519,11 @@ do_dd(CHAR_DATA * ch, char *argument)
 	WAIT_STATE(ch, 8);
 	if (hitcheck <= 95) {
 		if (!IS_NPC(ch)) {
-			argdam = ((number_range(28, 28) + (ch->destructo_discpower * 2)) * kicmult);
+			argdam = ((number_range(28, 28) + (ch->destructo_discpower * 2)) * (kicmult + smastery));
 			dam = get_attmod(ch, victim) * (argdam * kimult);
 			stat_train(ch, "int", 13);
 			ch->train += 13;
+			ch->masterydestructo_disc += 1;
 			ch->energymastery += 4;
 			if (ch->energymastery >= (ch->kspgain * 100)) {
 				pager_printf_color(ch,
@@ -9304,6 +9355,7 @@ do_death_ball(CHAR_DATA * ch, char *argument)
 	float	kicmult = 0;
 	int		hitcheck = 0;
 	int		adjcost = 0;
+	float	smastery = 0;
 
 	if (IS_NPC(ch) && is_split(ch)) {
 		if (!ch->master)
@@ -9326,6 +9378,7 @@ do_death_ball(CHAR_DATA * ch, char *argument)
 		kilimit = ch->train / 10000;
 		kimult = (float) get_curr_int(ch) / 1000 + 1;
 		kicmult = (float) kilimit / 100 + 1;
+		smastery = (float) ch->masterydeath_ball / 1000;
 	}
 	if (!IS_NPC(ch)) {
 		adjcost = 1000 * (ch->death_ballpower - ch->death_balleffic);
@@ -9344,10 +9397,11 @@ do_death_ball(CHAR_DATA * ch, char *argument)
 	WAIT_STATE(ch, 8);
 	if (hitcheck <= 95) {
 		if (!IS_NPC(ch)) {
-			argdam = ((number_range(100, 125) + (ch->death_ballpower * 11)) * kicmult);
+			argdam = ((number_range(100, 125) + (ch->death_ballpower * 11)) * (kicmult + smastery));
 			dam = get_attmod(ch, victim) * (argdam * kimult);
 			stat_train(ch, "int", 40);
 			ch->train += 40;
+			ch->masterydeath_ball += 1;
 			ch->energymastery += 6;
 			if (ch->energymastery >= (ch->kspgain * 100)) {
 				pager_printf_color(ch,
@@ -9397,6 +9451,7 @@ do_eye_beam(CHAR_DATA * ch, char *argument)
 	float	kicmult = 0;
 	int		hitcheck = 0;
 	int		adjcost = 0;
+	float	smastery = 0;
 	
 	if (IS_NPC(ch) && is_split(ch)) {
 		if (!ch->master)
@@ -9419,6 +9474,7 @@ do_eye_beam(CHAR_DATA * ch, char *argument)
 		kilimit = ch->train / 10000;
 		kimult = (float) get_curr_int(ch) / 1000 + 1;
 		kicmult = (float) kilimit / 100 + 1;
+		smastery = (float) ch->masteryeye_beam / 1000;
 	}
 	if (!IS_NPC(ch)) {
 		adjcost = 12 * (ch->eye_beampower - ch->eye_beameffic);
@@ -9438,10 +9494,11 @@ do_eye_beam(CHAR_DATA * ch, char *argument)
 	WAIT_STATE(ch, 8);
 	if (hitcheck <= 95) {
 		if (!IS_NPC(ch)) {
-			argdam = ((number_range(12, 14) + ch->eye_beampower) * kicmult);
+			argdam = ((number_range(12, 14) + ch->eye_beampower) * (kicmult + smastery));
 			dam = get_attmod(ch, victim) * (argdam * kimult);
 			stat_train(ch, "int", 10);
 			ch->train += 10;
+			ch->masteryeye_beam += 1;
 			ch->energymastery += 3;
 			if (ch->energymastery >= (ch->kspgain * 100)) {
 				pager_printf_color(ch,
@@ -9489,6 +9546,7 @@ do_finger_beam(CHAR_DATA * ch, char *argument)
 	float	kicmult = 0;
 	int		hitcheck = 0;
 	int		adjcost = 0;
+	float	smastery = 0;
 	
 	if (IS_NPC(ch) && is_split(ch)) {
 		if (!ch->master)
@@ -9511,6 +9569,7 @@ do_finger_beam(CHAR_DATA * ch, char *argument)
 		kilimit = ch->train / 10000;
 		kimult = (float) get_curr_int(ch) / 1000 + 1;
 		kicmult = (float) kilimit / 100 + 1;
+		smastery = (float) ch->masteryfinger_beam / 1000;
 	}
 	if (!IS_NPC(ch)) {
 		adjcost = 75 * (ch->finger_beampower - ch->finger_beameffic);
@@ -9530,10 +9589,11 @@ do_finger_beam(CHAR_DATA * ch, char *argument)
 	WAIT_STATE(ch, 8);
 	if (hitcheck <= 95) {
 		if (!IS_NPC(ch)) {
-			argdam = ((number_range(60, 65) + (ch->finger_beampower * 6)) * kicmult);
+			argdam = ((number_range(60, 65) + (ch->finger_beampower * 6)) * (kicmult + smastery));
 			dam = get_attmod(ch, victim) * (argdam * kimult);
 			stat_train(ch, "int", 16);
 			ch->train += 16;
+			ch->masteryfinger_beam += 1;
 			ch->energymastery += 5;
 			if (ch->energymastery >= (ch->kspgain * 100)) {
 				pager_printf_color(ch,
@@ -11646,6 +11706,7 @@ do_destructive_wave(CHAR_DATA * ch, char *argument)
 	float	kicmult = 0;
 	int		hitcheck = 0;
 	int		adjcost = 0;
+	float	smastery = 0;
 	
 	if (IS_NPC(ch) && is_split(ch)) {
 		if (!ch->master)
@@ -11668,6 +11729,7 @@ do_destructive_wave(CHAR_DATA * ch, char *argument)
 		kilimit = ch->train / 10000;
 		kimult = (float) get_curr_int(ch) / 1000 + 1;
 		kicmult = (float) kilimit / 100 + 1;
+		smastery = (float) ch->masterydestructive_wave / 1000;
 	}
 	if (!IS_NPC(ch)) {
 		adjcost = 60 * (ch->destructive_wavepower - ch->destructive_waveeffic);
@@ -11687,10 +11749,11 @@ do_destructive_wave(CHAR_DATA * ch, char *argument)
 	WAIT_STATE(ch, 8);
 	if (hitcheck <= 95) {
 		if (!IS_NPC(ch)) {
-			argdam = ((number_range(26, 28) + (ch->destructive_wavepower * 2)) * kicmult);
+			argdam = ((number_range(26, 28) + (ch->destructive_wavepower * 2)) * (kicmult + smastery));
 			dam = get_attmod(ch, victim) * (argdam * kimult);
 			stat_train(ch, "int", 10);
 			ch->train += 5;
+			ch->masterydestructive_wave += 1;
 			ch->energymastery += 4;
 			if (ch->energymastery >= (ch->kspgain * 100)) {
 				pager_printf_color(ch,
@@ -11913,6 +11976,7 @@ do_shockwave(CHAR_DATA * ch, char *argument)
 	float	kicmult = 0;
 	int		hitcheck = 0;
 	int		adjcost = 0;
+	float	smastery = 0;
 	
 	if (IS_NPC(ch) && is_split(ch)) {
 		if (!ch->master)
@@ -11935,6 +11999,7 @@ do_shockwave(CHAR_DATA * ch, char *argument)
 		kilimit = ch->train / 10000;
 		kimult = (float) get_curr_int(ch) / 1000 + 1;
 		kicmult = (float) kilimit / 100 + 1;
+		smastery = (float) ch->masteryshockwave / 1000;
 	}
 	if (!IS_NPC(ch)) {
 		adjcost = 70 * (ch->shockwavepower - ch->shockwaveeffic);
@@ -11954,10 +12019,11 @@ do_shockwave(CHAR_DATA * ch, char *argument)
 	WAIT_STATE(ch, 8);
 	if (hitcheck <= 95) {
 		if (!IS_NPC(ch)) {
-			argdam = ((number_range(45, 65) + (ch->shockwavepower * 5)) * kicmult);
+			argdam = ((number_range(45, 65) + (ch->shockwavepower * 5)) * (kicmult + smastery));
 			dam = get_attmod(ch, victim) * (argdam * kimult);
 			stat_train(ch, "int", 17);
 			ch->train += 17;
+			ch->masteryshockwave += 1;
 			ch->energymastery += 5;
 			if (ch->energymastery >= (ch->kspgain * 100)) {
 				pager_printf_color(ch,
@@ -12502,6 +12568,7 @@ do_gallic_gun(CHAR_DATA * ch, char *argument)
 	int		kilimit = 0;
 	int		hitcheck = 0;
 	int		adjcost = 0;
+	float	smastery = 0;
 	
 	if (IS_NPC(ch) && is_split(ch)) {
 		if (!ch->master)
@@ -12520,6 +12587,7 @@ do_gallic_gun(CHAR_DATA * ch, char *argument)
 		kilimit = ch->train / 10000;
 		kimult = (float) get_curr_int(ch) / 1000 + 1;
 		kicmult = (float) kilimit / 100 + 1;
+		smastery = (float) ch->masterygallic_gun / 1000;
 	}
 	if ((victim = who_fighting(ch)) == NULL) {
 		send_to_char("You aren't fighting anyone.\n\r", ch);
@@ -12541,10 +12609,11 @@ do_gallic_gun(CHAR_DATA * ch, char *argument)
 	WAIT_STATE(ch, 8);
 	if (hitcheck <= 95) {
 		if (!IS_NPC(ch)) {
-			argdam = ((number_range(70, 75) + (ch->gallic_gunpower * 7)) * kicmult);
+			argdam = ((number_range(70, 75) + (ch->gallic_gunpower * 7)) * (kicmult + smastery));
 			dam = get_attmod(ch, victim) * (argdam * kimult);
 			stat_train(ch, "int", 16);
 			ch->train += 16;
+			ch->masterygallic_gun += 1;
 			ch->energymastery += 5;
 			if (ch->energymastery >= (ch->kspgain * 100)) {
 				pager_printf_color(ch,
@@ -12991,6 +13060,7 @@ do_makosen(CHAR_DATA * ch, char *argument)
 	int		kilimit = 0;
 	int		hitcheck = 0;
 	int		adjcost = 0;
+	float	smastery = 0;
 	
 	if (IS_NPC(ch) && is_split(ch)) {
 		if (!ch->master)
@@ -13013,6 +13083,7 @@ do_makosen(CHAR_DATA * ch, char *argument)
 		kilimit = ch->train / 10000;
 		kimult = (float) get_curr_int(ch) / 1000 + 1;
 		kicmult = (float) kilimit / 100 + 1;
+		smastery = (float) ch->masterymakosen / 1000;
 	}
 	if (!IS_NPC(ch)) {
 		adjcost = 60 * (ch->makosenpower - ch->makoseneffic);
@@ -13030,10 +13101,11 @@ do_makosen(CHAR_DATA * ch, char *argument)
 	WAIT_STATE(ch, 8);
 	if (hitcheck <= 95) {
 		if (!IS_NPC(ch)) {
-			argdam = ((number_range(40, 42) + (ch->makosenpower * 4)) * kicmult);
+			argdam = ((number_range(40, 42) + (ch->makosenpower * 4)) * (kicmult + smastery));
 			dam = get_attmod(ch, victim) * (argdam * kimult);
 			stat_train(ch, "int", 15);
 			ch->train += 15;
+			ch->masterymakosen += 1;
 			ch->energymastery += 4;
 			if (ch->energymastery >= (ch->kspgain * 100)) {
 				pager_printf_color(ch,
