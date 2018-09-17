@@ -5100,6 +5100,7 @@ do_respec(CHAR_DATA * ch, char *argument)
 		ch->collideeffic = 0;
 		ch->lariatpower = 0;
 		ch->lariateffic = 0;
+		ch->vigoreffect = 0;
 		
 	ch->skilleye_beam = 0;
 	ch->skilldestructive_wave = 0;
