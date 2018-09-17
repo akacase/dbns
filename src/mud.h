@@ -2671,68 +2671,93 @@ struct char_data {
 /* Entries for increasing skill power */
 	int	bashpower;
 	int	basheffic;
+	int	masterybash;
 	int	crusherballpower;
 	int	crusherballeffic;
+	int	masterycrusherball;
 	int	collidepower;
 	int	collideeffic;
+	int	masterycollide;
 	int	concentrated_beampower;
 	int	concentrated_beameffic;
+	int	masteryconcentrated_beam;
 
 	int	death_ballpower;
 	int	death_balleffic;
+	int	masterydeath_ball;
 	int	destructo_discpower;
 	int	destructo_disceffic;
+	int	masterydestructo_disc;
 	int	destructive_wavepower;
 	int	destructive_waveeffic;
+	int	masterydestructive_wave;
 
 	int	ecliptic_meteorpower;
 	int	ecliptic_meteoreffic;
+	int	masteryecliptic_meteor;
 	int	energybeampower;
 	int	energybeameffic;
+	int	masteryenergybeam;
 	int	eye_beampower;
 	int	eye_beameffic;
+	int	masteryeye_beam;
 	int	energy_discpower;
 	int	energy_disceffic;
+	int masteryenergy_disc;
 
 	int	finger_beampower;
 	int	finger_beameffic;
+	int masteryfinger_beam;
 	int	forcewavepower;
 	int	forcewaveeffic;
+	int masteryforcewave;
 
 	int	gigantic_meteorpower;
 	int	gigantic_meteoreffic;
+	int masterygigantic_meteor;
 	int	gallic_gunpower;
 	int	gallic_guneffic;
+	int masterygallic_gun;
 
 	int	haymakerpower;
 	int	haymakereffic;
+	int masteryhaymaker;
 
 	int	kamehamehapower;
 	int	kamehamehaeffic;
+	int masterykamehameha;
 	int	kspgain;
 	int	bspgain;
 
 	int	lariatpower;
 	int	lariateffic;
+	int masterylariat;
 
 	int	meteorpower;
 	int	meteoreffic;
+	int masterymeteor;
 	int	masenkopower;
 	int	masenkoeffic;
+	int masterymasenko;
 	int	makosenpower;
 	int	makoseneffic;
+	int masterymakosen;
 	int	vigoreffec;
 
 	int	punchpower;
 	int	puncheffic;
+	int masterypunch;
 
 	int	sbcpower;
 	int	sbceffic;
+	int masterysbc;
 	int	shockwavepower;
 	int	shockwaveeffic;
+	int masteryshockwave;
 	int	sspgain;	
 	int	energy_ballpower;
 	int	energy_balleffic;
+	int masteryenergy_ball;
 /* Entries for hardcoded skill tree */
 	sh_int	skilleye_beam;
 	sh_int	skilldestructive_wave;
