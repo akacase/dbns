@@ -7074,7 +7074,7 @@ do_skills(CHAR_DATA * ch, char *argument) {
 			}
 		}
 		if (!str_cmp(arg, "energyball")) {
-			smastery = (float) ch->masteryenergy_ball / 1000;
+			smastery = (float) ch->masteryenergy_ball / 10000;
 			pager_printf_color(ch,
 				"&B------------------&CENERGY BALL&B-------------------\n\r");
 			pager_printf_color(ch,
@@ -7107,7 +7107,7 @@ do_skills(CHAR_DATA * ch, char *argument) {
 			}
 		}
 		if (!str_cmp(arg, "crusherball")) {
-			smastery = (float) ch->masterycrusherball / 1000;
+			smastery = (float) ch->masterycrusherball / 10000;
 			pager_printf_color(ch,
 				"&B------------------&CCRUSHER BALL&B-------------------\n\r");
 			pager_printf_color(ch,
@@ -7140,7 +7140,7 @@ do_skills(CHAR_DATA * ch, char *argument) {
 			}
 		}
 		if (!str_cmp(arg, "meteor")) {
-			smastery = (float) ch->masterymeteor / 1000;
+			smastery = (float) ch->masterymeteor / 10000;
 			pager_printf_color(ch,
 				"&B------------------&CMETEOR&B-------------------\n\r");
 			pager_printf_color(ch,
@@ -7173,7 +7173,7 @@ do_skills(CHAR_DATA * ch, char *argument) {
 			}
 		}
 		if (!str_cmp(arg, "giganticmeteor")) {
-			smastery = (float) ch->masterygigantic_meteor / 1000;
+			smastery = (float) ch->masterygigantic_meteor / 10000;
 			pager_printf_color(ch,
 				"&B------------------&CGIGANTIC METEOR&B-------------------\n\r");
 			pager_printf_color(ch,
@@ -7206,7 +7206,7 @@ do_skills(CHAR_DATA * ch, char *argument) {
 			}
 		}
 		if (!str_cmp(arg, "eclipticmeteor")) {
-			smastery = (float) ch->masteryecliptic_meteor / 1000;
+			smastery = (float) ch->masteryecliptic_meteor / 10000;
 			pager_printf_color(ch,
 				"&B------------------&CECLIPTIC METEOR&B-------------------\n\r");
 			pager_printf_color(ch,
@@ -7239,7 +7239,7 @@ do_skills(CHAR_DATA * ch, char *argument) {
 			}
 		}
 		if (!str_cmp(arg, "deathball")) {
-			smastery = (float) ch->masterydeath_ball / 1000;
+			smastery = (float) ch->masterydeath_ball / 10000;
 			pager_printf_color(ch,
 				"&B------------------&CDEATH BALL&B-------------------\n\r");
 			pager_printf_color(ch,
@@ -7274,7 +7274,7 @@ do_skills(CHAR_DATA * ch, char *argument) {
 			}
 		}
 		if (!str_cmp(arg, "energybeam")) {
-			smastery = (float) ch->masteryenergybeam / 1000;
+			smastery = (float) ch->masteryenergybeam / 10000;
 			pager_printf_color(ch,
 				"&B------------------&CENERGY BEAM&B-------------------\n\r");
 			pager_printf_color(ch,
@@ -7305,7 +7305,7 @@ do_skills(CHAR_DATA * ch, char *argument) {
 			}
 		}
 		if (!str_cmp(arg, "eyebeam")) {
-			smastery = (float) ch->masteryeye_beam / 1000;
+			smastery = (float) ch->masteryeye_beam / 10000;
 			pager_printf_color(ch,
 				"&B------------------&CEYE BEAM&B-------------------\n\r");
 			pager_printf_color(ch,
@@ -7338,7 +7338,7 @@ do_skills(CHAR_DATA * ch, char *argument) {
 			}
 		}
 		if (!str_cmp(arg, "masenko")) {
-			smastery = (float) ch->masterymasenko / 1000;
+			smastery = (float) ch->masterymasenko / 10000;
 			pager_printf_color(ch,
 				"&B------------------&CMASENKO&B-------------------\n\r");
 			pager_printf_color(ch,
@@ -7371,7 +7371,7 @@ do_skills(CHAR_DATA * ch, char *argument) {
 			}
 		}
 		if (!str_cmp(arg, "makosen")) {
-			smastery = (float) ch->masterymakosen / 1000;
+			smastery = (float) ch->masterymakosen / 10000;
 			pager_printf_color(ch,
 				"&B------------------&CMAKOSEN&B-------------------\n\r");
 			pager_printf_color(ch,
@@ -7408,7 +7408,7 @@ do_skills(CHAR_DATA * ch, char *argument) {
 			}
 		}
 		if (!str_cmp(arg, "sbc")) {
-			smastery = (float) ch->masterysbc / 1000;
+			smastery = (float) ch->masterysbc / 10000;
 			pager_printf_color(ch,
 				"&B------------------&CSPECIAL BEAM CANNON&B-------------------\n\r");
 			pager_printf_color(ch,
@@ -7443,7 +7443,7 @@ do_skills(CHAR_DATA * ch, char *argument) {
 			}
 		}
 		if (!str_cmp(arg, "concentratedbeam")) {
-			smastery = (float) ch->masteryconcentrated_beam / 1000;
+			smastery = (float) ch->masteryconcentrated_beam / 10000;
 			pager_printf_color(ch,
 				"&B------------------&CCONCENTRATED BEAM&B-------------------\n\r");
 			pager_printf_color(ch,
@@ -7476,7 +7476,7 @@ do_skills(CHAR_DATA * ch, char *argument) {
 			}
 		}
 		if (!str_cmp(arg, "kamehameha")) {
-			smastery = (float) ch->masterykamehameha / 1000;
+			smastery = (float) ch->masterykamehameha / 10000;
 			pager_printf_color(ch,
 				"&B------------------&CKAMEHAMEHA&B-------------------\n\r");
 			pager_printf_color(ch,
@@ -7509,7 +7509,7 @@ do_skills(CHAR_DATA * ch, char *argument) {
 			}
 		}
 		if (!str_cmp(arg, "gallicgun")) {
-			smastery = (float) ch->masterygallic_gun / 1000;
+			smastery = (float) ch->masterygallic_gun / 10000;
 			pager_printf_color(ch,
 				"&B------------------&CGALLIC GUN&B-------------------\n\r");
 			pager_printf_color(ch,
@@ -7542,7 +7542,7 @@ do_skills(CHAR_DATA * ch, char *argument) {
 			}
 		}
 		if (!str_cmp(arg, "fingerbeam")) {
-			smastery = (float) ch->masteryfinger_beam / 1000;
+			smastery = (float) ch->masteryfinger_beam / 10000;
 			pager_printf_color(ch,
 				"&B------------------&CFINGER BEAM&B-------------------\n\r");
 			pager_printf_color(ch,
@@ -7577,7 +7577,7 @@ do_skills(CHAR_DATA * ch, char *argument) {
 			}
 		}
 		if (!str_cmp(arg, "destructodisc")) {
-			smastery = (float) ch->masterydestructo_disc / 1000;
+			smastery = (float) ch->masterydestructo_disc / 10000;
 			pager_printf_color(ch,
 				"&B------------------&CDESTRUCTO DISC&B-------------------\n\r");
 			pager_printf_color(ch,
@@ -7612,7 +7612,7 @@ do_skills(CHAR_DATA * ch, char *argument) {
 			}
 		}
 		if (!str_cmp(arg, "destructivewave")) {
-			smastery = (float) ch->masterydestructive_wave / 1000;
+			smastery = (float) ch->masterydestructive_wave / 10000;
 			pager_printf_color(ch,
 				"&B------------------&CDESTRUCTIVE WAVE&B-------------------\n\r");
 			pager_printf_color(ch,
@@ -7645,7 +7645,7 @@ do_skills(CHAR_DATA * ch, char *argument) {
 			}
 		}
 		if (!str_cmp(arg, "energydisc")) {
-			smastery = (float) ch->masteryenergy_disc / 1000;
+			smastery = (float) ch->masteryenergy_disc / 10000;
 			pager_printf_color(ch,
 				"&B------------------&CENERGY DISC&B-------------------\n\r");
 			pager_printf_color(ch,
@@ -7678,7 +7678,7 @@ do_skills(CHAR_DATA * ch, char *argument) {
 			}
 		}
 		if (!str_cmp(arg, "punch")) {
-			smastery = (float) ch->masterypunch / 1000;
+			smastery = (float) ch->masterypunch / 10000;
 			pager_printf_color(ch,
 				"&B------------------&CPUNCH&B-------------------\n\r");
 			pager_printf_color(ch,
@@ -7711,7 +7711,7 @@ do_skills(CHAR_DATA * ch, char *argument) {
 			}
 		}
 		if (!str_cmp(arg, "haymaker")) {
-			smastery = (float) ch->masteryhaymaker / 1000;
+			smastery = (float) ch->masteryhaymaker / 10000;
 			pager_printf_color(ch,
 				"&B------------------&CHAYMAKER&B-------------------\n\r");
 			pager_printf_color(ch,
@@ -7744,7 +7744,7 @@ do_skills(CHAR_DATA * ch, char *argument) {
 			}
 		}
 		if (!str_cmp(arg, "bash")) {
-			smastery = (float) ch->masterybash / 1000;
+			smastery = (float) ch->masterybash / 10000;
 			pager_printf_color(ch,
 				"&B------------------&CBASH&B-------------------\n\r");
 			pager_printf_color(ch,
@@ -7777,7 +7777,7 @@ do_skills(CHAR_DATA * ch, char *argument) {
 			}
 		}
 		if (!str_cmp(arg, "collide")) {
-			smastery = (float) ch->masterycollide / 1000;
+			smastery = (float) ch->masterycollide / 10000;
 			pager_printf_color(ch,
 				"&B------------------&CCOLLIDE&B-------------------\n\r");
 			pager_printf_color(ch,
@@ -7810,7 +7810,7 @@ do_skills(CHAR_DATA * ch, char *argument) {
 			}
 		}
 		if (!str_cmp(arg, "lariat")) {
-			smastery = (float) ch->masterylariat / 1000;
+			smastery = (float) ch->masterylariat / 10000;
 			pager_printf_color(ch,
 				"&B------------------&CLARIAT&B-------------------\n\r");
 			pager_printf_color(ch,
@@ -7843,7 +7843,7 @@ do_skills(CHAR_DATA * ch, char *argument) {
 			}
 		}
 		if (!str_cmp(arg, "forcewave")) {
-			smastery = (float) ch->masteryforcewave / 1000;
+			smastery = (float) ch->masteryforcewave / 10000;
 			pager_printf_color(ch,
 				"&B------------------&CFORCEWAVE&B-------------------\n\r");
 			pager_printf_color(ch,
@@ -7876,7 +7876,7 @@ do_skills(CHAR_DATA * ch, char *argument) {
 			}
 		}
 		if (!str_cmp(arg, "shockwave")) {
-			smastery = (float) ch->masteryshockwave / 1000;
+			smastery = (float) ch->masteryshockwave / 10000;
 			pager_printf_color(ch,
 				"&B------------------&CSHOCKWAVE&B-------------------\n\r");
 			pager_printf_color(ch,

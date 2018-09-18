@@ -3126,7 +3126,7 @@ do_punch(CHAR_DATA * ch, char *argument)
 		kilimit = ch->train / 10000;
 		physmult = (float) get_curr_str(ch) / 950 + 1;
 		kicmult = (float) kilimit / 100 + 1;
-		smastery = (float) ch->masterypunch / 1000;
+		smastery = (float) ch->masterypunch / 10000;
 	}
 	if (!IS_NPC(ch)) {
 		adjcost = 1 * (ch->punchpower - ch->puncheffic);
@@ -6151,7 +6151,7 @@ do_energy_ball(CHAR_DATA * ch, char *argument)
 		kilimit = ch->train / 10000;
 		kimult = (float) get_curr_int(ch) / 1000 + 1;
 		kicmult = (float) kilimit / 100 + 1;
-		smastery = (float) ch->masteryenergy_ball / 1000;
+		smastery = (float) ch->masteryenergy_ball / 10000;
 	}
 	if ((victim = who_fighting(ch)) == NULL) {
 		send_to_char("You aren't fighting anyone.\n\r", ch);
@@ -6260,7 +6260,7 @@ void do_energy_disc( CHAR_DATA *ch, char *argument )
 		kilimit = ch->train / 10000;
 		kimult = (float) get_curr_int(ch) / 1000 + 1;
 		kicmult = (float) kilimit / 100 + 1;
-		smastery = (float) ch->masteryenergy_disc / 1000;
+		smastery = (float) ch->masteryenergy_disc / 10000;
 	}
 	hitcheck = number_range(1, 100);
 	WAIT_STATE(ch, 8);
@@ -6355,7 +6355,7 @@ void do_forcewave( CHAR_DATA *ch, char *argument )
 		kilimit = ch->train / 10000;
 		kimult = (float) get_curr_int(ch) / 1000 + 1;
 		kicmult = (float) kilimit / 100 + 1;
-		smastery = (float) ch->masteryforcewave / 1000;
+		smastery = (float) ch->masteryforcewave / 10000;
 	}
 	hitcheck = number_range(1, 100);
 	WAIT_STATE(ch, 8);
@@ -6450,7 +6450,7 @@ void do_concentrated_beam( CHAR_DATA *ch, char *argument )
 		kilimit = ch->train / 10000;
 		kimult = (float) get_curr_int(ch) / 1000 + 1;
 		kicmult = (float) kilimit / 100 + 1;
-		smastery = (float) ch->masteryconcentrated_beam / 1000;
+		smastery = (float) ch->masteryconcentrated_beam / 10000;
 	}
 	hitcheck = number_range(1, 100);
 	WAIT_STATE(ch, 8);
@@ -6545,7 +6545,7 @@ void do_energybeam( CHAR_DATA *ch, char *argument )
 		kilimit = ch->train / 10000;
 		kimult = (float) get_curr_int(ch) / 1000 + 1;
 		kicmult = (float) kilimit / 100 + 1;
-		smastery = (float) ch->masteryenergybeam / 1000;
+		smastery = (float) ch->masteryenergybeam / 10000;
 	}
 	hitcheck = number_range(1, 100);
 	WAIT_STATE(ch, 8);
@@ -6640,7 +6640,7 @@ void do_lariat( CHAR_DATA *ch, char *argument )
 		kilimit = ch->train / 10000;
 		physmult = (float) get_curr_str(ch) / 950 + 1;
 		kicmult = (float) kilimit / 100 + 1;
-		smastery = (float) ch->masterylariat / 1000;
+		smastery = (float) ch->masterylariat / 10000;
 	}
 	hitcheck = number_range(1, 100);
 	WAIT_STATE(ch, 8);
@@ -6744,7 +6744,7 @@ void do_ecliptic_meteor( CHAR_DATA *ch, char *argument )
 		kilimit = ch->train / 10000;
 		kimult = (float) get_curr_int(ch) / 1000 + 1;
 		kicmult = (float) kilimit / 100 + 1;
-		smastery = (float) ch->masteryecliptic_meteor / 1000;
+		smastery = (float) ch->masteryecliptic_meteor / 10000;
 	}
 	hitcheck = number_range(1, 100);
 	WAIT_STATE(ch, 8);
@@ -6848,7 +6848,7 @@ void do_gigantic_meteor( CHAR_DATA *ch, char *argument )
 		kilimit = ch->train / 10000;
 		kimult = (float) get_curr_int(ch) / 1000 + 1;
 		kicmult = (float) kilimit / 100 + 1;
-		smastery = (float) ch->masterygigantic_meteor / 1000;
+		smastery = (float) ch->masterygigantic_meteor / 10000;
 	}
 	hitcheck = number_range(1, 100);
 	WAIT_STATE(ch, 8);
@@ -6952,7 +6952,7 @@ void do_meteor( CHAR_DATA *ch, char *argument )
 		kilimit = ch->train / 10000;
 		kimult = (float) get_curr_int(ch) / 1000 + 1;
 		kicmult = (float) kilimit / 100 + 1;
-		smastery = (float) ch->masterymeteor / 1000;
+		smastery = (float) ch->masterymeteor / 10000;
 	}
 	hitcheck = number_range(1, 100);
 	WAIT_STATE(ch, 8);
@@ -7056,7 +7056,7 @@ void do_crusherball( CHAR_DATA *ch, char *argument )
 		kilimit = ch->train / 10000;
 		kimult = (float) get_curr_int(ch) / 1000 + 1;
 		kicmult = (float) kilimit / 100 + 1;
-		smastery = (float) ch->masterycrusherball / 1000;
+		smastery = (float) ch->masterycrusherball / 10000;
 	}
 	hitcheck = number_range(1, 100);
 	WAIT_STATE(ch, 8);
@@ -7161,7 +7161,7 @@ void do_haymaker( CHAR_DATA *ch, char *argument )
 		kilimit = ch->train / 10000;
 		physmult = (float) get_curr_str(ch) / 950 + 1;
 		kicmult = (float) kilimit / 100 + 1;
-		smastery = (float) ch->masteryhaymaker / 1000;
+		smastery = (float) ch->masteryhaymaker / 10000;
 	}
 	hitcheck = number_range(1, 100);
 
@@ -7266,7 +7266,7 @@ void do_collide( CHAR_DATA *ch, char *argument )
 		kilimit = ch->train / 10000;
 		physmult = (float) get_curr_str(ch) / 950 + 1;
 		kicmult = (float) kilimit / 100 + 1;
-		smastery = (float) ch->masterycollide / 1000;
+		smastery = (float) ch->masterycollide / 10000;
 	}
 	hitcheck = number_range(1, 100);
 	WAIT_STATE(ch, 8);
@@ -7355,7 +7355,7 @@ do_kamehameha(CHAR_DATA * ch, char *argument)
 		kilimit = ch->train / 10000;
 		kimult = (float) get_curr_int(ch) / 1000 + 1;
 		kicmult = (float) kilimit / 100 + 1;
-		smastery = (float) ch->masterykamehameha / 1000;
+		smastery = (float) ch->masterykamehameha / 10000;
 	}
 	if ((victim = who_fighting(ch)) == NULL) {
 		send_to_char("You aren't fighting anyone.\n\r", ch);
@@ -7882,7 +7882,7 @@ do_masenko(CHAR_DATA * ch, char *argument)
 		kilimit = ch->train / 10000;
 		kimult = (float) get_curr_int(ch) / 1000 + 1;
 		kicmult = (float) kilimit / 100 + 1;
-		smastery = (float) ch->masterymasenko / 1000;
+		smastery = (float) ch->masterymasenko / 10000;
 	}
 	if (!IS_NPC(ch)) {
 		adjcost = 60 * (ch->masenkopower - ch->masenkoeffic);
@@ -7984,7 +7984,7 @@ do_sbc(CHAR_DATA * ch, char *argument)
 		kilimit = ch->train / 10000;
 		kimult = (float) get_curr_int(ch) / 1000 + 1;
 		kicmult = (float) kilimit / 100 + 1;
-		smastery = (float) ch->masterysbc / 1000;
+		smastery = (float) ch->masterysbc / 10000;
 	}
 	if (!IS_NPC(ch)) {
 		adjcost = 110 * (ch->sbcpower - ch->sbceffic);
@@ -8501,7 +8501,7 @@ do_dd(CHAR_DATA * ch, char *argument)
 		kilimit = ch->train / 10000;
 		kimult = (float) get_curr_int(ch) / 1000 + 1;
 		kicmult = (float) kilimit / 100 + 1;
-		smastery = (float) ch->masterydestructo_disc / 1000;
+		smastery = (float) ch->masterydestructo_disc / 10000;
 	}
 	if (!IS_NPC(ch)) {
 		adjcost = 55 * (ch->destructo_discpower - ch->destructo_disceffic);
@@ -9378,7 +9378,7 @@ do_death_ball(CHAR_DATA * ch, char *argument)
 		kilimit = ch->train / 10000;
 		kimult = (float) get_curr_int(ch) / 1000 + 1;
 		kicmult = (float) kilimit / 100 + 1;
-		smastery = (float) ch->masterydeath_ball / 1000;
+		smastery = (float) ch->masterydeath_ball / 10000;
 	}
 	if (!IS_NPC(ch)) {
 		adjcost = 1000 * (ch->death_ballpower - ch->death_balleffic);
@@ -9474,7 +9474,7 @@ do_eye_beam(CHAR_DATA * ch, char *argument)
 		kilimit = ch->train / 10000;
 		kimult = (float) get_curr_int(ch) / 1000 + 1;
 		kicmult = (float) kilimit / 100 + 1;
-		smastery = (float) ch->masteryeye_beam / 1000;
+		smastery = (float) ch->masteryeye_beam / 10000;
 	}
 	if (!IS_NPC(ch)) {
 		adjcost = 12 * (ch->eye_beampower - ch->eye_beameffic);
@@ -9569,7 +9569,7 @@ do_finger_beam(CHAR_DATA * ch, char *argument)
 		kilimit = ch->train / 10000;
 		kimult = (float) get_curr_int(ch) / 1000 + 1;
 		kicmult = (float) kilimit / 100 + 1;
-		smastery = (float) ch->masteryfinger_beam / 1000;
+		smastery = (float) ch->masteryfinger_beam / 10000;
 	}
 	if (!IS_NPC(ch)) {
 		adjcost = 75 * (ch->finger_beampower - ch->finger_beameffic);
@@ -11729,7 +11729,7 @@ do_destructive_wave(CHAR_DATA * ch, char *argument)
 		kilimit = ch->train / 10000;
 		kimult = (float) get_curr_int(ch) / 1000 + 1;
 		kicmult = (float) kilimit / 100 + 1;
-		smastery = (float) ch->masterydestructive_wave / 1000;
+		smastery = (float) ch->masterydestructive_wave / 10000;
 	}
 	if (!IS_NPC(ch)) {
 		adjcost = 60 * (ch->destructive_wavepower - ch->destructive_waveeffic);
@@ -11999,7 +11999,7 @@ do_shockwave(CHAR_DATA * ch, char *argument)
 		kilimit = ch->train / 10000;
 		kimult = (float) get_curr_int(ch) / 1000 + 1;
 		kicmult = (float) kilimit / 100 + 1;
-		smastery = (float) ch->masteryshockwave / 1000;
+		smastery = (float) ch->masteryshockwave / 10000;
 	}
 	if (!IS_NPC(ch)) {
 		adjcost = 70 * (ch->shockwavepower - ch->shockwaveeffic);
@@ -12587,7 +12587,7 @@ do_gallic_gun(CHAR_DATA * ch, char *argument)
 		kilimit = ch->train / 10000;
 		kimult = (float) get_curr_int(ch) / 1000 + 1;
 		kicmult = (float) kilimit / 100 + 1;
-		smastery = (float) ch->masterygallic_gun / 1000;
+		smastery = (float) ch->masterygallic_gun / 10000;
 	}
 	if ((victim = who_fighting(ch)) == NULL) {
 		send_to_char("You aren't fighting anyone.\n\r", ch);
@@ -13083,7 +13083,7 @@ do_makosen(CHAR_DATA * ch, char *argument)
 		kilimit = ch->train / 10000;
 		kimult = (float) get_curr_int(ch) / 1000 + 1;
 		kicmult = (float) kilimit / 100 + 1;
-		smastery = (float) ch->masterymakosen / 1000;
+		smastery = (float) ch->masterymakosen / 10000;
 	}
 	if (!IS_NPC(ch)) {
 		adjcost = 60 * (ch->makosenpower - ch->makoseneffic);

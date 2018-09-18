@@ -2975,7 +2975,7 @@ void do_bash( CHAR_DATA *ch, char *argument )
 		kilimit = ch->train / 10000;
 		physmult = (float) get_curr_str(ch) / 950 + 1;
 		kicmult = (float) kilimit / 100 + 1;
-		smastery = (float) ch->masterybash / 1000;
+		smastery = (float) ch->masterybash / 10000;
 	}
 	if (!IS_NPC(ch)) {
 		adjcost = 16 * (ch->bashpower - ch->basheffic);
