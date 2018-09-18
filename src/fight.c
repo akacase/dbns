@@ -2363,6 +2363,7 @@ violence_update(void)
 							act( AT_RED, "$n collapses, DEAD, $s body completely exhausted.", ch, NULL, NULL, TO_NOTVICT );
 							sprintf( buf, "%s's body gives out from exhaustion'", ch->name );
 						}
+						ch->exp -= (ch->exp * 0.1);
 						do_info(ch, buf);
 						raw_kill(ch, ch);
 					}
@@ -2403,6 +2404,7 @@ violence_update(void)
 							act( AT_RED, "$n collapses, DEAD, $s body completely exhausted.", ch, NULL, NULL, TO_NOTVICT );
 							sprintf( buf, "%s's body gives out from exhaustion'", ch->name );
 						}
+						ch->exp -= (ch->exp * 0.1);
 						do_info(ch, buf);
 						raw_kill(ch, ch);
 					}
@@ -2438,6 +2440,7 @@ violence_update(void)
 							act( AT_RED, "$n collapses, DEAD, $s body completely exhausted.", ch, NULL, NULL, TO_NOTVICT );
 							sprintf( buf, "%s's body gives out from exhaustion'", ch->name );
 						}
+						ch->exp -= (ch->exp * 0.1);
 						do_info(ch, buf);
 						raw_kill(ch, ch);
 					}
@@ -2513,6 +2516,7 @@ violence_update(void)
 							act( AT_RED, "$n collapses, DEAD, $s body completely exhausted.", ch, NULL, NULL, TO_NOTVICT );
 							sprintf( buf, "%s's body gives out from exhaustion'", ch->name );
 						}
+						ch->exp -= (ch->exp * 0.1);
 						do_info(ch, buf);
 						raw_kill(ch, ch);
 					}
@@ -2553,6 +2557,7 @@ violence_update(void)
 							act( AT_RED, "$n collapses, DEAD, $s body completely exhausted.", ch, NULL, NULL, TO_NOTVICT );
 							sprintf( buf, "%s's body gives out from exhaustion'", ch->name );
 						}
+						ch->exp -= (ch->exp * 0.1);
 						do_info(ch, buf);
 						raw_kill(ch, ch);
 					}
@@ -2588,6 +2593,7 @@ violence_update(void)
 							act( AT_RED, "$n collapses, DEAD, $s body completely exhausted.", ch, NULL, NULL, TO_NOTVICT );
 							sprintf( buf, "%s's body gives out from exhaustion'", ch->name );
 						}
+						ch->exp -= (ch->exp * 0.1);
 						do_info(ch, buf);
 						raw_kill(ch, ch);
 					}
@@ -2658,6 +2664,7 @@ violence_update(void)
 							act( AT_RED, "$n collapses, DEAD, $s body completely exhausted.", ch, NULL, NULL, TO_NOTVICT );
 							sprintf( buf, "%s's body gives out from exhaustion'", ch->name );
 						}
+						ch->exp -= (ch->exp * 0.1);
 						do_info(ch, buf);
 						raw_kill(ch, ch);
 					}
@@ -2698,6 +2705,7 @@ violence_update(void)
 							act( AT_RED, "$n collapses, DEAD, $s body completely exhausted.", ch, NULL, NULL, TO_NOTVICT );
 							sprintf( buf, "%s's body gives out from exhaustion'", ch->name );
 						}
+						ch->exp -= (ch->exp * 0.1);
 						do_info(ch, buf);
 						raw_kill(ch, ch);
 					}
@@ -2733,6 +2741,7 @@ violence_update(void)
 							act( AT_RED, "$n collapses, DEAD, $s body completely exhausted.", ch, NULL, NULL, TO_NOTVICT );
 							sprintf( buf, "%s's body gives out from exhaustion'", ch->name );
 						}
+						ch->exp -= (ch->exp * 0.1);
 						do_info(ch, buf);
 						raw_kill(ch, ch);
 					}
@@ -2807,6 +2816,7 @@ violence_update(void)
 							act( AT_RED, "$n collapses, DEAD, $s body completely exhausted.", ch, NULL, NULL, TO_NOTVICT );
 							sprintf( buf, "%s's body gives out from exhaustion'", ch->name );
 						}
+						ch->exp -= (ch->exp * 0.1);
 						do_info(ch, buf);
 						raw_kill(ch, ch);
 					}
@@ -2847,6 +2857,7 @@ violence_update(void)
 							act( AT_RED, "$n collapses, DEAD, $s body completely exhausted.", ch, NULL, NULL, TO_NOTVICT );
 							sprintf( buf, "%s's body gives out from exhaustion'", ch->name );
 						}
+						ch->exp -= (ch->exp * 0.1);
 						do_info(ch, buf);
 						raw_kill(ch, ch);
 					}
@@ -2882,6 +2893,7 @@ violence_update(void)
 							act( AT_RED, "$n collapses, DEAD, $s body completely exhausted.", ch, NULL, NULL, TO_NOTVICT );
 							sprintf( buf, "%s's body gives out from exhaustion'", ch->name );
 						}
+						ch->exp -= (ch->exp * 0.1);
 						do_info(ch, buf);
 						raw_kill(ch, ch);
 					}
@@ -2952,6 +2964,7 @@ violence_update(void)
 							act( AT_RED, "$n collapses, DEAD, $s body completely exhausted.", ch, NULL, NULL, TO_NOTVICT );
 							sprintf( buf, "%s's body gives out from exhaustion'", ch->name );
 						}
+						ch->exp -= (ch->exp * 0.1);
 						do_info(ch, buf);
 						raw_kill(ch, ch);
 					}
@@ -2992,6 +3005,7 @@ violence_update(void)
 							act( AT_RED, "$n collapses, DEAD, $s body completely exhausted.", ch, NULL, NULL, TO_NOTVICT );
 							sprintf( buf, "%s's body gives out from exhaustion'", ch->name );
 						}
+						ch->exp -= (ch->exp * 0.1);
 						do_info(ch, buf);
 						raw_kill(ch, ch);
 					}
@@ -3027,6 +3041,7 @@ violence_update(void)
 							act( AT_RED, "$n collapses, DEAD, $s body completely exhausted.", ch, NULL, NULL, TO_NOTVICT );
 							sprintf( buf, "%s's body gives out from exhaustion'", ch->name );
 						}
+						ch->exp -= (ch->exp * 0.1);
 						do_info(ch, buf);
 						raw_kill(ch, ch);
 					}
@@ -3101,6 +3116,7 @@ violence_update(void)
 							act( AT_RED, "$n collapses, DEAD, $s body completely exhausted.", ch, NULL, NULL, TO_NOTVICT );
 							sprintf( buf, "%s's body gives out from exhaustion'", ch->name );
 						}
+						ch->exp -= (ch->exp * 0.1);
 						do_info(ch, buf);
 						raw_kill(ch, ch);
 					}
@@ -3141,6 +3157,7 @@ violence_update(void)
 							act( AT_RED, "$n collapses, DEAD, $s body completely exhausted.", ch, NULL, NULL, TO_NOTVICT );
 							sprintf( buf, "%s's body gives out from exhaustion'", ch->name );
 						}
+						ch->exp -= (ch->exp * 0.1);
 						do_info(ch, buf);
 						raw_kill(ch, ch);
 					}
@@ -3176,6 +3193,7 @@ violence_update(void)
 							act( AT_RED, "$n collapses, DEAD, $s body completely exhausted.", ch, NULL, NULL, TO_NOTVICT );
 							sprintf( buf, "%s's body gives out from exhaustion'", ch->name );
 						}
+						ch->exp -= (ch->exp * 0.1);
 						do_info(ch, buf);
 						raw_kill(ch, ch);
 					}
