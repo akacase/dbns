@@ -2149,7 +2149,7 @@ void do_powerup(CHAR_DATA *ch, char *argument)
 				act( AT_PURPLE, "Your chitinous body is replaced with smooth skin and patches as reflective as glass.", ch, NULL, NULL, TO_CHAR );
 				act( AT_PURPLE, "$n emerges from an explosion of ki, $s body transformed into a sleek, smooth form.", ch, NULL, NULL, TO_NOTVICT );
 				ch->pl = ch->exp * 50;
-				ch->powerup = 12;
+				ch->powerup = 11;
 				transStatApply(ch, threestr, threespd, threeint, threecon);
 				return;
 			}
@@ -2193,7 +2193,7 @@ void do_powerup(CHAR_DATA *ch, char *argument)
 				act( AT_PURPLE, "$n's muscles expand massively in size, swelling with incredible energy!", ch, NULL, NULL, TO_NOTVICT );
 				ch->pl = ch->exp * 150;
 				transStatApply(ch, fourstr, fourspd, fourint, fourcon);
-				ch->powerup = 46;
+				ch->powerup = 45;
 				return;
 			}
 	}

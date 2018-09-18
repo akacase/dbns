@@ -540,6 +540,11 @@ hit_gain(CHAR_DATA * ch)
 		gain += get_curr_con(ch);
 	else
 		gain += get_curr_con(ch) / 1.5;
+	if (xIS_SET((ch)->affected_by, AFF_INTEXPUSHUPS) || xIS_SET((ch)->affected_by, AFF_EXPUSHUPS)
+	|| xIS_SET((ch)->affected_by, AFF_EXENDURING) || xIS_SET((ch)->affected_by, AFF_INTEXENDURING)
+	|| xIS_SET((ch)->affected_by, AFF_INTEXSHADOWBOXING) || xIS_SET((ch)->affected_by, AFF_EXSHADOWBOXING)) {
+		gain = 0;
+	}
 
 	return UMIN(gain, ch->max_hit - ch->hit);
 }
@@ -593,6 +598,12 @@ mana_gain(CHAR_DATA * ch)
 	
 	if (gain > (ch->max_mana * 0.2))
 		gain = (ch->max_mana * 0.2);
+		
+	if (xIS_SET((ch)->affected_by, AFF_INTEXPUSHUPS) || xIS_SET((ch)->affected_by, AFF_EXPUSHUPS)
+	|| xIS_SET((ch)->affected_by, AFF_EXENDURING) || xIS_SET((ch)->affected_by, AFF_INTEXENDURING)
+	|| xIS_SET((ch)->affected_by, AFF_INTEXSHADOWBOXING) || xIS_SET((ch)->affected_by, AFF_EXSHADOWBOXING)) {
+		gain = 0;
+	}
 
 	return UMIN(gain, ch->max_mana - ch->mana);
 }
