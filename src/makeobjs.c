@@ -626,7 +626,7 @@ generate_treasure(CHAR_DATA * killer, CHAR_DATA * ch, OBJ_DATA * corpse)
 			obj_to_obj(create_money(zeni), corpse);
 		}
 		return;
-	} else {
+	}/* else {
 		if (killer->pl / ch->pl > 7)
 			return;
 
@@ -643,7 +643,7 @@ generate_treasure(CHAR_DATA * killer, CHAR_DATA * ch, OBJ_DATA * corpse)
 		obj_to_obj(item, corpse);
 		return;
 	}
-
+*/
 
 }
 
