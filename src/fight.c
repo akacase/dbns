@@ -1192,7 +1192,10 @@ violence_update(void)
 				sevencon = ch->perm_con * 1.25;
 				if (!xIS_SET((ch)->affected_by, AFF_SSJ)) {
 					int saiyanTotal = 0;
-					safemaximum = ((get_curr_int(ch) * 0.03) + 1);
+					if (!IS_IMMORTAL(ch))
+						safemaximum = ((get_curr_int(ch) * 0.03) + 1);
+					if (IS_IMMORTAL(ch))
+						safemaximum = ch->masterypowerup / 1000;
 					saiyanTotal = ((ch->perm_str * 2) + (ch->perm_dex * 2) + (ch->perm_int) + (ch->perm_con * 2));
 					if (ch->powerup < safemaximum) {
 						
