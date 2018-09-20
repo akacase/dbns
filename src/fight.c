@@ -1195,10 +1195,9 @@ violence_update(void)
 					if (!IS_IMMORTAL(ch))
 						safemaximum = ((get_curr_int(ch) * 0.03) + 1);
 					if (IS_IMMORTAL(ch))
-						safemaximum = ch->masterypowerup / 1000;
+						safemaximum = (ch->masterypowerup / 1000) + (ch->energymastery / 1000) + (ch->strikemastery / 1000);
 					saiyanTotal = ((ch->perm_str * 2) + (ch->perm_dex * 2) + (ch->perm_int) + (ch->perm_con * 2));
 					if (ch->powerup < safemaximum) {
-						
 						ch->pl *= 1.30;
 						ch->powerup += 1;
 						transStatApply(ch, powerupstr, powerupspd, powerupint, powerupcon);
@@ -2161,27 +2160,73 @@ violence_update(void)
 		}
 		if (xIS_SET((ch)->affected_by, AFF_POWERUPTRAIN) && ch->position == POS_STANDING) {
 			int	message = 0;
+			int drain = 0;
 			
 			message = number_range(1, 100);
+			drain = number_range(1,3);
 			
 			if (message >= 98) {
-				act( AT_WHITE, "Your body glows faintly as you manage to contain a raging power building within.", ch, NULL, NULL, TO_CHAR );
-				act( AT_WHITE, "$n glows very faintly.", ch, NULL, NULL, TO_NOTVICT );
-				act( AT_WHITE, "Your Ki Mastery increases.", ch, NULL, NULL, TO_CHAR );
-				ch->energymastery += 5;
-				ch->masterypowerup += 2;
+				if ((ch->mana - (ch->max_mana * (.02 * drain))) > 0) {
+					act( AT_WHITE, "Your body glows faintly as you manage to contain a raging power building within.", ch, NULL, NULL, TO_CHAR );
+					act( AT_WHITE, "$n glows very faintly.", ch, NULL, NULL, TO_NOTVICT );
+					act( AT_WHITE, "Your Ki Mastery increases.", ch, NULL, NULL, TO_CHAR );
+					ch->energymastery += 5;
+					ch->masterypowerup += 2;
+					ch->mana -= ch->max_mana * (.02 * drain);
+					if (ch->energymastery >= (ch->kspgain * 100)) {
+						pager_printf_color(ch,
+						"&CYou gained 5 Skill Points!\n\r");
+						ch->sptotal += 5;
+						ch->kspgain += 1;
+					}
+				}
+				else {
+					ch->mana = 0;
+					send_to_char("Exhausted, you lose concentration.\n\r", ch);
+					xREMOVE_BIT((ch)->affected_by, AFF_POWERUPTRAIN);
+				}
 			}
 			else if (message >= 60) {
-				act( AT_WHITE, "You struggle to maintain a delicate control over your inner power.", ch, NULL, NULL, TO_CHAR );
-				act( AT_WHITE, "$n struggles to maintain delicate control over $s inner power.", ch, NULL, NULL, TO_NOTVICT );
-				act( AT_WHITE, "Your Ki Mastery increases slightly.", ch, NULL, NULL, TO_CHAR );
-				ch->energymastery += 3;
-				ch->masterypowerup += 1;
+				if ((ch->mana - (ch->max_mana * (.02 * drain))) > 0) {
+					act( AT_WHITE, "You struggle to maintain delicate control over your inner power.", ch, NULL, NULL, TO_CHAR );
+					act( AT_WHITE, "$n struggles to maintain delicate control over $s inner power.", ch, NULL, NULL, TO_NOTVICT );
+					act( AT_WHITE, "Your Ki Mastery increases slightly.", ch, NULL, NULL, TO_CHAR );
+					ch->energymastery += 3;
+					ch->masterypowerup += 1;
+					ch->mana -= ch->max_mana * (.02 * drain);
+					if (ch->energymastery >= (ch->kspgain * 100)) {
+						pager_printf_color(ch,
+						"&CYou gained 5 Skill Points!\n\r");
+						ch->sptotal += 5;
+						ch->kspgain += 1;
+					}
+				}
+				else {
+					ch->mana = 0;
+					send_to_char("Exhausted, you lose concentration.\n\r", ch);
+					xREMOVE_BIT((ch)->affected_by, AFF_POWERUPTRAIN);
+				}
 			}
 			else {
-				act( AT_WHITE, "Your Ki Mastery increases slightly.", ch, NULL, NULL, TO_CHAR );
-				ch->energymastery += 3;
-				ch->masterypowerup += 1;
+				if ((ch->mana - (ch->max_mana * (.02 * drain))) > 0) {
+					act( AT_WHITE, "You struggle to maintain delicate control over your inner power.", ch, NULL, NULL, TO_CHAR );
+					act( AT_WHITE, "$n struggles to maintain delicate control over $s inner power.", ch, NULL, NULL, TO_NOTVICT );
+					act( AT_WHITE, "Your Ki Mastery increases slightly.", ch, NULL, NULL, TO_CHAR );
+					ch->energymastery += 3;
+					ch->masterypowerup += 1;
+					ch->mana -= ch->max_mana * (.02 * drain);
+					if (ch->energymastery >= (ch->kspgain * 100)) {
+						pager_printf_color(ch,
+						"&CYou gained 5 Skill Points!\n\r");
+						ch->sptotal += 5;
+						ch->kspgain += 1;
+					}
+				}
+				else {
+					ch->mana = 0;
+					send_to_char("Exhausted, you lose concentration.\n\r", ch);
+					xREMOVE_BIT((ch)->affected_by, AFF_POWERUPTRAIN);
+				}
 			}
 		}
 		/* Gravity area/room effects and bonus combat stats, weighted clothing */
