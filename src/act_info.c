@@ -3950,6 +3950,10 @@ do_where(CHAR_DATA * ch, char *argument)
 	int count = 0;
 
 	one_argument(argument, arg);
+	
+	if (!IS_IMMORTAL(ch)) {
+		return;
+	}
 
 	if (!str_cmp(arg, "npc")) {
 		ch_printf(ch, "\n\r&cNpc's that currently serve you:\n\r");

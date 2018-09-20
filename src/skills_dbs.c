@@ -1952,7 +1952,7 @@ void do_powerup(CHAR_DATA *ch, char *argument)
 	}
 	if (arg[0] == '\0') {
 		if (ch->pl >= ch->exp) {
-			send_to_char("Powerup how? Commands are: 'begin', 'push', and 'stop'.\n\r", ch);
+			send_to_char("Powerup how? Commands are: 'begin', 'push', 'stop', 'train', and 'release'.\n\r", ch);
 			send_to_char("'powerup push' is dangerous and can only be used after first powering up to maximum.\n\r", ch);
 			return;
 		}
@@ -1962,6 +1962,13 @@ void do_powerup(CHAR_DATA *ch, char *argument)
 			act(AT_WHITE, "$n unsuppresses $s power.", ch, NULL, NULL, TO_NOTVICT);
 			return;
 		}
+	}
+	if (!str_cmp(arg, "train") && !xIS_SET((ch)->affected_by, AFF_POWERUPTRAIN) && !xIS_SET((ch)->affected_by, AFF_POWERCHANNEL)
+		&& !xIS_SET((ch)->affected_by, AFF_OVERCHANNEL)) {
+			xSET_BIT((ch)->affected_by, AFF_POWERUPTRAIN);
+			act(AT_WHITE, "You enter a state of intense concentration and begin carefully regulating your power.", ch, NULL, NULL, TO_CHAR);
+			act(AT_WHITE, "$n enters a state of intense concentration.", ch, NULL, NULL, TO_NOTVICT);
+			return;
 	}
 	if (!str_cmp(arg, "ssj1")) {
 			if (!is_saiyan(ch) && !is_hb(ch)) {
@@ -2360,6 +2367,12 @@ void do_powerup(CHAR_DATA *ch, char *argument)
 			xREMOVE_BIT((ch)->affected_by, AFF_OVERCHANNEL);
 			act(AT_WHITE, "You stop pushing your limits and collapse to your knees.", ch, NULL, NULL, TO_CHAR);
 			act(AT_WHITE, "$n stops pushing $s limits and collapses to $s knees.", ch, NULL, NULL, TO_NOTVICT);
+			return;
+		}
+		if (xIS_SET((ch)->affected_by, AFF_POWERUPTRAIN)) {
+			xREMOVE_BIT((ch)->affected_by, AFF_POWERUPTRAIN);
+			act(AT_WHITE, "You put a stop to your training.", ch, NULL, NULL, TO_CHAR);
+			act(AT_WHITE, "$n puts a stop to $s training.", ch, NULL, NULL, TO_NOTVICT);
 			return;
 		}
 		else {
@@ -8895,7 +8908,7 @@ do_meditate(CHAR_DATA * ch, char *argument)
 	if(IS_AFFECTED(ch, AFF_PUSHUPS) || IS_AFFECTED(ch, AFF_SHADOWBOXING)
 	|| IS_AFFECTED(ch, AFF_ENDURING) || IS_AFFECTED(ch, AFF_MEDITATION)
 	|| IS_AFFECTED(ch, AFF_EXPUSHUPS) || IS_AFFECTED(ch, AFF_EXSHADOWBOXING) 
-	|| IS_AFFECTED(ch, AFF_EXENDURING)
+	|| IS_AFFECTED(ch, AFF_EXENDURING) || IS_AFFECTED(ch, AFF_POWERUPTRAIN)
 	|| IS_AFFECTED(ch, AFF_INTEXPUSHUPS) || IS_AFFECTED(ch, AFF_INTEXSHADOWBOXING) 
 	|| IS_AFFECTED(ch, AFF_INTEXENDURING)) {
 	  send_to_char("You can't seem to focus while you're this busy!\n\r", ch);

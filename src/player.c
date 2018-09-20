@@ -1834,10 +1834,6 @@ do_title(CHAR_DATA * ch, char *argument)
 		return;
 
 	set_char_color(AT_SCORE, ch);
-	if (ch->exp <= 5000 && ch->level < LEVEL_IMMORTAL) {
-		send_to_char("You must wait, until you can set your title.\n\r", ch);
-		return;
-	}
 	if (IS_SET(ch->pcdata->flags, PCFLAG_NOTITLE)) {
 		set_char_color(AT_IMMORT, ch);
 		send_to_char("The Gods prohibit you from changing your title.\n\r", ch);

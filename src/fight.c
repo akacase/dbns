@@ -2152,6 +2152,35 @@ violence_update(void)
 				}
 			}
 		}
+		if (xIS_SET((ch)->affected_by, AFF_POWERUPTRAIN) && ch->position != POS_STANDING) {
+			xREMOVE_BIT((ch)->affected_by, AFF_POWERUPTRAIN);
+			send_to_char("You lose concentration.\n\r", ch);
+		}
+		if (xIS_SET((ch)->affected_by, AFF_POWERUPTRAIN) && ch->position == POS_STANDING) {
+			int	message = 0;
+			
+			message = number_range(1, 100);
+			
+			if (message >= 98) {
+				act( AT_WHITE, "Your body glows faintly as you manage to contain a raging power building within.", ch, NULL, NULL, TO_CHAR );
+				act( AT_WHITE, "$n glows very faintly.", ch, NULL, NULL, TO_NOTVICT );
+				act( AT_WHITE, "Your Ki Mastery increases.", ch, NULL, NULL, TO_CHAR );
+				ch->energymastery += 5;
+				ch->masterypowerup += 2;
+			}
+			else if (message >= 60) {
+				act( AT_WHITE, "You struggle to maintain a delicate control over your inner power.", ch, NULL, NULL, TO_CHAR );
+				act( AT_WHITE, "$n struggles to maintain delicate control over $s inner power.", ch, NULL, NULL, TO_NOTVICT );
+				act( AT_WHITE, "Your Ki Mastery increases slightly.", ch, NULL, NULL, TO_CHAR );
+				ch->energymastery += 3;
+				ch->masterypowerup += 1;
+			}
+			else {
+				act( AT_WHITE, "Your Ki Mastery increases slightly.", ch, NULL, NULL, TO_CHAR );
+				ch->energymastery += 3;
+				ch->masterypowerup += 1;
+			}
+		}
 		/* Gravity area/room effects and bonus combat stats, weighted clothing */
 		if (!IS_NPC(ch)) {
 			double totalrgrav = 0;

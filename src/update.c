@@ -542,7 +542,8 @@ hit_gain(CHAR_DATA * ch)
 		gain += get_curr_con(ch) / 1.5;
 	if (xIS_SET((ch)->affected_by, AFF_INTEXPUSHUPS) || xIS_SET((ch)->affected_by, AFF_EXPUSHUPS)
 	|| xIS_SET((ch)->affected_by, AFF_EXENDURING) || xIS_SET((ch)->affected_by, AFF_INTEXENDURING)
-	|| xIS_SET((ch)->affected_by, AFF_INTEXSHADOWBOXING) || xIS_SET((ch)->affected_by, AFF_EXSHADOWBOXING)) {
+	|| xIS_SET((ch)->affected_by, AFF_INTEXSHADOWBOXING) || xIS_SET((ch)->affected_by, AFF_EXSHADOWBOXING)
+	|| xIS_SET((ch)->affected_by, AFF_POWERUPTRAIN) {
 		gain = 0;
 	}
 

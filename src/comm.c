@@ -2461,6 +2461,7 @@ nanny(DESCRIPTOR_DATA *d, char *argument)
 	ch->gravSetting = 1;
 	ch->exintensity = 0;
 	ch->gravExp = 1000;
+	ch->masterypowerup = 0;
 	ch->workoutstrain = 0;
 	ch->energy_ballpower = 0;
 	ch->energy_balleffic = 0;

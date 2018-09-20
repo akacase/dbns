@@ -1048,10 +1048,6 @@ do_chat(CHAR_DATA * ch, char *argument)
 void 
 do_ooc(CHAR_DATA * ch, char *argument)
 {
-	if (!IS_IMMORTAL(ch) && ch->exp < 5000) {
-		send_to_char("You can't use this channel until you are out of training.\n\r", ch);
-		return;
-	}
 	sysdata.outBytesFlag = LOGBOUTCHANNEL;
 	talk_channel(ch, drunk_speech(argument, ch), CHANNEL_OOC, "OOC");
 	sysdata.outBytesFlag = LOGBOUTNORM;

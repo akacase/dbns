@@ -316,6 +316,7 @@ fwrite_char (CHAR_DATA * ch, FILE * fp)
        (ch->in_room == get_room_index (ROOM_VNUM_LIMBO)
 	 && ch->was_in_room) ? ch->was_in_room->vnum : ch->in_room->vnum);
      fprintf (fp, "Worth           %lld\n", ch->worth);
+	 fprintf (fp, "Masterypowerup           %d\n", ch->masterypowerup);
 	 fprintf (fp, "Workoutstrain           %d\n", ch->workoutstrain);
 	 fprintf (fp, "Skillvigor           %d\n", ch->skillvigor);
 	 fprintf (fp, "Vigoreffec           %d\n", ch->vigoreffec);
@@ -2028,6 +2029,7 @@ fread_char (CHAR_DATA * ch, FILE * fp, bool preload)
 		   KEY ("Masterybash", ch->masterybash, fread_number (fp));
 		   KEY ("Masterycollide", ch->masterycollide, fread_number (fp));
 		   KEY ("Masterylariat", ch->masterylariat, fread_number (fp));
+		   KEY ("Masterypowerup", ch->masterypowerup, fread_number (fp));
 	       if (!strcmp (word, "MobRange")) {
 		    ch->pcdata->m_range_lo = fread_number (fp);
 		    ch->pcdata->m_range_hi = fread_number (fp);

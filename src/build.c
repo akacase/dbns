@@ -179,7 +179,7 @@ char   *const a_flags[] =
 	"superandroid", "noglobaldrop", "makeostar", "evilboost", "evilsurge",
 	"eviloverload", "biojr", "goldenoozaru", "pushups", "shadowboxing", "enduring",
 	"meditation", "powerchannel", "overchannel", "safemax", "expushups", "exshadowboxing", "exenduring",
-	"intexpushups", "intexshadowboxing", "intexenduring"
+	"intexpushups", "intexshadowboxing", "intexenduring", "poweruptrain"
 };
 
 char   *const act_flags[] =
