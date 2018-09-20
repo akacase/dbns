@@ -1282,17 +1282,6 @@ void do_pull( CHAR_DATA *ch, char *argument )
 
     if ( !IS_NPC(ch) && !str_cmp( arg, "tail" ))
     {
-	if (xIS_SET((ch)->affected_by, AFF_OOZARU) ||
-	    xIS_SET((ch)->affected_by, AFF_GOLDEN_OOZARU))
-	{
-	  ch_printf(ch,"You can't do that while in a beserked Oozaru state.\n\r");
-	  return;
-	}
-	if (xIS_SET(ch->affected_by, AFF_SSJ4))
-	{
-	  ch_printf(ch,"You can't do that while SSJ4.\n\r");
-	  return;
-	}
     	if ( (is_saiyan(ch) || is_hb(ch)) && ch->pcdata->tail > 0)
     	{
     		remove_tail(ch);
