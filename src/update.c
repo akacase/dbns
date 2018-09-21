@@ -1927,7 +1927,7 @@ char_update(void)
 			}
 			if (char_died(ch))
 				continue;
-			/* oozaru! */
+			/* oozaru!
 			if (!IS_NPC(ch)) {
 				if (ch->pcdata->tail > 0
 				    && ch->position >= POS_SLEEPING
@@ -1976,7 +1976,7 @@ char_update(void)
 							untransform_oozaru(ch);
 					}
 				}
-			}
+			} */
 			if (!IS_NPC(ch)) {
 				if (ch->position >= POS_SLEEPING) {
 					if (is_demon(ch)
