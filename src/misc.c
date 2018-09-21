@@ -1282,18 +1282,10 @@ void do_pull( CHAR_DATA *ch, char *argument )
 
     if ( !IS_NPC(ch) && !str_cmp( arg, "tail" ))
     {
-    	if ( (is_saiyan(ch) || is_hb(ch)) && ch->pcdata->tail > 0)
-    	{
-    		remove_tail(ch);
-    		ch->hit -= 5;
-                update_pos( ch );
-    		return;
-    	}
-    	else
-    	{
-			act( AT_PLAIN, "You don't have a tail you can remove.", ch, NULL, arg, TO_CHAR );
-			return;
-		}
+		remove_tail(ch);
+		ch->hit -= 5;
+			update_pos( ch );
+		return;
 	}
 
     if ( ( obj = get_obj_here( ch, arg ) ) == NULL )
