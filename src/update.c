@@ -486,11 +486,11 @@ gain_exp(CHAR_DATA * ch, long double gain)
 	}
 
 	/*  Check to gain more HP on gaining pl */
-	if (ch->max_hit != (ch->perm_con * 10))
-		ch->max_hit = (ch->perm_con * 10);
+	if (ch->max_hit != (ch->perm_con * 100))
+		ch->max_hit = (ch->perm_con * 100);
 	/* Check to gain more ki on gaining pl */
 	if (ch->max_mana != ((ch->perm_int * 15) + (ch->perm_con * 10) + (ch->perm_dex * 7) + (ch->perm_str * 7)))
-		ch->max_mana = ((ch->perm_int * 15) + (ch->perm_con * 10) + (ch->perm_dex * 7) + (ch->perm_str * 7));
+		ch->max_mana = ((ch->perm_int * 15) + (ch->perm_con * 10) + (ch->perm_dex * 7) + (ch->perm_str * 7))
 }
 
 /*
@@ -537,9 +537,9 @@ hit_gain(CHAR_DATA * ch)
 		gain *= 2;
 
 	if (ch->race == 3)
-		gain += get_curr_con(ch);
+		gain += (get_curr_con(ch) * 10);
 	else
-		gain += get_curr_con(ch) / 1.5;
+		gain += ((get_curr_con(ch) / 1.5) * 10);
 	if (xIS_SET((ch)->affected_by, AFF_INTEXPUSHUPS) || xIS_SET((ch)->affected_by, AFF_EXPUSHUPS)
 	|| xIS_SET((ch)->affected_by, AFF_EXENDURING) || xIS_SET((ch)->affected_by, AFF_INTEXENDURING)
 	|| xIS_SET((ch)->affected_by, AFF_INTEXSHADOWBOXING) || xIS_SET((ch)->affected_by, AFF_EXSHADOWBOXING)

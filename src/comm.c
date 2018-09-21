@@ -2538,6 +2538,7 @@ nanny(DESCRIPTOR_DATA *d, char *argument)
 	ch->lariatpower = 0;
 	ch->lariateffic = 0;
 	ch->masterylariat = 0;
+	ch->newbiepl = 0;
 	
 	ch->sptotal = 0;
 	ch->spgain = 0;
@@ -2556,7 +2557,7 @@ nanny(DESCRIPTOR_DATA *d, char *argument)
 	ch->gravityrankup = 0;
 	ch->bodyrank = 0;
 	ch->heart_pl = 5;
-	ch->max_hit += race_table[ch->race]->hit;
+	ch->max_hit = 1000;
 	ch->max_mana += race_table[ch->race]->mana;
 	ch->max_move = 100;
 	ch->hit = UMAX(1, ch->max_hit);

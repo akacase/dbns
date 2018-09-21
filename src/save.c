@@ -316,6 +316,7 @@ fwrite_char (CHAR_DATA * ch, FILE * fp)
        (ch->in_room == get_room_index (ROOM_VNUM_LIMBO)
 	 && ch->was_in_room) ? ch->was_in_room->vnum : ch->in_room->vnum);
      fprintf (fp, "Worth           %lld\n", ch->worth);
+	 fprintf (fp, "Newbiepl           %d\n", ch->newbiepl);
 	 fprintf (fp, "Masterypowerup           %d\n", ch->masterypowerup);
 	 fprintf (fp, "Workoutstrain           %d\n", ch->workoutstrain);
 	 fprintf (fp, "Skillvigor           %d\n", ch->skillvigor);
@@ -2038,6 +2039,7 @@ fread_char (CHAR_DATA * ch, FILE * fp, bool preload)
 	       break;
 
 	  case 'N':
+	       KEY ("Newbiepl", ch->newbiepl, fread_number (fp));
 	       KEY ("NPromptCFG", ch->pcdata->normalPromptConfig, fread_number (fp));
 	       KEY ("NaturalAC", ch->pcdata->natural_ac_max, fread_number (fp));
 	       KEY ("Name", ch->name, fread_string (fp));
