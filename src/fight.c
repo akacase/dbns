@@ -1193,7 +1193,7 @@ violence_update(void)
 				if (!xIS_SET((ch)->affected_by, AFF_SSJ)) {
 					int saiyanTotal = 0;
 
-					safemaximum = 1 + (ch->masterypowerup / 1000) + (ch->energymastery / 1000) + (ch->strikemastery / 1000);
+					safemaximum = 1 + (ch->masterypowerup / 1000) + (ch->energymastery / 10000) + (ch->strikemastery / 10000);
 					saiyanTotal = ((ch->perm_str * 2) + (ch->perm_dex * 2) + (ch->perm_int) + (ch->perm_con * 2));
 					if (ch->powerup < safemaximum) {
 						ch->pl *= (long double) ((long double) 1.01 + ((long double) ch->masterypowerup / 100000));
@@ -1529,7 +1529,7 @@ violence_update(void)
 					&& !xIS_SET((ch)->affected_by, AFF_ICER4)
 					&& !xIS_SET((ch)->affected_by, AFF_ICER5)
 					&& !xIS_SET((ch)->affected_by, AFF_GOLDENFORM)) {
-					safemaximum = 1 + (ch->masterypowerup / 1000) + (ch->energymastery / 1000) + (ch->strikemastery / 1000);
+					safemaximum = 1 + (ch->masterypowerup / 1000) + (ch->energymastery / 10000) + (ch->strikemastery / 10000);
 					if (ch->powerup < safemaximum) {
 						ch->pl *= (long double) ((long double) 1.01 + ((long double) ch->masterypowerup / 100000));
 						ch->powerup += 1;
@@ -1754,7 +1754,7 @@ violence_update(void)
 					int mysticTotal = 0;
 					
 					mysticTotal = ((ch->perm_str + ch->perm_dex) + (ch->perm_int * 2) + (ch->perm_con * 3));
-					safemaximum = 1 + (ch->masterypowerup / 1000) + (ch->energymastery / 1000) + (ch->strikemastery / 1000);
+					safemaximum = 1 + (ch->masterypowerup / 1000) + (ch->energymastery / 10000) + (ch->strikemastery / 10000);
 					if (ch->powerup < safemaximum) {
 						ch->pl *= (long double) ((long double) 1.01 + ((long double) ch->masterypowerup / 100000));
 						ch->powerup += 1;
@@ -1926,7 +1926,7 @@ violence_update(void)
 					int namekTotal = 0;
 					
 					namekTotal = ((ch->perm_str + ch->perm_dex) + (ch->perm_int * 3) + (ch->perm_con * 2));
-					safemaximum = 1 + (ch->masterypowerup / 1000) + (ch->energymastery / 1000) + (ch->strikemastery / 1000);
+					safemaximum = 1 + (ch->masterypowerup / 1000) + (ch->energymastery / 10000) + (ch->strikemastery / 10000);
 					if (ch->powerup < safemaximum) {
 						ch->pl *= (long double) ((long double) 1.01 + ((long double) ch->masterypowerup / 100000));
 						ch->powerup += 1;
