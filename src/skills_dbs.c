@@ -5183,8 +5183,6 @@ do_research(CHAR_DATA * ch, char *argument)
 		send_to_char("Stop that!\n\r", ch);
 		return;
 	}
-	if (IS_IMMORTAL(ch))
-		pager_printf_color(ch, "DEBUG: weighted training is currently %dx Earth's Gravity\n\r", weightedtraining(ch));
 		
 	spremaining = (ch->sptotal - ch->spallocated);
 	if (arg1[0] == '\0' && arg2[0] == '\0') {
@@ -5209,9 +5207,9 @@ do_research(CHAR_DATA * ch, char *argument)
 			return;
 		}
 		if (!str_cmp(arg2, "power")) {
-			spcostpow = (ch->vigoreffec * 100);
-			if (spcostpow < 100)
-				spcostpow = 100;
+			spcostpow = (ch->vigoreffec * 500);
+			if (spcostpow < 500)
+				spcostpow = 500;
 			if (spremaining < spcostpow) {
 				send_to_char("You don't have enough SP to do that.\n\r", ch);
 				return;
@@ -5270,9 +5268,9 @@ do_research(CHAR_DATA * ch, char *argument)
 			return;
 		}
 		if (!str_cmp(arg2, "power")) {
-			spcostpow = (ch->crusherballpower * 10);
-			if (spcostpow < 10)
-				spcostpow = 10;
+			spcostpow = (ch->crusherballpower * 100);
+			if (spcostpow < 100)
+				spcostpow = 100;
 			if (spremaining < spcostpow) {
 				send_to_char("You don't have enough SP to do that.\n\r", ch);
 				return;
@@ -5285,9 +5283,9 @@ do_research(CHAR_DATA * ch, char *argument)
 			}		
 		}
 		if (!str_cmp(arg2, "efficiency")) {
-			spcosteff = (ch->crusherballeffic * 10);
-			if (spcosteff < 10)
-				spcosteff = 10;
+			spcosteff = (ch->crusherballeffic * 100);
+			if (spcosteff < 100)
+				spcosteff = 100;
 			if (spremaining < spcosteff) {
 				send_to_char("You don't have enough SP to do that.\n\r", ch);
 				return;
@@ -5306,9 +5304,9 @@ do_research(CHAR_DATA * ch, char *argument)
 			return;
 		}
 		if (!str_cmp(arg2, "power")) {
-			spcostpow = (ch->meteorpower * 15);
-			if (spcostpow < 15)
-				spcostpow = 15;
+			spcostpow = (ch->meteorpower * 150);
+			if (spcostpow < 150)
+				spcostpow = 150;
 			if (spremaining < spcostpow) {
 				send_to_char("You don't have enough SP to do that.\n\r", ch);
 				return;
@@ -5321,9 +5319,9 @@ do_research(CHAR_DATA * ch, char *argument)
 			}		
 		}
 		if (!str_cmp(arg2, "efficiency")) {
-			spcosteff = (ch->meteoreffic * 15);
-			if (spcosteff < 15)
-				spcosteff = 15;
+			spcosteff = (ch->meteoreffic * 150);
+			if (spcosteff < 150)
+				spcosteff = 150;
 			if (spremaining < spcosteff) {
 				send_to_char("You don't have enough SP to do that.\n\r", ch);
 				return;
@@ -5342,9 +5340,9 @@ do_research(CHAR_DATA * ch, char *argument)
 			return;
 		}
 		if (!str_cmp(arg2, "power")) {
-			spcostpow = (ch->gigantic_meteorpower * 20);
-			if (spcostpow < 20)
-				spcostpow = 20;
+			spcostpow = (ch->gigantic_meteorpower * 200);
+			if (spcostpow < 200)
+				spcostpow = 200;
 			if (spremaining < spcostpow) {
 				send_to_char("You don't have enough SP to do that.\n\r", ch);
 				return;
@@ -5357,9 +5355,9 @@ do_research(CHAR_DATA * ch, char *argument)
 			}		
 		}
 		if (!str_cmp(arg2, "efficiency")) {
-			spcosteff = (ch->gigantic_meteoreffic * 20);
-			if (spcosteff < 20)
-				spcosteff = 20;
+			spcosteff = (ch->gigantic_meteoreffic * 200);
+			if (spcosteff < 200)
+				spcosteff = 200;
 			if (spremaining < spcosteff) {
 				send_to_char("You don't have enough SP to do that.\n\r", ch);
 				return;
@@ -5378,9 +5376,9 @@ do_research(CHAR_DATA * ch, char *argument)
 			return;
 		}
 		if (!str_cmp(arg2, "power")) {
-			spcostpow = (ch->ecliptic_meteorpower * 25);
-			if (spcostpow < 25)
-				spcostpow = 25;
+			spcostpow = (ch->ecliptic_meteorpower * 250);
+			if (spcostpow < 250)
+				spcostpow = 250;
 			if (spremaining < spcostpow) {
 				send_to_char("You don't have enough SP to do that.\n\r", ch);
 				return;
@@ -5393,9 +5391,9 @@ do_research(CHAR_DATA * ch, char *argument)
 			}		
 		}
 		if (!str_cmp(arg2, "efficiency")) {
-			spcosteff = (ch->ecliptic_meteoreffic * 25);
-			if (spcosteff < 25)
-				spcosteff = 25;
+			spcosteff = (ch->ecliptic_meteoreffic * 250);
+			if (spcosteff < 250)
+				spcosteff = 250;
 			if (spremaining < spcosteff) {
 				send_to_char("You don't have enough SP to do that.\n\r", ch);
 				return;
@@ -5414,9 +5412,9 @@ do_research(CHAR_DATA * ch, char *argument)
 			return;
 		}
 		if (!str_cmp(arg2, "power")) {
-			spcostpow = (ch->death_ballpower * 25);
-			if (spcostpow < 25)
-				spcostpow = 25;
+			spcostpow = (ch->death_ballpower * 250);
+			if (spcostpow < 250)
+				spcostpow = 250;
 			if (spremaining < spcostpow) {
 				send_to_char("You don't have enough SP to do that.\n\r", ch);
 				return;
@@ -5429,9 +5427,9 @@ do_research(CHAR_DATA * ch, char *argument)
 			}		
 		}
 		if (!str_cmp(arg2, "efficiency")) {
-			spcosteff = (ch->death_balleffic * 25);
-			if (spcosteff < 25)
-				spcosteff = 25;
+			spcosteff = (ch->death_balleffic * 250);
+			if (spcosteff < 250)
+				spcosteff = 250;
 			if (spremaining < spcosteff) {
 				send_to_char("You don't have enough SP to do that.\n\r", ch);
 				return;
@@ -5450,9 +5448,9 @@ do_research(CHAR_DATA * ch, char *argument)
 			return;
 		}
 		if (!str_cmp(arg2, "power")) {
-			spcostpow = (ch->energybeampower * 10);
-			if (spcostpow < 10)
-				spcostpow = 10;
+			spcostpow = (ch->energybeampower * 100);
+			if (spcostpow < 100)
+				spcostpow = 100;
 			if (spremaining < spcostpow) {
 				send_to_char("You don't have enough SP to do that.\n\r", ch);
 				return;
@@ -5465,9 +5463,9 @@ do_research(CHAR_DATA * ch, char *argument)
 			}		
 		}
 		if (!str_cmp(arg2, "efficiency")) {
-			spcosteff = (ch->energybeameffic * 10);
-			if (spcosteff < 10)
-				spcosteff = 10;
+			spcosteff = (ch->energybeameffic * 100);
+			if (spcosteff < 100)
+				spcosteff = 100;
 			if (spremaining < spcosteff) {
 				send_to_char("You don't have enough SP to do that.\n\r", ch);
 				return;
@@ -5486,9 +5484,9 @@ do_research(CHAR_DATA * ch, char *argument)
 			return;
 		}
 		if (!str_cmp(arg2, "power")) {
-			spcostpow = (ch->concentrated_beampower * 10);
-			if (spcostpow < 10)
-				spcostpow = 10;
+			spcostpow = (ch->concentrated_beampower * 100);
+			if (spcostpow < 100)
+				spcostpow = 100;
 			if (spremaining < spcostpow) {
 				send_to_char("You don't have enough SP to do that.\n\r", ch);
 				return;
@@ -5501,9 +5499,9 @@ do_research(CHAR_DATA * ch, char *argument)
 			}		
 		}
 		if (!str_cmp(arg2, "efficiency")) {
-			spcosteff = (ch->concentrated_beameffic * 10);
-			if (spcosteff < 10)
-				spcosteff = 10;
+			spcosteff = (ch->concentrated_beameffic * 100);
+			if (spcosteff < 100)
+				spcosteff = 100;
 			if (spremaining < spcosteff) {
 				send_to_char("You don't have enough SP to do that.\n\r", ch);
 				return;
@@ -5558,9 +5556,9 @@ do_research(CHAR_DATA * ch, char *argument)
 			return;
 		}
 		if (!str_cmp(arg2, "power")) {
-			spcostpow = (ch->haymakerpower * 10);
-			if (spcostpow < 10)
-				spcostpow = 10;
+			spcostpow = (ch->haymakerpower * 100);
+			if (spcostpow < 100)
+				spcostpow = 100;
 			if (spremaining < spcostpow) {
 				send_to_char("You don't have enough SP to do that.\n\r", ch);
 				return;
@@ -5573,9 +5571,9 @@ do_research(CHAR_DATA * ch, char *argument)
 			}		
 		}
 		if (!str_cmp(arg2, "efficiency")) {
-			spcosteff = (ch->haymakereffic * 10);
-			if (spcosteff < 10)
-				spcosteff = 10;
+			spcosteff = (ch->haymakereffic * 100);
+			if (spcosteff < 100)
+				spcosteff = 100;
 			if (spremaining < spcosteff) {
 				send_to_char("You don't have enough SP to do that.\n\r", ch);
 				return;
@@ -5594,9 +5592,9 @@ do_research(CHAR_DATA * ch, char *argument)
 			return;
 		}
 		if (!str_cmp(arg2, "power")) {
-			spcostpow = (ch->bashpower * 10);
-			if (spcostpow < 10)
-				spcostpow = 10;
+			spcostpow = (ch->bashpower * 100);
+			if (spcostpow < 100)
+				spcostpow = 100;
 			if (spremaining < spcostpow) {
 				send_to_char("You don't have enough SP to do that.\n\r", ch);
 				return;
@@ -5609,9 +5607,9 @@ do_research(CHAR_DATA * ch, char *argument)
 			}		
 		}
 		if (!str_cmp(arg2, "efficiency")) {
-			spcosteff = (ch->basheffic * 10);
-			if (spcosteff < 10)
-				spcosteff = 10;
+			spcosteff = (ch->basheffic * 100);
+			if (spcosteff < 100)
+				spcosteff = 100;
 			if (spremaining < spcosteff) {
 				send_to_char("You don't have enough SP to do that.\n\r", ch);
 				return;
@@ -5630,9 +5628,9 @@ do_research(CHAR_DATA * ch, char *argument)
 			return;
 		}
 		if (!str_cmp(arg2, "power")) {
-			spcostpow = (ch->collidepower * 15);
-			if (spcostpow < 15)
-				spcostpow = 15;
+			spcostpow = (ch->collidepower * 150);
+			if (spcostpow < 150)
+				spcostpow = 150;
 			if (spremaining < spcostpow) {
 				send_to_char("You don't have enough SP to do that.\n\r", ch);
 				return;
@@ -5645,9 +5643,9 @@ do_research(CHAR_DATA * ch, char *argument)
 			}		
 		}
 		if (!str_cmp(arg2, "efficiency")) {
-			spcosteff = (ch->collideeffic * 15);
-			if (spcosteff < 15)
-				spcosteff = 15;
+			spcosteff = (ch->collideeffic * 150);
+			if (spcosteff < 150)
+				spcosteff = 150;
 			if (spremaining < spcosteff) {
 				send_to_char("You don't have enough SP to do that.\n\r", ch);
 				return;
@@ -5666,9 +5664,9 @@ do_research(CHAR_DATA * ch, char *argument)
 			return;
 		}
 		if (!str_cmp(arg2, "power")) {
-			spcostpow = (ch->lariatpower * 20);
-			if (spcostpow < 20)
-				spcostpow = 20;
+			spcostpow = (ch->lariatpower * 200);
+			if (spcostpow < 200)
+				spcostpow = 200;
 			if (spremaining < spcostpow) {
 				send_to_char("You don't have enough SP to do that.\n\r", ch);
 				return;
@@ -5681,9 +5679,9 @@ do_research(CHAR_DATA * ch, char *argument)
 			}		
 		}
 		if (!str_cmp(arg2, "efficiency")) {
-			spcosteff = (ch->lariateffic * 20);
-			if (spcosteff < 20)
-				spcosteff = 20;
+			spcosteff = (ch->lariateffic * 200);
+			if (spcosteff < 200)
+				spcosteff = 200;
 			if (spremaining < spcosteff) {
 				send_to_char("You don't have enough SP to do that.\n\r", ch);
 				return;
@@ -5702,9 +5700,9 @@ do_research(CHAR_DATA * ch, char *argument)
 			return;
 		}
 		if (!str_cmp(arg2, "power")) {
-			spcostpow = (ch->eye_beampower * 10);
-			if (spcostpow < 10)
-				spcostpow = 10;
+			spcostpow = (ch->eye_beampower * 100);
+			if (spcostpow < 100)
+				spcostpow = 100;
 			if (spremaining < spcostpow) {
 				send_to_char("You don't have enough SP to do that.\n\r", ch);
 				return;
@@ -5717,9 +5715,9 @@ do_research(CHAR_DATA * ch, char *argument)
 			}		
 		}
 		if (!str_cmp(arg2, "efficiency")) {
-			spcosteff = (ch->eye_beameffic * 10);
-			if (spcosteff < 10)
-				spcosteff = 10;
+			spcosteff = (ch->eye_beameffic * 100);
+			if (spcosteff < 100)
+				spcosteff = 100;
 			if (spremaining < spcosteff) {
 				send_to_char("You don't have enough SP to do that.\n\r", ch);
 				return;
@@ -5738,9 +5736,9 @@ do_research(CHAR_DATA * ch, char *argument)
 			return;
 		}
 		if (!str_cmp(arg2, "power")) {
-			spcostpow = (ch->energy_discpower * 10);
-			if (spcostpow < 10)
-				spcostpow = 10;
+			spcostpow = (ch->energy_discpower * 100);
+			if (spcostpow < 100)
+				spcostpow = 100;
 			if (spremaining < spcostpow) {
 				send_to_char("You don't have enough SP to do that.\n\r", ch);
 				return;
@@ -5753,9 +5751,9 @@ do_research(CHAR_DATA * ch, char *argument)
 			}
 		}
 		if (!str_cmp(arg2, "efficiency")) {
-			spcosteff = (ch->energy_disceffic * 10);
-			if (spcosteff < 10)
-				spcosteff = 10;
+			spcosteff = (ch->energy_disceffic * 100);
+			if (spcosteff < 100)
+				spcosteff = 100;
 			if (spremaining < spcosteff) {
 				send_to_char("You don't have enough SP to do that.\n\r", ch);
 				return;
@@ -5774,9 +5772,9 @@ do_research(CHAR_DATA * ch, char *argument)
 			return;
 		}
 		if (!str_cmp(arg2, "power")) {
-			spcostpow = (ch->destructive_wavepower * 15);
-			if (spcostpow < 15)
-				spcostpow = 15;
+			spcostpow = (ch->destructive_wavepower * 150);
+			if (spcostpow < 150)
+				spcostpow = 150;
 			if (spremaining < spcostpow) {
 				send_to_char("You don't have enough SP to do that.\n\r", ch);
 				return;
@@ -5789,9 +5787,9 @@ do_research(CHAR_DATA * ch, char *argument)
 			}		
 		}
 		if (!str_cmp(arg2, "efficiency")) {
-			spcosteff = (ch->destructive_waveeffic * 15);
-			if (spcosteff < 15)
-				spcosteff = 15;
+			spcosteff = (ch->destructive_waveeffic * 150);
+			if (spcosteff < 150)
+				spcosteff = 150;
 			if (spremaining < spcosteff) {
 				send_to_char("You don't have enough SP to do that.\n\r", ch);
 				return;
@@ -5810,9 +5808,9 @@ do_research(CHAR_DATA * ch, char *argument)
 			return;
 		}
 		if (!str_cmp(arg2, "power")) {
-			spcostpow = (ch->forcewavepower * 15);
-			if (spcostpow < 15)
-				spcostpow = 15;
+			spcostpow = (ch->forcewavepower * 150);
+			if (spcostpow < 150)
+				spcostpow = 150;
 			if (spremaining < spcostpow) {
 				send_to_char("You don't have enough SP to do that.\n\r", ch);
 				return;
@@ -5825,9 +5823,9 @@ do_research(CHAR_DATA * ch, char *argument)
 			}		
 		}
 		if (!str_cmp(arg2, "efficiency")) {
-			spcosteff = (ch->forcewaveeffic * 15);
-			if (spcosteff < 15)
-				spcosteff = 15;
+			spcosteff = (ch->forcewaveeffic * 150);
+			if (spcosteff < 150)
+				spcosteff = 150;
 			if (spremaining < spcosteff) {
 				send_to_char("You don't have enough SP to do that.\n\r", ch);
 				return;
@@ -5846,9 +5844,9 @@ do_research(CHAR_DATA * ch, char *argument)
 			return;
 		}
 		if (!str_cmp(arg2, "power")) {
-			spcostpow = (ch->destructo_discpower * 15);
-			if (spcostpow < 15)
-				spcostpow = 15;
+			spcostpow = (ch->destructo_discpower * 150);
+			if (spcostpow < 150)
+				spcostpow = 150;
 			if (spremaining < spcostpow) {
 				send_to_char("You don't have enough SP to do that.\n\r", ch);
 				return;
@@ -5861,9 +5859,9 @@ do_research(CHAR_DATA * ch, char *argument)
 			}		
 		}
 		if (!str_cmp(arg2, "efficiency")) {
-			spcosteff = (ch->destructo_disceffic * 15);
-			if (spcosteff < 15)
-				spcosteff = 15;
+			spcosteff = (ch->destructo_disceffic * 150);
+			if (spcosteff < 150)
+				spcosteff = 150;
 			if (spremaining < spcosteff) {
 				send_to_char("You don't have enough SP to do that.\n\r", ch);
 				return;
@@ -5882,9 +5880,9 @@ do_research(CHAR_DATA * ch, char *argument)
 			return;
 		}
 		if (!str_cmp(arg2, "power")) {
-			spcostpow = (ch->masenkopower * 15);
-			if (spcostpow < 15)
-				spcostpow = 15;
+			spcostpow = (ch->masenkopower * 150);
+			if (spcostpow < 150)
+				spcostpow = 150;
 			if (spremaining < spcostpow) {
 				send_to_char("You don't have enough SP to do that.\n\r", ch);
 				return;
@@ -5897,9 +5895,9 @@ do_research(CHAR_DATA * ch, char *argument)
 			}		
 		}
 		if (!str_cmp(arg2, "efficiency")) {
-			spcosteff = (ch->masenkoeffic * 15);
-			if (spcosteff < 15)
-				spcosteff = 15;
+			spcosteff = (ch->masenkoeffic * 150);
+			if (spcosteff < 150)
+				spcosteff = 150;
 			if (spremaining < spcosteff) {
 				send_to_char("You don't have enough SP to do that.\n\r", ch);
 				return;
@@ -5918,9 +5916,9 @@ do_research(CHAR_DATA * ch, char *argument)
 			return;
 		}
 		if (!str_cmp(arg2, "power")) {
-			spcostpow = (ch->makosenpower * 15);
-			if (spcostpow < 15)
-				spcostpow = 15;
+			spcostpow = (ch->makosenpower * 150);
+			if (spcostpow < 150)
+				spcostpow = 150;
 			if (spremaining < spcostpow) {
 				send_to_char("You don't have enough SP to do that.\n\r", ch);
 				return;
@@ -5933,9 +5931,9 @@ do_research(CHAR_DATA * ch, char *argument)
 			}		
 		}
 		if (!str_cmp(arg2, "efficiency")) {
-			spcosteff = (ch->makoseneffic * 15);
-			if (spcosteff < 15)
-				spcosteff = 15;
+			spcosteff = (ch->makoseneffic * 150);
+			if (spcosteff < 150)
+				spcosteff = 150;
 			if (spremaining < spcosteff) {
 				send_to_char("You don't have enough SP to do that.\n\r", ch);
 				return;
@@ -5954,9 +5952,9 @@ do_research(CHAR_DATA * ch, char *argument)
 			return;
 		}
 		if (!str_cmp(arg2, "power")) {
-			spcostpow = (ch->sbcpower * 20);
-			if (spcostpow < 20)
-				spcostpow = 20;
+			spcostpow = (ch->sbcpower * 200);
+			if (spcostpow < 200)
+				spcostpow = 200;
 			if (spremaining < spcostpow) {
 				send_to_char("You don't have enough SP to do that.\n\r", ch);
 				return;
@@ -5969,9 +5967,9 @@ do_research(CHAR_DATA * ch, char *argument)
 			}		
 		}
 		if (!str_cmp(arg2, "efficiency")) {
-			spcosteff = (ch->sbceffic * 20);
-			if (spcosteff < 20)
-				spcosteff = 20;
+			spcosteff = (ch->sbceffic * 200);
+			if (spcosteff < 200)
+				spcosteff = 200;
 			if (spremaining < spcosteff) {
 				send_to_char("You don't have enough SP to do that.\n\r", ch);
 				return;
@@ -5990,9 +5988,9 @@ do_research(CHAR_DATA * ch, char *argument)
 			return;
 		}
 		if (!str_cmp(arg2, "power")) {
-			spcostpow = (ch->finger_beampower * 20);
-			if (spcostpow < 20)
-				spcostpow = 20;
+			spcostpow = (ch->finger_beampower * 200);
+			if (spcostpow < 200)
+				spcostpow = 200;
 			if (spremaining < spcostpow) {
 				send_to_char("You don't have enough SP to do that.\n\r", ch);
 				return;
@@ -6005,9 +6003,9 @@ do_research(CHAR_DATA * ch, char *argument)
 			}		
 		}
 		if (!str_cmp(arg2, "efficiency")) {
-			spcosteff = (ch->finger_beameffic * 20);
-			if (spcosteff < 20)
-				spcosteff = 20;
+			spcosteff = (ch->finger_beameffic * 200);
+			if (spcosteff < 200)
+				spcosteff = 200;
 			if (spremaining < spcosteff) {
 				send_to_char("You don't have enough SP to do that.\n\r", ch);
 				return;
@@ -6026,9 +6024,9 @@ do_research(CHAR_DATA * ch, char *argument)
 			return;
 		}
 		if (!str_cmp(arg2, "power")) {
-			spcostpow = (ch->kamehamehapower * 20);
-			if (spcostpow < 20)
-				spcostpow = 20;
+			spcostpow = (ch->kamehamehapower * 200);
+			if (spcostpow < 200)
+				spcostpow = 200;
 			if (spremaining < spcostpow) {
 				send_to_char("You don't have enough SP to do that.\n\r", ch);
 				return;
@@ -6041,9 +6039,9 @@ do_research(CHAR_DATA * ch, char *argument)
 			}		
 		}
 		if (!str_cmp(arg2, "efficiency")) {
-			spcosteff = (ch->kamehamehaeffic * 20);
-			if (spcosteff < 20)
-				spcosteff = 20;
+			spcosteff = (ch->kamehamehaeffic * 200);
+			if (spcosteff < 200)
+				spcosteff = 200;
 			if (spremaining < spcosteff) {
 				send_to_char("You don't have enough SP to do that.\n\r", ch);
 				return;
@@ -6062,9 +6060,9 @@ do_research(CHAR_DATA * ch, char *argument)
 			return;
 		}
 		if (!str_cmp(arg2, "power")) {
-			spcostpow = (ch->shockwavepower * 20);
-			if (spcostpow < 20)
-				spcostpow = 20;
+			spcostpow = (ch->shockwavepower * 200);
+			if (spcostpow < 200)
+				spcostpow = 200;
 			if (spremaining < spcostpow) {
 				send_to_char("You don't have enough SP to do that.\n\r", ch);
 				return;
@@ -6077,9 +6075,9 @@ do_research(CHAR_DATA * ch, char *argument)
 			}		
 		}
 		if (!str_cmp(arg2, "efficiency")) {
-			spcosteff = (ch->shockwaveeffic * 20);
-			if (spcosteff < 20)
-				spcosteff = 20;
+			spcosteff = (ch->shockwaveeffic * 200);
+			if (spcosteff < 200)
+				spcosteff = 200;
 			if (spremaining < spcosteff) {
 				send_to_char("You don't have enough SP to do that.\n\r", ch);
 				return;
@@ -6098,9 +6096,9 @@ do_research(CHAR_DATA * ch, char *argument)
 			return;
 		}
 		if (!str_cmp(arg2, "power")) {
-			spcostpow = (ch->gallic_gunpower * 20);
-			if (spcostpow < 20)
-				spcostpow = 20;
+			spcostpow = (ch->gallic_gunpower * 200);
+			if (spcostpow < 200)
+				spcostpow = 200;
 			if (spremaining < spcostpow) {
 				send_to_char("You don't have enough SP to do that.\n\r", ch);
 				return;
@@ -6113,9 +6111,9 @@ do_research(CHAR_DATA * ch, char *argument)
 			}		
 		}
 		if (!str_cmp(arg2, "efficiency")) {
-			spcosteff = (ch->gallic_guneffic * 20);
-			if (spcosteff < 20)
-				spcosteff = 20;
+			spcosteff = (ch->gallic_guneffic * 200);
+			if (spcosteff < 200)
+				spcosteff = 200;
 			if (spremaining < spcosteff) {
 				send_to_char("You don't have enough SP to do that.\n\r", ch);
 				return;
