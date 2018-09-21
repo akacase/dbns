@@ -2173,7 +2173,7 @@ violence_update(void)
 					act( AT_WHITE, "Your body glows faintly as you manage to contain a raging power building within.", ch, NULL, NULL, TO_CHAR );
 					act( AT_WHITE, "$n glows very faintly.", ch, NULL, NULL, TO_NOTVICT );
 					act( AT_WHITE, "Your Ki Mastery increases.", ch, NULL, NULL, TO_CHAR );
-					if (!IS_IMMORTAL(ch))
+					if (IS_IMMORTAL(ch))
 						pager_printf(ch, "&wDEBUG: Powerup Mastery is now %d.\n\r", ch->masterypowerup);
 					ch->energymastery += 5;
 					ch->masterypowerup += 3;
@@ -2196,7 +2196,7 @@ violence_update(void)
 					act( AT_WHITE, "You struggle to maintain delicate control over your inner power.", ch, NULL, NULL, TO_CHAR );
 					act( AT_WHITE, "$n struggles to maintain delicate control over $s inner power.", ch, NULL, NULL, TO_NOTVICT );
 					act( AT_WHITE, "Your Ki Mastery increases slightly.", ch, NULL, NULL, TO_CHAR );
-					if (!IS_IMMORTAL(ch))
+					if (IS_IMMORTAL(ch))
 						pager_printf(ch, "&wDEBUG: Powerup Mastery is now %d.\n\r", ch->masterypowerup);
 					ch->energymastery += 3;
 					ch->masterypowerup += 2;
@@ -2219,7 +2219,7 @@ violence_update(void)
 					act( AT_WHITE, "You struggle to maintain delicate control over your inner power.", ch, NULL, NULL, TO_CHAR );
 					act( AT_WHITE, "$n struggles to maintain delicate control over $s inner power.", ch, NULL, NULL, TO_NOTVICT );
 					act( AT_WHITE, "Your Ki Mastery increases slightly.", ch, NULL, NULL, TO_CHAR );
-					if (!IS_IMMORTAL(ch))
+					if (IS_IMMORTAL(ch))
 						pager_printf(ch, "&wDEBUG: Powerup Mastery is now %d.\n\r", ch->masterypowerup);
 					ch->energymastery += 3;
 					ch->masterypowerup += 2;
