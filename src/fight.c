@@ -1192,16 +1192,11 @@ violence_update(void)
 				sevencon = ch->perm_con * 1.25;
 				if (!xIS_SET((ch)->affected_by, AFF_SSJ)) {
 					int saiyanTotal = 0;
-					if (!IS_IMMORTAL(ch))
-						safemaximum = ((get_curr_int(ch) * 0.03) + 1);
-					if (IS_IMMORTAL(ch))
-						safemaximum = (ch->masterypowerup / 1000) + (ch->energymastery / 1000) + (ch->strikemastery / 1000);
+
+					safemaximum = (ch->masterypowerup / 1000) + (ch->energymastery / 1000) + (ch->strikemastery / 1000);
 					saiyanTotal = ((ch->perm_str * 2) + (ch->perm_dex * 2) + (ch->perm_int) + (ch->perm_con * 2));
 					if (ch->powerup < safemaximum) {
-						if (!IS_IMMORTAL(ch))
-							ch->pl *= 1.30;
-						if (IS_IMMORTAL(ch))
-							ch->pl *= (long double) ((long double) 1.01 + ((long double) ch->masterypowerup / 100000));
+						ch->pl *= (long double) ((long double) 1.01 + ((long double) ch->masterypowerup / 100000));
 						ch->powerup += 1;
 						transStatApply(ch, powerupstr, powerupspd, powerupint, powerupcon);
 						if (plmod >= 30 && saiyanTotal > 4000) {
@@ -1253,24 +1248,14 @@ violence_update(void)
 							xSET_BIT((ch)->affected_by, AFF_SAFEMAX);
 						}
 					}
-					if (IS_IMMORTAL(ch)) {
-						if (ch->powerup >= 15) {
-							ch->powerup = safemaximum;
-							xREMOVE_BIT((ch)->affected_by, AFF_POWERCHANNEL);
-							xSET_BIT((ch)->affected_by, AFF_SAFEMAX);
-							act( auraColor, "Having reached your limit, you stop powering up. Going any further would be dangerous.", ch, NULL, NULL, TO_CHAR );
-							act( auraColor, "$n reaches $s limit and stops powering up.", ch, NULL, NULL, TO_NOTVICT );
-						}
+					if (ch->powerup >= 15) {
+						ch->powerup = safemaximum;
+						xREMOVE_BIT((ch)->affected_by, AFF_POWERCHANNEL);
+						xSET_BIT((ch)->affected_by, AFF_SAFEMAX);
+						act( auraColor, "Having reached your limit, you stop powering up. Going any further would be dangerous.", ch, NULL, NULL, TO_CHAR );
+						act( auraColor, "$n reaches $s limit and stops powering up.", ch, NULL, NULL, TO_NOTVICT );
 					}
-					else {
-						if (ch->powerup >= safemaximum) {
-							ch->powerup = safemaximum;
-							xREMOVE_BIT((ch)->affected_by, AFF_POWERCHANNEL);
-							xSET_BIT((ch)->affected_by, AFF_SAFEMAX);
-							act( auraColor, "Having reached your limit, you stop powering up. Going any further would be dangerous.", ch, NULL, NULL, TO_CHAR );
-							act( auraColor, "$n reaches $s limit and stops powering up.", ch, NULL, NULL, TO_NOTVICT );
-						}
-					}
+					
 				}
 				if (xIS_SET((ch)->affected_by, AFF_SSJ)
 					&& !xIS_SET((ch)->affected_by, AFF_USSJ)
@@ -1545,9 +1530,9 @@ violence_update(void)
 					&& !xIS_SET((ch)->affected_by, AFF_ICER4)
 					&& !xIS_SET((ch)->affected_by, AFF_ICER5)
 					&& !xIS_SET((ch)->affected_by, AFF_GOLDENFORM)) {
-					safemaximum = ((get_curr_int(ch) * 0.03) + 1);
+					safemaximum = (ch->masterypowerup / 1000) + (ch->energymastery / 1000) + (ch->strikemastery / 1000);
 					if (ch->powerup < safemaximum) {
-						ch->pl *= 1.30;
+						ch->pl *= (long double) ((long double) 1.01 + ((long double) ch->masterypowerup / 100000));
 						ch->powerup += 1;
 						transStatApply(ch, powerupstr, powerupspd, powerupint, powerupcon);
 						if (plmod >= 2) {
@@ -1564,7 +1549,7 @@ violence_update(void)
 							act( auraColor, "$n glows brightly, hairline fractures appearing across $s body.", ch, NULL, NULL, TO_NOTVICT );
 						}
 					}
-					if (ch->powerup >= safemaximum) {
+					if (ch->powerup >= 15) {
 						ch->powerup = safemaximum;
 						xREMOVE_BIT((ch)->affected_by, AFF_POWERCHANNEL);
 						xSET_BIT((ch)->affected_by, AFF_SAFEMAX);
@@ -1770,9 +1755,9 @@ violence_update(void)
 					int mysticTotal = 0;
 					
 					mysticTotal = ((ch->perm_str + ch->perm_dex) + (ch->perm_int * 2) + (ch->perm_con * 3));
-					safemaximum = ((get_curr_int(ch) * 0.03) + 1);
+					safemaximum = (ch->masterypowerup / 1000) + (ch->energymastery / 1000) + (ch->strikemastery / 1000);
 					if (ch->powerup < safemaximum) {
-						ch->pl *= 1.30;
+						ch->pl *= (long double) ((long double) 1.01 + ((long double) ch->masterypowerup / 100000));
 						ch->powerup += 1;
 						transStatApply(ch, powerupstr, powerupspd, powerupint, powerupcon);
 						if (plmod >= 30
@@ -1814,7 +1799,7 @@ violence_update(void)
 							act( auraColor, "$n's body glows faintly.", ch, NULL, NULL, TO_NOTVICT );
 						}
 					}
-					if (ch->powerup >= safemaximum) {
+					if (ch->powerup >= 15) {
 						ch->powerup = safemaximum;
 						xREMOVE_BIT((ch)->affected_by, AFF_POWERCHANNEL);
 						xSET_BIT((ch)->affected_by, AFF_SAFEMAX);
@@ -1942,9 +1927,9 @@ violence_update(void)
 					int namekTotal = 0;
 					
 					namekTotal = ((ch->perm_str + ch->perm_dex) + (ch->perm_int * 3) + (ch->perm_con * 2));
-					safemaximum = ((get_curr_int(ch) * 0.03) + 1);
+					safemaximum = (ch->masterypowerup / 1000) + (ch->energymastery / 1000) + (ch->strikemastery / 1000);
 					if (ch->powerup < safemaximum) {
-						ch->pl *= 1.30;
+						ch->pl *= (long double) ((long double) 1.01 + ((long double) ch->masterypowerup / 100000));
 						ch->powerup += 1;
 						transStatApply(ch, powerupstr, powerupspd, powerupint, powerupcon);
 						if (plmod >= 35
@@ -1987,7 +1972,7 @@ violence_update(void)
 							act( auraColor, "$n's body glows faintly.", ch, NULL, NULL, TO_NOTVICT );
 						}
 					}
-					if (ch->powerup >= safemaximum) {
+					if (ch->powerup >= 15) {
 						ch->powerup = safemaximum;
 						xREMOVE_BIT((ch)->affected_by, AFF_POWERCHANNEL);
 						xSET_BIT((ch)->affected_by, AFF_SAFEMAX);
@@ -2351,6 +2336,13 @@ violence_update(void)
 			|| ch->position == POS_BERSERK
 			|| ch->position == POS_DEFENSIVE
 			|| ch->position == POS_EVASIVE) {
+				if (xIS_SET((ch)->affected_by, AFF_SAFEMAX) {
+					int	poweruprand = 0;
+					
+					poweruprand = number_range(1,3);
+					if (poweruprand = 3)
+						ch->masterypowerup += 2;
+				}
 				stat_train(ch, "str", weightstat);
 				stat_train(ch, "spd", weightstat);
 				stat_train(ch, "con", weightstat);
@@ -2428,7 +2420,7 @@ violence_update(void)
 		  breakbonus = statbonus * 2;
 
 		  if (trainmessage < 65) {
-		    base_xp = (long double)increase / 12 * totalgrav;
+		    base_xp = (long double)increase / 600 * totalgrav;
 			xp_gain = (long double)base_xp;
 			gain_exp(ch, xp_gain);
 			if (xp_gain > 1) {
@@ -2468,7 +2460,7 @@ violence_update(void)
 			}
 		  }
 		  if (trainmessage >= 65 && trainmessage < 99) {
-		    base_xp = (long double)increase / 12 * totalgrav;
+		    base_xp = (long double)increase / 600 * totalgrav;
 			xp_gain = (long double)base_xp;
 		    gain_exp(ch, xp_gain);
 		    pager_printf(ch, "&GYou perform a push-up, your strength steadily building.\n\r");
@@ -2509,7 +2501,7 @@ violence_update(void)
 			}
 		  }
 		  if (trainmessage >= 99) {
-		    base_xp = (long double)increase / 12 * totalgrav;
+		    base_xp = (long double)increase / 600 * totalgrav;
 			xp_gain = (long double)base_xp;
 		    gain_exp(ch, xp_gain);
 		    pager_printf(ch, "&GPushing past your normal limits, you perform a series of one-armed push-ups!\n\r");
@@ -2581,7 +2573,7 @@ violence_update(void)
 		  breakbonus = statbonus * 2;
 
 		  if (trainmessage < 65) {
-		    base_xp = (long double)increase / 6 * totalgrav;
+		    base_xp = (long double)increase / 300 * totalgrav;
 			xp_gain = (long double)base_xp;
 			gain_exp(ch, xp_gain);
 			if (xp_gain > 1) {
@@ -2621,7 +2613,7 @@ violence_update(void)
 			}
 		  }
 		  if (trainmessage >= 65 && trainmessage < 99) {
-		    base_xp = (long double)increase / 6 * totalgrav;
+		    base_xp = (long double)increase / 300 * totalgrav;
 			xp_gain = (long double)base_xp;
 		    gain_exp(ch, xp_gain);
 		    pager_printf(ch, "&GYou perform a push-up, your strength steadily building.\n\r");
@@ -2662,7 +2654,7 @@ violence_update(void)
 			}
 		  }
 		  if (trainmessage >= 99) {
-		    base_xp = (long double)increase / 6 * totalgrav;
+		    base_xp = (long double)increase / 300 * totalgrav;
 			xp_gain = (long double)base_xp;
 		    gain_exp(ch, xp_gain);
 		    pager_printf(ch, "&GPushing past your normal limits, you perform a series of one-armed push-ups!\n\r");
@@ -2729,7 +2721,7 @@ violence_update(void)
 		  breakbonus = statbonus * 2;
 
 		  if (trainmessage < 65) {
-		    base_xp = (long double)increase / 12 * totalgrav;
+		    base_xp = (long double)increase / 600 * totalgrav;
 			xp_gain = (long double)base_xp;
 			gain_exp(ch, xp_gain);
 			if (xp_gain > 1) {
@@ -2769,7 +2761,7 @@ violence_update(void)
 			}
 		  }
 		  if (trainmessage >= 65 && trainmessage < 99) {
-		    base_xp = (long double)increase / 12 * totalgrav;
+		    base_xp = (long double)increase / 600 * totalgrav;
 			xp_gain = (long double)base_xp;
 		    gain_exp(ch, xp_gain);
 		    pager_printf(ch, "&GYou jab repeatedly at the air, dancing from foot to foot.\n\r");
@@ -2810,7 +2802,7 @@ violence_update(void)
 			}
 		  }
 		  if (trainmessage >= 99) {
-		    base_xp = (long double)increase / 12 * totalgrav;
+		    base_xp = (long double)increase / 600 * totalgrav;
 			xp_gain = (long double)base_xp;
 		    gain_exp(ch, xp_gain);
 		    pager_printf(ch, "&GYou explode into an elaborate combo, firing punch after punch through a rush of insight!\n\r");
@@ -2881,7 +2873,7 @@ violence_update(void)
 		  breakbonus = statbonus * 2;
 
 		  if (trainmessage < 65) {
-		    base_xp = (long double)increase / 6 * totalgrav;
+		    base_xp = (long double)increase / 300 * totalgrav;
 			xp_gain = (long double)base_xp;
 			gain_exp(ch, xp_gain);
 			if (xp_gain > 1) {
@@ -2921,7 +2913,7 @@ violence_update(void)
 			}
 		  }
 		  if (trainmessage >= 65 && trainmessage < 99) {
-		    base_xp = (long double)increase / 6 * totalgrav;
+		    base_xp = (long double)increase / 300 * totalgrav;
 			xp_gain = (long double)base_xp;
 		    gain_exp(ch, xp_gain);
 		    pager_printf(ch, "&GYou jab repeatedly at the air, dancing from foot to foot.\n\r");
@@ -2962,7 +2954,7 @@ violence_update(void)
 			}
 		  }
 		  if (trainmessage >= 99) {
-		    base_xp = (long double)increase / 6 * totalgrav;
+		    base_xp = (long double)increase / 300 * totalgrav;
 			xp_gain = (long double)base_xp;
 		    gain_exp(ch, xp_gain);
 		    pager_printf(ch, "&GYou explode into an elaborate combo, firing punch after punch through a rush of insight!\n\r");
@@ -3029,7 +3021,7 @@ violence_update(void)
 		  breakbonus = statbonus * 2;
 
 		  if (trainmessage < 65) {
-		    base_xp = (long double)increase / 12 * totalgrav;
+		    base_xp = (long double)increase / 600 * totalgrav;
 			xp_gain = (long double)base_xp;
 			gain_exp(ch, xp_gain);
 			if (xp_gain > 1) {
@@ -3069,7 +3061,7 @@ violence_update(void)
 			}
 		  }
 		  if (trainmessage >= 65 && trainmessage < 99) {
-		    base_xp = (long double)increase / 12 * totalgrav;
+		    base_xp = (long double)increase / 600 * totalgrav;
 			xp_gain = (long double)base_xp;
 		    gain_exp(ch, xp_gain);
 		    pager_printf(ch, "&GYou feel heavy, struggling to carry your own weight without ki regulation.\n\r");
@@ -3110,7 +3102,7 @@ violence_update(void)
 			}
 		  }
 		  if (trainmessage >= 99) {
-		    base_xp = (long double)increase / 12 * totalgrav;
+		    base_xp = (long double)increase / 600 * totalgrav;
 			xp_gain = (long double)base_xp;
 		    gain_exp(ch, xp_gain);
 		    pager_printf(ch, "&GYou push through exhaustion, barely carrying on.\n\r");
@@ -3181,7 +3173,7 @@ violence_update(void)
 		  breakbonus = statbonus * 2;
 
 		  if (trainmessage < 65) {
-		    base_xp = (long double)increase / 6 * totalgrav;
+		    base_xp = (long double)increase / 300 * totalgrav;
 			xp_gain = (long double)base_xp;
 			gain_exp(ch, xp_gain);
 			if (xp_gain > 1) {
@@ -3221,7 +3213,7 @@ violence_update(void)
 			}
 		  }
 		  if (trainmessage >= 65 && trainmessage < 99) {
-		    base_xp = (long double)increase / 6 * totalgrav;
+		    base_xp = (long double)increase / 300 * totalgrav;
 			xp_gain = (long double)base_xp;
 		    gain_exp(ch, xp_gain);
 		    pager_printf(ch, "&GYou feel heavy, struggling to carry your own weight without ki regulation.\n\r");
@@ -3262,7 +3254,7 @@ violence_update(void)
 			}
 		  }
 		  if (trainmessage >= 99) {
-		    base_xp = (long double)increase / 6 * totalgrav;
+		    base_xp = (long double)increase / 300 * totalgrav;
 			xp_gain = (long double)base_xp;
 		    gain_exp(ch, xp_gain);
 		    pager_printf(ch, "&GYou push through exhaustion, barely carrying on.\n\r");
@@ -5957,22 +5949,22 @@ damage(CHAR_DATA * ch, CHAR_DATA * victim, int dam, int dt)
 		xp_mod = 1;
 		if (!IS_NPC(victim))
 			xp_gain =
-			    (long double)dam / 1000 * pow(victim->worth, xp_mod);
+			    (long double)dam / 50000 * pow(victim->worth, xp_mod);
 		if (IS_NPC(victim))
 			xp_gain =
-			    (long double)dam / 1000 * pow(victim->worth, xp_mod);
+			    (long double)dam / 50000 * pow(victim->worth, xp_mod);
 		/* Sparing and deadly combat pl gain's */
 		if (!IS_NPC(ch) && !IS_NPC(victim)
 		    && !xIS_SET(ch->act, PLR_SPAR)
 		    && !xIS_SET(victim->act, PLR_SPAR)) {
 		      xp_gain =
-		        (long double)dam / 500 * pow(victim->worth, xp_mod);
+		        (long double)dam / 2500 * pow(victim->worth, xp_mod);
 		}
 		if (!IS_NPC(ch) && !IS_NPC(victim)
 		    && xIS_SET(ch->act, PLR_SPAR)
 		    && xIS_SET(victim->act, PLR_SPAR)) {
 		      xp_gain =
-		        (long double)dam / 750 * pow(victim->worth, xp_mod);
+		        (long double)dam / 37500 * pow(victim->worth, xp_mod);
 		}
 		/* PL Gains cut if player is stronger than opontants */
 		if (!IS_NPC(victim)) {
