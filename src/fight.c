@@ -2211,8 +2211,6 @@ violence_update(void)
 			}
 			else {
 				if ((ch->mana - (ch->max_mana * (.02 * drain))) > 0) {
-					act( AT_WHITE, "You struggle to maintain delicate control over your inner power.", ch, NULL, NULL, TO_CHAR );
-					act( AT_WHITE, "$n struggles to maintain delicate control over $s inner power.", ch, NULL, NULL, TO_NOTVICT );
 					act( AT_WHITE, "Your Ki Mastery increases slightly.", ch, NULL, NULL, TO_CHAR );
 					if (IS_IMMORTAL(ch))
 						pager_printf(ch, "&wDEBUG: Powerup Mastery is now %d.\n\r", ch->masterypowerup);
