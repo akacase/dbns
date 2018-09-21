@@ -1595,6 +1595,15 @@ do_mset(CHAR_DATA * ch, char *argument)
 			victim->skillhaymaker = value;
 		return;
 	}
+	if (!str_cmp(arg2, "powerupmastery")) {
+		if (!can_mmodify(ch, victim))
+			return;
+		if (IS_NPC(victim))
+			return;
+		else if (!IS_NPC(victim))
+			victim->masterypowerup = value;
+		return;
+	}
 	if (!str_cmp(arg2, "strikemastery")) {
 		if (!can_mmodify(ch, victim))
 			return;
