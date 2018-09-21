@@ -394,6 +394,10 @@ double get_attmod( CHAR_DATA *ch, CHAR_DATA *victim )
 {
 	double attmod = 0.000;
 	attmod = ( (double) (ch)->pl / (victim)->pl);
+	if (attmod > 2.000)
+		attmod = 2.000;
+	if (attmod < 0.500)
+		attmod = 0.500;
 	return attmod;
 }
 long double get_lattmod( CHAR_DATA *ch, CHAR_DATA *victim )
