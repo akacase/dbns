@@ -5328,6 +5328,8 @@ stat_train(CHAR_DATA * ch, char *stat, int *modifier)
 	    *tAbility = 0;
 	    *pAbility += 1;
 	    *permTstat += 1;
+		ch->exp += 1;
+		ch->pl += 1;
 	    if( stat == "str") {
 	        send_to_char( "&CYou feel your strength improving!&D\n\r", ch);
 	    }
@@ -5392,6 +5394,8 @@ exercise_train(CHAR_DATA * ch, char *stat, int *modifier)
 	    *tAbility = 0;
 	    *pAbility += 1;
 	    *permTstat += 1;
+		ch->exp += 1;
+		ch->pl += 1;
 	    if( stat == "str") {
 	        send_to_char( "&CYou feel your strength improving!&D\n\r", ch);
 	    }
