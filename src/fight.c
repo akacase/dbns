@@ -1254,7 +1254,7 @@ violence_update(void)
 						}
 					}
 					if (IS_IMMORTAL(ch)) {
-						if (ch->powerup >= 10) {
+						if (ch->powerup >= 15) {
 							ch->powerup = safemaximum;
 							xREMOVE_BIT((ch)->affected_by, AFF_POWERCHANNEL);
 							xSET_BIT((ch)->affected_by, AFF_SAFEMAX);
