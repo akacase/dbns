@@ -1248,7 +1248,7 @@ violence_update(void)
 							xSET_BIT((ch)->affected_by, AFF_SAFEMAX);
 						}
 					}
-					if ((ch->powerup >= 15) || (ch->powerup = safemaximum)) {
+					if ((ch->powerup >= 15) || (ch->powerup >= safemaximum)) {
 						ch->powerup = safemaximum;
 						xREMOVE_BIT((ch)->affected_by, AFF_POWERCHANNEL);
 						xSET_BIT((ch)->affected_by, AFF_SAFEMAX);
@@ -1548,7 +1548,7 @@ violence_update(void)
 							act( auraColor, "$n glows brightly, hairline fractures appearing across $s body.", ch, NULL, NULL, TO_NOTVICT );
 						}
 					}
-					if ((ch->powerup >= 15) || (ch->powerup = safemaximum)) {
+					if ((ch->powerup >= 15) || (ch->powerup >= safemaximum)) {
 						ch->powerup = safemaximum;
 						xREMOVE_BIT((ch)->affected_by, AFF_POWERCHANNEL);
 						xSET_BIT((ch)->affected_by, AFF_SAFEMAX);
@@ -1798,7 +1798,7 @@ violence_update(void)
 							act( auraColor, "$n's body glows faintly.", ch, NULL, NULL, TO_NOTVICT );
 						}
 					}
-					if ((ch->powerup >= 15) || (ch->powerup = safemaximum)) {
+					if ((ch->powerup >= 15) || (ch->powerup >= safemaximum)) {
 						ch->powerup = safemaximum;
 						xREMOVE_BIT((ch)->affected_by, AFF_POWERCHANNEL);
 						xSET_BIT((ch)->affected_by, AFF_SAFEMAX);
@@ -1971,7 +1971,7 @@ violence_update(void)
 							act( auraColor, "$n's body glows faintly.", ch, NULL, NULL, TO_NOTVICT );
 						}
 					}
-					if ((ch->powerup >= 15) || (ch->powerup = safemaximum)) {
+					if ((ch->powerup >= 15) || (ch->powerup >= safemaximum)) {
 						ch->powerup = safemaximum;
 						xREMOVE_BIT((ch)->affected_by, AFF_POWERCHANNEL);
 						xSET_BIT((ch)->affected_by, AFF_SAFEMAX);
