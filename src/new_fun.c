@@ -394,7 +394,6 @@ double get_attmod( CHAR_DATA *ch, CHAR_DATA *victim )
 {
 	double attmod = 0.000;
 	attmod = ( (double) (ch)->pl / (victim)->pl);
-	attmod = 1.000;
 	return attmod;
 }
 long double get_lattmod( CHAR_DATA *ch, CHAR_DATA *victim )
@@ -410,7 +409,6 @@ long double get_lattmod( CHAR_DATA *ch, CHAR_DATA *victim )
 	if ( IS_NPC(ch) && IS_NPC(victim) )
     	attmod = ( (long double) (ch)->exp / (victim)->exp);
 		
-		attmod = 1.000;
 
 	return attmod;
 }
