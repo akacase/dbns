@@ -1253,12 +1253,23 @@ violence_update(void)
 							xSET_BIT((ch)->affected_by, AFF_SAFEMAX);
 						}
 					}
-					if (ch->powerup >= safemaximum) {
-						ch->powerup = safemaximum;
-						xREMOVE_BIT((ch)->affected_by, AFF_POWERCHANNEL);
-						xSET_BIT((ch)->affected_by, AFF_SAFEMAX);
-						act( auraColor, "Having reached your limit, you stop powering up. Going any further would be dangerous.", ch, NULL, NULL, TO_CHAR );
-						act( auraColor, "$n reaches $s limit and stops powering up.", ch, NULL, NULL, TO_NOTVICT );
+					if (IS_IMMORTAL(ch)) {
+						if (ch->powerup >= 10) {
+							ch->powerup = safemaximum;
+							xREMOVE_BIT((ch)->affected_by, AFF_POWERCHANNEL);
+							xSET_BIT((ch)->affected_by, AFF_SAFEMAX);
+							act( auraColor, "Having reached your limit, you stop powering up. Going any further would be dangerous.", ch, NULL, NULL, TO_CHAR );
+							act( auraColor, "$n reaches $s limit and stops powering up.", ch, NULL, NULL, TO_NOTVICT );
+						}
+					}
+					else {
+						if (ch->powerup >= safemaximum) {
+							ch->powerup = safemaximum;
+							xREMOVE_BIT((ch)->affected_by, AFF_POWERCHANNEL);
+							xSET_BIT((ch)->affected_by, AFF_SAFEMAX);
+							act( auraColor, "Having reached your limit, you stop powering up. Going any further would be dangerous.", ch, NULL, NULL, TO_CHAR );
+							act( auraColor, "$n reaches $s limit and stops powering up.", ch, NULL, NULL, TO_NOTVICT );
+						}
 					}
 				}
 				if (xIS_SET((ch)->affected_by, AFF_SSJ)
