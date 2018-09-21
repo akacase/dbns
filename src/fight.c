@@ -2336,7 +2336,7 @@ violence_update(void)
 			|| ch->position == POS_BERSERK
 			|| ch->position == POS_DEFENSIVE
 			|| ch->position == POS_EVASIVE) {
-				if (xIS_SET((ch)->affected_by, AFF_SAFEMAX) {
+				if (xIS_SET((ch)->affected_by, AFF_SAFEMAX)) {
 					int	poweruprand = 0;
 					
 					poweruprand = number_range(1,3);
