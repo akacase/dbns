@@ -1201,7 +1201,7 @@ violence_update(void)
 						if (!IS_IMMORTAL(ch))
 							ch->pl *= 1.30;
 						if (IS_IMMORTAL(ch))
-							ch->pl *= (1.01 + (ch->masterypowerup / 100000));
+							ch->pl *= (long double) 1.01 + ((long double) ch->masterypowerup / 100000);
 						ch->powerup += 1;
 						transStatApply(ch, powerupstr, powerupspd, powerupint, powerupcon);
 						if (plmod >= 30 && saiyanTotal > 4000) {
