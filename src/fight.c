@@ -1200,7 +1200,7 @@ violence_update(void)
 					if (ch->powerup < safemaximum) {
 						if (!IS_IMMORTAL(ch))
 							ch->pl *= 1.30;
-						else (IS_IMMORTAL(ch))
+						if (IS_IMMORTAL(ch))
 							ch->pl *= (1.01 + (ch->masterypowerup / 100000));
 						ch->powerup += 1;
 						transStatApply(ch, powerupstr, powerupspd, powerupint, powerupcon);
