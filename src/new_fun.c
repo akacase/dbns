@@ -295,17 +295,17 @@ int get_damroll( CHAR_DATA *ch)
 	int damroll = 0;
 	
 	if (xIS_SET((ch)->affected_by, AFF_ENERGYFIST)) {
-		damroll = get_curr_int(ch) / 40;
+		damroll = get_curr_int(ch) / 20;
 	}
 		
 	else if (xIS_SET((ch)->affected_by, AFF_HYBRIDSTYLE)) {
-		damroll = (get_curr_str(ch) / 25) + (get_curr_int(ch) / 50);
+		damroll = (get_curr_str(ch) / 13) + (get_curr_int(ch) / 25);
 	}
 	else if (xIS_SET((ch)->affected_by, AFF_BRUISERSTYLE)) {
-		damroll = get_curr_str(ch) / 18;
+		damroll = get_curr_str(ch) / 9;
 	}
 	else {
-		damroll = get_curr_str(ch) / 20;
+		damroll = get_curr_str(ch) / 10;
 	}
 	if (ch->mental_state > 5 && ch->mental_state < 15)
 		damroll++;
@@ -394,6 +394,7 @@ double get_attmod( CHAR_DATA *ch, CHAR_DATA *victim )
 {
 	double attmod = 0.000;
 	attmod = ( (double) (ch)->pl / (victim)->pl);
+	attmod = 1.000;
 	return attmod;
 }
 long double get_lattmod( CHAR_DATA *ch, CHAR_DATA *victim )
@@ -408,6 +409,8 @@ long double get_lattmod( CHAR_DATA *ch, CHAR_DATA *victim )
     	attmod = ( (long double) (ch)->exp / (victim)->pl);
 	if ( IS_NPC(ch) && IS_NPC(victim) )
     	attmod = ( (long double) (ch)->exp / (victim)->exp);
+		
+		attmod = 1.000;
 
 	return attmod;
 }
