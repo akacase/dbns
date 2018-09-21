@@ -5328,7 +5328,7 @@ stat_train(CHAR_DATA * ch, char *stat, int *modifier)
 	    *tAbility = 0;
 	    *pAbility += 1;
 	    *permTstat += 1;
-		if (ch->exp > 50) {
+		if (ch->exp < 50) {
 			ch->exp += 1;
 			ch->pl += 1;
 		}
@@ -5396,7 +5396,7 @@ exercise_train(CHAR_DATA * ch, char *stat, int *modifier)
 	    *tAbility = 0;
 	    *pAbility += 1;
 	    *permTstat += 1;
-		if (ch->exp > 50) {
+		if (ch->exp < 50) {
 			ch->exp += 1;
 			ch->pl += 1;
 		}
