@@ -1531,7 +1531,7 @@ violence_update(void)
 					&& !xIS_SET((ch)->affected_by, AFF_GOLDENFORM)) {
 					safemaximum = 1 + (ch->masterypowerup / 1000) + (ch->energymastery / 10000) + (ch->strikemastery / 10000);
 					if (ch->powerup < safemaximum) {
-						ch->pl *= (long double) ((long double) 1.01 + ((long double) ch->masterypowerup / 100000));
+						ch->pl *= (long double) ((long double) 1.01 + ((long double) ch->masterypowerup / 200000));
 						ch->powerup += 1;
 						transStatApply(ch, powerupstr, powerupspd, powerupint, powerupcon);
 						if (plmod >= 2) {
@@ -1756,7 +1756,7 @@ violence_update(void)
 					mysticTotal = ((ch->perm_str + ch->perm_dex) + (ch->perm_int * 2) + (ch->perm_con * 3));
 					safemaximum = 1 + (ch->masterypowerup / 1000) + (ch->energymastery / 10000) + (ch->strikemastery / 10000);
 					if (ch->powerup < safemaximum) {
-						ch->pl *= (long double) ((long double) 1.01 + ((long double) ch->masterypowerup / 100000));
+						ch->pl *= (long double) ((long double) 1.01 + ((long double) ch->masterypowerup / 200000));
 						ch->powerup += 1;
 						transStatApply(ch, powerupstr, powerupspd, powerupint, powerupcon);
 						if (plmod >= 30
@@ -1928,7 +1928,7 @@ violence_update(void)
 					namekTotal = ((ch->perm_str + ch->perm_dex) + (ch->perm_int * 3) + (ch->perm_con * 2));
 					safemaximum = 1 + (ch->masterypowerup / 1000) + (ch->energymastery / 10000) + (ch->strikemastery / 10000);
 					if (ch->powerup < safemaximum) {
-						ch->pl *= (long double) ((long double) 1.01 + ((long double) ch->masterypowerup / 100000));
+						ch->pl *= (long double) ((long double) 1.01 + ((long double) ch->masterypowerup / 200000));
 						ch->powerup += 1;
 						transStatApply(ch, powerupstr, powerupspd, powerupint, powerupcon);
 						if (plmod >= 35
