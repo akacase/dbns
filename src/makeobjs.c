@@ -613,10 +613,6 @@ generate_treasure(CHAR_DATA * killer, CHAR_DATA * ch, OBJ_DATA * corpse)
 		return;
 	} else if (tchance <= 80) {
 		zeni = calc_zeni(ch->exp, killer);
-		if (zeni < 1) {
-			bug("RTG Made less than 1 zeni: PC(%s) Mob(%d) Room(%d) Zeni(%d)", killer->name, ch->pIndexData->vnum, ch->in_room->vnum, zeni);
-			return;
-		}
 		if (ch->in_room) {
 			ch->in_room->area->gold_looted += zeni;
 			sysdata.global_looted += zeni / 100;
