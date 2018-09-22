@@ -6094,11 +6094,11 @@ damage(CHAR_DATA * ch, CHAR_DATA * victim, int dam, int dt)
 
 		/* fight training for strength */
 		if (xIS_SET((ch)->affected_by, AFF_ENERGYFIST)) {
-			stat_train(ch, "int", 4);
+			stat_train(ch, "int", 8);
 		}
 		else if (xIS_SET((ch)->affected_by, AFF_HYBRIDSTYLE)) {
-			stat_train(ch, "str", 2);
-			stat_train(ch, "int", 2);
+			stat_train(ch, "str", 4);
+			stat_train(ch, "int", 4);
 		}
 		else if (xIS_SET((ch)->affected_by, AFF_BRUISERSTYLE)) {
 			stat_train(ch, "str", 10);
