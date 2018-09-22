@@ -1196,7 +1196,7 @@ violence_update(void)
 					safemaximum = 1 + (ch->masterypowerup / 1000) + (ch->energymastery / 10000) + (ch->strikemastery / 10000);
 					saiyanTotal = ((ch->perm_str * 2) + (ch->perm_dex * 2) + (ch->perm_int) + (ch->perm_con * 2));
 					if (ch->powerup < safemaximum) {
-						ch->pl *= (long double) ((long double) 1.01 + ((long double) ch->masterypowerup / 100000));
+						ch->pl *= (long double) ((long double) 1.01 + ((long double) ch->masterypowerup / 200000));
 						ch->powerup += 1;
 						transStatApply(ch, powerupstr, powerupspd, powerupint, powerupcon);
 						if (plmod >= 30 && saiyanTotal > 4000) {
