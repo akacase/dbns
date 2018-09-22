@@ -2255,7 +2255,9 @@ violence_update(void)
 			weightstatmult = (double) ((double)totalrgrav / 50) + 1;
 			weightstat = 5 * weightstatmult;
 			
-			vigormod = ch->vigoreffec + 2;
+			vigormod = (ch->vigoreffec / 4) + 2;
+			if (vigormod < 2)
+				vigormod = 2;
 			
 			if (totalrgrav > 1) {
 				gravdam = damrange * totalrgrav;
