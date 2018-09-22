@@ -8013,7 +8013,7 @@ do_sbc(CHAR_DATA * ch, char *argument)
 	WAIT_STATE(ch, 8);
 	if (hitcheck <= 95) {
 		if (!IS_NPC(ch)) {
-			argdam = ((number_range(55, 65) + (ch->sbcpower * 5)) * (kicmult + smastery));
+			argdam = ((number_range(55, 65) + (ch->sbcpower * 6)) * (kicmult + smastery));
 			dam = get_attmod(ch, victim) * (argdam * kimult);
 			stat_train(ch, "int", 18);
 			ch->train += 18;
