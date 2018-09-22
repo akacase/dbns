@@ -84,7 +84,7 @@ do_bounty(CHAR_DATA * ch, char *argument)
 
 	bountymax = 2000000000;
 
-	if (ch->exp < 100000) {
+	if (ch->exp < 250) {
 		send_to_char("You can't use the bounty command until you are 100,000 PL.\n\r", ch);
 		return;
 	}
@@ -371,7 +371,7 @@ do_bounty(CHAR_DATA * ch, char *argument)
 		do_tell(bounty, buf);
 		return;
 	}
-	if (victim->exp < 100000 && ch != victim) {
+	if (victim->exp < 250 && ch != victim) {
 		sprintf(buf, "%s you can not place a bounty on a player under 100,000 power level.", ch->name);
 		do_tell(bounty, buf);
 		return;

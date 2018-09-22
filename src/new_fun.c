@@ -454,7 +454,7 @@ int get_true_rank( CHAR_DATA *ch )
 	if (IS_NPC(ch))
 		return 0;
 
-	if (ch->exp < 5000)
+	if (ch->exp < 250)
 		return 1;
 	else if (ch->exp < 100000)
 		return 2;
@@ -495,7 +495,7 @@ int get_rank_number( CHAR_DATA *ch )
 	if (IS_NPC(ch))
 		return -1;
 
-	if (ch->exp < 100000)
+	if (ch->exp < 250)
 		return 1;
 	else
 		return 2;

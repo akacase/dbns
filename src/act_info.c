@@ -3715,7 +3715,7 @@ do_who(CHAR_DATA * ch, char *argument)
 		else if (IS_HC(wch))
 			cur_who->type = WT_DEADLY;
 		else if (CAN_PKILL(wch)) {
-		        if(wch->exp < 100000)
+		        if(wch->exp < 250)
 			        cur_who->type = WT_TRAINING;
 		        else
 		                cur_who->type = WT_DEADLY;

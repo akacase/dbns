@@ -22,7 +22,7 @@ get_npc_rank(CHAR_DATA * ch)
 	if (!IS_NPC(ch))
 		return get_true_rank(ch);
 
-	if (ch->exp < 5000)
+	if (ch->exp < 250)
 		return 1;
 	else if (ch->exp < 100000)
 		return 2;
