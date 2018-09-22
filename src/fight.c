@@ -658,7 +658,7 @@ violence_update(void)
 					if (form_mastery >= 6)
 						ch->train += 1;
 					else if (form_mastery < 6)
-						ch->train += 60;
+						ch->train += 6;
 				}
 		}
 		if (!IS_NPC(ch)
@@ -686,7 +686,7 @@ violence_update(void)
 					if (form_mastery >= 20)
 						ch->train += 1;
 					else if (form_mastery < 20)
-						ch->train += 60;
+						ch->train += 6;
 				}
 		}
 		if (!IS_NPC(ch)
