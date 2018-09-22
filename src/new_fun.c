@@ -508,7 +508,7 @@ char *get_rank( CHAR_DATA *ch)
 	if (IS_NPC(ch))
 		return ("NPC");
 
-        if (ch->exp < 100000)
+        if (ch->exp < 250)
 	    return ("Fighter in Training");
 	else 
 	    return ("Deadly Fighter");
@@ -522,7 +522,7 @@ char *get_rank_color( CHAR_DATA *ch)
 
 	if (IS_HC(ch))
 		return ("&rUnknown");
-	else if (ch->exp < 100000)
+	else if (ch->exp < 250)
 		return ("&PFighter in Training");
 	else
 		return ("&cDeadly Fighter");

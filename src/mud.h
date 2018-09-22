@@ -197,7 +197,7 @@ typedef ch_ret SPELL_FUN args((int sn, int level, CHAR_DATA * ch, void *vo));
 #define CURRENT_UPGRADE_LEVEL		18
 
 #define START_ADEPT				10
-#define	PK_PL					5000
+#define	PK_PL					250
 //not used yet
 #define MAX_EXP                                 0
 #define	MAX_EXP_PRE_AUTH		5000

@@ -8621,18 +8621,6 @@ do_spar(CHAR_DATA * ch, char *argument)
 		send_to_char("You can't spar your self.\n\r", ch);
 		return;
 	}
-	if (!IS_NPC(ch) && !IS_NPC(victim) && ch->pcdata->sparcount >= 100) {
-		send_to_char
-		    ("You are too tired from sparring to spar further today.\n\r",
-		    ch);
-		return;
-	}
-	if (!IS_NPC(ch) && !IS_NPC(victim) && victim->pcdata->sparcount >= 100) {
-		send_to_char
-		    ("Your partner is too tired from sparring to spar further.\n\r",
-		    ch);
-		return;
-	}
 	if (!IS_IMMORTAL(ch) && !IS_NPC(ch) && !IS_NPC(victim)) {
 		if (!xIS_SET(ch->act, PLR_QUESTING)
 		    && xIS_SET(victim->act, PLR_QUESTING)) {
@@ -8687,13 +8675,13 @@ do_spar(CHAR_DATA * ch, char *argument)
 		    ch);
 		return;
 	}
-	if (!IS_NPC(ch) && !IS_NPC(victim) && ch->exp <= 5000) {
+	if (!IS_NPC(ch) && !IS_NPC(victim) && ch->exp <= 50) {
 		send_to_char
 		    ("You can not fight other players while you are in training.\n\r",
 		    ch);
 		return;
 	}
-	if (!IS_NPC(ch) && !IS_NPC(victim) && victim->exp <= 5000) {
+	if (!IS_NPC(ch) && !IS_NPC(victim) && victim->exp <= 50) {
 		send_to_char
 		    ("You can not fight other players while they are in training.\n\r",
 		    ch);
