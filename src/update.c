@@ -504,17 +504,14 @@ hit_gain(CHAR_DATA * ch)
 	if (IS_NPC(ch)) {
 		gain = number_range(6, 8);
 	} else {
-		gain = number_range(5, 7);
+		if (ch->race == 3)
+			gain += (get_curr_con(ch) * 10);
+		else
+			gain += ((get_curr_con(ch) / 1.5) * 10);
 
 		switch (ch->position) {
 		case POS_DEAD:
 			return 0;
-		case POS_MORTAL:
-			gain = number_range(1, 3);
-		case POS_INCAP:
-			gain = number_range(1, 3);
-		case POS_STUNNED:
-			gain = number_range(1, 3);
 		case POS_SLEEPING:
 			gain *= 2.0;
 			break;
@@ -536,10 +533,6 @@ hit_gain(CHAR_DATA * ch)
 	if (xIS_SET((ch)->in_room->room_flags, ROOM_HTANKS))
 		gain *= 2;
 
-	if (ch->race == 3)
-		gain += (get_curr_con(ch) * 10);
-	else
-		gain += ((get_curr_con(ch) / 1.5) * 10);
 	if (xIS_SET((ch)->affected_by, AFF_INTEXPUSHUPS) || xIS_SET((ch)->affected_by, AFF_EXPUSHUPS)
 	|| xIS_SET((ch)->affected_by, AFF_EXENDURING) || xIS_SET((ch)->affected_by, AFF_INTEXENDURING)
 	|| xIS_SET((ch)->affected_by, AFF_INTEXSHADOWBOXING) || xIS_SET((ch)->affected_by, AFF_EXSHADOWBOXING)
