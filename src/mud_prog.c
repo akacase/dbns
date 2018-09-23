@@ -1162,7 +1162,7 @@ doneargs:
 			if (IS_NPC(chkchar))
 				return mprog_vevall(chkchar->exp, opr, atoll(rval), mob);
 			else
-				return mprog_vevall(chkchar->pl, opr, atoll(rval), mob);
+				return mprog_vevall(chkchar->exp, opr, atoll(rval), mob);
 		}
 	}
 	if (chkobj) {
