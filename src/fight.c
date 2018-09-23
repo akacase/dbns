@@ -538,7 +538,7 @@ violence_update(void)
 				int form_mastery = 0;
 				double plmod = 0;
 				
-				form_mastery = (ch->train / 90000);
+				form_mastery = (ch->masterynamek / 90000);
 				plmod = (ch->pl / ch->exp);
 				if (ch->mana <= 0) {
 					xREMOVE_BIT((ch)->affected_by, AFF_SNAMEK);
@@ -576,11 +576,11 @@ violence_update(void)
 				if (form_drain < 1)
 					form_drain = 1;
 				ch->mana -= form_drain;
-				if (ch->desc) {
-					if (form_drain <= 1)
-						ch->train += 3;
-					else if (form_drain > 1)
-						ch->train += 9;
+				if (ch->desc && !ch->fighting) {
+					ch->masterynamek += 9;
+				}
+				else if (ch->desc && ch->fighting) {
+					ch->masterynamek += 27;
 				}
 		}
 		if (!IS_NPC(ch)
@@ -589,7 +589,7 @@ violence_update(void)
 				int form_mastery = 0;
 				double plmod = 0;
 				
-				form_mastery = (ch->train / 90000);
+				form_mastery = (ch->masterymystic / 90000);
 				plmod = (ch->pl / ch->exp);
 				if (ch->mana <= 0) {
 					xREMOVE_BIT((ch)->affected_by, AFF_MYSTIC);
@@ -626,18 +626,22 @@ violence_update(void)
 				if (form_drain < 1)
 					form_drain = 1;
 				ch->mana -= form_drain;
-				if (ch->desc) {
-					if (form_drain <= 1)
-						ch->train += 3;
-					else if (form_drain > 1)
-						ch->train += 9;
+				if (ch->desc && !ch->fighting) {
+					ch->masterymystic += 9;
+				}
+				else if (ch->desc && ch->fighting) {
+					ch->masterymystic += 27;
 				}
 		}
 		if (!IS_NPC(ch)
 			&& xIS_SET((ch)->affected_by, AFF_ICER2)) {
 				int form_mastery = 0;
 				
-				form_mastery = (ch->train / 90000);
+				form_mastery = (ch->masteryicer / 90000);
+				
+				if (form_mastery < 1)
+					form_mastery = 1;
+					
 				if (ch->mana <= 0) {
 					xREMOVE_BIT((ch)->affected_by, AFF_ICER2);
 					if (xIS_SET((ch)->affected_by, AFF_POWERCHANNEL))
@@ -652,20 +656,21 @@ violence_update(void)
 					act( AT_PURPLE, "You lose control of your ki and return to normal!", ch, NULL, NULL, TO_CHAR );
 					act( AT_PURPLE, "$n loses control of $s ki and returns to normal!", ch, NULL, NULL, TO_NOTVICT );
 				}
-				if (ch->desc) {
-					if (form_mastery < 1)
-						form_mastery = 1;
-					if (form_mastery >= 6)
-						ch->train += 1;
-					else if (form_mastery < 6)
-						ch->train += 6;
+				if (ch->desc && !ch->fighting) {
+					ch->masterymystic += 9;
+				}
+				else if (ch->desc && ch->fighting) {
+					ch->masterymystic += 27;
 				}
 		}
 		if (!IS_NPC(ch)
 			&& xIS_SET((ch)->affected_by, AFF_ICER3)) {
 				int form_mastery = 0;
 				
-				form_mastery = (ch->train / 90000);
+				form_mastery = (ch->masteryicer / 90000);
+				if (form_mastery < 1)
+					form_mastery = 1;
+					
 				if (ch->mana <= 0) {
 					xREMOVE_BIT((ch)->affected_by, AFF_ICER3);
 					if (xIS_SET((ch)->affected_by, AFF_POWERCHANNEL))
@@ -680,20 +685,21 @@ violence_update(void)
 					act( AT_PURPLE, "You lose control of your ki and return to normal!", ch, NULL, NULL, TO_CHAR );
 					act( AT_PURPLE, "$n loses control of $s ki and returns to normal!", ch, NULL, NULL, TO_NOTVICT );
 				}
-				if (ch->desc) {
-					if (form_mastery < 1)
-						form_mastery = 1;
-					if (form_mastery >= 20)
-						ch->train += 1;
-					else if (form_mastery < 20)
-						ch->train += 6;
+				if (ch->desc && !ch->fighting) {
+					ch->masterymystic += 6;
+				}
+				else if (ch->desc && ch->fighting) {
+					ch->masterymystic += 18;
 				}
 		}
 		if (!IS_NPC(ch)
 			&& xIS_SET((ch)->affected_by, AFF_ICER4)) {
 				int form_mastery = 0;
 				
-				form_mastery = (ch->train / 90000);
+				form_mastery = (ch->masteryicer / 90000);
+				if (form_mastery < 1)
+					form_mastery = 1;
+					
 				if (ch->mana <= 0) {
 					xREMOVE_BIT((ch)->affected_by, AFF_ICER4);
 					if (xIS_SET((ch)->affected_by, AFF_POWERCHANNEL))
@@ -708,13 +714,11 @@ violence_update(void)
 					act( AT_PURPLE, "You lose control of your ki and return to normal!", ch, NULL, NULL, TO_CHAR );
 					act( AT_PURPLE, "$n loses control of $s ki and returns to normal!", ch, NULL, NULL, TO_NOTVICT );
 				}
-				if (ch->desc) {
-					if (form_mastery < 1)
-						form_mastery = 1;
-					if (form_mastery >= 44)
-						ch->train += 3;
-					else if (form_mastery < 44)
-						ch->train += 9;
+				if (ch->desc && !ch->fighting) {
+					ch->masterymystic += 9;
+				}
+				else if (ch->desc && ch->fighting) {
+					ch->masterymystic += 27;
 				}
 		}
 		if (!IS_NPC(ch)
@@ -722,7 +726,7 @@ violence_update(void)
 				int form_drain = 0;
 				int form_mastery = 0;
 				
-				form_mastery = (ch->train / 90000);
+				form_mastery = (ch->masteryicer / 90000);
 				if (ch->mana <= 0) {
 					xREMOVE_BIT((ch)->affected_by, AFF_ICER5);
 					if (xIS_SET((ch)->affected_by, AFF_POWERCHANNEL))
@@ -743,11 +747,11 @@ violence_update(void)
 				if (form_drain < 1)
 					form_drain = 1;
 				ch->mana -= form_drain;
-				if (ch->desc) {
-					if (form_mastery >= 64)
-						ch->train += 3;
-					else if (form_mastery < 64)
-						ch->train += 9;
+				if (ch->desc && !ch->fighting) {
+					ch->masterymystic += 9;
+				}
+				else if (ch->desc && ch->fighting) {
+					ch->masterymystic += 27;
 				}
 		}
 		if (!IS_NPC(ch)
@@ -755,7 +759,7 @@ violence_update(void)
 				int form_drain = 0;
 				int form_mastery = 0;
 				
-				form_mastery = (ch->train / 90000);
+				form_mastery = (ch->masteryicer / 90000);
 				if (ch->mana <= 0) {
 					xREMOVE_BIT((ch)->affected_by, AFF_GOLDENFORM);
 					if (xIS_SET((ch)->affected_by, AFF_POWERCHANNEL))
@@ -776,11 +780,11 @@ violence_update(void)
 				if (form_drain < 400)
 					form_drain = 400;
 				ch->mana -= form_drain;
-				if (ch->desc) {
-					if (form_drain > 400)
-						ch->train += 9;
-					else if (form_drain <= 400)
-						ch->train += 3;
+				if (ch->desc && !ch->fighting) {
+					ch->masterymystic += 9;
+				}
+				else if (ch->desc && ch->fighting) {
+					ch->masterymystic += 27;
 				}
 		}
 		if (!IS_NPC(ch)
@@ -794,7 +798,7 @@ violence_update(void)
 				int form_drain = 0;
 				int form_mastery = 0;
 				
-				form_mastery = (ch->train / 90000);
+				form_mastery = (ch->masteryssj / 90000);
 				if (ch->mana <= 0) {
 					xREMOVE_BIT((ch)->affected_by, AFF_SSJ);
 					if (xIS_SET((ch)->affected_by, AFF_POWERCHANNEL))
@@ -817,11 +821,11 @@ violence_update(void)
 				if (form_drain < 1)
 					form_drain = 1;
 				ch->mana -= form_drain;
-				if (ch->desc) {
-					if (form_mastery >= 9)
-						ch->train += 3;
-					else if (form_mastery < 9)
-						ch->train += 9;
+				if (ch->desc && !ch->fighting) {
+					ch->masteryssj += 9;
+				}
+				else if (ch->desc && ch->fighting) {
+					ch->masteryssj += 27;
 				}
 		}
 		if (!IS_NPC(ch)
@@ -835,7 +839,7 @@ violence_update(void)
 				int form_drain = 0;
 				int form_mastery = 0;
 				
-				form_mastery = (ch->train / 90000);
+				form_mastery = (ch->masteryssj / 90000);
 				if (ch->mana <= 0) {
 					xREMOVE_BIT((ch)->affected_by, AFF_SSJ);
 					xREMOVE_BIT((ch)->affected_by, AFF_USSJ);
@@ -859,11 +863,11 @@ violence_update(void)
 				if (form_drain < 1)
 					form_drain = 1;
 				ch->mana -= form_drain;
-				if (ch->desc) {
-					if (form_mastery >= 19)
-						ch->train += 3;
-					else if (form_mastery < 19)
-						ch->train += 9;
+				if (ch->desc && !ch->fighting) {
+					ch->masteryssj += 9;
+				}
+				else if (ch->desc && ch->fighting) {
+					ch->masteryssj += 27;
 				}
 		}
 		if (!IS_NPC(ch)
@@ -877,7 +881,7 @@ violence_update(void)
 				int form_drain = 0;
 				int form_mastery = 0;
 				
-				form_mastery = (ch->train / 90000);
+				form_mastery = (ch->masteryssj / 90000);
 				if (ch->mana <= 0) {
 					xREMOVE_BIT((ch)->affected_by, AFF_SSJ);
 					xREMOVE_BIT((ch)->affected_by, AFF_USSJ);
@@ -902,11 +906,11 @@ violence_update(void)
 				if (form_drain < 1)
 					form_drain = 1;
 				ch->mana -= form_drain;
-				if (ch->desc) {
-					if (form_mastery >= 29)
-						ch->train += 3;
-					else if (form_mastery < 29)
-						ch->train += 9;
+				if (ch->desc && !ch->fighting) {
+					ch->masteryssj += 9;
+				}
+				else if (ch->desc && ch->fighting) {
+					ch->masteryssj += 27;
 				}
 		}
 		if (!IS_NPC(ch)
@@ -920,7 +924,7 @@ violence_update(void)
 				int form_drain = 0;
 				int form_mastery = 0;
 				
-				form_mastery = (ch->train / 90000);
+				form_mastery = (ch->masteryssj / 90000);
 				if (ch->mana <= 0) {
 					xREMOVE_BIT((ch)->affected_by, AFF_SSJ);
 					xREMOVE_BIT((ch)->affected_by, AFF_USSJ);
@@ -946,11 +950,11 @@ violence_update(void)
 				if (form_drain < 1)
 					form_drain = 1;
 				ch->mana -= form_drain;
-				if (ch->desc) {
-					if (form_drain >= 39)
-						ch->train += 3;
-					else if (form_drain < 39)
-						ch->train += 9;
+				if (ch->desc && !ch->fighting) {
+					ch->masteryssj += 9;
+				}
+				else if (ch->desc && ch->fighting) {
+					ch->masteryssj += 27;
 				}
 		}
 		if (!IS_NPC(ch)
@@ -964,7 +968,7 @@ violence_update(void)
 				int form_drain = 0;
 				int form_mastery = 0;
 				
-				form_mastery = (ch->train / 90000);
+				form_mastery = (ch->masteryssj / 90000);
 				if (ch->mana <= 0) {
 					xREMOVE_BIT((ch)->affected_by, AFF_SSJ);
 					xREMOVE_BIT((ch)->affected_by, AFF_USSJ);
@@ -991,11 +995,11 @@ violence_update(void)
 				if (form_drain < 1)
 					form_drain = 1;
 				ch->mana -= form_drain;
-				if (ch->desc) {
-					if (form_mastery >= 52)
-						ch->train += 3;
-					else if (form_mastery < 52)
-						ch->train += 9;
+				if (ch->desc && !ch->fighting) {
+					ch->masteryssj += 9;
+				}
+				else if (ch->desc && ch->fighting) {
+					ch->masteryssj += 27;
 				}
 		}
 		if (!IS_NPC(ch)
@@ -1009,7 +1013,7 @@ violence_update(void)
 				int form_drain = 0;
 				int form_mastery = 0;
 				
-				form_mastery = (ch->train / 90000);
+				form_mastery = (ch->masteryssj / 90000);
 				if (ch->mana <= 0) {
 					xREMOVE_BIT((ch)->affected_by, AFF_SSJ);
 					xREMOVE_BIT((ch)->affected_by, AFF_USSJ);
@@ -1037,11 +1041,11 @@ violence_update(void)
 				if (form_drain < 1)
 					form_drain = 1;
 				ch->mana -= form_drain;
-				if (ch->desc) {
-					if (form_mastery >= 62)
-						ch->train += 3;
-					else if (form_mastery < 62)
-						ch->train += 9;
+				if (ch->desc && !ch->fighting) {
+					ch->masteryssj += 9;
+				}
+				else if (ch->desc && ch->fighting) {
+					ch->masteryssj += 27;
 				}
 		}
 		if (!IS_NPC(ch)
@@ -1055,7 +1059,7 @@ violence_update(void)
 				int form_drain = 0;
 				int form_mastery = 0;
 				
-				form_mastery = (ch->train / 90000);
+				form_mastery = (ch->masteryssj / 90000);
 				if (ch->mana <= 0) {
 					xREMOVE_BIT((ch)->affected_by, AFF_SSJ);
 					xREMOVE_BIT((ch)->affected_by, AFF_USSJ);
@@ -1084,11 +1088,11 @@ violence_update(void)
 				if (form_drain < 250)
 					form_drain = 250;
 				ch->mana -= form_drain;
-				if (ch->desc) {
-					if (form_drain <= 250)
-						ch->train += 3;
-					else if (form_drain > 250)
-						ch->train += 9;
+				if (ch->desc && !ch->fighting) {
+					ch->masteryssj += 9;
+				}
+				else if (ch->desc && ch->fighting) {
+					ch->masteryssj += 27;
 				}
 		}
 		/* Bug Guard */
@@ -1118,7 +1122,14 @@ violence_update(void)
 			powerupcon = ch->perm_con * 0.05;
 			
 			safemaximum = ((get_curr_int(ch) * 0.03) + 1);
-			form_mastery = (ch->train / 90000);
+			if (is_saiyan(ch) || is_hb(ch))
+				form_mastery = (ch->masteryssj / 90000);
+			if (is_icer(ch))
+				form_mastery = (ch->masteryicer / 90000);
+			if (is_kaio(ch) || is_human(ch))
+				form_mastery = (ch->masterymystic / 90000);
+			if (is_namek(ch))
+				form_mastery = (ch->masterynamek / 90000);
 			plmod = (ch->pl / ch->exp);
 			if( !IS_NPC( ch ) && ch->pcdata->auraColorPowerUp > 0 )
 				auraColor = ch->pcdata->auraColorPowerUp;
@@ -1194,12 +1205,12 @@ violence_update(void)
 					int saiyanTotal = 0;
 
 					safemaximum = 1 + (ch->masterypowerup / 1000) + (ch->energymastery / 10000) + (ch->strikemastery / 10000);
-					saiyanTotal = ((ch->perm_str * 2) + (ch->perm_dex * 2) + (ch->perm_int) + (ch->perm_con * 2));
+					saiyanTotal = ((ch->strikemastery) + (ch->energymastery) + (ch->masterypowerup));
 					if (ch->powerup < safemaximum) {
 						ch->pl *= (long double) ((long double) 1.01 + ((long double) ch->masterypowerup / 200000));
 						ch->powerup += 1;
 						transStatApply(ch, powerupstr, powerupspd, powerupint, powerupcon);
-						if (plmod >= 30 && saiyanTotal > 4000) {
+						if (plmod >= 30 && saiyanTotal > 1000000) {
 							xSET_BIT((ch)->affected_by, AFF_SSJ);
 							xREMOVE_BIT((ch)->affected_by, AFF_POWERCHANNEL);
 							act( AT_YELLOW, "Your eyes turn blue, your hair flashes blonde and a fiery golden aura erupts around you!", ch, NULL, NULL, TO_CHAR );
@@ -1212,7 +1223,7 @@ violence_update(void)
 								ch->pcdata->haircolor = 3;
 							}
 						}
-						if ((plmod >= 30) && (saiyanTotal < 4000)) {
+						if ((plmod >= 30) && (saiyanTotal < 1000000)) {
 							ch->pl = (ch->exp * 30);
 							act( auraColor, "The raging torrent of ki fades but your power remains.", ch, NULL, NULL, TO_CHAR );
 							act( auraColor, "$n's raging torrent of ki fades away but $s power remains.", ch, NULL, NULL, TO_NOTVICT );
@@ -1483,6 +1494,7 @@ violence_update(void)
 				}
 			}
 			else if (is_icer(ch)) {
+				int	icertotal = 0;
 				int onestr = 0; 
 				int twostr = 0;
 				int threestr = 0;
@@ -1530,6 +1542,7 @@ violence_update(void)
 					&& !xIS_SET((ch)->affected_by, AFF_ICER5)
 					&& !xIS_SET((ch)->affected_by, AFF_GOLDENFORM)) {
 					safemaximum = 1 + (ch->masterypowerup / 1000) + (ch->energymastery / 10000) + (ch->strikemastery / 10000);
+					icertotal = ((ch->strikemastery) + (ch->energymastery) + (ch->masterypowerup));
 					if (ch->powerup < safemaximum) {
 						ch->pl *= (long double) ((long double) 1.01 + ((long double) ch->masterypowerup / 200000));
 						ch->powerup += 1;
@@ -1593,7 +1606,7 @@ violence_update(void)
 							act( AT_PURPLE, "Your chitinous body creaks ominously beneath your raging aura.", ch, NULL, NULL, TO_CHAR );
 							act( AT_PURPLE, "$n's chitinous body creaks ominously beneath $s raging aura.", ch, NULL, NULL, TO_NOTVICT );
 						}
-						if (plmod >= 30) {
+						if ((plmod >= 38) && (icertotal > 1000000)) {
 							xREMOVE_BIT((ch)->affected_by, AFF_ICER3);
 							xSET_BIT((ch)->affected_by, AFF_ICER4);
 							xREMOVE_BIT((ch)->affected_by, AFF_POWERCHANNEL);
@@ -1602,6 +1615,13 @@ violence_update(void)
 							act( AT_PURPLE, "$n emerges from an explosion of ki, $s body shrinking into a sleek, smooth form.", ch, NULL, NULL, TO_NOTVICT );
 							ch->pl = ch->exp * 50;
 							transStatApply(ch, threestr, threespd, threeint, threecon);
+						}
+						else if ((plmod >= 38) && (icertotal < 1000000)) {
+							ch->pl = (ch->exp * 30);
+							act( auraColor, "Unable to contain any more power, your chitinous body's swelling reduces.", ch, NULL, NULL, TO_CHAR );
+							act( auraColor, "$n's chitinous body's swelling reduces, unable to contain any more power.", ch, NULL, NULL, TO_NOTVICT );
+							xREMOVE_BIT((ch)->affected_by, AFF_POWERCHANNEL);
+							xSET_BIT((ch)->affected_by, AFF_SAFEMAX);
 						}
 					}
 					if (ch->powerup >= safemaximum) {
@@ -1753,14 +1773,14 @@ violence_update(void)
 				if (!xIS_SET((ch)->affected_by, AFF_MYSTIC)) {
 					int mysticTotal = 0;
 					
-					mysticTotal = ((ch->perm_str + ch->perm_dex) + (ch->perm_int * 2) + (ch->perm_con * 3));
+					mysticTotal = ((ch->strikemastery) + (ch->energymastery) + (ch->masterypowerup));
 					safemaximum = 1 + (ch->masterypowerup / 1000) + (ch->energymastery / 10000) + (ch->strikemastery / 10000);
 					if (ch->powerup < safemaximum) {
 						ch->pl *= (long double) ((long double) 1.01 + ((long double) ch->masterypowerup / 200000));
 						ch->powerup += 1;
 						transStatApply(ch, powerupstr, powerupspd, powerupint, powerupcon);
 						if (plmod >= 30
-							&& mysticTotal >= 4000) {
+							&& mysticTotal >= 1000000) {
 							xSET_BIT((ch)->affected_by, AFF_MYSTIC);
 							xREMOVE_BIT((ch)->affected_by, AFF_POWERCHANNEL);
 							act( auraColor, "You cry out as your aura expands, pushing beyond your latent potential!", ch, NULL, NULL, TO_CHAR );
@@ -1769,7 +1789,7 @@ violence_update(void)
 							ch->pl = ch->exp * 35;
 							transStatApply(ch, onestr, onespd, oneint, onecon);
 						}
-						if (plmod >= 30 && mysticTotal < 4000) {
+						if (plmod >= 30 && mysticTotal < 1000000) {
 							ch->pl = (ch->exp * 30);
 							act( auraColor, "Having reached your limit, you stop powering up. Going any further would be dangerous.", ch, NULL, NULL, TO_CHAR );
 							act( auraColor, "$n reaches $s limit and stops powering up.", ch, NULL, NULL, TO_NOTVICT );
@@ -1925,14 +1945,14 @@ violence_update(void)
 				if (!xIS_SET((ch)->affected_by, AFF_SNAMEK)) {
 					int namekTotal = 0;
 					
-					namekTotal = ((ch->perm_str + ch->perm_dex) + (ch->perm_int * 3) + (ch->perm_con * 2));
+					namekTotal = ((ch->strikemastery) + (ch->energymastery) + (ch->masterypowerup));
 					safemaximum = 1 + (ch->masterypowerup / 1000) + (ch->energymastery / 10000) + (ch->strikemastery / 10000);
 					if (ch->powerup < safemaximum) {
 						ch->pl *= (long double) ((long double) 1.01 + ((long double) ch->masterypowerup / 200000));
 						ch->powerup += 1;
 						transStatApply(ch, powerupstr, powerupspd, powerupint, powerupcon);
 						if (plmod >= 35
-							&& namekTotal >= 5000) {
+							&& namekTotal >= 1000000) {
 							xSET_BIT((ch)->affected_by, AFF_SNAMEK);
 							xREMOVE_BIT((ch)->affected_by, AFF_POWERCHANNEL);
 							act( AT_WHITE, "Your mind opens to the secrets of the ancient Namekians, flooding you with incredible power.", ch, NULL, NULL, TO_CHAR );
@@ -1942,7 +1962,7 @@ violence_update(void)
 							transStatApply(ch, onestr, onespd, oneint, onecon);
 						}
 						else if (plmod >= 35
-							&& namekTotal < 5000) {
+							&& namekTotal < 1000000) {
 							ch->pl = (ch->exp * 40);
 							act( auraColor, "You stop abruptly, unable to concentrate any further.", ch, NULL, NULL, TO_CHAR );
 							act( auraColor, "$n stops abruptly, unable to concentrate any further.", ch, NULL, NULL, TO_NOTVICT );

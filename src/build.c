@@ -1577,6 +1577,18 @@ do_mset(CHAR_DATA * ch, char *argument)
 			victim->gravExp = value;
 		return;
 	}
+	if (!str_cmp(arg2, "formmastery")) {
+		if (!can_mmodify(ch, victim))
+			return;
+		if (IS_NPC(victim))
+			return;
+		else if (!IS_NPC(victim))
+			victim->masteryicer = value;
+			victim->masteryssj = value;
+			victim->masterymystic = value;
+			victim->masterynamek = value;
+		return;
+	}
 	if (!str_cmp(arg2, "school")) {
 		if (!can_mmodify(ch, victim))
 			return;
