@@ -2652,6 +2652,10 @@ struct char_data {
 	int		gravSetting;
 	int		gravAcc;
 	long long int gravExp;
+	long long int masteryicer;
+	long long int masteryssj;
+	long long int masterymystic;
+	long long int masterynamek;
 	int		workoutstrain;
 	int		gravityrankup;
 	int		school;

@@ -479,6 +479,10 @@ fwrite_char (CHAR_DATA * ch, FILE * fp)
 	 fprintf (fp, "Gravityacclimation           %d\n", ch->gravAcc);
 	 fprintf (fp, "Gravityrankup           %d\n", ch->gravityrankup);
 	 fprintf (fp, "Gravityexp                   %lld\n", ch->gravExp);
+	 fprintf (fp, "Masteryicer                   %lld\n", ch->masteryicer);
+	 fprintf (fp, "Masteryssj                   %lld\n", ch->masteryssj);
+	 fprintf (fp, "Masterymystic                   %lld\n", ch->masterymystic);
+	 fprintf (fp, "Masterynamek                   %lld\n", ch->masterynamek);
      fprintf (fp, "HpManaMove     %d %d %d %d %d %d\n",
        ch->hit, ch->max_hit, ch->mana, ch->max_mana, ch->move,
        ch->max_move);
@@ -2031,6 +2035,10 @@ fread_char (CHAR_DATA * ch, FILE * fp, bool preload)
 		   KEY ("Masterycollide", ch->masterycollide, fread_number (fp));
 		   KEY ("Masterylariat", ch->masterylariat, fread_number (fp));
 		   KEY ("Masterypowerup", ch->masterypowerup, fread_number (fp));
+		   KEY ("Masteryicer", ch->masteryicer, fread_number_ll (fp));
+		   KEY ("Masteryssj", ch->masteryssj, fread_number_ll (fp));
+		   KEY ("Masterymystic", ch->masterymystic, fread_number_ll (fp));
+		   KEY ("Masterynamek", ch->masterynamek, fread_number_ll (fp));
 	       if (!strcmp (word, "MobRange")) {
 		    ch->pcdata->m_range_lo = fread_number (fp);
 		    ch->pcdata->m_range_hi = fread_number (fp);
