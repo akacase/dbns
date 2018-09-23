@@ -411,7 +411,16 @@ do_score(CHAR_DATA * ch, char *argument)
 	pager_printf_color(ch, "ZENI : &Y%-13s&C           AutoSac: (&W%c&C)\n\r",
 	    num_punct(ch->gold), xIS_SET(ch->act, PLR_AUTOSAC) ? 'X' : ' ');
 
-	int form_mastery = (ch->train / 90000);
+	int form_mastery = 0;
+	
+	if (is_saiyan(ch) || is_hb(ch))
+		form_mastery = (ch->masteryssj / 90000);
+	if (is_icer(ch))
+		form_mastery = (ch->masteryicer / 90000);
+	if (is_kaio(ch) || is_human(ch))
+		form_mastery = (ch->masterymystic / 90000);
+	if (is_namek(ch))
+		form_mastery = (ch->masterynamek / 90000);
 
 	if(form_mastery < 1) {
 	  form_mastery = 1;

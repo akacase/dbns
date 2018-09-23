@@ -10097,6 +10097,21 @@ do_godstat(CHAR_DATA * ch, char *argument)
 	    victim->hit,
 	    xIS_SET(victim->act, PLR_AUTOGOLD) ? 'X' : ' ',
 	    xIS_SET(victim->act, PLR_AUTOEXIT) ? 'X' : ' ');
+		
+	int form_mastery = 0;
+	
+	if (is_saiyan(victim) || is_hb(victim))
+		form_mastery = (victim->masteryssj / 90000);
+	if (is_icer(victim))
+		form_mastery = (victim->masteryicer / 90000);
+	if (is_kaio(victim) || is_human(victim))
+		form_mastery = (victim->masterymystic / 90000);
+	if (is_namek(victim))
+		form_mastery = (victim->masterynamek / 90000);
+
+	if(form_mastery < 1) {
+	  form_mastery = 1;
+	}
 
 	strcpy(buf, num_punct(victim->mana));
 	strcpy(buf2, num_punct(victim->max_mana));
@@ -10104,19 +10119,19 @@ do_godstat(CHAR_DATA * ch, char *argument)
 	if (victim->max_mana < 1000)
 		pager_printf_color(ch,
 		    "MASTERY: &G%2d&C       &YEnergy&C: [&Y%3s&C/&Y%-3s&C]           Sparing: (&W%c&C)    AutoLoot: (&W%c&C)\n\r",
-		    victim->train, buf, buf2,
+		    form_mastery, buf, buf2,
 		    xIS_SET(victim->act, PLR_SPAR) ? 'X' : ' ',
 		    xIS_SET(victim->act, PLR_AUTOLOOT) ? 'X' : ' ');
 	else if (victim->max_mana < 10000)
 		pager_printf_color(ch,
 		    "MASTERY: &G%2d&C       &YEnergy&C: [&Y%5s&C/&Y%-5s&C]       Sparing: (&W%c&C)    AutoLoot: (&W%c&C)\n\r",
-		    victim->train, buf, buf2,
+		    form_mastery, buf, buf2,
 		    xIS_SET(victim->act, PLR_SPAR) ? 'X' : ' ',
 		    xIS_SET(victim->act, PLR_AUTOLOOT) ? 'X' : ' ');
 	else
 		pager_printf_color(ch,
 		    "MASTERY: &G%2d&C       &YEnergy&C: [&Y%6s&C/&Y%-6s&C]     Sparing: (&W%c&C)    AutoLoot: (&W%c&C)\n\r",
-		    victim->train, buf, buf2,
+		    form_mastery, buf, buf2,
 		    xIS_SET(victim->act, PLR_SPAR) ? 'X' : ' ',
 		    xIS_SET(victim->act, PLR_AUTOLOOT) ? 'X' : ' ');
 
