@@ -5207,9 +5207,9 @@ do_research(CHAR_DATA * ch, char *argument)
 			return;
 		}
 		if (!str_cmp(arg2, "power")) {
-			spcostpow = (ch->vigoreffec * 500);
-			if (spcostpow < 500)
-				spcostpow = 500;
+			spcostpow = (ch->vigoreffec * 200);
+			if (spcostpow < 200)
+				spcostpow = 200;
 			if (spremaining < spcostpow) {
 				send_to_char("You don't have enough SP to do that.\n\r", ch);
 				return;
