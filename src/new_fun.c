@@ -295,7 +295,7 @@ int get_damroll( CHAR_DATA *ch)
 	int damroll = 0;
 	
 	if (xIS_SET((ch)->affected_by, AFF_ENERGYFIST)) {
-		damroll = get_curr_int(ch) / 20;
+		damroll = get_curr_int(ch) / 18;
 	}
 		
 	else if (xIS_SET((ch)->affected_by, AFF_HYBRIDSTYLE)) {
