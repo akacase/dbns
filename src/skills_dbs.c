@@ -1975,7 +1975,7 @@ void do_powerup(CHAR_DATA *ch, char *argument)
 				send_to_char("You don't even HAVE Saiyan blood, you clown.\n\r", ch);
 				return;
 			}
-			else if (ch->train < 2610000) {
+			else if (ch->masteryssj < 2610000) {
 				send_to_char("You lack enough control over your power to transform instantly.\n\r", ch);
 				return;
 			}
@@ -2008,7 +2008,7 @@ void do_powerup(CHAR_DATA *ch, char *argument)
 				send_to_char("You don't even HAVE Saiyan blood, you clown.\n\r", ch);
 				return;
 			}
-			else if (ch->train < 3510000) {
+			else if (ch->masteryssj < 3510000) {
 				send_to_char("You lack enough control over your power to transform instantly.\n\r", ch);
 				return;
 			}
@@ -2049,7 +2049,7 @@ void do_powerup(CHAR_DATA *ch, char *argument)
 				send_to_char("You don't even HAVE Saiyan blood, you clown.\n\r", ch);
 				return;
 			}
-			else if (ch->train < 4680000) {
+			else if (ch->masteryssj < 4680000) {
 				send_to_char("You lack enough control over your power to transform instantly.\n\r", ch);
 				return;
 			}
@@ -2088,7 +2088,7 @@ void do_powerup(CHAR_DATA *ch, char *argument)
 				send_to_char("You don't even HAVE Saiyan blood, you clown.\n\r", ch);
 				return;
 			}
-			else if (ch->train < 5670000) {
+			else if (ch->masteryssj < 5670000) {
 				send_to_char("You lack enough control over your power to transform instantly.\n\r", ch);
 				return;
 			}
@@ -2132,7 +2132,7 @@ void do_powerup(CHAR_DATA *ch, char *argument)
 				send_to_char("You clearly lack proper breeding.\n\r", ch);
 				return;
 			}
-			else if (ch->train < 1800000) {
+			else if (ch->masteryicer < 1800000) {
 				send_to_char("You lack enough control over your power to transform instantly.\n\r", ch);
 				return;
 			}
@@ -2170,7 +2170,7 @@ void do_powerup(CHAR_DATA *ch, char *argument)
 				send_to_char("You clearly lack proper breeding.\n\r", ch);
 				return;
 			}
-			else if (ch->train < 4140000) {
+			else if (ch->masteryicer < 4140000) {
 				send_to_char("You lack enough control over your power to transform instantly.\n\r", ch);
 				return;
 			}
@@ -2209,7 +2209,7 @@ void do_powerup(CHAR_DATA *ch, char *argument)
 				send_to_char("You have other means of unlocking your potential.\n\r", ch);
 				return;
 			}
-			else if (ch->train < 2520000) {
+			else if (ch->masterymystic < 2520000) {
 				send_to_char("You lack enough control over your power to transform instantly.\n\r", ch);
 				return;
 			}
@@ -2225,7 +2225,7 @@ void do_powerup(CHAR_DATA *ch, char *argument)
 				xSET_BIT((ch)->affected_by, AFF_MYSTIC);
 				if (xIS_SET((ch)->affected_by, AFF_POWERCHANNEL))
 					xREMOVE_BIT((ch)->affected_by, AFF_POWERCHANNEL);
-				if (ch->train >= 4950000) {
+				if (ch->masterymystic >= 4950000) {
 					act( auraColor, "In a violent flash of energy, the deepest reaches of your potential explodes to the surface.", ch, NULL, NULL, TO_CHAR );
 					act( auraColor, "In a violent flash of energy, the deepest reaches of $n's potential explodes to the surface.", ch, NULL, NULL, TO_NOTVICT );
 					transStatApply(ch, sixstr, sixspd, sixint, sixcon);
@@ -2233,7 +2233,7 @@ void do_powerup(CHAR_DATA *ch, char *argument)
 					ch->powerup = 47;
 					return;
 				}
-				else if (ch->train >= 4230000) {
+				else if (ch->masterymystic >= 4230000) {
 					act( auraColor, "Hundreds of bolts of pure, white energy crackle across the surface of your body as you access your true potential.", ch, NULL, NULL, TO_CHAR );
 					act( auraColor, "Hundreds of bolts of pure, white energy crackle across the surface of $n's body as they access their true potential.", ch, NULL, NULL, TO_NOTVICT );
 					transStatApply(ch, fivestr, fivespd, fiveint, fivecon);
@@ -2241,7 +2241,7 @@ void do_powerup(CHAR_DATA *ch, char *argument)
 					ch->powerup = 40;
 					return;
 				}
-				else if (ch->train >= 3600000) {
+				else if (ch->masterymystic >= 3600000) {
 					act( auraColor, "A massive amount of energy floods through your body as you access your latent potential.", ch, NULL, NULL, TO_CHAR );
 					act( auraColor, "A massive amount of energy floods through $n's body as they access their latent potential.", ch, NULL, NULL, TO_NOTVICT );
 					transStatApply(ch, fourstr, fourspd, fourint, fourcon);
@@ -2249,7 +2249,7 @@ void do_powerup(CHAR_DATA *ch, char *argument)
 					ch->powerup = 30;
 					return;
 				}
-				else if (ch->train >= 2520000) {
+				else if (ch->masterymystic >= 2520000) {
 					act( auraColor, "A massive amount of energy floods through your body as you access your latent potential.", ch, NULL, NULL, TO_CHAR );
 					act( auraColor, "A massive amount of energy floods through $n's body as they access their latent potential.", ch, NULL, NULL, TO_NOTVICT );
 					transStatApply(ch, onestr, onespd, oneint, onecon);
@@ -2264,7 +2264,7 @@ void do_powerup(CHAR_DATA *ch, char *argument)
 				send_to_char("Maybe in another life you were a Namekian, but definitely not in this one.\n\r", ch);
 				return;
 			}
-			else if (ch->train < 2520000) {
+			else if (ch->masterynamek < 2520000) {
 				send_to_char("You lack enough control over your power to transform instantly.\n\r", ch);
 				return;
 			}
@@ -2280,7 +2280,7 @@ void do_powerup(CHAR_DATA *ch, char *argument)
 				xSET_BIT((ch)->affected_by, AFF_SNAMEK);
 				if (xIS_SET((ch)->affected_by, AFF_POWERCHANNEL))
 					xREMOVE_BIT((ch)->affected_by, AFF_POWERCHANNEL);
-				if (ch->train >= 5310000) {
+				if (ch->masterynamek >= 5310000) {
 					act( auraColor, "The heavens shake and the earth trembles at your feet as you unleash your ancestral might.", ch, NULL, NULL, TO_CHAR );
 					act( auraColor, "The heavens shake and the earth trembles at $n's feet as they unleash their ancestral might.", ch, NULL, NULL, TO_NOTVICT );
 					transStatApply(ch, fivestr, fivespd, fiveint, fivecon);
@@ -2288,7 +2288,7 @@ void do_powerup(CHAR_DATA *ch, char *argument)
 					ch->powerup = 47;
 					return;
 				}
-				if (ch->train >= 4500000) {
+				if (ch->masterynamek >= 4500000) {
 					act( auraColor, "A blinding white aura suffuses your body, sending crackling energy scattering in all directions.", ch, NULL, NULL, TO_CHAR );
 					act( auraColor, "A blinding white aura suffuses $n's body, sending crackling energy scattering in all directions.", ch, NULL, NULL, TO_NOTVICT );
 					transStatApply(ch, fourstr, fourspd, fourint, fourcon);
@@ -2296,7 +2296,7 @@ void do_powerup(CHAR_DATA *ch, char *argument)
 					ch->powerup = 40;
 					return;
 				}
-				if (ch->train >= 3600000) {
+				if (ch->masterynamek >= 3600000) {
 					act( auraColor, "Giant beams of light erupt from the surface of your body as you unleash ancient secrets.", ch, NULL, NULL, TO_CHAR );
 					act( auraColor, "Giant beams of light erupt from the surface of $n's body as they unleash ancient secrets.", ch, NULL, NULL, TO_NOTVICT );
 					transStatApply(ch, threestr, threespd, threeint, threecon);
@@ -2304,7 +2304,7 @@ void do_powerup(CHAR_DATA *ch, char *argument)
 					ch->powerup = 30;
 					return;
 				}
-				if (ch->train >= 2520000) {
+				if (ch->masterynamek >= 2520000) {
 					act( auraColor, "A brilliant white light emerges from within, flooding the room with a sense of spiritual calm.", ch, NULL, NULL, TO_CHAR );
 					act( auraColor, "A brilliant white light emerges from within $n, flooding the room with a sense of spiritual calm.", ch, NULL, NULL, TO_NOTVICT );
 					transStatApply(ch, onestr, onespd, oneint, onecon);
