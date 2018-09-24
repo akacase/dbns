@@ -6763,8 +6763,8 @@ void do_ecliptic_meteor( CHAR_DATA *ch, char *argument )
 		if (!IS_NPC(ch)) {
 			argdam = ((number_range(100, 125) + (ch->ecliptic_meteorpower * 11)) * (kicmult + smastery));
 			dam = get_attmod(ch, victim) * (argdam * kimult);
-			stat_train(ch, "int", 40);
-			ch->train += 40;
+			stat_train(ch, "int", 20);
+			ch->train += 20;
 			ch->masteryecliptic_meteor += 1;
 			ch->energymastery += 6;
 			if (ch->energymastery >= (ch->kspgain * 100)) {
@@ -9410,8 +9410,8 @@ do_death_ball(CHAR_DATA * ch, char *argument)
 		if (!IS_NPC(ch)) {
 			argdam = ((number_range(100, 125) + (ch->death_ballpower * 11)) * (kicmult + smastery));
 			dam = get_attmod(ch, victim) * (argdam * kimult);
-			stat_train(ch, "int", 40);
-			ch->train += 40;
+			stat_train(ch, "int", 20);
+			ch->train += 20;
 			ch->masterydeath_ball += 1;
 			ch->energymastery += 6;
 			if (ch->energymastery >= (ch->kspgain * 100)) {
@@ -9419,7 +9419,7 @@ do_death_ball(CHAR_DATA * ch, char *argument)
 					"&CYou gained 5 Skill Points!\n\r");
 				ch->sptotal += 5;
 				ch->kspgain += 1;
-				}
+			}
 		}
 		if (IS_NPC(ch)) {
 			dam = get_attmod(ch, victim) * (number_range(100, 125) + (get_curr_int(ch) / 40));
