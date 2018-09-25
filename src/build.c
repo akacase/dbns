@@ -83,11 +83,11 @@ char   *const r_flags[] =
 	"dark", "death", "nomob", "indoors", "lawful", "neutral", "chaotic",
 	"nomagic", "tunnel", "private", "safe", "solitary", "petshop", "norecall",
 	"donation", "nodropall", "silence", "logspeech", "nodrop", "clanstoreroom",
-	"nosummon", "noastral", "teleport", "teleshowdesc", "nofloor", "gravchamber100",
+	"nosummon", "noastral", "teleport", "teleshowdesc", "nofloor",
 	"nosupplicate", "arena", "nomissile", "grav", "htanks", "prototype", "dnd",
 	"spaceship", "nodriving", "timechamber", "noteleport", "noteleportout",
 	"astralshield", "grav10", "grav50", "grav100", "grav200", "grav300", "grav400",
-	"grav500", "grav600", "grav700", "grav800", "grav900", "grav1000"
+	"grav500", "grav600", "grav700", "grav800", "grav900", "grav1000", "gravchamber100"
 };
 
 char   *const o_flags[] =
