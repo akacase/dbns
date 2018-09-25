@@ -4344,7 +4344,7 @@ void do_train(CHAR_DATA *ch, char *argument)
 	
 	if (IS_NPC(ch))
 		return;
-	if (!xIS_SET((ch)->in_room->room_flags, ROOM_GRAV) && !xIS_SET((ch)->in_room->room_flags, ROOM_GRAVCHAMBER100)) {
+	if (!xIS_SET((ch)->in_room->room_flags, ROOM_GRAV)) {
 		send_to_char("This doesn't appear to be a gravity chamber...\n\r", ch);
 		return;
 	}
