@@ -636,8 +636,10 @@ violence_update(void)
 		if (!IS_NPC(ch)
 			&& xIS_SET((ch)->affected_by, AFF_ICER2)) {
 				int form_mastery = 0;
+				int	icertotal = 0;
 				
 				form_mastery = (ch->masteryicer / 90000);
+				icertotal = ((ch->strikemastery) + (ch->energymastery) + (ch->masterypowerup));
 				
 				if (form_mastery < 1)
 					form_mastery = 1;
@@ -657,17 +659,30 @@ violence_update(void)
 					act( AT_PURPLE, "$n loses control of $s ki and returns to normal!", ch, NULL, NULL, TO_NOTVICT );
 				}
 				if (ch->desc && !ch->fighting) {
-					ch->masteryicer += 9;
+					if ((icertotal < 1000000) && (form_mastery < 1400000)) {
+						ch->masteryicer += 9;
+					}
+					else if ((icertotal < 1000000) && (form_mastery > 1400000)) {
+						ch->masteryicer += 1;
+					}
 				}
 				else if (ch->desc && ch->fighting) {
-					ch->masteryicer += 27;
+					if ((icertotal < 1000000) && (form_mastery < 1400000)) {
+						ch->masteryicer += 27;
+					}
+					else if ((icertotal < 1000000) && (form_mastery > 1400000)) {
+						ch->masteryicer += 1;
+					}
 				}
 		}
 		if (!IS_NPC(ch)
 			&& xIS_SET((ch)->affected_by, AFF_ICER3)) {
 				int form_mastery = 0;
+				int	icertotal = 0;
 				
 				form_mastery = (ch->masteryicer / 90000);
+				icertotal = ((ch->strikemastery) + (ch->energymastery) + (ch->masterypowerup));
+				
 				if (form_mastery < 1)
 					form_mastery = 1;
 					
@@ -686,10 +701,20 @@ violence_update(void)
 					act( AT_PURPLE, "$n loses control of $s ki and returns to normal!", ch, NULL, NULL, TO_NOTVICT );
 				}
 				if (ch->desc && !ch->fighting) {
-					ch->masteryicer += 9;
+					if ((icertotal < 1000000) && (form_mastery < 1400000)) {
+						ch->masteryicer += 9;
+					}
+					else if ((icertotal < 1000000) && (form_mastery > 1400000)) {
+						ch->masteryicer += 1;
+					}
 				}
 				else if (ch->desc && ch->fighting) {
-					ch->masteryicer += 27;
+					if ((icertotal < 1000000) && (form_mastery < 1400000)) {
+						ch->masteryicer += 27;
+					}
+					else if ((icertotal < 1000000) && (form_mastery > 1400000)) {
+						ch->masteryicer += 1;
+					}
 				}
 		}
 		if (!IS_NPC(ch)
