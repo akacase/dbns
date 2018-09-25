@@ -660,7 +660,7 @@ violence_update(void)
 				}
 				if (ch->desc && !ch->fighting) {
 					if (icertotal < 1000000) {
-						if (form_mastery > 1400000) {
+						if (form_mastery > 15) {
 							ch->masteryicer += 1;
 						}
 						else {
@@ -673,7 +673,7 @@ violence_update(void)
 				}
 				if (ch->desc && ch->fighting) {
 					if (icertotal < 1000000) {
-						if (form_mastery > 1400000) {
+						if (form_mastery > 15) {
 							ch->masteryicer += 1;
 						}
 						else {
@@ -712,7 +712,7 @@ violence_update(void)
 				}
 				if (ch->desc && !ch->fighting) {
 					if (icertotal < 1000000) {
-						if (form_mastery > 1400000) {
+						if (form_mastery > 15) {
 							ch->masteryicer += 1;
 						}
 						else {
@@ -725,7 +725,7 @@ violence_update(void)
 				}
 				if (ch->desc && ch->fighting) {
 					if (icertotal < 1000000) {
-						if (form_mastery > 1400000) {
+						if (form_mastery > 15) {
 							ch->masteryicer += 1;
 						}
 						else {
