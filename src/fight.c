@@ -659,19 +659,29 @@ violence_update(void)
 					act( AT_PURPLE, "$n loses control of $s ki and returns to normal!", ch, NULL, NULL, TO_NOTVICT );
 				}
 				if (ch->desc && !ch->fighting) {
-					if ((icertotal < 1000000) && (form_mastery < 1400000)) {
+					if (icertotal < 1000000) {
+						if (form_mastery < 1400000) {
+							ch->masteryicer += 9;
+						}
+						else {
+							ch->masteryicer += 1;
+						}
+					}
+					else if (icertotal >= 1000000) {
 						ch->masteryicer += 9;
 					}
-					else if ((icertotal < 1000000) && (form_mastery > 1400000)) {
-						ch->masteryicer += 1;
-					}
 				}
-				else if (ch->desc && ch->fighting) {
-					if ((icertotal < 1000000) && (form_mastery < 1400000)) {
-						ch->masteryicer += 27;
+				if (ch->desc && ch->fighting) {
+					if (icertotal < 1000000) {
+						if (form_mastery < 1400000) {
+							ch->masteryicer += 27;
+						}
+						else {
+							ch->masteryicer += 1;
+						}
 					}
-					else if ((icertotal < 1000000) && (form_mastery > 1400000)) {
-						ch->masteryicer += 1;
+					else if (icertotal >= 1000000) {
+						ch->masteryicer += 27;
 					}
 				}
 		}
@@ -701,19 +711,29 @@ violence_update(void)
 					act( AT_PURPLE, "$n loses control of $s ki and returns to normal!", ch, NULL, NULL, TO_NOTVICT );
 				}
 				if (ch->desc && !ch->fighting) {
-					if ((icertotal < 1000000) && (form_mastery < 1400000)) {
+					if (icertotal < 1000000) {
+						if (form_mastery < 1400000) {
+							ch->masteryicer += 9;
+						}
+						else {
+							ch->masteryicer += 1;
+						}
+					}
+					else if (icertotal >= 1000000) {
 						ch->masteryicer += 9;
 					}
-					else if ((icertotal < 1000000) && (form_mastery > 1400000)) {
-						ch->masteryicer += 1;
-					}
 				}
-				else if (ch->desc && ch->fighting) {
-					if ((icertotal < 1000000) && (form_mastery < 1400000)) {
-						ch->masteryicer += 27;
+				if (ch->desc && ch->fighting) {
+					if (icertotal < 1000000) {
+						if (form_mastery < 1400000) {
+							ch->masteryicer += 27;
+						}
+						else {
+							ch->masteryicer += 1;
+						}
 					}
-					else if ((icertotal < 1000000) && (form_mastery > 1400000)) {
-						ch->masteryicer += 1;
+					else if (icertotal >= 1000000) {
+						ch->masteryicer += 27;
 					}
 				}
 		}
