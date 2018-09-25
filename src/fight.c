@@ -657,10 +657,10 @@ violence_update(void)
 					act( AT_PURPLE, "$n loses control of $s ki and returns to normal!", ch, NULL, NULL, TO_NOTVICT );
 				}
 				if (ch->desc && !ch->fighting) {
-					ch->masterymystic += 9;
+					ch->masteryicer += 9;
 				}
 				else if (ch->desc && ch->fighting) {
-					ch->masterymystic += 27;
+					ch->masteryicer += 27;
 				}
 		}
 		if (!IS_NPC(ch)
@@ -686,10 +686,10 @@ violence_update(void)
 					act( AT_PURPLE, "$n loses control of $s ki and returns to normal!", ch, NULL, NULL, TO_NOTVICT );
 				}
 				if (ch->desc && !ch->fighting) {
-					ch->masterymystic += 6;
+					ch->masteryicer += 9;
 				}
 				else if (ch->desc && ch->fighting) {
-					ch->masterymystic += 18;
+					ch->masteryicer += 27;
 				}
 		}
 		if (!IS_NPC(ch)
@@ -715,10 +715,10 @@ violence_update(void)
 					act( AT_PURPLE, "$n loses control of $s ki and returns to normal!", ch, NULL, NULL, TO_NOTVICT );
 				}
 				if (ch->desc && !ch->fighting) {
-					ch->masterymystic += 9;
+					ch->masteryicer += 9;
 				}
 				else if (ch->desc && ch->fighting) {
-					ch->masterymystic += 27;
+					ch->masteryicer += 27;
 				}
 		}
 		if (!IS_NPC(ch)
@@ -748,10 +748,10 @@ violence_update(void)
 					form_drain = 1;
 				ch->mana -= form_drain;
 				if (ch->desc && !ch->fighting) {
-					ch->masterymystic += 9;
+					ch->masteryicer += 9;
 				}
 				else if (ch->desc && ch->fighting) {
-					ch->masterymystic += 27;
+					ch->masteryicer += 27;
 				}
 		}
 		if (!IS_NPC(ch)
@@ -781,10 +781,10 @@ violence_update(void)
 					form_drain = 400;
 				ch->mana -= form_drain;
 				if (ch->desc && !ch->fighting) {
-					ch->masterymystic += 9;
+					ch->masteryicer += 9;
 				}
 				else if (ch->desc && ch->fighting) {
-					ch->masterymystic += 27;
+					ch->masteryicer += 27;
 				}
 		}
 		if (!IS_NPC(ch)

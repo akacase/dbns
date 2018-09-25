@@ -10435,7 +10435,7 @@ do_godstat(CHAR_DATA * ch, char *argument)
 	pager_printf(ch, "Creation Date:     %s\n\r",
 	    (char *) ctime(&victim->pcdata->creation_date));
 	pager_printf(ch,
-		"School: %d", victim->school);
+		"School: %d ", victim->school);
 	pager_printf(ch,
 		"Strike Mastery: %d ", victim->strikemastery);
 	pager_printf(ch,
@@ -10444,7 +10444,19 @@ do_godstat(CHAR_DATA * ch, char *argument)
 		"Body Mastery: %d\n\r", victim->bodymastery);
 	pager_printf(ch,
 		"Exercise Intensity: %d\n\r", victim->exintensity);
+	pager_printf(ch,
+		"KC: %d ", victim->train);
+	pager_printf(ch,
+		"FMS: %d ", victim->masteryssj;
+	pager_printf(ch,
+		"FMI: %d ", victim->masteryicer;
+	pager_printf(ch,
+		"FMH: %d ", victim->masterymystic;
+	pager_printf(ch,
+		"FMN: %d ", victim->masterynamek;
+	
 	send_to_pager("&w&D\n\r", ch);
+
 }
 
 void
