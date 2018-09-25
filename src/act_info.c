@@ -4344,7 +4344,7 @@ void do_train(CHAR_DATA *ch, char *argument)
 	
 	if (IS_NPC(ch))
 		return;
-	if (!xIS_SET((ch)->in_room->room_flags, ROOM_GRAV)) {
+	if (!xIS_SET((ch)->in_room->room_flags, ROOM_GRAV) || !xIS_SET((ch)->in_room->room_flags, ROOM_GRAVCHAMBER100)) {
 		send_to_char("This doesn't appear to be a gravity chamber...\n\r", ch);
 		return;
 	}
@@ -4356,8 +4356,8 @@ void do_train(CHAR_DATA *ch, char *argument)
 		return;
 	}
 	else {
-		if (value < 1 || value > 10000) {
-			ch_printf(ch, "Gravity Range is 1 to 10000.\n\r");
+		if (value < 1 || value > 100) {
+			ch_printf(ch, "Gravity Range is 1 to 100.\n\r");
 			return;
 		}
 		ch->gravSetting = value;

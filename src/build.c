@@ -83,7 +83,7 @@ char   *const r_flags[] =
 	"dark", "death", "nomob", "indoors", "lawful", "neutral", "chaotic",
 	"nomagic", "tunnel", "private", "safe", "solitary", "petshop", "norecall",
 	"donation", "nodropall", "silence", "logspeech", "nodrop", "clanstoreroom",
-	"nosummon", "noastral", "teleport", "teleshowdesc", "nofloor",
+	"nosummon", "noastral", "teleport", "teleshowdesc", "nofloor", "gravchamber100",
 	"nosupplicate", "arena", "nomissile", "grav", "htanks", "prototype", "dnd",
 	"spaceship", "nodriving", "timechamber", "noteleport", "noteleportout",
 	"astralshield", "grav10", "grav50", "grav100", "grav200", "grav300", "grav400",

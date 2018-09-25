@@ -12631,7 +12631,7 @@ do_gallic_gun(CHAR_DATA * ch, char *argument)
 					"&CYou gained 5 Skill Points!\n\r");
 				ch->sptotal += 5;
 				ch->kspgain += 1;
-				}
+			}
 		}
 		if (IS_NPC(ch)) {
 			argdam = number_range(70, 75);
