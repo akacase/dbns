@@ -10447,13 +10447,13 @@ do_godstat(CHAR_DATA * ch, char *argument)
 	pager_printf(ch,
 		"KC: %d ", victim->train);
 	pager_printf(ch,
-		"FMS: %d ", victim->masteryssj;
+		"FMS: %d ", victim->masteryssj);
 	pager_printf(ch,
-		"FMI: %d ", victim->masteryicer;
+		"FMI: %d ", victim->masteryicer);
 	pager_printf(ch,
-		"FMH: %d ", victim->masterymystic;
+		"FMH: %d ", victim->masterymystic);
 	pager_printf(ch,
-		"FMN: %d ", victim->masterynamek;
+		"FMN: %d ", victim->masterynamek);
 	
 	send_to_pager("&w&D\n\r", ch);
 
