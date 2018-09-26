@@ -1662,7 +1662,7 @@ violence_update(void)
 							transStatApply(ch, threestr, threespd, threeint, threecon);
 						}
 						else if ((plmod >= 38) && (icertotal < 1000000)) {
-							ch->pl = (ch->exp * 30);
+							ch->pl = (ch->exp * 38);
 							act( auraColor, "Unable to contain any more power, your chitinous body's swelling reduces.", ch, NULL, NULL, TO_CHAR );
 							act( auraColor, "$n's chitinous body's swelling reduces, unable to contain any more power.", ch, NULL, NULL, TO_NOTVICT );
 							xREMOVE_BIT((ch)->affected_by, AFF_POWERCHANNEL);
