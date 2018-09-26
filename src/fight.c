@@ -2308,6 +2308,7 @@ violence_update(void)
 			int	damrange = 0;
 			int	gravdam = 0;
 			int	vigormod = 0;
+			int	weightconspd = 0;
 			
 			
 			damrange = number_range(1, 3);
@@ -2319,6 +2320,7 @@ violence_update(void)
 			weighttrain = 5 * weighttrainmult;
 			weightstatmult = (double) ((double)totalrgrav / 50) + 1;
 			weightstat = 5 * weightstatmult;
+			weightconspd = weightstat * 2;
 			
 			vigormod = (ch->vigoreffec / 4) + 2;
 			if (vigormod < 2)
@@ -2408,8 +2410,8 @@ violence_update(void)
 						ch->masterypowerup += 2;
 				}
 				stat_train(ch, "str", weightstat);
-				stat_train(ch, "spd", weightstat);
-				stat_train(ch, "con", weightstat);
+				stat_train(ch, "spd", weightconspd);
+				stat_train(ch, "con", weightconspd);
 				stat_train(ch, "int", weightstat);
 				ch->train += weighttrain;
 				ch->mana -= gravdam;
@@ -5933,13 +5935,13 @@ damage(CHAR_DATA * ch, CHAR_DATA * victim, int dam, int dt)
 			// train con when taking damage
 			if (dam > 0) {
 			  if (dam < 10) {
-			    stat_train(victim, "con", 5);
-			  }
-			  else if (dam < 20) {
 			    stat_train(victim, "con", 7);
 			  }
-			  else if (dam > 20) {
+			  else if (dam < 20) {
 			    stat_train(victim, "con", 10);
+			  }
+			  else if (dam > 20) {
+			    stat_train(victim, "con", 15);
 			  }
 			}
 			ch->melee = false;
