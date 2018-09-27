@@ -8979,6 +8979,12 @@ do_meditate(CHAR_DATA * ch, char *argument)
 					ch->train += weighttrain;
 					if (is_namek(ch) || is_kaio(ch))
 						ch->energymastery += 8;
+					if (ch->energymastery >= (ch->kspgain * 100)) {
+						pager_printf_color(ch,
+							"&CYou gained 5 Skill Points!\n\r");
+				ch->sptotal += 5;
+				ch->kspgain += 1;
+			}
 					if (ch->mana > ch->max_mana) {
 						ch->mana = ch->max_mana;
 						send_to_char
@@ -9031,6 +9037,9 @@ do_meditate(CHAR_DATA * ch, char *argument)
 					ch->train += weighttrain;
 					if (is_namek(ch) || is_kaio(ch))
 						ch->energymastery += 8;
+					if (ch->energymastery >= (ch->kspgain * 100)) {
+						pager_printf_color(ch,
+							"&CYou gained 5 Skill Points!\n\r");
 					if (ch->mana > ch->max_mana) {
 						ch->mana = ch->max_mana;
 						send_to_char
