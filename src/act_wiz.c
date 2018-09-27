@@ -10453,7 +10453,9 @@ do_godstat(CHAR_DATA * ch, char *argument)
 	pager_printf(ch,
 		"FMH: %d ", victim->masterymystic);
 	pager_printf(ch,
-		"FMN: %d ", victim->masterynamek);
+		"FMN: %d\n\r", victim->masterynamek);
+	pager_printf(ch,
+		"Powerup Mastery: %d ", victim->masterypowerup);
 	
 	send_to_pager("&w&D\n\r", ch);
 
