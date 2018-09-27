@@ -8977,6 +8977,8 @@ do_meditate(CHAR_DATA * ch, char *argument)
 					ch->mana += (float) right / 19 * ch->max_mana;
 					ch->mana += 10;
 					ch->train += weighttrain;
+					if (is_namek(ch) || is_kaio(ch))
+						ch->energymastery += 5;
 					if (ch->mana > ch->max_mana) {
 						ch->mana = ch->max_mana;
 						send_to_char
@@ -9027,6 +9029,8 @@ do_meditate(CHAR_DATA * ch, char *argument)
 					ch->mana += (float) right / 19 * ch->max_mana;
 					ch->mana += 10;
 					ch->train += weighttrain;
+					if (is_namek(ch) || is_kaio(ch))
+						ch->energymastery += 5;
 					if (ch->mana > ch->max_mana) {
 						ch->mana = ch->max_mana;
 						send_to_char
