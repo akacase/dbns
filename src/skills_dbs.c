@@ -7983,7 +7983,7 @@ do_sbc(CHAR_DATA * ch, char *argument)
 		return;
 	}
 	if (!IS_NPC(ch)
-	    && (ch->skillenergy_disc < 1)) {
+	    && (ch->skillsbc < 1)) {
 		send_to_char("You're not able to use that skill.\n\r", ch);
 		return;
 	}
