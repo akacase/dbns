@@ -302,7 +302,7 @@ bool 	DONT_UPPER;
 /*
  * Stuff for area versions --Shaddai
  */
-extern int 	area_version;
+int 	area_version;
 
 #define HAS_SPELL_INDEX     -1
 #define AREA_VERSION_WRITE 252
