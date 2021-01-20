@@ -302,7 +302,7 @@ bool 	DONT_UPPER;
 /*
  * Stuff for area versions --Shaddai
  */
-int 	area_version;
+extern int 	area_version;
 
 #define HAS_SPELL_INDEX     -1
 #define AREA_VERSION_WRITE 252
@@ -5791,6 +5791,8 @@ args((const char *argument, int channel,
 	bool check_parry args((CHAR_DATA * ch, CHAR_DATA * victim));
 	bool check_dodge args((CHAR_DATA * ch, CHAR_DATA * victim));
 	bool check_tumble args((CHAR_DATA * ch, CHAR_DATA * victim));
+
+	void transStatApply args((CHAR_DATA * ch, int strMod, int spdMod, int intMod, int conMod));
 	void transStatRemove args((CHAR_DATA * ch));
 
 /* new_fun.c */
