@@ -1,0 +1,70 @@
+# build.ninja
+cc    = clang
+cflags = -O2 -g3 -Wall -std=c11 
+math = -lm
+
+rule compile
+ command = $cc $cflags -c $in -o $out
+
+rule link
+ command = $cc $in $math -lz -o $out
+
+build act_comm.o: compile act_comm.c
+build act_info.o: compile act_info.c
+build act_move.o: compile act_move.c
+build act_obj.o: compile act_obj.c
+build act_wiz.o: compile act_wiz.c
+build board.o: compile board.c
+build boards.o: compile boards.c
+build bounty.o: compile bounty.c
+build build.o: compile build.c
+build clans.o: compile clans.c
+build colorize.o: compile colorize.c
+build comm.o: compile comm.c
+build comments.o: compile comments.c
+build const.o: compile const.c
+build db.o: compile db.c
+build deity.o: compile deity.c
+build editor.o: compile editor.c
+build fight.o: compile fight.c
+build finger.o: compile finger.c
+build grub.o: compile grub.c
+build handler.o: compile handler.c
+build hashstr.o: compile hashstr.c
+build hiscores.o: compile hiscores.c
+build house.o: compile house.c
+build ibuild.o: compile ibuild.c
+build interp.o: compile interp.c
+build magic.o: compile magic.c
+build makeobjs.o: compile makeobjs.c
+build mapout.o: compile mapout.c
+build marry.o: compile marry.c
+build misc.o: compile misc.c
+build mpxset.o: compile mpxset.c
+build mud_comm.o: compile mud_comm.c
+build mud_prog.o: compile mud_prog.c
+build new_fun.o: compile new_fun.c
+build pfiles.o: compile pfiles.c
+build planes.o: compile planes.c
+build planet.o: compile planet.c
+build player.o: compile player.c
+build rare.o: compile rare.c
+build requests.o: compile requests.c
+build reset.o: compile reset.c
+build save.o: compile save.c
+build shops.o: compile shops.c
+build skills.o: compile skills.c
+build skills_android.o: compile skills_android.c
+build skills_dbs.o: compile skills_dbs.c
+build skills_genie.o: compile skills_genie.c
+build space.o: compile space.c
+build special.o: compile special.c
+build stat_obj.o: compile stat_obj.c
+build tables.o: compile tables.c
+build update.o: compile update.c
+build dns.o: compile dns.c
+build sha256.o: compile sha256.c
+
+build dbnsd: link act_comm.o act_info.o act_move.o act_obj.o act_wiz.o board.o boards.o bounty.o build.o clans.o colorize.o comm.o comments.o const.o db.o deity.o editor.o fight.o finger.o grub.o handler.o hashstr.o hiscores.o house.o ibuild.o interp.o magic.o makeobjs.o mapout.o marry.o misc.o mpxset.o mud_comm.o mud_prog.o new_fun.o pfiles.o planes.o planet.o player.o rare.o requests.o reset.o save.o shops.o skills.o skills_android.o skills_dbs.o skills_genie.o space.o special.o stat_obj.o tables.o update.o dns.o sha256.o
+
+default dbnsd

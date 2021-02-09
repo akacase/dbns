@@ -1,6 +1,7 @@
 #system/*
 src/dbnsd
 src/*~
+src/.ninja_log
 src/#*#*
 src/.#*#*
 src/*.o
