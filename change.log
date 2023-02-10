@@ -1,3 +1,7 @@
+DB: NORTH STAR - v1.1
+- moving to Rust, OCaml -- something more type safe and memory safe, it's decided, will proceed.
+- move to google formatting rules and a sane C++ standard.
+
 DB: NORTH STAR - v1.0
 ----------
 - Introduce Rust into the build process (still undecided about this)
