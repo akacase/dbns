@@ -1427,7 +1427,7 @@ void nanny(DESCRIPTOR_DATA *d, char *argument) {
         return;
       }
 
-      sprintf(buf, ch->pcdata->filename);
+      sprintf(buf, "%s", ch->pcdata->filename);
       d->character->desc = NULL;
       free_char(d->character);
       d->character = NULL;
