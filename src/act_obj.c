@@ -21,8 +21,8 @@
 #include <sys/types.h>
 #include <time.h>
 
-#include "bet.h"
 #include "mud.h"
+#include "bet.h"
 
 /*
  * External functions
