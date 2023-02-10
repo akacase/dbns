@@ -23,12 +23,11 @@
 #include <stdlib.h>
 #include <string.h>
 #include <sys/types.h>
-/* force the who command to require an argument (should use cset) */
-#include <dlfcn.h> /* this might not be necessary for
+#include <dlfcn.h>
 #include <sys/cdefs.h>
 #include <sys/time.h>
 #include <unistd.h>
-					 * your UNIX machine. */
+#include "utf8.h"
 
 typedef int ch_ret;
 typedef int obj_ret;
@@ -6457,8 +6456,8 @@ ch_ret projectile_hit
     args((CHAR_DATA * ch, CHAR_DATA *victim, OBJ_DATA *wield,
           OBJ_DATA *projectile, sh_int dist));
 int ris_damage args((CHAR_DATA * ch, int dam, int ris));
-void exercise_train args((CHAR_DATA * ch, char *stat, int *modifier));
-void stat_train args((CHAR_DATA * ch, char *stat, int *modifier));
+void exercise_train args((CHAR_DATA * ch, char *stat, int modifier));
+void stat_train args((CHAR_DATA * ch, char *stat, int modifier));
 ch_ret damage args((CHAR_DATA * ch, CHAR_DATA *victim, int dam, int dt));
 void update_pos args((CHAR_DATA * victim));
 void set_fighting args((CHAR_DATA * ch, CHAR_DATA *victim));

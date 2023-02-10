@@ -1,6 +1,6 @@
 # build.ninja
 cc    = clang
-cflags = -O2 -g3 -Wall -std=c11 
+cflags = -O2 -g3 -Wall -std=c17 
 math = -lm
 
 rule compile

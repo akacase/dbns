@@ -4942,7 +4942,7 @@ int ris_damage(CHAR_DATA *ch, int dam, int ris) {
 /*
  * fight training
  */
-void stat_train(CHAR_DATA *ch, char *stat, int *modifier) {
+void stat_train(CHAR_DATA *ch, char *stat, int modifier) {
   int *tAbility;
   int *pAbility;
   int *permTstat;
@@ -4956,19 +4956,19 @@ void stat_train(CHAR_DATA *ch, char *stat, int *modifier) {
 
   fightIncrease = (number_range(1, 2) * gainMod);
 
-  if (stat == "str") {
+  if (strcmp(stat, "str")) {
     tAbility = &ch->pcdata->tStr;
     pAbility = &ch->perm_str;
     permTstat = &ch->pcdata->permTstr;
-  } else if (stat == "int") {
+  } else if (strcmp(stat, "int")) {
     tAbility = &ch->pcdata->tInt;
     pAbility = &ch->perm_int;
     permTstat = &ch->pcdata->permTint;
-  } else if (stat == "spd") {
+  } else if (strcmp(stat, "spd")) {
     tAbility = &ch->pcdata->tSpd;
     pAbility = &ch->perm_dex;
     permTstat = &ch->pcdata->permTspd;
-  } else if (stat == "con") {
+  } else if (strcmp(stat, "con")) {
     tAbility = &ch->pcdata->tCon;
     pAbility = &ch->perm_con;
     permTstat = &ch->pcdata->permTcon;
@@ -4989,16 +4989,16 @@ void stat_train(CHAR_DATA *ch, char *stat, int *modifier) {
         ch->pl += 1;
       }
     }
-    if (stat == "str") {
+    if (strcmp(stat, "str")) {
       send_to_char("&CYou feel your strength improving!&D\n\r", ch);
     }
-    if (stat == "spd") {
+    if (strcmp(stat, "spd")) {
       send_to_char("&CYou feel your speed improving!&D\n\r", ch);
     }
-    if (stat == "int") {
+    if (strcmp(stat, "int")) {
       send_to_char("&CYou feel your intelligence improving!&D\n\r", ch);
     }
-    if (stat == "con") {
+    if (strcmp(stat, "con")) {
       send_to_char("&CYou feel your constitution improving!&D\n\r", ch);
     }
   } else if (*permTstat >= 2000000000 && *tAbility >= 999) {
@@ -5006,7 +5006,7 @@ void stat_train(CHAR_DATA *ch, char *stat, int *modifier) {
   }
 }
 
-void exercise_train(CHAR_DATA *ch, char *stat, int *modifier) {
+void exercise_train(CHAR_DATA *ch, char *stat, int modifier) {
   int *tAbility;
   int *pAbility;
   int *permTstat;
@@ -5020,19 +5020,19 @@ void exercise_train(CHAR_DATA *ch, char *stat, int *modifier) {
 
   fightIncrease = (number_range(1, 2) * gainMod);
 
-  if (stat == "str") {
+  if (strcmp(stat, "str")) {
     tAbility = &ch->pcdata->tStr;
     pAbility = &ch->perm_str;
     permTstat = &ch->pcdata->permTstr;
-  } else if (stat == "int") {
+  } else if (strcmp(stat, "int")) {
     tAbility = &ch->pcdata->tInt;
     pAbility = &ch->perm_int;
     permTstat = &ch->pcdata->permTint;
-  } else if (stat == "spd") {
+  } else if (strcmp(stat, "spd")) {
     tAbility = &ch->pcdata->tSpd;
     pAbility = &ch->perm_dex;
     permTstat = &ch->pcdata->permTspd;
-  } else if (stat == "con") {
+  } else if (strcmp(stat, "con")) {
     tAbility = &ch->pcdata->tCon;
     pAbility = &ch->perm_con;
     permTstat = &ch->pcdata->permTcon;
@@ -5048,21 +5048,21 @@ void exercise_train(CHAR_DATA *ch, char *stat, int *modifier) {
       int randomgain = 0;
 
       randomgain = number_range(1, 3);
-      if (randomgain = 3) {
+      if (randomgain == 3) {
         ch->exp += 1;
         ch->pl += 1;
       }
     }
-    if (stat == "str") {
+    if (strcmp(stat, "str")) {
       send_to_char("&CYou feel your strength improving!&D\n\r", ch);
     }
-    if (stat == "spd") {
+    if (strcmp(stat, "spd")) {
       send_to_char("&CYou feel your speed improving!&D\n\r", ch);
     }
-    if (stat == "int") {
+    if (strcmp(stat, "int")) {
       send_to_char("&CYou feel your intelligence improving!&D\n\r", ch);
     }
-    if (stat == "con") {
+    if (strcmp(stat, "con")) {
       send_to_char("&CYou feel your constitution improving!&D\n\r", ch);
     }
   } else if (*permTstat >= 2000000000 && *tAbility >= 999) {
@@ -5098,10 +5098,6 @@ damage(CHAR_DATA *ch, CHAR_DATA *victim, int dam, int dt) {
   ROOM_INDEX_DATA *pRoomIndex;
   double clothingPlMod = 0;
   /* fight training */
-  int *tAbility;
-  int *pAbility;
-  int *permTstat;
-  int fightIncrease = 0;
 
   retcode = rNONE;
 

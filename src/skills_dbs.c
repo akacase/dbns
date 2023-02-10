@@ -143,9 +143,9 @@ void reuniteSplitForms(CHAR_DATA *ch) {
   }
   send_to_char("Something wierd happened?", ch);
   /*
-	 * bug("reuniteSplitForms: couldn't clean splits normaly, purging
-	 * all of %s's forms", ch->name);
-	 */
+   * bug("reuniteSplitForms: couldn't clean splits normaly, purging
+   * all of %s's forms", ch->name);
+   */
 
   for (och = first_char; och; och = och_next) {
     och_next = och->next;
@@ -7077,423 +7077,6 @@ void do_kamehameha(CHAR_DATA *ch, char *argument) {
   return;
 }
 
-/*
-do_oldchargekamehameha(CHAR_DATA * ch, char *argument)
-{
-	CHAR_DATA *victim;
-	char 	arg[MAX_INPUT_LENGTH];
-	int 	dam = 0;
-	int		argdam = 0;
-	int		kilimit = 0;
-	float	kimult = 0;
-	float	kicmult = 0;
-
-	one_argument(argument, arg);
-	if (IS_NPC(ch) && is_split(ch)) {
-		if (!ch->master)
-			return;
-		if (!can_use_skill
-		    (ch->master, number_percent(), gsn_kamehameha))
-			return;
-	}
-	if (IS_NPC(ch) && IS_AFFECTED(ch, AFF_CHARM)) {
-		send_to_char("You can't concentrate enough for that.\n\r", ch);
-		return;
-	}
-	if (!IS_NPC(ch)
-	    && ch->exp < skill_table[gsn_kamehameha]->skill_level[ch->class]) {
-		send_to_char("You can't do that.\n\r", ch);
-		return;
-	}
-	if (!IS_NPC(ch)) {
-		kilimit = ch->train / 10000;
-		kimult = (float) get_curr_int(ch) / 1000 + 1;
-		kicmult = (float) kilimit / 100 + 1;
-	}
-	if ((victim = who_fighting(ch)) == NULL) {
-		send_to_char("You aren't fighting anyone.\n\r", ch);
-		return;
-	}
-	if (!str_cmp(arg, "200") && (kilimit < 2)) {
-		send_to_char("You're unable to control your energy well enough!\n\r", ch);
-		return;
-	}
-	if (!str_cmp(arg, "300") && (kilimit < 10)) {
-		send_to_char("You're unable to control your energy well enough!\n\r", ch);
-		return;
-	}
-	if (!str_cmp(arg, "400") && (kilimit < 20)) {
-		send_to_char("You're unable to control your energy well enough!\n\r", ch);
-		return;
-	}
-	if (!str_cmp(arg, "500") && (kilimit < 30)) {
-		send_to_char("You're unable to control your energy well enough!\n\r", ch);
-		return;
-	}
-	if (!str_cmp(arg, "1000") && (kilimit < 40)) {
-		send_to_char("You're unable to control your energy well enough!\n\r", ch);
-		return;
-	}
-	if (arg[0] == '\0' && ch->mana < skill_table[gsn_kamehameha]->min_mana) {
-		send_to_char("You don't have enough energy.\n\r", ch);
-		return;
-	}
-	if (!str_cmp(arg, "50") && ch->mana < (skill_table[gsn_kamehameha]->min_mana) / 4) {
-		send_to_char("You don't have enough energy.\n\r", ch);
-		return;
-	}
-	if (!str_cmp(arg, "100") && ch->mana < (skill_table[gsn_kamehameha]->min_mana)) {
-		send_to_char("You don't have enough energy.\n\r", ch);
-		return;
-	}
-	if (!str_cmp(arg, "200") && ch->mana < (skill_table[gsn_kamehameha]->min_mana) * 4) {
-		send_to_char("You don't have enough energy.\n\r", ch);
-		return;
-	}
-	if (!str_cmp(arg, "300") && ch->mana < (skill_table[gsn_kamehameha]->min_mana) * 16) {
-		send_to_char("You don't have enough energy.\n\r", ch);
-		return;
-	}
-	if (!str_cmp(arg, "400") && ch->mana < (skill_table[gsn_kamehameha]->min_mana) * 64) {
-		send_to_char("You don't have enough energy.\n\r", ch);
-		return;
-	}
-	if (!str_cmp(arg, "500") && ch->mana < (skill_table[gsn_kamehameha]->min_mana) * 256) {
-		send_to_char("You don't have enough energy.\n\r", ch);
-		return;
-	}
-	if (!str_cmp(arg, "1000") && ch->mana < (skill_table[gsn_kamehameha]->min_mana) * 1024) {
-		send_to_char("You don't have enough energy.\n\r", ch);
-		return;
-	}
-	if (ch->focus < skill_table[gsn_kamehameha]->focus) {
-		send_to_char("You need to focus more.\n\r", ch);
-		return;
-	} else
-		ch->focus -= skill_table[gsn_kamehameha]->focus;
-
-	WAIT_STATE(ch, skill_table[gsn_kamehameha]->beats);
-	if (can_use_skill(ch, number_percent(), gsn_kamehameha)) {
-		if (!IS_NPC(ch)) {
-			if (arg[0] == '\0') {
-				argdam = number_range(50, 60) * kicmult;
-				dam = get_attmod(ch, victim) * (argdam * kimult);
-				stat_train(ch, "int", 10);
-				ch->train += 10;
-			}
-			if (!str_cmp(arg, "50")) {
-				argdam = number_range(25, 30) * kicmult ;
-				dam = get_attmod(ch, victim) * (argdam * kimult);
-				stat_train(ch, "int", 9);
-				ch->train += 4;
-			}
-			if (!str_cmp(arg, "100")) {
-				argdam = number_range(50, 60) * kicmult;
-				dam = get_attmod(ch, victim) * (argdam * kimult);
-				stat_train(ch, "int", 10);
-				ch->train += 10;
-			}
-			if (!str_cmp(arg, "200")) {
-				argdam = number_range(100, 120) * kicmult;
-				dam = get_attmod(ch, victim) * (argdam * kimult);
-				stat_train(ch, "int", 15);
-				ch->train += 15;	
-			}
-			if (!str_cmp(arg, "300")) {
-				argdam = number_range(150, 180) * kicmult;
-				dam = get_attmod(ch, victim) * (argdam * kimult);
-				stat_train(ch, "int", 22);
-				ch->train += 22;	
-			}
-			if (!str_cmp(arg, "400")) {
-				argdam = number_range(200, 240) * kicmult;
-				dam = get_attmod(ch, victim) * (argdam * kimult);
-				stat_train(ch, "int", 33);
-				ch->train += 33;	
-			}
-			if (!str_cmp(arg, "500")) {
-				argdam = number_range(250, 300) * kicmult;
-				dam = get_attmod(ch, victim) * (argdam * kimult);
-				stat_train(ch, "int", 49);
-				ch->train += 50;	
-			}
-			if (!str_cmp(arg, "1000")){
-				argdam = number_range(300, 360) * kicmult;
-				dam = get_attmod(ch, victim) * (argdam * kimult);
-				stat_train(ch, "int", 73);
-				ch->train += 50;	
-			}
-		
-		}
-		if (IS_NPC(ch)) {
-			if (arg[0] == '\0') {
-				argdam = number_range(20, 25);
-				dam = get_attmod(ch, victim) * (argdam + (get_curr_int(ch) / 40));
-			}
-			if (!str_cmp(arg, "50")) {
-				argdam = number_range(10, 13);
-				dam = get_attmod(ch, victim) * (argdam + (get_curr_int(ch) / 40));
-			}
-			if (!str_cmp(arg, "100")) {
-				argdam = number_range(20, 25);
-				dam = get_attmod(ch, victim) * (argdam + (get_curr_int(ch) / 40));
-			}
-			if (!str_cmp(arg, "200")) {
-				argdam = number_range(40, 50);
-				dam = get_attmod(ch, victim) * (argdam + (get_curr_int(ch) / 40));			
-			}
-			if (!str_cmp(arg, "300")) {
-				argdam = number_range(60, 75);
-				dam = get_attmod(ch, victim) * (argdam + (get_curr_int(ch) / 40));			
-			}
-			if (!str_cmp(arg, "400")) {
-				argdam = number_range(80, 100);
-				dam = get_attmod(ch, victim) * (argdam + (get_curr_int(ch) / 40));			
-			}
-			if (!str_cmp(arg, "500")) {
-				argdam = number_range(100, 125);
-				dam = get_attmod(ch, victim) * (argdam + (get_curr_int(ch) / 40));			
-			}
-			if (!str_cmp(arg, "1000")){
-				argdam = number_range(200, 250);
-				dam = get_attmod(ch, victim) * (argdam + (get_curr_int(ch) / 40));			
-			}
-		
-		}
-		if (dam < 1)
-			dam = 1;
-		if (ch->charge > 0)
-			dam = chargeDamMult(ch, dam);
-		if (arg[0] == '\0') {
-			act(AT_LBLUE,
-				"You put your arms back and cup your hands. 'KA-ME-HA-ME-HA!!!!'	",
-				ch, NULL, victim, TO_CHAR);
-			act(AT_LBLUE,
-				"You push your hands forward, throwing a blue beam at $N. &W[$t]",
-				ch, num_punct(dam), victim, TO_CHAR);
-			act(AT_LBLUE,
-				"$n puts $s arms back and cups $s hands. 'KA-ME-HA-ME-HA!!!!'	",
-				ch, NULL, victim, TO_VICT);
-			act(AT_LBLUE,
-				"$n pushes $s hands forward, throwing a blue beam at you. &W[$t]",
-				ch, num_punct(dam), victim, TO_VICT);
-			act(AT_LBLUE,
-				"$n puts $s arms back and cups $s hands. 'KA-ME-HA-ME-HA!!!!'	",
-				ch, NULL, victim, TO_NOTVICT);
-			act(AT_LBLUE,
-				"$n pushes $s hands forward, throwing a blue beam at $N. &W[$t]",
-				ch, num_punct(dam), victim, TO_NOTVICT);
-		}
-		if (!str_cmp(arg, "50")) {
-			act(AT_LBLUE,
-				"You put your arms back and cup your hands. 'KA-ME-HA-ME-HA!!!!'	",
-				ch, NULL, victim, TO_CHAR);
-			act(AT_LBLUE,
-				"You push your hands forward, throwing a small blue beam at $N. &W[$t]",
-				ch, num_punct(dam), victim, TO_CHAR);
-			act(AT_LBLUE,
-				"$n puts $s arms back and cups $s hands. 'KA-ME-HA-ME-HA!!!!'	",
-				ch, NULL, victim, TO_VICT);
-			act(AT_LBLUE,
-				"$n pushes $s hands forward, throwing a small blue beam at you. &W[$t]",
-				ch, num_punct(dam), victim, TO_VICT);
-			act(AT_LBLUE,
-				"$n puts $s arms back and cups $s hands. 'KA-ME-HA-ME-HA!!!!'	",
-				ch, NULL, victim, TO_NOTVICT);
-			act(AT_LBLUE,
-				"$n pushes $s hands forward, throwing a small blue beam at $N. &W[$t]",
-				ch, num_punct(dam), victim, TO_NOTVICT);
-		}
-		if (!str_cmp(arg, "200")) {
-			act(AT_LBLUE,
-				"You put your arms back and cup your hands. 'KA-ME-HA-ME-HA!!!!'	",
-				ch, NULL, victim, TO_CHAR);
-			act(AT_LBLUE,
-				"You push your hands forward, throwing a huge blue beam at $N. &W[$t]",
-				ch, num_punct(dam), victim, TO_CHAR);
-			act(AT_LBLUE,
-				"$n puts $s arms back and cups $s hands. 'KA-ME-HA-ME-HA!!!!'	",
-				ch, NULL, victim, TO_VICT);
-			act(AT_LBLUE,
-				"$n pushes $s hands forward, throwing a huge blue beam at you. &W[$t]",
-				ch, num_punct(dam), victim, TO_VICT);
-			act(AT_LBLUE,
-				"$n puts $s arms back and cups $s hands. 'KA-ME-HA-ME-HA!!!!'	",
-				ch, NULL, victim, TO_NOTVICT);
-			act(AT_LBLUE,
-				"$n pushes $s hands forward, throwing a huge blue beam at $N. &W[$t]",
-				ch, num_punct(dam), victim, TO_NOTVICT);
-		}
-		if (!str_cmp(arg, "300")) {
-			act(AT_LBLUE,
-				"You put your arms back and cup your hands. 'KA-ME-HA-ME-HA!!!!'	",
-				ch, NULL, victim, TO_CHAR);
-			act(AT_LBLUE,
-				"You push your hands forward, throwing a massive blue beam at $N. &W[$t]",
-				ch, num_punct(dam), victim, TO_CHAR);
-			act(AT_LBLUE,
-				"$n puts $s arms back and cups $s hands. 'KA-ME-HA-ME-HA!!!!'	",
-				ch, NULL, victim, TO_VICT);
-			act(AT_LBLUE,
-				"$n pushes $s hands forward, throwing a massive blue beam at you. &W[$t]",
-				ch, num_punct(dam), victim, TO_VICT);
-			act(AT_LBLUE,
-				"$n puts $s arms back and cups $s hands. 'KA-ME-HA-ME-HA!!!!'	",
-				ch, NULL, victim, TO_NOTVICT);
-			act(AT_LBLUE,
-				"$n pushes $s hands forward, throwing a massive blue beam at $N. &W[$t]",
-				ch, num_punct(dam), victim, TO_NOTVICT);
-		}
-		if (!str_cmp(arg, "400")) {
-			act(AT_LBLUE,
-				"You put your arms back and cup your hands, an enormous amount of",
-				ch, NULL, victim, TO_CHAR);
-			act(AT_LBLUE,
-				"ki exploding out from within your body. 'CHOU KA-ME-HA-ME-HAAAAA!!!'",
-				ch, NULL, victim, TO_CHAR);
-			act(AT_LBLUE,
-				"You push your hands forward, engulfing $N in an otherworldly blast. &W[$t]",
-				ch, num_punct(dam), victim, TO_CHAR);
-			act(AT_LBLUE,
-				"$n puts $s arms back and cups $s hands, an enormous amount of",
-				ch, NULL, victim, TO_VICT);
-			act(AT_LBLUE,
-				"ki exploding out from within $s body. 'CHOU KA-ME-HA-ME-HAAAAA!!!'",
-				ch, NULL, victim, TO_VICT);
-			act(AT_LBLUE,
-				"$n pushes $s hands forward, engulfing you in an otherworldly blast. &W[$t]",
-				ch, num_punct(dam), victim, TO_VICT);
-			act(AT_LBLUE,
-				"$n puts $s arms back and cups $s hands, an enormous amount of",
-				ch, NULL, victim, TO_NOTVICT);
-			act(AT_LBLUE,
-				"ki exploding out from within $s body. 'CHOU KA-ME-HA-ME-HAAAAA!!!'",
-				ch, NULL, victim, TO_NOTVICT);
-			act(AT_LBLUE,
-				"$n pushes $s hands forward, engulfing $N in an otherworldly blast. &W[$t]",
-				ch, num_punct(dam), victim, TO_NOTVICT);
-		}
-		if (!str_cmp(arg, "500")) {
-			act(AT_LBLUE,
-				"You put your arms back and cup your hands, an enormous amount of",
-				ch, NULL, victim, TO_CHAR);
-			act(AT_LBLUE,
-				"ki exploding out from within your body. 'KAAAA-MEEEE ... HAAA-MEEEE ...'",
-				ch, NULL, victim, TO_CHAR);
-			act(AT_LBLUE,
-				"You suddenly disappear, reappearing in a flash behind $N! 'HAAAAAAAA!!!!'",
-				ch, NULL, victim, TO_CHAR);
-			act(AT_LBLUE,
-				"$N is engulfed at point-blank range in a massive whorl of energy!  &W[$t]",
-				ch, num_punct(dam), victim, TO_CHAR);
-			act(AT_LBLUE,
-				"$n puts $s arms back and cups $s hands, an enormous amount of",
-				ch, NULL, victim, TO_VICT);
-			act(AT_LBLUE,
-				"ki exploding out from within $s body. 'KAAAA-MEEEE ... HAAA-MEEEE ...'",
-				ch, NULL, victim, TO_VICT);
-			act(AT_LBLUE,
-				"$n suddenly disappears, reappearing in a flash behind you! 'HAAAAAAAA!!!!'",
-				ch, NULL, victim, TO_VICT);
-			act(AT_LBLUE,
-				"You're engulfed at point-blank range in a massive whorl of energy! &W[$t]",
-				ch, num_punct(dam), victim, TO_VICT);
-			act(AT_LBLUE,
-				"$n puts $s arms back and cups $s hands, an enormous amount of",
-				ch, NULL, victim, TO_NOTVICT);
-			act(AT_LBLUE,
-				"ki exploding out from within $s body. 'KAAAA-MEEEE ... HAAA-MEEEE ...'",
-				ch, NULL, victim, TO_NOTVICT);
-			act(AT_LBLUE,
-				"$n suddenly disappears, reappearing in a flash behind $N! 'HAAAAAAAA!!!!'",
-				ch, NULL, victim, TO_NOTVICT);
-			act(AT_LBLUE,
-				"$N is engulfed at point-blank range in a massive whorl of energy! &W[$t]",
-				ch, num_punct(dam), victim, TO_NOTVICT);
-		}
-		if (!str_cmp(arg, "1000")) {
-			act(AT_LBLUE,
-				"You put your arms back and cup your hands, an enormous amount of",
-				ch, NULL, victim, TO_CHAR);
-			act(AT_LBLUE,
-				"ki exploding out from within your body. 'KAAAA-MEEEE ... HAAA-MEEEE ...'",
-				ch, NULL, victim, TO_CHAR);
-			act(AT_LBLUE,
-				"You throw your hands forward, nearly tearing apart your own body! 'HAAAAAAAA!!!!' ",
-				ch, NULL, victim, TO_CHAR);
-			act(AT_LBLUE,
-				"$N is engulfed in a universe-ravaging torrent of energy!  &W[$t]",
-				ch, num_punct(dam), victim, TO_CHAR);
-			act(AT_LBLUE,
-				"$n puts $s arms back and cups $s hands, an enormous amount of",
-				ch, NULL, victim, TO_VICT);
-			act(AT_LBLUE,
-				"ki exploding out from within $s body. 'KAAAA-MEEEE ... HAAA-MEEEE ...'",
-				ch, NULL, victim, TO_VICT);
-			act(AT_LBLUE,
-				"$n throws &s hands forward, nearly tearing apart &s own body! 'HAAAAAAAA!!!!'",
-				ch, NULL, victim, TO_VICT);
-			act(AT_LBLUE,
-				"You're engulfed in a universe-ravaging torrent of energy! &W[$t]",
-				ch, num_punct(dam), victim, TO_VICT);
-			act(AT_LBLUE,
-				"$n puts $s arms back and cups $s hands, an enormous amount of",
-				ch, NULL, victim, TO_NOTVICT);
-			act(AT_LBLUE,
-				"ki exploding out from within $s body. 'KAAAA-MEEEE ... HAAA-MEEEE ...'",
-				ch, NULL, victim, TO_NOTVICT);
-			act(AT_LBLUE,
-				"$n throws &s hands forward, nearly tearing apart &s own body! 'HAAAAAAAA!!!!'",
-				ch, NULL, victim, TO_NOTVICT);
-			act(AT_LBLUE,
-				"$N is engulfed in a universe-ravaging torrent of energy! &W[$t]",
-				ch, num_punct(dam), victim, TO_NOTVICT);
-		}
-
-		dam = ki_absorb(victim, ch, dam, gsn_kamehameha);
-		learn_from_success(ch, gsn_kamehameha);
-		global_retcode = damage(ch, victim, dam, TYPE_HIT);
-	} else {
-		act(AT_LBLUE, "You missed $N with your kamehameha.", ch, NULL,
-		    victim, TO_CHAR);
-		act(AT_LBLUE, "$n misses you with $s kamehameha.", ch, NULL,
-		    victim, TO_VICT);
-		act(AT_LBLUE, "$n missed $N with a kamehameha.", ch, NULL,
-		    victim, TO_NOTVICT);
-		learn_from_failure(ch, gsn_kamehameha);
-		global_retcode = damage(ch, victim, 0, TYPE_HIT);
-	}
-	if (arg[0] == '\0' || !str_cmp(arg, "100")) {
-		ch->mana -= skill_table[gsn_kamehameha]->min_mana;
-		return;
-	}
-	else if (!str_cmp(arg, "50")) {
-		ch->mana -= (skill_table[gsn_kamehameha]->min_mana / 4);
-		return;
-	}
-	else if (!str_cmp(arg, "200")) {
-		ch->mana -= (skill_table[gsn_kamehameha]->min_mana * 4);
-		return;
-	}
-	else if (!str_cmp(arg, "300")) {
-		ch->mana -= (skill_table[gsn_kamehameha]->min_mana * 16);
-		return;
-	}
-	else if (!str_cmp(arg, "400")) {
-		ch->mana -= (skill_table[gsn_kamehameha]->min_mana * 64);
-		return;
-	}
-	else if (!str_cmp(arg, "500")) {
-		ch->mana -= (skill_table[gsn_kamehameha]->min_mana * 256);
-		return;
-	}
-	else if (!str_cmp(arg, "1000")) {
-		ch->mana -= (skill_table[gsn_kamehameha]->min_mana * 1024);
-		return;
-	}
-}
-*/
-
 void do_masenko(CHAR_DATA *ch, char *argument) {
   CHAR_DATA *victim;
   int dam = 0;
@@ -7694,418 +7277,6 @@ void do_sbc(CHAR_DATA *ch, char *argument) {
   return;
 }
 
-/*
-void
-do_oldsbc(CHAR_DATA * ch, char *argument)
-{
-	CHAR_DATA *victim;
-	char 	arg[MAX_INPUT_LENGTH];
-	int 	dam = 0;
-	int		argdam = 0;
-	int		kilimit = 0;
-	float	kimult = 0;
-	float	kicmult = 0;
-	
-	one_argument(argument, arg);
-	if (IS_NPC(ch) && is_split(ch)) {
-		if (!ch->master)
-			return;
-		if (!can_use_skill(ch->master, number_percent(), gsn_sbc))
-			return;
-	}
-	if (IS_NPC(ch) && IS_AFFECTED(ch, AFF_CHARM)) {
-		send_to_char("You can't concentrate enough for that.\n\r", ch);
-		return;
-	}
-	if (!IS_NPC(ch)
-	    && ch->exp < skill_table[gsn_sbc]->skill_level[ch->class]) {
-		send_to_char("You can't do that.\n\r", ch);
-		return;
-	}
-	if ((victim = who_fighting(ch)) == NULL) {
-		send_to_char("You aren't fighting anyone.\n\r", ch);
-		return;
-	}
-	if (!IS_NPC(ch)) {
-		kilimit = ch->train / 10000;
-		kimult = (float) get_curr_int(ch) / 1000 + 1;
-		kicmult = (float) kilimit / 100 + 1;
-	}
-	if (!str_cmp(arg, "200") && (kilimit < 2)) {
-		send_to_char("You're unable to control your energy well enough!\n\r", ch);
-		return;
-	}
-	if (!str_cmp(arg, "300") && (kilimit < 10)) {
-		send_to_char("You're unable to control your energy well enough!\n\r", ch);
-		return;
-	}
-	if (!str_cmp(arg, "400") && (kilimit < 20)) {
-		send_to_char("You're unable to control your energy well enough!\n\r", ch);
-		return;
-	}
-	if (!str_cmp(arg, "500") && (kilimit < 30)) {
-		send_to_char("You're unable to control your energy well enough!\n\r", ch);
-		return;
-	}
-	if (!str_cmp(arg, "1000") && (kilimit < 40)) {
-		send_to_char("You're unable to control your energy well enough!\n\r", ch);
-		return;
-	}
-	if (arg[0] == '\0' && ch->mana < skill_table[gsn_sbc]->min_mana) {
-		send_to_char("You don't have enough energy.\n\r", ch);
-		return;
-	}
-	if (!str_cmp(arg, "50") && ch->mana < (skill_table[gsn_sbc]->min_mana) / 4) {
-		send_to_char("You don't have enough energy.\n\r", ch);
-		return;
-	}
-	if (!str_cmp(arg, "100") && ch->mana < (skill_table[gsn_sbc]->min_mana)) {
-		send_to_char("You don't have enough energy.\n\r", ch);
-		return;
-	}
-	if (!str_cmp(arg, "200") && ch->mana < (skill_table[gsn_sbc]->min_mana) * 4) {
-		send_to_char("You don't have enough energy.\n\r", ch);
-		return;
-	}
-	if (!str_cmp(arg, "300") && ch->mana < (skill_table[gsn_sbc]->min_mana) * 16) {
-		send_to_char("You don't have enough energy.\n\r", ch);
-		return;
-	}
-	if (!str_cmp(arg, "400") && ch->mana < (skill_table[gsn_sbc]->min_mana) * 64) {
-		send_to_char("You don't have enough energy.\n\r", ch);
-		return;
-	}
-	if (!str_cmp(arg, "500") && ch->mana < (skill_table[gsn_sbc]->min_mana) * 256) {
-		send_to_char("You don't have enough energy.\n\r", ch);
-		return;
-	}
-	if (!str_cmp(arg, "1000") && ch->mana < (skill_table[gsn_sbc]->min_mana) * 1024) {
-		send_to_char("You don't have enough energy.\n\r", ch);
-		return;
-	}
-	if (ch->focus < skill_table[gsn_sbc]->focus) {
-		send_to_char("You need to focus more.\n\r", ch);
-		return;
-	} else
-		ch->focus -= skill_table[gsn_sbc]->focus;
-
-	WAIT_STATE(ch, skill_table[gsn_sbc]->beats);
-	if (can_use_skill(ch, number_percent(), gsn_sbc)) {
-		if (!IS_NPC(ch)) {
-			if (arg[0] == '\0') {
-				argdam = number_range(20, 25) * kicmult;
-				dam = get_attmod(ch, victim) * (argdam * kimult);
-				stat_train(ch, "int", 10);
-				ch->train += 10;
-			}
-			if (!str_cmp(arg, "50")) {
-				argdam = number_range(10, 13) * kicmult ;
-				dam = get_attmod(ch, victim) * (argdam * kimult);
-				stat_train(ch, "int", 9);
-				ch->train += 4;
-			}
-			if (!str_cmp(arg, "100")) {
-				argdam = number_range(20, 25) * kicmult;
-				dam = get_attmod(ch, victim) * (argdam * kimult);
-				stat_train(ch, "int", 10);
-				ch->train += 10;
-			}
-			if (!str_cmp(arg, "200")) {
-				argdam = number_range(40, 50) * kicmult;
-				dam = get_attmod(ch, victim) * (argdam * kimult);
-				stat_train(ch, "int", 15);
-				ch->train += 15;	
-			}
-			if (!str_cmp(arg, "300")) {
-				argdam = number_range(60, 75) * kicmult;
-				dam = get_attmod(ch, victim) * (argdam * kimult);
-				stat_train(ch, "int", 22);
-				ch->train += 22;	
-			}
-			if (!str_cmp(arg, "400")) {
-				argdam = number_range(80, 100) * kicmult;
-				dam = get_attmod(ch, victim) * (argdam * kimult);
-				stat_train(ch, "int", 33);
-				ch->train += 33;	
-			}
-			if (!str_cmp(arg, "500")) {
-				argdam = number_range(100, 125) * kicmult;
-				dam = get_attmod(ch, victim) * (argdam * kimult);
-				stat_train(ch, "int", 49);
-				ch->train += 50;	
-			}
-			if (!str_cmp(arg, "1000")){
-				argdam = number_range(200, 250) * kicmult;
-				dam = get_attmod(ch, victim) * (argdam * kimult);
-				stat_train(ch, "int", 73);
-				ch->train += 50;	
-			}
-		
-		}
-		if (IS_NPC(ch)) {
-			if (arg[0] == '\0') {
-				argdam = number_range(20, 25);
-				dam = get_attmod(ch, victim) * (argdam + (get_curr_int(ch) / 40));
-			}
-			if (!str_cmp(arg, "50")) {
-				argdam = number_range(10, 13);
-				dam = get_attmod(ch, victim) * (argdam + (get_curr_int(ch) / 40));
-			}
-			if (!str_cmp(arg, "100")) {
-				argdam = number_range(20, 25);
-				dam = get_attmod(ch, victim) * (argdam + (get_curr_int(ch) / 40));
-			}
-			if (!str_cmp(arg, "200")) {
-				argdam = number_range(40, 50);
-				dam = get_attmod(ch, victim) * (argdam + (get_curr_int(ch) / 40));			
-			}
-			if (!str_cmp(arg, "300")) {
-				argdam = number_range(60, 75);
-				dam = get_attmod(ch, victim) * (argdam + (get_curr_int(ch) / 40));			
-			}
-			if (!str_cmp(arg, "400")) {
-				argdam = number_range(80, 100);
-				dam = get_attmod(ch, victim) * (argdam + (get_curr_int(ch) / 40));			
-			}
-			if (!str_cmp(arg, "500")) {
-				argdam = number_range(100, 125);
-				dam = get_attmod(ch, victim) * (argdam + (get_curr_int(ch) / 40));			
-			}
-			if (!str_cmp(arg, "1000")){
-				argdam = number_range(200, 250);
-				dam = get_attmod(ch, victim) * (argdam + (get_curr_int(ch) / 40));			
-			}
-		
-		}
-		if (ch->charge > 0)
-			dam = chargeDamMult(ch, dam);
-		if (!str_cmp(arg, "50")) {
-			act(AT_YELLOW,
-				"You momentarily put two fingers to your forehead.",
-				ch, NULL, victim, TO_CHAR);
-			act(AT_YELLOW,
-				"You thrust your fingers toward $N, sending out a thin corkscrew beam. &W[$t]",
-				ch, num_punct(dam), victim, TO_CHAR);
-			act(AT_YELLOW,
-				"$n momentarily puts two fingers to $s forehead.",
-				ch, NULL, victim, TO_VICT);
-			act(AT_YELLOW,
-				"$n thrusts $s fingers toward you, sending out a thin corkscrew beam. &W[$t]",
-				ch, num_punct(dam), victim, TO_VICT);
-			act(AT_YELLOW,
-				"$n momentarily puts two fingers to $s forehead.",
-				ch, NULL, victim, TO_NOTVICT);
-			act(AT_YELLOW,
-				"$n throws $s fingers toward $N, sending out a thin corkscrew beam. &W[$t]",
-				ch, num_punct(dam), victim, TO_NOTVICT);
-			
-		}
-		if (arg[0] == '\0' || !str_cmp(arg, "100")) {
-			act(AT_YELLOW,
-				"You put two fingers to your forehead, crackling energy gathering at their tips.",
-				ch, NULL, victim, TO_CHAR);
-			act(AT_YELLOW,
-				"Your thrust your fingers toward $N, sending out a corkscrew beam. &W[$t]",
-				ch, num_punct(dam), victim, TO_CHAR);
-			act(AT_YELLOW,
-				"$n puts two fingers to $s forehead as crackling energy gathers at their tips.",
-				ch, NULL, victim, TO_VICT);
-			act(AT_YELLOW,
-				"$n thrusts $s fingers toward you, sending out a corkscrew beam. &W[$t]",
-				ch, num_punct(dam), victim, TO_VICT);
-			act(AT_YELLOW,
-				"$n puts two fingers to $s forehead as crackling energy gathers at their tips.",
-				ch, NULL, victim, TO_NOTVICT);
-			act(AT_YELLOW,
-				"$n throws $s fingers toward $N, "
-				"sending out a corkscrew beam. &W[$t]", ch, num_punct(dam),
-				victim, TO_NOTVICT);
-			
-		}
-		if (!str_cmp(arg, "200")) {
-			act(AT_YELLOW,
-				"You put two fingers to your forehead, crackling energy gathering at their tips.",
-				ch, NULL, victim, TO_CHAR);
-			act(AT_YELLOW,
-				"A billowing aura erupts around you as you thrust your fingers toward $N, sending out a huge corkscrew beam. &W[$t]",
-				ch, num_punct(dam), victim, TO_CHAR);
-			act(AT_YELLOW,
-				"$n puts two fingers to $s forehead as crackling energy gathers at their tips.",
-				ch, NULL, victim, TO_VICT);
-			act(AT_YELLOW,
-				"A billowing aura erupts around $n as $m thrusts $s fingers toward you, sending out a huge corkscrew beam. &W[$t]",
-				ch, num_punct(dam), victim, TO_VICT);
-			act(AT_YELLOW,
-				"A billowing aura erupts around $n as $m puts two fingers to $s forehead.",
-				ch, NULL, victim, TO_NOTVICT);
-			act(AT_YELLOW,
-				"$n throws $s fingers toward $N, sending out a huge corkscrew beam. &W[$t]",
-				ch, num_punct(dam), victim, TO_NOTVICT);
-			
-		}
-		if (!str_cmp(arg, "300")) {
-			act(AT_YELLOW,
-				"You put two fingers to your forehead, crackling energy gathering at their tips.",
-				ch, NULL, victim, TO_CHAR);
-			act(AT_YELLOW,
-				"The ground trembles and shakes, sending dust and debris scattering in all directions.",
-				ch, num_punct(dam), victim, TO_CHAR);
-			act(AT_YELLOW,
-				"You thrust your hand forward, sending a massive corkscrew beam toward $N! &W[$t]",
-				ch, num_punct(dam), victim, TO_CHAR);
-			act(AT_YELLOW,
-				"$n puts two fingers to $s forehead as crackling energy gathers at their tips.",
-				ch, NULL, victim, TO_VICT);
-			act(AT_YELLOW,
-				"The ground trembles and shakes, sending dust and debris scattering in all directions.",
-				ch, num_punct(dam), victim, TO_VICT);
-			act(AT_YELLOW,	
-				"$n thrusts $s hand forward, sending a massive corkscrew beam toward you! &W[$t]",
-				ch, num_punct(dam), victim, TO_VICT);
-			act(AT_YELLOW,
-				"$n puts two fingers to $s forehead as crackling energy gathers at their tips.",
-				ch, NULL, victim, TO_NOTVICT);
-			act(AT_YELLOW,
-				"The ground trembles and shakes, sending dust and debris scattering in all directions.",
-				ch, num_punct(dam), victim, TO_NOTVICT);
-			act(AT_YELLOW,
-				"$n thrusts $s hand forward, sending a massive corkscrew beam toward $N! &W[$t]",
-				ch, num_punct(dam), victim, TO_NOTVICT);
-			
-		}
-		if (!str_cmp(arg, "400")) {
-			act(AT_YELLOW,
-				"You put two fingers to your forehead, crackling energy gathering at their tips.",
-				ch, NULL, victim, TO_CHAR);
-			act(AT_YELLOW,
-				"The wind churns and howls, your body wreathed with flashing lightning.",
-				ch, num_punct(dam), victim, TO_CHAR);
-			act(AT_YELLOW,
-				"You thrust your hand forward, sending a massive converging beam at $N! &W[$t]",
-				ch, num_punct(dam), victim, TO_CHAR);
-			act(AT_YELLOW,
-				"$n puts two fingers to $s forehead as crackling energy gathers at their tips.",
-				ch, NULL, victim, TO_VICT);
-			act(AT_YELLOW,
-				"The wind churns and howls, $s body wreathed with flashing lightning.",
-				ch, num_punct(dam), victim, TO_VICT);
-			act(AT_YELLOW,	
-				"$n thrusts $s hand forward, sending a massive converging beam at you! &W[$t]",
-				ch, num_punct(dam), victim, TO_VICT);
-			act(AT_YELLOW,
-				"$n puts two fingers to $s forehead as crackling energy gathers at their tips.",
-				ch, NULL, victim, TO_NOTVICT);
-			act(AT_YELLOW,
-				"The wind churns and howls, $s body wreathed with flashing lightning.",
-				ch, num_punct(dam), victim, TO_NOTVICT);
-			act(AT_YELLOW,
-				"$n thrusts $s hand forward, sending a massive converging beam $N! &W[$t]",
-				ch, num_punct(dam), victim, TO_NOTVICT);
-			
-		}
-		if (!str_cmp(arg, "500")) {
-			act(AT_YELLOW,
-				"You put two fingers to your forehead, bolts of crackling energy lancing outward.",
-				ch, NULL, victim, TO_CHAR);
-			act(AT_YELLOW,
-				"Every muscle in your body pulses, swelling with incredible amounts of ki.",
-				ch, num_punct(dam), victim, TO_CHAR);
-			act(AT_YELLOW,
-				"Your arm stretches forward and unleashes a catastrophic beam at $N from point-blank range! &W[$t]",
-				ch, num_punct(dam), victim, TO_CHAR);
-			act(AT_YELLOW,
-				"$n puts two fingers to $s forehead, bolts of crackling energy lancing outward.",
-				ch, NULL, victim, TO_VICT);
-			act(AT_YELLOW,
-				"Every muscle in $s body pulses, swelling with incredible amounts of ki.",
-				ch, num_punct(dam), victim, TO_VICT);
-			act(AT_YELLOW,	
-				"$n's arm suddenly stretches forward and unleashes a catastrophic beam at you from point-blank range! &W[$t]",
-				ch, num_punct(dam), victim, TO_VICT);
-			act(AT_YELLOW,
-				"$n puts two fingers to $s forehead, swelling with incredible amounts of ki.",
-				ch, NULL, victim, TO_NOTVICT);
-			act(AT_YELLOW,
-				"Every muscle in $s body pulses, swelling with incredible amounts of ki.",
-				ch, num_punct(dam), victim, TO_NOTVICT);
-			act(AT_YELLOW,
-				"$n's arm suddenly stretches forward and unleashes a catastrophic beam at $N from point-blank range! &W[$t]",
-				ch, num_punct(dam), victim, TO_NOTVICT);
-			
-		}
-		if (!str_cmp(arg, "1000")) {
-			act(AT_YELLOW,
-				"You put two fingers to your forehead, bolts of crackling energy lancing outward.",
-				ch, NULL, victim, TO_CHAR);
-			act(AT_YELLOW,
-				"Every muscle in your body pulses, swelling with incredible amounts of ki.",
-				ch, num_punct(dam), victim, TO_CHAR);
-			act(AT_YELLOW,
-				"Your arm stretches forward and unleashes a catastrophic beam at $N from point-blank range! &W[$t]",
-				ch, num_punct(dam), victim, TO_CHAR);
-			act(AT_YELLOW,
-				"$n puts two fingers to $s forehead, bolts of crackling energy lancing outward.",
-				ch, NULL, victim, TO_VICT);
-			act(AT_YELLOW,
-				"Every muscle in $s body pulses, swelling with incredible amounts of ki.",
-				ch, num_punct(dam), victim, TO_VICT);
-			act(AT_YELLOW,	
-				"$n's arm suddenly stretches forward and unleashes a catastrophic beam at you from point-blank range! &W[$t]",
-				ch, num_punct(dam), victim, TO_VICT);
-			act(AT_YELLOW,
-				"$n puts two fingers to $s forehead, swelling with incredible amounts of ki.",
-				ch, NULL, victim, TO_NOTVICT);
-			act(AT_YELLOW,
-				"Every muscle in $s body pulses, swelling with incredible amounts of ki.",
-				ch, num_punct(dam), victim, TO_NOTVICT);
-			act(AT_YELLOW,
-				"$n's arm suddenly stretches forward and unleashes a catastrophic beam at $N from point-blank range! &W[$t]",
-				ch, num_punct(dam), victim, TO_NOTVICT);
-			
-		}
-		dam = ki_absorb(victim, ch, dam, gsn_sbc);
-		learn_from_success(ch, gsn_sbc);
-		global_retcode = damage(ch, victim, dam, TYPE_HIT);
-	} else {
-		act(AT_YELLOW, "You missed $N with your special beam cannon.",
-		    ch, NULL, victim, TO_CHAR);
-		act(AT_YELLOW, "$n misses you with $s special beam cannon.", ch,
-		    NULL, victim, TO_VICT);
-		act(AT_YELLOW, "$n missed $N with a special beam cannon.", ch,
-		    NULL, victim, TO_NOTVICT);
-		learn_from_failure(ch, gsn_sbc);
-		global_retcode = damage(ch, victim, 0, TYPE_HIT);
-	}
-	if (arg[0] == '\0' || !str_cmp(arg, "100")) {
-		ch->mana -= skill_table[gsn_sbc]->min_mana;
-		return;
-	}
-	else if (!str_cmp(arg, "50")) {
-		ch->mana -= (skill_table[gsn_sbc]->min_mana / 4);
-		return;
-	}
-	else if (!str_cmp(arg, "200")) {
-		ch->mana -= (skill_table[gsn_sbc]->min_mana * 4);
-		return;
-	}
-	else if (!str_cmp(arg, "300")) {
-		ch->mana -= (skill_table[gsn_sbc]->min_mana * 16);
-		return;
-	}
-	else if (!str_cmp(arg, "400")) {
-		ch->mana -= (skill_table[gsn_sbc]->min_mana * 64);
-		return;
-	}
-	else if (!str_cmp(arg, "500")) {
-		ch->mana -= (skill_table[gsn_sbc]->min_mana * 256);
-		return;
-	}
-	else if (!str_cmp(arg, "1000")) {
-		ch->mana -= (skill_table[gsn_sbc]->min_mana * 1024);
-		return;
-	}
-}
-*/
 void do_dd(CHAR_DATA *ch, char *argument) {
   CHAR_DATA *victim;
   int dam = 0;
@@ -9205,247 +8376,6 @@ void do_finger_beam(CHAR_DATA *ch, char *argument) {
   return;
 }
 
-/*
-void
-do_oldfinger_beam(CHAR_DATA * ch, char *argument)
-{
-	CHAR_DATA *victim;
-	char 	arg[MAX_INPUT_LENGTH];
-	int 	dam = 0;
-	int		argdam = 0;
-	int		kilimit = 0;
-	float	kimult = 0;
-	float	kicmult = 0;
-
-	one_argument(argument, arg);
-	if (IS_NPC(ch) && is_split(ch)) {
-		if (!ch->master)
-			return;
-		if (!can_use_skill
-		    (ch->master, number_percent(), gsn_finger_beam))
-			return;
-	}
-	if (IS_NPC(ch) && IS_AFFECTED(ch, AFF_CHARM)) {
-		send_to_char("You can't concentrate enough for that.\n\r", ch);
-		return;
-	}
-	if (!IS_NPC(ch)
-	    && ch->exp < skill_table[gsn_finger_beam]->skill_level[ch->class]) {
-		send_to_char("You can't do that.\n\r", ch);
-		return;
-	}
-	if ((victim = who_fighting(ch)) == NULL) {
-		send_to_char("You aren't fighting anyone.\n\r", ch);
-		return;
-	}
-	if (!IS_NPC(ch)) {
-		kilimit = ch->train / 10000;
-		kimult = (float) get_curr_int(ch) / 1000 + 1;
-		kicmult = (float) kilimit / 100 + 1;
-	}
-	if (!str_cmp(arg, "200") && (kilimit < 2)) {
-		send_to_char("You're unable to control your energy well enough!\n\r", ch);
-		return;
-	}
-	if (!str_cmp(arg, "300") && (kilimit < 10)) {
-		send_to_char("You're unable to control your energy well enough!\n\r", ch);
-		return;
-	}
-	if (!str_cmp(arg, "400") && (kilimit < 20)) {
-		send_to_char("You're unable to control your energy well enough!\n\r", ch);
-		return;
-	}
-	if (!str_cmp(arg, "500") && (kilimit < 30)) {
-		send_to_char("You're unable to control your energy well enough!\n\r", ch);
-		return;
-	}
-	if (!str_cmp(arg, "1000") && (kilimit < 40)) {
-		send_to_char("You're unable to control your energy well enough!\n\r", ch);
-		return;
-	}
-	if (arg[0] == '\0' && ch->mana < skill_table[gsn_finger_beam]->min_mana) {
-		send_to_char("You don't have enough energy.\n\r", ch);
-		return;
-	}
-	if (!str_cmp(arg, "50") && ch->mana < (skill_table[gsn_finger_beam]->min_mana) / 4) {
-		send_to_char("You don't have enough energy.\n\r", ch);
-		return;
-	}
-	if (!str_cmp(arg, "100") && ch->mana < (skill_table[gsn_finger_beam]->min_mana)) {
-		send_to_char("You don't have enough energy.\n\r", ch);
-		return;
-	}
-	if (!str_cmp(arg, "200") && ch->mana < (skill_table[gsn_finger_beam]->min_mana) * 4) {
-		send_to_char("You don't have enough energy.\n\r", ch);
-		return;
-	}
-	if (!str_cmp(arg, "300") && ch->mana < (skill_table[gsn_finger_beam]->min_mana) * 16) {
-		send_to_char("You don't have enough energy.\n\r", ch);
-		return;
-	}
-	if (!str_cmp(arg, "400") && ch->mana < (skill_table[gsn_finger_beam]->min_mana) * 64) {
-		send_to_char("You don't have enough energy.\n\r", ch);
-		return;
-	}
-	if (!str_cmp(arg, "500") && ch->mana < (skill_table[gsn_finger_beam]->min_mana) * 256) {
-		send_to_char("You don't have enough energy.\n\r", ch);
-		return;
-	}
-	if (!str_cmp(arg, "1000") && ch->mana < (skill_table[gsn_finger_beam]->min_mana) * 1024) {
-		send_to_char("You don't have enough energy.\n\r", ch);
-		return;
-	}
-	if (ch->focus < skill_table[gsn_finger_beam]->focus) {
-		send_to_char("You need to focus more.\n\r", ch);
-		return;
-	} else
-		ch->focus -= skill_table[gsn_finger_beam]->focus;
-
-	sh_int 	z = get_aura(ch);
-
-	WAIT_STATE(ch, skill_table[gsn_finger_beam]->beats);
-	if (can_use_skill(ch, number_percent(), gsn_finger_beam)) {
-		if (!IS_NPC(ch)) {
-			if (arg[0] == '\0') {
-				argdam = number_range(20, 25) * kicmult;
-				dam = get_attmod(ch, victim) * (argdam * kimult);
-				stat_train(ch, "int", 10);
-				ch->train += 10;
-			}
-			if (!str_cmp(arg, "50")) {
-				argdam = number_range(10, 13) * kicmult ;
-				dam = get_attmod(ch, victim) * (argdam * kimult);
-				stat_train(ch, "int", 9);
-				ch->train += 4;
-			}
-			if (!str_cmp(arg, "100")) {
-				argdam = number_range(20, 25) * kicmult;
-				dam = get_attmod(ch, victim) * (argdam * kimult);
-				stat_train(ch, "int", 10);
-				ch->train += 10;
-			}
-			if (!str_cmp(arg, "200")) {
-				argdam = number_range(40, 50) * kicmult;
-				dam = get_attmod(ch, victim) * (argdam * kimult);
-				stat_train(ch, "int", 15);
-				ch->train += 15;	
-			}
-			if (!str_cmp(arg, "300")) {
-				argdam = number_range(60, 75) * kicmult;
-				dam = get_attmod(ch, victim) * (argdam * kimult);
-				stat_train(ch, "int", 22);
-				ch->train += 22;	
-			}
-			if (!str_cmp(arg, "400")) {
-				argdam = number_range(80, 100) * kicmult;
-				dam = get_attmod(ch, victim) * (argdam * kimult);
-				stat_train(ch, "int", 33);
-				ch->train += 33;	
-			}
-			if (!str_cmp(arg, "500")) {
-				argdam = number_range(100, 125) * kicmult;
-				dam = get_attmod(ch, victim) * (argdam * kimult);
-				stat_train(ch, "int", 49);
-				ch->train += 50;	
-			}
-			if (!str_cmp(arg, "1000")){
-				argdam = number_range(200, 250) * kicmult;
-				dam = get_attmod(ch, victim) * (argdam * kimult);
-				stat_train(ch, "int", 73);
-				ch->train += 50;	
-			}
-		
-		}
-		if (IS_NPC(ch)) {
-			if (arg[0] == '\0') {
-				argdam = number_range(20, 25);
-				dam = get_attmod(ch, victim) * (argdam + (get_curr_int(ch) / 40));
-			}
-			if (!str_cmp(arg, "50")) {
-				argdam = number_range(10, 13);
-				dam = get_attmod(ch, victim) * (argdam + (get_curr_int(ch) / 40));
-			}
-			if (!str_cmp(arg, "100")) {
-				argdam = number_range(20, 25);
-				dam = get_attmod(ch, victim) * (argdam + (get_curr_int(ch) / 40));
-			}
-			if (!str_cmp(arg, "200")) {
-				argdam = number_range(40, 50);
-				dam = get_attmod(ch, victim) * (argdam + (get_curr_int(ch) / 40));			
-			}
-			if (!str_cmp(arg, "300")) {
-				argdam = number_range(60, 75);
-				dam = get_attmod(ch, victim) * (argdam + (get_curr_int(ch) / 40));			
-			}
-			if (!str_cmp(arg, "400")) {
-				argdam = number_range(80, 100);
-				dam = get_attmod(ch, victim) * (argdam + (get_curr_int(ch) / 40));			
-			}
-			if (!str_cmp(arg, "500")) {
-				argdam = number_range(100, 125);
-				dam = get_attmod(ch, victim) * (argdam + (get_curr_int(ch) / 40));			
-			}
-			if (!str_cmp(arg, "1000")){
-				argdam = number_range(200, 250);
-				dam = get_attmod(ch, victim) * (argdam + (get_curr_int(ch) / 40));			
-			}
-		
-		}
-		if (ch->charge > 0)
-			dam = chargeDamMult(ch, dam);
-		act(z,
-		    "You point your hand towards $N, firing a beam of energy from the tip of your finger. &W[$t]",
-		    ch, num_punct(dam), victim, TO_CHAR);
-		act(z,
-		    "$n points $s hand towards you, firing a beam of energy from the tip of $s finger. &W[$t]",
-		    ch, num_punct(dam), victim, TO_VICT);
-		act(z,
-		    "$n points $s hand towards $N, firing a beam of energy from the tip of $s finger. &W[$t]",
-		    ch, num_punct(dam), victim, TO_NOTVICT);
-
-		dam = ki_absorb(victim, ch, dam, gsn_finger_beam);
-		learn_from_success(ch, gsn_finger_beam);
-		global_retcode = damage(ch, victim, dam, TYPE_HIT);
-	} else {
-		act(z, "You missed $N with your finger beam.", ch, NULL, victim,
-		    TO_CHAR);
-		act(z, "$n misses you with $s finger beam.", ch, NULL, victim,
-		    TO_VICT);
-		act(z, "$n missed $N with a finger beam.", ch, NULL, victim,
-		    TO_NOTVICT);
-		learn_from_failure(ch, gsn_finger_beam);
-		global_retcode = damage(ch, victim, 0, TYPE_HIT);
-	}
-	if (arg[0] == '\0' || !str_cmp(arg, "100")) {
-		ch->mana -= skill_table[gsn_shockwave]->min_mana;
-		return;
-	}
-	else if (!str_cmp(arg, "50")) {
-		ch->mana -= (skill_table[gsn_finger_beam]->min_mana / 4);
-		return;
-	}
-	else if (!str_cmp(arg, "200")) {
-		ch->mana -= (skill_table[gsn_finger_beam]->min_mana * 4);
-		return;
-	}
-	else if (!str_cmp(arg, "300")) {
-		ch->mana -= (skill_table[gsn_finger_beam]->min_mana * 16);
-		return;
-	}
-	else if (!str_cmp(arg, "400")) {
-		ch->mana -= (skill_table[gsn_finger_beam]->min_mana * 64);
-		return;
-	}
-	else if (!str_cmp(arg, "500")) {
-		ch->mana -= (skill_table[gsn_finger_beam]->min_mana * 256);
-		return;
-	}
-	else if (!str_cmp(arg, "1000")) {
-		ch->mana -= (skill_table[gsn_finger_beam]->min_mana * 1024);
-		return;
-	}
-}
-*/
 void do_tribeam(CHAR_DATA *ch, char *argument) {
   CHAR_DATA *victim;
   int dam = 0;
@@ -9481,14 +8411,14 @@ void do_tribeam(CHAR_DATA *ch, char *argument) {
   WAIT_STATE(ch, skill_table[gsn_tribeam]->beats);
   if (can_use_skill(ch, number_percent(), gsn_tribeam)) {
     /*
-		   dam = get_attmod(ch, victim) * number_range( 34, 40 );
-		 */
+                   dam = get_attmod(ch, victim) * number_range( 34, 40 );
+                 */
     dam = get_attmod(ch, victim) * (number_range(52, 56) + (get_curr_int(ch) / 20));
     if (ch->charge > 0)
       dam = chargeDamMult(ch, dam);
     /*	act( AT_SKILL, "You form your fingers into a triangle, spotting $N in your sights before pummeling $M with a powerfull beam of inner energy. &W[$t]", ch, num_punct(dam), victim, TO_CHAR );
- *	act( AT_SKILL, "$n forms $s fingers into a triangle, spotting you in $s sights before pummeling you with a powerfull beam of inner energy. &W[$t]", ch, num_punct(dam), victim, TO_VICT );
- *	act( AT_SKILL, "$n forms $s fingers into a triangle, spotting $N in $s sights before pummeling $M with a powerfull beam of inner energy. &W[$t]", ch, num_punct(dam), victim, TO_NOTVICT ); */
+     *	act( AT_SKILL, "$n forms $s fingers into a triangle, spotting you in $s sights before pummeling you with a powerfull beam of inner energy. &W[$t]", ch, num_punct(dam), victim, TO_VICT );
+     *	act( AT_SKILL, "$n forms $s fingers into a triangle, spotting $N in $s sights before pummeling $M with a powerfull beam of inner energy. &W[$t]", ch, num_punct(dam), victim, TO_NOTVICT ); */
 
     act(AT_YELLOW,
         "You form your fingers and thumbs into a triangle, "
@@ -10013,18 +8943,18 @@ void do_charge(CHAR_DATA *ch, char *argument) {
       if (!skill_table[ch->skillGsn]->name)
         bug("skills_dbs:3765");
       /* There was a bug that people can exploit when killing mobs.
- * They could charge, then do 'k (mob)'.  It'd break the charge,
- * and immediately engage them in combat with the mob.  Mostly
- * used against fighters in COU, Coolers, and the larger auto-repop
- * mobs.
- * My fix for this created a bug where people could use a timer
- * to set themselves into a 'charge loop' so to speak.  Could just
- * keep doing 'charge (skill)' in a spar, and they'd never attack
- * their partner--very useful for letting someone spam, but also
- * enabled them to cheat.
- * So, if any more changes are made to this part, take this into
- * consideration.  --Islvin
- */
+       * They could charge, then do 'k (mob)'.  It'd break the charge,
+       * and immediately engage them in combat with the mob.  Mostly
+       * used against fighters in COU, Coolers, and the larger auto-repop
+       * mobs.
+       * My fix for this created a bug where people could use a timer
+       * to set themselves into a 'charge loop' so to speak.  Could just
+       * keep doing 'charge (skill)' in a spar, and they'd never attack
+       * their partner--very useful for letting someone spam, but also
+       * enabled them to cheat.
+       * So, if any more changes are made to this part, take this into
+       * consideration.  --Islvin
+       */
       if (xIS_SET(ch->act, PLR_SPAR)) {
         pager_printf(ch,
                      "&wYou fire your charged up %s at %s!\n\r",
@@ -10164,7 +9094,7 @@ void do_multi_disk(CHAR_DATA *ch, char *arg) {
     ch->focus -=
         (skill_table[gsn_multi_disk]->focus * (1 + (shot / 10)));
 
-  //WAIT_STATE(ch, (skill_table[gsn_multi_disk]->beats * (1 + (shot / 10))));
+  // WAIT_STATE(ch, (skill_table[gsn_multi_disk]->beats * (1 + (shot / 10))));
   WAIT_STATE(ch, (skill_table[gsn_multi_disk]->beats));
 
   if (can_use_skill(ch, number_percent(), gsn_multi_disk)) {
@@ -10172,10 +9102,10 @@ void do_multi_disk(CHAR_DATA *ch, char *arg) {
       case 100:
         if (IS_NPC(victim) || (!IS_NPC(victim) && (!xIS_SET(ch->act, PLR_SPAR) || !xIS_SET(ch->act, PLR_SPAR)))) {
           /*
-				 * Redone so that instant death can't be
-				 * abused to instant kill players over 2x
-				 * their power. -- Islvin
-				 */
+           * Redone so that instant death can't be
+           * abused to instant kill players over 2x
+           * their power. -- Islvin
+           */
           if (victim->pl / ch->pl >= 2) {
             act(AT_YELLOW,
                 "You raise your hand above your head, forming a disc of pure energy, and throw it at $N.",
@@ -10255,7 +9185,7 @@ void do_multi_disk(CHAR_DATA *ch, char *arg) {
           shots--;
         }
         dam2 = number_range(2, 5);
-        //was 5 - 7 in the damage call
+        // was 5 - 7 in the damage call
         strcpy(buf2,
                num_punct(get_attmod(ch, victim) * dam * dam2));
 
@@ -11548,256 +10478,6 @@ void do_shockwave(CHAR_DATA *ch, char *argument) {
   return;
 }
 
-/*
-void
-do_oldshockwave(CHAR_DATA * ch, char *argument)
-{
-	CHAR_DATA *victim;
-	char 	arg[MAX_INPUT_LENGTH];
-	int 	dam = 0;
-	int		argdam = 0;
-	int		kilimit = 0;
-	float	kimult = 0;
-	float	kicmult = 0;
-
-	one_argument(argument, arg);
-	if (IS_NPC(ch) && is_split(ch)) {
-		if (!ch->master)
-			return;
-		if (!can_use_skill(ch->master, number_percent(), gsn_shockwave))
-			return;
-	}
-	if (IS_NPC(ch) && IS_AFFECTED(ch, AFF_CHARM)) {
-		send_to_char("You can't concentrate enough for that.\n\r", ch);
-		return;
-	}
-	if (!IS_NPC(ch)
-	    && ch->exp < skill_table[gsn_shockwave]->skill_level[ch->class]) {
-		send_to_char("You can't do that.\n\r", ch);
-		return;
-	}
-	if ((victim = who_fighting(ch)) == NULL) {
-		send_to_char("You aren't fighting anyone.\n\r", ch);
-		return;
-	}
-	if (!IS_NPC(ch)) {
-		kilimit = ch->train / 10000;
-		kimult = (float) get_curr_int(ch) / 1000 + 1;
-		kicmult = (float) kilimit / 100 + 1;
-	}
-	if (!str_cmp(arg, "200") && (kilimit < 2)) {
-		send_to_char("You're unable to control your energy well enough!\n\r", ch);
-		return;
-	}
-	if (!str_cmp(arg, "300") && (kilimit < 10)) {
-		send_to_char("You're unable to control your energy well enough!\n\r", ch);
-		return;
-	}
-	if (!str_cmp(arg, "400") && (kilimit < 20)) {
-		send_to_char("You're unable to control your energy well enough!\n\r", ch);
-		return;
-	}
-	if (!str_cmp(arg, "500") && (kilimit < 30)) {
-		send_to_char("You're unable to control your energy well enough!\n\r", ch);
-		return;
-	}
-	if (!str_cmp(arg, "1000") && (kilimit < 40)) {
-		send_to_char("You're unable to control your energy well enough!\n\r", ch);
-		return;
-	}
-	if (arg[0] == '\0' && ch->mana < skill_table[gsn_shockwave]->min_mana) {
-		send_to_char("You don't have enough energy.\n\r", ch);
-		return;
-	}
-	if (!str_cmp(arg, "50") && ch->mana < (skill_table[gsn_shockwave]->min_mana) / 4) {
-		send_to_char("You don't have enough energy.\n\r", ch);
-		return;
-	}
-	if (!str_cmp(arg, "100") && ch->mana < (skill_table[gsn_shockwave]->min_mana)) {
-		send_to_char("You don't have enough energy.\n\r", ch);
-		return;
-	}
-	if (!str_cmp(arg, "200") && ch->mana < (skill_table[gsn_shockwave]->min_mana) * 4) {
-		send_to_char("You don't have enough energy.\n\r", ch);
-		return;
-	}
-	if (!str_cmp(arg, "300") && ch->mana < (skill_table[gsn_shockwave]->min_mana) * 16) {
-		send_to_char("You don't have enough energy.\n\r", ch);
-		return;
-	}
-	if (!str_cmp(arg, "400") && ch->mana < (skill_table[gsn_shockwave]->min_mana) * 64) {
-		send_to_char("You don't have enough energy.\n\r", ch);
-		return;
-	}
-	if (!str_cmp(arg, "500") && ch->mana < (skill_table[gsn_shockwave]->min_mana) * 256) {
-		send_to_char("You don't have enough energy.\n\r", ch);
-		return;
-	}
-	if (!str_cmp(arg, "1000") && ch->mana < (skill_table[gsn_shockwave]->min_mana) * 1024) {
-		send_to_char("You don't have enough energy.\n\r", ch);
-		return;
-	}
-	if (ch->focus < skill_table[gsn_shockwave]->focus) {
-		send_to_char("You need to focus more.\n\r", ch);
-		return;
-	} else
-		ch->focus -= skill_table[gsn_shockwave]->focus;
-
-	sh_int 	z = get_aura(ch);
-
-	WAIT_STATE(ch, skill_table[gsn_shockwave]->beats);
-	if (can_use_skill(ch, number_percent(), gsn_shockwave)) {
-		if (!IS_NPC(ch)) {
-			if (arg[0] == '\0') {
-				argdam = number_range(20, 25) * kicmult;
-				dam = get_attmod(ch, victim) * (argdam * kimult);
-				stat_train(ch, "int", 10);
-				ch->train += 10;
-			}
-			if (!str_cmp(arg, "50")) {
-				argdam = number_range(10, 13) * kicmult ;
-				dam = get_attmod(ch, victim) * (argdam * kimult);
-				stat_train(ch, "int", 9);
-				ch->train += 4;
-			}
-			if (!str_cmp(arg, "100")) {
-				argdam = number_range(20, 25) * kicmult;
-				dam = get_attmod(ch, victim) * (argdam * kimult);
-				stat_train(ch, "int", 10);
-				ch->train += 10;
-			}
-			if (!str_cmp(arg, "200")) {
-				argdam = number_range(40, 50) * kicmult;
-				dam = get_attmod(ch, victim) * (argdam * kimult);
-				stat_train(ch, "int", 15);
-				ch->train += 15;	
-			}
-			if (!str_cmp(arg, "300")) {
-				argdam = number_range(60, 75) * kicmult;
-				dam = get_attmod(ch, victim) * (argdam * kimult);
-				stat_train(ch, "int", 22);
-				ch->train += 22;	
-			}
-			if (!str_cmp(arg, "400")) {
-				argdam = number_range(80, 100) * kicmult;
-				dam = get_attmod(ch, victim) * (argdam * kimult);
-				stat_train(ch, "int", 33);
-				ch->train += 33;	
-			}
-			if (!str_cmp(arg, "500")) {
-				argdam = number_range(100, 125) * kicmult;
-				dam = get_attmod(ch, victim) * (argdam * kimult);
-				stat_train(ch, "int", 49);
-				ch->train += 50;	
-			}
-			if (!str_cmp(arg, "1000")){
-				argdam = number_range(200, 250) * kicmult;
-				dam = get_attmod(ch, victim) * (argdam * kimult);
-				stat_train(ch, "int", 73);
-				ch->train += 50;	
-			}
-		
-		}
-		if (IS_NPC(ch)) {
-			if (arg[0] == '\0') {
-				argdam = number_range(20, 25);
-				dam = get_attmod(ch, victim) * (argdam + (get_curr_int(ch) / 40));
-			}
-			if (!str_cmp(arg, "50")) {
-				argdam = number_range(10, 13);
-				dam = get_attmod(ch, victim) * (argdam + (get_curr_int(ch) / 40));
-			}
-			if (!str_cmp(arg, "100")) {
-				argdam = number_range(20, 25);
-				dam = get_attmod(ch, victim) * (argdam + (get_curr_int(ch) / 40));
-			}
-			if (!str_cmp(arg, "200")) {
-				argdam = number_range(40, 50);
-				dam = get_attmod(ch, victim) * (argdam + (get_curr_int(ch) / 40));			
-			}
-			if (!str_cmp(arg, "300")) {
-				argdam = number_range(60, 75);
-				dam = get_attmod(ch, victim) * (argdam + (get_curr_int(ch) / 40));			
-			}
-			if (!str_cmp(arg, "400")) {
-				argdam = number_range(80, 100);
-				dam = get_attmod(ch, victim) * (argdam + (get_curr_int(ch) / 40));			
-			}
-			if (!str_cmp(arg, "500")) {
-				argdam = number_range(100, 125);
-				dam = get_attmod(ch, victim) * (argdam + (get_curr_int(ch) / 40));			
-			}
-			if (!str_cmp(arg, "1000")){
-				argdam = number_range(200, 250);
-				dam = get_attmod(ch, victim) * (argdam + (get_curr_int(ch) / 40));			
-			}
-		
-		}
-		if (ch->charge > 0)
-			dam = chargeDamMult(ch, dam);
-		act(z,
-		    "You clench your fists and deeply concentrate on focusing your physical and mental powers.",
-		    ch, NULL, victim, TO_CHAR);
-		act(z,
-		    "You then scream out as you throw one arm forward, firing a shockwave of invisible energy at $N. &W[$t]",
-		    ch, num_punct(dam), victim, TO_CHAR);
-		act(z,
-		    "$n clenches $s fists and deeply concentrates on focusing $s physical and mental powers.",
-		    ch, NULL, victim, TO_VICT);
-		act(z,
-		    "$n screams out as $e throws one arm foward, firing a shockwave of invisible energy at you. &W[$t]",
-		    ch, num_punct(dam), victim, TO_VICT);
-		act(z,
-		    "$n clenches $s fists and deeply concentrates on focusing $s physical and mental powers.",
-		    ch, NULL, victim, TO_NOTVICT);
-		act(z,
-		    "$n screams out as $e throws one arm foward, firing a shockwave of invisible energy at $N. &W[$t]",
-		    ch, num_punct(dam), victim, TO_NOTVICT);
-
-		dam = ki_absorb(victim, ch, dam, gsn_shockwave);
-		learn_from_success(ch, gsn_shockwave);
-		global_retcode = damage(ch, victim, dam, TYPE_HIT);
-	} else {
-		act(z, "You missed $N with your shockwave.", ch, NULL, victim,
-		    TO_CHAR);
-		act(z, "$n misses you with $s shockwave.", ch, NULL, victim,
-		    TO_VICT);
-		act(z, "$n missed $N with a shockwave.", ch, NULL, victim,
-		    TO_NOTVICT);
-		learn_from_failure(ch, gsn_shockwave);
-		global_retcode = damage(ch, victim, 0, TYPE_HIT);
-	}
-	if (arg[0] == '\0' || !str_cmp(arg, "100")) {
-		ch->mana -= skill_table[gsn_kamehameha]->min_mana;
-		return;
-	}
-	else if (!str_cmp(arg, "50")) {
-		ch->mana -= (skill_table[gsn_shockwave]->min_mana / 4);
-		return;
-	}
-	else if (!str_cmp(arg, "200")) {
-		ch->mana -= (skill_table[gsn_shockwave]->min_mana * 4);
-		return;
-	}
-	else if (!str_cmp(arg, "300")) {
-		ch->mana -= (skill_table[gsn_shockwave]->min_mana * 16);
-		return;
-	}
-	else if (!str_cmp(arg, "400")) {
-		ch->mana -= (skill_table[gsn_shockwave]->min_mana * 64);
-		return;
-	}
-	else if (!str_cmp(arg, "500")) {
-		ch->mana -= (skill_table[gsn_shockwave]->min_mana * 256);
-		return;
-	}
-	else if (!str_cmp(arg, "1000")) {
-		ch->mana -= (skill_table[gsn_shockwave]->min_mana * 1024);
-		return;
-	}
-}
-*/
-
 void do_psiblast(CHAR_DATA *ch, char *argument) {
   CHAR_DATA *victim;
   int dam = 0;
@@ -12408,26 +11088,26 @@ void do_hellzone_grenade(CHAR_DATA *ch, char *arg) {
     send_to_char("You don't have enough energy.\n\r", ch);
     return;
   }
-  //if (ch->focus < (skill_table[gsn_hellzone_grenade]->focus * (1 + (shot / 10))))
-  //Replaced this with something better.- Karma.
+  // if (ch->focus < (skill_table[gsn_hellzone_grenade]->focus * (1 + (shot / 10))))
+  // Replaced this with something better.- Karma.
   int focus = shots;
 
   if (focus < 12)
     focus = 12;
-  //Minimum focus
+  // Minimum focus
   if (ch->focus < focus) {
     send_to_char("You need to focus more.\n\r", ch);
     return;
   } else
     ch->focus -= focus;
-  //ch->focus -= (skill_table[gsn_hellzone_grenade]->focus * (1 + (shot / 10)));
+  // ch->focus -= (skill_table[gsn_hellzone_grenade]->focus * (1 + (shot / 10)));
 
   int wait = (focus / 12);
 
   if (wait < 2)
     wait = 2;
   WAIT_STATE(ch, (skill_table[gsn_hellzone_grenade]->beats * wait));
-  //WAIT_STATE(ch, (skill_table[gsn_hellzone_grenade]->beats * (1 + (shot / 10))));
+  // WAIT_STATE(ch, (skill_table[gsn_hellzone_grenade]->beats * (1 + (shot / 10))));
   if (can_use_skill(ch, number_percent(), gsn_hellzone_grenade)) {
     while (shots > 0) {
       switch (number_range(1, 4)) {
@@ -12756,7 +11436,7 @@ void do_scattered_finger_beam(CHAR_DATA *ch, char *arg) {
       shots--;
     }
     dam2 = number_range(2, 5);
-    //was 5 - 7
+    // was 5 - 7
     strcpy(buf2, num_punct(get_attmod(ch, victim) * dam * dam2));
 
     act(AT_PINK,
@@ -14125,9 +12805,9 @@ void do_monkey_gun(CHAR_DATA *ch, char *argument) {
     return;
   }
   /*
-	 * No mana cost for this skill as when in an Oozaru state, a
-	 * saiyan/halfies energy is pretty much unlimited. -Karma
-	 */
+   * No mana cost for this skill as when in an Oozaru state, a
+   * saiyan/halfies energy is pretty much unlimited. -Karma
+   */
 
   int focus = (get_curr_int(ch) / 5);
 
@@ -14402,9 +13082,9 @@ void do_spirit_bomb(CHAR_DATA *ch, char *arg) {
     else
       strcpy(size, "colossal");
     /*
-		 * after the adjectives becase pl diffrence shouldn't affect
-		 * the size of the attack -Goku
-		 */
+     * after the adjectives becase pl diffrence shouldn't affect
+     * the size of the attack -Goku
+     */
     dam = get_attmod(ch, victim) * dam;
 
     if (IS_GOOD(ch)) {
@@ -14770,11 +13450,11 @@ void do_extreme(CHAR_DATA *ch, char *argument) {
   WAIT_STATE(ch, skill_table[gsn_extreme]->beats);
   if (can_use_skill(ch, number_percent(), gsn_extreme)) {
     /*
-		* note to self in case this needs to be changed back to
-		* white color. it originally says "bright white light" in a
-		* section of these messages. Changed it to bright light for
-		* now. - Karma
-		*/
+     * note to self in case this needs to be changed back to
+     * white color. it originally says "bright white light" in a
+     * section of these messages. Changed it to bright light for
+     * now. - Karma
+     */
     act(z,
         "You close your eyes and concentrate, focusing all your energy and will to live on one point in your body.  A dot of light forms on your forehead, a bright light spreading out and bathing you in its glow as your hidden power awakens.",
         ch, NULL, NULL, TO_CHAR);
@@ -15339,9 +14019,9 @@ wearing_chip(CHAR_DATA *ch) {
   for (obj = ch->first_carrying; obj != NULL; obj = obj_next) {
     obj_next = obj->next_content;
     /*
-		 * Chips should have been like this a *long* time ago -Goku
-		 * 09.30.04
-		 */
+     * Chips should have been like this a *long* time ago -Goku
+     * 09.30.04
+     */
     if (CAN_WEAR(obj, ITEM_WEAR_PANEL))
       return obj;
   }
@@ -15355,9 +14035,9 @@ wearing_sentient_chip(CHAR_DATA *ch) {
   for (obj = ch->first_carrying; obj != NULL; obj = obj_next) {
     obj_next = obj->next_content;
     /*
-		 * Chips should have been like this a *long* time ago -Goku
-		 * 09.30.04
-		 */
+     * Chips should have been like this a *long* time ago -Goku
+     * 09.30.04
+     */
     if (CAN_WEAR(obj, ITEM_WEAR_PANEL)) {
       if (obj->pIndexData->vnum == 1337)
         return obj;
