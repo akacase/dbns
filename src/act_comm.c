@@ -1569,8 +1569,8 @@ do_tell(CHAR_DATA * ch, char *argument)
 		send_to_char("Tell whom what?\n\r", ch);
 		return;
 	}
-	//Typing 0. krill is annoying as HELL
-	    if ((victim = get_char_room(ch, arg)) == NULL)
+
+	if ((victim = get_char_room(ch, arg)) == NULL)
 		victim = get_pc_world(ch, arg);
 
 	if (victim == NULL
