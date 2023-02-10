@@ -23,31 +23,32 @@
 #define FINGERCODE /* Do not remove, used to interact with other snippets! - Samson 10-18-98 */
 
 #ifndef FCLOSE
-   #define FCLOSE(fp)  fclose(fp); fp=NULL;
+#define FCLOSE(fp) \
+  fclose(fp);      \
+  fp = NULL;
 #endif
 
 #ifndef GET_TIME_PLAYED
-   #define GET_TIME_PLAYED(ch)     (((ch)->played + (current_time - (ch)->logon)) / 3600)
+#define GET_TIME_PLAYED(ch) (((ch)->played + (current_time - (ch)->logon)) / 3600)
 #endif
 
-typedef struct	wizinfo_data	WIZINFO_DATA;
+typedef struct wizinfo_data WIZINFO_DATA;
 
-extern WIZINFO_DATA *	first_wizinfo;
-extern WIZINFO_DATA *   last_wizinfo;
+extern WIZINFO_DATA* first_wizinfo;
+extern WIZINFO_DATA* last_wizinfo;
 
-struct wizinfo_data
-{
-    WIZINFO_DATA *	next;
-    WIZINFO_DATA *	prev;
-    char *	name;
-    char *  email;
-    int	icq;
-    sh_int	level;
+struct wizinfo_data {
+  WIZINFO_DATA* next;
+  WIZINFO_DATA* prev;
+  char* name;
+  char* email;
+  int icq;
+  sh_int level;
 };
 
-DECLARE_DO_FUN( do_icq_number );  /* User can enter icq# for finger - Samson 1-4-99 */
-DECLARE_DO_FUN( do_email	);  /* User can enter email addy for finger - Samson 4-18-98 */
-DECLARE_DO_FUN( do_finger     );  /* Finger command - Samson 4-6-98 */
-DECLARE_DO_FUN( do_wizinfo    );  /* Wizinfo command - Samson 6-6-99 */
-DECLARE_DO_FUN( do_privacy	);  /* Privacy flag toggle - Samson 6-11-99 */
-void build_wizinfo( bool bootup );
+DECLARE_DO_FUN(do_icq_number); /* User can enter icq# for finger - Samson 1-4-99 */
+DECLARE_DO_FUN(do_email);      /* User can enter email addy for finger - Samson 4-18-98 */
+DECLARE_DO_FUN(do_finger);     /* Finger command - Samson 4-6-98 */
+DECLARE_DO_FUN(do_wizinfo);    /* Wizinfo command - Samson 6-6-99 */
+DECLARE_DO_FUN(do_privacy);    /* Privacy flag toggle - Samson 6-11-99 */
+void build_wizinfo(bool bootup);

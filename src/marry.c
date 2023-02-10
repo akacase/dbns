@@ -19,227 +19,196 @@ intact.
 Add do_divorce and do_marry to mud.h and tables.c - Ntanel StormBlade
 */
 
-
-#include <sys/types.h>
 #include <ctype.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <sys/types.h>
 #include <time.h>
+
 #include "mud.h"
 
-void do_marry( CHAR_DATA *ch, char *argument)
-{
-    char arg1[MAX_INPUT_LENGTH];
-    char arg2[MAX_INPUT_LENGTH];
-    CHAR_DATA *victim;
-    CHAR_DATA *victim2;
+void do_marry(CHAR_DATA *ch, char *argument) {
+  char arg1[MAX_INPUT_LENGTH];
+  char arg2[MAX_INPUT_LENGTH];
+  CHAR_DATA *victim;
+  CHAR_DATA *victim2;
 
-    argument = one_argument( argument, arg1 );
-    argument = one_argument( argument, arg2 );
+  argument = one_argument(argument, arg1);
+  argument = one_argument(argument, arg2);
 
+  if (arg1[0] == '\0' || arg2[0] == '\0') {
+    send_to_char("&WSyntax: marry <char1> <char2>\n\r", ch);
+    return;
+  }
 
-       if ( arg1[0] == '\0' || arg2[0] == '\0' )
-          {
-             send_to_char("&WSyntax: marry <char1> <char2>\n\r",ch);
-             return;
-          }
+  if (((victim = get_char_world(ch, arg1)) == NULL) ||
+      ((victim2 = get_char_world(ch, arg2)) == NULL)) {
+    send_to_char("&WBoth characters must be playing!\n\r", ch);
+    return;
+  }
 
-       if ( ((victim = get_char_world(ch,arg1)) == NULL) ||
-            ((victim2 = get_char_world(ch,arg2)) == NULL))
-          {
-          send_to_char("&WBoth characters must be playing!\n\r", ch );
-          return;
-          }
+  if (IS_NPC(victim) || IS_NPC(victim2)) {
+    send_to_char("&WSorry! Mobs can't get married!\n\r", ch);
+    return;
+  }
 
-       if ( IS_NPC(victim) || IS_NPC(victim2))
-          {
-          send_to_char("&WSorry! Mobs can't get married!\n\r", ch);
-          return;
-          }
+  if (victim->pcdata->spouse[0] == '\0' && victim2->pcdata->spouse[0] == '\0') {
+    send_to_char("&WYou pronounce them man and wife!\n\r", ch);
+    send_to_char("&WYou say the big 'I do.'\n\r", victim);
+    send_to_char("&WYou say the big 'I do.'\n\r", victim2);
 
+    act(AT_BLUE, "$n and $N are now declared married!\n\r", victim, NULL, victim2, TO_ROOM);
 
-       if (victim->pcdata->spouse[0] == '\0' && victim2->pcdata->spouse[0] == '\0')
-          {
-            send_to_char("&WYou pronounce them man and wife!\n\r", ch);
-            send_to_char("&WYou say the big 'I do.'\n\r", victim);
-            send_to_char("&WYou say the big 'I do.'\n\r", victim2);
+    victim->pcdata->spouse = str_dup(victim2->name);
 
-            act(AT_BLUE,"$n and $N are now declared married!\n\r", victim, NULL, victim2, TO_ROOM);
+    victim2->pcdata->spouse = str_dup(victim->name);
 
-            victim->pcdata->spouse = str_dup(victim2->name);
+    return;
+  } else {
+    send_to_char("&WThey are already married!\n\r", ch);
+    return;
+  }
 
-            victim2->pcdata->spouse = str_dup(victim->name);
-
-            return;
-          }
-        else
-        {
-           send_to_char("&WThey are already married!\n\r", ch);
-           return;
-        }
-
-
-       return;
+  return;
 }
 
-void do_divorce( CHAR_DATA *ch, char *argument)
-   {
-    char arg1[MAX_INPUT_LENGTH];
-    char arg2[MAX_INPUT_LENGTH];
-    CHAR_DATA *victim;
-    CHAR_DATA *victim2;
+void do_divorce(CHAR_DATA *ch, char *argument) {
+  char arg1[MAX_INPUT_LENGTH];
+  char arg2[MAX_INPUT_LENGTH];
+  CHAR_DATA *victim;
+  CHAR_DATA *victim2;
 
-    argument = one_argument( argument, arg1 );
-    argument = one_argument( argument, arg2 );
+  argument = one_argument(argument, arg1);
+  argument = one_argument(argument, arg2);
 
-       if ( arg1[0] == '\0' || arg2[0] == '\0' )
-          {
-          send_to_char("&WSyntax: divorce <char1> <char2>\n\r",ch);
-          return;
-          }
-       if ( ((victim = get_char_world(ch,arg1)) == NULL) ||
-            ((victim2 = get_char_world(ch,arg2)) == NULL))
-          {
-          send_to_char("&WBoth characters must be playing!\n\r", ch );
-          return;
-          }
+  if (arg1[0] == '\0' || arg2[0] == '\0') {
+    send_to_char("&WSyntax: divorce <char1> <char2>\n\r", ch);
+    return;
+  }
+  if (((victim = get_char_world(ch, arg1)) == NULL) ||
+      ((victim2 = get_char_world(ch, arg2)) == NULL)) {
+    send_to_char("&WBoth characters must be playing!\n\r", ch);
+    return;
+  }
 
-       if ( IS_NPC(victim) || IS_NPC(victim2))
-          {
-          send_to_char("&WI don't think they're Married to the Mob!\n\r", ch);
-          return;
-          }
+  if (IS_NPC(victim) || IS_NPC(victim2)) {
+    send_to_char("&WI don't think they're Married to the Mob!\n\r", ch);
+    return;
+  }
 
-       if ( !str_cmp( victim->pcdata->spouse, victim2->name ) && !str_cmp( victim2->pcdata->spouse, victim->name ) )
-/*       if (victim->pcdata->spouse != victim2->name || victim2->pcdata->spouse != victim->name)
+  if (!str_cmp(victim->pcdata->spouse, victim2->name) && !str_cmp(victim2->pcdata->spouse, victim->name))
+  /*       if (victim->pcdata->spouse != victim2->name || victim2->pcdata->spouse != victim->name)
           {
           send_to_char(AT_WHITE, "They aren't even married!!\n\r",ch);
           return;
           } */
-       {
-       send_to_char("&WYou hand them their papers.\n\r", ch);
-       send_to_char("&WYour divorce is final.\n\r", victim);
-       send_to_char("&WYour divorce is final.\n\r", victim2);
+  {
+    send_to_char("&WYou hand them their papers.\n\r", ch);
+    send_to_char("&WYour divorce is final.\n\r", victim);
+    send_to_char("&WYour divorce is final.\n\r", victim2);
 
-       act(AT_WHITE,"$n and $N swap divorce papers, they are no-longer married.",victim, NULL, victim2, TO_NOTVICT);
+    act(AT_WHITE, "$n and $N swap divorce papers, they are no-longer married.", victim, NULL, victim2, TO_NOTVICT);
 
-       DISPOSE( victim->pcdata->spouse         );
-       DISPOSE( victim2->pcdata->spouse        );
-       victim->pcdata->spouse = str_dup( "" );
-       victim2->pcdata->spouse = str_dup( "" );
-       return;
-       }
-       else
-       {
-       send_to_char("&WThey arent married!", ch);
-       return;
-       }
+    DISPOSE(victim->pcdata->spouse);
+    DISPOSE(victim2->pcdata->spouse);
+    victim->pcdata->spouse = str_dup("");
+    victim2->pcdata->spouse = str_dup("");
+    return;
+  } else {
+    send_to_char("&WThey arent married!", ch);
+    return;
+  }
 }
 
-void do_rings ( CHAR_DATA *ch, char *argument )
-{
-    char arg1[MAX_INPUT_LENGTH];
-    char arg2[MAX_INPUT_LENGTH];
-    CHAR_DATA *victim;
-    CHAR_DATA *victim2;
-    char        buf  [ MAX_STRING_LENGTH ];
-    OBJ_DATA  * ring;
-    EXTRA_DESCR_DATA * ed;
+void do_rings(CHAR_DATA *ch, char *argument) {
+  char arg1[MAX_INPUT_LENGTH];
+  char arg2[MAX_INPUT_LENGTH];
+  CHAR_DATA *victim;
+  CHAR_DATA *victim2;
+  char buf[MAX_STRING_LENGTH];
+  OBJ_DATA *ring;
+  EXTRA_DESCR_DATA *ed;
 
-    argument = one_argument( argument, arg1 );
-    argument = one_argument( argument, arg2 );
+  argument = one_argument(argument, arg1);
+  argument = one_argument(argument, arg2);
 
-
-       if ( ((victim = get_char_world(ch,arg1)) == NULL) ||
-            ((victim2 = get_char_world(ch,arg2)) == NULL))
-          {
-          send_to_char("&WBoth characters must be playing!\n\r", ch );
-          return;
-          }
-/*       if ((victim->pcdata->spouse != victim2->name) || (victim2->pcdata->spouse != victim->name))
+  if (((victim = get_char_world(ch, arg1)) == NULL) ||
+      ((victim2 = get_char_world(ch, arg2)) == NULL)) {
+    send_to_char("&WBoth characters must be playing!\n\r", ch);
+    return;
+  }
+  /*       if ((victim->pcdata->spouse != victim2->name) || (victim2->pcdata->spouse != victim->name))
        {
           send_to_char(AT_WHITE, "They arent even married!!\n\r", ch);
           return;
        } */
 
-    switch( victim2->sex )
-    {
-        case SEX_FEMALE:
-        {
-            ring = create_object( get_obj_index( OBJ_VNUM_DIAMOND_RING ), 0 );
-            switch( victim->sex )
-            {
-                case SEX_FEMALE:
-                {
-                    sprintf( buf, "This is the beautiful diamond ring given to you by your lovely\n\rwife %s at your wedding. It signifies your eternal love for eachother.\n\r",victim->name );
-                    ring->description = str_dup( buf );
-                    break;
-                }
-                case SEX_MALE:
-                {
-                    sprintf( buf, "This is the beautiful diamond ring given to you by your handsome\n\rhusband %s at your wedding. It signifies your eternal love for eachother.\n\r", victim->name );
-                    ring->description = str_dup( buf );
-                    break;
-                }
-                case SEX_NEUTRAL:
-                default:
-                {
-                    sprintf( buf, "This is the beautiful diamond ring given to you by your\n\rspouse %s at your wedding. It signifies your eternal love for eachother.\n\r", victim->name );
-                    ring->description = str_dup( buf );
-                    break;
-                }
-            }
-/*
-            if ( !extra_descr_free )
-            {
-                ed = alloc_perm( sizeof( *ed ) );
-            }
-            else
-            {
-                ed = extra_descr_free;
-                extra_descr_free = extra_descr_free->next;
-            }
-*/
-            ed = SetOExtra(ring, "inscription");
-//            ed->keyword = str_dup( "inscription" );
-            sprintf( buf, "The inscription reads:\n\rTo my lovely wife, yours forever, %s\n\r", victim->name );
-            ed->description = str_dup( buf );
-//            ed->deleted = FALSE;
-//            ed->next = ring->extra_descr;
-//            ring->extra_descr = ed;
-            break;
+  switch (victim2->sex) {
+    case SEX_FEMALE: {
+      ring = create_object(get_obj_index(OBJ_VNUM_DIAMOND_RING), 0);
+      switch (victim->sex) {
+        case SEX_FEMALE: {
+          sprintf(buf, "This is the beautiful diamond ring given to you by your lovely\n\rwife %s at your wedding. It signifies your eternal love for eachother.\n\r", victim->name);
+          ring->description = str_dup(buf);
+          break;
         }
-        case SEX_MALE:
+        case SEX_MALE: {
+          sprintf(buf, "This is the beautiful diamond ring given to you by your handsome\n\rhusband %s at your wedding. It signifies your eternal love for eachother.\n\r", victim->name);
+          ring->description = str_dup(buf);
+          break;
+        }
         case SEX_NEUTRAL:
-        default:
-        {
-            ring = create_object( get_obj_index( OBJ_VNUM_WEDDING_BAND ), 0 );
-            switch( victim->sex )
+        default: {
+          sprintf(buf, "This is the beautiful diamond ring given to you by your\n\rspouse %s at your wedding. It signifies your eternal love for eachother.\n\r", victim->name);
+          ring->description = str_dup(buf);
+          break;
+        }
+      }
+      /*
+            if ( !extra_descr_free )
             {
-                case SEX_FEMALE:
-                {
-                    sprintf( buf, "This is the ring given to you by your beautifull wife %s\n\rat your wedding. It signifies your eternal love for eachother.\n\r", victim->name );
-                    ring->description = str_dup( buf );
-                    break;
-                }
-                case SEX_MALE:
-                {
-                    sprintf( buf, "This is the ring given to you by your handsome husband %s\n\rat your wedding. It signifies your eternal love for eachother.\n\r", victim->name );
-                    ring->description = str_dup( buf );
-                    break;
-                }
-                case SEX_NEUTRAL:
-                default:
-                {
-                    sprintf( buf, "This is the ring given to you by your spouse %s at\n\ryour wedding. It signifies your eternal love for eachother.\n\r", victim->name );
-                    ring->description = str_dup( buf );
-                    break;
-                }
+                ed = alloc_perm( sizeof( *ed ) );
             }
+            else
+            {
+                ed = extra_descr_free;
+                extra_descr_free = extra_descr_free->next;
+            }
+*/
+      ed = SetOExtra(ring, "inscription");
+      //            ed->keyword = str_dup( "inscription" );
+      sprintf(buf, "The inscription reads:\n\rTo my lovely wife, yours forever, %s\n\r", victim->name);
+      ed->description = str_dup(buf);
+      //            ed->deleted = FALSE;
+      //            ed->next = ring->extra_descr;
+      //            ring->extra_descr = ed;
+      break;
+    }
+    case SEX_MALE:
+    case SEX_NEUTRAL:
+    default: {
+      ring = create_object(get_obj_index(OBJ_VNUM_WEDDING_BAND), 0);
+      switch (victim->sex) {
+        case SEX_FEMALE: {
+          sprintf(buf, "This is the ring given to you by your beautifull wife %s\n\rat your wedding. It signifies your eternal love for eachother.\n\r", victim->name);
+          ring->description = str_dup(buf);
+          break;
+        }
+        case SEX_MALE: {
+          sprintf(buf, "This is the ring given to you by your handsome husband %s\n\rat your wedding. It signifies your eternal love for eachother.\n\r", victim->name);
+          ring->description = str_dup(buf);
+          break;
+        }
+        case SEX_NEUTRAL:
+        default: {
+          sprintf(buf, "This is the ring given to you by your spouse %s at\n\ryour wedding. It signifies your eternal love for eachother.\n\r", victim->name);
+          ring->description = str_dup(buf);
+          break;
+        }
+      }
 
-
-/*
+      /*
             if ( !extra_descr_free )
             {
                 ed = alloc_perm( sizeof( *ed ) );
@@ -251,35 +220,31 @@ void do_rings ( CHAR_DATA *ch, char *argument )
             }
 */
 
-            ed = SetOExtra(ring, "inscription");
-/*
+      ed = SetOExtra(ring, "inscription");
+      /*
             ed->keyword = str_dup( "inscription" );
             ed->deleted = FALSE;
             ed->next = ring->extra_descr;
             ring->extra_descr = ed;
 */
 
-            switch( victim->sex )
-            {
-                default:
-                case SEX_MALE:
-                {
-                    sprintf( buf, "The inscription reads:\n\rTo my handsome husband... Forever yours, %s\n\r", victim->name );
-                    ed->description = str_dup( buf );
-                    break;
-                }
-                case SEX_NEUTRAL:
-                {
-                    sprintf( buf,"The inscription reads:\n\rForever love, %s\n\r", victim->name );
-                    ed->description = str_dup( buf );
-                    break;
-                }
-            }
+      switch (victim->sex) {
+        default:
+        case SEX_MALE: {
+          sprintf(buf, "The inscription reads:\n\rTo my handsome husband... Forever yours, %s\n\r", victim->name);
+          ed->description = str_dup(buf);
+          break;
         }
+        case SEX_NEUTRAL: {
+          sprintf(buf, "The inscription reads:\n\rForever love, %s\n\r", victim->name);
+          ed->description = str_dup(buf);
+          break;
+        }
+      }
     }
+  }
 
-    obj_to_char ( ring, victim );
+  obj_to_char(ring, victim);
 
-    return;
+  return;
 }
-

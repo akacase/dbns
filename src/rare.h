@@ -1,4 +1,4 @@
- /****************************************************************************
+/****************************************************************************
  * [S]imulated [M]edieval [A]dventure multi[U]ser [G]ame      |   \\._.//   *
  * -----------------------------------------------------------|   (0...0)   *
  * SMAUG 1.4 (C) 1994, 1995, 1996, 1998  by Derek Snider      |    ).:.(    *
@@ -17,6 +17,6 @@
 
 #define RARE_LEVEL 4
 
-void	scan_equipment 	args( ( void ) );
-bool	scan_players	args( ( char *dirname, char *filename ) );
-bool	scan_corpses	args( ( char *dirname, char *filename ) );
+void scan_equipment args((void));
+bool scan_players args((char *dirname, char *filename));
+bool scan_corpses args((char *dirname, char *filename));

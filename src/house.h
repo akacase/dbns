@@ -40,13 +40,13 @@
 //#define ADDED_ROOM_HOUSING_AREA "megaplexex.are"
 
 /* Location of housing directory */
-#define HOUSE_DIR             PREFIX_DIR "/houses/"
+#define HOUSE_DIR PREFIX_DIR "/houses/"
 /* Location of housing list for loadup of houses */
-#define HOUSE_LIST            HOUSE_DIR "house.lst"
+#define HOUSE_LIST HOUSE_DIR "house.lst"
 /* Location of automated housing auction file */
-#define HOMEBUY_FILE          HOUSE_DIR "homebuy.dat"
+#define HOMEBUY_FILE HOUSE_DIR "homebuy.dat"
 /* Location of house accessories file */
-#define ACCESSORIES_FILE      HOUSE_DIR "homeaccessories.dat"
+#define ACCESSORIES_FILE HOUSE_DIR "homeaccessories.dat"
 
 /* Minimum amount a house may go up on auction for */
 #define MIN_HOUSE_BID 5000000
@@ -64,21 +64,21 @@
 
 #ifdef HOUSE_MOBS
 /* Default price for a mob on accessories. Used by the house mobs. */
-#define DEFAULT_MOB_PRICE  50000
+#define DEFAULT_MOB_PRICE 50000
 #endif
 
 /*For automated housing auction*/
 typedef struct homebuy_data HOMEBUY_DATA;
 struct homebuy_data {
-     HOMEBUY_DATA *prev;
-     HOMEBUY_DATA *next;
-     char *bidder;
-     char *seller;
-     int vnum;
-     sh_int incpercent;
-     int bid;
-     int endtime;
-     bool apartment;
+  HOMEBUY_DATA *prev;
+  HOMEBUY_DATA *next;
+  char *bidder;
+  char *seller;
+  int vnum;
+  sh_int incpercent;
+  int bid;
+  int endtime;
+  bool apartment;
 };
 
 HOMEBUY_DATA *first_homebuy;
@@ -87,10 +87,10 @@ HOMEBUY_DATA *last_homebuy;
 /* For automated housing login messaging */
 typedef struct lmsg_data LMSG_DATA;
 struct lmsg_data {
-     LMSG_DATA *prev;
-     LMSG_DATA *next;
-     char *name;
-     sh_int type;
+  LMSG_DATA *prev;
+  LMSG_DATA *next;
+  char *name;
+  sh_int type;
 };
 
 LMSG_DATA *first_lmsg;
@@ -99,11 +99,11 @@ LMSG_DATA *last_lmsg;
 /* For basic housing */
 typedef struct home_data HOME_DATA;
 struct home_data {
-     HOME_DATA *prev;
-     HOME_DATA *next;
-     char *name;
-     bool apartment;
-     int vnum[MAX_HOUSE_ROOMS];
+  HOME_DATA *prev;
+  HOME_DATA *next;
+  char *name;
+  bool apartment;
+  int vnum[MAX_HOUSE_ROOMS];
 };
 
 HOME_DATA *first_home;
@@ -112,58 +112,58 @@ HOME_DATA *last_home;
 /* For the accessories auction */
 typedef struct accessories_data ACCESSORIES_DATA;
 struct accessories_data {
-     ACCESSORIES_DATA *prev;
-     ACCESSORIES_DATA *next;
-     int vnum;
-     int price;
-     bool mob;
+  ACCESSORIES_DATA *prev;
+  ACCESSORIES_DATA *next;
+  int vnum;
+  int price;
+  bool mob;
 };
 
 ACCESSORIES_DATA *first_accessory;
 ACCESSORIES_DATA *last_accessory;
 
 /* Commands added for housing system. */
-DECLARE_DO_FUN(do_accessories);	// Only command for housing accessories.
-DECLARE_DO_FUN(do_gohome);	// Command for a player to be instantly transported to their residence.
-DECLARE_DO_FUN(do_homebuy);	// Main housing auction command.
-DECLARE_DO_FUN(do_house);	// House personalization command and also immortal command to manually 
+DECLARE_DO_FUN(do_accessories);  // Only command for housing accessories.
+DECLARE_DO_FUN(do_gohome);       // Command for a player to be instantly transported to their residence.
+DECLARE_DO_FUN(do_homebuy);      // Main housing auction command.
+DECLARE_DO_FUN(do_house);        // House personalization command and also immortal command to manually
 // edit residences.
-DECLARE_DO_FUN(do_residence);	// Command to list current houses and their stats.
-DECLARE_DO_FUN(do_sellhouse);	// Player command to sell their residence and place it on auction.
+DECLARE_DO_FUN(do_residence);  // Command to list current houses and their stats.
+DECLARE_DO_FUN(do_sellhouse);  // Player command to sell their residence and place it on auction.
 
 /* Functions for basic housing functionality and functionality of the house command. */
-void save_residence(ROOM_INDEX_DATA * location);
-bool set_house(CHAR_DATA * ch, int vnum, bool apartment);
-bool remove_house(CHAR_DATA * ch);
-bool add_room(HOME_DATA * homedata, ROOM_INDEX_DATA * location, char *argument);
-bool give_key(CHAR_DATA * ch, int vnum);
-void fwrite_house(HOME_DATA * homedata);
+void save_residence(ROOM_INDEX_DATA *location);
+bool set_house(CHAR_DATA *ch, int vnum, bool apartment);
+bool remove_house(CHAR_DATA *ch);
+bool add_room(HOME_DATA *homedata, ROOM_INDEX_DATA *location, char *argument);
+bool give_key(CHAR_DATA *ch, int vnum);
+void fwrite_house(HOME_DATA *homedata);
 void load_homedata();
 bool load_house_file(char *name);
 void update_house_list();
-int fread_house(FILE * fp);
+int fread_house(FILE *fp);
 void save_house_by_vnum(int vnum);
 
 /* Functions for accessories functionality */
 void save_accessories();
 void load_accessories();
-void fread_accessories(FILE * fp);
+void fread_accessories(FILE *fp);
 
 /* Functions for housing auction functionality */
-bool add_homebuy(CHAR_DATA * seller, int vnum, bool apartment, int price);
-bool remove_homebuy(HOMEBUY_DATA * tmphome);
+bool add_homebuy(CHAR_DATA *seller, int vnum, bool apartment, int price);
+bool remove_homebuy(HOMEBUY_DATA *tmphome);
 void save_homebuy();
 void load_homebuy();
-void fread_homebuy(FILE * fp);
+void fread_homebuy(FILE *fp);
 void homebuy_update();
-bool check_parse_name(char *name, bool newchar);	/* Used from comm.c to prevent /dev/null bug */
+bool check_parse_name(char *name, bool newchar); /* Used from comm.c to prevent /dev/null bug */
 CHAR_DATA *load_player(char *name);
-void logoff(CHAR_DATA * ch);
-void fread_loginmsg(FILE * fp);
+void logoff(CHAR_DATA *ch);
+void fread_loginmsg(FILE *fp);
 void add_loginmsg(char *name, sh_int type);
-void check_loginmsg(CHAR_DATA * ch);
+void check_loginmsg(CHAR_DATA *ch);
 
 /*Function declarations from reset.c used for house mobs resets and removal of resets in general.*/
-void delete_reset(AREA_DATA * pArea, RESET_DATA * pReset);
-bool is_room_reset(RESET_DATA * pReset, ROOM_INDEX_DATA * aRoom,
-  AREA_DATA * pArea);
+void delete_reset(AREA_DATA *pArea, RESET_DATA *pReset);
+bool is_room_reset(RESET_DATA *pReset, ROOM_INDEX_DATA *aRoom,
+                   AREA_DATA *pArea);

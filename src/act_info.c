@@ -2759,7 +2759,7 @@ struct whogr_s {
   struct whogr_s *l_follow;
   DESCRIPTOR_DATA *d;
   int indent;
-} *first_whogr, *last_whogr;
+} * first_whogr, *last_whogr;
 
 struct whogr_s *
 find_whogr(DESCRIPTOR_DATA *d, struct whogr_s *first) {
@@ -3007,41 +3007,41 @@ void do_who(CHAR_DATA *ch, char *argument) {
       else if (!str_cmp(arg, "group") && ch)
         fGroup = true;
       else
-        /* SB who clan (order), guild, council */ if ((pClan = get_clan(arg)))
-          fClanMatch = true;
-        else if ((pCouncil = get_council(arg)))
-          fCouncilMatch = true;
-        else if ((pDeity = get_deity(arg)))
-          fDeityMatch = true;
-        else {
-          for (iClass = 0; iClass < MAX_CLASS; iClass++) {
-            if (!str_cmp(arg,
-                         class_table[iClass]->who_name)) {
-              rgfClass[iClass] = true;
-              break;
-            }
-          }
-          if (iClass != MAX_CLASS)
-            fClassRestrict = true;
-
-          for (iRace = 0; iRace < MAX_RACE; iRace++) {
-            if (!str_cmp(arg,
-                         race_table[iRace]->race_name)) {
-              rgfRace[iRace] = true;
-              break;
-            }
-          }
-          if (iRace != MAX_RACE)
-            fRaceRestrict = true;
-
-          if (iClass == MAX_CLASS && iRace == MAX_RACE && fClanMatch == false && fCouncilMatch == false && fDeityMatch == false) {
-            send_to_char(
-                "That's not a class, race, order, guild,"
-                " council or deity.\n\r",
-                ch);
-            return;
+          /* SB who clan (order), guild, council */ if ((pClan = get_clan(arg)))
+        fClanMatch = true;
+      else if ((pCouncil = get_council(arg)))
+        fCouncilMatch = true;
+      else if ((pDeity = get_deity(arg)))
+        fDeityMatch = true;
+      else {
+        for (iClass = 0; iClass < MAX_CLASS; iClass++) {
+          if (!str_cmp(arg,
+                       class_table[iClass]->who_name)) {
+            rgfClass[iClass] = true;
+            break;
           }
         }
+        if (iClass != MAX_CLASS)
+          fClassRestrict = true;
+
+        for (iRace = 0; iRace < MAX_RACE; iRace++) {
+          if (!str_cmp(arg,
+                       race_table[iRace]->race_name)) {
+            rgfRace[iRace] = true;
+            break;
+          }
+        }
+        if (iRace != MAX_RACE)
+          fRaceRestrict = true;
+
+        if (iClass == MAX_CLASS && iRace == MAX_RACE && fClanMatch == false && fCouncilMatch == false && fDeityMatch == false) {
+          send_to_char(
+              "That's not a class, race, order, guild,"
+              " council or deity.\n\r",
+              ch);
+          return;
+        }
+      }
     }
   }
 

@@ -203,11 +203,11 @@ int utf8casecmp(const void *src1, const void *src2) {
     unsigned char b = *s2;
 
     if (('A' <= a) && ('Z' >= a)) {
-      a |= 0x20; // make a lowercase
+      a |= 0x20;  // make a lowercase
     }
 
     if (('A' <= b) && ('Z' >= b)) {
-      b |= 0x20; // make b lowercase
+      b |= 0x20;  // make b lowercase
     }
 
     if (a < b) {
@@ -270,7 +270,7 @@ void *utf8chr(const void *src, int32_t chr) {
     c[0] = 0xe0 | (char)(chr >> 12);
     c[1] = 0x80 | (char)((chr >> 6) & 0x3f);
     c[2] = 0x80 | (char)(chr & 0x3f);
-  } else { // if (0 == ((int)0xffe00000 & chr)) {
+  } else {  // if (0 == ((int)0xffe00000 & chr)) {
     // 4-byte/21-bit utf8 code point
     // (0b11110xxx 0b10xxxxxx 0b10xxxxxx 0b10xxxxxx)
     c[0] = 0xf0 | (char)(chr >> 18);
@@ -413,7 +413,7 @@ size_t utf8len(const void *str) {
     } else if (0xc0 == (0xe0 & *s)) {
       // 2-byte utf8 code point (began with 0b110xxxxx)
       s += 2;
-    } else { // if (0x00 == (0x80 & *s)) {
+    } else {  // if (0x00 == (0x80 & *s)) {
       // 1-byte ascii (began with 0b0xxxxxxx)
       s += 1;
     }
@@ -435,11 +435,11 @@ int utf8ncasecmp(const void *src1, const void *src2, size_t n) {
     unsigned char b = *s2;
 
     if (('A' <= a) && ('Z' >= a)) {
-      a |= 0x20; // make a lowercase
+      a |= 0x20;  // make a lowercase
     }
 
     if (('A' <= b) && ('Z' >= b)) {
-      b |= 0x20; // make b lowercase
+      b |= 0x20;  // make b lowercase
     }
 
     if (a < b) {
@@ -544,7 +544,7 @@ void *utf8rchr(const void *src, int chr) {
     c[0] = 0xe0 | (char)(chr >> 12);
     c[1] = 0x80 | (char)((chr >> 6) & 0x3f);
     c[2] = 0x80 | (char)(chr & 0x3f);
-  } else { // if (0 == ((int)0xffe00000 & chr)) {
+  } else {  // if (0 == ((int)0xffe00000 & chr)) {
     // 4-byte/21-bit utf8 code point
     // (0b11110xxx 0b10xxxxxx 0b10xxxxxx 0b10xxxxxx)
     c[0] = 0xf0 | (char)(chr >> 18);
@@ -747,11 +747,11 @@ void *utf8casestr(const void *haystack, const void *needle) {
       char b = *n;
       // not entirely correct, but good enough
       if (('A' <= a) && ('Z' >= a)) {
-        a |= 0x20; // make a lowercase
+        a |= 0x20;  // make a lowercase
       }
 
       if (('A' <= b) && ('Z' >= b)) {
-        b |= 0x20; // make b lowercase
+        b |= 0x20;  // make b lowercase
       }
 
       // if we find a mismatch, bail out!
@@ -896,7 +896,7 @@ size_t utf8codepointsize(int32_t chr) {
     return 2;
   } else if (0 == ((int32_t)0xffff0000 & chr)) {
     return 3;
-  } else { // if (0 == ((int)0xffe00000 & chr)) {
+  } else {  // if (0 == ((int)0xffe00000 & chr)) {
     return 4;
   }
 }
@@ -931,7 +931,7 @@ void *utf8catcodepoint(void *utf8_restrict str, int32_t chr, size_t n) {
     s[1] = 0x80 | (char)((chr >> 6) & 0x3f);
     s[2] = 0x80 | (char)(chr & 0x3f);
     s += 3;
-  } else { // if (0 == ((int)0xffe00000 & chr)) {
+  } else {  // if (0 == ((int)0xffe00000 & chr)) {
     // 4-byte/21-bit utf8 code point
     // (0b11110xxx 0b10xxxxxx 0b10xxxxxx 0b10xxxxxx)
     if (n < 4) {
@@ -947,8 +947,7 @@ void *utf8catcodepoint(void *utf8_restrict str, int32_t chr, size_t n) {
   return s;
 }
 
-int utf8islower(int32_t chr)
-{
+int utf8islower(int32_t chr) {
   if (('A' <= chr) && ('Z' >= chr)) {
     return 0;
   }
@@ -956,16 +955,14 @@ int utf8islower(int32_t chr)
   return 1;
 }
 
-int utf8isupper(int32_t chr)
-{
+int utf8isupper(int32_t chr) {
   if (('A' <= chr) && ('Z' >= chr)) {
     return 1;
   }
   return 0;
 }
 
-void utf8lwr(void *utf8_restrict str)
-{
+void utf8lwr(void *utf8_restrict str) {
   void *p, *pn;
   int cp;
 
@@ -982,8 +979,7 @@ void utf8lwr(void *utf8_restrict str)
   }
 }
 
-void utf8upr(void *utf8_restrict str)
-{
+void utf8upr(void *utf8_restrict str) {
   void *p, *pn;
   int cp;
 
@@ -1003,11 +999,11 @@ void utf8upr(void *utf8_restrict str)
 #undef utf8_restrict
 
 #ifdef __cplusplus
-} // extern "C"
+}  // extern "C"
 #endif
 
 #if defined(__clang__)
 #pragma clang diagnostic pop
 #endif
 
-#endif // SHEREDOM_UTF8_H_INCLUDED
+#endif  // SHEREDOM_UTF8_H_INCLUDED

@@ -16,23 +16,25 @@
  ****************************************************************************/
 
 /* Used to interact with other snippets */
-#define PFILECODE 
+#define PFILECODE
 
 #ifndef FCLOSE
-  #define FCLOSE(fp)  fclose(fp); fp=NULL;
+#define FCLOSE(fp) \
+  fclose(fp);      \
+  fp = NULL;
 #endif
 
-extern  time_t pfile_time;  
-extern  HOUR_MIN_SEC * set_pfile_time; 
-extern  struct  tm *new_pfile_time;
-extern  time_t new_pfile_time_t;
-extern  sh_int num_pfiles;
+extern time_t pfile_time;
+extern HOUR_MIN_SEC *set_pfile_time;
+extern struct tm *new_pfile_time;
+extern time_t new_pfile_time_t;
+extern sh_int num_pfiles;
 
-void check_pfiles	args( ( time_t reset ) );
-void init_pfile_scan_time	args( ( void ) );
+void check_pfiles args((time_t reset));
+void init_pfile_scan_time args((void));
 
-void save_timedata	args( ( void ) );
-void fread_timedata args( ( FILE *fp ) );
-bool load_timedata	args( ( void ) );
+void save_timedata args((void));
+void fread_timedata args((FILE * fp));
+bool load_timedata args((void));
 
-DECLARE_DO_FUN( do_pfiles );
+DECLARE_DO_FUN(do_pfiles);
