@@ -1,0 +1,13 @@
+extern int port;
+extern char *data_dir;
+extern char *player_dir;
+extern char *backup_dir;
+extern char *god_dir;
+extern char *area_dir;
+extern char *deity_dir;
+extern char *council_dir;
+extern char *board_dir;
+extern char *race_dir;
+extern char *class_dir;
+extern char *watch_dir;
+extern char *clan_dir;
