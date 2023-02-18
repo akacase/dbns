@@ -1,0 +1,17 @@
+Fri Nov 25 11:30:00 2016: 0 players
+Fri Nov 25 12:00:00 2016: 0 players
+Fri Nov 25 12:30:00 2016: 0 players
+Fri Nov 25 13:00:00 2016: 0 players
+Sat Nov 26 23:00:00 2016: 1 players
+Sat Nov 26 23:30:00 2016: 0 players
+Sun Nov 27 00:00:00 2016: 0 players
+Sun Nov 27 01:30:00 2016: 1 players
+Sun Nov 27 02:00:00 2016: 1 players
+Sun Nov 27 02:30:00 2016: 2 players
+Sun Nov 27 03:00:00 2016: 1 players
+Sun Nov 27 03:30:00 2016: 0 players
+Sun Nov 27 04:00:00 2016: 0 players
+Sun Nov 27 14:00:00 2016: 1 players
+Sun Nov 27 14:30:00 2016: 2 players
+Sun Nov 27 15:00:00 2016: 2 players
+Sun Nov 27 15:30:00 2016: 2 players

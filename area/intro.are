@@ -1,0 +1,1560 @@
+#AREA   Orin Temple~
+
+
+
+#VERSION 252
+#AUTHOR Zerhyn~
+
+#RANGES
+0 65 0 65
+$
+
+#PLANET 1
+
+#FLAGS
+2 5
+
+#CLIMATE 2 2 2
+
+#MOBILES
+#100
+training android~
+An android~
+An android is here ready to fight you.
+~
+~
+67 0 0 C
+1
+1 0 100 0d0+0 1d5+0
+-1 50
+112 112 0
+5 5 5 5 5
+0 0 0 0 0
+4 4 0 0 1 1 0
+0 0 0 0 0 0 0 0
+> death_prog 100~
+mpmload 100
+~
+|
+#101
+start android upgrade chamber~
+An Upgrade Chamber~
+A mechanical upgrade chamber sits here.
+~
+~
+67109379 0 0 C
+250
+1 0 100 1d20+0 2d5+0
+-1 1
+112 112 0
+10 10 10 10 10
+0 0 0 0 0
+0 0 0 0 1 1 0
+0 0 0 0 0 0 0 0
+#102
+better android~
+A better android training partner~
+A better android training partner is prepared to fight you.
+~
+~
+3 0 0 C
+150
+1 0 100 1d20+100 2d5+0
+-1 50
+112 112 0
+10 10 10 10 10
+0 0 0 0 0
+0 0 0 0 1 1 0
+0 0 0 0 0 0 0 0
+> death_prog 100~
+mpecho &YThe android explodes into rattling chunks but pulls itself quickly together.&D
+mpmload 102
+~
+> act_prog ready~
+if isfight($i)
+slap $n
+mpechoat $n You can't do that while the mob is in combat.
+else
+mprestore self 30000
+nod $n
+endif
+~
+|
+#103
+advanced android~
+An advanced android~
+An advanced android training partner is prepared to fight you.
+~
+~
+3 0 0 C
+175
+1 0 100 1d20+120 2d5+0
+-1 150
+112 112 0
+10 10 10 10 10
+0 0 0 0 0
+0 0 0 0 1 1 0
+0 0 0 0 0 0 0 0
+> death_prog 100~
+mpecho &YThe android explodes into rattling chunks but pulls itself quickly together.&D
+mpmload 103
+~
+> act_prog ready~
+if isfight($i)
+slap $n
+mpechoat $n You can't do that while the mob is in combat.
+else
+mprestore self 30000
+nod $n
+endif
+~
+|
+#104
+hyper android~
+A hyper android~
+A hyper android training partner is prepared to fight you.
+~
+~
+3 0 0 C
+200
+1 0 100 1d20+140 2d5+0
+-1 450
+112 112 0
+10 10 10 10 10
+0 0 0 0 0
+0 0 0 0 1 1 0
+0 0 0 0 0 0 0 0
+> death_prog 100~
+mpecho &YThe android explodes into rattling chunks but pulls itself quickly together.&D
+mpmload 104
+~
+> act_prog ready~
+if isfight($i)
+slap $n
+mpechoat $n You can't do that while the mob is in combat.
+else
+mprestore self 30000
+nod $n
+endif
+~
+|
+#105
+supreme android~
+A supreme android~
+A supreme android training partner is prepared to fight you.
+~
+~
+3 0 0 C
+225
+1 0 100 1d20+160 2d5+0
+-1 1350
+112 112 0
+10 10 10 10 10
+0 0 0 0 0
+0 0 0 0 1 1 0
+0 0 0 0 0 0 0 0
+> death_prog 100~
+mpecho &YThe android explodes into rattling chunks but pulls itself quickly together.&D
+mpmload 105
+~
+> act_prog ready~
+if isfight($i)
+slap $n
+mpechoat $n You can't do that while the mob is in combat.
+else
+mprestore self 30000
+nod $n
+endif
+~
+|
+#106
+ultimate android~
+An ultimate android~
+An ultimate android training partner is prepared to fight you.
+~
+~
+3 0 0 C
+250
+1 0 100 1d20+200 2d5+0
+-1 4050
+112 112 0
+10 10 10 10 10
+0 0 0 0 0
+0 0 0 0 1 1 0
+0 0 0 0 0 0 0 0
+> death_prog 100~
+mpecho &YThe android explodes into rattling chunks but pulls itself quickly together.&D
+mpmload 106
+~
+> act_prog ready~
+if isfight($i)
+slap $n
+mpechoat $n You can't do that while the mob is in combat.
+else
+mprestore self 30000
+nod $n
+endif
+~
+|
+#107
+newbie master~
+The Newbie Master~
+The Newbie Master stands here, assisting newbies.
+~
+~
+-2080373757 0 0 C
+1
+1 0 100 1d20+0 2d5+0
+-1 1
+112 112 0
+10 10 10 10 10
+0 0 0 0 0
+0 0 0 0 1 1 0
+0 0 0 0 0 0 0 0
+#108
+basic android~
+A basic android training partner~
+A basic android training partner is here, prepared to assist in your training.
+~
+~
+3 0 0 C
+10
+1 0 100 1d20+0 2d5+0
+-1 5
+112 112 0
+10 10 10 10 10
+0 0 0 0 0
+0 0 0 0 1 1 0
+0 0 0 0 0 0 0 0
+> death_prog 100~
+mpecho &YA basic android training partner explodes into rattling chunks but pulls itself quickly together.&D
+mpmload 108
+~
+|
+#109
+intro seller~
+The Intro Shopkeeper~
+The Intro Shopkeeper stands here peddling his wares.
+~
+~
+67108867 0 0 C
+1
+1 0 100 1d20+0 2d5+0
+-1 1
+112 112 1
+500 10 10 10 0
+0 0 0 0 0
+0 0 0 0 1 1 0
+0 0 0 0 0 0 0 0
+#110
+newbie servobot~
+The Newbie Serv-O-Bot~
+The Newbie Serv-O-Bot hovers here, ready to assist.
+~
+~
+67108867 0 0 C
+0
+1 0 100 1d20+0 2d5+0
+-1 1
+112 112 0
+10 10 10 10 0
+0 0 0 0 0
+4 4 0 0 1 1 0
+0 0 0 0 0 0 0 0
+> greet_prog 100~
+if pl($n) < 50
+say Greetings, $n. The tower above will provide combat training, but it appears you still require basic training.
+peer $n
+say Seek the gravity chamber in the west section, or you will surely be horribly, horrifically -- [REDACTED}
+endif
+~
+|
+#111
+gravity servobot~
+The Gravity Serv-O-Bot~
+The Gravity Serv-O-Bot floats around aimlessly in the chamber.
+~
+~
+67108867 0 0 C
+0
+1 0 100 1d20+0 2d5+0
+-1 1
+112 112 0
+10 10 10 10 0
+0 0 0 0 0
+4 4 0 0 1 1 0
+0 0 0 0 0 0 0 0
+> greet_prog 100~
+if pl($n) < 50
+say Hello, $n! For assistance with gravity, please refer to 'help gravity'.
+ponder
+say You may feel yourself not increasing in power at first, but this is normal.
+say Keep at it, and I'm certain your meatbag body will positively FLOW with power.
+endif
+~
+> rand_prog 5~
+mpecho &cThe gravity Serv-O-Bot drones monotonously.&d
+~
+|
+#112
+jackie chun~
+Jackie Chun~
+The mysterious Jackie Chun stands here. Who could he be?
+~
+This man looks an awful lot like Master Roshi ... 
+But you can't quite put your finger on it. Hrm.
+~
+67108867 0 0 C
+0
+1 0 100 1d20+0 2d5+0
+-1 10
+112 112 1
+10 10 10 10 0
+0 0 0 0 0
+1 1 0 0 1 1 0
+0 0 0 0 0 0 0 0
+> greet_prog 100~
+mea $n &cJackie Chun peers intently at you.
+say Oh hello there. You won't find any strong fighters worth their salt here, but ...
+mea $n &cJackie Chun eyes you up and down.
+say Hehe, that looks right up your alley!
+~
+|
+#113
+orin thug~
+An Orin Temple thug~
+An Orin Temple thug dressed in Shaolin-style robes saunters around like he owns the place.
+~
+~
+16777217 0 0 C
+1
+1 0 100 1d20+1000 2d5+0
+-1 5
+112 112 1
+40 10 10 10 0
+0 0 0 0 0
+1 1 0 0 1 1 2
+0 0 0 0 0 0 0 0
+> death_prog 50~
+mpecho &YAn Orin Temple Thug scampers back up to his feet.&D
+mpmload 113
+~
+> fight_prog 25~
+punch
+~
+|
+#114
+orin aspirant~
+An Orin Temple aspirant~
+An Orin Temple aspirant kicks and punches at the air here, in between harassing the smaller students.
+~
+~
+16777217 0 0 C
+1
+1 0 100 1d20+1250 2d5+0
+-1 10
+112 112 1
+60 20 20 20 0
+0 0 0 0 0
+1 1 0 0 1 1 2
+0 0 0 0 0 0 0 0
+> fight_prog 25~
+punch
+~
+> death_prog 50~
+mpmload 114
+mpecho &YAn Orin Temple aspirant bounces back to his feet.&D
+~
+|
+#115
+orin guard~
+An Orin Temple Guard~
+A guard from Orin Temple stands here, appraising those who wander near.
+~
+~
+67108867 0 0 C
+0
+1 0 100 1d20+2000 2d5+0
+-1 20
+112 112 1
+10 10 10 10 0
+0 0 0 0 0
+1 1 0 0 1 1 0
+0 0 0 0 0 0 0 0
+> greet_prog 100~
+if pl($n) < 50
+say Turn around, twerp. I can tell just by looking at you that you've got no business down this road.
+snicker
+say Maybe play with the other twerps in the Temple for a while.
+else
+say You look like you can handle yourself. Fine, go on through.
+endif
+~
+|
+#116
+sentient time rift~
+The Sentient Time Rift~
+A strangely humanoid rift in time and space shimmers in and out of existence here.
+~
+~
+67108867 0 0 C
+0
+1 0 100 1d20+0 2d5+0
+-1 1
+112 112 0
+10 10 10 10 0
+0 0 0 0 0
+4 4 0 0 0 0 0
+0 0 0 0 0 0 0 0
+> greet_prog 100~
+say Greetings, warrior. To return to the Center of the Universe, simply speak 'return' aloud.
+~
+> speech_prog return~
+say Very well.
+mptransfer $n 6000
+mpat 6000 mea $n &YYou feel funny, then in a flash of light you're standing somewhere else entirely.&D
+mpat 6000 mpforce $n look
+~
+|
+#199
+last mob~
+a newly created last mob~
+Some god abandoned a newly created last mob here.
+~
+~
+1 0 0 C
+1
+1 0 100 0d0+0 1d5+0
+-1 1
+112 112 0
+5 5 5 5 5
+0 0 0 0 0
+0 3 0 0 1 1 0
+0 0 0 0 0 0 0 0
+#0
+
+
+#OBJECTS
+#100
+~
+Newbie Saiyan Battle Armor~
+Newbie Saiyan Battle Armor is laying on the ground here.~
+~
+9 8192&1 8
+95 0 0 0 0 0
+1 0 10
+ 0
+#199
+last obj~
+a newly created last obj~
+Some god dropped a newly created last obj here.~
+~
+13 0 0
+0 0 0 0 0 0
+1 0 0
+ 0
+#0
+
+
+#ROOMS
+#100
+The Beginning~
+You are entering the world of DragonBall: North Star.  Within lie many
+adventures and battles that you must endure.  Hopefully your time here will
+be entertaining!  We'll begin with a tutorial program for you so that you
+may learn how to play this MUD.  Please continue north by typing "north". 
+~
+0 4 0
+D0
+~
+~
+0 -1 101
+S
+#101
+Lesson 1 - Simple Commands~
+Here you will be introduced to simple commands. First we shall teach you
+how to move around in this world.  By typing in the direction you wish to go
+that is where you shall be moved.  north, south, west, east, northwest,
+northeast, southwest, and southeast.  All of these directions can be
+abbreviated like this: n, s, w, e, nw, ne, sw, se.  That is all for this
+lesson. Now type "up" to continue with the tutorial.
+~
+0 4 0
+D2
+~
+~
+0 -1 100
+D4
+~
+~
+0 -1 102
+S
+#102
+Lesson 2 - Communication~
+Communication is the key to surviving in any world.  You can talk to
+people in the same room as you by typing "say <what you want to say>". You
+may also talk to a person not in the same room as you with the "tell"
+command.  The public channels are channels that everyone who has them
+activated will hear what you say.  You may use all of them how ever, the
+"CHAT" channel is only for role playing messages.  If you are wanting to
+talk to people, but you don't want to role play at the moment then please
+use the "OOC" channel.  OOC stands for Out of Charecter.
+
+&YNew players are restricted to the 'newbie' channel for a short while.&d
+~
+0 4 0
+D4
+~
+~
+0 -1 107
+D5
+~
+~
+0 -1 101
+S
+#103
+Lesson 3 - Combat~
+You will have to fight many different battles in this world, so you must
+learn how to fight back.  Use the "kill" command to get into a fight with
+someone.  Your powerlevel determines how well you can fight in many ways,
+but most importantly how strong you are compared to your opponent.  If you
+would like to practice fighting go to the "east".  To the west are the
+healing tanks where you can quickly gain back your strength, as well a
+chamber to increase your stats. 
+~
+0 4 0
+D4
+~
+~
+0 -1 107
+D5
+~
+~
+0 -1 102
+S
+#104
+none~
+In the tower above you will practice actual combat, provided you're
+powerful enough.  The androids here are programmed to help you learn how to
+fight.  Just type "kill android to begin a battle.  If you require skill
+training, a master awaits you to the east. 
+~
+0 4 0
+D1
+~
+~
+0 -1 116
+D3
+~
+~
+0 -1 103
+S
+#105
+none~
+Take a load off and step into one of the state of the art healing tanks.
+While in this room your lifeforce and energy will go up two times faster
+than when you are not. 
+~
+0 4 0
+D1
+~
+~
+0 -1 103
+S
+#106
+Tutoral End~
+That is all that you need to know to survive in the DragonBall Saga.
+There is much, much more for you to learn, but you should now have a basic
+understanding of this world.  If you are ready to leave this tutoral then
+answer one question using say.
+
+"What kind of Triggers are allowed?"
+
+Upon answering the question, you will be transported to South City, or
+Dr. Gero's lab, if you are an Android. Happy Mudding and G'luck.
+
+This is where your Journey shall begin.
+~
+0 4 1
+D5
+~
+~
+0 -1 107
+> speech_prog 'none'~
+if race($n) == android
+ mpecho You have completed the tutoral.
+ mpecho You are engulfed in a bright white light
+ mptransfer $n 2308
+ mpat 2308 mpforce $n look
+else
+ mpecho You have completed the tutoral.
+ mpecho You are engulfed in a bright white light
+ mpecho As you regain your senses you find yourself
+ mpecho on your home world.
+ mptransfer $n 9001
+ mpat 9001 mpforce $n look
+endif
+~
+|
+S
+#107
+Lesson 3 - Rules of the Game~
+Now that you're familiarized with the commands, you must agree to the
+rules of the game to continue.  The Administration ask that you remain
+respectful to players and staff at all times.  Harassment of any kind will
+not be tolerated.  To continue to the game, please say "I agree". 
+~
+0 4 0
+D5
+~
+~
+0 -1 102
+> speech_prog 'i agree'~
+mpecho Okay.
+mptransfer $n 6000
+mpat 6000 mpforce $n look
+~
+|
+S
+#108
+none~
+This room allows you to increase your stats and gain powerlevel by
+training in increased gravity. To begin, type 'gravtrain' to see an output
+with what sorts of commands you may enter. 
+~
+0 4 0
+D0
+~
+~
+0 -1 105
+D3
+~
+~
+0 -1 126
+S
+#109
+Sparring Arena~
+A large elevated combat ring sits in the center of this room, covered in
+chunks of rubble.  This special place allows you to engage in combat with
+other players, provided you are both above 5000 base Power Level.  To
+begin, you must both choose your partner with 'partner <player>' then begin
+combat with 'spar <player>'. 
+~
+0 67108868 0
+D2
+~
+~
+0 -1 105
+S
+#110
+none~
+~
+0 4 1
+S
+#111
+none~
+~
+0 0 0
+D1
+~
+~
+0 -1 121
+D4
+~
+~
+0 -1 112
+D5
+~
+~
+0 -1 104
+S
+#112
+none~
+~
+0 0 0
+D1
+~
+~
+0 -1 122
+D4
+~
+~
+0 -1 113
+D5
+~
+~
+0 -1 111
+S
+#113
+none~
+~
+0 0 0
+D1
+~
+~
+0 -1 123
+D4
+~
+~
+0 -1 114
+D5
+~
+~
+0 -1 112
+S
+#114
+none~
+~
+0 0 0
+D1
+~
+~
+0 -1 124
+D4
+~
+~
+0 -1 115
+D5
+~
+~
+0 -1 113
+S
+#115
+none~
+~
+0 0 0
+D1
+~
+~
+0 -1 125
+D5
+~
+~
+0 -1 114
+S
+#116
+none~
+This room contains various amenenities to assist with helping you unlock
+your hidden potential as a fighter.  To see a list of your racial
+abilities, type 'alist'.  To see a list of your generic skills, type
+'slist'. Once you're powerful enough to learn an ability, type 'practice
+<skillname>' to be taught the basics. 
+~
+0 0 0
+D3
+~
+~
+0 -1 104
+S
+#117
+none~
+Here you will practice actual combat.  The android here is programmed to
+help you learn how to fight.  Just type "kill android" to begin battle.  If
+this android becomes too easy, more await you in the training chambers
+above.
+~
+0 4 0
+S
+#118
+none~
+Here you will practice actual combat.  The android here is programmed to
+help you learn how to fight.  Just type "kill android" to begin battle.  If
+this android becomes too easy, more await you in the training chambers
+above.
+~
+0 4 0
+S
+#119
+none~
+Here you will practice actual combat.  The android here is programmed to
+help you learn how to fight.  Just type "kill android" to begin battle.  If
+this android becomes too easy, more await you in the training chambers
+above.
+~
+0 4 0
+S
+#121
+none~
+~
+0 0 0
+D3
+~
+~
+0 -1 111
+D4
+~
+~
+0 -1 122
+S
+#122
+none~
+~
+0 0 0
+D3
+~
+~
+0 -1 112
+D4
+~
+~
+0 -1 123
+D5
+~
+~
+0 -1 121
+S
+#123
+none~
+~
+0 0 0
+D3
+~
+~
+0 -1 113
+D4
+~
+~
+0 -1 124
+D5
+~
+~
+0 -1 122
+S
+#124
+none~
+~
+0 0 0
+D3
+~
+~
+0 -1 114
+D4
+~
+~
+0 -1 125
+D5
+~
+~
+0 -1 123
+S
+#125
+none~
+~
+0 0 0
+D3
+~
+~
+0 -1 115
+D5
+~
+~
+0 -1 124
+S
+#126
+none~
+This room allows you to increase your stats and gain powerlevel by
+training in increased gravity.  To begin, type 'gravtrain' to see an output
+with what sorts of commands you may enter.  
+~
+0 0 0
+D1
+~
+~
+0 -1 108
+D3
+~
+~
+0 -1 127
+S
+#127
+none~
+This room allows you to increase your stats and gain powerlevel by
+training in increased gravity. To begin, type 'gravtrain' to see an output
+with what sorts of commands you may enter. 
+~
+0 0 0
+D1
+~
+~
+0 -1 126
+D3
+~
+~
+0 -1 128
+S
+#128
+none~
+This room allows you to increase your stats and gain powerlevel by
+training in increased gravity. To begin, type 'gravtrain' to see an output
+with what sorts of commands you may enter. 
+~
+0 0 0
+D1
+~
+~
+0 -1 127
+S
+#129
+Floating in a void~
+~
+0 1073741828 1
+S
+#130
+Before Orin Temple~
+~
+0 0 1
+D0
+~
+~
+0 -1 131
+D1
+~
+~
+0 -1 166
+D2
+~
+~
+0 -1 167
+S
+#131
+Orin Temple Gate~
+~
+0 4 1
+D0
+~
+~
+0 -1 132
+D2
+~
+~
+0 -1 130
+S
+#132
+A path through the courtyard~
+~
+0 0 1
+D0
+~
+~
+0 -1 133
+D1
+~
+~
+0 -1 140
+D2
+~
+~
+0 -1 131
+D3
+~
+~
+0 -1 139
+S
+#133
+A path through the courtyard~
+~
+0 0 1
+D0
+~
+~
+0 -1 134
+D1
+~
+~
+0 -1 141
+D2
+~
+~
+0 -1 132
+D3
+~
+~
+0 -1 138
+S
+#134
+A path through the courtyard~
+~
+0 0 1
+D0
+~
+~
+0 -1 135
+D1
+~
+~
+0 -1 142
+D2
+~
+~
+0 -1 133
+D3
+~
+~
+0 -1 137
+S
+#135
+A path through the courtyard~
+~
+0 0 1
+D0
+~
+~
+0 -1 144
+D1
+~
+~
+0 -1 143
+D2
+~
+~
+0 -1 134
+D3
+~
+~
+0 -1 136
+S
+#136
+Orin Temple Courtyard~
+~
+0 0 1
+D1
+~
+~
+0 -1 135
+D2
+~
+~
+0 -1 137
+S
+#137
+Orin Temple Courtyard~
+~
+0 0 1
+D0
+~
+~
+0 -1 136
+D1
+~
+~
+0 -1 134
+D2
+~
+~
+0 -1 138
+S
+#138
+Orin Temple Courtyard~
+~
+0 0 1
+D0
+~
+~
+0 -1 137
+D1
+~
+~
+0 -1 133
+D2
+~
+~
+0 -1 139
+S
+#139
+Orin Temple Courtyard~
+~
+0 0 1
+D0
+~
+~
+0 -1 138
+D1
+~
+~
+0 -1 132
+S
+#140
+Orin Temple Courtyard~
+~
+0 0 1
+D0
+~
+~
+0 -1 141
+D3
+~
+~
+0 -1 132
+S
+#141
+Orin Temple Courtyard~
+~
+0 0 1
+D0
+~
+~
+0 -1 142
+D2
+~
+~
+0 -1 140
+D3
+~
+~
+0 -1 133
+S
+#142
+Orin Temple Courtyard~
+~
+0 0 1
+D0
+~
+~
+0 -1 143
+D2
+~
+~
+0 -1 141
+D3
+~
+~
+0 -1 134
+S
+#143
+Orin Temple Courtyard~
+~
+0 0 1
+D2
+~
+~
+0 -1 142
+D3
+~
+~
+0 -1 135
+S
+#144
+Orin Temple Dojo~
+~
+0 4 1
+D0
+~
+~
+0 -1 145
+D1
+~
+~
+0 -1 154
+D2
+~
+~
+0 -1 135
+D3
+~
+~
+0 -1 153
+S
+#145
+Orin Temple Dojo~
+~
+0 0 1
+D0
+~
+~
+0 -1 146
+D1
+~
+~
+0 -1 155
+D2
+~
+~
+0 -1 144
+D3
+~
+~
+0 -1 152
+S
+#146
+Orin Temple Dojo~
+~
+0 0 1
+D0
+~
+~
+0 -1 147
+D1
+~
+~
+0 -1 156
+D2
+~
+~
+0 -1 145
+D3
+~
+~
+0 -1 151
+S
+#147
+Orin Temple Dojo~
+~
+0 0 1
+D0
+~
+~
+0 -1 148
+D1
+~
+~
+0 -1 157
+D2
+~
+~
+0 -1 146
+D3
+~
+~
+0 -1 150
+S
+#148
+Orin Temple Dojo~
+~
+0 0 1
+D1
+~
+~
+0 -1 158
+D2
+~
+~
+0 -1 147
+D3
+~
+~
+0 -1 149
+S
+#149
+Orin Temple Dojo: Northwest Corner~
+~
+0 0 1
+D1
+~
+~
+0 -1 148
+D2
+~
+~
+0 -1 150
+S
+#150
+Orin Temple Dojo~
+~
+0 0 1
+D0
+~
+~
+0 -1 149
+D1
+~
+~
+0 -1 147
+D2
+~
+~
+0 -1 151
+S
+#151
+Orin Temple Dojo~
+~
+0 0 1
+D0
+~
+~
+0 -1 150
+D1
+~
+~
+0 -1 146
+D2
+~
+~
+0 -1 152
+S
+#152
+Orin Temple Dojo~
+~
+0 0 1
+D0
+~
+~
+0 -1 151
+D1
+~
+~
+0 -1 145
+D2
+~
+~
+0 -1 153
+S
+#153
+Orin Temple Dojo: Southwest Corner~
+~
+0 0 1
+D0
+~
+~
+0 -1 152
+D1
+~
+~
+0 -1 144
+S
+#154
+Orin Temple Dojo: Southeast Corner~
+~
+0 0 1
+D0
+~
+~
+0 -1 155
+D1
+~
+~
+0 -1 159
+D3
+~
+~
+0 -1 144
+S
+#155
+Orin Temple Dojo~
+~
+0 0 1
+D0
+~
+~
+0 -1 156
+D2
+~
+~
+0 -1 154
+D3
+~
+~
+0 -1 145
+S
+#156
+Orin Temple Dojo~
+~
+0 0 1
+D0
+~
+~
+0 -1 157
+D2
+~
+~
+0 -1 155
+D3
+~
+~
+0 -1 146
+S
+#157
+Orin Temple Dojo~
+~
+0 0 1
+D0
+~
+~
+0 -1 158
+D2
+~
+~
+0 -1 156
+D3
+~
+~
+0 -1 147
+S
+#158
+Orin Temple Dojo: Northeast Corner~
+~
+0 0 1
+D2
+~
+~
+0 -1 157
+D3
+~
+~
+0 -1 148
+S
+#159
+Orin Temple: Sleeping Quarters~
+~
+0 0 1
+D1
+~
+~
+0 -1 160
+D3
+~
+~
+0 -1 154
+S
+#160
+Orin Temple: Sleeping Quarters~
+~
+0 0 1
+D0
+~
+~
+0 -1 165
+D1
+~
+~
+0 -1 161
+D3
+~
+~
+0 -1 159
+S
+#161
+Orin Temple: Sleeping Quarters~
+~
+0 0 1
+D0
+~
+~
+0 -1 164
+D1
+~
+~
+0 -1 162
+D3
+~
+~
+0 -1 160
+S
+#162
+Orin Temple: Sleeping Quarters~
+~
+0 0 1
+D0
+~
+~
+0 -1 163
+D3
+~
+~
+0 -1 161
+S
+#163
+Unclaimed Bunk~
+~
+0 536870916 1
+D2
+~
+~
+0 -1 162
+S
+#164
+Unclaimed Bunk~
+~
+0 536870916 1
+D2
+~
+~
+0 -1 161
+S
+#165
+Unclaimed Bunk~
+~
+0 536870916 1
+D2
+~
+~
+0 -1 160
+S
+#166
+A path into the wilds~
+~
+0 1073741828 1
+D1
+~
+~
+0 -1 308012
+D3
+~
+~
+0 -1 130
+S
+#167
+Timespace Pocket~
+~
+0 4 1
+D0
+~
+~
+0 -1 130
+S
+#168
+Floating in a void~
+~
+0 1073741828 1
+S
+#169
+Floating in a void~
+~
+0 1073741828 1
+S
+#170
+Floating in a void~
+~
+0 1073741828 1
+S
+#199
+Floating in a void~
+~
+0 4 1
+S
+#0
+
+
+#RESETS
+M 1 113 1 139
+M 1 113 1 140
+M 1 113 1 142
+M 1 113 1 135
+M 1 113 1 133
+M 1 113 1 137
+M 1 114 1 153
+M 1 114 1 159
+M 1 114 1 161
+M 1 114 1 149
+M 1 114 1 158
+M 1 114 1 147
+M 1 114 1 145
+M 1 112 1 131
+M 1 115 1 166
+M 1 116 1 167
+S
+
+
+#SHOPS
+ 109    0  0  0  0  0   100  90         0 23    ; The Intro Shopkeeper
+0
+
+
+#REPAIRS
+0
+
+
+#SPECIALS
+S
+
+
+#$
