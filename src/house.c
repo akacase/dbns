@@ -31,8 +31,17 @@
 #include <sys/types.h>
 #include <time.h>
 
-#include "mud.h"
 #include "comm.h"
+#include "mud.h"
+
+HOMEBUY_DATA *first_homebuy;
+HOMEBUY_DATA *last_homebuy;
+LMSG_DATA *first_lmsg;
+LMSG_DATA *last_lmsg;
+HOME_DATA *first_home;
+HOME_DATA *last_home;
+ACCESSORIES_DATA *first_accessory;
+ACCESSORIES_DATA *last_accessory;
 
 void do_house(CHAR_DATA *ch, char *argument) {
   char arg[MAX_INPUT_LENGTH];

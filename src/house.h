@@ -81,8 +81,8 @@ struct homebuy_data {
   bool apartment;
 };
 
-HOMEBUY_DATA *first_homebuy;
-HOMEBUY_DATA *last_homebuy;
+extern HOMEBUY_DATA *first_homebuy;
+extern HOMEBUY_DATA *last_homebuy;
 
 /* For automated housing login messaging */
 typedef struct lmsg_data LMSG_DATA;
@@ -93,8 +93,8 @@ struct lmsg_data {
   sh_int type;
 };
 
-LMSG_DATA *first_lmsg;
-LMSG_DATA *last_lmsg;
+extern LMSG_DATA *first_lmsg;
+extern LMSG_DATA *last_lmsg;
 
 /* For basic housing */
 typedef struct home_data HOME_DATA;
@@ -106,8 +106,8 @@ struct home_data {
   int vnum[MAX_HOUSE_ROOMS];
 };
 
-HOME_DATA *first_home;
-HOME_DATA *last_home;
+extern HOME_DATA *first_home;
+extern HOME_DATA *last_home;
 
 /* For the accessories auction */
 typedef struct accessories_data ACCESSORIES_DATA;
@@ -119,8 +119,8 @@ struct accessories_data {
   bool mob;
 };
 
-ACCESSORIES_DATA *first_accessory;
-ACCESSORIES_DATA *last_accessory;
+extern ACCESSORIES_DATA *first_accessory;
+extern ACCESSORIES_DATA *last_accessory;
 
 /* Commands added for housing system. */
 DECLARE_DO_FUN(do_accessories);  // Only command for housing accessories.

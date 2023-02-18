@@ -51,6 +51,12 @@
 #define TOOSMALL 2
 #define TOOLARGE 3
 
+/* globals from mud.h */
+bool MOBtrigger = false;
+bool DONT_UPPER = false;
+int area_version = 0;
+int top_mob_serial = 0;
+
 const char echo_off_str[] = {IAC, WILL, TELOPT_ECHO, '\0'};
 const char echo_on_str[] = {IAC, WONT, TELOPT_ECHO, '\0'};
 const char go_ahead_str[] = {IAC, GA, '\0'};

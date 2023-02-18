@@ -263,7 +263,7 @@ extern int MAX_PC_CLASS;
 #include "rare.h"
 
 /* This is to tell if act uses uppercasestring or not --Shaddai */
-bool DONT_UPPER;
+extern bool DONT_UPPER;
 
 #define SECONDS_PER_TICK 70
 
@@ -296,12 +296,12 @@ bool DONT_UPPER;
 /*
  * Stuff for area versions --Shaddai
  */
-int area_version;
+extern int area_version;
 
 #define HAS_SPELL_INDEX -1
 #define AREA_VERSION_WRITE 252
 
-int top_mob_serial;
+extern int top_mob_serial;
 
 typedef enum {
   GROWTH_NONE,
@@ -1138,7 +1138,7 @@ struct mpsleep_data {
   bool single_step;
 };
 
-bool MOBtrigger;
+extern bool MOBtrigger;
 
 /*
  * Per-class stuff.
@@ -6089,7 +6089,7 @@ void echo_to_room
 void echo_to_area args((AREA_DATA * area, char *argument));
 
 /* board.c */
-NOTE_DATA *note_free;
+extern NOTE_DATA *note_free;
 void free_global_note args((NOTE_DATA * note));
 
 /* boards.c */
