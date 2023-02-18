@@ -3,7 +3,8 @@
     "stat.h": "c",
     "types.h": "c",
     "ip.h": "c",
-    "mud.h": "c"
+    "mud.h": "c",
+    "__config": "c"
   },
   "nixEnvSelector.nixFile": "${workspaceRoot}/shell.nix",
   "C_Cpp_Runner.cCompilerPath": "clang",

@@ -202,7 +202,7 @@ char ECONOMY_FILE[128] = "/system/economy.txt";   /* Gold looted, etc */
 char PROJECTS_FILE[128] = "/system/projects.txt"; /* For projects        */
 char PLANE_FILE[128] = "/system/planes.dat";      /* For planes          */
 char COLOR_FILE[128] = "/system/colors.dat";      /* User-definable color */
-char TEMP_FILE[128] = "/system/charsave.tmp";     /* More char save */
+char TEMP_FILE[128] = "/tmp/charsave.tmp";     /* More char save */
 char HELP_FILE[128] = "/area/help.are";           /* For undefined helps */
 char HELP_FILE_BAK[128] = "/area/help.are.bak";   /* For undefined helps */
 char DNS_FILE[128] = "/system/dns.dat";
@@ -334,6 +334,8 @@ void send_to_desc_color(const char *txt, DESCRIPTOR_DATA *d) {
 int main(int argc, char **argv) {
   struct timeval now_time;
   char hostn[128];
+  char mkdir[MAX_STRING_LENGTH];
+
   const char *errstr = NULL;
   const char *data_dir = NULL;
   int ch;
@@ -381,6 +383,10 @@ int main(int argc, char **argv) {
   setup_lists(data_dir);
   /* setup files */
   setup_files(data_dir);
+
+  /* setup pfile directories */
+  snprintf(mkdir, sizeof(mkdir), "mkdir -p %s", PLAYER_DIR);
+  system(mkdir);
 
   printf("%s\n", COMMAND_FILE);
 

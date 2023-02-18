@@ -24,8 +24,8 @@
 #include <sys/types.h>
 #include <time.h>
 
-#include "mud.h"
 #include "comm.h"
+#include "mud.h"
 
 /*
  * Increment with every major format change.
@@ -153,6 +153,7 @@ void re_equip_char(CHAR_DATA *ch) {
 void save_char_obj(CHAR_DATA *ch) {
   char strsave[MAX_INPUT_LENGTH];
   char strback[MAX_INPUT_LENGTH];
+  char mkdir[MAX_INPUT_LENGTH];
   FILE *fp;
 
   if (!ch) {
@@ -162,6 +163,9 @@ void save_char_obj(CHAR_DATA *ch) {
 
   if (IS_NPC(ch))
     return;
+
+  snprintf(mkdir, sizeof(mkdir), "mkdir -p %s", TMP_DIR);
+  system(mkdir);
 
   saving_char = ch;
 
@@ -175,11 +179,11 @@ void save_char_obj(CHAR_DATA *ch) {
           capitalize(ch->pcdata->filename));
 
   /*
-      * Auto-backup pfile (can cause lag with high disk access situtations).
-      */
+   * Auto-backup pfile (can cause lag with high disk access situtations).
+   */
   /* Backup of each pfile on save as above can cause lag in high disk
-	access situations on big muds like Realms.  Quitbackup saves most
-	of that and keeps an adequate backup -- Blodkai, 10/97 */
+        access situations on big muds like Realms.  Quitbackup saves most
+        of that and keeps an adequate backup -- Blodkai, 10/97 */
 
   if (IS_SET(sysdata.save_flags, SV_BACKUP) ||
       (IS_SET(sysdata.save_flags, SV_QUITBACKUP) && quitting_char == ch)) {
@@ -190,12 +194,12 @@ void save_char_obj(CHAR_DATA *ch) {
   }
 
   /*
-      * Save immortal stats, level & vnums for wizlist           -Thoric
-      * and do_vnums command
-      *
-      * Also save the player flags so we the wizlist builder can see
-      * who is a guest and who is retired.
-      */
+   * Save immortal stats, level & vnums for wizlist           -Thoric
+   * and do_vnums command
+   *
+   * Also save the player flags so we the wizlist builder can see
+   * who is a guest and who is retired.
+   */
   if (ch->level >= LEVEL_IMMORTAL) {
     sprintf(strback, "%s%s", GOD_DIR, capitalize(ch->pcdata->filename));
 
@@ -508,9 +512,9 @@ void fwrite_char(CHAR_DATA *ch, FILE *fp) {
             print_bitvector(&ch->no_affected_by));
 
   /*
-      * Strip off fighting positions & store as
-      * new style (pos>=100 flags new style in character loading)
-      */
+   * Strip off fighting positions & store as
+   * new style (pos>=100 flags new style in character loading)
+   */
   pos = ch->position;
   if (pos == POS_BERSERK || pos == POS_AGGRESSIVE || pos == POS_FIGHTING || pos == POS_DEFENSIVE || pos == POS_EVASIVE)
     pos = POS_STANDING;
@@ -704,13 +708,13 @@ void fwrite_char(CHAR_DATA *ch, FILE *fp) {
           ch->perm_str,
           ch->perm_int, ch->perm_dex, ch->perm_con, ch->perm_lck);
   /* For the android enhance command, so that the base
-	stats can be modified without interfering with
-	transformations. At the time, only str and dex
-	are needed here. The other stats are added just in
-	case of any future need for them. I also realise that
-	this is the sort of thing that AttrMod is for, however
-	I am creating this seperately to avoid any conflicts with
-	pre-existing code. -Karma.
+        stats can be modified without interfering with
+        transformations. At the time, only str and dex
+        are needed here. The other stats are added just in
+        case of any future need for them. I also realise that
+        this is the sort of thing that AttrMod is for, however
+        I am creating this seperately to avoid any conflicts with
+        pre-existing code. -Karma.
      */
   fprintf(fp, "AttrAdd       %d %d %d %d %d\n",
           ch->add_str, ch->add_dex, ch->add_int, ch->add_con, ch->add_lck);
@@ -841,17 +845,17 @@ void fwrite_obj(CHAR_DATA *ch, OBJ_DATA *obj, FILE *fp, int iNest,
   }
 
   /*
-      * Slick recursion to write lists backwards,
-      *   so loading them will load in forwards order.
-      */
+   * Slick recursion to write lists backwards,
+   *   so loading them will load in forwards order.
+   */
   if (obj->prev_content && os_type != OS_CORPSE)
     fwrite_obj(ch, obj->prev_content, fp, iNest, OS_CARRY);
 
   /*
-      * Castrate storage characters.
-      * Catch deleted objects                                    -Thoric
-      * Do NOT save prototype items!                             -Thoric
-      */
+   * Castrate storage characters.
+   * Catch deleted objects                                    -Thoric
+   * Do NOT save prototype items!                             -Thoric
+   */
   /*
        if ( (ch && ch->exp < (obj->level * 0.30))
        || ( obj->item_type == ITEM_KEY && !IS_OBJ_STAT(obj, ITEM_CLANOBJECT ))
@@ -946,8 +950,8 @@ void fwrite_obj(CHAR_DATA *ch, OBJ_DATA *obj, FILE *fp, int iNest,
 
   for (paf = obj->first_affect; paf; paf = paf->next) {
     /*
-	   * Save extra object affects                            -Thoric
-	   */
+     * Save extra object affects                            -Thoric
+     */
     if (paf->type < 0 || paf->type >= top_sn) {
       fprintf(fp, "Affect       %d %d %d %d %s\n",
               paf->type,
@@ -1208,8 +1212,8 @@ bool load_char_obj(DESCRIPTOR_DATA *d, char *name, bool preload) {
     ch->pcdata->pwd = str_dup("");
 
     /* every characters starts at default board from login.. this board
-	     should be read_level == 0 !
-	  */
+             should be read_level == 0 !
+          */
     ch->pcdata->board = &boards[DEFAULT_BOARD];
 
     ch->pcdata->bamfin = str_dup("");
@@ -1356,8 +1360,8 @@ void fread_char(CHAR_DATA *ch, FILE *fp, bool preload) {
             else {
               ch->pcdata->learned[sn] = value;
               /* Take care of people who have stuff they shouldn't     *
-			       * Assumes class and level were loaded before. -- Altrag *
-			       * Assumes practices are loaded first too now. -- Altrag */
+               * Assumes class and level were loaded before. -- Altrag *
+               * Assumes practices are loaded first too now. -- Altrag */
               if (skill_table[sn]->skill_level[ch->class] <= 0) {
                 ch->pcdata->learned[sn] = 0;
                 ch->practice++;
@@ -1700,8 +1704,8 @@ void fread_char(CHAR_DATA *ch, FILE *fp, bool preload) {
         KEY("Favor", ch->pcdata->favor, fread_number(fp));
         if (!strcmp(word, "Filename")) {
           /*
-		     * File Name already set externally.
-		     */
+           * File Name already set externally.
+           */
           fread_to_eol(fp);
           fMatch = true;
           break;
@@ -2048,10 +2052,10 @@ void fread_char(CHAR_DATA *ch, FILE *fp, bool preload) {
         KEY("Played", ch->played, fread_number(fp));
         /* KEY( "Position", ch->position,           fread_number( fp ) ); */
         /*
-		*  new positions are stored in the file from 100 up
-		*  old positions are from 0 up
-		*  if reading an old position, some translation is necessary
-		*/
+         *  new positions are stored in the file from 100 up
+         *  old positions are from 0 up
+         *  if reading an old position, some translation is necessary
+         */
         if (!strcmp(word, "Position")) {
           ch->position = fread_number(fp);
           if (ch->position < 100) {
@@ -2214,8 +2218,8 @@ void fread_char(CHAR_DATA *ch, FILE *fp, bool preload) {
             else {
               ch->pcdata->learned[sn] = value;
               /* Take care of people who have stuff they shouldn't     *
-			       * Assumes class and level were loaded before. -- Altrag *
-			       * Assumes practices are loaded first too now. -- Altrag */
+               * Assumes class and level were loaded before. -- Altrag *
+               * Assumes practices are loaded first too now. -- Altrag */
               if (skill_table[sn]->skill_level[ch->class] <= 0) {
                 ch->pcdata->learned[sn] = 0;
                 ch->practice++;
@@ -2819,7 +2823,7 @@ void write_corpses(CHAR_DATA *ch, char *name, OBJ_DATA *objrem) {
   FILE *fp = NULL;
 
   /* Name and ch support so that we dont have to have a char to save their
-	corpses.. (ie: decayed corpses while offline) */
+        corpses.. (ie: decayed corpses while offline) */
   if (ch && IS_NPC(ch)) {
     bug("Write_corpses: writing NPC corpse.", 0);
     return;
@@ -2964,8 +2968,8 @@ fread_mobile(FILE *fp) {
       for (;;) {
         word = feof(fp) ? "EndMobile" : fread_word(fp);
         /* So we don't get so many bug messages when something messes up
-		     * --Shaddai
-		     */
+         * --Shaddai
+         */
         if (!strcmp(word, "EndMobile"))
           break;
       }
@@ -2976,8 +2980,8 @@ fread_mobile(FILE *fp) {
     for (;;) {
       word = feof(fp) ? "EndMobile" : fread_word(fp);
       /* So we don't get so many bug messages when something messes up
-		* --Shaddai
-		*/
+       * --Shaddai
+       */
       if (!strcmp(word, "EndMobile"))
         break;
     }
