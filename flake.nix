@@ -17,7 +17,7 @@
         dbns = with pkgs; stdenv.mkDerivation {
           name = "dbns";
           src = ./src;
-          nativeBuildInputs = [ gnumake llvmPackages_14.clang zlib ninja ];
+          nativeBuildInputs = [ gnumake clang zlib ninja ];
 
           buildPhase = ''
             ninja
@@ -43,7 +43,7 @@
         devShell = pkgs.mkShell {
           buildInputs = with pkgs; [
             gnumake
-            llvmPackages_14.clang
+            clang
             zlib
             ninja
           ];
@@ -53,7 +53,7 @@
       dbns = with final; (stdenv.mkDerivation {
         name = "dbns";
         src = ./src;
-        nativeBuildInputs = [ gnumake llvmPackages_14.clang zlib ninja ];
+        nativeBuildInputs = [ gnumake clang zlib ninja ];
 
         buildPhase = ''
           ninja
