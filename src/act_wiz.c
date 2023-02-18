@@ -29,6 +29,7 @@
 #include <time.h>
 #include <unistd.h>
 
+#include "comm.h"
 #include "mud.h"
 #include "sha256.h"
 
@@ -2040,8 +2041,12 @@ void do_shutdow(CHAR_DATA *ch, char *argument) {
 
 void do_shutdown(CHAR_DATA *ch, char *argument) {
   char buf[MAX_STRING_LENGTH];
+  char mkdir[MAX_STRING_LENGTH];
   extern bool mud_down;
   CHAR_DATA *vch;
+
+  snprintf(mkdir, sizeof(mkdir), "mkdir -p %s", TMP_DIR);
+  system(mkdir);
 
   set_char_color(AT_IMMORT, ch);
 
@@ -6480,7 +6485,7 @@ void do_setclass(CHAR_DATA *ch, char *argument) {
       return;
     }
     for (i = 0; i < MAX_PC_CLASS; i++)
-      fprintf(fpList, "%s%s.class\n", CLASSDIR, class_table[i]->who_name);
+      fprintf(fpList, "%s%s.class\n", CLASS_DIR, class_table[i]->who_name);
 
     fprintf(fpList, "$\n");
     fclose(fpList);
@@ -6784,7 +6789,7 @@ void do_setrace(CHAR_DATA *ch, char *argument) {
       return;
     }
     for (i = 0; i < MAX_PC_RACE; i++)
-      fprintf(fpList, "%s%s.race\n", RACEDIR, race_table[i]->race_name);
+      fprintf(fpList, "%s%s.race\n", RACE_DIR, race_table[i]->race_name);
     fprintf(fpList, "$\n");
     fclose(fpList);
     send_to_char("Done.\n\r", ch);
@@ -7324,8 +7329,8 @@ void save_reserved(void) {
   RESERVE_DATA *res;
   FILE *fp;
 
-  if (!(fp = fopen(SYSTEM_DIR RESERVED_LIST, "w"))) {
-    bug("Save_reserved: cannot open " RESERVED_LIST, 0);
+  if (!(fp = fopen(RESERVED_LIST, "w"))) {
+    bug("Save_reserved: cannot open ", RESERVED_LIST, 0);
     perror(RESERVED_LIST);
     return;
   }
