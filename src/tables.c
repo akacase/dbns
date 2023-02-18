@@ -21,6 +21,7 @@
 #include <time.h>
 
 #include "mud.h"
+#include "comm.h"
 
 #if defined(KEY)
 #undef KEY
@@ -1767,7 +1768,7 @@ void write_class_file(int cl) {
   int x;
   long double y;
 
-  sprintf(filename, "%s%s.class", CLASSDIR, class->who_name);
+  sprintf(filename, "%s%s.class", CLASS_DIR, class->who_name);
   if ((fpout = fopen(filename, "w")) == NULL) {
     sprintf(buf, "Cannot open: %s for writing", filename);
     bug(buf, 0);
@@ -1862,7 +1863,7 @@ void write_race_file(int ra) {
     return;
   }
 
-  sprintf(filename, "%s%s.race", RACEDIR, race->race_name);
+  sprintf(filename, "%s%s.race", RACE_DIR, race->race_name);
   if ((fpout = fopen(filename, "w+")) == NULL) {
     sprintf(buf, "Cannot open: %s for writing", filename);
     bug(buf, 0);
@@ -1924,7 +1925,7 @@ bool load_race_file(char *fname) {
   FILE *fp;
   int i, wear = 0;
 
-  sprintf(buf, "%s%s", RACEDIR, fname);
+  sprintf(buf, "%s%s", RACE_DIR, fname);
   if ((fp = fopen(buf, "r")) == NULL) {
     perror(buf);
     return false;

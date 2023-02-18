@@ -8,3 +8,5 @@ src/*.o
 src/*.core
 corpses/*
 player/*
+tmp/*
+result

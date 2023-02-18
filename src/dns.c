@@ -28,6 +28,7 @@
 #include <unistd.h>
 
 #include "mud.h"
+#include "comm.h"
 
 DNS_DATA *first_cache;
 DNS_DATA *last_cache;

@@ -25,6 +25,7 @@
 #include <time.h>
 
 #include "mud.h"
+#include "comm.h"
 
 DEITY_DATA *first_deity;
 DEITY_DATA *last_deity;

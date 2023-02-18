@@ -1,7 +1,9 @@
 {
   "files.associations": {
     "stat.h": "c",
-    "types.h": "c"
+    "types.h": "c",
+    "ip.h": "c",
+    "mud.h": "c"
   },
   "nixEnvSelector.nixFile": "${workspaceRoot}/shell.nix",
   "C_Cpp_Runner.cCompilerPath": "clang",

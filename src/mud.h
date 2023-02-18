@@ -16,17 +16,18 @@
  *			    Main mud header file			    *
  ****************************************************************************/
 
+#include <dlfcn.h>
 #include <limits.h>
 #include <stdarg.h>
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <sys/types.h>
-#include <dlfcn.h>
 #include <sys/cdefs.h>
 #include <sys/time.h>
+#include <sys/types.h>
 #include <unistd.h>
+
 #include "utf8.h"
 
 typedef int ch_ret;
@@ -194,7 +195,7 @@ typedef ch_ret SPELL_FUN args((int sn, int level, CHAR_DATA *ch, void *vo));
 
 #define START_ADEPT 10
 #define PK_PL 250
-//not used yet
+// not used yet
 #define MAX_EXP 0
 #define MAX_EXP_PRE_AUTH 5000
 #define MAX_EXP_WORTH 500000
@@ -483,14 +484,14 @@ struct morph_data {
   int race;              /* Races not allowed to use this */
   int timer;             /* Timer for how long it lasts */
   int used;              /* How many times has this morph been
-					 * used */
+                          * used */
   int vnum;              /* Unique identifier */
   sh_int ac;
   sh_int bloodused;     /* Amount of blood morph requires
-					 * Vamps only */
+                         * Vamps only */
   int con;              /* Amount of Con gained/Lost */
   sh_int dayfrom;       /* Starting Day you can morph into
-					 * this */
+                         * this */
   sh_int dayto;         /* Ending Day you can morph into this */
   int dex;              /* Amount of dex added */
   sh_int dodge;         /* Percent of dodge added IE 1 = 1% */
@@ -515,7 +516,7 @@ struct morph_data {
   sh_int timeto;   /* Hour ending that you can morph */
   sh_int tumble;   /* Percent of tumble added IE 1 = 1% */
   bool no_cast;    /* Can you cast a spell to morph into
-					 * it */
+                    * it */
   bool objuse[3];  /* Objects needed to morph */
 };
 
@@ -1235,9 +1236,9 @@ struct member_data {
   int race;          /* race of member */
   int level;         /* level of member */
   int deaths;        /* Pdeaths for clans, mdeaths for
-					 * guilds/orders */
+                      * guilds/orders */
   int kills;         /* Pkills for clans, mkills for
-					 * guilds/orders */
+                      * guilds/orders */
   MEMBER_DATA *next; /* Next member */
   MEMBER_DATA *prev; /* Prev member */
 };
@@ -1512,9 +1513,9 @@ struct alliance_data {
   CLAN_DATA *clan;    /* The clan that has set this data */
   CLAN_DATA *vclan;   /* The clan that this data is about */
   sh_int status;      /* Neutral, Friendly, Allied, Hostile,
-					 * At War */
+                       * At War */
   sh_int vclanStatus; /* Status of other clan towards this
-					 * clan */
+                       * clan */
   sh_int votes;       /* 2 votes required for at war status */
   char *leader1Vote;  /* first leader who voted for war */
   char *leader2Vote;  /* second leader who voted for war */
@@ -1557,7 +1558,7 @@ struct clan_data {
   sh_int strikes;    /* Number of strikes against the clan   */
   sh_int members;    /* Number of clan members               */
   sh_int activeMem;  /* Members who have logged in during
-					 * the past 30 days */
+                      * the past 30 days */
   sh_int mem_limit;  /* Number of clan members allowed       */
   sh_int alignment;  /* Clan's general alignment             */
   int board;         /* Vnum of clan board                   */
@@ -1579,9 +1580,9 @@ struct clan_data {
   long double clanPL; /* Total clan PL */
 
   /*
-	 * removed since this is handled in the alliance data bool war; char *
-	 * war_clan;
-	 */
+   * removed since this is handled in the alliance data bool war; char *
+   * war_clan;
+   */
 
   /* Male rank names */
   char *mRank1; /* Leader rank */
@@ -1625,10 +1626,10 @@ struct clan_data {
   long double bank;  /* Zeni in clans bank account */
 
   /*
-	 * char *  war1; char *  war2; char *  war3; char *  war4; char *
-	 * war5; char *  war6; char *  war7; char *  war8; char *  war9;
-	 * char *  war10;
-	 */
+   * char *  war1; char *  war2; char *  war3; char *  war4; char *
+   * war5; char *  war6; char *  war7; char *  war8; char *  war9;
+   * char *  war10;
+   */
 };
 
 struct council_data {
@@ -1760,7 +1761,7 @@ struct affect_data {
   int modifier;
   EXT_BV bitvector;
   int affLocator; /* For tracking affect data so they
-					 * can be removed later -Goku */
+                   * can be removed later -Goku */
 };
 
 /*
@@ -3275,7 +3276,7 @@ struct char_data {
   DO_FUN *last_cmd;
   DO_FUN *prev_cmd; /* mapping */
   void *dest_buf;   /* This one is to assign to differen
-					 * things */
+                     * things */
   char *alloc_ptr;  /* Must str_dup and free this one */
   void *spare_ptr;
   int tempnum;
@@ -3546,12 +3547,12 @@ struct char_data {
   int mod_con;
   int mod_lck;
   int add_str;
-  //For the enhance command
+  // For the enhance command
   int add_dex;
   int add_int;
   int add_con;
   int add_lck;
-  //For the enhance command
+  // For the enhance command
   sh_int mental_state;    /* simplified */
   sh_int emotional_state; /* simplified */
   int pagelen;            /* BUILD INTERFACE */
@@ -3577,11 +3578,11 @@ struct char_data {
 
   long double corespl;
   bool fm_core;
-  //Absorbed fm core
+  // Absorbed fm core
   bool e_core;
-  //Absorbed e core
+  // Absorbed e core
   bool h_core;
-  //Absorbed h core
+  // Absorbed h core
   int fusionflags;
   int fusions;
   int fusiontimer;
@@ -3606,9 +3607,9 @@ struct char_data {
   bool ki_cancel;
   bool ki_deflect;
   /*
-	 * To tell the damage function whether or not to treat the damage as
-	 * melee or a ki attack. Used only for blocking/dodging. -Karma
-	 */
+   * To tell the damage function whether or not to treat the damage as
+   * melee or a ki attack. Used only for blocking/dodging. -Karma
+   */
   bool melee;
   char *bot_string_check;
 };
@@ -3670,7 +3671,7 @@ struct pc_data {
   char *title;
   char *bestowments; /* Special bestowed commands       */
   int flags;         /* Whether the player is deadly and
-					 * whatever else we add.      */
+                      * whatever else we add.      */
   int pkills;        /* Number of pkills on behalf of clan */
   int pdeaths;       /* Number of times pkilled (legally)  */
   int mkills;        /* Number of mobs killed                   */
@@ -3679,10 +3680,10 @@ struct pc_data {
   int spar_wins;
   int spar_loss;
   long int outcast_time;   /* The time at which the char was
-					 * outcast */
+                            * outcast */
   NUISANCE_DATA *nuisance; /* New Nuisance structure */
   long int restore_time;   /* The last time the char did a
-					 * restore all */
+                            * restore all */
   int r_range_lo;          /* room range */
   int r_range_hi;
   int m_range_lo; /* mob range  */
@@ -3697,10 +3698,10 @@ struct pc_data {
   double learned[MAX_SKILL];
   KILLED_DATA killed[MAX_KILLTRACK];
   sh_int quest_number; /* current *QUEST BEING DONE* DON'T
-					 * REMOVE! */
+                        * REMOVE! */
   sh_int quest_curr;   /* current number of quest points */
   int quest_accum;     /* quest points accumulated in players
-					 * life */
+                        * life */
   sh_int favor;        /* deity favor */
   sh_int charmies;     /* Number of Charmies */
   time_t release_date; /* Auto-helling.. Altrag */
@@ -3708,7 +3709,7 @@ struct pc_data {
   char *helled_by;
   char *bio;                               /* Personal Bio */
   SKILLTYPE *special_skills[MAX_PERSONAL]; /* personalized
-							 * skills/spells */
+                                            * skills/spells */
   char *prompt;                            /* User config prompts */
   char *fprompt;                           /* Fight prompts */
   char *subprompt;                         /* Substate prompt */
@@ -3727,7 +3728,7 @@ struct pc_data {
   int admintalk;
   int pk_timer;
   int gohometimer;
-  //30 minutes after a PK before you go home.-- Saiyr
+  // 30 minutes after a PK before you go home.-- Saiyr
   int silence;
   int eKTimer;
   char *silencedby;
@@ -3779,9 +3780,9 @@ struct pc_data {
   int tStat;
 
   /*
-	 * I'm using this as a back up of ch->desc->host for link deads
-	 * since it's not currently being used any where -Goku 10.15.03
-	 */
+   * I'm using this as a back up of ch->desc->host for link deads
+   * since it's not currently being used any where -Goku 10.15.03
+   */
   char *lasthost;
   /* Added this to cache last logon time -Goku 10.15.03 */
   time_t lastlogon;
@@ -3824,11 +3825,11 @@ struct pc_data {
   sh_int battlePromptConfig;
 
   /*
-	 * Added to cut down on number of spars per day (high level players
-	 * are sharing chars and multiplaying with proxies). This will
-	 * restrict the number of times a character can initiate a spar. --
-	 * Islvin
-	 */
+   * Added to cut down on number of spars per day (high level players
+   * are sharing chars and multiplaying with proxies). This will
+   * restrict the number of times a character can initiate a spar. --
+   * Islvin
+   */
 
   int sparcount;
   time_t nextspartime;
@@ -3904,7 +3905,7 @@ struct obj_index_data {
   sh_int item_type;
   EXT_BV extra_flags;
   int magic_flags; /* Need more bitvectors for spells -
-					 * Scryn */
+                    * Scryn */
   int wear_flags;
   sh_int count;
   sh_int weight;
@@ -3941,7 +3942,7 @@ struct obj_data {
   sh_int mpscriptpos;
   EXT_BV extra_flags;
   int magic_flags; /* Need more bitvectors for spells -
-					 * Scryn */
+                    * Scryn */
   int wear_flags;
   MPROG_ACT_LIST *mpact; /* mudprogs */
   int mpactnum;          /* mudprogs */
@@ -4107,7 +4108,7 @@ struct system_data {
   sh_int build_level;        /* Level of build channel LEVEL_BUILD */
   sh_int log_level;          /* Level of log channel LEVEL LOG */
   sh_int level_modify_proto; /* Level to modify prototype stuff
-					 * LEVEL_LESSER */
+                              * LEVEL_LESSER */
   sh_int level_invoke_proto;
   sh_int level_override_private; /* override private flag */
   sh_int level_mset_player;      /* Level to mset a player */
@@ -4115,7 +4116,7 @@ struct system_data {
   sh_int bash_nontank;           /* Bash mod basher != primary attacker */
   sh_int gouge_plr_vs_plr;       /* Gouge mod player vs. player */
   sh_int gouge_nontank;          /* Gouge mod player != primary
-					 * attacker */
+                                  * attacker */
   sh_int stun_plr_vs_plr;        /* Stun mod player vs. player */
   sh_int stun_regular;           /* Stun difficult */
   sh_int dodge_mod;              /* Divide dodge chance by */
@@ -4127,13 +4128,13 @@ struct system_data {
   sh_int dam_mob_vs_mob;         /* Damage mod mobile vs. mobile */
   sh_int level_getobjnotake;     /* Get objects without take flag */
   sh_int level_forcepc;          /* The level at which you can use
-					 * force on players. */
+                                  * force on players. */
   sh_int bestow_dif;             /* Max # of levels between trust and
-					 * command level for a bestow to work
-					 * --Blodkai */
+                                  * command level for a bestow to work
+                                  * --Blodkai */
   sh_int max_sn;                 /* Max skills */
   char *guild_overseer;          /* Pointer to char containing the name
-					 * of the */
+                                  * of the */
   char *guild_advisor;           /* guild overseer and advisor. */
   int save_flags;                /* Toggles for saving conditions */
   sh_int save_frequency;         /* How old to autosave someone */
@@ -4144,14 +4145,14 @@ struct system_data {
   sh_int ban_class_level;        /* Level to ban classes */
   sh_int ban_race_level;         /* Level to ban races */
   sh_int ident_retries;          /* Number of times to retry broken
-					 * pipes. */
+                                  * pipes. */
   sh_int pk_loot;                /* Pkill looting allowed? */
   sh_int newbie_purge;           /* Level to auto-purge newbies at -
-					 * Samson 12-27-98 */
+                                  * Samson 12-27-98 */
   sh_int regular_purge;          /* Level to purge normal players at -
-					 * Samson 12-27-98 */
+                                  * Samson 12-27-98 */
   bool CLEANPFILES;              /* Should the mud clean up pfiles
-					 * daily? - Samson 12-27-98 */
+                                  * daily? - Samson 12-27-98 */
 
   sh_int plimit;
   sh_int level_noplimit;
@@ -4162,7 +4163,7 @@ struct system_data {
 
   /* for couting bandwidth */
   int outBytesFlag;
-  //0 = other, 1 = chan, 2 = combat, 3 = move
+  // 0 = other, 1 = chan, 2 = combat, 3 = move
   int outBytesOther;
   int outBytesChannel;
   int outBytesCombat;
@@ -4340,18 +4341,18 @@ struct skill_type {
 struct auction_data {
   OBJ_DATA *item;    /* a pointer to the item */
   CHAR_DATA *seller; /* a pointer to the seller - which may
-					 * NOT quit */
+                      * NOT quit */
   CHAR_DATA *buyer;  /* a pointer to the buyer - which may
-					 * NOT quit */
+                      * NOT quit */
   int bet;           /* last bet - or 0 if noone has bet
-					 * anything */
+                      * anything */
   sh_int going;      /* 1,2, sold */
   sh_int pulse;      /* how many pulses (.25 sec) until
-					 * another call-out ? */
+                      * another call-out ? */
   int starting;
   OBJ_INDEX_DATA *history[AUCTION_MEM]; /* store auction history */
   sh_int hist_timer;                    /* clear out history buffer if auction
-					 * is idle */
+                                         * is idle */
   OBJ_DATA *queued_obj[AUCTION_QUE];
   CHAR_DATA *queued_char[AUCTION_QUE];
   int queued_starting_bid[AUCTION_QUE];
@@ -4361,7 +4362,7 @@ struct auction_data {
 /*
  * These are skill_lookup return values for common skills and spells.
  */
-//Golem shit-- Saiyr
+// Golem shit-- Saiyr
 extern sh_int gsn_demonwave;
 extern sh_int gsn_candyblast;
 extern sh_int gsn_tentacle;
@@ -4388,7 +4389,7 @@ extern sh_int gsn_block;
 extern sh_int gsn_hide;
 extern sh_int gsn_peek;
 extern sh_int gsn_pick_lock;
-//extern sh_int gsn_scan;
+// extern sh_int gsn_scan;
 extern sh_int gsn_sneak;
 extern sh_int gsn_steal;
 extern sh_int gsn_gouge;
@@ -4825,6 +4826,11 @@ void ext_toggle_bits args((EXT_BV * var, EXT_BV *bits));
   } while (0)
 
 /*
+ * helper macro
+ */
+#define CONCAT_DIR(str, str2, str3) snprintf(str, sizeof(str), "%s/%s", str2, str3);
+
+/*
  * Character macros.
  */
 #define IS_NPC(ch) (xIS_SET((ch)->act, ACT_IS_NPC))
@@ -4976,7 +4982,7 @@ struct cmd_type {
   char *name;
   DO_FUN *do_fun;
   int flags; /* Added for Checking interpret stuff
-					 * -Shaddai */
+              * -Shaddai */
   sh_int position;
   sh_int level;
   sh_int log;
@@ -5226,7 +5232,7 @@ extern bool spaceDeath;
  * Command functions.
  * Defined in act_*.c (mostly).
  */
-//Buu shit
+// Buu shit
 DECLARE_DO_FUN(do_finger2);
 DECLARE_DO_FUN(do_transform);
 DECLARE_DO_FUN(do_demon_wave);
@@ -5974,106 +5980,11 @@ DECLARE_SPELL_FUN(spell_notfound);
 DECLARE_SPELL_FUN(spell_sensu_bean);
 
 /*
- * Data files used by the server.
- *
- * AREA_LIST contains a list of areas to boot.
- * All files are read in completely at bootup.
- * Most output files (bug, idea, typo, shutdown) are append-only.
- *
  * The NULL_FILE is held open so that we have a stream handle in reserve,
- *   so players can go ahead and telnet to all the other descriptors.
+ * so players can go ahead and telnet to all the other descriptors.
  * Then we close it whenever we need to open a file (e.g. a save file).
  */
-#define PREFIX_DIR "/opt/dbns/db"               /* prefix where the information is \
-                                                 * stored and installed to */
-#define PLAYER_DIR PREFIX_DIR "/player/"        /* Player files         */
-#define BACKUP_DIR PREFIX_DIR "/player/backup/" /* Backup Player files  */
-#define GOD_DIR PREFIX_DIR "/gods/"             /* God Info Dir         */
-#define BOARD_DIR PREFIX_DIR "/boards/"         /* Board data dir       */
-#define CLAN_DIR PREFIX_DIR "/clans/"           /* Clan data dir        */
-#define COUNCIL_DIR PREFIX_DIR "/councils/"     /* Council data dir     */
-#define DEITY_DIR PREFIX_DIR "/deity/"          /* Deity data dir               */
-#define BUILD_DIR PREFIX_DIR "/building/"       /* Online building save dir     */
-#define SYSTEM_DIR PREFIX_DIR "/system/"        /* Main system files            */
-#define PROG_DIR PREFIX_DIR "/mudprogs/"        /* MUDProg files                */
-#define CORPSE_DIR PREFIX_DIR "/corpses/"       /* Corpses */
-#define AREA_DIR PREFIX_DIR "/area/"            /* Areas */
-#define RACE_DIR PREFIX_DIR "/races/"
 #define NULL_FILE "/dev/null" /* To reserve one stream        */
-
-#define CLASS_DIR PREFIX_DIR "/classes/" /* Classes                      */
-#define WATCH_DIR PREFIX_DIR "/watch/"   /* Imm watch files --Gorog      */
-
-#define PLAYFROM_DIR PREFIX_DIR "/playfrom/" /* To track character login \
-                                              * sites */
-/*
- * The watch directory contains a maximum of one file for each immortal
- * that contains output from "player watches". The name of each file
- * in this directory is the name of the immortal who requested the watch
- */
-
-#define AREA_LIST AREA_DIR "area.lst"          /* List of areas                */
-#define WATCH_LIST AREA_DIR "watch.lst"        /* List of watches              */
-#define BAN_LIST SYSTEM_DIR "ban.lst"          /* List of bans                 */
-#define RESERVED_LIST AREA_DIR "reserved.lst"  /* List of reserved names       */
-#define CLAN_LIST CLAN_DIR "clan.lst"          /* List of clans                */
-#define COUNCIL_LIST COUNCIL_DIR "council.lst" /* List of councils             */
-#define GOD_LIST GOD_DIR "gods.lst"            /* List of gods                 */
-#define DEITY_LIST DEITY_DIR "deity.lst"       /* List of deities              */
-#define CLASS_LIST CLASS_DIR "class.lst"       /* List of classes              */
-#define RACE_LIST RACE_DIR "race.lst"          /* List of races                */
-
-#define CENSOR_LIST AREA_DIR "censor.lst" /* List of reserved names       */
-
-#define MORPH_FILE SYSTEM_DIR "morph.dat"        /* For morph data */
-#define BOARD_FILE SYSTEM_DIR "boards.txt"       /* For bulletin boards   */
-#define SHUTDOWN_FILE SYSTEM_DIR "shutdown.txt"  /* For 'shutdown'        */
-#define IMM_HOST_FILE SYSTEM_DIR "immortal.host" /* For stoping hackers */
-
-#define RIPSCREEN_FILE SYSTEM_DIR "mudrip.rip"
-#define RIPTITLE_FILE SYSTEM_DIR "mudtitle.rip"
-#define ANSITITLE_FILE SYSTEM_DIR "mudtitle.ans"
-#define ASCTITLE_FILE SYSTEM_DIR "mudtitle.asc"
-#define BOOTLOG_FILE SYSTEM_DIR "boot.txt"     /* Boot up error file  */
-#define BUG_FILE SYSTEM_DIR "bugs.txt"         /* For bug()          */
-#define PBUG_FILE SYSTEM_DIR "pbugs.txt"       /* For 'bug' command   */
-#define IDEA_FILE SYSTEM_DIR "ideas.txt"       /* For 'idea'          */
-#define TYPO_FILE SYSTEM_DIR "typos.txt"       /* For 'typo'          */
-#define FIXED_FILE SYSTEM_DIR "fixed.txt"      /* For 'fixed' command */
-#define LOG_FILE SYSTEM_DIR "log.txt"          /* For talking in logged rooms */
-#define MOBLOG_FILE SYSTEM_DIR "moblog.txt"    /* For mplog messages  */
-#define PLEVEL_FILE SYSTEM_DIR "plevel.txt"    /* Char level info */
-#define WIZLIST_FILE SYSTEM_DIR "WIZLIST"      /* Wizlist             */
-#define WHO_FILE SYSTEM_DIR "WHO"              /* Who output file     */
-#define WEBWHO_FILE SYSTEM_DIR "WEBWHO"        /* WWW Who output file */
-#define REQUEST_PIPE SYSTEM_DIR "REQUESTS"     /* Request FIFO        */
-#define SKILL_FILE SYSTEM_DIR "skills.dat"     /* Skill table         */
-#define HERB_FILE SYSTEM_DIR "herbs.dat"       /* Herb table          */
-#define TONGUE_FILE SYSTEM_DIR "tongues.dat"   /* Tongue tables       */
-#define SOCIAL_FILE SYSTEM_DIR "socials.dat"   /* Socials             */
-#define COMMAND_FILE SYSTEM_DIR "commands.dat" /* Commands            */
-#define USAGE_FILE SYSTEM_DIR "usage.txt"      /* How many people are on      \
-                                                * every half hour - trying to \
-                                                * determine best reboot time */
-#define TIME_FILE SYSTEM_DIR "time.dat"
-#define ECONOMY_FILE SYSTEM_DIR "economy.txt"   /* Gold looted, value of \
-                                                 * used potions/pills  */
-#define PROJECTS_FILE SYSTEM_DIR "projects.txt" /* For projects        */
-#define PLANE_FILE SYSTEM_DIR "planes.dat"      /* For planes          */
-#define COLOR_FILE SYSTEM_DIR "colors.dat"      /* User-definable color */
-#define TEMP_FILE SYSTEM_DIR "charsave.tmp"     /* More char save \
-                                                 * protect */
-#define CLASSDIR PREFIX_DIR "/classes/"
-#define RACEDIR PREFIX_DIR "/races/"
-#define HELP_FILE AREA_DIR "help.are"         /* For undefined helps */
-#define HELP_FILE_BAK AREA_DIR "help.are.bak" /* For undefined helps */
-
-#define SHIP_DIR PREFIX_DIR "/space/"
-#define SPACE_DIR PREFIX_DIR "/space/"
-#define PLANET_DIR PREFIX_DIR "/planets/"
-#define SHIP_LIST SPACE_DIR "ship.lst"
-#define PLANET_LIST PLANET_DIR "planet.lst"
-#define SPACE_LIST SPACE_DIR "space.lst"
 
 /*
  * Our function prototypes.

@@ -18,6 +18,7 @@
 #include <time.h>
 
 #include "mud.h"
+#include "comm.h"
 
 char *mprog_type_to_name args((int type));
 ch_ret simple_damage(CHAR_DATA *ch, CHAR_DATA *victim, int dam, int dt);

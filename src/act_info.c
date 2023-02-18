@@ -24,6 +24,7 @@
 #include <sys/types.h>
 #include <time.h>
 
+#include "comm.h"
 #include "mud.h"
 #include "sha256.h"
 
@@ -1161,17 +1162,13 @@ void show_char_to_char_1(CHAR_DATA *victim, CHAR_DATA *ch) {
   if (!IS_NPC(victim)) {
     if (victim->description[0] != '\0')
       descNo = 0;
-
-    if ((xIS_SET((victim)->affected_by, AFF_SSJ) || xIS_SET((victim)->affected_by, AFF_HYPER) || xIS_SET((victim)->affected_by, AFF_ICER2) || xIS_SET((victim)->affected_by, AFF_SNAMEK) || xIS_SET((victim)->affected_by, AFF_SEMIPERFECT)) && victim->pcdata->description1 != '\0')
+    if ((xIS_SET((victim)->affected_by, AFF_SSJ) || xIS_SET((victim)->affected_by, AFF_HYPER) || xIS_SET((victim)->affected_by, AFF_ICER2) || xIS_SET((victim)->affected_by, AFF_SNAMEK) || xIS_SET((victim)->affected_by, AFF_SEMIPERFECT)) && victim->pcdata->description1 != NULL)
       descNo = 1;
-
-    if ((xIS_SET((victim)->affected_by, AFF_SSJ2) || xIS_SET((victim)->affected_by, AFF_EXTREME) || xIS_SET((victim)->affected_by, AFF_ICER3) || xIS_SET((victim)->affected_by, AFF_PERFECT)) && victim->pcdata->description2 != '\0')
+    if ((xIS_SET((victim)->affected_by, AFF_SSJ2) || xIS_SET((victim)->affected_by, AFF_EXTREME) || xIS_SET((victim)->affected_by, AFF_ICER3) || xIS_SET((victim)->affected_by, AFF_PERFECT)) && victim->pcdata->description2 != NULL)
       descNo = 2;
-
-    if ((xIS_SET((victim)->affected_by, AFF_SSJ3) || xIS_SET((victim)->affected_by, AFF_ICER4) || xIS_SET((victim)->affected_by, AFF_ULTRAPERFECT)) && victim->pcdata->description3 != '\0')
+    if ((xIS_SET((victim)->affected_by, AFF_SSJ3) || xIS_SET((victim)->affected_by, AFF_ICER4) || xIS_SET((victim)->affected_by, AFF_ULTRAPERFECT)) && victim->pcdata->description3 != NULL)
       descNo = 3;
-
-    if ((xIS_SET((victim)->affected_by, AFF_SSJ4) || xIS_SET((victim)->affected_by, AFF_ICER5)) && victim->pcdata->description4 != '\0')
+    if ((xIS_SET((victim)->affected_by, AFF_SSJ4) || xIS_SET((victim)->affected_by, AFF_ICER5)) && victim->pcdata->description4 != NULL)
       descNo = 4;
   } else if (IS_NPC(victim)) {
     if (victim->description[0] != '\0')
@@ -2759,7 +2756,7 @@ struct whogr_s {
   struct whogr_s *l_follow;
   DESCRIPTOR_DATA *d;
   int indent;
-} * first_whogr, *last_whogr;
+} *first_whogr, *last_whogr;
 
 struct whogr_s *
 find_whogr(DESCRIPTOR_DATA *d, struct whogr_s *first) {
@@ -3007,41 +3004,41 @@ void do_who(CHAR_DATA *ch, char *argument) {
       else if (!str_cmp(arg, "group") && ch)
         fGroup = true;
       else
-          /* SB who clan (order), guild, council */ if ((pClan = get_clan(arg)))
-        fClanMatch = true;
-      else if ((pCouncil = get_council(arg)))
-        fCouncilMatch = true;
-      else if ((pDeity = get_deity(arg)))
-        fDeityMatch = true;
-      else {
-        for (iClass = 0; iClass < MAX_CLASS; iClass++) {
-          if (!str_cmp(arg,
-                       class_table[iClass]->who_name)) {
-            rgfClass[iClass] = true;
-            break;
+        /* SB who clan (order), guild, council */ if ((pClan = get_clan(arg)))
+          fClanMatch = true;
+        else if ((pCouncil = get_council(arg)))
+          fCouncilMatch = true;
+        else if ((pDeity = get_deity(arg)))
+          fDeityMatch = true;
+        else {
+          for (iClass = 0; iClass < MAX_CLASS; iClass++) {
+            if (!str_cmp(arg,
+                         class_table[iClass]->who_name)) {
+              rgfClass[iClass] = true;
+              break;
+            }
+          }
+          if (iClass != MAX_CLASS)
+            fClassRestrict = true;
+
+          for (iRace = 0; iRace < MAX_RACE; iRace++) {
+            if (!str_cmp(arg,
+                         race_table[iRace]->race_name)) {
+              rgfRace[iRace] = true;
+              break;
+            }
+          }
+          if (iRace != MAX_RACE)
+            fRaceRestrict = true;
+
+          if (iClass == MAX_CLASS && iRace == MAX_RACE && fClanMatch == false && fCouncilMatch == false && fDeityMatch == false) {
+            send_to_char(
+                "That's not a class, race, order, guild,"
+                " council or deity.\n\r",
+                ch);
+            return;
           }
         }
-        if (iClass != MAX_CLASS)
-          fClassRestrict = true;
-
-        for (iRace = 0; iRace < MAX_RACE; iRace++) {
-          if (!str_cmp(arg,
-                       race_table[iRace]->race_name)) {
-            rgfRace[iRace] = true;
-            break;
-          }
-        }
-        if (iRace != MAX_RACE)
-          fRaceRestrict = true;
-
-        if (iClass == MAX_CLASS && iRace == MAX_RACE && fClanMatch == false && fCouncilMatch == false && fDeityMatch == false) {
-          send_to_char(
-              "That's not a class, race, order, guild,"
-              " council or deity.\n\r",
-              ch);
-          return;
-        }
-      }
     }
   }
 

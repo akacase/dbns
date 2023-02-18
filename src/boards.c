@@ -24,6 +24,7 @@
 #include <time.h>
 
 #include "mud.h"
+#include "comm.h"
 
 /* Defines for voting on notes. -- Narn */
 #define VOTE_NONE 0

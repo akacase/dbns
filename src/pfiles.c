@@ -28,6 +28,7 @@
 #include <time.h>
 #include <unistd.h>
 
+#include "comm.h"
 #include "mud.h"
 
 extern char *GfpName;
@@ -117,13 +118,19 @@ void fread_timedata(FILE *fp) {
 
 bool load_timedata(void) {
   char filename[MAX_INPUT_LENGTH];
+  char mkdir[MAX_INPUT_LENGTH];
+
   FILE *fp;
   bool found;
 
   found = false;
-  sprintf(filename, "%stime.dat", SYSTEM_DIR);
 
-  if ((fp = fopen(filename, "r")) != NULL) {
+  snprintf(mkdir, sizeof(mkdir), "mkdir -p %s", TMP_DIR);
+
+  /* ensure temporary directory exists before creating hiscores */
+  system(mkdir);
+
+  if ((fp = fopen(TIME_FILE, "ab+")) != NULL) {
     found = true;
     for (;;) {
       char letter = '\0';
@@ -158,15 +165,15 @@ bool load_timedata(void) {
 
 void init_pfile_scan_time(void) {
   /*
-         * Init pfile scan time.
-         */
+   * Init pfile scan time.
+   */
   set_pfile_time = &set_pfile_time_struct;
 
   new_pfile_time = update_time(localtime(&current_time));
   /*
-	 * Copies *new_pfile_time to new_pfile_struct, and then points
-	 * new_pfile_time to new_pfile_struct again. -- Alty
-	 */
+   * Copies *new_pfile_time to new_pfile_struct, and then points
+   * new_pfile_time to new_pfile_struct again. -- Alty
+   */
   new_pfile_struct = *new_pfile_time;
   new_pfile_time = &new_pfile_struct;
   if (new_pfile_time->tm_hour > 5)
@@ -405,12 +412,12 @@ void do_pfiles(CHAR_DATA *ch, char *argument) {
 
 void check_pfiles(time_t reset) {
   /*
-	 * This only counts them up on reboot if the cleanup isn't needed -
-	 * Samson 1-2-00
-	 */
+   * This only counts them up on reboot if the cleanup isn't needed -
+   * Samson 1-2-00
+   */
   if (reset == 255 && new_pfile_time_t > current_time) {
     reset = 0; /* Call me paranoid, but it might be
-					 * meaningful later on */
+                * meaningful later on */
     log_string("Counting pfiles.....");
     pfile_scan(true);
     return;

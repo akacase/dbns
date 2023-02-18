@@ -20,8 +20,6 @@
  *                          DNS Resolver Module                             *
  ****************************************************************************/
 
-#define DNS_FILE SYSTEM_DIR "dns.dat"
-
 typedef struct dns_data DNS_DATA;
 
 extern DNS_DATA *first_cache;

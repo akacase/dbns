@@ -24,6 +24,7 @@
 #include <time.h>
 
 #include "mud.h"
+#include "comm.h"
 #include "sha256.h"
 
 bool add_hiscore(char *keyword, char *name, int score);

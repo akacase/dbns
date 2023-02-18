@@ -14,6 +14,7 @@
 #include <stdbool.h>
 #include <stdio.h>
 
+#include "comm.h"
 #include "mud.h"
 
 /* data */
@@ -699,12 +700,16 @@ void save_hiscores(void)
 {
   FILE *fp;
   char filename[MAX_INPUT_LENGTH];
+  char mkdir[MAX_INPUT_LENGTH];
   HISCORE *table;
   HISCORE_ENTRY *entry;
 
-  sprintf(filename, "%shiscores.dat", SYSTEM_DIR);
+  snprintf(mkdir, sizeof(mkdir), "mkdir -p %s", TMP_DIR);
 
-  fp = fopen(filename, "w");
+  /* ensure temporary directory exists before creating hiscores */
+  system(mkdir);
+
+  fp = fopen(HISCORE_FILE, "ab+");
   if (fp == NULL) {
     bug("save_hiscores: fopen");
     return;
@@ -742,9 +747,7 @@ void load_hiscores(void)
   FILE *fp;
   HISCORE *new_table;
 
-  sprintf(filename, "%shiscores.dat", SYSTEM_DIR);
-
-  fp = fopen(filename, "r");
+  fp = fopen(HISCORE_FILE, "r");
   if (fp == NULL)
     return;
 
@@ -880,18 +883,18 @@ void ladderTableClear(int mon) {
   }
 
   /*
-	if (table->length > 0)
-	{
-	for( entry = table->first_entry ; entry ; entry = entry->next )
-	{
-		UNLINK( entry, table->first_entry, table->last_entry, next, prev );
-		STRFREE( entry->name );
-		DISPOSE( entry );
-		table->length--;
-	}
-	if (table->length != 0)
-		bug("Error while reseting hiscore table: length was no 0");
-	}
+        if (table->length > 0)
+        {
+        for( entry = table->first_entry ; entry ; entry = entry->next )
+        {
+                UNLINK( entry, table->first_entry, table->last_entry, next, prev );
+                STRFREE( entry->name );
+                DISPOSE( entry );
+                table->length--;
+        }
+        if (table->length != 0)
+                bug("Error while reseting hiscore table: length was no 0");
+        }
 */
   return;
 }

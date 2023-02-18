@@ -25,6 +25,7 @@
 #include <time.h>
 
 #include "mud.h"
+#include "comm.h"
 
 /*
  * Increment with every major format change.

@@ -29,6 +29,7 @@
 #include <syslog.h>
 #include <time.h>
 #define strcasecmp strcmp
+#include "comm.h"
 #include "mud.h"
 
 extern int _filbuf args((FILE *));
@@ -335,7 +336,7 @@ sh_int gsn_android;
 sh_int gsn_icer;
 sh_int gsn_bio_android;
 
-//sh_int gsn_halfling;
+// sh_int gsn_halfling;
 sh_int gsn_kaio;
 sh_int gsn_demon;
 sh_int gsn_wizard;
@@ -458,8 +459,11 @@ void rprog_read_programs args((FILE * fp, ROOM_INDEX_DATA *pRoomIndex));
 
 void shutdown_mud(char *reason) {
   FILE *fp;
+  char mkdir[MAX_INPUT_LENGTH];
 
-  if ((fp = fopen(SHUTDOWN_FILE, "a")) != NULL) {
+  snprintf(mkdir, sizeof(mkdir), "mkdir -p %s", TMP_DIR);
+
+  if ((fp = fopen(SHUTDOWN_FILE, "ab+")) != NULL) {
     fprintf(fp, "%s\n", reason);
     fclose(fp);
   }
@@ -635,8 +639,8 @@ void boot_db() {
       save_equipment[wear][x] = NULL;
 
   /*
-         * Set time and weather.
-         */
+   * Set time and weather.
+   */
   {
     long lhour, lday, lmonth;
 
@@ -664,8 +668,8 @@ void boot_db() {
   }
 
   /*
-         * Assign gsn's for skills which need them.
-         */
+   * Assign gsn's for skills which need them.
+   */
   {
     log_string("Assigning gsn's");
     ASSIGN_GSN(gsn_style_evasive, "evasive style");
@@ -856,8 +860,8 @@ void boot_db() {
   /* load_planes(); */
 
   /*
-         * Read in all the area files.
-         */
+   * Read in all the area files.
+   */
   {
     FILE *fpList;
     char area[MAX_STRING_LENGTH];
@@ -885,17 +889,17 @@ void boot_db() {
   /* check_planes(NULL); */
 
   /*
-         *   initialize supermob.
-         *    must be done before reset_area!
-         */
+   *   initialize supermob.
+   *    must be done before reset_area!
+   */
   init_supermob();
 
   /*
-         * Fix up exits.
-         * Declare db booting over.
-         * Reset all areas once.
-         * Load up the notes file.
-         */
+   * Fix up exits.
+   * Declare db booting over.
+   * Reset all areas once.
+   * Load up the notes file.
+   */
   {
     log_string("Fixing exits");
     fix_exits();
@@ -1325,9 +1329,9 @@ void load_mobiles(AREA_DATA *tarea, FILE *fp) {
     }
 
     /*
-		 * pMobIndex->defposition		= fread_number( fp
-		 * );
-		 */
+     * pMobIndex->defposition		= fread_number( fp
+     * );
+     */
     pMobIndex->defposition = fread_number(fp);
     if (pMobIndex->defposition < 100) {
       switch (pMobIndex->defposition) {
@@ -1365,8 +1369,8 @@ void load_mobiles(AREA_DATA *tarea, FILE *fp) {
     }
 
     /*
-		 * Back to meaningful values.
-		 */
+     * Back to meaningful values.
+     */
     pMobIndex->sex = fread_number(fp);
 
     if (letter != 'S' && letter != 'C') {
@@ -1408,13 +1412,13 @@ void load_mobiles(AREA_DATA *tarea, FILE *fp) {
       pMobIndex->speaking = x6;
       pMobIndex->numattacks = x7;
       /*
-			 * Thanks to Nick Gammon for noticing this. if (
-			 * !pMobIndex->speaks ) pMobIndex->speaks =
-			 * race_table[pMobIndex->race]->language |
-			 * LANG_COMMON; if ( !pMobIndex->speaking )
-			 * pMobIndex->speaking =
-			 * race_table[pMobIndex->race]->language;
-			 */
+       * Thanks to Nick Gammon for noticing this. if (
+       * !pMobIndex->speaks ) pMobIndex->speaks =
+       * race_table[pMobIndex->race]->language |
+       * LANG_COMMON; if ( !pMobIndex->speaking )
+       * pMobIndex->speaking =
+       * race_table[pMobIndex->race]->language;
+       */
       if (!pMobIndex->speaks)
         pMobIndex->speaks = LANG_COMMON;
       if (!pMobIndex->speaking)
@@ -1552,13 +1556,13 @@ void load_objects(AREA_DATA *tarea, FILE *fp) {
     pObjIndex->action_desc = fread_string(fp);
 
     /*
-		 * Commented out by Narn, Apr/96 to allow item short descs
-		 * like Bonecrusher and Oblivion
-		 */
+     * Commented out by Narn, Apr/96 to allow item short descs
+     * like Bonecrusher and Oblivion
+     */
     /*
-		 * pObjIndex->short_descr[0]	=
-		 * LOWER(pObjIndex->short_descr[0]);
-		 */
+     * pObjIndex->short_descr[0]	=
+     * LOWER(pObjIndex->short_descr[0]);
+     */
     pObjIndex->description[0] = UPPER(pObjIndex->description[0]);
 
     pObjIndex->item_type = fread_number(fp);
@@ -1660,8 +1664,8 @@ void load_objects(AREA_DATA *tarea, FILE *fp) {
     }
 
     /*
-		 * Translate spell "slot numbers" to internal "skill numbers."
-		 */
+     * Translate spell "slot numbers" to internal "skill numbers."
+     */
     if (area_version == 0)
       switch (pObjIndex->item_type) {
         case ITEM_PILL:
@@ -1718,8 +1722,8 @@ void load_resets(AREA_DATA *tarea, FILE *fp) {
         ++count;
     } else {
       /*
-		         * Clean out the old resets
-		         */
+       * Clean out the old resets
+       */
       sprintf(buf, "Cleaning resets: %s", tarea->name);
       clean_resets(tarea);
     }
@@ -1750,9 +1754,9 @@ void load_resets(AREA_DATA *tarea, FILE *fp) {
     ++count;
 
     /*
-		 * Validate parameters.
-		 * We're calling the index functions for the side effect.
-		 */
+     * Validate parameters.
+     * We're calling the index functions for the side effect.
+     */
     switch (letter) {
       default:
         bug("Load_resets: bad command '%c'.", letter);
@@ -2082,10 +2086,10 @@ void load_rooms(AREA_DATA *tarea, FILE *fp) {
             for (j = 0; j < 79; j++) {
               map_index->map_of_vnums[i][j] = -1;
               /*
-							 * map_index->map_of_
-							 * ptrs[i][j] =
-							 * NULL;
-							 */
+               * map_index->map_of_
+               * ptrs[i][j] =
+               * NULL;
+               */
             }
           }
         }
@@ -2318,10 +2322,10 @@ void initialize_economy(void) {
   AREA_DATA *tarea;
   int low_random = 10000;
 
-  //10 k
+  // 10 k
   int high_random = 10000000;
 
-  //10 m
+  // 10 m
 
   for (tarea = first_area; tarea; tarea = tarea->next) {
     /* skip area if they already got some gold */
@@ -2492,8 +2496,8 @@ void area_update(void) {
       continue;
 
     /*
-		 * Check for PC's.
-		 */
+     * Check for PC's.
+     */
     if (pArea->nplayer > 0 && pArea->age == (reset_age - 1)) {
       char buf[MAX_STRING_LENGTH];
 
@@ -2510,9 +2514,9 @@ void area_update(void) {
       }
     }
     /*
-		 * Check age and reset.
-		 * Note: Mud Academy resets every 3 minutes (not 15).
-		 */
+     * Check age and reset.
+     * Note: Mud Academy resets every 3 minutes (not 15).
+     */
     if (pArea->nplayer == 0 || pArea->age >= reset_age) {
       ROOM_INDEX_DATA *pRoomIndex;
 
@@ -2664,15 +2668,15 @@ create_mobile(MOB_INDEX_DATA *pMobIndex) {
   mob->speaking = pMobIndex->speaking;
 
   /*
-         * Perhaps add this to the index later --Shaddai
-         */
+   * Perhaps add this to the index later --Shaddai
+   */
   xCLEAR_BITS(mob->no_affected_by);
   mob->no_resistant = 0;
   mob->no_immune = 0;
   mob->no_susceptible = 0;
   /*
-         * Insert in list.
-         */
+   * Insert in list.
+   */
   add_char(mob);
   pMobIndex->count++;
   nummobsloaded++;
@@ -2717,8 +2721,8 @@ create_object(OBJ_INDEX_DATA *pObjIndex, int level) {
   obj->origin = STRALLOC(originText);
 
   /*
-         * Mess with object properties.
-         */
+   * Mess with object properties.
+   */
   switch (obj->item_type) {
     default:
       bug("Read_object: vnum %d bad type.", pObjIndex->vnum);
@@ -2743,10 +2747,10 @@ create_object(OBJ_INDEX_DATA *pObjIndex, int level) {
     case ITEM_COOK:
     case ITEM_FOOD:
       /*
-		 * optional food condition (rotting food)		-Thoric
-		 * value1 is the max condition of the food
-		 * value4 is the optional initial condition
-		 */
+       * optional food condition (rotting food)		-Thoric
+       * value1 is the max condition of the food
+       * value4 is the optional initial condition
+       */
       if (obj->value[4])
         obj->timer = obj->value[4];
       else
@@ -2877,8 +2881,8 @@ create_object_new(OBJ_INDEX_DATA *pObjIndex, int level, int originCode, char *or
   obj->origin = STRALLOC(originText);
 
   /*
-         * Mess with object properties.
-         */
+   * Mess with object properties.
+   */
   switch (obj->item_type) {
     default:
       bug("Read_object: vnum %d bad type.", pObjIndex->vnum);
@@ -2903,10 +2907,10 @@ create_object_new(OBJ_INDEX_DATA *pObjIndex, int level, int originCode, char *or
     case ITEM_COOK:
     case ITEM_FOOD:
       /*
-		 * optional food condition (rotting food)		-Thoric
-		 * value1 is the max condition of the food
-		 * value4 is the optional initial condition
-		 */
+       * optional food condition (rotting food)		-Thoric
+       * value1 is the max condition of the food
+       * value4 is the optional initial condition
+       */
       if (obj->value[4])
         obj->timer = obj->value[4];
       else
@@ -3558,9 +3562,9 @@ fread_string_wspace(FILE *fp) {
   ln = 0;
 
   /*
-         * Don't skip blanks.
-         * Read first char.
-         */
+   * Don't skip blanks.
+   * Read first char.
+   */
   do {
     if (feof(fp)) {
       bug("fread_string: EOF encountered on read.\n\r", 0);
@@ -3626,9 +3630,9 @@ fread_string(FILE *fp) {
   ln = 0;
 
   /*
-         * Skip blanks.
-         * Read first char.
-         */
+   * Skip blanks.
+   * Read first char.
+   */
   do {
     if (feof(fp)) {
       bug("fread_string: EOF encountered on read.\n\r", 0);
@@ -3694,9 +3698,9 @@ fread_string_nohash(FILE *fp) {
   ln = 0;
 
   /*
-         * Skip blanks.
-         * Read first char.
-         */
+   * Skip blanks.
+   * Read first char.
+   */
   do {
     if (feof(fp)) {
       bug("fread_string_no_hash: EOF encountered on read.\n\r", 0);
@@ -3786,9 +3790,9 @@ fread_line(FILE *fp) {
   ln = 0;
 
   /*
-         * Skip blanks.
-         * Read first char.
-         */
+   * Skip blanks.
+   * Read first char.
+   */
   do {
     if (feof(fp)) {
       bug("fread_line: EOF encountered on read.\n\r", 0);
@@ -4236,7 +4240,7 @@ void append_file(CHAR_DATA *ch, char *file, char *str) {
     return;
 
   fclose(fpLOG);
-  if ((fp = fopen(file, "a")) == NULL) {
+  if ((fp = fopen(file, "ab+")) == NULL) {
     perror(file);
     send_to_char("Could not open the file!\n\r", ch);
   } else {
@@ -4270,8 +4274,11 @@ void append_to_file(char *file, char *str) {
  */
 void bug(const char *str, ...) {
   char buf[MAX_STRING_LENGTH];
+  char mkdir[MAX_INPUT_LENGTH];
   FILE *fp;
   struct stat fst;
+
+  snprintf(mkdir, sizeof(mkdir), "mkdir -p %s", TMP_DIR);
 
   if (fpArea != NULL) {
     int iLine;
@@ -4292,11 +4299,9 @@ void bug(const char *str, ...) {
     sprintf(buf, "[*****] FILE: %s LINE: %d", strArea, iLine);
     log_string(buf);
 
-    if (stat(SHUTDOWN_FILE, &fst) != -1) { /* file exists */
-      if ((fp = fopen(SHUTDOWN_FILE, "a")) != NULL) {
-        fprintf(fp, "[*****] %s\n", buf);
-        fclose(fp);
-      }
+    if ((fp = fopen(SHUTDOWN_FILE, "ab+")) != NULL) {
+      fprintf(fp, "[*****] %s\n", buf);
+      fclose(fp);
     }
   }
   strcpy(buf, "[*****] BUG: ");
@@ -4310,7 +4315,7 @@ void bug(const char *str, ...) {
   log_string(buf);
 
   fclose(fpLOG);
-  if ((fp = fopen(BUG_FILE, "a")) != NULL) {
+  if ((fp = fopen(BUG_FILE, "ab+")) != NULL) {
     fprintf(fp, "%s\n", buf);
     fclose(fp);
   }
@@ -4324,8 +4329,14 @@ void bug(const char *str, ...) {
  */
 void boot_log(const char *str, ...) {
   char buf[MAX_STRING_LENGTH];
+  char mkdir[MAX_INPUT_LENGTH];
   FILE *fp;
   va_list param;
+
+  snprintf(mkdir, sizeof(mkdir), "mkdir -p %s", TMP_DIR);
+
+  /* ensure temporary directory exists before creating hiscores */
+  system(mkdir);
 
   strcpy(buf, "[*****] BOOT: ");
   va_start(param, str);
@@ -4334,7 +4345,7 @@ void boot_log(const char *str, ...) {
   log_string(buf);
 
   fclose(fpLOG);
-  if ((fp = fopen(BOOTLOG_FILE, "a")) != NULL) {
+  if ((fp = fopen(BOOTLOG_FILE, "ab+")) != NULL) {
     fprintf(fp, "%s\n", buf);
     fclose(fp);
   }
@@ -4366,9 +4377,9 @@ void show_file(CHAR_DATA *ch, char *filename) {
       num = 0;
     }
     /*
-		 * Thanks to stu <sprice@ihug.co.nz> from the mailing list
-		 * in pointing This out.
-		 */
+     * Thanks to stu <sprice@ihug.co.nz> from the mailing list
+     * in pointing This out.
+     */
     fclose(fp);
   }
 }
@@ -4416,7 +4427,13 @@ void log_string_plus(const char *str, sh_int log_type, sh_int level) {
 void towizfile(const char *line) {
   int filler, xx;
   char outline[MAX_STRING_LENGTH];
+  char mkdir[MAX_INPUT_LENGTH];
   FILE *wfp;
+
+  snprintf(mkdir, sizeof(mkdir), "mkdir -p %s", TMP_DIR);
+
+  /* ensure temporary directory exists before creating hiscores */
+  system(mkdir);
 
   outline[0] = '\0';
 
@@ -4430,7 +4447,7 @@ void towizfile(const char *line) {
     strcat(outline, line);
   }
   strcat(outline, "\n\r");
-  wfp = fopen(WIZLIST_FILE, "a");
+  wfp = fopen(WIZLIST_FILE, "ab+");
   if (wfp) {
     fputs(outline, wfp);
     fclose(wfp);
@@ -4799,9 +4816,9 @@ void load_mudprogs(AREA_DATA *tarea, FILE *fp) {
           exit(1);
         }
         /*
-			 * Go to the end of the prog command list if other
-			 * commands exist
-			 */
+         * Go to the end of the prog command list if other
+         * commands exist
+         */
 
         if ((original = iMob->mudprogs) != NULL)
           for (; original->next; original = original->next)
@@ -4995,9 +5012,9 @@ void load_objprogs(AREA_DATA *tarea, FILE *fp) {
           exit(1);
         }
         /*
-			 * Go to the end of the prog command list if other
-			 * commands exist
-			 */
+         * Go to the end of the prog command list if other
+         * commands exist
+         */
 
         if ((original = iObj->mudprogs) != NULL)
           for (; original->next; original = original->next)
@@ -5190,9 +5207,9 @@ void load_roomprogs(AREA_DATA *tarea, FILE *fp) {
           exit(1);
         }
         /*
-			 * Go to the end of the prog command list if other
-			 * commands exist
-			 */
+         * Go to the end of the prog command list if other
+         * commands exist
+         */
 
         if ((original = iRoom->mudprogs) != NULL)
           for (; original->next; original = original->next)
@@ -5488,7 +5505,7 @@ make_room(int vnum) {
   pRoomIndex->vnum = vnum;
   pRoomIndex->name = STRALLOC("Floating in a void");
   pRoomIndex->description = STRALLOC("");
-  //pRoomIndex->room_flags =
+  // pRoomIndex->room_flags =
   if (!xIS_SET(pRoomIndex->room_flags, ROOM_PROTOTYPE))
     xSET_BIT(pRoomIndex->room_flags, ROOM_PROTOTYPE);
   pRoomIndex->sector_type = 1;
@@ -5639,9 +5656,9 @@ make_mobile(int vnum, int cvnum, char *name) {
     pMobIndex->gold = -1;
     pMobIndex->exp = 1;
     /*
-	         * Bug noticed by Sevoreria Dragonlight
-	         * -- So we set it back to constants.. :P.. changed to POS_STANDING -- Alty
-	         */
+     * Bug noticed by Sevoreria Dragonlight
+     * -- So we set it back to constants.. :P.. changed to POS_STANDING -- Alty
+     */
     pMobIndex->position = POS_STANDING;
     pMobIndex->defposition = POS_STANDING;
     pMobIndex->sex = 0;
@@ -5842,10 +5859,10 @@ void load_area_file(AREA_DATA *tarea, char *filename) {
     else if (!str_cmp(word, "RANGES"))
       load_ranges(tarea, fpArea);
     /*
-		 * if we're loading this value than it's an old area version
-		 * so we just junk the values and let it auto set -Goku
-		 * 09.29.04
-		 */
+     * if we're loading this value than it's an old area version
+     * so we just junk the values and let it auto set -Goku
+     * 09.29.04
+     */
     else if (!str_cmp(word, "ECONOMY")) {
       fread_number(fpArea);
       fread_number(fpArea);
@@ -5917,7 +5934,7 @@ void load_reserved(void) {
   RESERVE_DATA *res;
   FILE *fp;
 
-  if (!(fp = fopen(SYSTEM_DIR RESERVED_LIST, "r")))
+  if (!(fp = fopen(RESERVED_LIST, "r")))
     return;
 
   for (;;) {
@@ -6352,9 +6369,9 @@ void save_sysdata(SYSTEM_DATA sys) {
     fprintf(fp, "AHelp          %d\n", sys.ahelp);
     fprintf(fp, "RpChannel      %d\n", sys.rpChannel);
     /*
-		 * Put here to handle saving and updating of race ranks
-		 * -Karma.
-		 */
+     * Put here to handle saving and updating of race ranks
+     * -Karma.
+     */
 
     /* Kaioshin ranks */
     fprintf(fp, "Supremekai     %s~\n", kaioshin[5]);
@@ -6779,61 +6796,61 @@ void do_check_vnums(CHAR_DATA *ch, char *argument) {
     for ( pArea = first_asort; pArea; pArea = pArea->next_sort )
     {
         area_conflict = false;
-	if ( IS_SET( pArea->status, AREA_DELETED ) )
-	   continue;
-	else
-	if (room)
-	  if((pArea->low_r_vnum >= low_range)
-	  && (pArea->hi_r_vnum <= high_range))
-	    area_conflict = true;
+        if ( IS_SET( pArea->status, AREA_DELETED ) )
+           continue;
+        else
+        if (room)
+          if((pArea->low_r_vnum >= low_range)
+          && (pArea->hi_r_vnum <= high_range))
+            area_conflict = true;
 
-	if (mob)
-	  if((pArea->low_m_vnum >= low_range)
-	  && (pArea->hi_m_vnum <= high_range))
-	    area_conflict = true;
+        if (mob)
+          if((pArea->low_m_vnum >= low_range)
+          && (pArea->hi_m_vnum <= high_range))
+            area_conflict = true;
 
-	if (obj)
-	  if((pArea->low_o_vnum >= low_range)
-	  && (pArea->hi_o_vnum <= high_range))
-	    area_conflict = true;
+        if (obj)
+          if((pArea->low_o_vnum >= low_range)
+          && (pArea->hi_o_vnum <= high_range))
+            area_conflict = true;
 
-	if (area_conflict)
-	  ch_printf(ch, "Conflict:%-15s| Rooms: %5d - %-5d"
-		     " Objs: %5d - %-5d Mobs: %5d - %-5d\n\r",
-		(pArea->filename ? pArea->filename : "(invalid)"),
-		pArea->low_r_vnum, pArea->hi_r_vnum,
-		pArea->low_o_vnum, pArea->hi_o_vnum,
-		pArea->low_m_vnum, pArea->hi_m_vnum );
+        if (area_conflict)
+          ch_printf(ch, "Conflict:%-15s| Rooms: %5d - %-5d"
+                     " Objs: %5d - %-5d Mobs: %5d - %-5d\n\r",
+                (pArea->filename ? pArea->filename : "(invalid)"),
+                pArea->low_r_vnum, pArea->hi_r_vnum,
+                pArea->low_o_vnum, pArea->hi_o_vnum,
+                pArea->low_m_vnum, pArea->hi_m_vnum );
     }
 
     for ( pArea = first_bsort; pArea; pArea = pArea->next_sort )
     {
         area_conflict = false;
-	if ( IS_SET( pArea->status, AREA_DELETED ) )
-	   continue;
-	else
-	if (room)
-	  if((pArea->low_r_vnum >= low_range)
-	  && (pArea->hi_r_vnum <= high_range))
-	    area_conflict = true;
+        if ( IS_SET( pArea->status, AREA_DELETED ) )
+           continue;
+        else
+        if (room)
+          if((pArea->low_r_vnum >= low_range)
+          && (pArea->hi_r_vnum <= high_range))
+            area_conflict = true;
 
-	if (mob)
-	  if((pArea->low_m_vnum >= low_range)
-	  && (pArea->hi_m_vnum <= high_range))
-	    area_conflict = true;
+        if (mob)
+          if((pArea->low_m_vnum >= low_range)
+          && (pArea->hi_m_vnum <= high_range))
+            area_conflict = true;
 
-	if (obj)
-	  if((pArea->low_o_vnum >= low_range)
-	  && (pArea->hi_o_vnum <= high_range))
-	    area_conflict = true;
+        if (obj)
+          if((pArea->low_o_vnum >= low_range)
+          && (pArea->hi_o_vnum <= high_range))
+            area_conflict = true;
 
-	if (area_conflict)
-	  sprintf(ch, "Conflict:%-15s| Rooms: %5d - %-5d"
-		     " Objs: %5d - %-5d Mobs: %5d - %-5d\n\r",
-		(pArea->filename ? pArea->filename : "(invalid)"),
-		pArea->low_r_vnum, pArea->hi_r_vnum,
-		pArea->low_o_vnum, pArea->hi_o_vnum,
-		pArea->low_m_vnum, pArea->hi_m_vnum );
+        if (area_conflict)
+          sprintf(ch, "Conflict:%-15s| Rooms: %5d - %-5d"
+                     " Objs: %5d - %-5d Mobs: %5d - %-5d\n\r",
+                (pArea->filename ? pArea->filename : "(invalid)"),
+                pArea->low_r_vnum, pArea->hi_r_vnum,
+                pArea->low_o_vnum, pArea->hi_o_vnum,
+                pArea->low_m_vnum, pArea->hi_m_vnum );
     }
 */
   return;
@@ -7019,7 +7036,7 @@ void save_weatherdata() {
 }
 
 void load_projects(void) { /* Copied load_boards structure for
-					 * simplicity */
+                            * simplicity */
   char filename[MAX_INPUT_LENGTH];
   FILE *fp;
   PROJECT_DATA *project;

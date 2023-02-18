@@ -115,155 +115,171 @@ void load_from_fp(DESCRIPTOR_DATA *d, bool np);
 void usage(void);
 long long strtonum(const char *numstr, long long minval, long long maxval,
                    const char **errstrp);
+void prepend(char *s, const char *t);
+void setup_directories(const char *dir);
+void setup_lists(const char *dir);
+void setup_files(const char *dir);
+
+void prepend(char *s, const char *t) {
+  size_t len = strlen(t);
+  memmove(s + len, s, strlen(s) + 1);
+  memcpy(s, t, len);
+}
 
 /* globals */
 unsigned int port = 4000;
-char *data_dir = NULL;
 
-/* dirs */
-char *player_dir = NULL;
-char *backup_dir = NULL;
-char *god_dir = NULL;
-char *area_dir = NULL;
-char *deity_dir = NULL;
-char *council_dir = NULL;
-char *board_dir = NULL;
-char *race_dir = NULL;
-char *class_dir = NULL;
-char *watch_dir = NULL;
-char *clan_dir = NULL;
-char *build_dir = NULL;
-char *prog_dir = NULL;
-char *system_dir = NULL;
-char *corpse_dir = NULL;
-char *ship_dir = NULL;
-char *space_dir = NULL;
-char *planet_dir = NULL;
+/*
+ * Data files used by the server.
+ * AREA_LIST contains a list of areas to boot.
+ * All files are read in completely at bootup.
+ * Most output files (bug, idea, typo, shutdown) are append-only.
+ */
+char PLAYER_DIR[128] = "/player/";        /* Player files         */
+char BACKUP_DIR[128] = "/player/backup/"; /* Backup Player files  */
+char GOD_DIR[128] = "/gods/";             /* God Info Dir         */
+char BOARD_DIR[128] = "/boards/";         /* Board data dir       */
+char CLAN_DIR[128] = "/clans/";           /* Clan data dir        */
+char COUNCIL_DIR[128] = "/councils/";     /* Council data dir     */
+char DEITY_DIR[128] = "/deity/";          /* Deity data dir               */
+char BUILD_DIR[128] = "/building/";       /* Online building save dir     */
+char SYSTEM_DIR[128] = "/system/";        /* Main system files            */
+char PROG_DIR[128] = "/mudprogs/";        /* MUDProg files                */
+char CORPSE_DIR[128] = "/corpses/";
+char AREA_DIR[128] = "/area/";
+char RACE_DIR[128] = "/races/";
+char CLASS_DIR[128] = "/classes/";
+char SHIP_DIR[128] = "/space/";
+char SPACE_DIR[128] = "/space/";
+char PLANET_DIR[128] = "/planets/";
+char WATCH_DIR[128] = "/watch/";
+char TMP_DIR[128] = "/tmp/";
 
-/* lists */
-char *area_list = NULL;
-char *watch_list = NULL;
-char *ban_list = NULL;
-char *reserved_list = NULL;
-char *clan_list = NULL;
-char *council_list = NULL;
-char *god_list = NULL;
-char *deity_list = NULL;
-char *class_list = NULL;
-char *race_list = NULL;
-char *censor_list = NULL;
-char *ship_list = NULL;
-char *planet_list = NULL;
-char *space_list = NULL;
+char AREA_LIST[128] = "/area/area.lst";           /* List of areas                */
+char WATCH_LIST[128] = "/area/watch.lst";         /* List of watches              */
+char BAN_LIST[128] = "/system/ban.lst";           /* List of bans                 */
+char RESERVED_LIST[128] = "/area/reserved.lst";   /* List of reserved names       */
+char CLAN_LIST[128] = "/clans/clan.lst";          /* List of clans                */
+char COUNCIL_LIST[128] = "/councils/council.lst"; /* List of councils             */
+char GOD_LIST[128] = "/gods/gods.lst";            /* List of gods                 */
+char DEITY_LIST[128] = "/deity/deity.lst";        /* List of deities              */
+char CLASS_LIST[128] = "/classes/class.lst";      /* List of classes              */
+char RACE_LIST[128] = "/races/race.lst";          /* List of races                */
+char CENSOR_LIST[128] = "/area/censor.lst";       /* List of reserved names       */
+char SHIP_LIST[128] = "/space/ship.lst";
+char PLANET_LIST[128] = "/planets/planet.lst";
+char SPACE_LIST[128] = "/space/space.lst";
 
-/* files */
-char *morph_file = NULL;
-char *board_file = NULL;
-char *shutdown_file = NULL;
-char *imm_host_file = NULL;
-char *ripscreen_file = NULL;
-char *riptitle_file = NULL;
-char *ansititle_file = NULL;
-char *asctitle_file = NULL;
-char *bootlog_file = NULL;
-char *bug_file = NULL;
-char *pbug_file = NULL;
-char *idea_file = NULL;
-char *typo_file = NULL;
-char *fixed_file = NULL;
-char *log_file = NULL;
-char *moblog_file = NULL;
-char *plevel_file = NULL;
-char *wizlist_file = NULL;
-char *who_file = NULL;
-char *webwho_file = NULL;
-char *request_pipe = NULL;
-char *skill_file = NULL;
-char *herb_file = NULL;
-char *tongue_file = NULL;
-char *social_file = NULL;
-char *command_file = NULL;
-char *usage_file = NULL;
-char *time_file = NULL;
-char *economy_file = NULL;
-char *projects_file = NULL;
-char *plane_file = NULL;
-char *color_file = NULL;
-char *temp_file = NULL;
-char *help_file = NULL;
-char *help_file_bak = NULL;
+char MORPH_FILE[128] = "/system/morph.dat";        /* For morph data */
+char BOARD_FILE[128] = "/system/boards.txt";       /* For bulletin boards   */
+char SHUTDOWN_FILE[128] = "/tmp/shutdown.txt";  /* For 'shutdown'        */
+char IMM_HOST_FILE[128] = "/system/immortal.host"; /* For stoping hackers */
+char RIPSCREEN_FILE[128] = "/system/mudrip.rip";
+char RIPTITLE_FILE[128] = "/system/mudtitle.rip";
+char ANSITITLE_FILE[128] = "/system/mudtitle.ans";
+char ASCTITLE_FILE[128] = "/system/mudtitle.asc";
+char BOOTLOG_FILE[128] = "/tmp/boot.txt";     /* Boot up error file  */
+char BUG_FILE[128] = "/tmp/bugs.txt";         /* For bug()          */
+char PBUG_FILE[128] = "/tmp/pbugs.txt";       /* For 'bug' command   */
+char IDEA_FILE[128] = "/system/ideas.txt";       /* For 'idea'          */
+char TYPO_FILE[128] = "/system/typos.txt";       /* For 'typo'          */
+char FIXED_FILE[128] = "/system/fixed.txt";      /* For 'fixed' command */
+char LOG_FILE[128] = "/system/log.txt";          /* For talking in logged rooms */
+char MOBLOG_FILE[128] = "/system/moblog.txt";    /* For mplog messages  */
+char PLEVEL_FILE[128] = "/system/plevel.txt";    /* Char level info */
+char WIZLIST_FILE[128] = "/tmp/WIZLIST";      /* Wizlist             */
+char WHO_FILE[128] = "/system/WHO";              /* Who output file     */
+char WEBWHO_FILE[128] = "/system/WEBWHO";        /* WWW Who output file */
+char REQUEST_PIPE[128] = "/system/REQUESTS";     /* Request FIFO        */
+char SKILL_FILE[128] = "/system/skills.dat";     /* Skill table         */
+char HERB_FILE[128] = "/system/herbs.dat";       /* Herb table          */
+char TONGUE_FILE[128] = "/system/tongues.dat";   /* Tongue tables       */
+char SOCIAL_FILE[128] = "/system/socials.dat";   /* Socials             */
+char COMMAND_FILE[128] = "/system/commands.dat"; /* Commands            */
+char USAGE_FILE[128] = "/system/usage.txt";      /* How many people are on  */
+char TIME_FILE[128] = "/tmp/time.dat";
+char ECONOMY_FILE[128] = "/system/economy.txt";   /* Gold looted, etc */
+char PROJECTS_FILE[128] = "/system/projects.txt"; /* For projects        */
+char PLANE_FILE[128] = "/system/planes.dat";      /* For planes          */
+char COLOR_FILE[128] = "/system/colors.dat";      /* User-definable color */
+char TEMP_FILE[128] = "/system/charsave.tmp";     /* More char save */
+char HELP_FILE[128] = "/area/help.are";           /* For undefined helps */
+char HELP_FILE_BAK[128] = "/area/help.are.bak";   /* For undefined helps */
+char DNS_FILE[128] = "/system/dns.dat";
+char HISCORE_FILE[128] = "/tmp/hiscores.dat";
 
-void setup_lists(char *dir) { 
-  snprintf(area_list, (sizeof(area_list)), "%s/%s", dir, AREA_LIST);
-  snprintf(watch_list, (sizeof(watch_list)), "%s/%s", dir, AREA_LIST);
-  snprintf(ban_list, (sizeof(ban_list)), "%s/%s", dir, BAN_LIST);
-  snprintf(reserved_list, (sizeof(reserved_list)), "%s/%s", dir, AREA_LIST);
-  snprintf(clan_list, (sizeof(clan_list)), "%s/%s", dir, CLAN_LIST);
-  snprintf(council_list, (sizeof(council_list)), "%s/%s", dir, COUNCIL_LIST);
-  snprintf(god_list, (sizeof(god_list)), "%s/%s", dir, GOD_LIST);
-  snprintf(deity_list, (sizeof(deity_list)), "%s/%s", dir, DEITY_LIST);
-  snprintf(class_list, (sizeof(class_list)), "%s/%s", dir, CLASS_LIST);
-  snprintf(race_list, (sizeof(race_list)), "%s/%s", dir, RACE_LIST);
-  snprintf(censor_list, (sizeof(censor_list)), "%s/%s", dir, AREA_LIST);
-  snprintf(ship_list, (sizeof(ship_list)), "%s/%s", dir, SPACE_LIST);
-  snprintf(planet_list, (sizeof(planet_list)), "%s/%s", dir, PLANET_LIST);
-  snprintf(space_list, (sizeof(space_list)), "%s/%s", dir, SPACE_LIST);
+void setup_lists(const char *dir) {
+  prepend(AREA_LIST, dir);
+  prepend(BAN_LIST, dir);
+  prepend(CLAN_LIST, dir);
+  prepend(COUNCIL_LIST, dir);
+  prepend(GOD_LIST, dir);
+  prepend(DEITY_LIST, dir);
+  prepend(CLASS_LIST, dir);
+  prepend(RACE_LIST, dir);
+  prepend(SPACE_LIST, dir);
+  prepend(SHIP_LIST, dir);
+  prepend(PLANET_LIST, dir);
 }
 
-void setup_files(char *dir) { 
-  snprintf(morph_file, sizeof(morph_file), "%s/%s", dir, MORPH_FILE);
-  snprintf(board_file, sizeof(board_file), "%s/%s", dir, BOARD_FILE);
-  snprintf(shutdown_file, sizeof(shutdown_file), "%s/%s", dir, SHUTDOWN_FILE);
-  snprintf(imm_host_file, sizeof(imm_host_file), "%s/%s", dir, IMM_HOST_FILE);
-  snprintf(ripscreen_file, sizeof(ripscreen_file), "%s/%s", dir, RIPSCREEN_FILE);
-  snprintf(riptitle_file, sizeof(riptitle_file), "%s/%s", dir, RIPTITLE_FILE);
-  snprintf(ansititle_file, sizeof(ansititle_file), "%s/%s", dir, ANSITITLE_FILE);
-  snprintf(asctitle_file, sizeof(asctitle_file), "%s/%s", dir, ASCTITLE_FILE);
-  snprintf(bootlog_file, sizeof(bootlog_file), "%s/%s", dir, BOOTLOG_FILE);
-  snprintf(bug_file, sizeof(bug_file), "%s/%s", dir, BUG_FILE);
-  snprintf(pbug_file, sizeof(pbug_file), "%s/%s", dir, PBUG_FILE);
-  snprintf(idea_file, sizeof(idea_file), "%s/%s", dir, IDEA_FILE);
-  snprintf(typo_file, sizeof(typo_file), "%s/%s", dir, TYPO_FILE);
-  snprintf(fixed_file, sizeof(fixed_file), "%s/%s", dir, FIXED_FILE);
-  snprintf(log_file, sizeof(log_file), "%s/%s", dir, LOG_FILE);
-  snprintf(moblog_file, sizeof(moblog_file), "%s/%s", dir, MOBLOG_FILE);
-  snprintf(plevel_file, sizeof(plevel_file), "%s/%s", dir, PLEVEL_FILE);
-  snprintf(wizlist_file, sizeof(wizlist_file), "%s/%s", dir, WIZLIST_FILE);
-  snprintf(who_file, sizeof(who_file), "%s/%s", dir, WHO_FILE);
-  snprintf(webwho_file, sizeof(webwho_file), "%s/%s", dir, WEBWHO_FILE);
-  snprintf(skill_file, sizeof(skill_file), "%s/%s", dir, SKILL_FILE);
-  snprintf(herb_file, sizeof(herb_file), "%s/%s", dir, HERB_FILE);
-  snprintf(tongue_file, sizeof(tongue_file), "%s/%s", dir, TONGUE_FILE);
-  snprintf(social_file, sizeof(social_file), "%s/%s", dir, SOCIAL_FILE);
-  snprintf(command_file, sizeof(command_file), "%s/%s", dir, COMMAND_FILE);
-  snprintf(usage_file, sizeof(usage_file), "%s/%s", dir, USAGE_FILE);
-  snprintf(time_file, sizeof(time_file), "%s/%s", dir, TIME_FILE);
-  snprintf(economy_file, sizeof(economy_file), "%s/%s", dir, ECONOMY_FILE);
-  snprintf(projects_file, sizeof(projects_file), "%s/%s", dir, PROJECTS_FILE);
-  snprintf(plane_file, sizeof(plane_file), "%s/%s", dir, PLANE_FILE);
-  snprintf(color_file, sizeof(color_file), "%s/%s", dir, COLOR_FILE);
-  snprintf(temp_file, sizeof(temp_file), "%s/%s", dir, TEMP_FILE);
-  snprintf(help_file, sizeof(help_file), "%s/%s", dir, HELP_FILE);
+void setup_files(const char *dir) {
+  prepend(MORPH_FILE, dir);
+  prepend(BOARD_FILE, dir);
+  prepend(SHUTDOWN_FILE, dir);
+  prepend(IMM_HOST_FILE, dir);
+  prepend(RIPSCREEN_FILE, dir);
+  prepend(RIPTITLE_FILE, dir);
+  prepend(ANSITITLE_FILE, dir);
+  prepend(ASCTITLE_FILE, dir);
+  prepend(BOOTLOG_FILE, dir);
+  prepend(BUG_FILE, dir);
+  prepend(PBUG_FILE, dir);
+  prepend(IDEA_FILE, dir);
+  prepend(TYPO_FILE, dir);
+  prepend(FIXED_FILE, dir);
+  prepend(LOG_FILE, dir);
+  prepend(MOBLOG_FILE, dir);
+  prepend(PLEVEL_FILE, dir);
+  prepend(WIZLIST_FILE, dir);
+  prepend(WHO_FILE, dir);
+  prepend(WEBWHO_FILE, dir);
+  prepend(SKILL_FILE, dir);
+  prepend(HERB_FILE, dir);
+  prepend(TONGUE_FILE, dir);
+  prepend(SOCIAL_FILE, dir);
+  prepend(COMMAND_FILE, dir);
+  prepend(USAGE_FILE, dir);
+  prepend(TIME_FILE, dir);
+  prepend(ECONOMY_FILE, dir);
+  prepend(PROJECTS_FILE, dir);
+  prepend(PLANE_FILE, dir);
+  prepend(COLOR_FILE, dir);
+  prepend(TEMP_FILE, dir);
+  prepend(HELP_FILE, dir);
+  prepend(HELP_FILE_BAK, dir);
+  prepend(DNS_FILE, dir);
+  prepend(HISCORE_FILE, dir);
 }
 
-void setup_directories(char *dir) { 
-  snprintf(player_dir, sizeof(player_dir), "%s/%s", dir, PLAYER_DIR);
-  snprintf(backup_dir, sizeof(backup_dir), "%s/%s", dir, BACKUP_DIR);
-  snprintf(god_dir, sizeof(god_dir), "%s/%s", dir, GOD_DIR);
-  snprintf(board_dir, sizeof(board_dir), "%s/%s", dir, BOARD_DIR);
-  snprintf(clan_dir, sizeof(clan_dir), "%s/%s", dir, CLAN_DIR);
-  snprintf(council_dir, sizeof(council_dir), "%s/%s", dir, COUNCIL_DIR);
-  snprintf(deity_dir, sizeof(deity_dir), "%s/%s", dir, DEITY_DIR);
-  snprintf(build_dir, sizeof(build_dir), "%s/%s", dir, BUILD_DIR);
-  snprintf(system_dir, sizeof(system_dir), "%s/%s", dir, SYSTEM_DIR);
-  snprintf(prog_dir, sizeof(prog_dir), "%s/%s", dir, PROG_DIR);
-  snprintf(corpse_dir, sizeof(corpse_dir), "%s/%s", dir, CORPSE_DIR);
-  snprintf(area_dir, sizeof(area_dir), "%s/%s", dir, AREA_DIR);
-  snprintf(race_dir, sizeof(race_dir), "%s/%s", dir, RACE_DIR);
-  snprintf(class_dir, sizeof(class_dir), "%s/%s", dir, CLASS_DIR);
-  snprintf(watch_dir, sizeof(watch_dir), "%s/%s", dir, WATCH_DIR);
-  snprintf(space_dir, sizeof(space_dir), "%s/%s", dir, SPACE_DIR);
-  snprintf(planet_dir, sizeof(planet_dir), "%s/%s", dir, PLANET_DIR);
+void setup_directories(const char *dir) {
+  prepend(PLAYER_DIR, dir);
+  prepend(BACKUP_DIR, dir);
+  prepend(GOD_DIR, dir);
+  prepend(BOARD_DIR, dir);
+  prepend(CLAN_DIR, dir);
+  prepend(COUNCIL_DIR, dir);
+  prepend(DEITY_DIR, dir);
+  prepend(BUILD_DIR, dir);
+  prepend(SYSTEM_DIR, dir);
+  prepend(PROG_DIR, dir);
+  prepend(CORPSE_DIR, dir);
+  prepend(AREA_DIR, dir);
+  prepend(RACE_DIR, dir);
+  prepend(CLASS_DIR, dir);
+  prepend(WATCH_DIR, dir);
+  prepend(SPACE_DIR, dir);
+  prepend(PLANET_DIR, dir);
+  prepend(TMP_DIR, dir);
 }
 
 void usage(void) {
@@ -319,7 +335,7 @@ int main(int argc, char **argv) {
   struct timeval now_time;
   char hostn[128];
   const char *errstr = NULL;
-  //char *data_dir = NULL;
+  const char *data_dir = NULL;
   int ch;
 
   while ((ch = getopt(argc, argv, "p:d:")) != -1) {
@@ -365,6 +381,8 @@ int main(int argc, char **argv) {
   setup_lists(data_dir);
   /* setup files */
   setup_files(data_dir);
+
+  printf("%s\n", COMMAND_FILE);
 
   /* init time. */
   gettimeofday(&now_time, NULL);

@@ -1,19 +1,19 @@
 /****************************************************************************
-* [S]imulated [M]edieval [A]dventure multi[U]ser [G]ame      |   \\._.//   *
-* -----------------------------------------------------------|   (0...0)   *
-* SMAUG 1.4 (C) 1994, 1995, 1996, 1998  by Derek Snider      |    ).:.(    *
-* -----------------------------------------------------------|    {o o}    *
-* SMAUG code team: Thoric, Altrag, Blodkai, Narn, Haus,      |   / ' ' \   *
-* Scryn, Rennard, Swordbearer, Gorog, Grishnakh, Nivek,      |~'~.VxvxV.~'~*
-* Tricops and Fireblade                                      |             *
-* ------------------------------------------------------------------------ *
-* Merc 2.1 Diku Mud improvments copyright (C) 1992, 1993 by Michael        *
-* Chastain, Michael Quan, and Mitchell Tse.                                *
-* Original Diku Mud copyright (C) 1990, 1991 by Sebastian Hammer,          *
-* Michael Seifert, Hans Henrik St{rfeldt, Tom Madsen, and Katja Nyboe.     *
-* ------------------------------------------------------------------------ *
-*			   Player communication module                     *
-****************************************************************************/
+ * [S]imulated [M]edieval [A]dventure multi[U]ser [G]ame      |   \\._.//   *
+ * -----------------------------------------------------------|   (0...0)   *
+ * SMAUG 1.4 (C) 1994, 1995, 1996, 1998  by Derek Snider      |    ).:.(    *
+ * -----------------------------------------------------------|    {o o}    *
+ * SMAUG code team: Thoric, Altrag, Blodkai, Narn, Haus,      |   / ' ' \   *
+ * Scryn, Rennard, Swordbearer, Gorog, Grishnakh, Nivek,      |~'~.VxvxV.~'~*
+ * Tricops and Fireblade                                      |             *
+ * ------------------------------------------------------------------------ *
+ * Merc 2.1 Diku Mud improvments copyright (C) 1992, 1993 by Michael        *
+ * Chastain, Michael Quan, and Mitchell Tse.                                *
+ * Original Diku Mud copyright (C) 1990, 1991 by Sebastian Hammer,          *
+ * Michael Seifert, Hans Henrik St{rfeldt, Tom Madsen, and Katja Nyboe.     *
+ * ------------------------------------------------------------------------ *
+ *			   Player communication module                     *
+ ****************************************************************************/
 #include <ctype.h>
 #include <stdbool.h>
 #include <stdio.h>
@@ -21,6 +21,7 @@
 #include <sys/types.h>
 #include <time.h>
 
+#include "comm.h"
 #include "mud.h"
 
 /*
@@ -139,7 +140,7 @@ scramble(const char *argument, int modifier) {
   sh_int conversion = 0;
 
   modifier %= number_range(80, 300); /* Bitvectors get way too
-						 * large #s */
+                                      * large #s */
   for (position = 0; position < MAX_INPUT_LENGTH; position++) {
     if (argument[position] == '\0') {
       arg[position] = '\0';
@@ -178,7 +179,7 @@ scramble(const char *argument, int modifier) {
 /* I'll rewrite this later if its still needed.. -- Altrag
 char *translate( CHAR_DATA *ch, CHAR_DATA *victim, const char *argument )
 {
-	return ("");
+        return ("");
 }
 */
 
@@ -288,9 +289,9 @@ drunk_speech(const char *argument, CHAR_DATA *ch) {
     return ("");
   }
   /*
-	if ( *arg == '\0' )
-	  return ((char *) argument);
-	*/
+        if ( *arg == '\0' )
+          return ((char *) argument);
+        */
 
   txt = buf;
   txt1 = buf1;
@@ -343,7 +344,7 @@ drunk_speech(const char *argument, CHAR_DATA *ch) {
 
   while (*txt1 != '\0') { /* Let's make them stutter */
     if (*txt1 == ' ') {   /* If there's a space, then there's
-			 * gotta be a */
+                           * gotta be a */
                           /* along there somewhere soon */
 
       while (*txt1 == ' ') /* Don't stutter on spaces */
@@ -357,9 +358,9 @@ drunk_speech(const char *argument, CHAR_DATA *ch) {
           *txt++ = *txt1++, pos++;
 
         if (*txt1 == ' ') { /* Make sure not to
-					 * stutter a space after */
+                             * stutter a space after */
                             /* the
-					 * initial offset into the word */
+                             * initial offset into the word */
           *txt++ = *txt1++;
           continue;
         }
@@ -369,9 +370,9 @@ drunk_speech(const char *argument, CHAR_DATA *ch) {
           *txt++ = *txt1;
           pos++;
           if (*txt1 == ' ' || pos == offset) { /* Make sure we don't
-						 * stick */
+                                                * stick */
                                                /* A hyphen right
-						 * before a space	 */
+                                                * before a space	 */
             txt1--;
             break;
           }
@@ -476,20 +477,20 @@ void talk_channel(CHAR_DATA *ch, char *argument, int channel, const char *verb) 
       sprintf(buf, "&D&W[&C%s&W] &C%s&W:&C '%s&D&C'&D\n\r", verb, ch->name, argument);
       sprintf(buf_invis, "&D&W[&C%s&W] &CSomeone&W:&C '%s&D&C'&D\n\r", verb, argument);
       break;
-      //Think Channel stupid SMAUG people calling it "high" - Goku 09.05 .03
+      // Think Channel stupid SMAUG people calling it "high" - Goku 09.05 .03
     case CHANNEL_HIGH:
       pager_printf_color(ch, "&D&g[&c%s&g]&R%s&w> &Y%s&D\n\r", verb, ch->name, argument);
       sprintf(buf, "&D&g[&c%s&g]&R%s&w> &Y%s&D\n\r", verb, ch->name, argument);
       sprintf(buf_invis, "&D&g[&c%s&g]&RSomeone&w> &Y%s&D\n\r", verb, argument);
       break;
-      //MUSE Channel stupid SMAUG people calling it "highgod" - Goku 09.05 .03
+      // MUSE Channel stupid SMAUG people calling it "highgod" - Goku 09.05 .03
     case CHANNEL_HIGHGOD:
       pager_printf_color(ch, "&D&c%s&G[&g%s&G]&w> &Y%s&D\n\r", verb, ch->name, argument);
       sprintf(buf, "&D&c%s&G[&g%s&G]&w> &Y%s&D\n\r", verb, ch->name, argument);
       sprintf(buf_invis, "&D&c%s&G[&gSomeone&G]&w> &Y%s&D\n\r", verb, argument);
       break;
     case CHANNEL_NEWBIE:
-      //argument = remove_color(argument);
+      // argument = remove_color(argument);
       pager_printf_color(ch, "&D&W[&C%s&W] &w%s&W:&B '%s&D&B'&D\n\r", verb, ch->name, argument);
       sprintf(buf, "&D&W[&C%s&W] &w%s&W:&B '%s&D&B'&D\n\r", verb, ch->name, argument);
       sprintf(buf_invis, "&D&W[&C%s&W] &wSomeone&W:&B '%s&D&B'&D\n\r", verb, argument);
@@ -500,13 +501,13 @@ void talk_channel(CHAR_DATA *ch, char *argument, int channel, const char *verb) 
       sprintf(buf_invis, "&D&W[&C%s&W] &CSomeone&W:&c '%s&D&c'&D\n\r", verb, argument);
       break;
     case CHANNEL_ASK:
-      //argument = remove_color(argument);
+      // argument = remove_color(argument);
       pager_printf_color(ch, "&D&W[&c%s&W] &C%s&W&W: &z--&W '&O%s&W'&D\n\r", verb, ch->name, argument);
       sprintf(buf, "&D&W[&c%s&W] &C%s&W&W: &z--&W '&O%s&W'&D\n\r", verb, ch->name, argument);
       sprintf(buf_invis, "&D&W[&c%s&W] &CSomeone&W&W: &z--&W '&O%s&W'&D\n\r", verb, argument);
       break;
     case CHANNEL_ADMIN:
-      //argument = remove_color(argument);
+      // argument = remove_color(argument);
       pager_printf_color(ch, "&D&R[&W%s&R] &R%s&W: &z--&W '%s'&D\n\r", verb, ch->name, argument);
       sprintf(buf, "&D&R[&W%s&R] &R%s&W: &z--&W '%s'&D\n\r", verb, ch->name, argument);
       sprintf(buf_invis, "&D&R[&W%s&R] &RSomeone&W: &z--&W '%s'&D\n\r", verb, argument);
@@ -516,7 +517,7 @@ void talk_channel(CHAR_DATA *ch, char *argument, int channel, const char *verb) 
       if ((admVict = get_char_world(ch, admName)) == NULL) {
         return;
       }
-      //argument = remove_color(argument);
+      // argument = remove_color(argument);
       pager_printf_color(ch, "&D&R[&W%s-%s&R] &R%s&W: &z--&W '%s'&D\n\r", verb, admVict->name, ch->name, argument);
       sprintf(buf, "&D&R[&W%s-%s&R] &R%s&W: &z--&W '%s'&D\n\r", verb, admVict->name, ch->name, argument);
       sprintf(buf_invis, "&D&R[&W%s-%s&R] &RSomeone&W: &z--&W '%s'&D\n\r", verb, admVict->name, argument);
@@ -529,7 +530,7 @@ void talk_channel(CHAR_DATA *ch, char *argument, int channel, const char *verb) 
       break;
     case CHANNEL_SHOUT:
     case CHANNEL_YELL:
-      //argument = remove_color(argument);
+      // argument = remove_color(argument);
       pager_printf_color(ch, "&D&YYou %s '%s'&D\n\r", verb, argument);
       sprintf(buf, "&D&Y%s %ss '%s'&D\n\r", ch->name, verb, argument);
       sprintf(buf_invis, "&D&YSomeone %ss '%s'&D\n\r", verb, argument);
@@ -716,18 +717,18 @@ void talk_channel(CHAR_DATA *ch, char *argument, int channel, const char *verb) 
         vch != ch && !xIS_SET(och->deaf, channel)) {
       char *sbuf = argument;
       char lbuf[MAX_INPUT_LENGTH + 4]; /* invis level string +
-								 * buf */
+                                        * buf */
 
       /*
-			 * fix by Gorog os that players can ignore others'
-			 * channel talk
-			 */
+       * fix by Gorog os that players can ignore others'
+       * channel talk
+       */
       /*
-			 * fix so you can ignore anyone other than an Imm --
-			 * Melora
-			 */
+       * fix so you can ignore anyone other than an Imm --
+       * Melora
+       */
       if (is_ignoring(och, ch) && !IS_IMMORTAL(och) /* get_trust(ch) <=
-			        get_trust(och) */
+                                get_trust(och) */
       )
         continue;
 
@@ -743,9 +744,9 @@ void talk_channel(CHAR_DATA *ch, char *argument, int channel, const char *verb) 
         continue;
 
       /*
-			 * Make it so only admin see the admin chanel --
-			 * Melora
-			 */
+       * Make it so only admin see the admin chanel --
+       * Melora
+       */
       if (IS_IMMORTAL(ch)) {
         ;
       } else {
@@ -754,9 +755,9 @@ void talk_channel(CHAR_DATA *ch, char *argument, int channel, const char *verb) 
       }
 
       /*
-			 * Only imms and the victim can see adminto --
-			 * Melora
-			 */
+       * Only imms and the victim can see adminto --
+       * Melora
+       */
       if (channel == CHANNEL_ADMTO &&
           (!IS_IMMORTAL(och) && (och != admVict)))
         continue;
@@ -884,9 +885,9 @@ void talk_channel(CHAR_DATA *ch, char *argument, int channel, const char *verb) 
   }
 
   /*
-	 * too much system degradation with 300+ players not to charge 'em a
-	 * bit
-	 */
+   * too much system degradation with 300+ players not to charge 'em a
+   * bit
+   */
   /* 600 players now, but waitstate on clantalk is bad for pkillers */
   if (ch->level < 51)
     WAIT_STATE(ch, 6);
@@ -1245,10 +1246,10 @@ void do_say(CHAR_DATA *ch, char *argument) {
       if (!IS_IMMORTAL(ch) || get_trust(vch) > get_trust(ch))
         continue;
       /*
-			 * else { set_char_color(AT_IGNORE, vch);
-			 * ch_printf(vch,"You attempt to ignore %s, but" "
-			 * are unable to do so.\n\r", ch->name); }
-			 */
+       * else { set_char_color(AT_IGNORE, vch);
+       * ch_printf(vch,"You attempt to ignore %s, but" "
+       * are unable to do so.\n\r", ch->name); }
+       */
     }
 #ifndef SCRAMBLE
     if (speaking != -1 && (!IS_NPC(ch) || ch->speaking)) {
@@ -1274,9 +1275,9 @@ void do_say(CHAR_DATA *ch, char *argument) {
     }
   }
   /*
-	 * MOBtrigger = false; act( AT_SAY, "$n says '$T'", ch, NULL,
-	 * argument, TO_ROOM );
-	 */
+   * MOBtrigger = false; act( AT_SAY, "$n says '$T'", ch, NULL,
+   * argument, TO_ROOM );
+   */
   ch->act = actflags;
   MOBtrigger = false;
   if (is_fused(ch) && !is_superandroid(ch))
@@ -1358,7 +1359,7 @@ void do_whisper(CHAR_DATA *ch, char *argument) {
     send_to_char("That player is silenced.  They will receive your message but can not respond.\n\r", ch);
 
   if (victim->desc /* make sure desc exists first
-					 * -Thoric */
+                    * -Thoric */
       && victim->desc->connected == CON_EDITING && get_trust(ch) < LEVEL_GOD) {
     act(AT_PLAIN, "$E is currently in a writing buffer.  Please try again in a few minutes.", ch, 0, victim, TO_CHAR);
     return;
@@ -1373,10 +1374,10 @@ void do_whisper(CHAR_DATA *ch, char *argument) {
       return;
     }
     /*
-		 * else { set_char_color(AT_IGNORE, victim);
-		 * ch_printf(victim, "You attempt to ignore %s, but " "are
-		 * unable to do so.\n\r", ch->name); }
-		 */
+     * else { set_char_color(AT_IGNORE, victim);
+     * ch_printf(victim, "You attempt to ignore %s, but " "are
+     * unable to do so.\n\r", ch->name); }
+     */
   }
   /* Bug fix by guppy@wavecomputers.net */
   MOBtrigger = false;
@@ -1507,7 +1508,7 @@ void do_tell(CHAR_DATA *ch, char *argument) {
     return;
   }
   if (victim->desc /* make sure desc exists first
-					 * -Thoric */
+                    * -Thoric */
       && victim->desc->connected == CON_EDITING && get_trust(ch) < LEVEL_GOD) {
     act(AT_PLAIN, "$E is currently in a writing buffer.  Please try again in a few minutes.", ch, 0, victim, TO_CHAR);
     return;
@@ -1522,10 +1523,10 @@ void do_tell(CHAR_DATA *ch, char *argument) {
       return;
     }
     /*
-		 * else { set_char_color(AT_IGNORE, victim);
-		 * ch_printf(victim, "You attempt to ignore %s, but " "are
-		 * unable to do so.\n\r", ch->name); }
-		 */
+     * else { set_char_color(AT_IGNORE, victim);
+     * ch_printf(victim, "You attempt to ignore %s, but " "are
+     * unable to do so.\n\r", ch->name); }
+     */
   }
   ch->retell = victim;
 
@@ -1644,7 +1645,7 @@ void do_reply(CHAR_DATA *ch, char *argument) {
     return;
   }
   if (victim->desc /* make sure desc exists first
-					 * -Thoric */
+                    * -Thoric */
       && victim->desc->connected == CON_EDITING && get_trust(ch) < LEVEL_GOD) {
     act(AT_PLAIN, "$E is currently in a writing buffer.  Please try again in a few minutes.", ch, 0, victim, TO_CHAR);
     return;
@@ -1659,10 +1660,10 @@ void do_reply(CHAR_DATA *ch, char *argument) {
       return;
     }
     /*
-		 * else { set_char_color(AT_IGNORE, victim);
-		 * ch_printf(victim, "You attempt to ignore %s, but " "are
-		 * unable to do so.\n\r", ch->name); }
-		 */
+     * else { set_char_color(AT_IGNORE, victim);
+     * ch_printf(victim, "You attempt to ignore %s, but " "are
+     * unable to do so.\n\r", ch->name); }
+     */
   }
   sysdata.outBytesFlag = LOGBOUTCHANNEL;
   act(AT_TELL, "You tell $N '$t'", ch, argument, victim, TO_CHAR);
@@ -1973,18 +1974,18 @@ void do_emote(CHAR_DATA *ch, char *argument) {
       if (!IS_IMMORTAL(ch) || get_trust(vch) > get_trust(ch))
         continue;
       /*
-			 * else { set_char_color(AT_IGNORE, vch);
-			 * ch_printf(vch,"You attempt to ignore %s, but" "
-			 * are unable to do so.\n\r", ch->name); }
-			 */
+       * else { set_char_color(AT_IGNORE, vch);
+       * ch_printf(vch,"You attempt to ignore %s, but" "
+       * are unable to do so.\n\r", ch->name); }
+       */
     }
     /*
-			if (IS_NPC(ch) && xIS_SET(ch->act, ACT_ROBOT))
-				{
-					chatperformtoroom(argument,ch);
-		    		return;
-		    	}
-		*/
+                        if (IS_NPC(ch) && xIS_SET(ch->act, ACT_ROBOT))
+                                {
+                                        chatperformtoroom(argument,ch);
+                                return;
+                        }
+                */
 
 #ifndef SCRAMBLE
     if (speaking != -1 && (!IS_NPC(ch) || ch->speaking)) {
@@ -2006,10 +2007,10 @@ void do_emote(CHAR_DATA *ch, char *argument) {
     sysdata.outBytesFlag = LOGBOUTNORM;
   }
   /*
-	 * MOBtrigger = false; act( AT_ACTION, "$n $T", ch, NULL, buf,
-	 * TO_ROOM ); MOBtrigger = false; act( AT_ACTION, "$n $T", ch, NULL,
-	 * buf, TO_CHAR );
-	 */
+   * MOBtrigger = false; act( AT_ACTION, "$n $T", ch, NULL, buf,
+   * TO_ROOM ); MOBtrigger = false; act( AT_ACTION, "$n $T", ch, NULL,
+   * buf, TO_CHAR );
+   */
   ch->act = actflags;
   if (xIS_SET(ch->in_room->room_flags, ROOM_LOGSPEECH)) {
     sprintf(buf, "%s %s (emote)", IS_NPC(ch) ? ch->short_descr : ch->name,
@@ -2021,7 +2022,14 @@ void do_emote(CHAR_DATA *ch, char *argument) {
 
 void do_bug(CHAR_DATA *ch, char *argument) {
   char buf[MAX_STRING_LENGTH];
+  char mkdir[MAX_INPUT_LENGTH];
+
   struct tm *t = localtime(&current_time);
+
+  snprintf(mkdir, sizeof(mkdir), "mkdir -p %s", TMP_DIR);
+
+  /* ensure temporary directory exists before creating hiscores */
+  system(mkdir);
 
   set_char_color(AT_PLAIN, ch);
   if (argument[0] == '\0') {
@@ -2232,7 +2240,7 @@ void do_quit(CHAR_DATA *ch, char *argument) {
 /* fquit is like quit, but called when we get a broken pipe or someone EOFs on their
  * descriptor. fquit slots someone on the extract_char queue, so their character will
  * be free'd once the update has been ran. close_socket (in extract_char) is passed a false
- * value to clear, because the "runtime" will free the character 
+ * value to clear, because the "runtime" will free the character
  */
 void fquit(CHAR_DATA *ch) {
   OBJ_DATA *obj;
@@ -3045,15 +3053,15 @@ void do_gtell(CHAR_DATA *ch, char *argument) {
     return;
   }
   /*
-	 * Note use of send_to_char, so gtell works on sleepers.
-	 */
+   * Note use of send_to_char, so gtell works on sleepers.
+   */
   for (gch = first_char; gch; gch = gch->next) {
     if (is_same_group(gch, ch)) {
       set_char_color(AT_GTELL, gch);
       /*
-			 * Groups unscrambled regardless of clan language.
-			 * Other languages still garble though. -- Altrag
-			 */
+       * Groups unscrambled regardless of clan language.
+       * Other languages still garble though. -- Altrag
+       */
 #ifndef SCRAMBLE
 
       if (speaking != -1 && (!IS_NPC(ch) || ch->speaking)) {
@@ -3110,7 +3118,6 @@ void talk_auction(char *argument) {
       set_char_color(AT_CYAN, original);
       send_to_char(buf, original);
       send_to_char("\n\r", original);
-      //act(AT_GOSSIP, buf, original, NULL, NULL, TO_CHAR);
     }
   }
 }

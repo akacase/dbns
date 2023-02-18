@@ -21,6 +21,7 @@
 #include <time.h>
 
 #include "mud.h"
+#include "comm.h"
 
 struct at_color_type at_color_table[AT_MAXCOLOR];
 

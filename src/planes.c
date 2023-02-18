@@ -5,6 +5,7 @@
 #include <time.h>
 
 #include "mud.h"
+#include "comm.h"
 
 PLANE_DATA *first_plane, *last_plane;
 

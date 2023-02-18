@@ -32,6 +32,7 @@
 #include <time.h>
 
 #include "mud.h"
+#include "comm.h"
 
 void do_house(CHAR_DATA *ch, char *argument) {
   char arg[MAX_INPUT_LENGTH];

@@ -24,6 +24,7 @@
 #include <time.h>
 
 #include "mud.h"
+#include "comm.h"
 
 extern char lastplayercmd[MAX_INPUT_LENGTH];
 extern CHAR_DATA *gch_prev;

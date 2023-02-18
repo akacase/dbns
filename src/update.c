@@ -23,6 +23,7 @@
 #include <time.h>
 
 #include "mud.h"
+#include "comm.h"
 
 char *kaioshin[6];
 char *greaterdemon[6];

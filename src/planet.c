@@ -8,6 +8,7 @@
 #include <time.h>
 
 #include "mud.h"
+#include "comm.h"
 
 PLANET_DATA *first_planet;
 PLANET_DATA *last_planet;

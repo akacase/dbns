@@ -29,6 +29,7 @@
 #include <time.h>
 
 #include "mud.h"
+#include "comm.h"
 
 #if defined(KEY)
 #undef KEY

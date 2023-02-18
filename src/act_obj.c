@@ -22,6 +22,7 @@
 #include <time.h>
 
 #include "mud.h"
+#include "comm.h"
 #include "bet.h"
 
 /*

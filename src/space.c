@@ -7,6 +7,7 @@
 #include <time.h>
 
 #include "mud.h"
+#include "comm.h"
 
 SHIP_DATA *first_ship;
 SHIP_DATA *last_ship;
