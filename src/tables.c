@@ -224,7 +224,6 @@ DO_FUN *skill_function(char *name) {
       if (!str_cmp(name, "do_dismount")) return do_dismount;
       if (!str_cmp(name, "do_divinewrath")) return do_divinewrath;
       if (!str_cmp(name, "do_divorce")) return do_divorce;
-      if (!str_cmp(name, "do_dmesg")) return do_dmesg;
       if (!str_cmp(name, "do_dnd")) return do_dnd;
       if (!str_cmp(name, "do_dnsusers")) return do_dnsusers;
       if (!str_cmp(name, "do_down")) return do_down;
@@ -1016,7 +1015,6 @@ char *skill_name(DO_FUN *skill) {
   if (skill == do_dismiss) return "do_dismiss";
   if (skill == do_dismount) return "do_dismount";
   if (skill == do_divorce) return "do_divorce";
-  if (skill == do_dmesg) return "do_dmesg";
   if (skill == do_dnd) return "do_dnd";
   if (skill == do_dnsusers) return "do_dnsusers";
   if (skill == do_down) return "do_down";

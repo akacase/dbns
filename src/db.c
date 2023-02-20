@@ -102,8 +102,6 @@ MAP_INDEX_DATA *first_map; /* maps */
 
 AUCTION_DATA *auction; /* auctions */
 
-FILE *fpLOG;
-
 char *GfpName = NULL;
 bool StopFP = false;
 
@@ -402,7 +400,6 @@ void shop_inventory_update(void);
 /*
  * Local booting procedures.
  */
-void boot_log args((const char *str, ...));
 void load_area args((FILE * fp));
 void load_author args((AREA_DATA * tarea, FILE *fp));
 void load_economy(void);
@@ -477,8 +474,7 @@ void boot_db() {
 
   fpArea = NULL;
   show_hash(32);
-  unlink(BOOTLOG_FILE);
-  boot_log("---------------------[ Boot Log ]--------------------");
+  printf("---------------------[ Boot Log ]--------------------\n");
 
   log_string("Loading commands");
   load_commands();
@@ -1761,33 +1757,33 @@ void load_resets(AREA_DATA *tarea, FILE *fp) {
       default:
         bug("Load_resets: bad command '%c'.", letter);
         if (fBootDb)
-          boot_log("Load_resets: %s (%d) bad command '%c'.", tarea->filename, count, letter);
+          printf("Load_resets: %s (%d) bad command '%c'.\n", tarea->filename, count, letter);
         return;
 
       case 'M':
         if (get_mob_index(arg1) == NULL && fBootDb)
-          boot_log("Load_resets: %s (%d) 'M': mobile %d doesn't exist.",
-                   tarea->filename, count, arg1);
+          printf("Load_resets: %s (%d) 'M': mobile %d doesn't exist.\n",
+                 tarea->filename, count, arg1);
         if (get_room_index(arg3) == NULL && fBootDb)
-          boot_log("Load_resets: %s (%d) 'M': room %d doesn't exist.",
-                   tarea->filename, count, arg3);
+          printf("Load_resets: %s (%d) 'M': room %d doesn't exist.\n",
+                 tarea->filename, count, arg3);
         break;
 
       case 'O':
         if (get_obj_index(arg1) == NULL && fBootDb)
-          boot_log("Load_resets: %s (%d) '%c': object %d doesn't exist.",
-                   tarea->filename, count, letter, arg1);
+          printf("Load_resets: %s (%d) '%c': object %d doesn't exist.\n",
+                 tarea->filename, count, letter, arg1);
         if (get_room_index(arg3) == NULL && fBootDb)
-          boot_log("Load_resets: %s (%d) '%c': room %d doesn't exist.",
-                   tarea->filename, count, letter, arg3);
+          printf("Load_resets: %s (%d) '%c': room %d doesn't exist.\n",
+                 tarea->filename, count, letter, arg3);
         break;
 
       case 'P':
         if (get_obj_index(arg1) == NULL && fBootDb)
-          boot_log("Load_resets: %s (%d) '%c': object %d doesn't exist.", tarea->filename, count, letter, arg1);
+          printf("Load_resets: %s (%d) '%c': object %d doesn't exist.\n", tarea->filename, count, letter, arg1);
         if (arg3 > 0) {
           if (get_obj_index(arg3) == NULL && fBootDb)
-            boot_log("Load_resets: %s (%d) 'P': destination object %d doesn't exist.", tarea->filename, count, arg3);
+            printf("Load_resets: %s (%d) 'P': destination object %d doesn't exist.\n", tarea->filename, count, arg3);
         } else {
           if (extra > 1)
             not01 = true;
@@ -1797,8 +1793,8 @@ void load_resets(AREA_DATA *tarea, FILE *fp) {
       case 'G':
       case 'E':
         if (get_obj_index(arg1) == NULL && fBootDb)
-          boot_log("Load_resets: %s (%d) '%c': object %d doesn't exist.",
-                   tarea->filename, count, letter, arg1);
+          printf("Load_resets: %s (%d) '%c': object %d doesn't exist.\n",
+                 tarea->filename, count, letter, arg1);
         break;
 
       case 'T':
@@ -1807,8 +1803,8 @@ void load_resets(AREA_DATA *tarea, FILE *fp) {
       case 'H':
         if (arg1 > 0)
           if (get_obj_index(arg1) == NULL && fBootDb)
-            boot_log("Load_resets: %s (%d) 'H': object %d doesn't exist.",
-                     tarea->filename, count, arg1);
+            printf("Load_resets: %s (%d) 'H': object %d doesn't exist.\n",
+                   tarea->filename, count, arg1);
         break;
 
       case 'B':
@@ -1822,8 +1818,8 @@ void load_resets(AREA_DATA *tarea, FILE *fp) {
               bug("Reset: %c %d %d %d %d", letter, extra, arg1, arg2,
                   arg3);
               if (fBootDb)
-                boot_log("Load_resets: %s (%d) 'B': room %d doesn't exist.",
-                         tarea->filename, count, arg1);
+                printf("Load_resets: %s (%d) 'B': room %d doesn't exist.\n",
+                       tarea->filename, count, arg1);
             }
             door = (arg2 & BIT_RESET_DOOR_MASK) >> BIT_RESET_DOOR_THRESHOLD;
 
@@ -1832,8 +1828,8 @@ void load_resets(AREA_DATA *tarea, FILE *fp) {
               bug("Reset: %c %d %d %d %d", letter, extra, arg1, arg2,
                   arg3);
               if (fBootDb)
-                boot_log("Load_resets: %s (%d) 'B': exit %d not door.",
-                         tarea->filename, count, door);
+                printf("Load_resets: %s (%d) 'B': exit %d not door.\n",
+                       tarea->filename, count, door);
             }
           } break;
           case BIT_RESET_ROOM:
@@ -1842,25 +1838,25 @@ void load_resets(AREA_DATA *tarea, FILE *fp) {
               bug("Reset: %c %d %d %d %d", letter, extra, arg1, arg2,
                   arg3);
               if (fBootDb)
-                boot_log("Load_resets: %s (%d) 'B': room %d doesn't exist.",
-                         tarea->filename, count, arg1);
+                printf("Load_resets: %s (%d) 'B': room %d doesn't exist.\n",
+                       tarea->filename, count, arg1);
             }
             break;
           case BIT_RESET_OBJECT:
             if (arg1 > 0)
               if (get_obj_index(arg1) == NULL && fBootDb)
-                boot_log("Load_resets: %s (%d) 'B': object %d doesn't exist.",
-                         tarea->filename, count, arg1);
+                printf("Load_resets: %s (%d) 'B': object %d doesn't exist.\n",
+                       tarea->filename, count, arg1);
             break;
           case BIT_RESET_MOBILE:
             if (arg1 > 0)
               if (get_mob_index(arg1) == NULL && fBootDb)
-                boot_log("Load_resets: %s (%d) 'B': mobile %d doesn't exist.",
-                         tarea->filename, count, arg1);
+                printf("Load_resets: %s (%d) 'B': mobile %d doesn't exist.\n",
+                       tarea->filename, count, arg1);
             break;
           default:
-            boot_log("Load_resets: %s (%d) 'B': bad type flag (%d).",
-                     tarea->filename, count, arg2 & BIT_RESET_TYPE_MASK);
+            printf("Load_resets: %s (%d) 'B': bad type flag (%d).\n",
+                   tarea->filename, count, arg2 & BIT_RESET_TYPE_MASK);
             break;
         }
         break;
@@ -1872,8 +1868,8 @@ void load_resets(AREA_DATA *tarea, FILE *fp) {
           bug("Reset: %c %d %d %d %d", letter, extra, arg1, arg2,
               arg3);
           if (fBootDb)
-            boot_log("Load_resets: %s (%d) 'D': room %d doesn't exist.",
-                     tarea->filename, count, arg1);
+            printf("Load_resets: %s (%d) 'D': room %d doesn't exist.\n",
+                   tarea->filename, count, arg1);
           break;
         }
         if (arg2 < 0 || arg2 > MAX_DIR + 1 || (pexit = get_exit(pRoomIndex, arg2)) == NULL || !IS_SET(pexit->exit_info, EX_ISDOOR)) {
@@ -1881,28 +1877,28 @@ void load_resets(AREA_DATA *tarea, FILE *fp) {
           bug("Reset: %c %d %d %d %d", letter, extra, arg1, arg2,
               arg3);
           if (fBootDb)
-            boot_log("Load_resets: %s (%d) 'D': exit %d not door.",
-                     tarea->filename, count, arg2);
+            printf("Load_resets: %s (%d) 'D': exit %d not door.\n",
+                   tarea->filename, count, arg2);
         }
         if (arg3 < 0 || arg3 > 2) {
           bug("Load_resets: 'D': bad 'locks': %d.", arg3);
           if (fBootDb)
-            boot_log("Load_resets: %s (%d) 'D': bad 'locks': %d.",
-                     tarea->filename, count, arg3);
+            printf("Load_resets: %s (%d) 'D': bad 'locks': %d.\n",
+                   tarea->filename, count, arg3);
         }
         break;
 
       case 'R':
         pRoomIndex = get_room_index(arg1);
         if (!pRoomIndex && fBootDb)
-          boot_log("Load_resets: %s (%d) 'R': room %d doesn't exist.",
-                   tarea->filename, count, arg1);
+          printf("Load_resets: %s (%d) 'R': room %d doesn't exist.\n",
+                 tarea->filename, count, arg1);
 
         if (arg2 < 0 || arg2 > 10) {
           bug("Load_resets: 'R': bad exit %d.", arg2);
           if (fBootDb)
-            boot_log("Load_resets: %s (%d) 'R': bad exit %d.",
-                     tarea->filename, count, arg2);
+            printf("Load_resets: %s (%d) 'R': bad exit %d.\n",
+                   tarea->filename, count, arg2);
           break;
         }
         break;
@@ -2358,8 +2354,8 @@ void fix_exits(void) {
         pexit->rvnum = pRoomIndex->vnum;
         if (pexit->vnum <= 0 || (pexit->to_room = get_room_index(pexit->vnum)) == NULL) {
           if (fBootDb)
-            boot_log("Fix_exits: room %d, exit %s leads to bad vnum (%d)",
-                     pRoomIndex->vnum, dir_name[pexit->vdir], pexit->vnum);
+            printf("Fix_exits: room %d, exit %s leads to bad vnum (%d)\n",
+                   pRoomIndex->vnum, dir_name[pexit->vdir], pexit->vnum);
 
           bug("Deleting %s exit in room %d", dir_name[pexit->vdir],
               pRoomIndex->vnum);
@@ -4239,7 +4235,6 @@ void append_file(CHAR_DATA *ch, char *file, char *str) {
   if (IS_NPC(ch) || str[0] == '\0')
     return;
 
-  fclose(fpLOG);
   if ((fp = fopen(file, "ab+")) == NULL) {
     perror(file);
     send_to_char("Could not open the file!\n\r", ch);
@@ -4249,7 +4244,6 @@ void append_file(CHAR_DATA *ch, char *file, char *str) {
     fclose(fp);
   }
 
-  fpLOG = fopen(NULL_FILE, "r");
   return;
 }
 
@@ -4314,42 +4308,10 @@ void bug(const char *str, ...) {
   }
   log_string(buf);
 
-  fclose(fpLOG);
   if ((fp = fopen(BUG_FILE, "ab+")) != NULL) {
     fprintf(fp, "%s\n", buf);
     fclose(fp);
   }
-  fpLOG = fopen(NULL_FILE, "r");
-
-  return;
-}
-
-/*
- * Add a string to the boot-up log				-Thoric
- */
-void boot_log(const char *str, ...) {
-  char buf[MAX_STRING_LENGTH];
-  char mkdir[MAX_INPUT_LENGTH];
-  FILE *fp;
-  va_list param;
-
-  snprintf(mkdir, sizeof(mkdir), "mkdir -p %s", TMP_DIR);
-
-  /* ensure temporary directory exists before creating hiscores */
-  system(mkdir);
-
-  strcpy(buf, "[*****] BOOT: ");
-  va_start(param, str);
-  vsprintf(buf + strlen(buf), str, param);
-  va_end(param);
-  log_string(buf);
-
-  fclose(fpLOG);
-  if ((fp = fopen(BOOTLOG_FILE, "ab+")) != NULL) {
-    fprintf(fp, "%s\n", buf);
-    fclose(fp);
-  }
-  fpLOG = fopen(NULL_FILE, "r");
 
   return;
 }
@@ -4382,14 +4344,6 @@ void show_file(CHAR_DATA *ch, char *filename) {
      */
     fclose(fp);
   }
-}
-
-/*
- * Show the boot log file					-Thoric
- */
-void do_dmesg(CHAR_DATA *ch, char *argument) {
-  set_pager_color(AT_LOG, ch);
-  show_file(ch, BOOTLOG_FILE);
 }
 
 /*

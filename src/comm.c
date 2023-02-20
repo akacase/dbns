@@ -52,10 +52,10 @@
 #define TOOLARGE 3
 
 /* globals from mud.h */
-bool MOBtrigger = false;
-bool DONT_UPPER = false;
-int area_version = 0;
-int top_mob_serial = 0;
+bool MOBtrigger;
+bool DONT_UPPER;
+int area_version;
+int top_mob_serial;
 
 const char echo_off_str[] = {IAC, WILL, TELOPT_ECHO, '\0'};
 const char echo_on_str[] = {IAC, WONT, TELOPT_ECHO, '\0'};
@@ -178,22 +178,22 @@ char SPACE_LIST[128] = "/space/space.lst";
 
 char MORPH_FILE[128] = "/system/morph.dat";        /* For morph data */
 char BOARD_FILE[128] = "/system/boards.txt";       /* For bulletin boards   */
-char SHUTDOWN_FILE[128] = "/tmp/shutdown.txt";  /* For 'shutdown'        */
+char SHUTDOWN_FILE[128] = "/tmp/shutdown.txt";     /* For 'shutdown'        */
 char IMM_HOST_FILE[128] = "/system/immortal.host"; /* For stoping hackers */
 char RIPSCREEN_FILE[128] = "/system/mudrip.rip";
 char RIPTITLE_FILE[128] = "/system/mudtitle.rip";
 char ANSITITLE_FILE[128] = "/system/mudtitle.ans";
 char ASCTITLE_FILE[128] = "/system/mudtitle.asc";
-char BOOTLOG_FILE[128] = "/tmp/boot.txt";     /* Boot up error file  */
-char BUG_FILE[128] = "/tmp/bugs.txt";         /* For bug()          */
-char PBUG_FILE[128] = "/tmp/pbugs.txt";       /* For 'bug' command   */
+char BOOTLOG_FILE[128] = "/tmp/boot.txt";        /* Boot up error file  */
+char BUG_FILE[128] = "/tmp/bugs.txt";            /* For bug()          */
+char PBUG_FILE[128] = "/tmp/pbugs.txt";          /* For 'bug' command   */
 char IDEA_FILE[128] = "/system/ideas.txt";       /* For 'idea'          */
 char TYPO_FILE[128] = "/system/typos.txt";       /* For 'typo'          */
 char FIXED_FILE[128] = "/system/fixed.txt";      /* For 'fixed' command */
 char LOG_FILE[128] = "/system/log.txt";          /* For talking in logged rooms */
 char MOBLOG_FILE[128] = "/system/moblog.txt";    /* For mplog messages  */
 char PLEVEL_FILE[128] = "/system/plevel.txt";    /* Char level info */
-char WIZLIST_FILE[128] = "/tmp/WIZLIST";      /* Wizlist             */
+char WIZLIST_FILE[128] = "/tmp/WIZLIST";         /* Wizlist             */
 char WHO_FILE[128] = "/system/WHO";              /* Who output file     */
 char WEBWHO_FILE[128] = "/system/WEBWHO";        /* WWW Who output file */
 char REQUEST_PIPE[128] = "/system/REQUESTS";     /* Request FIFO        */
@@ -208,7 +208,7 @@ char ECONOMY_FILE[128] = "/system/economy.txt";   /* Gold looted, etc */
 char PROJECTS_FILE[128] = "/system/projects.txt"; /* For projects        */
 char PLANE_FILE[128] = "/system/planes.dat";      /* For planes          */
 char COLOR_FILE[128] = "/system/colors.dat";      /* User-definable color */
-char TEMP_FILE[128] = "/tmp/charsave.tmp";     /* More char save */
+char TEMP_FILE[128] = "/tmp/charsave.tmp";        /* More char save */
 char HELP_FILE[128] = "/area/help.are";           /* For undefined helps */
 char HELP_FILE_BAK[128] = "/area/help.are.bak";   /* For undefined helps */
 char DNS_FILE[128] = "/system/dns.dat";
@@ -379,8 +379,8 @@ int main(int argc, char **argv) {
   }
 
   if (!data_dir) {
-    log_string("please provide a data_dir argument via the -d flag");
-    exit(1);
+    log_string("no data_dir argument passed via -d, defaulting to \"..\"");
+    data_dir = "..";
   }
 
   /* setup all directories */
@@ -393,8 +393,6 @@ int main(int argc, char **argv) {
   /* setup pfile directories */
   snprintf(mkdir, sizeof(mkdir), "mkdir -p %s", PLAYER_DIR);
   system(mkdir);
-
-  printf("%s\n", COMMAND_FILE);
 
   /* init time. */
   gettimeofday(&now_time, NULL);
@@ -426,10 +424,6 @@ int main(int argc, char **argv) {
   new_boot_time_t = mktime(new_boot_time);
   init_pfile_scan_time();
 
-  if ((fpLOG = fopen(NULL_FILE, "r")) == NULL) {
-    perror(NULL_FILE);
-    exit(1);
-  }
   /* run the game. */
   log_string("Booting Database");
   boot_db();

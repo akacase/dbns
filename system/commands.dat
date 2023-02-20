@@ -904,14 +904,6 @@ Log         1
 End
 
 #COMMAND
-Name        dmesg~
-Code        do_dmesg
-Position    100
-Level       58
-Log         1
-End
-
-#COMMAND
 Name        drag~
 Code        do_drag
 Position    112

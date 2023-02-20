@@ -44,8 +44,11 @@
           buildInputs = with pkgs; [
             gnumake
             clang
+            lldb
             zlib
             ninja
+            sqlite
+            nixpkgs-fmt
           ];
         };
       }) // {

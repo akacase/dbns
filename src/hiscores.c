@@ -744,8 +744,14 @@ void load_hiscores(void)
 /* Loads all hiscore tables */
 {
   char filename[MAX_INPUT_LENGTH];
+  char mkdir[MAX_INPUT_LENGTH];
   FILE *fp;
   HISCORE *new_table;
+
+  snprintf(mkdir, sizeof(mkdir), "mkdir -p %s", TMP_DIR);
+  if (system(mkdir) == -1) {
+    bug("issue creating tmp dir");
+  }
 
   fp = fopen(HISCORE_FILE, "r");
   if (fp == NULL)

@@ -1274,10 +1274,6 @@ void do_say(CHAR_DATA *ch, char *argument) {
         act(AT_SAY, "$n says '$t'", ch, sbuf, vch, TO_VICT);
     }
   }
-  /*
-   * MOBtrigger = false; act( AT_SAY, "$n says '$T'", ch, NULL,
-   * argument, TO_ROOM );
-   */
   ch->act = actflags;
   MOBtrigger = false;
   if (is_fused(ch) && !is_superandroid(ch))
@@ -1973,20 +1969,7 @@ void do_emote(CHAR_DATA *ch, char *argument) {
       /* continue unless emoter is an immortal */
       if (!IS_IMMORTAL(ch) || get_trust(vch) > get_trust(ch))
         continue;
-      /*
-       * else { set_char_color(AT_IGNORE, vch);
-       * ch_printf(vch,"You attempt to ignore %s, but" "
-       * are unable to do so.\n\r", ch->name); }
-       */
     }
-    /*
-                        if (IS_NPC(ch) && xIS_SET(ch->act, ACT_ROBOT))
-                                {
-                                        chatperformtoroom(argument,ch);
-                                return;
-                        }
-                */
-
 #ifndef SCRAMBLE
     if (speaking != -1 && (!IS_NPC(ch) || ch->speaking)) {
       int speakswell = UMIN(knows_language(vch, ch->speaking, ch),
