@@ -178,11 +178,6 @@ bool check_skill(CHAR_DATA *ch, char *command, char *argument) {
     sn = (first + top) >> 1;
 
     if (LOWER(command[0]) == LOWER(skill_table[sn]->name[0]) && !str_prefix(command, skill_table[sn]->name) && (skill_table[sn]->skill_fun || skill_table[sn]->spell_fun != spell_null) && (can_use_skill(ch, 0, sn)))
-      /*
-	&&  (IS_NPC(ch)
-	||  (ch->pcdata->learned[sn] > 0
-	&&   ch->level >= skill_table[sn]->skill_level[ch->class])) )
-*/
       break;
     if (first >= top)
       return false;
@@ -209,31 +204,13 @@ bool check_skill(CHAR_DATA *ch, char *command, char *argument) {
     return true;
   }
 
-  /* check if mana is required */
-  /*
-    if ( skill_table[sn]->min_mana )
-    {
-	mana = IS_NPC(ch) ? 0 : UMAX(skill_table[sn]->min_mana,
-	   100 / ( 2 + ch->level - skill_table[sn]->skill_level[ch->class] ) );
-	if ( !IS_NPC(ch) && ch->mana < mana )
-	{
-	    send_to_char( "You don't have enough energy.\n\r", ch );
-	    return true;
-	}
-    }
-    else
-    {
-	mana = 0;
-	blood = 0;
-    }
-*/
   /* energy is drained from within each function not here */
   mana = 0;
   blood = 0;
 
   /*
-     * Is this a real do-fun, or a really a spell?
-     */
+   * Is this a real do-fun, or a really a spell?
+   */
   if (!skill_table[sn]->skill_fun) {
     ch_ret retcode = rNONE;
     void *vo = NULL;
@@ -276,13 +253,6 @@ bool check_skill(CHAR_DATA *ch, char *command, char *argument) {
 
         if (!IS_NPC(ch)) {
           if (!IS_NPC(victim)) {
-            /*  Sheesh! can't do anything
-		    send_to_char( "You can't do that on a player.\n\r", ch );
-		    return true;
-	            */
-            /*
-		    if ( xIS_SET(victim->act, PLR_PK))
-*/
             if (get_timer(ch, TIMER_PKILLED) > 0) {
               send_to_char("You have been killed in the last 5 minutes.\n\r", ch);
               return true;
@@ -409,6 +379,7 @@ bool check_skill(CHAR_DATA *ch, char *command, char *argument) {
   tail_chain();
   return true;
 }
+
 bool check_ability(CHAR_DATA *ch, char *command, char *argument) {
   int sn;
   int first = gsn_first_ability;
@@ -421,11 +392,6 @@ bool check_ability(CHAR_DATA *ch, char *command, char *argument) {
     sn = (first + top) >> 1;
 
     if (LOWER(command[0]) == LOWER(skill_table[sn]->name[0]) && !str_prefix(command, skill_table[sn]->name) && (skill_table[sn]->skill_fun || skill_table[sn]->spell_fun != spell_null) && (can_use_skill(ch, 0, sn)))
-      /*
-	&&  (IS_NPC(ch)
-	||  (ch->pcdata->learned[sn] > 0
-	&&   ch->level >= skill_table[sn]->skill_level[ch->class])) )
-*/
       break;
     if (first >= top)
       return false;
@@ -449,31 +415,13 @@ bool check_ability(CHAR_DATA *ch, char *command, char *argument) {
     return true;
   }
 
-  /* check if mana is required */
-  /*
-    if ( skill_table[sn]->min_mana )
-    {
-	mana = IS_NPC(ch) ? 0 : UMAX(skill_table[sn]->min_mana,
-	   100 / ( 2 + ch->level - skill_table[sn]->skill_level[ch->class] ) );
-	if ( !IS_NPC(ch) && ch->mana < mana )
-	{
-	    send_to_char( "You don't have enough energy.\n\r", ch );
-	    return true;
-	}
-    }
-    else
-    {
-	mana = 0;
-	blood = 0;
-    }
-*/
   /* energy is drained from within each function not here */
   mana = 0;
   blood = 0;
 
   /*
-     * Is this a real do-fun, or a really a spell?
-     */
+   * Is this a real do-fun, or a really a spell?
+   */
   if (!skill_table[sn]->skill_fun) {
     ch_ret retcode = rNONE;
     void *vo = NULL;
@@ -516,13 +464,6 @@ bool check_ability(CHAR_DATA *ch, char *command, char *argument) {
 
         if (!IS_NPC(ch)) {
           if (!IS_NPC(victim)) {
-            /*  Sheesh! can't do anything
-		    send_to_char( "You can't do that on a player.\n\r", ch );
-		    return true;
-	            */
-            /*
-		    if ( xIS_SET(victim->act, PLR_PK))
-*/
             if (get_timer(ch, TIMER_PKILLED) > 0) {
               send_to_char("You have been killed in the last 5 minutes.\n\r", ch);
               return true;
@@ -651,7 +592,6 @@ void do_skin(CHAR_DATA *ch, char *argument) {
   bool found;
   char *name;
   char buf[MAX_STRING_LENGTH];
-  found = false;
 
   if (!IS_PKILL(ch) && !IS_IMMORTAL(ch)) {
     send_to_char("Leave the hideous defilings to the killers!\n", ch);
@@ -692,9 +632,6 @@ void do_skin(CHAR_DATA *ch, char *argument) {
   skin->description = STRALLOC(buf);
   act(AT_BLOOD, "$n strips the skin from $p.", ch, corpse, NULL, TO_ROOM);
   act(AT_BLOOD, "You strip the skin from $p.", ch, corpse, NULL, TO_CHAR);
-  /*  act( AT_MAGIC, "\nThe skinless corpse is dragged through the ground by a strange force...", ch, corpse, NULL, TO_CHAR);
-    act( AT_MAGIC, "\nThe skinless corpse is dragged through the ground by a strange force...", ch, corpse, NULL, TO_ROOM);
-    extract_obj( corpse ); */
   obj_to_char(skin, ch);
   return;
 }
@@ -883,9 +820,9 @@ void do_slookup(CHAR_DATA *ch, char *argument) {
                   skill->skill_adept[iClass],
                   num_punct_ld(skill->skill_level[iClass]));
           /*if ( iClass % 2 == 2 )
-			   strcat(buf, "\n\r" );
-		   else
-			   strcat(buf, "  " );*/
+                           strcat(buf, "\n\r" );
+                   else
+                           strcat(buf, "  " );*/
           strcat(buf, "\n\r");
           send_to_char(buf, ch);
         }
@@ -1170,11 +1107,11 @@ void do_sset(CHAR_DATA *ch, char *argument) {
       return;
     }
     /*	if ( !str_cmp( arg2, "minlevel" ) )
-	{
-	    skill->min_level = atoi( argument );
-	    send_to_char( "Ok.\n\r", ch );
-	    return;
-	}
+        {
+            skill->min_level = atoi( argument );
+            send_to_char( "Ok.\n\r", ch );
+            return;
+        }
 */
     if (!str_cmp(arg2, "sector")) {
       char tmp_arg[MAX_STRING_LENGTH];
@@ -1267,8 +1204,8 @@ void do_sset(CHAR_DATA *ch, char *argument) {
       return;
     }
     /*
-	 * affect <location> <modifier> <duration> <bitvector>
-	 */
+     * affect <location> <modifier> <duration> <bitvector>
+     */
     if (!str_cmp(arg2, "affect")) {
       char location[MAX_INPUT_LENGTH];
       char modifier[MAX_INPUT_LENGTH];
@@ -1334,34 +1271,34 @@ void do_sset(CHAR_DATA *ch, char *argument) {
       return;
     }
     /*
-	if ( !str_cmp( arg2, "level" ) )
-	{
-	    char arg3[MAX_INPUT_LENGTH];
-	    int class;
+        if ( !str_cmp( arg2, "level" ) )
+        {
+            char arg3[MAX_INPUT_LENGTH];
+            int class;
 
-	    argument = one_argument( argument, arg3 );
-	    class = atoi( arg3 );
-	    if ( class >= MAX_PC_CLASS || class < 0 )
-		send_to_char( "Not a valid class.\n\r", ch );
-	    else
-		skill->skill_level[class] = atoi(argument);
-	    return;
+            argument = one_argument( argument, arg3 );
+            class = atoi( arg3 );
+            if ( class >= MAX_PC_CLASS || class < 0 )
+                send_to_char( "Not a valid class.\n\r", ch );
+            else
+                skill->skill_level[class] = atoi(argument);
+            return;
         }
-	if ( !str_cmp( arg2, "racelevel" ) )
-	{
-	    char arg3[MAX_INPUT_LENGTH];
-	    int race;
+        if ( !str_cmp( arg2, "racelevel" ) )
+        {
+            char arg3[MAX_INPUT_LENGTH];
+            int race;
 
-	    argument = one_argument( argument, arg3 );
-	    race = atoi( arg3 );
-	    if ( race >= MAX_PC_RACE || race < 0 )
-		send_to_char( "Not a valid race.\n\r", ch );
-	    else
-		skill->race_level[race] =
-			URANGE(0, atoi(argument), MAX_LEVEL);
-	    return;
-	}
-	*/
+            argument = one_argument( argument, arg3 );
+            race = atoi( arg3 );
+            if ( race >= MAX_PC_RACE || race < 0 )
+                send_to_char( "Not a valid race.\n\r", ch );
+            else
+                skill->race_level[race] =
+                        URANGE(0, atoi(argument), MAX_LEVEL);
+            return;
+        }
+        */
     if (!str_cmp(arg2, "max")) {
       char arg3[MAX_INPUT_LENGTH];
       int class;
@@ -1381,36 +1318,6 @@ void do_sset(CHAR_DATA *ch, char *argument) {
       }
       return;
     }
-    /*
-	if ( !str_cmp( arg2, "adept" ) )
-	{
-	    char arg3[MAX_INPUT_LENGTH];
-	    int class;
-
-	    argument = one_argument( argument, arg3 );
-	    class = atoi( arg3 );
-	    if ( class >= MAX_PC_CLASS || class < 0 )
-		send_to_char( "Not a valid class.\n\r", ch );
-	    else
-		skill->skill_adept[class] =
-			URANGE(0, atoi(argument), 100);
-	    return;
-	}
-	if ( !str_cmp( arg2, "raceadept" ) )
-	{
-	    char arg3[MAX_INPUT_LENGTH];
-	    int race;
-
-	    argument = one_argument( argument, arg3 );
-	    race = atoi( arg3 );
-	    if ( race >= MAX_PC_RACE || race < 0 )
-		send_to_char( "Not a valid race.\n\r", ch );
-	    else
-		skill->race_adept[race] =
-			URANGE(0, atoi(argument), 100);
-	    return;
-	}
-	*/
 
     if (!str_cmp(arg2, "name")) {
       DISPOSE(skill->name);
@@ -1588,8 +1495,8 @@ void do_sset(CHAR_DATA *ch, char *argument) {
   }
 
   /*
-     * Snarf the value.
-     */
+   * Snarf the value.
+   */
   if (!is_number(argument)) {
     send_to_char("Value must be numeric.\n\r", ch);
     return;
@@ -1717,11 +1624,11 @@ void do_gouge(CHAR_DATA *ch, char *argument) {
       } else
         WAIT_STATE(victim, PULSE_VIOLENCE);
       /* Taken out by request - put back in by Thoric
-		 * This is how it was designed.  You'd be a tad stunned
-		 * if someone gouged you in the eye.
-		 * Mildly modified by Blodkai, Feb 1998 at request of
-		 * of pkill Conclave (peaceful use remains the same)
-		 */
+       * This is how it was designed.  You'd be a tad stunned
+       * if someone gouged you in the eye.
+       * Mildly modified by Blodkai, Feb 1998 at request of
+       * of pkill Conclave (peaceful use remains the same)
+       */
     } else if (global_retcode == rVICT_DIED) {
       act(AT_BLOOD, "Your fingers plunge into your victim's brain, causing immediate death!",
           ch, NULL, NULL, TO_CHAR);
@@ -1925,11 +1832,6 @@ void do_dig(CHAR_DATA *ch, char *argument) {
   /* dig out an EX_DIG exit... */
   if (arg[0] != '\0') {
     if ((pexit = find_door(ch, arg, true)) != NULL && IS_SET(pexit->exit_info, EX_DIG) && IS_SET(pexit->exit_info, EX_CLOSED)) {
-      /* 4 times harder to dig open a passage without a shovel */
-      /*
-	    if ( (number_percent() * (shovel ? 1 : 4)) <
-		 LEARNED(ch, gsn_dig) )
-*/
       if (can_use_skill(ch, (number_percent() * (shovel ? 1 : 4)),
                         gsn_dig)) {
         REMOVE_BIT(pexit->exit_info, EX_CLOSED);
@@ -1951,12 +1853,7 @@ void do_dig(CHAR_DATA *ch, char *argument) {
   for (obj = startobj; obj; obj = obj->next_content) {
     /* twice as hard to find something without a shovel */
     if (IS_OBJ_STAT(obj, ITEM_BURIED) && (can_use_skill(ch, (number_percent() * (shovel ? 1 : 2)),
-                                                        gsn_dig)))
-    /*
-	&&  (number_percent() * (shovel ? 1 : 2)) <
-	    (IS_NPC(ch) ? 80 : ch->pcdata->learned[gsn_dig]) )
-*/
-    {
+                                                        gsn_dig))) {
       found = true;
       break;
     }
@@ -2131,8 +2028,8 @@ void do_steal(CHAR_DATA *ch, char *argument) {
 */
   /*    if ( check_illegal_psteal( ch, victim ) )
     {
-	send_to_char( "You can't steal from that player.\n\r", ch );
-	return;
+        send_to_char( "You can't steal from that player.\n\r", ch );
+        return;
     }
 */
 
@@ -2163,8 +2060,8 @@ void do_steal(CHAR_DATA *ch, char *argument) {
 
   if (victim->position == POS_FIGHTING || !can_use_skill(ch, percent, gsn_steal)) {
     /*
-	 * Failure.
-	 */
+     * Failure.
+     */
     send_to_char("Oops...\n\r", ch);
     act(AT_ACTION, "$n tried to steal from you!\n\r", ch, NULL, victim, TO_VICT);
     act(AT_ACTION, "$n tried to steal from $N.\n\r", ch, NULL, victim, TO_NOTVICT);
@@ -2416,96 +2313,96 @@ void do_sting(CHAR_DATA *ch, char *argument) {
 /*
  void newskilltemplate( CHAR_DATA *ch, char *argument )
 {
-	CHAR_DATA *victim;
-	int 	dam = 0;
-	int		argdam = 0;
-	int		kilimit = 0;
-	float	physmult = 0;
-	float	kicmult = 0;
-	int		hitcheck = 0;
-	int		adjcost = 0;
+        CHAR_DATA *victim;
+        int 	dam = 0;
+        int		argdam = 0;
+        int		kilimit = 0;
+        float	physmult = 0;
+        float	kicmult = 0;
+        int		hitcheck = 0;
+        int		adjcost = 0;
 
-	if (IS_NPC(ch) && is_split(ch)) {
-		if (!ch->master)
-			return;
-	}
-	if (IS_NPC(ch) && IS_AFFECTED(ch, AFF_CHARM)) {
-		send_to_char("You can't concentrate enough for that.\n\r", ch);
-		return;
-	}
-	if (!IS_NPC(ch)
-	    && (ch->skillbash < 1)) {
-		send_to_char("You're not able to use that skill.\n\r", ch);
-		return;
-	}
-	if ((victim = who_fighting(ch)) == NULL) {
-		send_to_char("You aren't fighting anyone.\n\r", ch);
-		return;
-	}
-	if (!IS_NPC(ch)) {
-		kilimit = ch->train / 10000;
-		physmult = (float) get_curr_str(ch) / 950 + 1;
-		kicmult = (float) kilimit / 100 + 1;
-	}
-	if (!IS_NPC(ch)) {
-		adjcost = 16 * (ch->bashpower - ch->basheffic);
-		if (adjcost < 16)
-			adjcost = 16;
-	}
-	else {
-		adjcost = 1;
-	}
-	if (ch->mana < adjcost) {
-			send_to_char("You don't have enough energy.\n\r", ch);
-			return;
-	}
-	hitcheck = number_range(1, 100);
+        if (IS_NPC(ch) && is_split(ch)) {
+                if (!ch->master)
+                        return;
+        }
+        if (IS_NPC(ch) && IS_AFFECTED(ch, AFF_CHARM)) {
+                send_to_char("You can't concentrate enough for that.\n\r", ch);
+                return;
+        }
+        if (!IS_NPC(ch)
+            && (ch->skillbash < 1)) {
+                send_to_char("You're not able to use that skill.\n\r", ch);
+                return;
+        }
+        if ((victim = who_fighting(ch)) == NULL) {
+                send_to_char("You aren't fighting anyone.\n\r", ch);
+                return;
+        }
+        if (!IS_NPC(ch)) {
+                kilimit = ch->train / 10000;
+                physmult = (float) get_curr_str(ch) / 950 + 1;
+                kicmult = (float) kilimit / 100 + 1;
+        }
+        if (!IS_NPC(ch)) {
+                adjcost = 16 * (ch->bashpower - ch->basheffic);
+                if (adjcost < 16)
+                        adjcost = 16;
+        }
+        else {
+                adjcost = 1;
+        }
+        if (ch->mana < adjcost) {
+                        send_to_char("You don't have enough energy.\n\r", ch);
+                        return;
+        }
+        hitcheck = number_range(1, 100);
 
-	WAIT_STATE(ch, 8);
-	if (hitcheck <= 95) {
-		if (!IS_NPC(ch)) {
-			argdam = ((number_range(10, 12) + ch->bashpower) * kicmult);
-			dam = get_attmod(ch, victim) * (argdam * physmult);
-			stat_train(ch, "str", 10);
-			ch->train += 5;
-			ch->strikemastery += 3;
-			if (ch->energymastery >= (ch->kspgain * 100)) {
-				pager_printf_color(ch,
-					"&CYou gained 5 Skill Points!\n\r");
-				ch->sptotal += 5;
-				ch->kspgain += 1;
-				}
-		}
-		if (IS_NPC(ch)) {
-			dam = get_attmod(ch, victim) * (number_range(10, 12) + (get_curr_str(ch) / 40));
-		}
-		if (ch->charge > 0)
-			dam = chargeDamMult(ch, dam);
+        WAIT_STATE(ch, 8);
+        if (hitcheck <= 95) {
+                if (!IS_NPC(ch)) {
+                        argdam = ((number_range(10, 12) + ch->bashpower) * kicmult);
+                        dam = get_attmod(ch, victim) * (argdam * physmult);
+                        stat_train(ch, "str", 10);
+                        ch->train += 5;
+                        ch->strikemastery += 3;
+                        if (ch->energymastery >= (ch->kspgain * 100)) {
+                                pager_printf_color(ch,
+                                        "&CYou gained 5 Skill Points!\n\r");
+                                ch->sptotal += 5;
+                                ch->kspgain += 1;
+                                }
+                }
+                if (IS_NPC(ch)) {
+                        dam = get_attmod(ch, victim) * (number_range(10, 12) + (get_curr_str(ch) / 40));
+                }
+                if (ch->charge > 0)
+                        dam = chargeDamMult(ch, dam);
 
-		act(AT_YELLOW,
-			"You crash directly into $N, knocking them for a loop! &W[$t]",
-			ch, num_punct(dam), victim, TO_CHAR);
-		act(AT_YELLOW,
-			"$n crashes directly into you, knocking you for a loop! &W[$t]",
-			ch, num_punct(dam), victim, TO_VICT);
-		act(AT_YELLOW,
-			"$n crashes directly into $N, knocking them for a loop! &W[$t]",
-			ch, num_punct(dam), victim, TO_NOTVICT);
-		global_retcode = damage(ch, victim, dam, TYPE_HIT);
-	}
-	else {
-		act(AT_YELLOW, "You missed $N with a barreling collision.", ch,
-		    NULL, victim, TO_CHAR);
-		act(AT_YELLOW, "$n misses you with a barreling collision.", ch, NULL,
-		    victim, TO_VICT);
-		act(AT_YELLOW, "$n missed $N with a barreling collision.", ch, NULL,
-		    victim, TO_NOTVICT);
-		global_retcode = damage(ch, victim, 0, TYPE_HIT);
-	}
-	ch->mana -= adjcost;
-	return;
+                act(AT_YELLOW,
+                        "You crash directly into $N, knocking them for a loop! &W[$t]",
+                        ch, num_punct(dam), victim, TO_CHAR);
+                act(AT_YELLOW,
+                        "$n crashes directly into you, knocking you for a loop! &W[$t]",
+                        ch, num_punct(dam), victim, TO_VICT);
+                act(AT_YELLOW,
+                        "$n crashes directly into $N, knocking them for a loop! &W[$t]",
+                        ch, num_punct(dam), victim, TO_NOTVICT);
+                global_retcode = damage(ch, victim, dam, TYPE_HIT);
+        }
+        else {
+                act(AT_YELLOW, "You missed $N with a barreling collision.", ch,
+                    NULL, victim, TO_CHAR);
+                act(AT_YELLOW, "$n misses you with a barreling collision.", ch, NULL,
+                    victim, TO_VICT);
+                act(AT_YELLOW, "$n missed $N with a barreling collision.", ch, NULL,
+                    victim, TO_NOTVICT);
+                global_retcode = damage(ch, victim, 0, TYPE_HIT);
+        }
+        ch->mana -= adjcost;
+        return;
 }
- 
+
 
 
 */
@@ -2625,9 +2522,9 @@ void do_stun(CHAR_DATA *ch, char *argument) {
   /*
     if ( !IS_NPC(ch) && ch->move < ch->max_move/10 )
     {
-	set_char_color( AT_SKILL, ch );
-	send_to_char( "You are far too tired to do that.\n\r", ch );
-	return;
+        set_char_color( AT_SKILL, ch );
+        send_to_char( "You are far too tired to do that.\n\r", ch );
+        return;
     }
 */
   WAIT_STATE(ch, skill_table[gsn_stun]->beats);
@@ -3118,9 +3015,9 @@ void do_aid(CHAR_DATA *ch, char *argument) {
   /*
     if ( victim->hit <= -6 )
     {
-	act( AT_PLAIN, "$N's condition is beyond your aiding ability.", ch,
-	     NULL, victim, TO_CHAR);
-	return;
+        act( AT_PLAIN, "$N's condition is beyond your aiding ability.", ch,
+             NULL, victim, TO_CHAR);
+        return;
     }
 */
   percent = number_percent() - (get_curr_lck(ch) - 13);
@@ -3759,13 +3656,13 @@ bool check_illegal_psteal(CHAR_DATA *ch, CHAR_DATA *victim) {
   if (!IS_NPC(victim) && !IS_NPC(ch)) {
     if ((!IS_SET(victim->pcdata->flags, PCFLAG_DEADLY) || ch->level - victim->level > 10 || !IS_SET(ch->pcdata->flags, PCFLAG_DEADLY)) && (ch->in_room->vnum < 29 || ch->in_room->vnum > 43) && ch != victim) {
       /*
-	    sprintf( log_buf, "%s illegally stealing from %s at %d",
-		(IS_NPC(ch) ? ch->short_descr : ch->name),
-		victim->name,
-		victim->in_room->vnum );
-	    log_string( log_buf );
-	    to_channel( log_buf, CHANNEL_MONITOR, "Monitor", LEVEL_IMMORTAL );
-	    */
+            sprintf( log_buf, "%s illegally stealing from %s at %d",
+                (IS_NPC(ch) ? ch->short_descr : ch->name),
+                victim->name,
+                victim->in_room->vnum );
+            log_string( log_buf );
+            to_channel( log_buf, CHANNEL_MONITOR, "Monitor", LEVEL_IMMORTAL );
+            */
       return true;
     }
   }
@@ -3898,11 +3795,11 @@ ch_ret ranged_got_target(CHAR_DATA *ch, CHAR_DATA *victim, OBJ_DATA *weapon,
 
   if (IS_NPC(victim) && xIS_SET(victim->act, ACT_SENTINEL) && ch->in_room != victim->in_room) {
     /*
-	 * letsee, if they're high enough.. attack back with fireballs
-	 * long distance or maybe some minions... go herne! heh..
-	 *
-	 * For now, just always miss if not in same room  -Thoric
-	 */
+     * letsee, if they're high enough.. attack back with fireballs
+     * long distance or maybe some minions... go herne! heh..
+     *
+     * For now, just always miss if not in same room  -Thoric
+     */
 
     if (projectile) {
       learn_from_failure(ch, gsn_missile_weapons);
@@ -3990,12 +3887,12 @@ ch_ret ranged_attack(CHAR_DATA *ch, char *argument, OBJ_DATA *weapon,
         return rNONE;
       }
       /* Taken out because of waitstate
-	    if ( !IS_NPC(ch) && !IS_NPC(victim) )
-	    {
-	    	send_to_char("Pkill like a real pkiller.\n\r", ch );
-		return rNONE;
-	    }
-	    */
+            if ( !IS_NPC(ch) && !IS_NPC(victim) )
+            {
+                send_to_char("Pkill like a real pkiller.\n\r", ch );
+                return rNONE;
+            }
+            */
     }
   } else
     dir = pexit->vdir;
@@ -4042,23 +3939,23 @@ ch_ret ranged_attack(CHAR_DATA *ch, char *argument, OBJ_DATA *weapon,
     }
 
     /* don't allow attacks on mobs stuck in another area?
-	if ( IS_NPC(vch) && xIS_SET(vch->act, ACT_STAY_AREA)
-	&&   ch->in_room->area != vch->in_room->area) )
-	{
-	}
-	*/
+        if ( IS_NPC(vch) && xIS_SET(vch->act, ACT_STAY_AREA)
+        &&   ch->in_room->area != vch->in_room->area) )
+        {
+        }
+        */
     /*don't allow attacks on mobs that are in a no-missile room --Shaddai */
     if (xIS_SET(vch->in_room->room_flags, ROOM_NOMISSILE)) {
       send_to_char("You can't get a clean shot off.\n\r", ch);
       return rNONE;
     }
     /* Taken out cause of wait state
-	if ( !IS_NPC(ch) && !IS_NPC(vch) )
-	{
-	    send_to_char("Pkill like a real pkiller.\n\r", ch );
-	    return rNONE;
-	}
-	*/
+        if ( !IS_NPC(ch) && !IS_NPC(vch) )
+        {
+            send_to_char("Pkill like a real pkiller.\n\r", ch );
+            return rNONE;
+        }
+        */
 
     /* can't properly target someone heavily in battle */
     if (vch->num_fighting > max_fight(vch)) {
@@ -4312,12 +4209,12 @@ void do_throw( CHAR_DATA *ch, char *argument )
   argument = one_argument( argument, arg2 );
 
   for ( throw_obj = ch->last_carrying; throw_obj;
-	throw_obj = throw_obj=>prev_content )
+        throw_obj = throw_obj=>prev_content )
   {
 ---    if ( can_see_obj( ch, throw_obj )
-	&& ( throw_obj->wear_loc == WEAR_HELD || throw_obj->wear_loc ==
-	WEAR_WIELDED || throw_obj->wear_loc == WEAR_DUAL_WIELDED )
-	&& nifty_is_name( arg, throw_obj->name ) )
+        && ( throw_obj->wear_loc == WEAR_HELD || throw_obj->wear_loc ==
+        WEAR_WIELDED || throw_obj->wear_loc == WEAR_DUAL_WIELDED )
+        && nifty_is_name( arg, throw_obj->name ) )
       break;
  ----
     if ( can_see_obj( ch, throw_obj ) && nifty_is_name( arg, throw_obj->name )
@@ -4351,10 +4248,10 @@ void do_throw( CHAR_DATA *ch, char *argument )
    else
     {
       if ( ( ( victim = get_char_room( ch, arg1 ) ) == NULL )
-  	&& ( arg2[0] == '\0' ) )
+        && ( arg2[0] == '\0' ) )
       {
         act( AT_GREY, "Throw $t at whom?", ch, obj->short_descr, NULL,
-	  TO_CHAR );
+          TO_CHAR );
         return;
       }
     }

@@ -5978,13 +5978,6 @@ DECLARE_SPELL_FUN(spell_notfound);
 DECLARE_SPELL_FUN(spell_sensu_bean);
 
 /*
- * The NULL_FILE is held open so that we have a stream handle in reserve,
- * so players can go ahead and telnet to all the other descriptors.
- * Then we close it whenever we need to open a file (e.g. a save file).
- */
-#define NULL_FILE "/dev/null" /* To reserve one stream        */
-
-/*
  * Our function prototypes.
  * One big lump ... this is every function in Merc.
  */

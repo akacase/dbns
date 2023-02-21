@@ -6,7 +6,6 @@
     utils.url = "github:numtide/flake-utils";
   };
 
-
   outputs = { self, nixpkgs, utils }: utils.lib.eachDefaultSystem
     (system:
       let
@@ -17,7 +16,7 @@
         dbns = with pkgs; stdenv.mkDerivation {
           name = "dbns";
           src = ./src;
-          nativeBuildInputs = [ gnumake clang zlib ninja ];
+          nativeBuildInputs = [ gnumake clang libbsd zlib ninja ];
 
           buildPhase = ''
             ninja
@@ -45,6 +44,7 @@
             gnumake
             clang
             lldb
+            libbsd
             zlib
             ninja
             sqlite
@@ -56,7 +56,7 @@
       dbns = with final; (stdenv.mkDerivation {
         name = "dbns";
         src = ./src;
-        nativeBuildInputs = [ gnumake clang zlib ninja ];
+        nativeBuildInputs = [ gnumake clang libbsd zlib ninja ];
 
         buildPhase = ''
           ninja

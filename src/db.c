@@ -3962,20 +3962,20 @@ int number_fuzzy(int number) {
 
 /*
  * Generate a random number.
- * Ooops was (random() % to) + from which doesn't work -Shaddai
+ * Ooops was (arc4random() % to) + from which doesn't work -Shaddai
  */
 int number_range(int from, int to) {
   if ((to - from) < 1)
     return from;
-  return ((random() % (to - from + 1)) + from);
+  return ((arc4random() % (to - from + 1)) + from);
 }
 
 /*
  * Generate a percentile roll.
- * random() % 100 only does 0-99, changed to do 1-100 -Shaddai
+ * arc4random() % 100 only does 0-99, changed to do 1-100 -Shaddai
  */
 int number_percent(void) {
-  return (random() % 100) + 1;
+  return (arc4random() % 100) + 1;
 }
 
 /*
@@ -3984,14 +3984,14 @@ int number_percent(void) {
 int number_door(void) {
   int door;
 
-  while ((door = random() & (16 - 1)) > 9)
+  while ((door = arc4random() & (16 - 1)) > 9)
     ;
 
   return door;
 }
 
 int number_bits(int width) {
-  return random() & ((1 << width) - 1);
+  return arc4random() & ((1 << width) - 1);
 }
 
 /*
@@ -4270,7 +4270,6 @@ void bug(const char *str, ...) {
   char buf[MAX_STRING_LENGTH];
   char mkdir[MAX_INPUT_LENGTH];
   FILE *fp;
-  struct stat fst;
 
   snprintf(mkdir, sizeof(mkdir), "mkdir -p %s", TMP_DIR);
 
@@ -4410,10 +4409,6 @@ void towizfile(const char *line) {
 
 void add_to_wizlist(char *name, int level) {
   WIZENT *wiz, *tmp;
-
-#ifdef DEBUG
-  log_string("Adding to wizlist...");
-#endif
 
   CREATE(wiz, WIZENT, 1);
   wiz->name = str_dup(name);

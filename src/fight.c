@@ -23,14 +23,14 @@
 #include <sys/types.h>
 #include <time.h>
 
-#include "mud.h"
 #include "comm.h"
+#include "mud.h"
 
 extern char lastplayercmd[MAX_INPUT_LENGTH];
 extern CHAR_DATA *gch_prev;
 
 OBJ_DATA *used_weapon; /* Used to figure out which weapon
-					 * later */
+                        * later */
 
 /*
  * Local functions.
@@ -222,9 +222,9 @@ bool is_attack_supressed(CHAR_DATA *ch) {
     return false;
 
   /*
-	 * perma-supression -- bard? (can be reset at end of fight, or
-	 * spell, etc)
-	 */
+   * perma-supression -- bard? (can be reset at end of fight, or
+   * spell, etc)
+   */
   if (timer->value == -1)
     return true;
 
@@ -384,18 +384,18 @@ void violence_update(void) {
       do_shout(ch, "Goku says, 'Prepare for the worst!'");
     }
     /*
-		 * See if we got a pointer to someone who recently died...
-		 * if so, either the pointer is bad... or it's a player who
-		 * "died", and is back at the healer...
-		 * Since he/she's in the char_list, it's likely to be the later...
-		 * and should not already be in another fight already
-		 */
+     * See if we got a pointer to someone who recently died...
+     * if so, either the pointer is bad... or it's a player who
+     * "died", and is back at the healer...
+     * Since he/she's in the char_list, it's likely to be the later...
+     * and should not already be in another fight already
+     */
     if (char_died(ch))
       continue;
 
     /*
-		 * See if we got a pointer to some bad looking data...
-		 */
+     * See if we got a pointer to some bad looking data...
+     */
     if (!ch->in_room || !ch->name) {
       log_string("violence_update: bad ch record!  (Shortcutting.)");
       sprintf(buf,
@@ -466,9 +466,9 @@ void violence_update(void) {
       continue;
 
     /*
-		 * We need spells that have shorter durations than an hour.
-		 * So a melee round sounds good to me... -Thoric
-		 */
+     * We need spells that have shorter durations than an hour.
+     * So a melee round sounds good to me... -Thoric
+     */
     for (paf = ch->first_affect; paf; paf = paf_next) {
       paf_next = paf->next;
       if (paf->duration > 0)
@@ -3663,7 +3663,7 @@ void violence_update(void) {
       continue;
 
     /* check for exits moving players around */
-    if ((retcode = pullcheck(ch, pulse)) == rCHAR_DIED || char_died(ch))
+    if (pullcheck(ch, pulse) == rCHAR_DIED || char_died(ch))
       continue;
 
     /* so people charging attacks stop fighting */
@@ -3727,9 +3727,9 @@ void violence_update(void) {
       continue;
 
     /*
-		 *  Mob triggers
-		 *  -- Added some victim death checks, because it IS possible.. -- Alty
-		 */
+     *  Mob triggers
+     *  -- Added some victim death checks, because it IS possible.. -- Alty
+     */
     rprog_rfight_trigger(ch);
     if (char_died(ch) || char_died(victim))
       continue;
@@ -3741,8 +3741,8 @@ void violence_update(void) {
       continue;
 
     /*
-		 * NPC special attack flags                             -Thoric
-		 */
+     * NPC special attack flags                             -Thoric
+     */
     if (IS_NPC(ch)) {
       if (!xIS_EMPTY(ch->attacks)) {
         attacktype = -1;
@@ -3782,8 +3782,8 @@ void violence_update(void) {
         }
       }
       /*
-			 * NPC special defense flags                                -Thoric
-			 */
+       * NPC special defense flags                                -Thoric
+       */
       if (!xIS_EMPTY(ch->defenses)) {
         attacktype = -1;
         if (50 + (ch->level / 4) > number_percent()) {
@@ -3803,16 +3803,16 @@ void violence_update(void) {
           switch (attacktype) {
             case DFND_CURELIGHT:
               /*
-						 * A few quick checks in the
-						 * cure ones so that a) less
-						 * spam and b) we don't have
-						 * mobs looking stupider
-						 * than normal by healing
-						 * themselves when they
-						 * aren't even being hit
-						 * (although that doesn't
-						 * happen TOO often
-						 */
+               * A few quick checks in the
+               * cure ones so that a) less
+               * spam and b) we don't have
+               * mobs looking stupider
+               * than normal by healing
+               * themselves when they
+               * aren't even being hit
+               * (although that doesn't
+               * happen TOO often
+               */
               if (ch->hit < ch->max_hit) {
                 act(AT_MAGIC,
                     "$n mutters a few incantations...and looks a little better.",
@@ -3857,10 +3857,10 @@ void violence_update(void) {
               }
               break;
               /*
-						 * Thanks to
-						 * guppy@wavecomputers.net
-						 * for catching this
-						 */
+               * Thanks to
+               * guppy@wavecomputers.net
+               * for catching this
+               */
             case DFND_SHOCKSHIELD:
               if (!IS_AFFECTED(ch, AFF_SHOCKSHIELD)) {
                 act(AT_MAGIC,
@@ -3948,17 +3948,17 @@ void violence_update(void) {
       }
     }
     /*
-		 * Fun for the whole family!
-		 */
+     * Fun for the whole family!
+     */
     for (rch = ch->in_room->first_person; rch; rch = rch_next) {
       rch_next = rch->next_in_room;
 
       /*
-			 *   Group Fighting Styles Support:
-			 *   If ch is tanking
-			 *   If rch is using a more aggressive style than ch
-			 *   Then rch is the new tank   -h
-			 */
+       *   Group Fighting Styles Support:
+       *   If ch is tanking
+       *   If rch is using a more aggressive style than ch
+       *   Then rch is the new tank   -h
+       */
       /* &&( is_same_group(ch, rch)      ) */
 
       if ((!IS_NPC(ch) && !IS_NPC(rch)) && (rch != ch) && (rch->fighting) && (who_fighting(rch->fighting->who) == ch) &&
@@ -3967,8 +3967,8 @@ void violence_update(void) {
       }
       if (IS_AWAKE(rch) && !rch->fighting) {
         /*
-				 * Split forms auto-assist others in their group.
-				 */
+         * Split forms auto-assist others in their group.
+         */
 
         if (!IS_NPC(ch) && is_splitformed(ch)) {
           if (IS_NPC(rch) && is_split(rch) && is_same_group(ch, rch) && !is_safe(rch, victim, true))
@@ -3977,8 +3977,8 @@ void violence_update(void) {
           continue;
         }
         /*
-				 * PC's auto-assist others in their group.
-				 */
+         * PC's auto-assist others in their group.
+         */
         if (!IS_NPC(ch) || IS_AFFECTED(ch, AFF_CHARM)) {
           if (((!IS_NPC(rch) && rch->desc) || IS_AFFECTED(rch, AFF_CHARM)) && is_same_group(ch, rch) && !is_safe(rch, victim, true)) {
             multi_hit(rch, victim,
@@ -3987,8 +3987,8 @@ void violence_update(void) {
           continue;
         }
         /*
-				 * NPC's assist NPC's of same type or 12.5% chance regardless.
-				 */
+         * NPC's assist NPC's of same type or 12.5% chance regardless.
+         */
         if (IS_NPC(rch) && !IS_AFFECTED(rch, AFF_CHARM) && !xIS_SET(rch->act, ACT_NOASSIST)) {
           if (char_died(ch))
             break;
@@ -4091,8 +4091,8 @@ multi_hit(CHAR_DATA *ch, CHAR_DATA *victim, int dt) {
   } else
     dual_bonus = 0;
   /*
-	 * NPC predetermined number of attacks                      -Thoric
-	 */
+   * NPC predetermined number of attacks                      -Thoric
+   */
   if (IS_NPC(ch) && ch->numattacks > 0) {
     for (chance = 0; chance < ch->numattacks; chance++) {
       retcode = one_hit(ch, victim, dt);
@@ -4161,13 +4161,6 @@ int weapon_prof_bonus_check(CHAR_DATA *ch, OBJ_DATA *wield, int *gsn_ptr) {
     }
     if (*gsn_ptr != -1)
       bonus = (int)((LEARNED(ch, *gsn_ptr) - 50) / 10);
-
-    /*
-		 * Reduce weapon bonuses for misaligned clannies. if (
-		 * IS_CLANNED(ch) ) { bonus = bonus * 1000 / ( 1 + abs(
-		 * ch->alignment - ch->pcdata->clan->alignment ) ); }
-		 */
-
     if (IS_DEVOTED(ch))
       bonus -= ch->pcdata->favor / -400;
   }
@@ -4236,9 +4229,9 @@ one_hit(CHAR_DATA *ch, CHAR_DATA *victim, int dt) {
   attmod = get_attmod(ch, victim);
 
   /*
-	 * Can't beat a dead char!
-	 * Guard against weird room-leavings.
-	 */
+   * Can't beat a dead char!
+   * Guard against weird room-leavings.
+   */
   if (victim->position == POS_DEAD || ch->in_room != victim->in_room)
     return rVICT_DIED;
 
@@ -4246,9 +4239,9 @@ one_hit(CHAR_DATA *ch, CHAR_DATA *victim, int dt) {
 
   used_weapon = NULL;
   /*
-	 * Figure out the weapon doing the damage                   -Thoric
-	 * Dual wield support -- switch weapons each attack
-	 */
+   * Figure out the weapon doing the damage                   -Thoric
+   * Dual wield support -- switch weapons each attack
+   */
   if ((wield = get_eq_char(ch, WEAR_DUAL_WIELD)) != NULL) {
     if (dual_flip == false) {
       dual_flip = true;
@@ -4323,12 +4316,12 @@ one_hit(CHAR_DATA *ch, CHAR_DATA *victim, int dt) {
       dt += wield->value[3];
   }
   /*
-	 * Calculate percent to hit.
-	 */
+   * Calculate percent to hit.
+   */
 
   /*
-	 * Base chance to hit. Change as needed
-	 */
+   * Base chance to hit. Change as needed
+   */
   baseToHit = 60;
 
   if (get_curr_dex(ch) > get_curr_dex(victim))
@@ -4355,8 +4348,8 @@ one_hit(CHAR_DATA *ch, CHAR_DATA *victim, int dt) {
   baseToHit = URANGE(1, baseToHit, 100);
 
   /*
-	 * The moment of excitement!
-	 */
+   * The moment of excitement!
+   */
   diceroll = number_range(1, 100);
   if ((diceroll > 5 && diceroll > baseToHit) || diceroll >= 96) {
     /* Miss. */
@@ -4367,12 +4360,12 @@ one_hit(CHAR_DATA *ch, CHAR_DATA *victim, int dt) {
     return rNONE;
   }
   /*
-	 * Hit.
-	 * Calc damage.
-	 */
+   * Hit.
+   * Calc damage.
+   */
 
   if (!wield) { /* bare hand dice formula fixed by
-					 * Thoric */
+                 * Thoric */
     if (is_android(ch) || is_superandroid(ch))
       dam =
           number_range(ch->barenumdie,
@@ -4387,8 +4380,8 @@ one_hit(CHAR_DATA *ch, CHAR_DATA *victim, int dt) {
   }
 
   /*
-	 * Calculate Damage Modifiers Based on strength and con
-	 */
+   * Calculate Damage Modifiers Based on strength and con
+   */
   dam += get_damroll(ch);
   if (dt == TYPE_HIT)
     dam -= get_strDef(victim);
@@ -4398,22 +4391,22 @@ one_hit(CHAR_DATA *ch, CHAR_DATA *victim, int dt) {
     dam = 0;
 
   /*
-	 * Bonuses.
-	 */
+   * Bonuses.
+   */
   if (prof_bonus)
     dam += prof_bonus / 4;
 
   /*
-	 * Max Damage Possable.
-	 */
+   * Max Damage Possable.
+   */
   if (dam * attmod > 999999999)
     dam = 999999999;
   else
     dam *= attmod;
 
   /*
-	 * Calculate Damage Modifiers from Victim's Fighting Style
-	 */
+   * Calculate Damage Modifiers from Victim's Fighting Style
+   */
   if (victim->position == POS_BERSERK)
     dam = 1.2 * dam;
   else if (victim->position == POS_AGGRESSIVE)
@@ -4426,8 +4419,8 @@ one_hit(CHAR_DATA *ch, CHAR_DATA *victim, int dt) {
     learn_from_success(victim, gsn_style_evasive);
   }
   /*
-	 * Calculate Damage Modifiers from Attacker's Fighting Style
-	 */
+   * Calculate Damage Modifiers from Attacker's Fighting Style
+   */
   if (ch->position == POS_BERSERK) {
     dam = 1.2 * dam;
     learn_from_success(ch, gsn_style_berserk);
@@ -4453,8 +4446,8 @@ one_hit(CHAR_DATA *ch, CHAR_DATA *victim, int dt) {
         (2 + URANGE(2, ch->level - (victim->level / 4), 30) / 16);
 
   /*
-	 * For NPC's, they can be set to automaticly take a % off dammage
-	 */
+   * For NPC's, they can be set to automaticly take a % off dammage
+   */
   if (IS_NPC(victim)) {
     if ((GET_AC(victim) > 0)) {
       dam = (dam * (GET_AC(victim) * 0.01));
@@ -4478,8 +4471,8 @@ one_hit(CHAR_DATA *ch, CHAR_DATA *victim, int dt) {
       dam = ris_damage(victim, dam, RIS_NONMAGIC);
 
     /*
-		 * Handle PLUS1 - PLUS6 ris bits vs. weapon hitroll     -Thoric
-		 */
+     * Handle PLUS1 - PLUS6 ris bits vs. weapon hitroll     -Thoric
+     */
     plusris = obj_hitroll(wield);
   } else
     dam = ris_damage(victim, dam, RIS_NONMAGIC);
@@ -4562,9 +4555,9 @@ one_hit(CHAR_DATA *ch, CHAR_DATA *victim, int dt) {
     return retcode;
 
   /*
-	 * Weapon spell support                             -Thoric
-	 * Each successful hit casts a spell
-	 */
+   * Weapon spell support                             -Thoric
+   * Each successful hit casts a spell
+   */
   if (wield && !IS_SET(victim->immune, RIS_MAGIC) && !xIS_SET(victim->in_room->room_flags, ROOM_NO_MAGIC)) {
     AFFECT_DATA *aff;
 
@@ -4585,8 +4578,8 @@ one_hit(CHAR_DATA *ch, CHAR_DATA *victim, int dt) {
       return retcode;
   }
   /*
-	 * magic shields that retaliate                             -Thoric
-	 */
+   * magic shields that retaliate                             -Thoric
+   */
   if (IS_AFFECTED(victim, AFF_FIRESHIELD) && !IS_AFFECTED(ch, AFF_FIRESHIELD))
     retcode =
         spell_smaug(skill_lookup("flare"), off_shld_lvl(victim, ch),
@@ -4661,8 +4654,8 @@ projectile_hit(CHAR_DATA *ch, CHAR_DATA *victim, OBJ_DATA *wield,
   }
 
   /*
-	 * Can't beat a dead char!
-	 */
+   * Can't beat a dead char!
+   */
   if (victim->position == POS_DEAD || char_died(victim)) {
     extract_obj(projectile);
     return rVICT_DIED;
@@ -4678,8 +4671,8 @@ projectile_hit(CHAR_DATA *ch, CHAR_DATA *victim, OBJ_DATA *wield,
       dt += wield->value[3];
   }
   /*
-	 * Calculate to-hit-armor-class-0 versus armor.
-	 */
+   * Calculate to-hit-armor-class-0 versus armor.
+   */
   if (IS_NPC(ch)) {
     thac0_00 = ch->mobthac0;
     thac0_32 = 0;
@@ -4703,8 +4696,8 @@ projectile_hit(CHAR_DATA *ch, CHAR_DATA *victim, OBJ_DATA *wield,
   victim_ac += prof_bonus;
 
   /*
-	 * The moment of excitement!
-	 */
+   * The moment of excitement!
+   */
   while ((diceroll = number_bits(5)) >= 20)
     ;
 
@@ -4728,9 +4721,9 @@ projectile_hit(CHAR_DATA *ch, CHAR_DATA *victim, OBJ_DATA *wield,
     return rNONE;
   }
   /*
-	 * Hit.
-	 * Calc damage.
-	 */
+   * Hit.
+   * Calc damage.
+   */
 
   if (!wield) /* dice formula fixed by Thoric */
     dam = proj_bonus;
@@ -4741,16 +4734,16 @@ projectile_hit(CHAR_DATA *ch, CHAR_DATA *victim, OBJ_DATA *wield,
         (proj_bonus / 10);
 
   /*
-	 * Bonuses.
-	 */
+   * Bonuses.
+   */
   dam += GET_DAMROLL(ch);
 
   if (prof_bonus)
     dam += prof_bonus / 4;
 
   /*
-	 * Calculate Damage Modifiers from Victim's Fighting Style
-	 */
+   * Calculate Damage Modifiers from Victim's Fighting Style
+   */
   if (victim->position == POS_BERSERK)
     dam = 1.2 * dam;
   else if (victim->position == POS_AGGRESSIVE)
@@ -4778,8 +4771,8 @@ projectile_hit(CHAR_DATA *ch, CHAR_DATA *victim, OBJ_DATA *wield,
     dam = ris_damage(victim, dam, RIS_NONMAGIC);
 
   /*
-	 * Handle PLUS1 - PLUS6 ris bits vs. weapon hitroll -Thoric
-	 */
+   * Handle PLUS1 - PLUS6 ris bits vs. weapon hitroll -Thoric
+   */
   if (wield)
     plusris = obj_hitroll(wield);
 
@@ -4957,19 +4950,19 @@ void stat_train(CHAR_DATA *ch, char *stat, int modifier) {
 
   fightIncrease = (number_range(1, 2) * gainMod);
 
-  if (strcmp(stat, "str")) {
+  if (strcmp("str", stat) == 0) {
     tAbility = &ch->pcdata->tStr;
     pAbility = &ch->perm_str;
     permTstat = &ch->pcdata->permTstr;
-  } else if (strcmp(stat, "int")) {
+  } else if (strcmp("int", stat) == 0) {
     tAbility = &ch->pcdata->tInt;
     pAbility = &ch->perm_int;
     permTstat = &ch->pcdata->permTint;
-  } else if (strcmp(stat, "spd")) {
+  } else if (strcmp("spd", stat) == 0) {
     tAbility = &ch->pcdata->tSpd;
     pAbility = &ch->perm_dex;
     permTstat = &ch->pcdata->permTspd;
-  } else if (strcmp(stat, "con")) {
+  } else if (strcmp("con", stat) == 0) {
     tAbility = &ch->pcdata->tCon;
     pAbility = &ch->perm_con;
     permTstat = &ch->pcdata->permTcon;
@@ -4982,24 +4975,23 @@ void stat_train(CHAR_DATA *ch, char *stat, int modifier) {
     *pAbility += 1;
     *permTstat += 1;
     if (ch->exp < 50) {
-      int randomgain = 0;
+      int randomgain = number_range(1, 3);
 
-      randomgain = number_range(1, 3);
-      if (randomgain = 3) {
+      if (randomgain == 3) {
         ch->exp += 1;
         ch->pl += 1;
       }
     }
-    if (strcmp(stat, "str")) {
+    if (strcmp("str", stat) == 0) {
       send_to_char("&CYou feel your strength improving!&D\n\r", ch);
     }
-    if (strcmp(stat, "spd")) {
+    if (strcmp("spd", stat) == 0) {
       send_to_char("&CYou feel your speed improving!&D\n\r", ch);
     }
-    if (strcmp(stat, "int")) {
+    if (strcmp("int", stat) == 0) {
       send_to_char("&CYou feel your intelligence improving!&D\n\r", ch);
     }
-    if (strcmp(stat, "con")) {
+    if (strcmp("con", stat) == 0) {
       send_to_char("&CYou feel your constitution improving!&D\n\r", ch);
     }
   } else if (*permTstat >= 2000000000 && *tAbility >= 999) {
@@ -5021,19 +5013,19 @@ void exercise_train(CHAR_DATA *ch, char *stat, int modifier) {
 
   fightIncrease = (number_range(1, 2) * gainMod);
 
-  if (strcmp(stat, "str")) {
+  if (strcmp("str", stat) == 0) {
     tAbility = &ch->pcdata->tStr;
     pAbility = &ch->perm_str;
     permTstat = &ch->pcdata->permTstr;
-  } else if (strcmp(stat, "int")) {
+  } else if (strcmp("int", stat) == 0) {
     tAbility = &ch->pcdata->tInt;
     pAbility = &ch->perm_int;
     permTstat = &ch->pcdata->permTint;
-  } else if (strcmp(stat, "spd")) {
+  } else if (strcmp("spd", stat) == 0) {
     tAbility = &ch->pcdata->tSpd;
     pAbility = &ch->perm_dex;
     permTstat = &ch->pcdata->permTspd;
-  } else if (strcmp(stat, "con")) {
+  } else if (strcmp("con", stat) == 0) {
     tAbility = &ch->pcdata->tCon;
     pAbility = &ch->perm_con;
     permTstat = &ch->pcdata->permTcon;
@@ -5201,9 +5193,9 @@ damage(CHAR_DATA *ch, CHAR_DATA *victim, int dam, int dt) {
   }
   if (victim != ch) {
     /*
-		 * Certain attacks are forbidden.
-		 * Most other attacks are returned.
-		 */
+     * Certain attacks are forbidden.
+     * Most other attacks are returned.
+     */
     if (is_safe(ch, victim, true))
       return rNONE;
     check_attacker(ch, victim);
@@ -5246,38 +5238,38 @@ damage(CHAR_DATA *ch, CHAR_DATA *victim, int dam, int dt) {
       }
     }
     /*
-		 * More charm stuff.
-		 */
+     * More charm stuff.
+     */
     if (victim->master == ch)
       stop_follower(victim);
 
     /*
-		 * Pkill stuff.  If a deadly attacks another deadly or is attacked by
-		 * one, then ungroup any nondealies.  Disabled untill I can figure out
-		 * the right way to do it.
-		 */
+     * Pkill stuff.  If a deadly attacks another deadly or is attacked by
+     * one, then ungroup any nondealies.  Disabled untill I can figure out
+     * the right way to do it.
+     */
 
     /*
-		 *  count the # of non-pkill pc in a ( not including == ch )
-		 */
+     *  count the # of non-pkill pc in a ( not including == ch )
+     */
     for (gch = ch->in_room->first_person; gch;
          gch = gch->next_in_room)
       if (is_same_group(ch, gch) && !IS_NPC(gch) && !IS_PKILL(gch) && (ch != gch))
         anopc++;
 
     /*
-		 *  count the # of non-pkill pc in b ( not including == victim )
-		 */
+     *  count the # of non-pkill pc in b ( not including == victim )
+     */
     for (gch = victim->in_room->first_person; gch;
          gch = gch->next_in_room)
       if (is_same_group(victim, gch) && !IS_NPC(gch) && !IS_PKILL(gch) && (victim != gch))
         bnopc++;
 
     /*
-		 *  only consider disbanding if both groups have 1(+) non-pk pc,
-		 *  or when one participant is pc, and the other group has 1(+)
-		 *  pk pc's (in the case that participant is only pk pc in group)
-		 */
+     *  only consider disbanding if both groups have 1(+) non-pk pc,
+     *  or when one participant is pc, and the other group has 1(+)
+     *  pk pc's (in the case that participant is only pk pc in group)
+     */
     if ((bnopc > 0 && anopc > 0) || (bnopc > 0 && !IS_NPC(ch)) || (anopc > 0 && !IS_NPC(victim))) {
       /* disband from same group first */
       if (is_same_group(ch, victim)) {
@@ -6412,7 +6404,7 @@ bool is_safe(CHAR_DATA *ch, CHAR_DATA *victim, bool show_messg) {
     return false;
 
   if (!victim) { /* Gonna find this is_safe crash bug
-					 * -Blod */
+                  * -Blod */
     bug("Is_safe: %s opponent does not exist!", ch->name);
     return true;
   }
@@ -6519,8 +6511,8 @@ void check_killer(CHAR_DATA *ch, CHAR_DATA *victim) {
     split = true;
 
   /*
-	 * NPC's are fair game.
-	 */
+   * NPC's are fair game.
+   */
   if (IS_NPC(victim)) {
     if (!IS_NPC(ch)) {
       int level_ratio;
@@ -6546,43 +6538,43 @@ void check_killer(CHAR_DATA *ch, CHAR_DATA *victim) {
     return;
   }
   /*
-	 * If you kill yourself nothing happens.
-	 */
+   * If you kill yourself nothing happens.
+   */
 
   if (ch == victim)
     return;
 
   /*
-	 * Any character in the arena is ok to kill.
-	 * Added pdeath and pkills here
-	 if ( in_arena( ch ) )
-	 {
-	 if ( !IS_NPC(ch) && !IS_NPC(victim) )
-	 {
-	 ch->pcdata->pkills++;
-	 victim->pcdata->pdeaths++;
-	 adjust_hiscore( "pkill", ch, ch->pcdata->pkills );
-	 }
-	 else if ( (IS_NPC(ch) && is_split(ch))
-	 && !IS_NPC(victim) )
-	 {
-	 if( !ch->master )
-	 {
-	 log("%s just killed the split form %s without the owner online",
-	 victim->name, ch->short_descr );
-	 }
-	 ch->master->pcdata->pkills++;
-	 victim->pcdata->pdeaths++;
-	 adjust_hiscore( "pkill", ch, ch->master->pcdata->pkills );
-	 }
+         * Any character in the arena is ok to kill.
+         * Added pdeath and pkills here
+         if ( in_arena( ch ) )
+         {
+         if ( !IS_NPC(ch) && !IS_NPC(victim) )
+         {
+         ch->pcdata->pkills++;
+         victim->pcdata->pdeaths++;
+         adjust_hiscore( "pkill", ch, ch->pcdata->pkills );
+         }
+         else if ( (IS_NPC(ch) && is_split(ch))
+         && !IS_NPC(victim) )
+         {
+         if( !ch->master )
+         {
+         log("%s just killed the split form %s without the owner online",
+         victim->name, ch->short_descr );
+         }
+         ch->master->pcdata->pkills++;
+         victim->pcdata->pdeaths++;
+         adjust_hiscore( "pkill", ch, ch->master->pcdata->pkills );
+         }
 
-	 return;
-	 }
-	 */
+         return;
+         }
+         */
 
   /*
-	 * So are killers and thieves.
-	 */
+   * So are killers and thieves.
+   */
   if (xIS_SET(victim->act, PLR_KILLER) || xIS_SET(victim->act, PLR_THIEF)) {
     if (!IS_NPC(ch)) {
       if (ch->pcdata->clan) {
@@ -6695,8 +6687,8 @@ void check_killer(CHAR_DATA *ch, CHAR_DATA *victim) {
     return;
   }
   /*
-	 * Charm-o-rama.
-	 */
+   * Charm-o-rama.
+   */
   if (IS_AFFECTED(ch, AFF_CHARM)) {
     if (!ch->master) {
       char buf[MAX_STRING_LENGTH];
@@ -6714,11 +6706,11 @@ void check_killer(CHAR_DATA *ch, CHAR_DATA *victim) {
     return;
   }
   /*
-	 * NPC's are cool of course (as long as not charmed).
-	 * Hitting yourself is cool too (bleeding).
-	 * So is being immortal (Alander's idea).
-	 * And current killers stay as they are.
-	 */
+   * NPC's are cool of course (as long as not charmed).
+   * Hitting yourself is cool too (bleeding).
+   * So is being immortal (Alander's idea).
+   * And current killers stay as they are.
+   */
 
   if (IS_NPC(ch)) {
     if (!IS_NPC(victim)) {
@@ -6730,11 +6722,11 @@ void check_killer(CHAR_DATA *ch, CHAR_DATA *victim) {
         add_timer(victim, TIMER_PKILLED, 345, NULL, 0);
       if (victim->pcdata->clan) {
         /*
-				 * if( split ) {
-				 * victim->pcdata->clan->pdeaths++;
-				 * ch->master->pcdata->clan->pkills++; }
-				 * else
-				 */
+         * if( split ) {
+         * victim->pcdata->clan->pdeaths++;
+         * ch->master->pcdata->clan->pkills++; }
+         * else
+         */
         victim->pcdata->clan->mdeaths++;
       }
       if (split) {
@@ -6814,13 +6806,13 @@ void check_killer(CHAR_DATA *ch, CHAR_DATA *victim) {
 void check_attacker(CHAR_DATA *ch, CHAR_DATA *victim) {
   return;
   /*
- * Made some changes to this function Apr 6/96 to reduce the prolifiration
- * of attacker flags in the realms. -Narn
- */
+   * Made some changes to this function Apr 6/96 to reduce the prolifiration
+   * of attacker flags in the realms. -Narn
+   */
   /*
-	 * NPC's are fair game.
-	 * So are killers and thieves.
-	 */
+   * NPC's are fair game.
+   * So are killers and thieves.
+   */
   if (IS_NPC(victim) || xIS_SET(victim->act, PLR_KILLER) || xIS_SET(victim->act, PLR_THIEF))
     return;
 
@@ -6829,8 +6821,8 @@ void check_attacker(CHAR_DATA *ch, CHAR_DATA *victim) {
     return;
 
   /*
-	 * Charm-o-rama.
-	 */
+   * Charm-o-rama.
+   */
   if (IS_AFFECTED(ch, AFF_CHARM)) {
     if (!ch->master) {
       char buf[MAX_STRING_LENGTH];
@@ -6845,11 +6837,11 @@ void check_attacker(CHAR_DATA *ch, CHAR_DATA *victim) {
     return;
   }
   /*
-	 * NPC's are cool of course (as long as not charmed).
-	 * Hitting yourself is cool too (bleeding).
-	 * So is being immortal (Alander's idea).
-	 * And current killers stay as they are.
-	 */
+   * NPC's are cool of course (as long as not charmed).
+   * Hitting yourself is cool too (bleeding).
+   * So is being immortal (Alander's idea).
+   * And current killers stay as they are.
+   */
   if (IS_NPC(ch) || ch == victim || ch->level >= LEVEL_IMMORTAL || xIS_SET(ch->act, PLR_ATTACKER) || xIS_SET(ch->act, PLR_KILLER))
     return;
 
@@ -7301,8 +7293,8 @@ void raw_kill(CHAR_DATA *ch, CHAR_DATA *victim) {
   /* Shut down some of those naked spammer killers - Blodkai */
 
   /*
-	 * Pardon crimes...                                         -Thoric
-	 */
+   * Pardon crimes...                                         -Thoric
+   */
   if (xIS_SET(victim->act, PLR_KILLER)) {
     xREMOVE_BIT(victim->act, PLR_KILLER);
     send_to_char("The gods have pardoned you for your murderous acts.\n\r",
@@ -7336,9 +7328,9 @@ void group_gain(CHAR_DATA *ch, CHAR_DATA *victim) {
   int members;
 
   /*
-	 * Monsters don't get kill xp's or alignment changes.
-	 * Dying of mortal wounds or poison doesn't give xp to anyone!
-	 */
+   * Monsters don't get kill xp's or alignment changes.
+   * Dying of mortal wounds or poison doesn't give xp to anyone!
+   */
   if (IS_NPC(ch) || victim == ch)
     return;
 
@@ -7897,7 +7889,7 @@ void new_dam_message(CHAR_DATA *ch, CHAR_DATA *victim, int dam, int dt,
             found = true;
           }
           if (found) { /* miss message already
-							 * sent */
+                        * sent */
             if (was_in_room) {
               char_from_room(ch);
               char_to_room(ch,
@@ -8475,19 +8467,19 @@ void do_flee(CHAR_DATA *ch, char *argument) {
   was_in = ch->in_room;
 
   /*
-	 * Decided to make fleeing harder to accomplish when in a pk fight.
-	 * -Karma
-	 */
+   * Decided to make fleeing harder to accomplish when in a pk fight.
+   * -Karma
+   */
   wf = who_fighting(ch);
   bool nochance = false;
 
   if (!IS_NPC(ch) && !IS_NPC(wf)) {
     if (number_range(1, 2) == 2)
-      //50 % chance
+      // 50 % chance
       nochance = true;
   } else {
     if (number_range(1, 5) < 2)
-      //80 % chance
+      // 80 % chance
       nochance = true;
   }
 

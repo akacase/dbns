@@ -1,17 +1,19 @@
 {
-    "configurations": [
-        {
-            "name": "Mac",
-            "includePath": [
-                "${workspaceFolder}/**"
-            ],
-            "defines": [],
-            "macFrameworkPath": [
-                "/nix/store/wr481gz996zf902l4mhdgy5a3kcxxahi-apple-framework-CoreFoundation-11.0.0/Library/Frameworks"
-            ],
-            "compilerPath": "/nix/store/iqd25854qrdz69vwbvq87x3ma9l895vr-clang-wrapper-11.1.0/bin/clang",
-            "intelliSenseMode": "macos-clang-arm64"
-        }
-    ],
-    "version": 4
+  "configurations": [
+    {
+      "name": "macos-clang-x64",
+      "includePath": [
+        "${workspaceFolder}/**"
+      ],
+      "defines": [],
+      "macFrameworkPath": [
+        "/nix/store/wr481gz996zf902l4mhdgy5a3kcxxahi-apple-framework-CoreFoundation-11.0.0/Library/Frameworks"
+      ],
+      "compilerPath": "/nix/store/h43b41xigskix5j0cyasnaj819k1jfc6-clang-wrapper-11.1.0/bin/clang",
+      "intelliSenseMode": "macos-clang-x64",
+      "cStandard": "${default}",
+      "cppStandard": "${default}"
+    }
+  ],
+  "version": 4
 }
