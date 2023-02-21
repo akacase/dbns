@@ -1199,20 +1199,16 @@ void do_avtalk(CHAR_DATA *ch, char *argument) {
 void do_say(CHAR_DATA *ch, char *argument) {
   char buf[MAX_STRING_LENGTH];
   CHAR_DATA *vch;
-  CHAR_DATA *robot = NULL;
-
   EXT_BV actflags;
-
-#ifndef SCRAMBLE
 
   int speaking = -1, lang;
 
-  for (lang = 0; lang_array[lang] != LANG_UNKNOWN; lang++)
+  for (lang = 0; lang_array[lang] != LANG_UNKNOWN; lang++) {
     if (ch->speaking & lang_array[lang]) {
       speaking = lang;
       break;
     }
-#endif
+  }
 
   if (argument[0] == '\0') {
     send_to_char("Say what?\n\r", ch);
@@ -1237,21 +1233,12 @@ void do_say(CHAR_DATA *ch, char *argument) {
     if (vch == ch)
       continue;
 
-    if (IS_NPC(vch) && xIS_SET(vch->act, ACT_ROBOT))
-      robot = vch;
-
     /* Check to see if character is ignoring speaker */
     if (is_ignoring(vch, ch)) {
       /* continue unless speaker is an immortal */
       if (!IS_IMMORTAL(ch) || get_trust(vch) > get_trust(ch))
         continue;
-      /*
-       * else { set_char_color(AT_IGNORE, vch);
-       * ch_printf(vch,"You attempt to ignore %s, but" "
-       * are unable to do so.\n\r", ch->name); }
-       */
     }
-#ifndef SCRAMBLE
     if (speaking != -1 && (!IS_NPC(ch) || ch->speaking)) {
       int speakswell = UMIN(knows_language(vch, ch->speaking, ch),
                             knows_language(ch, ch->speaking, vch));
@@ -1259,10 +1246,6 @@ void do_say(CHAR_DATA *ch, char *argument) {
       if (speakswell < 75)
         sbuf = translate(speakswell, argument, lang_names[speaking]);
     }
-#else
-    if (!knows_language(vch, ch->speaking, ch) && (!IS_NPC(ch) || ch->speaking != 0))
-      sbuf = scramble(argument, ch->speaking);
-#endif
 
     sbuf = drunk_speech(sbuf, ch);
 
@@ -1294,6 +1277,7 @@ void do_say(CHAR_DATA *ch, char *argument) {
   if (char_died(ch))
     return;
   rprog_speech_trigger(argument, ch);
+
   return;
 }
 
@@ -1304,14 +1288,11 @@ void do_whisper(CHAR_DATA *ch, char *argument) {
   int position;
   int speaking = -1, lang;
 
-#ifndef SCRAMBLE
-
   for (lang = 0; lang_array[lang] != LANG_UNKNOWN; lang++)
     if (ch->speaking & lang_array[lang]) {
       speaking = lang;
       break;
     }
-#endif
 
   xREMOVE_BIT(ch->deaf, CHANNEL_WHISPER);
 
@@ -1369,12 +1350,8 @@ void do_whisper(CHAR_DATA *ch, char *argument) {
                 victim->name);
       return;
     }
-    /*
-     * else { set_char_color(AT_IGNORE, victim);
-     * ch_printf(victim, "You attempt to ignore %s, but " "are
-     * unable to do so.\n\r", ch->name); }
-     */
   }
+
   /* Bug fix by guppy@wavecomputers.net */
   MOBtrigger = false;
 
@@ -1382,8 +1359,6 @@ void do_whisper(CHAR_DATA *ch, char *argument) {
   act(AT_WHISPER, "You whisper to $N '$t'", ch, argument, victim, TO_CHAR);
   position = victim->position;
   victim->position = POS_STANDING;
-#ifndef SCRAMBLE
-
   if (speaking != -1 && (!IS_NPC(ch) || ch->speaking)) {
     int speakswell = UMIN(knows_language(victim, ch->speaking, ch),
                           knows_language(ch, ch->speaking, victim));
@@ -1391,14 +1366,6 @@ void do_whisper(CHAR_DATA *ch, char *argument) {
     if (speakswell < 85)
       act(AT_WHISPER, "$n whispers to you '$t'", ch,
           translate(speakswell, argument, lang_names[speaking]), victim, TO_VICT);
-#else
-
-  if (!knows_language(vch, ch->speaking, ch) &&
-      (!IS_NPC(ch) || ch->speaking != 0))
-    act(AT_WHISPER, "$n whispers to you '$t'", ch,
-        translate(speakswell, argument, lang_names[speaking]), victim, TO_VICT);
-#endif
-
     else
       act(AT_WHISPER, "$n whispers to you '$t'", ch, argument, victim, TO_VICT);
   }
@@ -1432,8 +1399,6 @@ void do_tell(CHAR_DATA *ch, char *argument) {
   int position;
   CHAR_DATA *switched_victim = NULL;
 
-#ifndef SCRAMBLE
-
   int speaking = -1, lang;
 
   for (lang = 0; lang_array[lang] != LANG_UNKNOWN; lang++)
@@ -1441,7 +1406,6 @@ void do_tell(CHAR_DATA *ch, char *argument) {
       speaking = lang;
       break;
     }
-#endif
 
   xREMOVE_BIT(ch->deaf, CHANNEL_TELLS);
   if (xIS_SET(ch->in_room->room_flags, ROOM_SILENCE)) {
@@ -1518,11 +1482,6 @@ void do_tell(CHAR_DATA *ch, char *argument) {
                 victim->name);
       return;
     }
-    /*
-     * else { set_char_color(AT_IGNORE, victim);
-     * ch_printf(victim, "You attempt to ignore %s, but " "are
-     * unable to do so.\n\r", ch->name); }
-     */
   }
   ch->retell = victim;
 
@@ -1595,8 +1554,6 @@ void do_reply(CHAR_DATA *ch, char *argument) {
   CHAR_DATA *victim;
   int position;
 
-#ifndef SCRAMBLE
-
   int speaking = -1, lang;
 
   for (lang = 0; lang_array[lang] != LANG_UNKNOWN; lang++)
@@ -1604,7 +1561,6 @@ void do_reply(CHAR_DATA *ch, char *argument) {
       speaking = lang;
       break;
     }
-#endif
 
   xREMOVE_BIT(ch->deaf, CHANNEL_TELLS);
   if (xIS_SET(ch->in_room->room_flags, ROOM_SILENCE)) {
@@ -1655,11 +1611,6 @@ void do_reply(CHAR_DATA *ch, char *argument) {
                 victim->name);
       return;
     }
-    /*
-     * else { set_char_color(AT_IGNORE, victim);
-     * ch_printf(victim, "You attempt to ignore %s, but " "are
-     * unable to do so.\n\r", ch->name); }
-     */
   }
   sysdata.outBytesFlag = LOGBOUTCHANNEL;
   act(AT_TELL, "You tell $N '$t'", ch, argument, victim, TO_CHAR);
@@ -1674,7 +1625,6 @@ void do_reply(CHAR_DATA *ch, char *argument) {
   }
   position = victim->position;
   victim->position = POS_STANDING;
-#ifndef SCRAMBLE
 
   if (speaking != -1 && (!IS_NPC(ch) || ch->speaking)) {
     int speakswell = UMIN(knows_language(victim, ch->speaking, ch),
@@ -1686,14 +1636,6 @@ void do_reply(CHAR_DATA *ch, char *argument) {
       act(AT_TELL, "$n tells you '$t'", ch, argument, victim, TO_VICT);
   } else
     act(AT_TELL, "$n tells you '$t'", ch, argument, victim, TO_VICT);
-#else
-
-  if (knows_language(victim, ch->speaking, ch) ||
-      (IS_NPC(ch) && !ch->speaking))
-    act(AT_TELL, "$n tells you '$t'", ch, argument, victim, TO_VICT);
-  else
-    act(AT_TELL, "$n tells you '$t'", ch, scramble(argument, ch->speaking), victim, TO_VICT);
-#endif
 
   victim->position = position;
   victim->reply = ch;
@@ -1855,7 +1797,6 @@ void do_retell(CHAR_DATA *ch, char *argument) {
   }
   position = victim->position;
   victim->position = POS_STANDING;
-#ifndef SCRAMBLE
 
   if (speaking != -1 && (!IS_NPC(ch) || ch->speaking)) {
     int speakswell = UMIN(knows_language(victim, ch->speaking, ch),
@@ -1867,17 +1808,6 @@ void do_retell(CHAR_DATA *ch, char *argument) {
       act(AT_TELL, "$n tells you '$t'", ch, argument, victim, TO_VICT);
   } else
     act(AT_TELL, "$n tells you '$t'", ch, argument, victim, TO_VICT);
-#else
-
-  if (knows_language(victim, ch->speaking, ch) ||
-      (IS_NPC(ch) && !ch->speaking)) {
-    act(AT_TELL, "$n tells you '$t'", ch, argument, victim,
-        TO_VICT);
-  } else {
-    act(AT_TELL, "$n tells you '$t'", ch,
-        scramble(argument, ch->speaking), victim, TO_VICT);
-  }
-#endif
 
   MOBtrigger = true;
 
@@ -1928,8 +1858,6 @@ void do_emote(CHAR_DATA *ch, char *argument) {
   CHAR_DATA *vch;
   EXT_BV actflags;
 
-#ifndef SCRAMBLE
-
   int speaking = -1, lang;
 
   for (lang = 0; lang_array[lang] != LANG_UNKNOWN; lang++)
@@ -1937,7 +1865,6 @@ void do_emote(CHAR_DATA *ch, char *argument) {
       speaking = lang;
       break;
     }
-#endif
 
   if (!IS_NPC(ch) && xIS_SET(ch->act, PLR_NO_EMOTE)) {
     send_to_char("You can't show your emotions.\n\r", ch);
@@ -1970,7 +1897,7 @@ void do_emote(CHAR_DATA *ch, char *argument) {
       if (!IS_IMMORTAL(ch) || get_trust(vch) > get_trust(ch))
         continue;
     }
-#ifndef SCRAMBLE
+
     if (speaking != -1 && (!IS_NPC(ch) || ch->speaking)) {
       int speakswell = UMIN(knows_language(vch, ch->speaking, ch),
                             knows_language(ch, ch->speaking, vch));
@@ -1978,22 +1905,13 @@ void do_emote(CHAR_DATA *ch, char *argument) {
       if (speakswell < 85)
         sbuf = translate(speakswell, argument, lang_names[speaking]);
     }
-#else
-    if (!knows_language(vch, ch->speaking, ch) &&
-        (!IS_NPC(ch) && ch->speaking != 0))
-      sbuf = scramble(buf, ch->speaking);
-#endif
 
     MOBtrigger = false;
     sysdata.outBytesFlag = LOGBOUTCHANNEL;
     act(AT_ACTION, "$n $t", ch, sbuf, vch, (vch == ch ? TO_CHAR : TO_VICT));
     sysdata.outBytesFlag = LOGBOUTNORM;
   }
-  /*
-   * MOBtrigger = false; act( AT_ACTION, "$n $T", ch, NULL, buf,
-   * TO_ROOM ); MOBtrigger = false; act( AT_ACTION, "$n $T", ch, NULL,
-   * buf, TO_CHAR );
-   */
+
   ch->act = actflags;
   if (xIS_SET(ch->in_room->room_flags, ROOM_LOGSPEECH)) {
     sprintf(buf, "%s %s (emote)", IS_NPC(ch) ? ch->short_descr : ch->name,

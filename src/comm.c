@@ -1339,7 +1339,7 @@ void write_to_buffer(DESCRIPTOR_DATA *d, const char *txt, int length) {
 
   /* find length in case caller didn't. */
   if (length <= 0)
-    length = utf8len(txt);
+    length = strlen(txt);
 
   /* initial \n\r if needed. */
   if (d->outtop == 0 && !d->fcommand) {
@@ -1499,7 +1499,7 @@ void nanny(DESCRIPTOR_DATA *d, char *argument) {
         return;
       }
 
-      if (check_playing(d, argument, false) == BERR) {
+      if (check_playing(d, argument, false)) {
         write_to_buffer(d, "Name: ", 0);
         return;
       }
@@ -1536,7 +1536,7 @@ void nanny(DESCRIPTOR_DATA *d, char *argument) {
       }
 
       chk = check_reconnect(d, argument, false);
-      if (chk == BERR)
+      if (chk)
         return;
 
       if (chk) {
@@ -1602,7 +1602,7 @@ void nanny(DESCRIPTOR_DATA *d, char *argument) {
       }
 
       chk = check_reconnect(d, ch->pcdata->filename, true);
-      if (chk == BERR) {
+      if (chk) {
         if (d->character && d->character->desc)
           d->character->desc = NULL;
         close_socket(d, false);
@@ -2815,7 +2815,8 @@ bool check_playing(DESCRIPTOR_DATA *d, char *name, bool kick) {
         sprintf(log_buf, "%s already connected.",
                 ch->pcdata->filename);
         log_string_plus(log_buf, LOG_COMM, sysdata.log_level);
-        return BERR;
+
+        return true;
       }
       if (!kick)
         return true;
