@@ -28,6 +28,9 @@
 #include <sys/types.h>
 #include <syslog.h>
 #include <time.h>
+#ifndef __APPLE__
+  #include <bsd/stdlib.h>
+#endif 
 #define strcasecmp strcmp
 #include "comm.h"
 #include "mud.h"
