@@ -859,7 +859,7 @@ void new_descriptor(int new_desc) {
   set_alarm(20);
   alarm_section = "new_descriptor: after accept";
 
-  if (fcntl(desc, F_SETFL, FNDELAY) == -1) {
+  if (fcntl(desc, F_SETFL, O_NDELAY) == -1) {
     perror("New_descriptor: fcntl: FNDELAY");
     set_alarm(0);
     return;
