@@ -46,7 +46,6 @@
 
 #define closesocket close
 #define ENOSR 63
-#define BERR 255
 #define INVALID 1
 #define TOOSMALL 2
 #define TOOLARGE 3
@@ -2771,7 +2770,8 @@ bool check_reconnect(DESCRIPTOR_DATA *d, char *name, bool f_conn) {
           free_char(d->character);
           d->character = NULL;
         }
-        return BERR;
+
+        return true;
       }
       if (f_conn == false) {
         DISPOSE(d->character->pcdata->pwd);
