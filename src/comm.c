@@ -3344,7 +3344,7 @@ void act(sh_int AType, const char *format, CHAR_DATA *ch, const void *arg1, cons
 
 char *
 default_fprompt(CHAR_DATA *ch) {
-  static char buf[60];
+  static char buf[1024];
 
   if (!IS_NPC(ch)) {
     switch (ch->pcdata->battlePromptConfig) {
