@@ -3439,41 +3439,8 @@ void act(sh_int AType, const char *format, CHAR_DATA *ch, const void *arg1, cons
   return;
 }
 
-/*
-char *default_fprompt( CHAR_DATA *ch )
-{
-  static char buf[60];
-
-  if (ch->race == race_lookup( "android" ))
-  {
-    strcpy(buf, "&D&z<&wDamage &w(&c%h&w) ");
-    strcat(buf, "&wArmor &w(&c%z&w) ");
-    strcat(buf, "&wEnergy &w(&c%m&w) ");
-    strcat(buf, "&wFocus &w(&c%f&w)&z>");
-    if ( IS_NPC(ch) || IS_IMMORTAL(ch) )
-      strcat(buf, " %i%R&D\n\r");
-    else
-      strcat(buf, " &D\n\r");
-    strcat(buf, "&D&z<&cTechlevel &c(&w%x&c/&w&W%P&c)&z>&w Enemy: &w(&R%y&w)&D&w ");
-  }
-  else
-  {
-    strcpy(buf, "&D&z<&wLifeforce &w(&c%h&w) ");
-    strcat(buf, "&wArmor &w(&c%z&w) ");
-    strcat(buf, "&wEnergy &w(&c%m&w) ");
-    strcat(buf, "&wFocus &w(&c%f&w)&z>");
-    if ( IS_NPC(ch) || IS_IMMORTAL(ch) )
-      strcat(buf, " %i%R&D\n\r");
-    else
-      strcat(buf, " &D\n\r");
-    strcat(buf, "&D&z<&cPowerlevel &c(&w%x&c/&w&W%P&c)&z>&w Enemy: &w(&R%y&w)&D&w ");
-  }
-  return buf;
-}
-*/
-
 char *default_fprompt(CHAR_DATA *ch) {
-  static char buf[60];
+  static char buf[MAX_STRING_LENGTH];
 
   if (!IS_NPC(ch)) {
     switch (ch->pcdata->battlePromptConfig) {
