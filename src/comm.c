@@ -37,6 +37,9 @@
 #include <syslog.h>
 #include <time.h>
 #include <unistd.h>
+#ifndef __APPLE__
+  #include <bsd/stdlib.h>
+#endif 
 
 #include "mud.h"
 #include "sha256.h"
