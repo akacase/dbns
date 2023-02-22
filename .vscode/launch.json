@@ -5,9 +5,9 @@
       "name": "C/C++ Runner: Debug Session",
       "type": "lldb",
       "request": "launch",
-      "args": [],
-      "cwd": "/Users/case/code/dbns",
-      "program": "/Users/case/code/dbns/build/Debug/outDebug"
-    }
+      "args": ["-p", "4000", "-d", ".."],
+      "cwd": "/Users/case/code/dbns/src",
+      "program": "/Users/case/code/dbns/src/dbnsd"
+    },
   ]
 }

@@ -1408,20 +1408,22 @@ void do_look(CHAR_DATA *ch, char *argument) {
     send_to_char("You can't see anything but stars!\n\r", ch);
     return;
   }
+
   if (ch->position == POS_SLEEPING) {
-    send_to_char("You can't see anything, you're sleeping!\n\r",
-                 ch);
+    send_to_char("You can't see anything, you're sleeping!\n\r", ch);
     return;
   }
+
   if (!check_blind(ch))
     return;
 
   if (!IS_NPC(ch) && !xIS_SET(ch->act, PLR_HOLYLIGHT) && !IS_AFFECTED(ch, AFF_trueSIGHT) && room_is_dark(ch->in_room) && !is_android(ch) && !is_superandroid(ch) && !is_demon(ch)) {
     set_char_color(AT_DGREY, ch);
-    send_to_char("It is pitch black ... \n\r", ch);
-    show_char_to_char(ch->in_room->first_person, ch);
+    //send_to_char("It is pitch black ... \n\r", ch);
+    //show_char_to_char(ch->in_room->first_person, ch);
     return;
   }
+
   argument = one_argument(argument, arg1);
   argument = one_argument(argument, arg2);
   argument = one_argument(argument, arg3);
@@ -1433,7 +1435,8 @@ void do_look(CHAR_DATA *ch, char *argument) {
 
     sysdata.outBytesFlag = LOGBOUTMOVEMENT;
 
-    switch (ch->inter_page) { /* rmenu */
+    switch (ch->inter_page) /* rmenu */
+    {
       case ROOM_PAGE_A:
         do_rmenu(ch, "a");
         break;
@@ -1455,11 +1458,14 @@ void do_look(CHAR_DATA *ch, char *argument) {
       if (arg1[0] == '\0' || (!IS_NPC(ch) && !xIS_SET(ch->act, PLR_BRIEF)))
         send_to_char(ch->in_room->description, ch);
     }
-    if (!IS_NPC(ch) && xIS_SET(ch->act, PLR_AUTOMAP)) { /* maps */
+
+    if (!IS_NPC(ch) && xIS_SET(ch->act, PLR_AUTOMAP)) /* maps */
+    {
       if (ch->in_room->map != NULL) {
         do_lookmap(ch, NULL);
       }
     }
+
     if (!IS_NPC(ch) && xIS_SET(ch->act, PLR_AUTOEXIT))
       do_exits(ch, "auto");
 
@@ -1471,74 +1477,44 @@ void do_look(CHAR_DATA *ch, char *argument) {
     show_char_to_char(ch->in_room->first_person, ch);
 
     if (str_cmp(arg1, "auto"))
-      if ((ship =
-               ship_from_cockpit(ch->in_room->vnum)) != NULL) {
+      if ((ship = ship_from_cockpit(ch->in_room->vnum)) != NULL) {
         set_char_color(AT_WHITE, ch);
-        pager_printf_color(ch,
-                           "\n\rThrough the transparisteel windows you see:\n\r");
+        pager_printf_color(ch, "\n\rThrough the transparisteel windows you see:\n\r");
 
         if (ship->starsystem) {
           MISSILE_DATA *missile;
           SHIP_DATA *target;
 
           set_char_color(AT_GREEN, ch);
-          if (ship->starsystem->star1 && str_cmp(ship->starsystem->star1,
-                                                 ""))
-            pager_printf_color(ch,
-                               "&Y%s\n\r",
+          if (ship->starsystem->star1 && str_cmp(ship->starsystem->star1, ""))
+            pager_printf_color(ch, "&Y%s\n\r",
                                ship->starsystem->star1);
-          if (ship->starsystem->star2 && str_cmp(ship->starsystem->star2,
-                                                 ""))
-            pager_printf_color(ch,
-                               "&Y%s\n\r",
+          if (ship->starsystem->star2 && str_cmp(ship->starsystem->star2, ""))
+            pager_printf_color(ch, "&Y%s\n\r",
                                ship->starsystem->star2);
           if (ship->starsystem->planet1 && str_cmp(ship->starsystem->planet1, ""))
-            pager_printf_color(ch,
-                               "&G%s\n\r",
+            pager_printf_color(ch, "&G%s\n\r",
                                ship->starsystem->planet1);
           if (ship->starsystem->planet2 && str_cmp(ship->starsystem->planet2, ""))
-            pager_printf_color(ch,
-                               "&G%s\n\r",
+            pager_printf_color(ch, "&G%s\n\r",
                                ship->starsystem->planet2);
           if (ship->starsystem->planet3 && str_cmp(ship->starsystem->planet3, ""))
-            pager_printf_color(ch,
-                               "&G%s\n\r",
+            pager_printf_color(ch, "&G%s\n\r",
                                ship->starsystem->planet3);
-          for (target =
-                   ship->starsystem->first_ship;
-               target;
-               target =
-                   target->next_in_starsystem) {
+          for (target = ship->starsystem->first_ship; target; target = target->next_in_starsystem) {
             if (target != ship)
-              pager_printf_color(ch,
-                                 "&C%s\n\r",
+              pager_printf_color(ch, "&C%s\n\r",
                                  target->name);
           }
-          for (missile =
-                   ship->starsystem->first_missile;
-               missile;
-               missile =
-                   missile->next_in_starsystem) {
-            pager_printf_color(ch,
-                               "&R%s\n\r",
-                               missile->missiletype ==
-                                       CONCUSSION_MISSILE
-                                   ? "A Concusion Missile"
-                                   : (missile->missiletype ==
-                                              PROTON_TORPEDO
-                                          ? "A Torpedo"
-                                          : (missile->missiletype ==
-                                                     HEAVY_ROCKET
-                                                 ? "A Heavy Rocket"
-                                                 : "A Heavy Bomb")));
+          for (missile = ship->starsystem->first_missile; missile; missile = missile->next_in_starsystem) {
+            pager_printf_color(ch, "&R%s\n\r",
+                               missile->missiletype == CONCUSSION_MISSILE ? "A Concusion Missile" : (missile->missiletype == PROTON_TORPEDO ? "A Torpedo" : (missile->missiletype == HEAVY_ROCKET ? "A Heavy Rocket" : "A Heavy Bomb")));
           }
           pager_printf_color(ch, "&D");
         } else if (ship->location == ship->lastdoc) {
           ROOM_INDEX_DATA *to_room;
 
-          if ((to_room =
-                   get_room_index(ship->location)) !=
-              NULL) {
+          if ((to_room = get_room_index(ship->location)) != NULL) {
             pager_printf_color(ch, "\n\r");
             original = ch->in_room;
             char_from_room(ch);
@@ -1552,6 +1528,7 @@ void do_look(CHAR_DATA *ch, char *argument) {
     sysdata.outBytesFlag = LOGBOUTNORM;
     return;
   }
+
   if (!str_cmp(arg1, "compass")) {
     show_compass_dir(ch);
     return;
@@ -1564,13 +1541,13 @@ void do_look(CHAR_DATA *ch, char *argument) {
       send_to_char("Look beneath what?\n\r", ch);
       return;
     }
+
     if ((obj = get_obj_here(ch, arg2)) == NULL) {
       send_to_char("You do not see that here.\n\r", ch);
       return;
     }
     if (!CAN_WEAR(obj, ITEM_TAKE) && ch->level < sysdata.level_getobjnotake) {
-      send_to_char("You can't seem to get a grip on it.\n\r",
-                   ch);
+      send_to_char("You can't seem to get a grip on it.\n\r", ch);
       return;
     }
     if (ch->carry_weight + obj->weight > can_carry_w(ch)) {
@@ -1579,10 +1556,8 @@ void do_look(CHAR_DATA *ch, char *argument) {
     }
     count = obj->count;
     obj->count = 1;
-    act(AT_PLAIN, "You lift $p and look beneath it:", ch, obj, NULL,
-        TO_CHAR);
-    act(AT_PLAIN, "$n lifts $p and looks beneath it:", ch, obj,
-        NULL, TO_ROOM);
+    act(AT_PLAIN, "You lift $p and look beneath it:", ch, obj, NULL, TO_CHAR);
+    act(AT_PLAIN, "$n lifts $p and looks beneath it:", ch, obj, NULL, TO_ROOM);
     obj->count = count;
     if (IS_OBJ_STAT(obj, ITEM_COVERING))
       show_list_to_char(obj->first_content, ch, true, true);
@@ -1592,6 +1567,7 @@ void do_look(CHAR_DATA *ch, char *argument) {
       oprog_examine_trigger(ch, obj);
     return;
   }
+
   if (!str_cmp(arg1, "i") || !str_cmp(arg1, "in")) {
     int count;
 
@@ -1600,10 +1576,12 @@ void do_look(CHAR_DATA *ch, char *argument) {
       send_to_char("Look in what?\n\r", ch);
       return;
     }
+
     if ((obj = get_obj_here(ch, arg2)) == NULL) {
       send_to_char("You do not see that here.\n\r", ch);
       return;
     }
+
     switch (obj->item_type) {
       default:
         send_to_char("That is not a container.\n\r", ch);
@@ -1616,6 +1594,7 @@ void do_look(CHAR_DATA *ch, char *argument) {
             oprog_examine_trigger(ch, obj);
           break;
         }
+
         ch_printf(ch, "It's %s full of a %s liquid.\n\r",
                   obj->value[1] < obj->value[0] / 4
                       ? "less than"
@@ -1629,14 +1608,11 @@ void do_look(CHAR_DATA *ch, char *argument) {
         break;
 
       case ITEM_PORTAL:
-        for (pexit = ch->in_room->first_exit; pexit;
-             pexit = pexit->next) {
+        for (pexit = ch->in_room->first_exit; pexit; pexit = pexit->next) {
           if (pexit->vdir == DIR_PORTAL && IS_SET(pexit->exit_info, EX_PORTAL)) {
-            if (room_is_private(pexit->to_room) && get_trust(ch) <
-                                                       sysdata.level_override_private) {
+            if (room_is_private(pexit->to_room) && get_trust(ch) < sysdata.level_override_private) {
               set_char_color(AT_WHITE, ch);
-              send_to_char("That room is private buster!\n\r",
-                           ch);
+              send_to_char("That room is private buster!\n\r", ch);
               return;
             }
             original = ch->in_room;
@@ -1658,15 +1634,14 @@ void do_look(CHAR_DATA *ch, char *argument) {
           send_to_char("It is closed.\n\r", ch);
           break;
         }
+
       case ITEM_KEYRING:
         count = obj->count;
         obj->count = 1;
         if (obj->item_type == ITEM_CONTAINER)
-          act(AT_PLAIN, "$p contains:", ch, obj, NULL,
-              TO_CHAR);
+          act(AT_PLAIN, "$p contains:", ch, obj, NULL, TO_CHAR);
         else
-          act(AT_PLAIN, "$p holds:", ch, obj, NULL,
-              TO_CHAR);
+          act(AT_PLAIN, "$p holds:", ch, obj, NULL, TO_CHAR);
         obj->count = count;
         show_list_to_char(obj->first_content, ch, true, true);
         if (doexaprog)
@@ -1675,24 +1650,23 @@ void do_look(CHAR_DATA *ch, char *argument) {
     }
     return;
   }
-  if ((pdesc =
-           get_extra_descr(arg1, ch->in_room->first_extradesc)) != NULL) {
+
+  if ((pdesc = get_extra_descr(arg1, ch->in_room->first_extradesc)) != NULL) {
     send_to_char_color(pdesc, ch);
     return;
   }
+
   door = get_door(arg1);
   if ((pexit = find_door(ch, arg1, true)) != NULL) {
     if (IS_SET(pexit->exit_info, EX_CLOSED) && !IS_SET(pexit->exit_info, EX_WINDOW)) {
       if ((IS_SET(pexit->exit_info, EX_SECRET) || IS_SET(pexit->exit_info, EX_DIG)) && door != -1)
         send_to_char("Nothing special there.\n\r", ch);
       else
-        act(AT_PLAIN, "The $d is closed.", ch, NULL,
-            pexit->keyword, TO_CHAR);
+        act(AT_PLAIN, "The $d is closed.", ch, NULL, pexit->keyword, TO_CHAR);
       return;
     }
     if (IS_SET(pexit->exit_info, EX_BASHED))
-      act(AT_RED, "The $d has been bashed from its hinges!",
-          ch, NULL, pexit->keyword, TO_CHAR);
+      act(AT_RED, "The $d has been bashed from its hinges!", ch, NULL, pexit->keyword, TO_CHAR);
 
     if (pexit->description && pexit->description[0] != '\0')
       send_to_char(pexit->description, ch);
@@ -1700,7 +1674,7 @@ void do_look(CHAR_DATA *ch, char *argument) {
       send_to_char("Nothing special there.\n\r", ch);
 
     /*
-     * Ability to look into the next room                   -Thoric
+     * Ability to look into the next room			-Thoric
      */
     if (pexit->to_room && (IS_AFFECTED(ch, AFF_SCRYING) || IS_SET(pexit->exit_info, EX_xLOOK) || get_trust(ch) >= LEVEL_IMMORTAL)) {
       if (!IS_SET(pexit->exit_info, EX_xLOOK) && get_trust(ch) < LEVEL_IMMORTAL) {
@@ -1711,24 +1685,20 @@ void do_look(CHAR_DATA *ch, char *argument) {
          * scry spell to benefit from objects that are affected by scry.
          */
         if (!IS_NPC(ch)) {
-          int percent =
-              LEARNED(ch, skill_lookup("scry"));
-
+          int percent = LEARNED(ch, skill_lookup("scry"));
           if (!percent) {
-            percent = 55; /* 95 was too good
-                           * -Thoric */
+            percent = 55; /* 95 was too good -Thoric */
           }
+
           if (number_percent() > percent) {
-            send_to_char("You fail.\n\r",
-                         ch);
+            send_to_char("You fail.\n\r", ch);
             return;
           }
         }
       }
       if (room_is_private(pexit->to_room) && get_trust(ch) < sysdata.level_override_private) {
         set_char_color(AT_WHITE, ch);
-        send_to_char("That room is private buster!\n\r",
-                     ch);
+        send_to_char("That room is private buster!\n\r", ch);
         return;
       }
       original = ch->in_room;
@@ -1743,11 +1713,13 @@ void do_look(CHAR_DATA *ch, char *argument) {
     send_to_char("Nothing special there.\n\r", ch);
     return;
   }
+
   if ((victim = get_char_room(ch, arg1)) != NULL) {
     show_char_to_char_1(victim, ch);
     return;
   }
-  /* finally fixed the annoying look 2.obj desc bug       -Thoric */
+
+  /* finally fixed the annoying look 2.obj desc bug	-Thoric */
   number = number_argument(arg1, arg);
   for (cnt = 0, obj = ch->last_carrying; obj; obj = obj->prev_content) {
     /* cronel hiscore */
@@ -1756,10 +1728,9 @@ void do_look(CHAR_DATA *ch, char *argument) {
       show_hiscore(kwd, ch);
       return;
     }
+
     if (can_see_obj(ch, obj)) {
-      if ((pdesc =
-               get_extra_descr(arg,
-                               obj->first_extradesc)) != NULL) {
+      if ((pdesc = get_extra_descr(arg, obj->first_extradesc)) != NULL) {
         if ((cnt += obj->count) < number)
           continue;
         send_to_char_color(pdesc, ch);
@@ -1767,9 +1738,8 @@ void do_look(CHAR_DATA *ch, char *argument) {
           oprog_examine_trigger(ch, obj);
         return;
       }
-      if ((pdesc =
-               get_extra_descr(arg,
-                               obj->pIndexData->first_extradesc)) != NULL) {
+
+      if ((pdesc = get_extra_descr(arg, obj->pIndexData->first_extradesc)) != NULL) {
         if ((cnt += obj->count) < number)
           continue;
         send_to_char_color(pdesc, ch);
@@ -1780,16 +1750,11 @@ void do_look(CHAR_DATA *ch, char *argument) {
       if (nifty_is_name_prefix(arg, obj->name)) {
         if ((cnt += obj->count) < number)
           continue;
-        pdesc =
-            get_extra_descr(obj->name,
-                            obj->pIndexData->first_extradesc);
+        pdesc = get_extra_descr(obj->name, obj->pIndexData->first_extradesc);
         if (!pdesc)
-          pdesc =
-              get_extra_descr(obj->name,
-                              obj->first_extradesc);
+          pdesc = get_extra_descr(obj->name, obj->first_extradesc);
         if (!pdesc)
-          send_to_char_color("You see nothing special.\r\n",
-                             ch);
+          send_to_char_color("You see nothing special.\r\n", ch);
         else
           send_to_char_color(pdesc, ch);
         if (doexaprog)
@@ -1806,10 +1771,9 @@ void do_look(CHAR_DATA *ch, char *argument) {
       show_hiscore(kwd, ch);
       return;
     }
+
     if (can_see_obj(ch, obj)) {
-      if ((pdesc =
-               get_extra_descr(arg,
-                               obj->first_extradesc)) != NULL) {
+      if ((pdesc = get_extra_descr(arg, obj->first_extradesc)) != NULL) {
         if ((cnt += obj->count) < number)
           continue;
         send_to_char_color(pdesc, ch);
@@ -1817,9 +1781,8 @@ void do_look(CHAR_DATA *ch, char *argument) {
           oprog_examine_trigger(ch, obj);
         return;
       }
-      if ((pdesc =
-               get_extra_descr(arg,
-                               obj->pIndexData->first_extradesc)) != NULL) {
+
+      if ((pdesc = get_extra_descr(arg, obj->pIndexData->first_extradesc)) != NULL) {
         if ((cnt += obj->count) < number)
           continue;
         send_to_char_color(pdesc, ch);
@@ -1830,16 +1793,11 @@ void do_look(CHAR_DATA *ch, char *argument) {
       if (nifty_is_name_prefix(arg, obj->name)) {
         if ((cnt += obj->count) < number)
           continue;
-        pdesc =
-            get_extra_descr(obj->name,
-                            obj->pIndexData->first_extradesc);
+        pdesc = get_extra_descr(obj->name, obj->pIndexData->first_extradesc);
         if (!pdesc)
-          pdesc =
-              get_extra_descr(obj->name,
-                              obj->first_extradesc);
+          pdesc = get_extra_descr(obj->name, obj->first_extradesc);
         if (!pdesc)
-          send_to_char("You see nothing special.\r\n",
-                       ch);
+          send_to_char("You see nothing special.\r\n", ch);
         else
           send_to_char_color(pdesc, ch);
         if (doexaprog)
@@ -1850,6 +1808,7 @@ void do_look(CHAR_DATA *ch, char *argument) {
   }
 
   send_to_char("You do not see that here.\n\r", ch);
+  return;
 }
 
 void show_race_line(CHAR_DATA *ch, CHAR_DATA *victim) {

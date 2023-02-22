@@ -24,22 +24,19 @@
 #include <locale.h>
 #include <netdb.h>
 #include <netinet/in.h>
-#include <netinet/ip.h>
 #include <signal.h>
 #include <stdarg.h>
 #include <stdbool.h>
 #include <stdio.h>
 #include <string.h>
 #include <sys/socket.h>
-#include <sys/stat.h>
-#include <sys/types.h>
 #include <sys/wait.h>
 #include <syslog.h>
 #include <time.h>
 #include <unistd.h>
 #ifndef __APPLE__
-  #include <bsd/stdlib.h>
-#endif 
+#include <bsd/stdlib.h>
+#endif
 
 #include "mud.h"
 #include "sha256.h"
@@ -472,13 +469,13 @@ int main(int argc, char **argv) {
 
 int init_socket(int port) {
   char hostname[64];
-  struct sockaddr_in sa;
+  struct sockaddr_in6 sa;
   int x = 1;
   int fd;
 
   gethostname(hostname, sizeof(hostname));
 
-  if ((fd = socket(AF_INET, SOCK_STREAM, 0)) < 0) {
+  if ((fd = socket(AF_INET6, SOCK_STREAM, 0)) < 0) {
     perror("Init_socket: socket");
     exit(1);
   }
@@ -491,10 +488,10 @@ int init_socket(int port) {
   }
 
   memset(&sa, '\0', sizeof(sa));
-  sa.sin_family = AF_INET;
-  sa.sin_port = htons(port);
+  sa.sin6_family = AF_INET6;
+  sa.sin6_port = htons(port);
 
-  if (bind(fd, (struct sockaddr *)&sa, sizeof(sa)) == -1) {
+  if (bind(fd, (struct sockaddr *)&sa, sizeof(sa)) < 0) {
     perror("Init_socket: bind");
     closesocket(fd);
     exit(1);
@@ -888,7 +885,7 @@ void new_descriptor(int new_desc) {
 
   dnew->host = STRALLOC(log_buf);
   from = gethostbyaddr((char *)&sock.sin_addr,
-                       sizeof(sock.sin_addr), AF_INET);
+                       sizeof(sock.sin_addr), AF_INET6);
   dnew->host2 = STRALLOC((char *)(from ? from->h_name : buf));
   /*
    * Init descriptor data.
@@ -1794,9 +1791,7 @@ void nanny(DESCRIPTOR_DATA *d, char *argument) {
         return;
       }
 
-      //	argument[0] = UPPER(argument[0]);
       *argument = capitalizeString(argument);
-      /* Old players can keep their characters. -- Alty */
       if (!check_parse_name(argument, TRUE)) {
         send_to_desc_color("&wIllegal name, try another.\n\rLast name: &D", d);
         return;
@@ -1851,7 +1846,7 @@ void nanny(DESCRIPTOR_DATA *d, char *argument) {
         send_to_desc_color("&wDo you wish to be a &RHARDCORE&w character? (&WY&w/&WN&w): ", d);
         return;
       }
-      switch (*argument) {
+      switch (argument[0]) {
         case 'y':
         case 'Y':
           sprintf(buf, "\n\r&wOkay, you are now &RHARDCORE&w!&D");
@@ -1878,10 +1873,12 @@ void nanny(DESCRIPTOR_DATA *d, char *argument) {
       switch (argument[0]) {
         case 'm':
         case 'M':
+          printf("chose dude");
           ch->sex = SEX_MALE;
           break;
         case 'f':
         case 'F':
+          printf("chose lady");
           ch->sex = SEX_FEMALE;
           break;
         case 'n':
@@ -1893,16 +1890,6 @@ void nanny(DESCRIPTOR_DATA *d, char *argument) {
           return;
       }
 
-      /* Added for when I need to close down char creation to do
-         work on this section. Leaving the commented code in for
-         future use, if the need arises. -Karma
-      if(!(!str_cmp(d->character->name,"lemming")) )
-      {
-        send_to_desc_color( "Character creation is currently disabled.\n\r",d);
-        return;
-      }
-      */
-
       send_to_desc_color("\n\r&wThe following Races are Available to You:&D\n\r", d);
       send_to_desc_color("&c==============================================================================&D", d);
       buf[0] = '\0';
@@ -1911,17 +1898,13 @@ void nanny(DESCRIPTOR_DATA *d, char *argument) {
        * Take this out SHADDAI
        */
       i = 0;
-      /*for ( iClass = 0; iClass < MAX_PC_CLASS; iClass++ )*/
       send_to_desc_color("\n\r", d);
-      // for ( iClass = 0; iClass < 9; iClass++ )
       for (iClass = 0; iClass < 31; iClass++) {
         if (iClass == 4) {
-          // i++;
           continue;
         }
         if (iClass > 8 && iClass < 28)
           continue;
-        // char letters[11] = "abcdefghij";
         char letters[14] = "abcdefghijklmn";
         if (class_table[iClass]->who_name &&
             class_table[iClass]->who_name[0] != '\0') {
@@ -1964,14 +1947,11 @@ void nanny(DESCRIPTOR_DATA *d, char *argument) {
           c = 29;  // android-e
         if (i == 10)
           c = 30;  // android-fm
-        /*for ( iClass = 0; iClass < MAX_PC_CLASS; iClass++ )*/
-        // for ( iClass = 0; iClass < 9; iClass++ )
         for (iClass = 0; iClass < 31; iClass++) {
           if (iClass > 8 && iClass < 28)
             continue;
           if (class_table[iClass]->who_name &&
               class_table[iClass]->who_name[0] != '\0') {
-            // if ( i == iClass )
             if (c == iClass) {
               ch->class = iClass;
               ch->race = iClass;
@@ -1980,7 +1960,6 @@ void nanny(DESCRIPTOR_DATA *d, char *argument) {
           }
         }
       } else {
-        // char letters[11] = "abcdefghij";
         char letters[14] = "abcdefghijklmn";
         for (i = 0; i < 14; i++) {
           if (arg[0] == letters[i]) {
@@ -2021,11 +2000,8 @@ void nanny(DESCRIPTOR_DATA *d, char *argument) {
         }
         i = 0;
         send_to_desc_color("\n\r&c==============================================================================&D", d);
-        /*for ( iClass = 0; iClass < MAX_PC_CLASS; iClass++ )*/
-        // for ( iClass = 0; iClass < 9; iClass++ )
         for (iClass = 0; iClass < 31; iClass++) {
           if (iClass == 4) {
-            // i++;
             continue;
           }
           if (iClass > 8 && iClass < 28)
@@ -2344,25 +2320,6 @@ void nanny(DESCRIPTOR_DATA *d, char *argument) {
         send_to_desc_color("&wThat's not a build type.\n\rWhat IS it going to be? &D", d);
         return;
       }
-
-      /*	send_to_desc_color( "\n\rWould you like RIP, ANSI or no graphic/color support, (R/A/N)? ", d );
-              d->connected = CON_GET_WANT_RIPANSI;
-              break;
-
-          case CON_GET_WANT_RIPANSI:
-              switch ( argument[0] )
-              {
-              case 'r': case 'R':
-                  xSET_BIT(ch->act,PLR_RIP);
-                  xSET_BIT(ch->act,PLR_ANSI);
-                  break;
-              case 'a': case 'A': xSET_BIT(ch->act,PLR_ANSI);  break;
-              case 'n': case 'N': break;
-              default:
-                  write_to_buffer( d, "Invalid selection.\n\rRIP, ANSI or NONE? ", 0 );
-                  return;
-              }
-      */
       sprintf(log_buf, "%s@%s new %s %s.", ch->name, d->host,
               race_table[ch->race]->race_name,
               class_table[ch->class]->who_name);
@@ -2388,7 +2345,6 @@ void nanny(DESCRIPTOR_DATA *d, char *argument) {
     case CON_PRESS_ENTER:
       if (ch->position == POS_MOUNTED)
         ch->position = POS_STANDING;
-
       set_pager_color(AT_PLAIN, ch);
       if (xIS_SET(ch->act, PLR_RIP))
         send_rip_screen(ch);
@@ -2410,22 +2366,18 @@ void nanny(DESCRIPTOR_DATA *d, char *argument) {
 
     case CON_READ_MOTD: {
       char motdbuf[MAX_STRING_LENGTH];
-
       sprintf(motdbuf, "\n\rWelcome to %s...\n\r", sysdata.mud_name);
       send_to_desc_color(motdbuf, d);
     }
       add_char(ch);
       d->connected = CON_PLAYING;
-      /* hopefully clear up some ansi changing issues	  -Nopey */
       set_char_color(AT_DGREEN, ch);
-      if (!xIS_SET(ch->act, PLR_ANSI) && d->ansi == TRUE)
-        d->ansi = FALSE;
-      else if (xIS_SET(ch->act, PLR_ANSI) && d->ansi == FALSE)
-        d->ansi = TRUE;
-
+      if (!xIS_SET(ch->act, PLR_ANSI) && d->ansi == true)
+        d->ansi = false;
+      else if (xIS_SET(ch->act, PLR_ANSI) && d->ansi == false)
+        d->ansi = true;
       if (ch->level == 0) {
-        OBJ_DATA *obj;
-        int iLang;
+        int i_lang;
 
         ch->pcdata->upgradeL = CURRENT_UPGRADE_LEVEL;
 
@@ -2474,34 +2426,133 @@ void nanny(DESCRIPTOR_DATA *d, char *argument) {
         ch->height = number_range(race_table[ch->race]->height * .9, race_table[ch->race]->height * 1.1);
         ch->weight = number_range(race_table[ch->race]->weight * .9, race_table[ch->race]->weight * 1.1);
 
-        if ((iLang = skill_lookup("common")) < 0)
+        if ((i_lang = skill_lookup("common")) < 0)
           bug("Nanny: cannot find common language.");
         else
-          ch->pcdata->learned[iLang] = 100;
+          ch->pcdata->learned[i_lang] = 100;
 
-        for (iLang = 0; lang_array[iLang] != LANG_UNKNOWN; iLang++)
-          if (lang_array[iLang] == race_table[ch->race]->language)
+        for (i_lang = 0; lang_array[i_lang] != LANG_UNKNOWN; i_lang++)
+          if (lang_array[i_lang] == race_table[ch->race]->language)
             break;
-        if (lang_array[iLang] == LANG_UNKNOWN)
+        if (lang_array[i_lang] == LANG_UNKNOWN)
           ;
-        /*bug( "Nanny: invalid racial language." );*/
         else {
-          if ((iLang = skill_lookup(lang_names[iLang])) < 0)
+          if ((i_lang = skill_lookup(lang_names[i_lang])) < 0)
             bug("Nanny: cannot find racial language.");
           else
-            ch->pcdata->learned[iLang] = 100;
+            ch->pcdata->learned[i_lang] = 100;
         }
-
-        /* ch->resist           += race_table[ch->race]->resist;    drats */
-        /* ch->susceptible     += race_table[ch->race]->suscept;    drats */
 
         name_stamp_stats(ch);
 
         ch->level = 1;
-        ch->exp = 100;
-        ch->pl = 100;
-        ch->heart_pl = 100;
-        ch->max_hit += race_table[ch->race]->hit;
+        ch->exp = 5;
+        ch->pl = 5;
+        ch->gravAcc = 1;
+        ch->gravSetting = 1;
+        ch->exintensity = 0;
+        ch->gravExp = 1000;
+        ch->masteryicer = 0;
+        ch->masteryssj = 0;
+        ch->masterymystic = 0;
+        ch->masterynamek = 0;
+        ch->masterypowerup = 0;
+        ch->workoutstrain = 0;
+        ch->energy_ballpower = 0;
+        ch->energy_balleffic = 0;
+        ch->masteryenergy_ball = 0;
+        ch->crusherballpower = 0;
+        ch->crusherballeffic = 0;
+        ch->masterycrusherball = 0;
+        ch->meteorpower = 0;
+        ch->meteoreffic = 0;
+        ch->masterymeteor = 0;
+        ch->gigantic_meteorpower = 0;
+        ch->gigantic_meteoreffic = 0;
+        ch->masterygigantic_meteor = 0;
+        ch->ecliptic_meteorpower = 0;
+        ch->ecliptic_meteoreffic = 0;
+        ch->masteryecliptic_meteor = 0;
+        ch->death_ballpower = 0;
+        ch->death_balleffic = 0;
+        ch->masterydeath_ball = 0;
+        ch->energybeampower = 0;
+        ch->energybeameffic = 0;
+        ch->masteryenergybeam = 0;
+        ch->eye_beampower = 0;
+        ch->eye_beameffic = 0;
+        ch->masteryeye_beam = 0;
+        ch->masenkopower = 0;
+        ch->masenkoeffic = 0;
+        ch->masterymasenko = 0;
+        ch->makosenpower = 0;
+        ch->makoseneffic = 0;
+        ch->masterymakosen = 0;
+        ch->sbcpower = 0;
+        ch->sbceffic = 0;
+        ch->masterysbc = 0;
+        ch->concentrated_beampower = 0;
+        ch->concentrated_beameffic = 0;
+        ch->masteryconcentrated_beam = 0;
+        ch->kamehamehapower = 0;
+        ch->kamehamehaeffic = 0;
+        ch->masterykamehameha = 0;
+        ch->gallic_gunpower = 0;
+        ch->gallic_guneffic = 0;
+        ch->masterygallic_gun = 0;
+        ch->finger_beampower = 0;
+        ch->finger_beameffic = 0;
+        ch->masteryfinger_beam = 0;
+        ch->destructo_discpower = 0;
+        ch->destructo_disceffic = 0;
+        ch->masterydestructo_disc = 0;
+        ch->destructive_wavepower = 0;
+        ch->destructive_waveeffic = 0;
+        ch->masterydestructive_wave = 0;
+        ch->forcewavepower = 0;
+        ch->forcewaveeffic = 0;
+        ch->masteryforcewave = 0;
+        ch->shockwavepower = 0;
+        ch->shockwaveeffic = 0;
+        ch->masteryshockwave = 0;
+        ch->energy_discpower = 0;
+        ch->energy_disceffic = 0;
+        ch->masteryenergy_disc = 0;
+        ch->punchpower = 0;
+        ch->puncheffic = 0;
+        ch->masterypunch = 0;
+        ch->haymakerpower = 0;
+        ch->haymakereffic = 0;
+        ch->masteryhaymaker = 0;
+        ch->bashpower = 0;
+        ch->basheffic = 0;
+        ch->masterybash = 0;
+        ch->collidepower = 0;
+        ch->collideeffic = 0;
+        ch->masterycollide = 0;
+        ch->lariatpower = 0;
+        ch->lariateffic = 0;
+        ch->masterylariat = 0;
+        ch->newbiepl = 0;
+
+        ch->sptotal = 0;
+        ch->spgain = 0;
+
+        ch->sspgain = 0;
+        ch->kspgain = 0;
+        ch->bspgain = 0;
+
+        ch->spallocated = 0;
+        ch->school = 0;
+        ch->strikemastery = 0;
+        ch->strikerank = 0;
+        ch->energymastery = 0;
+        ch->energyrank = 0;
+        ch->bodymastery = 0;
+        ch->gravityrankup = 0;
+        ch->bodyrank = 0;
+        ch->heart_pl = 5;
+        ch->max_hit = 1000;
         ch->max_mana += race_table[ch->race]->mana;
         ch->max_move = 100;
         ch->hit = UMAX(1, ch->max_hit);
@@ -2517,18 +2568,81 @@ void nanny(DESCRIPTOR_DATA *d, char *argument) {
         ch->pcdata->admintalk = 0;
         ch->pcdata->age = 18;
         ch->pcdata->sparcount = 0;
+        ch->skilleye_beam = 0;
+        ch->skilldestructive_wave = 0;
+        ch->skillbash = 0;
+        ch->skillhaymaker = 0;
+        ch->skillenergy_style = 1;
+        ch->skillbruiser_style = 1;
+        ch->skillhybrid_style = 1;
+        ch->skillaggressive_style = 1;
+        ch->skillberserk_style = 1;
+        ch->skillblock = 1;
+        ch->skillcollide = 0;
+        ch->skilldcd = 1;
+        ch->skilldefensive_style = 1;
+        ch->skilldodge = 1;
+        ch->skillevasive_style = 1;
+        ch->skilllariat = 0;
+        ch->skillpunch = 1;
+        ch->skillmeditate = 1;
+        ch->skillstandard_style = 1;
+        ch->skillssj1 = 0;
+        ch->skillssj2 = 0;
+        ch->skillssj3 = 0;
+        ch->skillssgod = 0;
+        ch->skillssblue = 0;
+        ch->skillultra_instinct = 0;
+        ch->skillbbk = 0;
+        ch->skillburning_attack = 0;
+        ch->skillconcentrated_beam = 0;
+        ch->skillblast_zone = 0;
+        ch->skillcrusherball = 0;
+        ch->skilldeath_ball = 0;
+        ch->skilldestructo_disc = 0;
+        ch->skillecliptic_meteor = 0;
+        ch->skillenergy_ball = 1;
+        ch->skillenergy_beam = 0;
+        ch->skillenergy_disc = 0;
+        ch->skillfinal_flash = 0;
+        ch->skillfinger_beam = 0;
+        ch->skillforcewave = 0;
+        ch->skillgallic_gun = 0;
+        ch->skillfinishing_buster = 0;
+        ch->skillgigantic_meteor = 0;
+        ch->skillheaven_splitter = 0;
+        ch->skillhells_flash = 0;
+        ch->skillhellzone_grenade = 0;
+        ch->skillinstant_trans = 0;
+        ch->skillkaio_create = 0;
+        ch->skillkaioken = 0;
+        ch->skillkamehameha = 0;
+        ch->skillki_absorb = 0;
+        ch->skillki_heal = 0;
+        ch->skillmakosen = 0;
+        ch->skillmasenko = 0;
+        ch->skillmeteor = 0;
+        ch->skillmultidisc = 0;
+        ch->skillmulti_eye_beam = 0;
+        ch->skillmonkey_cannon = 0;
+        ch->skillpsionic_blast = 0;
+        ch->skillmulti_finger_beam = 0;
+        ch->skillsense = 1;
+        ch->skillshockwave = 0;
+        ch->skillsbc = 0;
+        ch->skillspirit_ball = 0;
+        ch->skillspirit_bomb = 0;
+        ch->skillsuppress = 0;
+        ch->skillvigor = 0;
+        ch->vigoreffec = 0;
         if (is_saiyan(ch) || is_hb(ch) || is_icer(ch) || is_bio(ch))
-          ch->pcdata->tail = TRUE;
+          ch->pcdata->tail = true;
         else
-          ch->pcdata->tail = FALSE;
+          ch->pcdata->tail = false;
         if (is_android(ch))
           ch->pcdata->natural_ac_max = 500;
         if (is_bio(ch))
           ch->pcdata->absorb_pl_mod = 6;
-
-        /* To make it so that saiyans and halfies start out
-           with the Oozaru mouth cannon. -Karma
-         */
         if (is_saiyan(ch) || is_hb(ch))
           ch->pcdata->learned[gsn_monkey_gun] = 95;
 
@@ -2538,8 +2652,6 @@ void nanny(DESCRIPTOR_DATA *d, char *argument) {
         set_title(ch, buf);
         ch->pcdata->creation_date = current_time;
 
-        /* Added by Narn.  Start new characters with autoexit and autgold
-           already turned on.  Very few people don't use those. */
         xSET_BIT(ch->act, PLR_AUTOGOLD);
         xSET_BIT(ch->act, PLR_AUTOEXIT);
         xSET_BIT(ch->act, PLR_AUTO_COMPASS);
@@ -2547,7 +2659,6 @@ void nanny(DESCRIPTOR_DATA *d, char *argument) {
         SET_BIT(ch->pcdata->flags, PCFLAG_DEADLY);
         xSET_BIT(ch->deaf, CHANNEL_FOS);
 
-        /* Don't display old notes as 'unread' except for the announcment board */
         for (i = 1; i < MAX_BOARD; i++) {
           for (catchup_notes = ch->pcdata->board->note_first; catchup_notes && catchup_notes->next; catchup_notes = catchup_notes->next)
             ;
@@ -2559,19 +2670,8 @@ void nanny(DESCRIPTOR_DATA *d, char *argument) {
           }
         }
 
-        /* Added by Brittany, Nov 24/96.  The object is the adventurer's guide
-           to the realms of despair, part of Academy.are. */
-        {
-          OBJ_INDEX_DATA *obj_ind = get_obj_index(10333);
-          if (obj_ind != NULL) {
-            obj = create_object(obj_ind, 0);
-            obj_to_char(obj, ch);
-            equip_char(ch, obj, WEAR_HOLD);
-          }
-        }
-        /* Display_prompt interprets blank as default */
+        char_to_room(ch, get_room_index(ROOM_VNUM_SCHOOL));
         ch->pcdata->prompt = STRALLOC("");
-
       } else if (!IS_IMMORTAL(ch) && ch->pcdata->release_date > 0 &&
                  ch->pcdata->release_date > current_time) {
         if (ch->in_room->vnum == 6 || ch->in_room->vnum == 8 || ch->in_room->vnum == 1206)
@@ -2588,6 +2688,7 @@ void nanny(DESCRIPTOR_DATA *d, char *argument) {
       } else {
         char_to_room(ch, get_room_index(ROOM_VNUM_TEMPLE));
       }
+
       act(AT_ACTION, "$n has entered the game.", ch, NULL, NULL, TO_CANSEE);
       if (ch->pcdata->pet) {
         act(AT_ACTION, "$n returns to $s master from the Void.",
@@ -2609,18 +2710,16 @@ void nanny(DESCRIPTOR_DATA *d, char *argument) {
 
       /* For the logon pl tracker */
       ch->logon_start = ch->exp;
-
       do_global_boards(ch, "");
 
-      ch->dodge = FALSE;
-      ch->block = FALSE;
-      ch->ki_dodge = FALSE;
-      ch->ki_cancel = FALSE;
-      ch->ki_deflect = FALSE;
+      ch->dodge = false;
+      ch->block = false;
+      ch->ki_dodge = false;
+      ch->ki_cancel = false;
+      ch->ki_deflect = false;
 
       do_look(ch, "auto");
-      tax_player(ch); /* Here we go, let's tax players to lower the gold
-                         pool -- TRI */
+      tax_player(ch);
       mccp_interest(ch);
       mail_count(ch);
       check_loginmsg(ch);
@@ -2631,21 +2730,16 @@ void nanny(DESCRIPTOR_DATA *d, char *argument) {
         ch->was_in_room = get_room_index(ROOM_VNUM_TEMPLE);
       else if (!ch->was_in_room)
         ch->was_in_room = ch->in_room;
-
       break;
-
     case CON_NOTE_TO:
       handle_con_note_to(d, argument);
       break;
-
     case CON_NOTE_SUBJECT:
       handle_con_note_subject(d, argument);
       break; /* subject */
-
     case CON_NOTE_EXPIRE:
       handle_con_note_expire(d, argument);
       break;
-
     case CON_NOTE_TEXT:
       handle_con_note_text(d, argument);
       break;
@@ -2653,8 +2747,6 @@ void nanny(DESCRIPTOR_DATA *d, char *argument) {
       handle_con_note_finish(d, argument);
       break;
   }
-
-  return;
 }
 
 bool is_reserved_name(char *name) {
