@@ -1559,13 +1559,6 @@ void nanny(DESCRIPTOR_DATA *d, char *argument) {
        *  Shaddai
        */
 
-      if (check_total_ip(d)) {
-        send_to_desc_color(
-            "Your maximum amount of players you can have online has been reached.\n\r", d);
-        close_socket(d, FALSE);
-        return;
-      }
-
       chk = check_reconnect(d, argument, false);
       if (chk == BERR)
         return;
