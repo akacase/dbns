@@ -465,6 +465,9 @@ void fwrite_char(CHAR_DATA *ch, FILE *fp) {
   fprintf(fp, "Gravityacclimation           %d\n", ch->gravAcc);
   fprintf(fp, "Gravityrankup           %d\n", ch->gravityrankup);
   fprintf(fp, "Gravityexp                   %lld\n", ch->gravExp);
+  fprintf(fp, "Biomass                   %lld\n", ch->biomass);
+  fprintf(fp, "Gsbiomass                   %lld\n", ch->gsbiomass);
+  fprintf(fp, "Masterybio                   %lld\n", ch->masterybio);
   fprintf(fp, "Masteryicer                   %lld\n", ch->masteryicer);
   fprintf(fp, "Masteryssj                   %lld\n", ch->masteryssj);
   fprintf(fp, "Masterymystic                   %lld\n", ch->masterymystic);
@@ -1551,6 +1554,7 @@ void fread_char(CHAR_DATA *ch, FILE *fp, bool preload) {
         KEY("Bck_pl", ch->bck_pl, fread_number_ld(fp));
         KEY("Bck_race", ch->bck_race, fread_number(fp));
         KEY("Bspgain", ch->bspgain, fread_number(fp));
+		KEY("Biomass", ch->biomass, fread_number_ll(fp));
         break;
 
       case 'C':
@@ -1746,6 +1750,7 @@ void fread_char(CHAR_DATA *ch, FILE *fp, bool preload) {
         KEY("Gravitysetting", ch->gravSetting, fread_number(fp));
         KEY("Gravityexp", ch->gravExp, fread_number_ll(fp));
         KEY("Gravityrankup", ch->gravityrankup, fread_number(fp));
+		KEY("Gsbiomass", ch->gsbiomass, fread_number_ll(fp));
         /* temporary measure */
         if (!strcmp(word, "Guild")) {
           ch->pcdata->clan_name = fread_string(fp);
@@ -1970,6 +1975,7 @@ void fread_char(CHAR_DATA *ch, FILE *fp, bool preload) {
         KEY("Masteryssj", ch->masteryssj, fread_number_ll(fp));
         KEY("Masterymystic", ch->masterymystic, fread_number_ll(fp));
         KEY("Masterynamek", ch->masterynamek, fread_number_ll(fp));
+		KEY("Masterybio", ch->masterybio, fread_number_ll(fp));
         if (!strcmp(word, "MobRange")) {
           ch->pcdata->m_range_lo = fread_number(fp);
           ch->pcdata->m_range_hi = fread_number(fp);

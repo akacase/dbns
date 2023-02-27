@@ -838,55 +838,28 @@ void find_absorb_data(CHAR_DATA *ch, CHAR_DATA *victim) {
 }
 
 void bio_absorb(CHAR_DATA *ch, CHAR_DATA *victim) {
-  int xp_gain_post = 0;
   char buf1[MAX_STRING_LENGTH];
-  long double cPL = ch->exp;
-  long double vPL = victim->exp;
-  bool canAbsorb = false;
+  int getbiomass;
 
   if (IS_NPC(ch))
     return;
 
-  if (!IS_NPC(ch) && ch->pl > ch->exp)
-    cPL = ch->pl;
-
-  if (!IS_NPC(victim) && victim->pl > victim->exp)
-    vPL = victim->pl;
-
-  if ((cPL / vPL) > 5) {
-    canAbsorb = false;
-  } else {
-    canAbsorb = true;
+  act(AT_HIT, "You stab $N in the chest with your tail and suck out $S lifeforce!", ch, NULL, victim, TO_CHAR);
+  act(AT_HIT, "$n stabs $N in the chest with $s tail and sucks out $S lifeforce!", ch, NULL, victim, TO_ROOM);
+  if (IS_NPC(victim)) {
+    if (ch->pl > (victim->exp * 4)) {
+	    getbiomass = 1;
+		act(AT_HIT, "$N is too weak to add more than a paltry sum to your power.", ch, NULL, victim, TO_CHAR);
+    }
+	else {
+		getbiomass = victim->worth;
+	}
   }
-
-  act(AT_HIT, "You stab $N in the chest with your tail and suck out $S life force.", ch, NULL, victim, TO_CHAR);
-  act(AT_HIT, "$n stabs $N in the chest with $s tail and sucks out $S life force.", ch, NULL, victim, TO_ROOM);
-
-  if (number_range(1, 100) < 75 && ch->pcdata->absorb_learn > 0 && (canAbsorb) && !IS_NPC(victim)) {
-    pager_printf(ch, "You surge with new found power as you learn %s\n\r", skill_table[ch->pcdata->absorb_sn]->name);
-    ch->pcdata->learned[ch->pcdata->absorb_sn] = UMIN(GET_ADEPT(ch, ch->pcdata->absorb_sn), ch->pcdata->learned[ch->pcdata->absorb_sn] + ch->pcdata->absorb_learn);
-  }
-
-  xp_gain_post = UMIN(ch->pcdata->absorb_pl * (race_table[ch->race]->exp_multiplier / 100.0), 2147483646);
-
-  if (xp_gain_post != 1) {
-    sprintf(buf1, "Your power level increases by %s points.", num_punct(xp_gain_post));
-    act(AT_HIT, buf1, ch, NULL, victim, TO_CHAR);
-  } else {
-    sprintf(buf1, "Your power level increases by %s point.", num_punct(xp_gain_post));
-    act(AT_HIT, buf1, ch, NULL, victim, TO_CHAR);
-  }
-
-  gain_exp(ch, ch->pcdata->absorb_pl);
-
-  ch->pcdata->absorb_pl = 0;
-  ch->pcdata->absorb_sn = 0;
-  ch->pcdata->absorb_learn = 0;
+	
+  ch->biomass += getbiomass;
   victim->hit = -20;
   update_pos(victim);
-
   evolveCheck(ch, victim, false);
-
   return;
 }
 

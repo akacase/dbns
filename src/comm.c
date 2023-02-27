@@ -2444,7 +2444,10 @@ void nanny(DESCRIPTOR_DATA *d, char *argument) {
         ch->gravAcc = 1;
         ch->gravSetting = 1;
         ch->exintensity = 0;
+		ch->biomass = 0;
+		ch->gsbiomass= 0;
         ch->gravExp = 1000;
+		ch->masterybio = 0;
         ch->masteryicer = 0;
         ch->masteryssj = 0;
         ch->masterymystic = 0;

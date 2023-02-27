@@ -54,12 +54,12 @@ bool pkill_ok(CHAR_DATA *ch, CHAR_DATA *victim) {
   if (IS_NPC(ch) || IS_NPC(victim))
     return true;
 
-  if (ch->exp <= 5000) {
+  if (ch->exp <= 250) {
     send_to_char("You can not fight other players until you're out of training'.\n\r",
                  ch);
     return false;
   }
-  if (victim->exp <= 5000) {
+  if (victim->exp <= 250) {
     send_to_char("You can not fight other players until they're out of training.\n\r",
                  ch);
     return false;
@@ -489,6 +489,127 @@ void violence_update(void) {
       }
     }
     /* Transformation Update */
+	if (!IS_NPC(ch) && xIS_SET((ch)->affected_by, AFF_SEMIPERFECT)) {
+      int form_mastery = 0;
+      int biototal = 0;
+
+      form_mastery = (ch->masterybio / 90000);
+      biototal = ((ch->strikemastery) + (ch->energymastery) + (ch->masterypowerup));
+
+      if (form_mastery < 1)
+        form_mastery = 1;
+
+      if (ch->mana <= 0) {
+        xREMOVE_BIT((ch)->affected_by, AFF_SEMIPERFECT);
+        if (xIS_SET((ch)->affected_by, AFF_POWERCHANNEL))
+          xREMOVE_BIT((ch)->affected_by, AFF_POWERCHANNEL);
+        if (xIS_SET((ch)->affected_by, AFF_OVERCHANNEL))
+          xREMOVE_BIT((ch)->affected_by, AFF_OVERCHANNEL);
+        if (xIS_SET((ch)->affected_by, AFF_SAFEMAX))
+          xREMOVE_BIT((ch)->affected_by, AFF_SAFEMAX);
+        ch->pl = ch->exp;
+        ch->powerup = 0;
+        transStatRemove(ch);
+        act(AT_PURPLE, "You lose control of your ki and return to normal!", ch, NULL, NULL, TO_CHAR);
+        act(AT_PURPLE, "$n loses control of $s ki and returns to normal!", ch, NULL, NULL, TO_NOTVICT);
+      }
+      if (ch->desc && !ch->fighting) {
+        if (biototal < 1000000) {
+          if (form_mastery > 15) {
+            ch->masterybio += 1;
+          } else {
+            ch->masterybio += 9;
+          }
+        } else if (biototal >= 1000000) {
+          ch->masterybio += 9;
+        }
+      }
+      if (ch->desc && ch->fighting) {
+        if (biototal < 1000000) {
+          if (form_mastery > 15) {
+            ch->masterybio += 1;
+          } else {
+            ch->masterybio += 27;
+          }
+        } else if (biototal >= 1000000) {
+          ch->masterybio += 27;
+        }
+      }
+    }
+	    if (!IS_NPC(ch) && xIS_SET((ch)->affected_by, AFF_PERFECT)) {
+      int form_mastery = 0;
+      int biototal = 0;
+
+      form_mastery = (ch->masterybio / 90000);
+      biototal = ((ch->strikemastery) + (ch->energymastery) + (ch->masterypowerup));
+
+      if (form_mastery < 1)
+        form_mastery = 1;
+
+      if (ch->mana <= 0) {
+        xREMOVE_BIT((ch)->affected_by, AFF_PERFECT);
+        if (xIS_SET((ch)->affected_by, AFF_POWERCHANNEL))
+          xREMOVE_BIT((ch)->affected_by, AFF_POWERCHANNEL);
+        if (xIS_SET((ch)->affected_by, AFF_OVERCHANNEL))
+          xREMOVE_BIT((ch)->affected_by, AFF_OVERCHANNEL);
+        if (xIS_SET((ch)->affected_by, AFF_SAFEMAX))
+          xREMOVE_BIT((ch)->affected_by, AFF_SAFEMAX);
+        ch->pl = ch->exp;
+        ch->powerup = 0;
+        transStatRemove(ch);
+        act(AT_PURPLE, "You lose control of your ki and return to normal!", ch, NULL, NULL, TO_CHAR);
+        act(AT_PURPLE, "$n loses control of $s ki and returns to normal!", ch, NULL, NULL, TO_NOTVICT);
+      }
+      if (ch->desc && !ch->fighting) {
+        if (biototal < 1000000) {
+          if (form_mastery > 15) {
+            ch->masterybio += 1;
+          } else {
+            ch->masterybio += 9;
+          }
+        } else if (biototal >= 1000000) {
+          ch->masterybio += 9;
+        }
+      }
+      if (ch->desc && ch->fighting) {
+        if (biototal < 1000000) {
+          if (form_mastery > 15) {
+            ch->masterybio += 1;
+          } else {
+            ch->masterybio += 27;
+          }
+        } else if (biototal >= 1000000) {
+          ch->masterybio += 27;
+        }
+      }
+    }
+    if (!IS_NPC(ch) && xIS_SET((ch)->affected_by, AFF_ULTRAPERFECT)) {
+      int form_mastery = 0;
+
+      form_mastery = (ch->masterybio / 90000);
+      if (form_mastery < 1)
+        form_mastery = 1;
+
+      if (ch->mana <= 0) {
+        xREMOVE_BIT((ch)->affected_by, AFF_ULTRAPERFECT);
+        if (xIS_SET((ch)->affected_by, AFF_POWERCHANNEL))
+          xREMOVE_BIT((ch)->affected_by, AFF_POWERCHANNEL);
+        if (xIS_SET((ch)->affected_by, AFF_OVERCHANNEL))
+          xREMOVE_BIT((ch)->affected_by, AFF_OVERCHANNEL);
+        if (xIS_SET((ch)->affected_by, AFF_SAFEMAX))
+          xREMOVE_BIT((ch)->affected_by, AFF_SAFEMAX);
+        ch->pl = ch->exp;
+        ch->powerup = 0;
+        transStatRemove(ch);
+        act(AT_PURPLE, "You lose control of your ki and return to normal!", ch, NULL, NULL, TO_CHAR);
+        act(AT_PURPLE, "$n loses control of $s ki and returns to normal!", ch, NULL, NULL, TO_NOTVICT);
+      }
+      if (ch->desc && !ch->fighting) {
+        ch->masterybio += 9;
+      } else if (ch->desc && ch->fighting) {
+        ch->masterybio += 27;
+      }
+    }
     if (!IS_NPC(ch) && xIS_SET((ch)->affected_by, AFF_SNAMEK)) {
       int form_drain = 0;
       int form_mastery = 0;
@@ -1052,6 +1173,8 @@ void violence_update(void) {
         form_mastery = (ch->masterymystic / 90000);
       if (is_namek(ch))
         form_mastery = (ch->masterynamek / 90000);
+	  if (is_bio(ch))
+		form_mastery = (ch->masterybio / 90000);
       plmod = (ch->pl / ch->exp);
       if (!IS_NPC(ch) && ch->pcdata->auraColorPowerUp > 0)
         auraColor = ch->pcdata->auraColorPowerUp;
@@ -1372,7 +1495,162 @@ void violence_update(void) {
             act(AT_LBLUE, "$n's intense God Ki recedes.", ch, NULL, NULL, TO_NOTVICT);
           }
         }
-      } else if (is_icer(ch)) {
+      }
+	  else if (is_bio(ch)) {
+        int biototal = 0;
+        int onestr = 0;
+        int twostr = 0;
+        int threestr = 0;
+        int fourstr = 0;
+        int fivestr = 0;
+        int onespd = 0;
+        int twospd = 0;
+        int threespd = 0;
+        int fourspd = 0;
+        int fivespd = 0;
+        int oneint = 0;
+        int twoint = 0;
+        int threeint = 0;
+        int fourint = 0;
+        int fiveint = 0;
+        int onecon = 0;
+        int twocon = 0;
+        int threecon = 0;
+        int fourcon = 0;
+        int fivecon = 0;
+
+        onestr = ch->perm_str * 0.15;
+        twostr = ch->perm_str * 0.25;
+        threestr = ch->perm_str * 0.40;
+        onespd = ch->perm_dex * 0.15;
+        twospd = ch->perm_dex * 0.25;
+        threespd = ch->perm_dex * 0.40;
+        oneint = ch->perm_int * 0.15;
+        twoint = ch->perm_int * 0.25;
+        threeint = ch->perm_int * 0.40;
+        onecon = ch->perm_con * 0.15;
+        twocon = ch->perm_con * 0.25;
+        threecon = ch->perm_con * 0.40;
+        if (!xIS_SET((ch)->affected_by, AFF_SEMIPERFECT) && !xIS_SET((ch)->affected_by, AFF_PERFECT) && !xIS_SET((ch)->affected_by, AFF_ULTRAPERFECT)) {
+          safemaximum = 1 + (ch->gsbiomass);
+          biototal = ((ch->strikemastery) + (ch->energymastery) + (ch->biomass));
+          if (ch->powerup < safemaximum) {
+            ch->pl *= 1.25;
+            ch->powerup += 1;
+            transStatApply(ch, powerupstr, powerupspd, powerupint, powerupcon);
+			if (plmod > 1) {
+              act(auraColor, "The essence of your harvested victims churns the air around you!", ch, NULL, NULL, TO_CHAR);
+              act(auraColor, "The essence of $n's harvested victims churns the air around $s aura!", ch, NULL, NULL, TO_NOTVICT);
+            }
+            if (plmod >= 40 && ch->gsbiomass >= 17) {
+              xSET_BIT((ch)->affected_by, AFF_SEMIPERFECT);
+              xREMOVE_BIT((ch)->affected_by, AFF_POWERCHANNEL);
+              act(AT_GREEN, "Your body expands in size, shifting to a larger, more humanoid form!", ch, NULL, NULL, TO_CHAR);
+			  act(AT_GREEN, "Your tail compresses, shifting upward between your smaller wings.", ch, NULL, NULL, TO_CHAR);
+			  act(AT_GREEN, "So close to perfection.", ch, NULL, NULL, TO_CHAR);
+              act(AT_GREEN, "$n's body expands in size, shifting to a larger, more humanoid form!", ch, NULL, NULL, TO_NOTVICT);
+			  act(AT_GREEN, "$n's wings and tail compress, shrinking along $s upper back.", ch, NULL, NULL, TO_NOTVICT);
+			  act(AT_GREEN, "A hideous display.", ch, NULL, NULL, TO_NOTVICT);
+              ch->powerup = 0;
+              ch->pl = ch->exp * 60;
+              transStatApply(ch, onestr, onespd, oneint, onecon);
+            }
+          }
+          if (ch->powerup >= safemaximum) {
+            ch->powerup = safemaximum;
+            xREMOVE_BIT((ch)->affected_by, AFF_POWERCHANNEL);
+            xSET_BIT((ch)->affected_by, AFF_SAFEMAX);
+            act(auraColor, "The howling anguish of your victims ceases as you reach your limit. Going any further would be dangerous.", ch, NULL, NULL, TO_CHAR);
+            act(auraColor, "$n reaches $s limit and stops powering up, the howling anguish of $s victims ceasing.", ch, NULL, NULL, TO_NOTVICT);
+          }
+        }
+        if (xIS_SET((ch)->affected_by, AFF_SEMIPERFECT)) {
+          safemaximum = form_mastery;
+          if (ch->powerup < safemaximum) {
+            ch->pl *= 1.03;
+            ch->powerup += 1;
+            if (plmod > 62) {
+              act(AT_YELLOW, "Your large form glows brilliantly, scattering rays of golden light through your aura.", ch, NULL, NULL, TO_CHAR);
+              act(AT_YELLOW, "$n's large form glows brilliantly, $s golden aura radiating with golden light.", ch, NULL, NULL, TO_NOTVICT);
+            }
+            if (plmod >= 80 && ch->gsbiomass >= 18) {
+              xREMOVE_BIT((ch)->affected_by, AFF_SEMIPERFECT);
+              xSET_BIT((ch)->affected_by, AFF_PERFECT);
+              xREMOVE_BIT((ch)->affected_by, AFF_POWERCHANNEL);
+              act(AT_GREEN, "Your body shines suddenly with a brilliant inner light.", ch, NULL, NULL, TO_CHAR);
+              act(AT_GREEN, "Your bulky muscles compress and you adopt an even more humanoid appearance,", ch, NULL, NULL, TO_CHAR);
+			  act(AT_GREEN, "compounding the features of your accumulated genetic material.", ch, NULL, NULL, TO_CHAR);
+			  act(AT_GREEN, "True perfection.", ch, NULL, NULL, TO_CHAR);
+              act(AT_GREEN, "$n erupts into a blinding white light, emerging from the chaos in a more", ch, NULL, NULL, TO_NOTVICT);
+			  act(AT_GREEN, "compressed, agile form. Their features are decidedly more humanoid,", ch, NULL, NULL, TO_NOTVICT);
+			  act(AT_GREEN, "exuding confidence and an unsettling inner strength.", ch, NULL, NULL, TO_NOTVICT);
+              ch->pl = ch->exp * 125;
+              transStatApply(ch, twostr, twospd, twoint, twocon);
+            }
+          }
+          if (ch->powerup >= safemaximum) {
+            ch->powerup = safemaximum;
+            xREMOVE_BIT((ch)->affected_by, AFF_POWERCHANNEL);
+            xSET_BIT((ch)->affected_by, AFF_SAFEMAX);
+            act(AT_YELLOW, "You relax, unable to push your power any further.", ch, NULL, NULL, TO_CHAR);
+            act(AT_YELLOW, "$n relaxes, unable to push $s power any further.", ch, NULL, NULL, TO_NOTVICT);
+          }
+        }
+        if (xIS_SET((ch)->affected_by, AFF_PERFECT)) {
+          safemaximum = form_mastery;
+          if (ch->powerup < safemaximum) {
+            ch->pl *= 1.03;
+            ch->powerup += 1;
+            if (plmod > 129) {
+              act(AT_YELLOW, "Your golden aura churns with radiant light, sending scattering rays surging about you.", ch, NULL, NULL, TO_CHAR);
+              act(AT_YELLOW, "$n's golden aura churns with radiant light, sending scattering rays surging about them.", ch, NULL, NULL, TO_NOTVICT);
+            }
+            if ((plmod >= 150) && (ch->gsbiomass >= 19)) {
+              xREMOVE_BIT((ch)->affected_by, AFF_PERFECT);
+              xSET_BIT((ch)->affected_by, AFF_ULTRAPERFECT);
+              xREMOVE_BIT((ch)->affected_by, AFF_POWERCHANNEL);
+              act(AT_GREEN, "Countless bolts of energy arc through your massive aura as it swells suddenly in size!", ch, NULL, NULL, TO_CHAR);
+              act(AT_GREEN, "You ascend beyond mere perfection, attaining a level of strength previously unknown.", ch, NULL, NULL, TO_CHAR);
+			  act(AT_GREEN, "Absolute perfection.", ch, NULL, NULL, TO_CHAR);
+              act(AT_GREEN, "$n ascends beyond mere perfection, sending crackling bolts of energy arcing throughout $s massive aura!", ch, NULL, NULL, TO_NOTVICT);
+              ch->pl = ch->exp * 225;
+              transStatApply(ch, threestr, threespd, threeint, threecon);
+            } else if ((plmod >= 150) && (ch->gsbiomass = 18)) {
+              ch->pl = (ch->exp * 150);
+              act(AT_YELLOW, "Reaching the limits of perfection, your golden aura reduces dramatically in size.", ch, NULL, NULL, TO_CHAR);
+              act(AT_YELLOW, "$n reaches the limits of perfection, unable to force out any more power.", ch, NULL, NULL, TO_NOTVICT);
+              xREMOVE_BIT((ch)->affected_by, AFF_POWERCHANNEL);
+              xSET_BIT((ch)->affected_by, AFF_SAFEMAX);
+            }
+          }
+          if (ch->powerup >= safemaximum) {
+            ch->powerup = safemaximum;
+            xREMOVE_BIT((ch)->affected_by, AFF_POWERCHANNEL);
+            xSET_BIT((ch)->affected_by, AFF_SAFEMAX);
+            act(AT_YELLOW, "You relax your massive aura, unable to increase your perfect power any further.", ch, NULL, NULL, TO_CHAR);
+            act(AT_YELLOW, "$n relaxes, unable to increase $s perfect power any further.", ch, NULL, NULL, TO_NOTVICT);
+          }
+        }
+        if (xIS_SET((ch)->affected_by, AFF_ULTRAPERFECT)) {
+          safemaximum = form_mastery;
+          if (ch->powerup < safemaximum) {
+            ch->pl *= 1.06;
+            ch->powerup += 1;
+            if (plmod > 155) {
+              act(AT_YELLOW, "Countless bolts of pure energy dance in scattering arcs around you.", ch, NULL, NULL, TO_CHAR);
+              act(AT_YELLOW, "Countless bolts of pure energy dance in scattering arcs around $n.", ch, NULL, NULL, TO_NOTVICT);
+            }
+          }
+          if (ch->powerup >= safemaximum) {
+            ch->powerup = safemaximum;
+            xREMOVE_BIT((ch)->affected_by, AFF_POWERCHANNEL);
+            xSET_BIT((ch)->affected_by, AFF_SAFEMAX);
+            act(AT_YELLOW, "Reaching the limits of perfection, your golden aura reduces dramatically in size.", ch, NULL, NULL, TO_CHAR);
+            act(AT_YELLOW, "$n reaches the limits of perfection, unable to force out any more power.", ch, NULL, NULL, TO_NOTVICT);
+          }
+        }
+      }
+	  else if (is_icer(ch)) {
         int icertotal = 0;
         int onestr = 0;
         int twostr = 0;
@@ -1909,7 +2187,7 @@ void violence_update(void) {
           }
         }
       }
-      if (!is_saiyan(ch) && !is_hb(ch) && !is_icer(ch) && !is_namek(ch) && !is_human(ch) && !is_kaio(ch)) {
+      if (!is_saiyan(ch) && !is_hb(ch) && !is_icer(ch) && !is_namek(ch) && !is_human(ch) && !is_kaio(ch) && !is_bio(ch)) {
         send_to_char("DEBUG: You should only be testing the non-locked races.\n\r", ch);
       }
     }
