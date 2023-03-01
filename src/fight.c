@@ -488,6 +488,10 @@ void violence_update(void) {
         affect_remove(ch, paf);
       }
     }
+	/*Make sure 'powerup push' doesn't run unchecked and kill people*/
+	if (!xIS_SET((ch)->affected_by, AFF_SAFEMAX) && !IS_NPC(ch)) {
+	  ch->pushpowerup = 0;
+	}
     /* Transformation Update */
 	if (!IS_NPC(ch) && xIS_SET((ch)->affected_by, AFF_SEMIPERFECT)) {
       int form_mastery = 0;
@@ -1217,6 +1221,8 @@ void violence_update(void) {
         int fivecon = 0;
         int sixcon = 0;
         int sevencon = 0;
+		char transbuf[MAX_STRING_LENGTH];
+		char transbuf2[MAX_STRING_LENGTH];
 
         onestr = ch->perm_str * 0.20;
         twostr = ch->perm_str * 0.30;
@@ -1255,11 +1261,21 @@ void violence_update(void) {
             ch->pl *= (long double)((long double)1.01 + ((long double)ch->masterypowerup / 200000));
             ch->powerup += 1;
             transStatApply(ch, powerupstr, powerupspd, powerupint, powerupcon);
-            if (plmod >= 30 && saiyanTotal > 1000000) {
+            if (plmod >= 30 && saiyanTotal >= 1000000) {
               xSET_BIT((ch)->affected_by, AFF_SSJ);
               xREMOVE_BIT((ch)->affected_by, AFF_POWERCHANNEL);
-              act(AT_YELLOW, "Your eyes turn blue, your hair flashes blonde and a fiery golden aura erupts around you!", ch, NULL, NULL, TO_CHAR);
-              act(AT_YELLOW, "$n's hair suddenly flashes blonde, transcending beyond $s normal limits in a fiery display of golden ki!", ch, NULL, NULL, TO_NOTVICT);
+			  if (ch->perm_str >= (ch->perm_int * 4) || (ch->altssj = 1)) {
+                act(AT_YELLOW, "You howl in pure rage, an incredible rush of power filling your body.", ch, NULL, NULL, TO_CHAR);
+				act(AT_YELLOW, "Your hair stands on end, and a golden aura tinged with flecks of pooling green is unleashed around you!", ch, NULL, NULL, TO_CHAR);
+                act(AT_YELLOW, "$n's hair suddenly flashes yellow-green, transcending beyond $s normal limits in a monstrous display of rage!", ch, NULL, NULL, TO_NOTVICT);
+				if (ch->altssj = 0) {
+				  ch->altssj += 1;
+				}
+			  }
+			  else {
+				act(AT_YELLOW, "Your eyes turn blue, your hair flashes blonde and a fiery golden aura erupts around you!", ch, NULL, NULL, TO_CHAR);
+                act(AT_YELLOW, "$n's hair suddenly flashes blonde, transcending beyond $s normal limits in a fiery display of golden ki!", ch, NULL, NULL, TO_NOTVICT);
+			  }
               ch->powerup = 0;
               ch->pl = ch->exp * 50;
               transStatApply(ch, onestr, onespd, oneint, onecon);
@@ -1268,7 +1284,7 @@ void violence_update(void) {
                 ch->pcdata->haircolor = 3;
               }
             }
-            if ((plmod >= 30) && (saiyanTotal < 1000000)) {
+            if ((plmod >= 27) && (saiyanTotal < 1000000)) {
               ch->pl = (ch->exp * 30);
               act(auraColor, "The raging torrent of ki fades but your power remains.", ch, NULL, NULL, TO_CHAR);
               act(auraColor, "$n's raging torrent of ki fades away but $s power remains.", ch, NULL, NULL, TO_NOTVICT);
@@ -1295,14 +1311,14 @@ void violence_update(void) {
             if (plmod > 1 && plmod < 5) {
               act(auraColor, "Your body glows faintly.", ch, NULL, NULL, TO_CHAR);
               act(auraColor, "$n's body glows faintly.", ch, NULL, NULL, TO_NOTVICT);
-            }
-            if ((plmod >= 30) && (saiyanTotal < 4000)) {
+            }/*
+            if ((plmod >= 27) && (saiyanTotal < 4000)) {
               ch->pl = (ch->exp * 30);
               act(auraColor, "The raging torrent of ki fades, but your power remains.", ch, NULL, NULL, TO_CHAR);
               act(auraColor, "$n's raging torrent of ki fades away, but $s power remains.", ch, NULL, NULL, TO_NOTVICT);
               xREMOVE_BIT((ch)->affected_by, AFF_POWERCHANNEL);
               xSET_BIT((ch)->affected_by, AFF_SAFEMAX);
-            }
+            }*/
           }
           if ((ch->powerup >= 15) || (ch->powerup >= safemaximum)) {
             ch->powerup = safemaximum;
@@ -2202,16 +2218,16 @@ void violence_update(void) {
       }
       form_mastery = (ch->train / 90000);
       if (xIS_SET((ch)->affected_by, AFF_SSJ) || xIS_SET((ch)->affected_by, AFF_SSJ2) || xIS_SET((ch)->affected_by, AFF_SSJ3) || xIS_SET((ch)->affected_by, AFF_SSJ4) || xIS_SET((ch)->affected_by, AFF_SGOD) || xIS_SET((ch)->affected_by, AFF_HYPER) || xIS_SET((ch)->affected_by, AFF_SNAMEK) || xIS_SET((ch)->affected_by, AFF_ICER2) || xIS_SET((ch)->affected_by, AFF_ICER3) || xIS_SET((ch)->affected_by, AFF_ICER4) || xIS_SET((ch)->affected_by, AFF_ICER5) || xIS_SET((ch)->affected_by, AFF_GOLDENFORM) || xIS_SET((ch)->affected_by, AFF_SEMIPERFECT) || xIS_SET((ch)->affected_by, AFF_PERFECT) || xIS_SET((ch)->affected_by, AFF_ULTRAPERFECT) || xIS_SET((ch)->affected_by, AFF_OOZARU) || xIS_SET((ch)->affected_by, AFF_GOLDEN_OOZARU) || xIS_SET((ch)->affected_by, AFF_EXTREME) || xIS_SET((ch)->affected_by, AFF_MYSTIC) || xIS_SET((ch)->affected_by, AFF_SUPERANDROID) || xIS_SET((ch)->affected_by, AFF_MAKEOSTAR) || xIS_SET((ch)->affected_by, AFF_EVILBOOST) || xIS_SET((ch)->affected_by, AFF_EVILSURGE) || xIS_SET((ch)->affected_by, AFF_EVILOVERLOAD)) {
-        safemaximum = form_mastery;
+        safemaximum = (form_mastery / 5);
         if (form_mastery < 1)
           form_mastery = 1;
-        danger = ((ch->powerup - safemaximum) * (ch->powerup * 100));
+        danger = ((ch->pushpowerup - safemaximum) * (ch->pushpowerup * 1000));
         /* Just in case. */
         if (danger < 1) {
           danger = 1;
         }
         ch->pl *= 1.01;
-        ch->powerup += 1;
+        ch->pushpowerup += 1;
         if ((ch->mana - danger) < 0)
           ch->mana = 0;
         else {
@@ -2238,14 +2254,14 @@ void violence_update(void) {
           act(AT_YELLOW, "$n struggles against the will of $s own body, increasing $s power at incredible risk.", ch, NULL, NULL, TO_NOTVICT);
         }
       } else {
-        safemaximum = ((get_curr_int(ch) * 0.03) + 1);
-        danger = ((ch->powerup - safemaximum) * (ch->powerup * 100));
+        safemaximum = 1;
+        danger = ((ch->pushpowerup - safemaximum) * (ch->powerup * 250));
         /* Just in case. */
         if (danger < 1) {
           danger = 1;
         }
         ch->pl *= 1.01;
-        ch->powerup += 1;
+        ch->pushpowerup += 1;
         if ((ch->mana - danger) < 0)
           ch->mana = 0;
 
@@ -2256,13 +2272,13 @@ void violence_update(void) {
           ch->hit -= (danger / 10);
           act(AT_RED, "Your body is ripping itself apart!", ch, NULL, NULL, TO_CHAR);
           act(AT_RED, "$n's body is ripping itself apart!'", ch, NULL, NULL, TO_NOTVICT);
-          if (ch->hit - (danger / 10) < 0) {
-            ch->hit -= (danger / 10);
+          if (ch->hit - (danger) < 0) {
+            ch->hit -= danger;
             update_pos(ch);
             if (ch->position == POS_DEAD) {
               act(AT_RED, "Your body gives out under the intense strain. All must succumb to their limits in the end.", ch, NULL, NULL, TO_CHAR);
-              act(AT_RED, "$n collapses, DEAD, $s body completely spent.", ch, NULL, NULL, TO_NOTVICT);
-              sprintf(buf, "%s withers away, succumbing to their limits", ch->name);
+              act(AT_RED, "$n explodes, $s body completely spent!", ch, NULL, NULL, TO_NOTVICT);
+              sprintf(buf, "%s's body explodes in a mass of unbound Ki! Oh the humanity!", ch->name);
               do_info(ch, buf);
               raw_kill(ch, ch);
             }
@@ -6062,8 +6078,9 @@ damage(CHAR_DATA *ch, CHAR_DATA *victim, int dam, int dt) {
   }
   update_pos(victim);
 
-  if (ch->race == 6 && victim->position <= POS_STUNNED && victim->hit < 1 && !xIS_SET(ch->act, PLR_SPAR))
+  if (ch->race == 6 && victim->position <= POS_STUNNED && victim->hit < 1 && !xIS_SET(ch->act, PLR_SPAR)) {
     bio_absorb(ch, victim);
+  }
   else
     switch (victim->position) {
       case POS_MORTAL:

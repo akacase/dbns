@@ -465,6 +465,9 @@ void fwrite_char(CHAR_DATA *ch, FILE *fp) {
   fprintf(fp, "Gravityacclimation           %d\n", ch->gravAcc);
   fprintf(fp, "Gravityrankup           %d\n", ch->gravityrankup);
   fprintf(fp, "Gravityexp                   %lld\n", ch->gravExp);
+  fprintf(fp, "Altssj                   %d\n", ch->altssj);
+  fprintf(fp, "Pushpowerup                   %d\n", ch->pushpowerup);
+  fprintf(fp, "Transformhint                   %d\n", ch->transformhint);
   fprintf(fp, "Biomass                   %lld\n", ch->biomass);
   fprintf(fp, "Gsbiomass                   %lld\n", ch->gsbiomass);
   fprintf(fp, "Masterybio                   %lld\n", ch->masterybio);
@@ -1496,6 +1499,7 @@ void fread_char(CHAR_DATA *ch, FILE *fp, bool preload) {
         }
 
         KEY("Auction_PL", ch->pcdata->auction_pl, fread_number_ld(fp));
+		KEY("Altssj", ch->altssj, fread_number(fp));
         break;
 
       case 'B':
@@ -2037,6 +2041,7 @@ void fread_char(CHAR_DATA *ch, FILE *fp, bool preload) {
         KEY("Punch", ch->skillpunch, fread_number(fp));
         KEY("Punchpower", ch->punchpower, fread_number(fp));
         KEY("Puncheffic", ch->puncheffic, fread_number(fp));
+		KEY("Pushpowerup", ch->pushpowerup, fread_number(fp));
         KEY("Psionic_Blast", ch->skillpsionic_blast, fread_number(fp));
         KEY("Pagerlen", ch->pcdata->pagerlen, fread_number(fp));
         KEY("Password", ch->pcdata->pwd, fread_string_nohash(fp));
@@ -2403,6 +2408,7 @@ void fread_char(CHAR_DATA *ch, FILE *fp, bool preload) {
           break;
         }
         KEY("Train", ch->train, fread_number(fp));
+		KEY("Transformhint", ch->transformhint, fread_number(fp));
         KEY("Trust", ch->trust, fread_number(fp));
         /* Let no character be trusted higher than one below maxlevel -- Narn */
         ch->trust = UMIN(ch->trust, MAX_LEVEL - 1);

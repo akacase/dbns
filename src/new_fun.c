@@ -857,6 +857,10 @@ void bio_absorb(CHAR_DATA *ch, CHAR_DATA *victim) {
   }
 	
   ch->biomass += getbiomass;
+  stat_train(ch, "str", 100);
+  stat_train(ch, "spd", 100);
+  stat_train(ch, "con", 100);
+  stat_train(ch, "int", 100);
   victim->hit = -20;
   update_pos(victim);
   evolveCheck(ch, victim, false);

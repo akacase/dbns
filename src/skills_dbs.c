@@ -6020,7 +6020,7 @@ void do_forcewave(CHAR_DATA *ch, char *argument) {
     send_to_char("You can't concentrate enough for that.\n\r", ch);
     return;
   }
-  if (!IS_NPC(ch) && (ch->skillenergy_disc < 1)) {
+  if (!IS_NPC(ch) && (ch->skillforcewave < 1)) {
     send_to_char("You're not able to use that skill.\n\r", ch);
     return;
   }
@@ -7774,7 +7774,9 @@ void do_meditate(CHAR_DATA *ch, char *argument) {
           statComb = ((get_curr_str(ch) + get_curr_dex(ch) + get_curr_int(ch) + get_curr_con(ch)) - 39);
           increase = number_range(1, 3);
           xp_gain = (long double)increase / 75000 * statComb;
-          gain_exp(ch, xp_gain);
+		  if (!IS_BIO(ch)) {
+            gain_exp(ch, xp_gain);
+		  }
           ch->mana += (float)right / 19 * ch->max_mana;
           ch->mana += 10;
           ch->train += weighttrain;

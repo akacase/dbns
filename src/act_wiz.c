@@ -9736,6 +9736,8 @@ void do_godstat(CHAR_DATA *ch, char *argument) {
     form_mastery = (victim->masterymystic / 90000);
   if (is_namek(victim))
     form_mastery = (victim->masterynamek / 90000);
+  if (is_bio(victim))
+	form_mastery = (victim->masterybio / 90000);
 
   if (form_mastery < 1) {
     form_mastery = 1;
@@ -10071,7 +10073,11 @@ void do_godstat(CHAR_DATA *ch, char *argument) {
   pager_printf(ch,
                "FMN: %d\n\r", victim->masterynamek);
   pager_printf(ch,
+               "FMB: %d\n\r", victim->masterybio);
+  pager_printf(ch,
                "Powerup Mastery: %d ", victim->masterypowerup);
+  pager_printf(ch,
+               "Biomass: %d\n\r", victim->biomass);
 
   send_to_pager("&w&D\n\r", ch);
 }

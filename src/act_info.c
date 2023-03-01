@@ -585,9 +585,16 @@ void show_visible_affects_to_char(CHAR_DATA *victim, CHAR_DATA *ch) {
   }
   if (IS_AFFECTED(victim, AFF_SSJ) && !IS_AFFECTED(victim, AFF_SSJ2) && !IS_AFFECTED(victim, AFF_SSJ3) && !IS_AFFECTED(victim, AFF_SSJ4) && !IS_AFFECTED(victim, AFF_SGOD)) {
     pager_printf_color(ch, "  &P*");
-    act(AT_YELLOW,
-        "$N is surrounded by a fiery yellow aura.", ch,
-        NULL, victim, TO_CHAR);
+	if (ch->altssj = 1) {
+	  act(AT_YELLOW,
+	  "$N is surrounded by a green-tinged aura of raging golden flame.", ch,
+	  NULL, victim, TO_CHAR);
+	}
+	else {
+      act(AT_YELLOW,
+	  "$N is surrounded by a fiery yellow aura.", ch,
+	  NULL, victim, TO_CHAR);
+	}
   }
   if (IS_AFFECTED(victim, AFF_KID_TRANS)) {
     pager_printf_color(ch, "  &P*");
@@ -597,9 +604,16 @@ void show_visible_affects_to_char(CHAR_DATA *victim, CHAR_DATA *ch) {
   }
   if ((IS_AFFECTED(victim, AFF_SSJ) && IS_AFFECTED(victim, AFF_SSJ2) && !IS_AFFECTED(victim, AFF_SSJ3) && !IS_AFFECTED(victim, AFF_SSJ4) && !IS_AFFECTED(victim, AFF_SGOD))) {
     pager_printf_color(ch, "  &P*");
-    act(AT_YELLOW,
-        "$N is surrounded by a fiery yellow aura.",
-        ch, NULL, victim, TO_CHAR);
+    if (ch->altssj = 1) {
+	  act(AT_YELLOW,
+	  "$N is surrounded by a green-tinged aura of raging golden flame.", ch,
+	  NULL, victim, TO_CHAR);
+	}
+	else {
+      act(AT_YELLOW,
+	  "$N is surrounded by a fiery yellow aura.", ch,
+	  NULL, victim, TO_CHAR);
+	}
     pager_printf_color(ch, "  &P*");
     act(AT_BLUE, "$N is surrounded by random bolts of electricity.", ch, NULL, victim, TO_CHAR);
   }

@@ -412,6 +412,8 @@ void do_score(CHAR_DATA *ch, char *argument) {
     form_mastery = (ch->masterymystic / 90000);
   if (is_namek(ch))
     form_mastery = (ch->masterynamek / 90000);
+  if (is_bio(ch))
+	form_mastery = (ch->masterybio / 90000);
 
   if (form_mastery < 1) {
     form_mastery = 1;

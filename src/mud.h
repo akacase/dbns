@@ -3313,6 +3313,9 @@ struct char_data {
   long long int masterynamek;
   long long int biomass;
   long long int gsbiomass;
+  int transformhint;
+  int altssj;
+  int pushpowerup;
   int workoutstrain;
   int gravityrankup;
   int school;
