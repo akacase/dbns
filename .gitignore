@@ -11,3 +11,4 @@ player/*
 tmp/*
 result
 .DS_Store
+.direnv

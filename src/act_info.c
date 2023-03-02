@@ -585,16 +585,15 @@ void show_visible_affects_to_char(CHAR_DATA *victim, CHAR_DATA *ch) {
   }
   if (IS_AFFECTED(victim, AFF_SSJ) && !IS_AFFECTED(victim, AFF_SSJ2) && !IS_AFFECTED(victim, AFF_SSJ3) && !IS_AFFECTED(victim, AFF_SSJ4) && !IS_AFFECTED(victim, AFF_SGOD)) {
     pager_printf_color(ch, "  &P*");
-	if (ch->altssj = 1) {
-	  act(AT_YELLOW,
-	  "$N is surrounded by a green-tinged aura of raging golden flame.", ch,
-	  NULL, victim, TO_CHAR);
-	}
-	else {
+    if (ch->altssj == 1) {
       act(AT_YELLOW,
-	  "$N is surrounded by a fiery yellow aura.", ch,
-	  NULL, victim, TO_CHAR);
-	}
+          "$N is surrounded by a green-tinged aura of raging golden flame.", ch,
+          NULL, victim, TO_CHAR);
+    } else {
+      act(AT_YELLOW,
+          "$N is surrounded by a fiery yellow aura.", ch,
+          NULL, victim, TO_CHAR);
+    }
   }
   if (IS_AFFECTED(victim, AFF_KID_TRANS)) {
     pager_printf_color(ch, "  &P*");
@@ -604,16 +603,15 @@ void show_visible_affects_to_char(CHAR_DATA *victim, CHAR_DATA *ch) {
   }
   if ((IS_AFFECTED(victim, AFF_SSJ) && IS_AFFECTED(victim, AFF_SSJ2) && !IS_AFFECTED(victim, AFF_SSJ3) && !IS_AFFECTED(victim, AFF_SSJ4) && !IS_AFFECTED(victim, AFF_SGOD))) {
     pager_printf_color(ch, "  &P*");
-    if (ch->altssj = 1) {
-	  act(AT_YELLOW,
-	  "$N is surrounded by a green-tinged aura of raging golden flame.", ch,
-	  NULL, victim, TO_CHAR);
-	}
-	else {
+    if (ch->altssj == 1) {
       act(AT_YELLOW,
-	  "$N is surrounded by a fiery yellow aura.", ch,
-	  NULL, victim, TO_CHAR);
-	}
+          "$N is surrounded by a green-tinged aura of raging golden flame.", ch,
+          NULL, victim, TO_CHAR);
+    } else {
+      act(AT_YELLOW,
+          "$N is surrounded by a fiery yellow aura.", ch,
+          NULL, victim, TO_CHAR);
+    }
     pager_printf_color(ch, "  &P*");
     act(AT_BLUE, "$N is surrounded by random bolts of electricity.", ch, NULL, victim, TO_CHAR);
   }
@@ -1433,8 +1431,8 @@ void do_look(CHAR_DATA *ch, char *argument) {
 
   if (!IS_NPC(ch) && !xIS_SET(ch->act, PLR_HOLYLIGHT) && !IS_AFFECTED(ch, AFF_trueSIGHT) && room_is_dark(ch->in_room) && !is_android(ch) && !is_superandroid(ch) && !is_demon(ch)) {
     set_char_color(AT_DGREY, ch);
-    //send_to_char("It is pitch black ... \n\r", ch);
-    //show_char_to_char(ch->in_room->first_person, ch);
+    // send_to_char("It is pitch black ... \n\r", ch);
+    // show_char_to_char(ch->in_room->first_person, ch);
     return;
   }
 
@@ -4862,135 +4860,124 @@ void do_develop(CHAR_DATA *ch, char *argument) {
   if (!str_cmp(arg1, "sorry,nothinghere!...yet") && arg2[0] == '\0') {
     send_to_char("What're you, some kinda wise guy?\n\r", ch);
     return;
-  } if (is_bio(ch)) {
-      if (!str_cmp(arg1, "biomass") && arg2[0] == '\0') {
-	  send_to_char("Attempt to sequence your internal stores of energy-pure Biomaterial?\n\r", ch);
-	  send_to_char("A power increase may result from 'develop biomass sequencer'\n\r", ch);
-	  return;
-	  }
-	  if (!str_cmp(arg1, "biomass") && !str_cmp(arg2, "sequencer")) {
-	  act(AT_GREEN, "You recompile the energy-pure Biomaterial within your body.", ch, NULL, NULL, TO_CHAR);
-	    if (ch->gsbiomass == 0 && ch->biomass >= 2000) {
-			act(AT_GREEN, "You feel a change within you. Your ability to control your powerlevel has improved.", ch, NULL, NULL, TO_CHAR);
-			ch->gsbiomass = 1;
-			return;
-		}
-		if (ch->gsbiomass == 1 && ch->biomass >= 4000) {
-			act(AT_GREEN, "You feel a change within you. Your ability to control your powerlevel has improved.", ch, NULL, NULL, TO_CHAR);
-			ch->gsbiomass = 2;
-			return;
-		}
-		if (ch->gsbiomass == 2 && ch->biomass >= 6000) {
-			act(AT_GREEN, "You feel a change within you. Your ability to control your powerlevel has improved.", ch, NULL, NULL, TO_CHAR);
-			ch->gsbiomass = 3;
-			return;
-		}
-		if (ch->gsbiomass == 3 && ch->biomass >= 8000) {
-			act(AT_GREEN, "You feel a change within you. Your ability to control your powerlevel has improved.", ch, NULL, NULL, TO_CHAR);
-			ch->gsbiomass = 4;
-			return;
-		}
-		if (ch->gsbiomass == 4 && ch->biomass >= 10000) {
-			act(AT_GREEN, "You feel a change within you. Your ability to control your powerlevel has improved.", ch, NULL, NULL, TO_CHAR);
-			ch->gsbiomass = 5;
-			return;
-		}
-		if (ch->gsbiomass == 5 && ch->biomass >= 12000) {
-			act(AT_GREEN, "You feel a change within you. Your ability to control your powerlevel has improved.", ch, NULL, NULL, TO_CHAR);
-			ch->gsbiomass = 6;
-			return;
-		}
-		if (ch->gsbiomass == 6 && ch->biomass >= 14000) {
-			act(AT_GREEN, "You feel a change within you. Your ability to control your powerlevel has improved.", ch, NULL, NULL, TO_CHAR);
-			ch->gsbiomass = 7;
-			return;
-		}
-		if (ch->gsbiomass == 7 && ch->biomass >= 16000) {
-			act(AT_GREEN, "You feel a change within you. Your ability to control your powerlevel has improved.", ch, NULL, NULL, TO_CHAR);
-			ch->gsbiomass = 8;
-			return;
-		}
-		if (ch->gsbiomass == 8 && ch->biomass >= 18000) {
-			act(AT_GREEN, "You feel a change within you. Your ability to control your powerlevel has improved.", ch, NULL, NULL, TO_CHAR);
-			ch->gsbiomass = 9;
-			return;
-		}
-		if (ch->gsbiomass == 9 && ch->biomass >= 20000) {
-			act(AT_GREEN, "You feel a change within you. Your ability to control your powerlevel has improved.", ch, NULL, NULL, TO_CHAR);
-			ch->gsbiomass = 10;
-			return;
-		}
-		if (ch->gsbiomass == 10 && ch->biomass >= 22000) {
-			act(AT_GREEN, "You feel a change within you. Your ability to control your powerlevel has improved.", ch, NULL, NULL, TO_CHAR);
-			ch->gsbiomass = 11;
-			return;
-		}
-		if (ch->gsbiomass == 11 && ch->biomass >= 24000) {
-			act(AT_GREEN, "You feel a change within you. Your ability to control your powerlevel has improved.", ch, NULL, NULL, TO_CHAR);
-			ch->gsbiomass = 12;
-			return;
-		}
-		if (ch->gsbiomass == 12 && ch->biomass >= 26000) {
-			act(AT_GREEN, "You feel a change within you. Your ability to control your powerlevel has improved.", ch, NULL, NULL, TO_CHAR);
-			ch->gsbiomass = 13;
-			return;
-		}
-		if (ch->gsbiomass == 13 && ch->biomass >= 28000) {
-			act(AT_GREEN, "You feel a change within you. Your ability to control your powerlevel has improved.", ch, NULL, NULL, TO_CHAR);
-			ch->gsbiomass = 14;
-			return;
-		}
-		if (ch->gsbiomass == 14 && ch->biomass >= 30000) {
-			act(AT_GREEN, "You feel a change within you. Your ability to control your powerlevel has improved.", ch, NULL, NULL, TO_CHAR);
-			ch->gsbiomass = 15;
-			return;
-		}
-		if (ch->gsbiomass == 15 && ch->biomass >= 40000) {
-			act(AT_GREEN, "You feel a change within you. Your ability to control your powerlevel has improved.", ch, NULL, NULL, TO_CHAR);
-			ch->gsbiomass = 16;
-			return;
-		}
-		if (ch->gsbiomass == 16 && ch->biomass >= 350000) {
-			act(AT_GREEN, "What's this?! You feel an incredible surge of power within you!", ch, NULL, NULL, TO_CHAR);
-			act(AT_GREEN, "Your body has acclimated, inching you one step closer to true perfection!", ch, NULL, NULL, TO_CHAR);
-			ch->gsbiomass = 17;
-			sprintf(buf1, "%s has attained Semi-Perfection!", ch->name);
-			do_info(ch, buf1);
-			return;
-		}
-		if (ch->gsbiomass == 17 && ch->biomass >= 500000) {
-			act(AT_GREEN, "What's this?! You feel an incredible surge of power within you!", ch, NULL, NULL, TO_CHAR);
-			act(AT_GREEN, "You have attained perfection!", ch, NULL, NULL, TO_CHAR);
-			ch->gsbiomass = 18;
-			sprintf(buf1, "%s has attained Perfection!", ch->name);
-			do_info(ch, buf1);
-			return;
-		}
-		if (ch->gsbiomass == 18 && ch->biomass >= 750000) {
-			act(AT_GREEN, "What's this?! You feel an incredible surge of power within you!", ch, NULL, NULL, TO_CHAR);
-			act(AT_GREEN, "You have surpassed even perfection!", ch, NULL, NULL, TO_CHAR);
-			ch->gsbiomass = 19;
-			sprintf(buf1, "%s has attained Ultra-Perfection!", ch->name);
-			do_info(ch, buf1);
-			return;
-		}
-		else {
-			act(AT_GREEN, "Nothing. You don't feel any change at all.", ch, NULL, NULL, TO_CHAR);
-			return;
-		}
-	  }
-	  
-	  
-	  
-	  
-	  
-	  
-	  
-	  
-	  
-	  
-	  
+  }
+  if (is_bio(ch)) {
+    if (!str_cmp(arg1, "biomass") && arg2[0] == '\0') {
+      send_to_char("Attempt to sequence your internal stores of energy-pure Biomaterial?\n\r", ch);
+      send_to_char("A power increase may result from 'develop biomass sequencer'\n\r", ch);
+      return;
     }
+    if (!str_cmp(arg1, "biomass") && !str_cmp(arg2, "sequencer")) {
+      act(AT_GREEN, "You recompile the energy-pure Biomaterial within your body.", ch, NULL, NULL, TO_CHAR);
+      if (ch->gsbiomass == 0 && ch->biomass >= 2000) {
+        act(AT_GREEN, "You feel a change within you. Your ability to control your powerlevel has improved.", ch, NULL, NULL, TO_CHAR);
+        ch->gsbiomass = 1;
+        return;
+      }
+      if (ch->gsbiomass == 1 && ch->biomass >= 4000) {
+        act(AT_GREEN, "You feel a change within you. Your ability to control your powerlevel has improved.", ch, NULL, NULL, TO_CHAR);
+        ch->gsbiomass = 2;
+        return;
+      }
+      if (ch->gsbiomass == 2 && ch->biomass >= 6000) {
+        act(AT_GREEN, "You feel a change within you. Your ability to control your powerlevel has improved.", ch, NULL, NULL, TO_CHAR);
+        ch->gsbiomass = 3;
+        return;
+      }
+      if (ch->gsbiomass == 3 && ch->biomass >= 8000) {
+        act(AT_GREEN, "You feel a change within you. Your ability to control your powerlevel has improved.", ch, NULL, NULL, TO_CHAR);
+        ch->gsbiomass = 4;
+        return;
+      }
+      if (ch->gsbiomass == 4 && ch->biomass >= 10000) {
+        act(AT_GREEN, "You feel a change within you. Your ability to control your powerlevel has improved.", ch, NULL, NULL, TO_CHAR);
+        ch->gsbiomass = 5;
+        return;
+      }
+      if (ch->gsbiomass == 5 && ch->biomass >= 12000) {
+        act(AT_GREEN, "You feel a change within you. Your ability to control your powerlevel has improved.", ch, NULL, NULL, TO_CHAR);
+        ch->gsbiomass = 6;
+        return;
+      }
+      if (ch->gsbiomass == 6 && ch->biomass >= 14000) {
+        act(AT_GREEN, "You feel a change within you. Your ability to control your powerlevel has improved.", ch, NULL, NULL, TO_CHAR);
+        ch->gsbiomass = 7;
+        return;
+      }
+      if (ch->gsbiomass == 7 && ch->biomass >= 16000) {
+        act(AT_GREEN, "You feel a change within you. Your ability to control your powerlevel has improved.", ch, NULL, NULL, TO_CHAR);
+        ch->gsbiomass = 8;
+        return;
+      }
+      if (ch->gsbiomass == 8 && ch->biomass >= 18000) {
+        act(AT_GREEN, "You feel a change within you. Your ability to control your powerlevel has improved.", ch, NULL, NULL, TO_CHAR);
+        ch->gsbiomass = 9;
+        return;
+      }
+      if (ch->gsbiomass == 9 && ch->biomass >= 20000) {
+        act(AT_GREEN, "You feel a change within you. Your ability to control your powerlevel has improved.", ch, NULL, NULL, TO_CHAR);
+        ch->gsbiomass = 10;
+        return;
+      }
+      if (ch->gsbiomass == 10 && ch->biomass >= 22000) {
+        act(AT_GREEN, "You feel a change within you. Your ability to control your powerlevel has improved.", ch, NULL, NULL, TO_CHAR);
+        ch->gsbiomass = 11;
+        return;
+      }
+      if (ch->gsbiomass == 11 && ch->biomass >= 24000) {
+        act(AT_GREEN, "You feel a change within you. Your ability to control your powerlevel has improved.", ch, NULL, NULL, TO_CHAR);
+        ch->gsbiomass = 12;
+        return;
+      }
+      if (ch->gsbiomass == 12 && ch->biomass >= 26000) {
+        act(AT_GREEN, "You feel a change within you. Your ability to control your powerlevel has improved.", ch, NULL, NULL, TO_CHAR);
+        ch->gsbiomass = 13;
+        return;
+      }
+      if (ch->gsbiomass == 13 && ch->biomass >= 28000) {
+        act(AT_GREEN, "You feel a change within you. Your ability to control your powerlevel has improved.", ch, NULL, NULL, TO_CHAR);
+        ch->gsbiomass = 14;
+        return;
+      }
+      if (ch->gsbiomass == 14 && ch->biomass >= 30000) {
+        act(AT_GREEN, "You feel a change within you. Your ability to control your powerlevel has improved.", ch, NULL, NULL, TO_CHAR);
+        ch->gsbiomass = 15;
+        return;
+      }
+      if (ch->gsbiomass == 15 && ch->biomass >= 40000) {
+        act(AT_GREEN, "You feel a change within you. Your ability to control your powerlevel has improved.", ch, NULL, NULL, TO_CHAR);
+        ch->gsbiomass = 16;
+        return;
+      }
+      if (ch->gsbiomass == 16 && ch->biomass >= 350000) {
+        act(AT_GREEN, "What's this?! You feel an incredible surge of power within you!", ch, NULL, NULL, TO_CHAR);
+        act(AT_GREEN, "Your body has acclimated, inching you one step closer to true perfection!", ch, NULL, NULL, TO_CHAR);
+        ch->gsbiomass = 17;
+        sprintf(buf1, "%s has attained Semi-Perfection!", ch->name);
+        do_info(ch, buf1);
+        return;
+      }
+      if (ch->gsbiomass == 17 && ch->biomass >= 500000) {
+        act(AT_GREEN, "What's this?! You feel an incredible surge of power within you!", ch, NULL, NULL, TO_CHAR);
+        act(AT_GREEN, "You have attained perfection!", ch, NULL, NULL, TO_CHAR);
+        ch->gsbiomass = 18;
+        sprintf(buf1, "%s has attained Perfection!", ch->name);
+        do_info(ch, buf1);
+        return;
+      }
+      if (ch->gsbiomass == 18 && ch->biomass >= 750000) {
+        act(AT_GREEN, "What's this?! You feel an incredible surge of power within you!", ch, NULL, NULL, TO_CHAR);
+        act(AT_GREEN, "You have surpassed even perfection!", ch, NULL, NULL, TO_CHAR);
+        ch->gsbiomass = 19;
+        sprintf(buf1, "%s has attained Ultra-Perfection!", ch->name);
+        do_info(ch, buf1);
+        return;
+      } else {
+        act(AT_GREEN, "Nothing. You don't feel any change at all.", ch, NULL, NULL, TO_CHAR);
+        return;
+      }
+    }
+  }
 }
 
 void do_wimpy(CHAR_DATA *ch, char *argument) {

@@ -7774,7 +7774,7 @@ void do_meditate(CHAR_DATA *ch, char *argument) {
           statComb = ((get_curr_str(ch) + get_curr_dex(ch) + get_curr_int(ch) + get_curr_con(ch)) - 39);
           increase = number_range(1, 3);
           xp_gain = (long double)increase / 75000 * statComb;
-		  if (!IS_BIO(ch)) {
+		  if (!is_bio(ch)) {
             gain_exp(ch, xp_gain);
 		  }
           ch->mana += (float)right / 19 * ch->max_mana;
