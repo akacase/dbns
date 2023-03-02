@@ -1264,13 +1264,11 @@ void violence_update(void) {
             if (plmod >= 30 && saiyanTotal >= 1000000) {
               xSET_BIT((ch)->affected_by, AFF_SSJ);
               xREMOVE_BIT((ch)->affected_by, AFF_POWERCHANNEL);
-			  if (ch->perm_str >= (ch->perm_int * 4) || (ch->altssj = 1)) {
+			  if (ch->perm_str >= (ch->perm_int * 4)) {
                 act(AT_YELLOW, "You howl in pure rage, an incredible rush of power filling your body.", ch, NULL, NULL, TO_CHAR);
 				act(AT_YELLOW, "Your hair stands on end, and a golden aura tinged with flecks of pooling green is unleashed around you!", ch, NULL, NULL, TO_CHAR);
                 act(AT_YELLOW, "$n's hair suddenly flashes yellow-green, transcending beyond $s normal limits in a monstrous display of rage!", ch, NULL, NULL, TO_NOTVICT);
-				if (ch->altssj = 0) {
-				  ch->altssj += 1;
-				}
+				ch->altssj = 1;
 			  }
 			  else {
 				act(AT_YELLOW, "Your eyes turn blue, your hair flashes blonde and a fiery golden aura erupts around you!", ch, NULL, NULL, TO_CHAR);
