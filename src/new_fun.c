@@ -847,7 +847,7 @@ void bio_absorb(CHAR_DATA *ch, CHAR_DATA *victim) {
   act(AT_HIT, "You stab $N in the chest with your tail and suck out $S lifeforce!", ch, NULL, victim, TO_CHAR);
   act(AT_HIT, "$n stabs $N in the chest with $s tail and sucks out $S lifeforce!", ch, NULL, victim, TO_ROOM);
   if (IS_NPC(victim)) {
-    if (ch->pl > (victim->exp * 4)) {
+    if (ch->pl > (victim->exp * 5)) {
 	    getbiomass = 1;
 		act(AT_HIT, "$N is too weak to add more than a paltry sum to your power.", ch, NULL, victim, TO_CHAR);
     }

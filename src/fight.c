@@ -1268,7 +1268,13 @@ void violence_update(void) {
                 act(AT_YELLOW, "You howl in pure rage, an incredible rush of power filling your body.", ch, NULL, NULL, TO_CHAR);
 				act(AT_YELLOW, "Your hair stands on end, and a golden aura tinged with flecks of pooling green is unleashed around you!", ch, NULL, NULL, TO_CHAR);
                 act(AT_YELLOW, "$n's hair suddenly flashes yellow-green, transcending beyond $s normal limits in a monstrous display of rage!", ch, NULL, NULL, TO_NOTVICT);
-				ch->altssj = 1;
+				if (ch->altssj == 0) {
+				  ch->altssj = 1;
+				  sprintf(transbuf, "The atmosphere shifts to an unsettling greenish hue as the world trembles beneath %s's rage!", ch->name);
+				  do_info(ch, transbuf);
+				  sprintf(transbuf2, "%s has become a Legendary Super Saiyan!", ch->name);
+				  do_info(ch, transbuf2);
+				}
 			  }
 			  else {
 				act(AT_YELLOW, "Your eyes turn blue, your hair flashes blonde and a fiery golden aura erupts around you!", ch, NULL, NULL, TO_CHAR);
@@ -2216,13 +2222,10 @@ void violence_update(void) {
       }
       form_mastery = (ch->train / 90000);
       if (xIS_SET((ch)->affected_by, AFF_SSJ) || xIS_SET((ch)->affected_by, AFF_SSJ2) || xIS_SET((ch)->affected_by, AFF_SSJ3) || xIS_SET((ch)->affected_by, AFF_SSJ4) || xIS_SET((ch)->affected_by, AFF_SGOD) || xIS_SET((ch)->affected_by, AFF_HYPER) || xIS_SET((ch)->affected_by, AFF_SNAMEK) || xIS_SET((ch)->affected_by, AFF_ICER2) || xIS_SET((ch)->affected_by, AFF_ICER3) || xIS_SET((ch)->affected_by, AFF_ICER4) || xIS_SET((ch)->affected_by, AFF_ICER5) || xIS_SET((ch)->affected_by, AFF_GOLDENFORM) || xIS_SET((ch)->affected_by, AFF_SEMIPERFECT) || xIS_SET((ch)->affected_by, AFF_PERFECT) || xIS_SET((ch)->affected_by, AFF_ULTRAPERFECT) || xIS_SET((ch)->affected_by, AFF_OOZARU) || xIS_SET((ch)->affected_by, AFF_GOLDEN_OOZARU) || xIS_SET((ch)->affected_by, AFF_EXTREME) || xIS_SET((ch)->affected_by, AFF_MYSTIC) || xIS_SET((ch)->affected_by, AFF_SUPERANDROID) || xIS_SET((ch)->affected_by, AFF_MAKEOSTAR) || xIS_SET((ch)->affected_by, AFF_EVILBOOST) || xIS_SET((ch)->affected_by, AFF_EVILSURGE) || xIS_SET((ch)->affected_by, AFF_EVILOVERLOAD)) {
-        safemaximum = (form_mastery / 5);
-        if (form_mastery < 1)
-          form_mastery = 1;
-        danger = ((ch->pushpowerup - safemaximum) * (ch->pushpowerup * 1000));
+        danger = ((ch->pushpowerup * 1000) * ch->pushpowerup);
         /* Just in case. */
         if (danger < 1) {
-          danger = 1;
+          danger = 1000;
         }
         ch->pl *= 1.01;
         ch->pushpowerup += 1;
@@ -2253,10 +2256,10 @@ void violence_update(void) {
         }
       } else {
         safemaximum = 1;
-        danger = ((ch->pushpowerup - safemaximum) * (ch->powerup * 250));
+        danger = ((ch->pushpowerup * 200) * ch->pushpowerup);
         /* Just in case. */
         if (danger < 1) {
-          danger = 1;
+          danger = 200;
         }
         ch->pl *= 1.01;
         ch->pushpowerup += 1;
@@ -2270,8 +2273,8 @@ void violence_update(void) {
           ch->hit -= (danger / 10);
           act(AT_RED, "Your body is ripping itself apart!", ch, NULL, NULL, TO_CHAR);
           act(AT_RED, "$n's body is ripping itself apart!'", ch, NULL, NULL, TO_NOTVICT);
-          if (ch->hit - (danger) < 0) {
-            ch->hit -= danger;
+          if (ch->hit - (danger / 10) < 0) {
+            ch->hit -= (danger / 10);
             update_pos(ch);
             if (ch->position == POS_DEAD) {
               act(AT_RED, "Your body gives out under the intense strain. All must succumb to their limits in the end.", ch, NULL, NULL, TO_CHAR);
