@@ -2444,6 +2444,7 @@ void nanny(DESCRIPTOR_DATA *d, char *argument) {
         ch->gravAcc = 1;
         ch->gravSetting = 1;
         ch->exintensity = 0;
+		ch->releasepl = 0;
 		ch->pushpowerup = 0;
 		ch->transformhint = 0;
 		ch->altssj = 0;

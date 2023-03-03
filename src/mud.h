@@ -3313,6 +3313,7 @@ struct char_data {
   long long int masterynamek;
   long long int biomass;
   long long int gsbiomass;
+  long long int releasepl;
   int transformhint;
   int altssj;
   int pushpowerup;

@@ -7474,18 +7474,24 @@ void do_suppress(CHAR_DATA *ch, char *argument) {
       arg = atof(argument);
 
     if (arg < 1) {
-      send_to_char("You can not set your suppress level lower than 1.\n\r",
+      send_to_char("You can't suppress -that- much!\n\r",
                    ch);
       return;
     }
-    if (arg > ch->exp) {
-      send_to_char("You can not set your suppress level higher than your base power.\n\r",
+    if (arg > ch->exp && arg >= ch->releasepl) {
+      send_to_char("Nice try!  You can't pull power from nowhere!\n\r",
+                   ch);
+      return;
+    }
+	if (arg > ch->exp && arg < ch->releasepl) {
+	  ch->pcdata->suppress = arg;
+      send_to_char("Okay.  Suppress level set!\n\r",
                    ch);
       return;
     }
     if (!IS_NPC(ch))
       ch->pcdata->suppress = arg;
-    send_to_char("Okay.  Suppress level set.\n\r", ch);
+    send_to_char("Okay.  Suppress level set!\n\r", ch);
     return;
   }
   if (ch->position == POS_EVASIVE || ch->position == POS_DEFENSIVE || ch->position == POS_AGGRESSIVE || ch->position == POS_BERSERK || ch->position == POS_FIGHTING) {
@@ -7495,77 +7501,6 @@ void do_suppress(CHAR_DATA *ch, char *argument) {
   WAIT_STATE(ch, 8);
   hitcheck = number_range(1, 100);
   if (hitcheck <= 100) {
-    if (ch->exp != ch->pl && xIS_SET(ch->affected_by, AFF_OOZARU)) {
-      send_to_char("You can't while you are an Oozaru.\n\r",
-                   ch);
-      return;
-    }
-    if (ch->exp != ch->pl && xIS_SET(ch->affected_by, AFF_GOLDEN_OOZARU)) {
-      send_to_char("You can't while you are a Golden Oozaru.\n\r",
-                   ch);
-      return;
-    }
-    if (ch->exp != ch->pl && xIS_SET(ch->affected_by, AFF_MAKEOSTAR)) {
-      send_to_char("You can't while you are being affected by the Makeo Star.\n\r",
-                   ch);
-      return;
-    }
-    removeGenieTrans(ch);
-
-    if (xIS_SET((ch)->affected_by, AFF_SSJ) || xIS_SET((ch)->affected_by, AFF_USSJ) || xIS_SET((ch)->affected_by, AFF_USSJ2) || xIS_SET((ch)->affected_by, AFF_SSJ2) || xIS_SET((ch)->affected_by, AFF_SSJ3) || xIS_SET((ch)->affected_by, AFF_SSJ4) || xIS_SET((ch)->affected_by, AFF_KAIOKEN) || xIS_SET((ch)->affected_by, AFF_HYPER) || xIS_SET((ch)->affected_by, AFF_EXTREME) || xIS_SET((ch)->affected_by, AFF_SNAMEK) || xIS_SET((ch)->affected_by, AFF_ICER2) || xIS_SET((ch)->affected_by, AFF_ICER3) || xIS_SET((ch)->affected_by, AFF_ICER4) || xIS_SET((ch)->affected_by, AFF_ICER5) || xIS_SET((ch)->affected_by, AFF_SEMIPERFECT) || xIS_SET((ch)->affected_by, AFF_PERFECT) || xIS_SET((ch)->affected_by, AFF_ULTRAPERFECT) || xIS_SET((ch)->affected_by, AFF_MYSTIC) || xIS_SET((ch)->affected_by, AFF_EVILBOOST) || xIS_SET((ch)->affected_by, AFF_EVILSURGE) || xIS_SET((ch)->affected_by, AFF_EVILOVERLOAD)) {
-      if (xIS_SET((ch)->affected_by, AFF_SSJ)) {
-        xREMOVE_BIT((ch)->affected_by, AFF_SSJ);
-        if (!IS_NPC(ch)) {
-          ch->pcdata->haircolor =
-              ch->pcdata->orignalhaircolor;
-          ch->pcdata->eyes =
-              ch->pcdata->orignaleyes;
-        }
-      }
-      if (xIS_SET((ch)->affected_by, AFF_USSJ))
-        xREMOVE_BIT((ch)->affected_by, AFF_USSJ);
-      if (xIS_SET((ch)->affected_by, AFF_USSJ2))
-        xREMOVE_BIT((ch)->affected_by, AFF_USSJ2);
-      if (xIS_SET((ch)->affected_by, AFF_SSJ2))
-        xREMOVE_BIT((ch)->affected_by, AFF_SSJ2);
-      if (xIS_SET((ch)->affected_by, AFF_SSJ3))
-        xREMOVE_BIT((ch)->affected_by, AFF_SSJ3);
-      if (xIS_SET((ch)->affected_by, AFF_SSJ4))
-        xREMOVE_BIT((ch)->affected_by, AFF_SSJ4);
-      if (xIS_SET((ch)->affected_by, AFF_KAIOKEN))
-        xREMOVE_BIT((ch)->affected_by, AFF_KAIOKEN);
-      if (xIS_SET((ch)->affected_by, AFF_SNAMEK))
-        xREMOVE_BIT((ch)->affected_by, AFF_SNAMEK);
-      if (xIS_SET((ch)->affected_by, AFF_EXTREME))
-        xREMOVE_BIT((ch)->affected_by, AFF_EXTREME);
-      if (xIS_SET((ch)->affected_by, AFF_HYPER))
-        xREMOVE_BIT((ch)->affected_by, AFF_HYPER);
-      if (xIS_SET((ch)->affected_by, AFF_ICER2))
-        xREMOVE_BIT((ch)->affected_by, AFF_ICER2);
-      if (xIS_SET((ch)->affected_by, AFF_ICER3))
-        xREMOVE_BIT((ch)->affected_by, AFF_ICER3);
-      if (xIS_SET((ch)->affected_by, AFF_ICER4))
-        xREMOVE_BIT((ch)->affected_by, AFF_ICER4);
-      if (xIS_SET((ch)->affected_by, AFF_ICER5))
-        xREMOVE_BIT((ch)->affected_by, AFF_ICER5);
-      if (xIS_SET((ch)->affected_by, AFF_SEMIPERFECT))
-        xREMOVE_BIT((ch)->affected_by, AFF_SEMIPERFECT);
-      if (xIS_SET((ch)->affected_by, AFF_PERFECT))
-        xREMOVE_BIT((ch)->affected_by, AFF_PERFECT);
-      if (xIS_SET((ch)->affected_by, AFF_ULTRAPERFECT))
-        xREMOVE_BIT((ch)->affected_by,
-                    AFF_ULTRAPERFECT);
-      if (xIS_SET((ch)->affected_by, AFF_MYSTIC))
-        xREMOVE_BIT((ch)->affected_by, AFF_MYSTIC);
-      if (xIS_SET((ch)->affected_by, AFF_EVILBOOST))
-        xREMOVE_BIT((ch)->affected_by, AFF_EVILBOOST);
-      if (xIS_SET((ch)->affected_by, AFF_EVILSURGE))
-        xREMOVE_BIT((ch)->affected_by, AFF_EVILSURGE);
-      if (xIS_SET((ch)->affected_by, AFF_EVILOVERLOAD))
-        xREMOVE_BIT((ch)->affected_by,
-                    AFF_EVILOVERLOAD);
-    }
-    ch->powerup = 0;
     if (!IS_NPC(ch)) {
       send_to_pager_color("&BYou power down and suppress your power.\n\r",
                           ch);
@@ -7573,11 +7508,8 @@ void do_suppress(CHAR_DATA *ch, char *argument) {
           "$n takes a slow, deep breath and exhales calmly.",
           ch, NULL, NULL, TO_NOTVICT);
     }
-    if (xIS_SET((ch)->affected_by, AFF_HEART))
-      xREMOVE_BIT(ch->affected_by, AFF_HEART);
-
     if (!IS_NPC(ch)) {
-      if (ch->pcdata->suppress < 1 || ch->pcdata->suppress > ch->exp)
+      if (ch->pcdata->suppress < 1)
         ch->pcdata->suppress = ch->exp;
 
       ch->pl = ch->pcdata->suppress;

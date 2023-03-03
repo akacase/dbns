@@ -488,9 +488,13 @@ void violence_update(void) {
         affect_remove(ch, paf);
       }
     }
-	/*Make sure 'powerup push' doesn't run unchecked and kill people*/
+	/*Make sure 'powerup push' doesn't run unchecked and kill people, and make sure you can't suppress to more than you could power up to*/
 	if (!xIS_SET((ch)->affected_by, AFF_SAFEMAX) && !IS_NPC(ch)) {
+	  ch->releasepl = ch->exp;
 	  ch->pushpowerup = 0;
+	}
+	if (xIS_SET((ch)->affected_by, AFF_SAFEMAX) && !IS_NPC(ch)) {
+	  ch->releasepl = ch->pl;
 	}
     /* Transformation Update */
 	if (!IS_NPC(ch) && xIS_SET((ch)->affected_by, AFF_SEMIPERFECT)) {

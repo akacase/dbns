@@ -469,6 +469,7 @@ void fwrite_char(CHAR_DATA *ch, FILE *fp) {
   fprintf(fp, "Pushpowerup                   %d\n", ch->pushpowerup);
   fprintf(fp, "Transformhint                   %d\n", ch->transformhint);
   fprintf(fp, "Biomass                   %lld\n", ch->biomass);
+  fprintf(fp, "Releasepl                   %lld\n", ch->releasepl);
   fprintf(fp, "Gsbiomass                   %lld\n", ch->gsbiomass);
   fprintf(fp, "Masterybio                   %lld\n", ch->masterybio);
   fprintf(fp, "Masteryicer                   %lld\n", ch->masteryicer);
@@ -2123,6 +2124,7 @@ void fread_char(CHAR_DATA *ch, FILE *fp, bool preload) {
         KEY("Rank", ch->pcdata->rank, fread_string_nohash(fp));
         KEY("Resistant", ch->resistant, fread_number(fp));
         KEY("Restore_time", ch->pcdata->restore_time, fread_number(fp));
+		KEY("Releasepl", ch->releasepl, fread_number_ll(fp));
 
         if (!strcmp(word, "Room")) {
           ch->in_room = get_room_index(fread_number(fp));
