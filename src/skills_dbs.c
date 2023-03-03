@@ -7554,8 +7554,6 @@ void do_suppress(CHAR_DATA *ch, char *argument) {
     act(AT_SKILL, "You try but can't seem to suppress your power.",
         ch, NULL, NULL, TO_CHAR);
   }
-
-  transStatRemove(ch);
   return;
 }
 
