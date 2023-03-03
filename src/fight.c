@@ -496,6 +496,22 @@ void violence_update(void) {
 	if (xIS_SET((ch)->affected_by, AFF_SAFEMAX) && !IS_NPC(ch)) {
 	  ch->releasepl = ch->pl;
 	}
+	if (!is_transformed(ch) && !IS_NPC(ch)) {
+	  double plmod;
+	  plmod = (ch->pl / ch->exp);
+	  if (!xIS_SET((ch)->affected_by, AFF_SAFEMAX)) {
+	    if (plmod > 30 && is_saiyan(ch))
+		  ch->pl = (ch->exp * 30);
+	    else if (plmod > 30 && is_hb(ch))
+		  ch->pl = (ch->exp * 30);
+	    else if (plmod > 40 && is_namek(ch))
+		  ch->pl = (ch->exp * 40);
+	    else if (plmod > 30 && is_kaio(ch))
+		  ch->pl = (ch->exp * 30);
+	    else if (plmod > 30 && is_human(ch))
+		  ch->pl = (ch->exp * 30);
+	  }
+	}
     /* Transformation Update */
 	if (!IS_NPC(ch) && xIS_SET((ch)->affected_by, AFF_SEMIPERFECT)) {
       int form_mastery = 0;
