@@ -1930,9 +1930,8 @@ void violence_update(void) {
         fivecon = ch->perm_con * 1.40;
         if (!xIS_SET((ch)->affected_by, AFF_ICER2) && !xIS_SET((ch)->affected_by, AFF_ICER3) && !xIS_SET((ch)->affected_by, AFF_ICER4) && !xIS_SET((ch)->affected_by, AFF_ICER5) && !xIS_SET((ch)->affected_by, AFF_GOLDENFORM)) {
           safemaximum = 1 + (ch->masterypowerup / 1000) + (ch->energymastery / 10000) + (ch->strikemastery / 10000);
-          icertotal = ((ch->strikemastery) + (ch->energymastery) + (ch->masterypowerup));
           if (ch->powerup < safemaximum) {
-            ch->pl *= (long double)((long double)1.01 + ((long double)ch->masterypowerup / 200000));
+            ch->pl *= 1.2;
             ch->powerup += 1;
             transStatApply(ch, powerupstr, powerupspd, powerupint, powerupcon);
             if (plmod >= 2) {
@@ -1982,10 +1981,11 @@ void violence_update(void) {
             xREMOVE_BIT((ch)->affected_by, AFF_POWERCHANNEL);
             xSET_BIT((ch)->affected_by, AFF_SAFEMAX);
             act(AT_PURPLE, "You relax, your prehensile tail coiling nonchalantly behind you.", ch, NULL, NULL, TO_CHAR);
-            act(AT_PURPLE, "$n relaxes, his tail coiling nonchalantly behind $m.", ch, NULL, NULL, TO_NOTVICT);
+            act(AT_PURPLE, "$n relaxes, $s tail coiling nonchalantly behind $m.", ch, NULL, NULL, TO_NOTVICT);
           }
         }
         if (xIS_SET((ch)->affected_by, AFF_ICER3)) {
+		  icertotal = ((ch->strikemastery) + (ch->energymastery) + (ch->masterypowerup));
           safemaximum = form_mastery;
           if (ch->powerup < safemaximum) {
             ch->pl *= 1.15;
@@ -1994,7 +1994,7 @@ void violence_update(void) {
               act(AT_PURPLE, "Your chitinous body creaks ominously beneath your raging aura.", ch, NULL, NULL, TO_CHAR);
               act(AT_PURPLE, "$n's chitinous body creaks ominously beneath $s raging aura.", ch, NULL, NULL, TO_NOTVICT);
             }
-            if ((plmod >= 38) && (icertotal > 1000000)) {
+            if (plmod >= 35 && icertotal > 1000000) {
               xREMOVE_BIT((ch)->affected_by, AFF_ICER3);
               xSET_BIT((ch)->affected_by, AFF_ICER4);
               xREMOVE_BIT((ch)->affected_by, AFF_POWERCHANNEL);
@@ -2003,7 +2003,7 @@ void violence_update(void) {
               act(AT_PURPLE, "$n emerges from an explosion of ki, $s body shrinking into a sleek, smooth form.", ch, NULL, NULL, TO_NOTVICT);
               ch->pl = ch->exp * 50;
               transStatApply(ch, threestr, threespd, threeint, threecon);
-            } else if ((plmod >= 38) && (icertotal < 1000000)) {
+            } else if (plmod >= 38 && icertotal < 1000000) {
               ch->pl = (ch->exp * 38);
               act(auraColor, "Unable to contain any more power, your chitinous body's swelling reduces.", ch, NULL, NULL, TO_CHAR);
               act(auraColor, "$n's chitinous body's swelling reduces, unable to contain any more power.", ch, NULL, NULL, TO_NOTVICT);
@@ -5996,7 +5996,7 @@ damage(CHAR_DATA *ch, CHAR_DATA *victim, int dam, int dt) {
 
   if (!is_android_h(victim))
     victim->mana -=
-        URANGE(0, ((double)dam / 7500 * 0.25 * victim->mana),
+        URANGE(0, ((double)dam / 7500 * 0.01 * victim->mana),
                victim->max_mana);
 
   heart_calc(victim, "");
