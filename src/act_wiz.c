@@ -9738,6 +9738,8 @@ void do_godstat(CHAR_DATA *ch, char *argument) {
     form_mastery = (victim->masterynamek / 90000);
   if (is_bio(victim))
 	form_mastery = (victim->masterybio / 90000);
+  if (is_genie(victim))
+	form_mastery = (victim->masterymajin / 90000);
 
   if (form_mastery < 1) {
     form_mastery = 1;

@@ -414,6 +414,8 @@ void do_score(CHAR_DATA *ch, char *argument) {
     form_mastery = (ch->masterynamek / 90000);
   if (is_bio(ch))
 	form_mastery = (ch->masterybio / 90000);
+  if (is_genie(ch))
+	form_mastery = (ch->masterymajin / 90000);
 
   if (form_mastery < 1) {
     form_mastery = 1;
@@ -3305,6 +3307,12 @@ bool is_transformed(CHAR_DATA *ch) {
   if (xIS_SET((ch)->affected_by, AFF_EVILSURGE))
     return true;
   if (xIS_SET((ch)->affected_by, AFF_EVILOVERLOAD))
+    return true;
+  if (xIS_SET((ch)->affected_by, AFF_THIN_TRANS))
+    return true;
+  if (xIS_SET((ch)->affected_by, AFF_SUPER_TRANS))
+    return true;
+  if (xIS_SET((ch)->affected_by, AFF_KID_TRANS))
     return true;
   if (xIS_SET((ch)->affected_by, AFF_BIOJR))
     return true;

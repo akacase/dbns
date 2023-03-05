@@ -127,9 +127,9 @@ char* const complexion[MAX_COMPLEXION] =
         "brown", "copper", "tan", "light-tan", "pale",
         "light-green", "green", "evergreen", "jade green",
         "baby blue", "muddy brown", "sable brown",
-        "midnite black", "purple", "blood red",
+        "midnite black", "purple", "red",
         "charcoal grey", "sky blue", "lavender",
-        "amber gold", "red", "dark silver",
+        "amber gold", "pink", "dark silver",
         "light silver"};
 
 char* const secondary_color[MAX_SECONDARYCOLOR] =

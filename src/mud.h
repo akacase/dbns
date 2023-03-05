@@ -1920,6 +1920,7 @@ typedef enum {
   AFF_EVIL_TRANS,
   AFF_SUPER_TRANS,
   AFF_KID_TRANS,
+  AFF_THIN_TRANS,
   AFF_MYSTIC,
   AFF_SUPERANDROID,
   AFF_NO_GLOBAL_DROP,
@@ -3307,6 +3308,7 @@ struct char_data {
   int gravAcc;
   long long int gravExp;
   long long int masterybio;
+  long long int masterymajin;
   long long int masteryicer;
   long long int masteryssj;
   long long int masterymystic;

@@ -1576,6 +1576,8 @@ void do_powerdown(CHAR_DATA *ch, char *argument) {
       xREMOVE_BIT(ch->affected_by, AFF_SUPER_TRANS);
     if (xIS_SET((ch)->affected_by, AFF_KID_TRANS))
       xREMOVE_BIT(ch->affected_by, AFF_KID_TRANS);
+	if (xIS_SET((ch)->affected_by, AFF_THIN_TRANS))
+      xREMOVE_BIT(ch->affected_by, AFF_THIN_TRANS);
     if (xIS_SET((ch)->affected_by, AFF_MYSTIC))
       xREMOVE_BIT(ch->affected_by, AFF_MYSTIC);
     if (xIS_SET((ch)->affected_by, AFF_SUPERANDROID))
@@ -1615,7 +1617,7 @@ void do_powerdown(CHAR_DATA *ch, char *argument) {
                  ch);
     return;
   }
-  if (xIS_SET((ch)->affected_by, AFF_SSJ) || xIS_SET((ch)->affected_by, AFF_USSJ) || xIS_SET((ch)->affected_by, AFF_USSJ2) || xIS_SET((ch)->affected_by, AFF_SSJ2) || xIS_SET((ch)->affected_by, AFF_SSJ3) || xIS_SET((ch)->affected_by, AFF_SSJ4) || xIS_SET((ch)->affected_by, AFF_SGOD) || xIS_SET((ch)->affected_by, AFF_KAIOKEN) || xIS_SET((ch)->affected_by, AFF_HYPER) || xIS_SET((ch)->affected_by, AFF_EXTREME) || xIS_SET((ch)->affected_by, AFF_SNAMEK) || xIS_SET((ch)->affected_by, AFF_ICER2) || xIS_SET((ch)->affected_by, AFF_ICER3) || xIS_SET((ch)->affected_by, AFF_ICER4) || xIS_SET((ch)->affected_by, AFF_ICER5) || xIS_SET((ch)->affected_by, AFF_GOLDENFORM) || xIS_SET((ch)->affected_by, AFF_SEMIPERFECT) || xIS_SET((ch)->affected_by, AFF_PERFECT) || xIS_SET((ch)->affected_by, AFF_ULTRAPERFECT) || xIS_SET((ch)->affected_by, AFF_GROWTH) || xIS_SET((ch)->affected_by, AFF_GIANT) || xIS_SET((ch)->affected_by, AFF_EVIL_TRANS) || xIS_SET((ch)->affected_by, AFF_SUPER_TRANS) || xIS_SET((ch)->affected_by, AFF_KID_TRANS) || xIS_SET((ch)->affected_by, AFF_MYSTIC) || xIS_SET((ch)->affected_by, AFF_SUPERANDROID) || xIS_SET((ch)->affected_by, AFF_EVILBOOST) || xIS_SET((ch)->affected_by, AFF_EVILSURGE) || xIS_SET((ch)->affected_by, AFF_EVILOVERLOAD)) {
+  if (xIS_SET((ch)->affected_by, AFF_SSJ) || xIS_SET((ch)->affected_by, AFF_USSJ) || xIS_SET((ch)->affected_by, AFF_USSJ2) || xIS_SET((ch)->affected_by, AFF_SSJ2) || xIS_SET((ch)->affected_by, AFF_SSJ3) || xIS_SET((ch)->affected_by, AFF_SSJ4) || xIS_SET((ch)->affected_by, AFF_SGOD) || xIS_SET((ch)->affected_by, AFF_KAIOKEN) || xIS_SET((ch)->affected_by, AFF_HYPER) || xIS_SET((ch)->affected_by, AFF_EXTREME) || xIS_SET((ch)->affected_by, AFF_SNAMEK) || xIS_SET((ch)->affected_by, AFF_ICER2) || xIS_SET((ch)->affected_by, AFF_ICER3) || xIS_SET((ch)->affected_by, AFF_ICER4) || xIS_SET((ch)->affected_by, AFF_ICER5) || xIS_SET((ch)->affected_by, AFF_GOLDENFORM) || xIS_SET((ch)->affected_by, AFF_SEMIPERFECT) || xIS_SET((ch)->affected_by, AFF_PERFECT) || xIS_SET((ch)->affected_by, AFF_ULTRAPERFECT) || xIS_SET((ch)->affected_by, AFF_GROWTH) || xIS_SET((ch)->affected_by, AFF_GIANT) || xIS_SET((ch)->affected_by, AFF_EVIL_TRANS) || xIS_SET((ch)->affected_by, AFF_SUPER_TRANS) || xIS_SET((ch)->affected_by, AFF_KID_TRANS) ||xIS_SET((ch)->affected_by, AFF_THIN_TRANS) || xIS_SET((ch)->affected_by, AFF_MYSTIC) || xIS_SET((ch)->affected_by, AFF_SUPERANDROID) || xIS_SET((ch)->affected_by, AFF_EVILBOOST) || xIS_SET((ch)->affected_by, AFF_EVILSURGE) || xIS_SET((ch)->affected_by, AFF_EVILOVERLOAD)) {
     if (xIS_SET((ch)->affected_by, AFF_SSJ)) {
       xREMOVE_BIT((ch)->affected_by, AFF_SSJ);
       if (!IS_NPC(ch)) {
@@ -1676,6 +1678,8 @@ void do_powerdown(CHAR_DATA *ch, char *argument) {
       xREMOVE_BIT(ch->affected_by, AFF_SUPER_TRANS);
     if (xIS_SET((ch)->affected_by, AFF_KID_TRANS))
       xREMOVE_BIT(ch->affected_by, AFF_KID_TRANS);
+	if (xIS_SET((ch)->affected_by, AFF_THIN_TRANS))
+      xREMOVE_BIT(ch->affected_by, AFF_THIN_TRANS);
     if (xIS_SET((ch)->affected_by, AFF_MYSTIC))
       xREMOVE_BIT(ch->affected_by, AFF_MYSTIC);
     if (xIS_SET((ch)->affected_by, AFF_SUPERANDROID))

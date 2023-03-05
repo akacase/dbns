@@ -840,10 +840,12 @@ void find_absorb_data(CHAR_DATA *ch, CHAR_DATA *victim) {
 void bio_absorb(CHAR_DATA *ch, CHAR_DATA *victim) {
   char buf1[MAX_STRING_LENGTH];
   int getbiomass;
+  int majingain;
 
   if (IS_NPC(ch))
     return;
 
+  if (is_bio(ch)) {
   act(AT_HIT, "You stab $N in the chest with your tail and suck out $S lifeforce!", ch, NULL, victim, TO_CHAR);
   act(AT_HIT, "$n stabs $N in the chest with $s tail and sucks out $S lifeforce!", ch, NULL, victim, TO_ROOM);
   if (IS_NPC(victim)) {
@@ -865,6 +867,143 @@ void bio_absorb(CHAR_DATA *ch, CHAR_DATA *victim) {
   update_pos(victim);
   evolveCheck(ch, victim, false);
   return;
+  }
+  else if (is_genie(ch)) {
+	int candyfun = 0;
+	candyfun = number_range(1, 10);
+	majingain = ((get_curr_con(ch) / 1.5));
+	if (candyfun == 10) {
+	act(AT_HIT, "You whip your head toward $N and zap them with a burst of energy from your tentacle!", ch, NULL, victim, TO_CHAR);
+	act(AT_HIT, "$N transforms into a donut! You scarf them down without a moment's thought. Deee~licious!", ch, NULL, victim, TO_CHAR);
+	act(AT_HIT, "$n transforms $N into a donut and devours them!", ch, NULL, victim, TO_ROOM);
+	ch->hit += majingain;
+	if (ch->hit > ch->max_hit)
+		ch->hit = ch->max_hit;
+	ch->mana += (ch->max_mana / 20);
+	if (ch->mana > ch->max_mana)
+		ch->mana = ch->max_mana;
+	victim->hit = -20;
+	update_pos(victim);
+	return;
+	}
+	else if (candyfun == 9) {
+	act(AT_HIT, "You whip your head toward $N and zap them with a burst of energy from your tentacle!", ch, NULL, victim, TO_CHAR);
+	act(AT_HIT, "$N transforms into a fruit parfait! No spoon required. Deee~licious!", ch, NULL, victim, TO_CHAR);
+	act(AT_HIT, "$n transforms $N into a fruit parfait and devours them!", ch, NULL, victim, TO_ROOM);
+	if (ch->hit > ch->max_hit)
+		ch->hit = ch->max_hit;
+	ch->mana += (ch->max_mana / 20);
+	if (ch->mana > ch->max_mana)
+		ch->mana = ch->max_mana;
+	victim->hit = -20;
+	update_pos(victim);
+	return;
+	}
+	else if (candyfun == 8) {
+	act(AT_HIT, "You whip your head toward $N and zap them with a burst of energy from your tentacle!", ch, NULL, victim, TO_CHAR);
+	act(AT_HIT, "$N transforms into a full-size candy bar! A slight crunch with a nougat center. Deee~licious!", ch, NULL, victim, TO_CHAR);
+	act(AT_HIT, "$n transforms $N into a full-size candy bar and devours them!", ch, NULL, victim, TO_ROOM);
+	if (ch->hit > ch->max_hit)
+		ch->hit = ch->max_hit;
+	ch->mana += (ch->max_mana / 20);
+	if (ch->mana > ch->max_mana)
+		ch->mana = ch->max_mana;
+	victim->hit = -20;
+	update_pos(victim);
+	return;
+	}
+	else if (candyfun == 7) {
+	act(AT_HIT, "You whip your head toward $N and zap them with a burst of energy from your tentacle!", ch, NULL, victim, TO_CHAR);
+	act(AT_HIT, "$N transforms into a chocolate rabbit! Is it Easter? Who cares! Deee~licious!", ch, NULL, victim, TO_CHAR);
+	act(AT_HIT, "$n transforms $N into a fruit parfait and devours them!", ch, NULL, victim, TO_ROOM);
+	if (ch->hit > ch->max_hit)
+		ch->hit = ch->max_hit;
+	ch->mana += (ch->max_mana / 20);
+	if (ch->mana > ch->max_mana)
+		ch->mana = ch->max_mana;
+	victim->hit = -20;
+	update_pos(victim);
+	return;
+	}
+	else if (candyfun == 6) {
+	act(AT_HIT, "You whip your head toward $N and zap them with a burst of energy from your tentacle!", ch, NULL, victim, TO_CHAR);
+	act(AT_HIT, "$N transforms into a jawbreaker! You swallow it whole, missing the entire point. Deee~licious!", ch, NULL, victim, TO_CHAR);
+	act(AT_HIT, "$n transforms $N into a jawbreaker and devours them!", ch, NULL, victim, TO_ROOM);
+	if (ch->hit > ch->max_hit)
+		ch->hit = ch->max_hit;
+	ch->mana += (ch->max_mana / 20);
+	if (ch->mana > ch->max_mana)
+		ch->mana = ch->max_mana;
+	victim->hit = -20;
+	update_pos(victim);
+	return;
+	}
+	else if (candyfun == 5) {
+	act(AT_HIT, "You whip your head toward $N and zap them with a burst of energy from your tentacle!", ch, NULL, victim, TO_CHAR);
+	act(AT_HIT, "$N transforms into a mass of gummy bears! Off with their heads! Deee~licious!", ch, NULL, victim, TO_CHAR);
+	act(AT_HIT, "$n transforms $N into a mass of gummy bears and devours them one by one!", ch, NULL, victim, TO_ROOM);
+	if (ch->hit > ch->max_hit)
+		ch->hit = ch->max_hit;
+	ch->mana += (ch->max_mana / 20);
+	if (ch->mana > ch->max_mana)
+		ch->mana = ch->max_mana;
+	victim->hit = -20;
+	update_pos(victim);
+	return;
+	}
+	else if (candyfun == 4) {
+	act(AT_HIT, "You whip your head toward $N and zap them with a burst of energy from your tentacle!", ch, NULL, victim, TO_CHAR);
+	act(AT_HIT, "$N transforms into a sour candy sucker! Nothin' sucky about this! Deee~licious!", ch, NULL, victim, TO_CHAR);
+	act(AT_HIT, "$n transforms $N into a sour candy sucker and devours them!", ch, NULL, victim, TO_ROOM);
+	if (ch->hit > ch->max_hit)
+		ch->hit = ch->max_hit;
+	ch->mana += (ch->max_mana / 20);
+	if (ch->mana > ch->max_mana)
+		ch->mana = ch->max_mana;
+	victim->hit = -20;
+	update_pos(victim);
+	return;
+	}
+	else if (candyfun == 3) {
+	act(AT_HIT, "You whip your head toward $N and zap them with a burst of energy from your tentacle!", ch, NULL, victim, TO_CHAR);
+	act(AT_HIT, "$N transforms into a wad of chewing gum! ABC? Gross! You eat it anyway.", ch, NULL, victim, TO_CHAR);
+	act(AT_HIT, "$n transforms $N into a wad of chewing gum and devours them!", ch, NULL, victim, TO_ROOM);
+	if (ch->hit > ch->max_hit)
+		ch->hit = ch->max_hit;
+	ch->mana += (ch->max_mana / 20);
+	if (ch->mana > ch->max_mana)
+		ch->mana = ch->max_mana;
+	victim->hit = -20;
+	update_pos(victim);
+	return;
+	}
+	else if (candyfun == 2) {
+	act(AT_HIT, "You whip your head toward $N and zap them with a burst of energy from your tentacle!", ch, NULL, victim, TO_CHAR);
+	act(AT_HIT, "$N transforms into a marshmallow peep! You revel in the gooey goodness. Deee~licious!", ch, NULL, victim, TO_CHAR);
+	act(AT_HIT, "$n transforms $N into a marshmallow peep and devours them!", ch, NULL, victim, TO_ROOM);
+	if (ch->hit > ch->max_hit)
+		ch->hit = ch->max_hit;
+	ch->mana += (ch->max_mana / 20);
+	if (ch->mana > ch->max_mana)
+		ch->mana = ch->max_mana;
+	victim->hit = -20;
+	update_pos(victim);
+	return;
+	}
+	else if (candyfun == 1) {
+	act(AT_HIT, "You whip your head toward $N and zap them with a burst of energy from your tentacle!", ch, NULL, victim, TO_CHAR);
+	act(AT_HIT, "$N transforms into a chocolate-chip cookie! Those better not be raisins. Deee~licious!", ch, NULL, victim, TO_CHAR);
+	act(AT_HIT, "$n transforms $N into a chocolate-chip cookie and devours them!", ch, NULL, victim, TO_ROOM);
+	if (ch->hit > ch->max_hit)
+		ch->hit = ch->max_hit;
+	ch->mana += (ch->max_mana / 20);
+	if (ch->mana > ch->max_mana)
+		ch->mana = ch->max_mana;
+	victim->hit = -20;
+	update_pos(victim);
+	return;
+	}
+  }
 }
 
 void evolveCheck(CHAR_DATA *ch, CHAR_DATA *victim, bool death) {

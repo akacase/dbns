@@ -471,6 +471,7 @@ void fwrite_char(CHAR_DATA *ch, FILE *fp) {
   fprintf(fp, "Biomass                   %lld\n", ch->biomass);
   fprintf(fp, "Releasepl                   %lld\n", ch->releasepl);
   fprintf(fp, "Gsbiomass                   %lld\n", ch->gsbiomass);
+  fprintf(fp, "Masterymajin                   %lld\n", ch->masterymajin);
   fprintf(fp, "Masterybio                   %lld\n", ch->masterybio);
   fprintf(fp, "Masteryicer                   %lld\n", ch->masteryicer);
   fprintf(fp, "Masteryssj                   %lld\n", ch->masteryssj);
@@ -1981,6 +1982,7 @@ void fread_char(CHAR_DATA *ch, FILE *fp, bool preload) {
         KEY("Masterymystic", ch->masterymystic, fread_number_ll(fp));
         KEY("Masterynamek", ch->masterynamek, fread_number_ll(fp));
 		KEY("Masterybio", ch->masterybio, fread_number_ll(fp));
+		KEY("Masterymajin", ch->masterymajin, fread_number_ll(fp));
         if (!strcmp(word, "MobRange")) {
           ch->pcdata->m_range_lo = fread_number(fp);
           ch->pcdata->m_range_hi = fread_number(fp);

@@ -1892,6 +1892,15 @@ void nanny(DESCRIPTOR_DATA *d, char *argument) {
        */
       i = 0;
       send_to_desc_color("\n\r", d);
+	  send_to_desc_color("&w   (&W0&w)   &cSaiyan&w       (&GAVAILABLE&w)&D\n\r", d);
+	  send_to_desc_color("&w   (&W1&w)   &cHuman&w        (&GAVAILABLE&w)&D\n\r", d);
+	  send_to_desc_color("&w   (&W2&w)   &cHalfbreed&w    (&GAVAILABLE&w)&D\n\r", d);
+	  send_to_desc_color("&w   (&W3&w)   &cNamekian&w     (&GAVAILABLE&w)&D\n\r", d);
+	  send_to_desc_color("&w   (&W4&w)   &cIcer&w         (&GAVAILABLE&w)&D\n\r", d);
+	  send_to_desc_color("&w   (&W5&w)   &cBio-Android&w  (&YOPEN FOR TESTING&w)&D\n\r", d);
+	  send_to_desc_color("&w   (&W6&w)   &cKaio&w         (&GAVAILABLE&w)&D\n\r", d);
+	  send_to_desc_color("&w   (&W11&w)  &cGenie/Majin&w  (&YOPEN FOR TESTING&w)&D\n\r", d);
+	  /*
       for (iClass = 0; iClass < 31; iClass++) {
         if (iClass == 4) {
           continue;
@@ -1902,11 +1911,12 @@ void nanny(DESCRIPTOR_DATA *d, char *argument) {
         if (class_table[iClass]->who_name &&
             class_table[iClass]->who_name[0] != '\0') {
           sprintf(buf, "&w   (&W%2d&w)  &c%-12s&w  ('&R%c&w' for help)&D\n\r",
+		  sprintf(buf, "&w   (&Wd&w)  &c&w  ('&R&w' for help)&D\n\r",
                   i, class_table[iClass]->who_name, letters[i]);
           send_to_desc_color(buf, d);
           i++;
         }
-      }
+      } */
       send_to_desc_color("&c==============================================================================&D", d);
       sprintf(buf, "\n\r&wChoose the number of your race: &D");
       send_to_desc_color(buf, d);
@@ -1940,8 +1950,10 @@ void nanny(DESCRIPTOR_DATA *d, char *argument) {
           c = 29;  // android-e
         if (i == 10)
           c = 30;  // android-fm
+		if (i == 11)
+		  c = 27; // genie/majin
         for (iClass = 0; iClass < 31; iClass++) {
-          if (iClass > 8 && iClass < 28)
+          if (iClass > 8 && iClass < 27)
             continue;
           if (class_table[iClass]->who_name &&
               class_table[iClass]->who_name[0] != '\0') {
@@ -1979,13 +1991,14 @@ void nanny(DESCRIPTOR_DATA *d, char *argument) {
               c = 29;  // android-e
             if (i == 10)
               c = 30;  // android-fm
+			if (i == 11)
+			  c = 27; // genie/majin
             if (!str_cmp(class_table[c]->who_name, "android-h"))
               sprintf(buf, "androidh");
             else if (!str_cmp(class_table[c]->who_name, "android-e"))
               sprintf(buf, "androide");
             else if (!str_cmp(class_table[c]->who_name, "android-fm"))
               sprintf(buf, "androidfm");
-            else
               sprintf(buf, "%s", class_table[c]->who_name);
             do_help(ch, buf);
             return;
@@ -2016,13 +2029,13 @@ void nanny(DESCRIPTOR_DATA *d, char *argument) {
       }
 
       /*if ( iClass == MAX_PC_CLASS */
-      if (iClass != 28 && iClass != 29 && iClass != 30)
+      if (iClass != 27 && iClass != 28 && iClass != 29 && iClass != 30)
         if (iClass > 8 || !class_table[iClass]->who_name || class_table[iClass]->who_name[0] == '\0' || !str_cmp(class_table[iClass]->who_name, "unused")) {
           send_to_desc_color("&wThat's not a race.\n\rWhat IS your race? &D", d);
           return;
         }
 
-      if (ch->race == 3 || ch->race == 5 || ch->race == 6) {
+      if (ch->race == 3 || ch->race == 5 || ch->race == 6 || ch->race == 27) {
         ch->pcdata->haircolor = 24;
         ch->pcdata->orignalhaircolor = 24;
       } else {
@@ -2044,7 +2057,7 @@ void nanny(DESCRIPTOR_DATA *d, char *argument) {
       }
     case CON_GET_NEW_HAIR:
       argument = one_argument(argument, arg);
-      if (ch->race != 3 && ch->race != 5 && ch->race != 6) {
+      if (ch->race != 3 && ch->race != 5 && ch->race != 6 && ch->race != 27) {
         if (!str_cmp(arg, "help")) {
           do_help(ch, argument);
           send_to_desc_color("&wPlease choose a hair color: &D", d);
@@ -2086,7 +2099,7 @@ void nanny(DESCRIPTOR_DATA *d, char *argument) {
         break;
       }
 
-      else if (ch->race == 5) {
+      else if (ch->race == 5 || ch->race == 27) {
         send_to_desc_color("\n\r&wPlease choose a main body color from the following list:&D\n\r", d);
         buf[0] = '\0';
         buf2[0] = '\0';
@@ -2124,7 +2137,7 @@ void nanny(DESCRIPTOR_DATA *d, char *argument) {
     case CON_GET_NEW_COMPLEXION:
 
       argument = one_argument(argument, arg);
-      if (ch->race == 5) {
+      if (ch->race == 5 || ch->race == 27) {
         if (!str_cmp(arg, "help")) {
           do_help(ch, argument);
           send_to_desc_color("&wPlease choose a main body color: &D", d);
@@ -2451,6 +2464,7 @@ void nanny(DESCRIPTOR_DATA *d, char *argument) {
 		ch->biomass = 0;
 		ch->gsbiomass= 0;
         ch->gravExp = 1000;
+		ch->masterymajin = 0;
 		ch->masterybio = 0;
         ch->masteryicer = 0;
         ch->masteryssj = 0;
@@ -2646,7 +2660,7 @@ void nanny(DESCRIPTOR_DATA *d, char *argument) {
         if (is_saiyan(ch) || is_hb(ch))
           ch->pcdata->learned[gsn_monkey_gun] = 95;
 
-        sprintf(buf, "the %s",
+        sprintf(buf, "the Fighter in Training",
                 title_table[ch->class][ch->level]
                            [ch->sex == SEX_FEMALE ? 1 : 0]);
         set_title(ch, buf);
