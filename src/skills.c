@@ -2515,7 +2515,7 @@ void do_bash(CHAR_DATA *ch, char *argument) {
 	ch->train += 5;
 	ch->masterybash += 1;
 	ch->strikemastery += 3;
-	if (ch->strikemastery >= (ch->kspgain * 100)) {
+	if (ch->strikemastery >= (ch->sspgain * 100)) {
 	  pager_printf_color(ch,"&CYou gained 5 Skill Points!\n\r");
 	  ch->sptotal += 5;
 	  ch->kspgain += 1;

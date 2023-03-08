@@ -3154,7 +3154,7 @@ void do_punch(CHAR_DATA *ch, char *argument) {
 	ch->train += 1;
 	ch->masterypunch += 1;
 	ch->strikemastery += 1;
-	if (ch->strikemastery >= (ch->kspgain * 100)) {
+	if (ch->strikemastery >= (ch->sspgain * 100)) {
 	  pager_printf_color(ch,"&CYou gained 5 Skill Points!\n\r");
 	  ch->sptotal += 5;
 	  ch->kspgain += 1;
@@ -7268,7 +7268,7 @@ void do_lariat(CHAR_DATA *ch, char *argument) {
 	ch->train += 16;
 	ch->masterylariat += 1;
 	ch->strikemastery += 5;
-	if (ch->strikemastery >= (ch->kspgain * 100)) {
+	if (ch->strikemastery >= (ch->sspgain * 100)) {
 	  pager_printf_color(ch,"&CYou gained 5 Skill Points!\n\r");
 	  ch->sptotal += 5;
 	  ch->kspgain += 1;
@@ -8433,7 +8433,7 @@ void do_haymaker(CHAR_DATA *ch, char *argument) {
 	ch->train += 12;
 	ch->masteryhaymaker += 1;
 	ch->strikemastery += 2;
-	if (ch->strikemastery >= (ch->kspgain * 100)) {
+	if (ch->strikemastery >= (ch->sspgain * 100)) {
 	  pager_printf_color(ch,"&CYou gained 5 Skill Points!\n\r");
 	  ch->sptotal += 5;
 	  ch->kspgain += 1;
@@ -8666,7 +8666,7 @@ void do_collide(CHAR_DATA *ch, char *argument) {
 	ch->train += 14;
 	ch->masterycollide += 1;
 	ch->strikemastery += 4;
-	if (ch->strikemastery >= (ch->kspgain * 100)) {
+	if (ch->strikemastery >= (ch->sspgain * 100)) {
 	  pager_printf_color(ch,"&CYou gained 5 Skill Points!\n\r");
 	  ch->sptotal += 5;
 	  ch->kspgain += 1;
