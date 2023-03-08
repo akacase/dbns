@@ -5971,9 +5971,10 @@ void do_energy_ball(CHAR_DATA *ch, char *argument) {
   int lowdam = 0;
   int highdam = 0;
   char arg[MAX_INPUT_LENGTH];
-  int AT_AURACOLOR = ch->pcdata->auraColorPowerUp;
+  int AT_AURACOLOR = 0;
 
   argument = one_argument(argument, arg);
+  AT_AURACOLOR = AT_YELLOW;
   
   if (IS_NPC(ch) && is_split(ch)) {
     if (!ch->master)
@@ -5988,6 +5989,7 @@ void do_energy_ball(CHAR_DATA *ch, char *argument) {
     return;
   }
   if (!IS_NPC(ch)) {
+	AT_AURACOLOR = ch->pcdata->auraColorPowerUp;
 	kilimit = ch->train / 10000;
 	kimult = (float)get_curr_int(ch) / 1000 + 1;
 	kicmult = (float)kilimit / 100 + 1;
@@ -10650,8 +10652,9 @@ void do_eye_beam(CHAR_DATA *ch, char *argument) {
   int lowdam = 0;
   int highdam = 0;
   char arg[MAX_INPUT_LENGTH];
-  int AT_AURACOLOR = ch->pcdata->auraColorPowerUp;
+  int AT_AURACOLOR = 0;
 
+  AT_AURACOLOR = AT_YELLOW;
   argument = one_argument(argument, arg);
   
   if (IS_NPC(ch) && is_split(ch)) {
@@ -10667,6 +10670,7 @@ void do_eye_beam(CHAR_DATA *ch, char *argument) {
     return;
   }
   if (!IS_NPC(ch)) {
+	AT_AURACOLOR = ch->pcdata->auraColorPowerUp;
 	kilimit = ch->train / 10000;
 	kimult = (float)get_curr_int(ch) / 1000 + 1;
 	kicmult = (float)kilimit / 100 + 1;
@@ -10869,8 +10873,10 @@ void do_finger_beam(CHAR_DATA *ch, char *argument) {
   int lowdam = 0;
   int highdam = 0;
   char arg[MAX_INPUT_LENGTH];
-  int AT_AURACOLOR = ch->pcdata->auraColorPowerUp;
-
+  int AT_AURACOLOR = 0;
+  
+  
+  AT_AURACOLOR = AT_YELLOW;
   argument = one_argument(argument, arg);
   
   if (IS_NPC(ch) && is_split(ch)) {
@@ -10886,6 +10892,7 @@ void do_finger_beam(CHAR_DATA *ch, char *argument) {
     return;
   }
   if (!IS_NPC(ch)) {
+	AT_AURACOLOR = ch->pcdata->auraColorPowerUp;
 	kilimit = ch->train / 10000;
 	kimult = (float)get_curr_int(ch) / 1000 + 1;
 	kicmult = (float)kilimit / 100 + 1;
@@ -12376,8 +12383,10 @@ void do_destructive_wave(CHAR_DATA *ch, char *argument) {
   int lowdam = 0;
   int highdam = 0;
   char arg[MAX_INPUT_LENGTH];
-  int AT_AURACOLOR = ch->pcdata->auraColorPowerUp;
-
+  int AT_AURACOLOR = 0;
+  
+  
+  AT_AURACOLOR = AT_YELLOW;
   argument = one_argument(argument, arg);
   
   if (IS_NPC(ch) && is_split(ch)) {
@@ -12393,6 +12402,7 @@ void do_destructive_wave(CHAR_DATA *ch, char *argument) {
     return;
   }
   if (!IS_NPC(ch)) {
+	AT_AURACOLOR = ch->pcdata->auraColorPowerUp;
 	kilimit = ch->train / 10000;
 	kimult = (float)get_curr_int(ch) / 1000 + 1;
 	kicmult = (float)kilimit / 100 + 1;
@@ -12751,9 +12761,10 @@ void do_shockwave(CHAR_DATA *ch, char *argument) {
   int lowdam = 0;
   int highdam = 0;
   char arg[MAX_INPUT_LENGTH];
-  int AT_AURACOLOR = ch->pcdata->auraColorPowerUp;
+  int AT_AURACOLOR = 0;
 
   argument = one_argument(argument, arg);
+  AT_AURACOLOR = AT_YELLOW;
   
   if (IS_NPC(ch) && is_split(ch)) {
     if (!ch->master)
@@ -12768,6 +12779,7 @@ void do_shockwave(CHAR_DATA *ch, char *argument) {
     return;
   }
   if (!IS_NPC(ch)) {
+	AT_AURACOLOR = ch->pcdata->auraColorPowerUp;
 	kilimit = ch->train / 10000;
 	kimult = (float)get_curr_int(ch) / 1000 + 1;
 	kicmult = (float)kilimit / 100 + 1;
