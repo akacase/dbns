@@ -3157,7 +3157,7 @@ void do_punch(CHAR_DATA *ch, char *argument) {
 	if (ch->strikemastery >= (ch->sspgain * 100)) {
 	  pager_printf_color(ch,"&CYou gained 5 Skill Points!\n\r");
 	  ch->sptotal += 5;
-	  ch->kspgain += 1;
+	  ch->sspgain += 1;
 	}
   }
   if ((ch->mana - adjcost) < 0)
@@ -7273,7 +7273,7 @@ void do_lariat(CHAR_DATA *ch, char *argument) {
 	if (ch->strikemastery >= (ch->sspgain * 100)) {
 	  pager_printf_color(ch,"&CYou gained 5 Skill Points!\n\r");
 	  ch->sptotal += 5;
-	  ch->kspgain += 1;
+	  ch->sspgain += 1;
 	}
   }
   if ((ch->mana - adjcost) < 0)
@@ -8438,7 +8438,7 @@ void do_haymaker(CHAR_DATA *ch, char *argument) {
 	if (ch->strikemastery >= (ch->sspgain * 100)) {
 	  pager_printf_color(ch,"&CYou gained 5 Skill Points!\n\r");
 	  ch->sptotal += 5;
-	  ch->kspgain += 1;
+	  ch->sspgain += 1;
 	}
   }
   if ((ch->mana - adjcost) < 0)
@@ -8671,7 +8671,7 @@ void do_collide(CHAR_DATA *ch, char *argument) {
 	if (ch->strikemastery >= (ch->sspgain * 100)) {
 	  pager_printf_color(ch,"&CYou gained 5 Skill Points!\n\r");
 	  ch->sptotal += 5;
-	  ch->kspgain += 1;
+	  ch->sspgain += 1;
 	}
   }
   if ((ch->mana - adjcost) < 0)
