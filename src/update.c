@@ -49,7 +49,6 @@ void mobile_update args((void));
 void weather_update args((void));
 void time_update args((void)); /* FB */
 void char_update args((void));
-void mystic_check args((void));
 void dball_check args((void));
 void summon_update args((void));
 void obj_update args((void));
@@ -380,7 +379,6 @@ void do_plset(CHAR_DATA *ch, char *argument) {
 void gain_exp(CHAR_DATA *ch, long double gain) {
   char buf[MAX_STRING_LENGTH];
   long double modgain;
-  int energygain;
   float pl_mult = 1;
   int rank = 0, newRank = 0;
   int trueRank = 0;
@@ -469,7 +467,7 @@ void gain_exp(CHAR_DATA *ch, long double gain) {
  * Regeneration stuff.
  */
 int hit_gain(CHAR_DATA *ch) {
-  int gain;
+  int gain = 0;
 
   if (IS_NPC(ch)) {
     gain = number_range(6, 8);
@@ -1085,84 +1083,6 @@ void summon_update(void) {
     return;
   }
   return;
-}
-
-/* For handling mystic training - Karma */
-
-void mystic_check(void) {
-  CHAR_DATA *ch, *ch_next;
-
-  for (ch = first_char; ch; ch = ch_next) {
-    ch_next = ch->next;
-    if (!ch->teaching)
-      continue;
-    if (ch->tmystic == 0)
-      continue;
-
-    if (ch->mysticlearn > 0)
-      ch->mysticlearn--;
-
-    if (ch->mysticlearn == 15) {
-      act(AT_WHITE,
-          "You finish dancing infront of $N, and sit down on the ground. You then throw your hands out infront of $N and say \"BLUAGH\" as you start into the second half of the mystic training.",
-          ch->teaching, NULL, ch, TO_CHAR);
-      act(AT_WHITE,
-          "$n finishes dancing infront of you, and sits down on the ground. $n then throws $s hands out infront of you and says \"BLUAGH\" as $e starts into the second half of the mystic training.",
-          ch->teaching, NULL, ch, TO_VICT);
-      act(AT_WHITE,
-          "$n finishes dancing infront of $N, and sits down on the ground. $n then throws $s hands out infront of $N and says \"BLUAGH\" as $e starts into the second half of the mystic training.",
-          ch->teaching, NULL, ch, TO_NOTVICT);
-      ch_printf(ch,
-                "&RYou still may not type anything. You still have 15 minutes left to go.\n\r");
-      ch_printf(ch->teaching,
-                "&RYou still may not type anything. You still have 15 minutes left to go.\n\r");
-      ch->tmystic = 3;
-      continue;
-    } else if (ch->mysticlearn > 15) {
-      act(AT_WHITE,
-          "You continue dancing in a large circle around $N and chanting random gibberish.",
-          ch->teaching, NULL, ch, TO_CHAR);
-      act(AT_WHITE,
-          "$n continues dancing in a large circle around you and chanting random gibberish.",
-          ch->teaching, NULL, ch, TO_VICT);
-      act(AT_WHITE,
-          "$n continues dancing in a large circle around $N and chanting random gibberish.",
-          ch->teaching, NULL, ch, TO_NOTVICT);
-      continue;
-    } else if (ch->mysticlearn < 15 && ch->mysticlearn > 0) {
-      act(AT_WHITE,
-          "You continue sitting infront of $N with your palms facing $e, as you concentrate on releasing $s hidden powers.",
-          ch->teaching, NULL, ch, TO_CHAR);
-      act(AT_WHITE,
-          "$n continues sitting infront of you with $s palms facing you, as $e concentrates on releasing your hidden powers.",
-          ch->teaching, NULL, ch, TO_VICT);
-      act(AT_WHITE,
-          "$n continues sitting infront of $N with $s palms facing $N, as $e concentrates on releasing $N's hidden powers.",
-          ch->teaching, NULL, ch, TO_NOTVICT);
-      continue;
-    } else if (ch->mysticlearn == 0 && ch->tmystic == 3) {
-      ch->tmystic = 0;
-      ch->teaching->tmystic = 0;
-      act(AT_WHITE,
-          "$n suddenly tells you that you are done. You have successfully learned mystic.",
-          ch->teaching, NULL, ch, TO_VICT);
-      act(AT_WHITE,
-          "You tell $N that you are done. You have successfully taught $N mystic.",
-          ch->teaching, NULL, ch, TO_CHAR);
-      act(AT_WHITE,
-          "$n suddenly tells $N that $e is done. $N has successfully learned mystic.",
-          ch->teaching, NULL, ch, TO_NOTVICT);
-      ch->pcdata->learned[gsn_mystic] = 95;
-      SET_BIT(ch->pcdata->flags, PCFLAG_KNOWSMYSTIC);
-      ch->teaching->teaching = NULL;
-      ch->teaching = NULL;
-      save_char_obj(ch);
-      do_powerup(ch, "");
-      do_powerdown(ch, "");
-      do_mystic(ch, "20");
-      continue;
-    }
-  }
 }
 
 /* Keeps track of all kaioshin/demon ranks, etc, in the game.
@@ -2778,7 +2698,6 @@ void update_handler(void) {
     pulse_minute = PULSE_MINUTE;
     if (sysdata.kaiRestoreTimer > 0)
       sysdata.kaiRestoreTimer -= 1;
-    mystic_check();
     save_economy();
   }
   if (--pulse_second <= 0) {

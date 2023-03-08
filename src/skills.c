@@ -2310,114 +2310,23 @@ void do_sting(CHAR_DATA *ch, char *argument) {
   return;
 }
 
-/*
- void newskilltemplate( CHAR_DATA *ch, char *argument )
-{
-        CHAR_DATA *victim;
-        int 	dam = 0;
-        int		argdam = 0;
-        int		kilimit = 0;
-        float	physmult = 0;
-        float	kicmult = 0;
-        int		hitcheck = 0;
-        int		adjcost = 0;
-
-        if (IS_NPC(ch) && is_split(ch)) {
-                if (!ch->master)
-                        return;
-        }
-        if (IS_NPC(ch) && IS_AFFECTED(ch, AFF_CHARM)) {
-                send_to_char("You can't concentrate enough for that.\n\r", ch);
-                return;
-        }
-        if (!IS_NPC(ch)
-            && (ch->skillbash < 1)) {
-                send_to_char("You're not able to use that skill.\n\r", ch);
-                return;
-        }
-        if ((victim = who_fighting(ch)) == NULL) {
-                send_to_char("You aren't fighting anyone.\n\r", ch);
-                return;
-        }
-        if (!IS_NPC(ch)) {
-                kilimit = ch->train / 10000;
-                physmult = (float) get_curr_str(ch) / 950 + 1;
-                kicmult = (float) kilimit / 100 + 1;
-        }
-        if (!IS_NPC(ch)) {
-                adjcost = 16 * (ch->bashpower - ch->basheffic);
-                if (adjcost < 16)
-                        adjcost = 16;
-        }
-        else {
-                adjcost = 1;
-        }
-        if (ch->mana < adjcost) {
-                        send_to_char("You don't have enough energy.\n\r", ch);
-                        return;
-        }
-        hitcheck = number_range(1, 100);
-
-        WAIT_STATE(ch, 8);
-        if (hitcheck <= 95) {
-                if (!IS_NPC(ch)) {
-                        argdam = ((number_range(10, 12) + ch->bashpower) * kicmult);
-                        dam = get_attmod(ch, victim) * (argdam * physmult);
-                        stat_train(ch, "str", 10);
-                        ch->train += 5;
-                        ch->strikemastery += 3;
-                        if (ch->energymastery >= (ch->kspgain * 100)) {
-                                pager_printf_color(ch,
-                                        "&CYou gained 5 Skill Points!\n\r");
-                                ch->sptotal += 5;
-                                ch->kspgain += 1;
-                                }
-                }
-                if (IS_NPC(ch)) {
-                        dam = get_attmod(ch, victim) * (number_range(10, 12) + (get_curr_str(ch) / 40));
-                }
-                if (ch->charge > 0)
-                        dam = chargeDamMult(ch, dam);
-
-                act(AT_YELLOW,
-                        "You crash directly into $N, knocking them for a loop! &W[$t]",
-                        ch, num_punct(dam), victim, TO_CHAR);
-                act(AT_YELLOW,
-                        "$n crashes directly into you, knocking you for a loop! &W[$t]",
-                        ch, num_punct(dam), victim, TO_VICT);
-                act(AT_YELLOW,
-                        "$n crashes directly into $N, knocking them for a loop! &W[$t]",
-                        ch, num_punct(dam), victim, TO_NOTVICT);
-                global_retcode = damage(ch, victim, dam, TYPE_HIT);
-        }
-        else {
-                act(AT_YELLOW, "You missed $N with a barreling collision.", ch,
-                    NULL, victim, TO_CHAR);
-                act(AT_YELLOW, "$n misses you with a barreling collision.", ch, NULL,
-                    victim, TO_VICT);
-                act(AT_YELLOW, "$n missed $N with a barreling collision.", ch, NULL,
-                    victim, TO_NOTVICT);
-                global_retcode = damage(ch, victim, 0, TYPE_HIT);
-        }
-        ch->mana -= adjcost;
-        return;
-}
-
-
-
-*/
-
 void do_bash(CHAR_DATA *ch, char *argument) {
   CHAR_DATA *victim;
   int dam = 0;
   int argdam = 0;
-  int kilimit = 0;
   float physmult = 0;
   float kicmult = 0;
+  int kilimit = 0;
   int hitcheck = 0;
   int adjcost = 0;
+  int basecost = 0;
   float smastery = 0;
+  int lowdam = 0;
+  int highdam = 0;
+  char arg[MAX_INPUT_LENGTH];
 
+  argument = one_argument(argument, arg);
+  
   if (IS_NPC(ch) && is_split(ch)) {
     if (!ch->master)
       return;
@@ -2430,71 +2339,192 @@ void do_bash(CHAR_DATA *ch, char *argument) {
     send_to_char("You're not able to use that skill.\n\r", ch);
     return;
   }
+  if (!IS_NPC(ch)) {
+	kilimit = ch->train / 10000;
+	physmult = (float)get_curr_str(ch) / 950 + 1;
+	kicmult = (float)kilimit / 100 + 1;
+	smastery = (float)ch->masterybash / 10000;
+	if (smastery > 10)
+	  smastery = 10;
+  }
   if ((victim = who_fighting(ch)) == NULL) {
     send_to_char("You aren't fighting anyone.\n\r", ch);
     return;
   }
-  if (!IS_NPC(ch)) {
-    kilimit = ch->train / 10000;
-    physmult = (float)get_curr_str(ch) / 950 + 1;
-    kicmult = (float)kilimit / 100 + 1;
-    smastery = (float)ch->masterybash / 10000;
-  }
-  if (!IS_NPC(ch)) {
-    adjcost = 16 * (ch->bashpower - ch->basheffic);
-    if (adjcost < 16)
-      adjcost = 16;
-  } else {
-    adjcost = 1;
-  }
-  if (ch->mana < adjcost) {
-    send_to_char("You don't have enough energy.\n\r", ch);
-    return;
-  }
+  basecost = 25;
+  adjcost = basecost;
+  lowdam = 100;
+  highdam = 120;
   hitcheck = number_range(1, 100);
-
-  WAIT_STATE(ch, 8);
+  WAIT_STATE(ch, 6);
   if (hitcheck <= 95) {
-    if (!IS_NPC(ch)) {
-      argdam = ((number_range(10, 12) + ch->bashpower) * (kicmult + smastery));
-      dam = get_attmod(ch, victim) * (argdam * physmult);
-      stat_train(ch, "str", 10);
-      ch->train += 5;
-      ch->strikemastery += 3;
-      ch->masterybash += 1;
-      if (ch->strikemastery >= (ch->sspgain * 100)) {
-        pager_printf_color(ch,
-                           "&CYou gained 5 Skill Points!\n\r");
-        ch->sptotal += 5;
-        ch->sspgain += 1;
-      }
-    }
-    if (IS_NPC(ch)) {
-      dam = get_attmod(ch, victim) * (number_range(10, 12) + (get_curr_str(ch) / 40));
-    }
-    if (ch->charge > 0)
-      dam = chargeDamMult(ch, dam);
-
-    act(AT_YELLOW,
-        "You crash directly into $N, knocking them for a loop! &W[$t]",
-        ch, num_punct(dam), victim, TO_CHAR);
-    act(AT_YELLOW,
-        "$n crashes directly into you, knocking you for a loop! &W[$t]",
-        ch, num_punct(dam), victim, TO_VICT);
-    act(AT_YELLOW,
-        "$n crashes directly into $N, knocking them for a loop! &W[$t]",
-        ch, num_punct(dam), victim, TO_NOTVICT);
-    global_retcode = damage(ch, victim, dam, TYPE_HIT);
-  } else {
-    act(AT_YELLOW, "You missed $N with a barreling collision.", ch,
-        NULL, victim, TO_CHAR);
-    act(AT_YELLOW, "$n misses you with a barreling collision.", ch, NULL,
-        victim, TO_VICT);
-    act(AT_YELLOW, "$n missed $N with a barreling collision.", ch, NULL,
-        victim, TO_NOTVICT);
-    global_retcode = damage(ch, victim, 0, TYPE_HIT);
+	if (arg[0] == '\0') {
+	  if (!IS_NPC(ch)) {
+		argdam = (number_range(lowdam, highdam) * (kicmult + smastery));
+		dam = get_attmod(ch, victim) * (argdam * physmult);
+	  }
+	  else if (IS_NPC(ch)) {
+		argdam = number_range(lowdam, highdam);
+		dam = get_attmod(ch, victim) * (argdam + (get_curr_str(ch) / 40));
+	  }
+	  if (dam < 1)
+		dam = 1;
+	  act(AT_YELLOW,"You crash directly into $N, knocking them for a loop! &W[$t]", ch, num_punct(dam), victim, TO_CHAR);
+	  act(AT_YELLOW,"$n crashes directly into you, knocking you for a loop! &W[$t]", ch, num_punct(dam), victim, TO_VICT);
+	  act(AT_YELLOW,"$n crashes directly into $N, knocking them for a loop! &W[$t]", ch, num_punct(dam), victim, TO_NOTVICT);
+	  if ((ch->mana - adjcost) < 0) {
+		act(AT_LBLUE,"You collide with $N, but can't seem to generate any power!", ch, NULL, victim, TO_CHAR);
+		act(AT_LBLUE,"$n collides with you but can't seem to generate any power!", ch, NULL, victim, TO_VICT);
+		act(AT_LBLUE,"$n collides with $N but can't seem to generate any power!", ch, NULL, victim, TO_NOTVICT);
+		global_retcode = damage(ch, victim, 0, TYPE_HIT);
+		ch->mana = 0;
+	  } else {
+		global_retcode = damage(ch, victim, dam, TYPE_HIT);
+	  }
+	}
+	else if (!str_cmp(arg, "200")) {
+	  if (ch->bashpower < 1) {
+		send_to_char("You lack the skill.\n\r", ch);
+		return;
+	  }
+	  if (!IS_NPC(ch)) {
+		argdam = (number_range(lowdam * 2, highdam * 2) * (kicmult + smastery));
+		dam = get_attmod(ch, victim) * (argdam * physmult);
+	  }
+	  else if (IS_NPC(ch)) {
+		argdam = number_range(lowdam * 2, highdam * 2);
+		dam = get_attmod(ch, victim) * (argdam + (get_curr_str(ch) / 40));
+	  }
+	  if (dam < 1)
+		dam = 1;
+	  adjcost = basecost * 4;
+	  act(AT_YELLOW,"You crash directly into $N, knocking them for a loop! &W[$t]", ch, num_punct(dam), victim, TO_CHAR);
+	  act(AT_YELLOW,"$n crashes directly into you, knocking you for a loop! &W[$t]", ch, num_punct(dam), victim, TO_VICT);
+	  act(AT_YELLOW,"$n crashes directly into $N, knocking them for a loop! &W[$t]", ch, num_punct(dam), victim, TO_NOTVICT);
+	  if ((ch->mana - adjcost) < 0) {
+		act(AT_LBLUE,"You collide with $N, but can't seem to generate any power!", ch, NULL, victim, TO_CHAR);
+		act(AT_LBLUE,"$n collides with you but can't seem to generate any power!", ch, NULL, victim, TO_VICT);
+		act(AT_LBLUE,"$n collides with $N but can't seem to generate any power!", ch, NULL, victim, TO_NOTVICT);
+		global_retcode = damage(ch, victim, 0, TYPE_HIT);
+		ch->mana = 0;
+	  } else {
+		global_retcode = damage(ch, victim, dam, TYPE_HIT);
+	  }
+	}
+	else if (!str_cmp(arg, "300")) {
+	  if (ch->bashpower < 2) {
+		send_to_char("You lack the skill.\n\r", ch);
+		return;
+	  }
+	  if (!IS_NPC(ch)) {
+		argdam = (number_range(lowdam * 3, highdam * 3) * (kicmult + smastery));
+		dam = get_attmod(ch, victim) * (argdam * physmult);
+	  }
+	  else if (IS_NPC(ch)) {
+		argdam = number_range(lowdam * 3, highdam * 3);
+		dam = get_attmod(ch, victim) * (argdam + (get_curr_str(ch) / 40));
+	  }
+	  if (dam < 1)
+		dam = 1;
+	  adjcost = basecost * 16;
+	  act(AT_YELLOW,"You crash directly into $N, knocking them for a loop! &W[$t]", ch, num_punct(dam), victim, TO_CHAR);
+	  act(AT_YELLOW,"$n crashes directly into you, knocking you for a loop! &W[$t]", ch, num_punct(dam), victim, TO_VICT);
+	  act(AT_YELLOW,"$n crashes directly into $N, knocking them for a loop! &W[$t]", ch, num_punct(dam), victim, TO_NOTVICT);
+	  if ((ch->mana - adjcost) < 0) {
+		act(AT_LBLUE,"You collide with $N, but can't seem to generate any power!", ch, NULL, victim, TO_CHAR);
+		act(AT_LBLUE,"$n collides with you but can't seem to generate any power!", ch, NULL, victim, TO_VICT);
+		act(AT_LBLUE,"$n collides with $N but can't seem to generate any power!", ch, NULL, victim, TO_NOTVICT);
+		global_retcode = damage(ch, victim, 0, TYPE_HIT);
+		ch->mana = 0;
+	  } else {
+		global_retcode = damage(ch, victim, dam, TYPE_HIT);
+	  }
+	}
+	else if (!str_cmp(arg, "400")) {
+	  if (ch->bashpower < 3) {
+		send_to_char("You lack the skill.\n\r", ch);
+		return;
+	  }
+	  if (!IS_NPC(ch)) {
+		argdam = (number_range(lowdam * 4, highdam * 4) * (kicmult + smastery));
+		dam = get_attmod(ch, victim) * (argdam * physmult);
+	  }
+	  else if (IS_NPC(ch)) {
+		argdam = number_range(lowdam * 4, highdam * 4);
+		dam = get_attmod(ch, victim) * (argdam + (get_curr_str(ch) / 40));
+	  }
+	  if (dam < 1)
+		dam = 1;
+	  adjcost = basecost * 64;
+	  act(AT_YELLOW,"You crash directly into $N, knocking them for a loop! &W[$t]", ch, num_punct(dam), victim, TO_CHAR);
+	  act(AT_YELLOW,"$n crashes directly into you, knocking you for a loop! &W[$t]", ch, num_punct(dam), victim, TO_VICT);
+	  act(AT_YELLOW,"$n crashes directly into $N, knocking them for a loop! &W[$t]", ch, num_punct(dam), victim, TO_NOTVICT);
+	  if ((ch->mana - adjcost) < 0) {
+		act(AT_LBLUE,"You collide with $N, but can't seem to generate any power!", ch, NULL, victim, TO_CHAR);
+		act(AT_LBLUE,"$n collides with you but can't seem to generate any power!", ch, NULL, victim, TO_VICT);
+		act(AT_LBLUE,"$n collides with $N but can't seem to generate any power!", ch, NULL, victim, TO_NOTVICT);
+		global_retcode = damage(ch, victim, 0, TYPE_HIT);
+		ch->mana = 0;
+	  } else {
+		global_retcode = damage(ch, victim, dam, TYPE_HIT);
+	  }
+	}
+	else if (!str_cmp(arg, "500")) {
+	  if (ch->bashpower < 4) {
+		send_to_char("You lack the skill.\n\r", ch);
+		return;
+	  }
+	  if (!IS_NPC(ch)) {
+		argdam = (number_range(lowdam * 5, highdam * 5) * (kicmult + smastery));
+		dam = get_attmod(ch, victim) * (argdam * physmult);
+	  }
+	  else if (IS_NPC(ch)) {
+		argdam = number_range(lowdam * 5, highdam * 5);
+		dam = get_attmod(ch, victim) * (argdam + (get_curr_str(ch) / 40));
+	  }
+	  if (dam < 1)
+		dam = 1;
+	  adjcost = basecost * 256;
+	  act(AT_YELLOW,"You crash directly into $N, knocking them for a loop! &W[$t]", ch, num_punct(dam), victim, TO_CHAR);
+	  act(AT_YELLOW,"$n crashes directly into you, knocking you for a loop! &W[$t]", ch, num_punct(dam), victim, TO_VICT);
+	  act(AT_YELLOW,"$n crashes directly into $N, knocking them for a loop! &W[$t]", ch, num_punct(dam), victim, TO_NOTVICT);
+	  if ((ch->mana - adjcost) < 0) {
+		act(AT_LBLUE,"You collide with $N, but can't seem to generate any power!", ch, NULL, victim, TO_CHAR);
+		act(AT_LBLUE,"$n collides with you but can't seem to generate any power!", ch, NULL, victim, TO_VICT);
+		act(AT_LBLUE,"$n collides with $N but can't seem to generate any power!", ch, NULL, victim, TO_NOTVICT);
+		global_retcode = damage(ch, victim, 0, TYPE_HIT);
+		ch->mana = 0;
+	  } else {
+		global_retcode = damage(ch, victim, dam, TYPE_HIT);
+	  }
+	}
+	else {
+		send_to_char("Only increments of 200-500.\n\r", ch);
+		return;
+	}
   }
-  ch->mana -= adjcost;
+  else {
+	act(AT_LBLUE, "You missed $N with a barreling collision.", ch, NULL, victim, TO_CHAR);
+	act(AT_LBLUE, "$n misses you with a barreling collision.", ch, NULL, victim, TO_VICT);
+	act(AT_LBLUE, "$n missed $N with a barreling collision.", ch, NULL, victim, TO_NOTVICT);
+	global_retcode = damage(ch, victim, 0, TYPE_HIT);
+  }
+  if (!IS_NPC(ch) && ch->mana != 0) {
+	// train player masteries, no benefit from spamming at no ki
+	stat_train(ch, "str", 10);
+	ch->train += 5;
+	ch->masterybash += 1;
+	ch->strikemastery += 3;
+	if (ch->strikemastery >= (ch->kspgain * 100)) {
+	  pager_printf_color(ch,"&CYou gained 5 Skill Points!\n\r");
+	  ch->sptotal += 5;
+	  ch->kspgain += 1;
+	}
+  }
+  if ((ch->mana - adjcost) < 0)
+	ch->mana = 0;
+  else
+	ch->mana -= adjcost;
   return;
 }
 

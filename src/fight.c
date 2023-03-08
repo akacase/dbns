@@ -1250,7 +1250,7 @@ void violence_update(void) {
 		form_mastery = (ch->masterybio / 90000);
 	  if (is_genie(ch))
 		form_mastery = (ch->masterymajin / 90000);
-		plmod = (ch->pl / ch->exp);
+	  plmod = (ch->pl / ch->exp);
       if (!IS_NPC(ch) && ch->pcdata->auraColorPowerUp > 0)
         auraColor = ch->pcdata->auraColorPowerUp;
       if (form_mastery < 1)
@@ -1797,6 +1797,12 @@ void violence_update(void) {
               ch->powerup = 0;
               ch->pl = ch->exp * 60;
               transStatApply(ch, onestr, onespd, oneint, onecon);
+            }
+			else if ((plmod >= 30) && (majintotal < 1000000)) {
+              ch->pl = (ch->exp * 30);
+              xREMOVE_BIT((ch)->affected_by, AFF_POWERCHANNEL);
+              ch->powerup = safemaximum;
+              xSET_BIT((ch)->affected_by, AFF_SAFEMAX);
             }
           }
           if (ch->powerup >= safemaximum) {
@@ -2659,7 +2665,7 @@ void violence_update(void) {
           int poweruprand = 0;
 
           poweruprand = number_range(1, 3);
-          if (poweruprand = 3)
+          if (poweruprand == 3)
             ch->masterypowerup += 2;
         }
         stat_train(ch, "str", weightstat);

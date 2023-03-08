@@ -1697,6 +1697,8 @@ void do_powerdown(CHAR_DATA *ch, char *argument) {
     xREMOVE_BIT(ch->affected_by, AFF_HEART);
   transStatRemove(ch);
   ch->pl = ch->exp;
+  ch->releasepl = ch->exp;
+  ch->pcdata->suppress = ch->exp;
   heart_calc(ch, "");
 
   if (is_splitformed(ch)) {
@@ -2936,13 +2938,19 @@ void do_punch(CHAR_DATA *ch, char *argument) {
   CHAR_DATA *victim;
   int dam = 0;
   int argdam = 0;
-  int kilimit = 0;
   float physmult = 0;
   float kicmult = 0;
+  int kilimit = 0;
   int hitcheck = 0;
   int adjcost = 0;
+  int basecost = 0;
   float smastery = 0;
+  int lowdam = 0;
+  int highdam = 0;
+  char arg[MAX_INPUT_LENGTH];
 
+  argument = one_argument(argument, arg);
+  
   if (IS_NPC(ch) && is_split(ch)) {
     if (!ch->master)
       return;
@@ -2955,80 +2963,207 @@ void do_punch(CHAR_DATA *ch, char *argument) {
     send_to_char("You're not able to use that skill.\n\r", ch);
     return;
   }
+  if (!IS_NPC(ch)) {
+	kilimit = ch->train / 10000;
+	physmult = (float)get_curr_str(ch) / 950 + 1;
+	kicmult = (float)kilimit / 100 + 1;
+	smastery = (float)ch->masterypunch / 10000;
+	if (smastery > 10)
+	  smastery = 10;
+  }
   if ((victim = who_fighting(ch)) == NULL) {
     send_to_char("You aren't fighting anyone.\n\r", ch);
     return;
   }
-  if (!IS_NPC(ch)) {
-    kilimit = ch->train / 10000;
-    physmult = (float)get_curr_str(ch) / 950 + 1;
-    kicmult = (float)kilimit / 100 + 1;
-    smastery = (float)ch->masterypunch / 10000;
-  }
-  if (!IS_NPC(ch)) {
-    adjcost = 1 * (ch->punchpower - ch->puncheffic);
-    if (adjcost < 1)
-      adjcost = 1;
-  } else {
-    adjcost = 1;
-  }
-  if (ch->mana < adjcost) {
-    send_to_char("You don't have enough energy.\n\r", ch);
-    return;
-  }
+  basecost = 1;
+  adjcost = basecost;
+  lowdam = 20;
+  highdam = 40;
   hitcheck = number_range(1, 100);
   WAIT_STATE(ch, 6);
   if (hitcheck <= 95) {
-    if (!IS_NPC(ch)) {
-      argdam = ((number_range(2, 4) + ch->punchpower) * (kicmult + smastery));
-      dam = get_attmod(ch, victim) * (argdam * physmult);
-      stat_train(ch, "str", 5);
-      ch->train += 1;
-      ch->masterypunch += 1;
-      ch->strikemastery += 1;
-      if (ch->strikemastery >= (ch->sspgain * 100)) {
-        pager_printf_color(ch,
-                           "&CYou gained 5 Skill Points!\n\r");
-        ch->sptotal += 5;
-        ch->sspgain += 1;
-      }
-    }
-    if (IS_NPC(ch)) {
-      dam = get_attmod(ch, victim) * (number_range(2, 4) + (get_curr_str(ch) / 50));
-    }
-    if (ch->charge > 0)
-      dam = chargeDamMult(ch, dam);
-
-    act(AT_YELLOW,
-        "You carefully study $N's movements, waiting for the perfect opportunity to strike.",
-        ch, NULL, victim, TO_CHAR);
-    act(AT_YELLOW,
-        "$N presents an opening, and you hammer $M directly in the stomach! &W[$t]",
-        ch, num_punct(dam), victim, TO_CHAR);
-    act(AT_YELLOW,
-        "$n carefully studies your movements.", ch,
-        NULL, victim, TO_VICT);
-    act(AT_YELLOW,
-        "$n exploits an opening in your defense and hammers you in the stomach! &W[$t]",
-        ch, num_punct(dam), victim, TO_VICT);
-    act(AT_YELLOW,
-        "$n carefully studies $N's movements.", ch,
-        NULL, victim, TO_NOTVICT);
-    act(AT_YELLOW,
-        "$n exploits an opening in $N's defense and hammers $M in the stomach! &W[$t]",
-        ch, num_punct(dam), victim, TO_NOTVICT);
-
-    global_retcode = damage(ch, victim, dam, TYPE_HIT);
-  } else {
-    act(AT_YELLOW, "You missed $N with a clumsily timed punch.", ch,
-        NULL, victim, TO_CHAR);
-    act(AT_YELLOW, "$n misses you with a clumsily timed punch.", ch, NULL,
-        victim, TO_VICT);
-    act(AT_YELLOW, "$n missed $N with a clumsily timed punch.", ch, NULL,
-        victim, TO_NOTVICT);
-    global_retcode = damage(ch, victim, 0, TYPE_HIT);
+	if (arg[0] == '\0') {
+	  if (!IS_NPC(ch)) {
+		argdam = (number_range(lowdam, highdam) * (kicmult + smastery));
+		dam = get_attmod(ch, victim) * (argdam * physmult);
+	  }
+	  else if (IS_NPC(ch)) {
+		argdam = number_range(lowdam, highdam);
+		dam = get_attmod(ch, victim) * (argdam + (get_curr_str(ch) / 40));
+	  }
+	  if (dam < 1)
+		dam = 1;
+	  act(AT_YELLOW,"You carefully study $N's movements, waiting for the perfect opportunity to strike.", ch, NULL, victim, TO_CHAR);
+	  act(AT_YELLOW,"$N presents an opening, and you hammer $M directly in the stomach! &W[$t]", ch, num_punct(dam), victim, TO_CHAR);
+	  act(AT_YELLOW,"$n carefully studies your movements.", ch,NULL, victim, TO_VICT);
+	  act(AT_YELLOW,"$n exploits an opening in your defense and hammers you in the stomach! &W[$t]", ch, num_punct(dam), victim, TO_VICT);
+	  act(AT_YELLOW,"$n carefully studies $N's movements.", ch, NULL, victim, TO_NOTVICT);
+	  act(AT_YELLOW,"$n exploits an opening in $N's defense and hammers $M in the stomach! &W[$t]", ch, num_punct(dam), victim, TO_NOTVICT);
+	  if ((ch->mana - adjcost) < 0) {
+		act(AT_LBLUE,"You can't seem to get any power out of your punch!", ch, NULL, victim, TO_CHAR);
+		act(AT_LBLUE,"$n can't seem to get any power out of $s punch!", ch, NULL, victim, TO_VICT);
+		act(AT_LBLUE,"$n can't seem to get any power out of $s punch!", ch, NULL, victim, TO_NOTVICT);
+		global_retcode = damage(ch, victim, 0, TYPE_HIT);
+		ch->mana = 0;
+	  } else {
+		global_retcode = damage(ch, victim, dam, TYPE_HIT);
+	  }
+	}
+	else if (!str_cmp(arg, "200")) {
+	  if (ch->punchpower < 1) {
+		send_to_char("You lack the skill.\n\r", ch);
+		return;
+	  }
+	  if (!IS_NPC(ch)) {
+		argdam = (number_range(lowdam * 2, highdam * 2) * (kicmult + smastery));
+		dam = get_attmod(ch, victim) * (argdam * physmult);
+	  }
+	  else if (IS_NPC(ch)) {
+		argdam = number_range(lowdam * 2, highdam * 2);
+		dam = get_attmod(ch, victim) * (argdam + (get_curr_str(ch) / 40));
+	  }
+	  if (dam < 1)
+		dam = 1;
+	  adjcost = basecost * 4;
+	  act(AT_YELLOW,"You carefully study $N's movements, waiting for the perfect opportunity to strike.", ch, NULL, victim, TO_CHAR);
+	  act(AT_YELLOW,"$N presents an opening, and you hammer $M directly in the stomach with two consecutive punches! &W[$t]", ch, num_punct(dam), victim, TO_CHAR);
+	  act(AT_YELLOW,"$n carefully studies your movements.", ch,NULL, victim, TO_VICT);
+	  act(AT_YELLOW,"$n exploits an opening in your defense and hammers you in the stomach with two consecutive punches! &W[$t]", ch, num_punct(dam), victim, TO_VICT);
+	  act(AT_YELLOW,"$n carefully studies $N's movements.", ch, NULL, victim, TO_NOTVICT);
+	  act(AT_YELLOW,"$n exploits an opening in $N's defense and hammers $M in the stomach with two consecutive punches! &W[$t]", ch, num_punct(dam), victim, TO_NOTVICT);
+	  if ((ch->mana - adjcost) < 0) {
+		act(AT_LBLUE,"You can't seem to get any power out of your punch!", ch, NULL, victim, TO_CHAR);
+		act(AT_LBLUE,"$n can't seem to get any power out of $s punch!", ch, NULL, victim, TO_VICT);
+		act(AT_LBLUE,"$n can't seem to get any power out of $s punch!", ch, NULL, victim, TO_NOTVICT);
+		global_retcode = damage(ch, victim, 0, TYPE_HIT);
+		ch->mana = 0;
+	  } else {
+		global_retcode = damage(ch, victim, dam, TYPE_HIT);
+	  }
+	}
+	else if (!str_cmp(arg, "300")) {
+	  if (ch->punchpower < 2) {
+		send_to_char("You lack the skill.\n\r", ch);
+		return;
+	  }
+	  if (!IS_NPC(ch)) {
+		argdam = (number_range(lowdam * 3, highdam * 3) * (kicmult + smastery));
+		dam = get_attmod(ch, victim) * (argdam * physmult);
+	  }
+	  else if (IS_NPC(ch)) {
+		argdam = number_range(lowdam * 3, highdam * 3);
+		dam = get_attmod(ch, victim) * (argdam + (get_curr_str(ch) / 40));
+	  }
+	  if (dam < 1)
+		dam = 1;
+	  adjcost = basecost * 16;
+	  act(AT_YELLOW,"You carefully study $N's movements, waiting for the perfect opportunity to strike.", ch, NULL, victim, TO_CHAR);
+	  act(AT_YELLOW,"$N presents an opening, and you hammer $M directly in the stomach with a flurry of blows! &W[$t]", ch, num_punct(dam), victim, TO_CHAR);
+	  act(AT_YELLOW,"$n carefully studies your movements.", ch,NULL, victim, TO_VICT);
+	  act(AT_YELLOW,"$n exploits an opening in your defense and hammers you in the stomach with a flurry of blows! &W[$t]", ch, num_punct(dam), victim, TO_VICT);
+	  act(AT_YELLOW,"$n carefully studies $N's movements.", ch, NULL, victim, TO_NOTVICT);
+	  act(AT_YELLOW,"$n exploits an opening in $N's defense and hammers $M in the stomach with a flurry of blows! &W[$t]", ch, num_punct(dam), victim, TO_NOTVICT);
+	  if ((ch->mana - adjcost) < 0) {
+		act(AT_LBLUE,"You can't seem to get any power out of your punch!", ch, NULL, victim, TO_CHAR);
+		act(AT_LBLUE,"$n can't seem to get any power out of $s punch!", ch, NULL, victim, TO_VICT);
+		act(AT_LBLUE,"$n can't seem to get any power out of $s punch!", ch, NULL, victim, TO_NOTVICT);
+		global_retcode = damage(ch, victim, 0, TYPE_HIT);
+		ch->mana = 0;
+	  } else {
+		global_retcode = damage(ch, victim, dam, TYPE_HIT);
+	  }
+	}
+	else if (!str_cmp(arg, "400")) {
+	  if (ch->punchpower < 3) {
+		send_to_char("You lack the skill.\n\r", ch);
+		return;
+	  }
+	  if (!IS_NPC(ch)) {
+		argdam = (number_range(lowdam * 4, highdam * 4) * (kicmult + smastery));
+		dam = get_attmod(ch, victim) * (argdam * physmult);
+	  }
+	  else if (IS_NPC(ch)) {
+		argdam = number_range(lowdam * 4, highdam * 4);
+		dam = get_attmod(ch, victim) * (argdam + (get_curr_str(ch) / 40));
+	  }
+	  if (dam < 1)
+		dam = 1;
+	  adjcost = basecost * 64;
+	  act(AT_YELLOW,"You carefully study $N's movements, waiting for the perfect opportunity to strike.", ch, NULL, victim, TO_CHAR);
+	  act(AT_YELLOW,"$N presents an opening, and you hammer $M directly in the stomach with a flurry of blows! &W[$t]", ch, num_punct(dam), victim, TO_CHAR);
+	  act(AT_YELLOW,"$n carefully studies your movements.", ch,NULL, victim, TO_VICT);
+	  act(AT_YELLOW,"$n exploits an opening in your defense and hammers you in the stomach with a flurry of blows! &W[$t]", ch, num_punct(dam), victim, TO_VICT);
+	  act(AT_YELLOW,"$n carefully studies $N's movements.", ch, NULL, victim, TO_NOTVICT);
+	  act(AT_YELLOW,"$n exploits an opening in $N's defense and hammers $M in the stomach with a flurry of blows! &W[$t]", ch, num_punct(dam), victim, TO_NOTVICT);
+	  if ((ch->mana - adjcost) < 0) {
+		act(AT_LBLUE,"You can't seem to get any power out of your punch!", ch, NULL, victim, TO_CHAR);
+		act(AT_LBLUE,"$n can't seem to get any power out of $s punch!", ch, NULL, victim, TO_VICT);
+		act(AT_LBLUE,"$n can't seem to get any power out of $s punch!", ch, NULL, victim, TO_NOTVICT);
+		global_retcode = damage(ch, victim, 0, TYPE_HIT);
+		ch->mana = 0;
+	  } else {
+		global_retcode = damage(ch, victim, dam, TYPE_HIT);
+	  }
+	}
+	else if (!str_cmp(arg, "500")) {
+	  if (ch->punchpower < 4) {
+		send_to_char("You lack the skill.\n\r", ch);
+		return;
+	  }
+	  if (!IS_NPC(ch)) {
+		argdam = (number_range(lowdam * 5, highdam * 5) * (kicmult + smastery));
+		dam = get_attmod(ch, victim) * (argdam * physmult);
+	  }
+	  else if (IS_NPC(ch)) {
+		argdam = number_range(lowdam * 5, highdam * 5);
+		dam = get_attmod(ch, victim) * (argdam + (get_curr_str(ch) / 40));
+	  }
+	  if (dam < 1)
+		dam = 1;
+	  adjcost = basecost * 256;
+	  act(AT_YELLOW,"You carefully study $N's movements, waiting for the perfect opportunity to strike.", ch, NULL, victim, TO_CHAR);
+	  act(AT_YELLOW,"$N presents an opening, and you hammer $M directly in the stomach with a flurry of blows! &W[$t]", ch, num_punct(dam), victim, TO_CHAR);
+	  act(AT_YELLOW,"$n carefully studies your movements.", ch,NULL, victim, TO_VICT);
+	  act(AT_YELLOW,"$n exploits an opening in your defense and hammers you in the stomach with a flurry of blows! &W[$t]", ch, num_punct(dam), victim, TO_VICT);
+	  act(AT_YELLOW,"$n carefully studies $N's movements.", ch, NULL, victim, TO_NOTVICT);
+	  act(AT_YELLOW,"$n exploits an opening in $N's defense and hammers $M in the stomach with a flurry of blows! &W[$t]", ch, num_punct(dam), victim, TO_NOTVICT);
+	  if ((ch->mana - adjcost) < 0) {
+		act(AT_LBLUE,"You can't seem to get any power out of your punch!", ch, NULL, victim, TO_CHAR);
+		act(AT_LBLUE,"$n can't seem to get any power out of $s punch!", ch, NULL, victim, TO_VICT);
+		act(AT_LBLUE,"$n can't seem to get any power out of $s punch!", ch, NULL, victim, TO_NOTVICT);
+		global_retcode = damage(ch, victim, 0, TYPE_HIT);
+		ch->mana = 0;
+	  } else {
+		global_retcode = damage(ch, victim, dam, TYPE_HIT);
+	  }
+	}
+	else {
+		send_to_char("Only increments of 200-500.\n\r", ch);
+		return;
+	}
   }
-  ch->mana -= adjcost;
+  else {
+	act(AT_LBLUE, "You missed $N with your punch.", ch, NULL, victim, TO_CHAR);
+	act(AT_LBLUE, "$n misses you with $s punch.", ch, NULL, victim, TO_VICT);
+	act(AT_LBLUE, "$n missed $N with $s punch.", ch, NULL, victim, TO_NOTVICT);
+	global_retcode = damage(ch, victim, 0, TYPE_HIT);
+  }
+  if (!IS_NPC(ch) && ch->mana != 0) {
+	// train player masteries, no benefit from spamming at no ki
+	stat_train(ch, "str", 5);
+	ch->train += 1;
+	ch->masterypunch += 1;
+	ch->strikemastery += 1;
+	if (ch->strikemastery >= (ch->kspgain * 100)) {
+	  pager_printf_color(ch,"&CYou gained 5 Skill Points!\n\r");
+	  ch->sptotal += 5;
+	  ch->kspgain += 1;
+	}
+  }
+  if ((ch->mana - adjcost) < 0)
+	ch->mana = 0;
+  else
+	ch->mana -= adjcost;
   return;
 }
 
@@ -5826,15 +5961,20 @@ void do_energy_ball(CHAR_DATA *ch, char *argument) {
   CHAR_DATA *victim;
   int dam = 0;
   int argdam = 0;
-  int kilimit = 0;
   float kimult = 0;
   float kicmult = 0;
+  int kilimit = 0;
   int hitcheck = 0;
   int adjcost = 0;
+  int basecost = 0;
   float smastery = 0;
+  int lowdam = 0;
+  int highdam = 0;
+  char arg[MAX_INPUT_LENGTH];
+  int AT_AURACOLOR = ch->pcdata->auraColorPowerUp;
 
-  sh_int z = get_aura(ch);
-
+  argument = one_argument(argument, arg);
+  
   if (IS_NPC(ch) && is_split(ch)) {
     if (!ch->master)
       return;
@@ -5848,69 +5988,191 @@ void do_energy_ball(CHAR_DATA *ch, char *argument) {
     return;
   }
   if (!IS_NPC(ch)) {
-    kilimit = ch->train / 10000;
-    kimult = (float)get_curr_int(ch) / 1000 + 1;
-    kicmult = (float)kilimit / 100 + 1;
-    smastery = (float)ch->masteryenergy_ball / 10000;
+	kilimit = ch->train / 10000;
+	kimult = (float)get_curr_int(ch) / 1000 + 1;
+	kicmult = (float)kilimit / 100 + 1;
+	smastery = (float)ch->masteryenergy_ball / 10000;
+	if (smastery > 10)
+	  smastery = 10;
   }
   if ((victim = who_fighting(ch)) == NULL) {
     send_to_char("You aren't fighting anyone.\n\r", ch);
     return;
   }
-  if (!IS_NPC(ch)) {
-    adjcost = 1 * (ch->energy_ballpower - ch->energy_balleffic);
-    if (adjcost < 1)
-      adjcost = 1;
-  } else {
-    adjcost = 1;
-  }
-  if (ch->mana < adjcost) {
-    send_to_char("You don't have enough energy.\n\r", ch);
-    return;
-  }
+  basecost = 1;
+  adjcost = basecost;
+  lowdam = 20;
+  highdam = 40;
   hitcheck = number_range(1, 100);
   WAIT_STATE(ch, 8);
-
   if (hitcheck <= 95) {
-    if (!IS_NPC(ch)) {
-      argdam = ((number_range(2, 4) + ch->energy_ballpower) * (kicmult + smastery));
-      dam = get_attmod(ch, victim) * (argdam * kimult);
-      stat_train(ch, "int", 5);
-      ch->train += 1;
-      ch->masteryenergy_ball += 1;
-      ch->energymastery += 1;
-      if (ch->energymastery >= (ch->kspgain * 100)) {
-        pager_printf_color(ch,
-                           "&CYou gained 5 Skill Points!&D\n\r");
-        ch->sptotal += 5;
-        ch->kspgain += 1;
-      }
-    }
-    if (IS_NPC(ch)) {
-      argdam = number_range(2, 4);
-      dam = get_attmod(ch, victim) * (argdam + (get_curr_int(ch) / 50));
-    }
-    if (ch->charge > 0)
-      dam = chargeDamMult(ch, dam);
-
-    act(z, "You blast $N with a single energy ball. &W[$t]", ch,
-        num_punct(dam), victim, TO_CHAR);
-    act(z, "$n blasts you with a single energy ball. &W[$t]", ch,
-        num_punct(dam), victim, TO_VICT);
-    act(z, "$n blasts $N with a single energy ball. &W[$t]", ch,
-        num_punct(dam), victim, TO_NOTVICT);
-
-    global_retcode = damage(ch, victim, dam, TYPE_HIT);
-  } else {
-    act(z, "Your energy attack veers wildly off course.", ch, NULL, victim,
-        TO_CHAR);
-    act(z, "$n's energy attack sails harmlessly past you.", ch, NULL, victim,
-        TO_VICT);
-    act(z, "$n's energy attack sails harmlessly past $N.", ch, NULL, victim,
-        TO_NOTVICT);
-    global_retcode = damage(ch, victim, 0, TYPE_HIT);
+	if (arg[0] == '\0') {
+	  if (!IS_NPC(ch)) {
+		argdam = (number_range(lowdam, highdam) * (kicmult + smastery));
+		dam = get_attmod(ch, victim) * (argdam * kimult);
+	  }
+	  else if (IS_NPC(ch)) {
+		argdam = number_range(lowdam, highdam);
+		dam = get_attmod(ch, victim) * (argdam + (get_curr_int(ch) / 40));
+	  }
+	  if (dam < 1)
+		dam = 1;
+	  act(AT_AURACOLOR,"You blast $N with a single energy ball. &W[$t]", ch, num_punct(dam), victim, TO_CHAR);
+	  act(AT_AURACOLOR,"$n blasts you with a single energy ball. &W[$t]", ch, num_punct(dam), victim, TO_VICT);
+	  act(AT_AURACOLOR,"$n blasts $N with a single energy ball. &W[$t]", ch, num_punct(dam), victim, TO_NOTVICT);
+	  if ((ch->mana - adjcost) < 0) {
+		act(AT_LBLUE,"Your energy ball fizzles into nothing!", ch, NULL, victim, TO_CHAR);
+		act(AT_LBLUE,"$n's energy ball fizzles into nothing!", ch, NULL, victim, TO_VICT);
+		act(AT_LBLUE,"$n's energy ball fizzles into nothing!", ch, NULL, victim, TO_NOTVICT);
+		global_retcode = damage(ch, victim, 0, TYPE_HIT);
+		ch->mana = 0;
+	  } else {
+		global_retcode = damage(ch, victim, dam, TYPE_HIT);
+	  }
+	}
+	else if (!str_cmp(arg, "200")) {
+	  if (ch->energy_ballpower < 1) {
+		send_to_char("You lack the skill.\n\r", ch);
+		return;
+	  }
+	  if (!IS_NPC(ch)) {
+		argdam = (number_range(lowdam * 2, highdam * 2) * (kicmult + smastery));
+		dam = get_attmod(ch, victim) * (argdam * kimult);
+	  }
+	  else if (IS_NPC(ch)) {
+		argdam = number_range(lowdam * 2, highdam * 2);
+		dam = get_attmod(ch, victim) * (argdam + (get_curr_int(ch) / 40));
+	  }
+	  if (dam < 1)
+		dam = 1;
+	  adjcost = basecost * 4;
+	  act(AT_AURACOLOR,"You blast $N with two quick shots of energy. &W[$t]", ch, num_punct(dam), victim, TO_CHAR);
+	  act(AT_AURACOLOR,"$n blasts you with two quick shots of energy. &W[$t]", ch, num_punct(dam), victim, TO_VICT);
+	  act(AT_AURACOLOR,"$n blasts $N with two quick shots of energy. &W[$t]", ch, num_punct(dam), victim, TO_NOTVICT);
+	  if ((ch->mana - adjcost) < 0) {
+		act(AT_LBLUE,"Your energy balls fizzle into nothing!", ch, NULL, victim, TO_CHAR);
+		act(AT_LBLUE,"$n's energy balls fizzle into nothing!", ch, NULL, victim, TO_VICT);
+		act(AT_LBLUE,"$n's energy balls fizzle into nothing!", ch, NULL, victim, TO_NOTVICT);
+		global_retcode = damage(ch, victim, 0, TYPE_HIT);
+		ch->mana = 0;
+	  } else {
+		global_retcode = damage(ch, victim, dam, TYPE_HIT);
+	  }
+	}
+	else if (!str_cmp(arg, "300")) {
+	  if (ch->energy_ballpower < 2) {
+		send_to_char("You lack the skill.\n\r", ch);
+		return;
+	  }
+	  if (!IS_NPC(ch)) {
+		argdam = (number_range(lowdam * 3, highdam * 3) * (kicmult + smastery));
+		dam = get_attmod(ch, victim) * (argdam * kimult);
+	  }
+	  else if (IS_NPC(ch)) {
+		argdam = number_range(lowdam * 3, highdam * 3);
+		dam = get_attmod(ch, victim) * (argdam + (get_curr_int(ch) / 40));
+	  }
+	  if (dam < 1)
+		dam = 1;
+	  adjcost = basecost * 16;
+	  act(AT_AURACOLOR,"You blast $N with three rapid shots of energy. &W[$t]", ch, num_punct(dam), victim, TO_CHAR);
+	  act(AT_AURACOLOR,"$n blasts you with three rapid shots of energy. &W[$t]", ch, num_punct(dam), victim, TO_VICT);
+	  act(AT_AURACOLOR,"$n blasts $N with three rapid shots of energy. &W[$t]", ch, num_punct(dam), victim, TO_NOTVICT);
+	  if ((ch->mana - adjcost) < 0) {
+		act(AT_LBLUE,"Your energy balls fizzle into nothing!", ch, NULL, victim, TO_CHAR);
+		act(AT_LBLUE,"$n's energy balls fizzle into nothing!", ch, NULL, victim, TO_VICT);
+		act(AT_LBLUE,"$n's energy balls fizzle into nothing!", ch, NULL, victim, TO_NOTVICT);
+		global_retcode = damage(ch, victim, 0, TYPE_HIT);
+		ch->mana = 0;
+	  } else {
+		global_retcode = damage(ch, victim, dam, TYPE_HIT);
+	  }
+	}
+	else if (!str_cmp(arg, "400")) {
+	  if (ch->energy_ballpower < 3) {
+		send_to_char("You lack the skill.\n\r", ch);
+		return;
+	  }
+	  if (!IS_NPC(ch)) {
+		argdam = (number_range(lowdam * 4, highdam * 4) * (kicmult + smastery));
+		dam = get_attmod(ch, victim) * (argdam * kimult);
+	  }
+	  else if (IS_NPC(ch)) {
+		argdam = number_range(lowdam * 4, highdam * 4);
+		dam = get_attmod(ch, victim) * (argdam + (get_curr_int(ch) / 40));
+	  }
+	  if (dam < 1)
+		dam = 1;
+	  adjcost = basecost * 64;
+	  act(AT_AURACOLOR,"You blast $N with four rapid shots of energy. &W[$t]", ch, num_punct(dam), victim, TO_CHAR);
+	  act(AT_AURACOLOR,"$n blasts you with four rapid shots of energy. &W[$t]", ch, num_punct(dam), victim, TO_VICT);
+	  act(AT_AURACOLOR,"$n blasts $N with four rapid shots of energy. &W[$t]", ch, num_punct(dam), victim, TO_NOTVICT);
+	  if ((ch->mana - adjcost) < 0) {
+		act(AT_LBLUE,"Your energy balls fizzle into nothing!", ch, NULL, victim, TO_CHAR);
+		act(AT_LBLUE,"$n's energy balls fizzle into nothing!", ch, NULL, victim, TO_VICT);
+		act(AT_LBLUE,"$n's energy balls fizzle into nothing!", ch, NULL, victim, TO_NOTVICT);
+		global_retcode = damage(ch, victim, 0, TYPE_HIT);
+		ch->mana = 0;
+	  } else {
+		global_retcode = damage(ch, victim, dam, TYPE_HIT);
+	  }
+	}
+	else if (!str_cmp(arg, "500")) {
+	  if (ch->energy_ballpower < 4) {
+		send_to_char("You lack the skill.\n\r", ch);
+		return;
+	  }
+	  if (!IS_NPC(ch)) {
+		argdam = (number_range(lowdam * 5, highdam * 5) * (kicmult + smastery));
+		dam = get_attmod(ch, victim) * (argdam * kimult);
+	  }
+	  else if (IS_NPC(ch)) {
+		argdam = number_range(lowdam * 5, highdam * 5);
+		dam = get_attmod(ch, victim) * (argdam + (get_curr_int(ch) / 40));
+	  }
+	  if (dam < 1)
+		dam = 1;
+	  adjcost = basecost * 256;
+	  act(AT_AURACOLOR,"You blast $N with a barrage of consecutive shots! &W[$t]", ch, num_punct(dam), victim, TO_CHAR);
+	  act(AT_AURACOLOR,"$n blasts you with a barrage of consecutive shots! &W[$t]", ch, num_punct(dam), victim, TO_VICT);
+	  act(AT_AURACOLOR,"$n blasts $N with a barrage of consecutive shots! &W[$t]", ch, num_punct(dam), victim, TO_NOTVICT);
+	  if ((ch->mana - adjcost) < 0) {
+		act(AT_LBLUE,"Your energy ball fizzles into nothing!", ch, NULL, victim, TO_CHAR);
+		act(AT_LBLUE,"$n's energy ball fizzles into nothing!", ch, NULL, victim, TO_VICT);
+		act(AT_LBLUE,"$n's energy ball fizzles into nothing!", ch, NULL, victim, TO_NOTVICT);
+		global_retcode = damage(ch, victim, 0, TYPE_HIT);
+		ch->mana = 0;
+	  } else {
+		global_retcode = damage(ch, victim, dam, TYPE_HIT);
+	  }
+	}
+	else {
+		send_to_char("Only increments of 200-500.\n\r", ch);
+		return;
+	}
   }
-  ch->mana -= adjcost;
+  else {
+	act(AT_LBLUE, "You missed $N with your energy attack.", ch, NULL, victim, TO_CHAR);
+	act(AT_LBLUE, "$n misses you with an energy attack.", ch, NULL, victim, TO_VICT);
+	act(AT_LBLUE, "$n missed $N with an energy attack.", ch, NULL, victim, TO_NOTVICT);
+	global_retcode = damage(ch, victim, 0, TYPE_HIT);
+  }
+  if (!IS_NPC(ch) && ch->mana != 0) {
+	// train player masteries, no benefit from spamming at no ki
+	stat_train(ch, "int", 5);
+	ch->train += 1;
+	ch->masteryenergy_ball += 1;
+	ch->energymastery += 1;
+	if (ch->energymastery >= (ch->kspgain * 100)) {
+	  pager_printf_color(ch,"&CYou gained 5 Skill Points!\n\r");
+	  ch->sptotal += 5;
+	  ch->kspgain += 1;
+	}
+  }
+  if ((ch->mana - adjcost) < 0)
+	ch->mana = 0;
+  else
+	ch->mana -= adjcost;
   return;
 }
 
@@ -5923,8 +6185,14 @@ void do_energy_disc(CHAR_DATA *ch, char *argument) {
   int kilimit = 0;
   int hitcheck = 0;
   int adjcost = 0;
+  int basecost = 0;
   float smastery = 0;
+  int lowdam = 0;
+  int highdam = 0;
+  char arg[MAX_INPUT_LENGTH];
 
+  argument = one_argument(argument, arg);
+  
   if (IS_NPC(ch) && is_split(ch)) {
     if (!ch->master)
       return;
@@ -5937,71 +6205,192 @@ void do_energy_disc(CHAR_DATA *ch, char *argument) {
     send_to_char("You're not able to use that skill.\n\r", ch);
     return;
   }
+  if (!IS_NPC(ch)) {
+	kilimit = ch->train / 10000;
+	kimult = (float)get_curr_int(ch) / 1000 + 1;
+	kicmult = (float)kilimit / 100 + 1;
+	smastery = (float)ch->masteryenergy_disc / 10000;
+	if (smastery > 10)
+	  smastery = 10;
+  }
   if ((victim = who_fighting(ch)) == NULL) {
     send_to_char("You aren't fighting anyone.\n\r", ch);
     return;
   }
-  if (!IS_NPC(ch)) {
-    adjcost = 15 * (ch->energy_discpower - ch->energy_disceffic);
-    if (adjcost < 15)
-      adjcost = 15;
-  } else {
-    adjcost = 1;
-  }
-  if (ch->mana < adjcost) {
-    send_to_char("You don't have enough energy.\n\r", ch);
-    return;
-  }
-  if (!IS_NPC(ch)) {
-    kilimit = ch->train / 10000;
-    kimult = (float)get_curr_int(ch) / 1000 + 1;
-    kicmult = (float)kilimit / 100 + 1;
-    smastery = (float)ch->masteryenergy_disc / 10000;
-  }
+  basecost = 15;
+  adjcost = basecost;
+  lowdam = 120;
+  highdam = 140;
   hitcheck = number_range(1, 100);
   WAIT_STATE(ch, 8);
   if (hitcheck <= 95) {
-    if (!IS_NPC(ch)) {
-      argdam = ((number_range(12, 14) + ch->energy_discpower) * (kicmult + smastery));
-      dam = get_attmod(ch, victim) * (argdam * kimult);
-      stat_train(ch, "int", 10);
-      ch->train += 10;
-      ch->masteryenergy_disc += 1;
-      ch->energymastery += 2;
-      if (ch->energymastery >= (ch->kspgain * 100)) {
-        pager_printf_color(ch,
-                           "&CYou gained 5 Skill Points!&D\n\r");
-        ch->sptotal += 5;
-        ch->kspgain += 1;
-      }
-    }
-    if (IS_NPC(ch)) {
-      dam = get_attmod(ch, victim) * (number_range(12, 14) + (get_curr_int(ch) / 40));
-    }
-    if (ch->charge > 0)
-      dam = chargeDamMult(ch, dam);
-
-    act(AT_YELLOW,
-        "You hurl a tiny spinning blade of pure energy straight at $N, creating a deep wound. &W[$t]",
-        ch, num_punct(dam), victim, TO_CHAR);
-    act(AT_YELLOW,
-        "$n hurls a tiny spinning blade of pure energy straight at you, creating a deep wound. &W[$t]",
-        ch, num_punct(dam), victim, TO_VICT);
-    act(AT_YELLOW,
-        "$n hurls a tiny spinning blade of pure energy straight at $N, creating a deep wound. &W[$t]",
-        ch, num_punct(dam), victim, TO_NOTVICT);
-
-    global_retcode = damage(ch, victim, dam, TYPE_HIT);
-  } else {
-    act(AT_YELLOW, "You missed $N with your energy disc.", ch,
-        NULL, victim, TO_CHAR);
-    act(AT_YELLOW, "$n misses you with an energy disc.", ch, NULL,
-        victim, TO_VICT);
-    act(AT_YELLOW, "$n missed $N with an energy disc.", ch, NULL,
-        victim, TO_NOTVICT);
-    global_retcode = damage(ch, victim, 0, TYPE_HIT);
+	if (arg[0] == '\0') {
+	  if (!IS_NPC(ch)) {
+		argdam = (number_range(lowdam, highdam) * (kicmult + smastery));
+		dam = get_attmod(ch, victim) * (argdam * kimult);
+	  }
+	  else if (IS_NPC(ch)) {
+		argdam = number_range(lowdam, highdam);
+		dam = get_attmod(ch, victim) * (argdam + (get_curr_int(ch) / 40));
+	  }
+	  if (dam < 1)
+		dam = 1;
+	  act(AT_YELLOW,"You hurl a tiny spinning blade of pure energy straight at $N. &W[$t]", ch, num_punct(dam), victim, TO_CHAR);
+	  act(AT_YELLOW,"$n hurls a tiny spinning blade of pure energy straight at you. &W[$t]", ch, num_punct(dam), victim, TO_VICT);
+	  act(AT_YELLOW,"$n hurls a tiny spinning blade of pure energy straight at $N. &W[$t]", ch, num_punct(dam), victim, TO_NOTVICT);
+	  if ((ch->mana - adjcost) < 0) {
+		act(AT_LBLUE,"Your energy disc fizzles into nothing!", ch, NULL, victim, TO_CHAR);
+		act(AT_LBLUE,"$n's energy disc fizzles into nothing!", ch, NULL, victim, TO_VICT);
+		act(AT_LBLUE,"$n's energy disc fizzles into nothing!", ch, NULL, victim, TO_NOTVICT);
+		global_retcode = damage(ch, victim, 0, TYPE_HIT);
+		ch->mana = 0;
+	  } else {
+		global_retcode = damage(ch, victim, dam, TYPE_HIT);
+	  }
+	}
+	else if (!str_cmp(arg, "200")) {
+	  if (ch->energy_discpower < 1) {
+		send_to_char("You lack the skill.\n\r", ch);
+		return;
+	  }
+	  if (!IS_NPC(ch)) {
+		argdam = (number_range(lowdam * 2, highdam * 2) * (kicmult + smastery));
+		dam = get_attmod(ch, victim) * (argdam * kimult);
+	  }
+	  else if (IS_NPC(ch)) {
+		argdam = number_range(lowdam * 2, highdam * 2);
+		dam = get_attmod(ch, victim) * (argdam + (get_curr_int(ch) / 40));
+	  }
+	  if (dam < 1)
+		dam = 1;
+	  adjcost = basecost * 4;
+	  act(AT_YELLOW,"You hurl a tiny spinning blade of pure energy straight at $N. &W[$t]", ch, num_punct(dam), victim, TO_CHAR);
+	  act(AT_YELLOW,"$n hurls a tiny spinning blade of pure energy straight at you. &W[$t]", ch, num_punct(dam), victim, TO_VICT);
+	  act(AT_YELLOW,"$n hurls a tiny spinning blade of pure energy straight at $N. &W[$t]", ch, num_punct(dam), victim, TO_NOTVICT);
+	  if ((ch->mana - adjcost) < 0) {
+		act(AT_LBLUE,"Your energy disc fizzles into nothing!", ch, NULL, victim, TO_CHAR);
+		act(AT_LBLUE,"$n's energy disc fizzles into nothing!", ch, NULL, victim, TO_VICT);
+		act(AT_LBLUE,"$n's energy disc fizzles into nothing!", ch, NULL, victim, TO_NOTVICT);
+		global_retcode = damage(ch, victim, 0, TYPE_HIT);
+		ch->mana = 0;
+	  } else {
+		global_retcode = damage(ch, victim, dam, TYPE_HIT);
+	  }
+	}
+	else if (!str_cmp(arg, "300")) {
+	  if (ch->energy_discpower < 2) {
+		send_to_char("You lack the skill.\n\r", ch);
+		return;
+	  }
+	  if (!IS_NPC(ch)) {
+		argdam = (number_range(lowdam * 3, highdam * 3) * (kicmult + smastery));
+		dam = get_attmod(ch, victim) * (argdam * kimult);
+	  }
+	  else if (IS_NPC(ch)) {
+		argdam = number_range(lowdam * 3, highdam * 3);
+		dam = get_attmod(ch, victim) * (argdam + (get_curr_int(ch) / 40));
+	  }
+	  if (dam < 1)
+		dam = 1;
+	  adjcost = basecost * 16;
+	  act(AT_YELLOW,"You hurl a tiny spinning blade of pure energy straight at $N. &W[$t]", ch, num_punct(dam), victim, TO_CHAR);
+	  act(AT_YELLOW,"$n hurls a tiny spinning blade of pure energy straight at you. &W[$t]", ch, num_punct(dam), victim, TO_VICT);
+	  act(AT_YELLOW,"$n hurls a tiny spinning blade of pure energy straight at $N. &W[$t]", ch, num_punct(dam), victim, TO_NOTVICT);
+	  if ((ch->mana - adjcost) < 0) {
+		act(AT_LBLUE,"Your energy disc fizzles into nothing!", ch, NULL, victim, TO_CHAR);
+		act(AT_LBLUE,"$n's energy disc fizzles into nothing!", ch, NULL, victim, TO_VICT);
+		act(AT_LBLUE,"$n's energy disc fizzles into nothing!", ch, NULL, victim, TO_NOTVICT);
+		global_retcode = damage(ch, victim, 0, TYPE_HIT);
+		ch->mana = 0;
+	  } else {
+		global_retcode = damage(ch, victim, dam, TYPE_HIT);
+	  }
+	}
+	else if (!str_cmp(arg, "400")) {
+	  if (ch->energy_discpower < 3) {
+		send_to_char("You lack the skill.\n\r", ch);
+		return;
+	  }
+	  if (!IS_NPC(ch)) {
+		argdam = (number_range(lowdam * 4, highdam * 4) * (kicmult + smastery));
+		dam = get_attmod(ch, victim) * (argdam * kimult);
+	  }
+	  else if (IS_NPC(ch)) {
+		argdam = number_range(lowdam * 4, highdam * 4);
+		dam = get_attmod(ch, victim) * (argdam + (get_curr_int(ch) / 40));
+	  }
+	  if (dam < 1)
+		dam = 1;
+	  adjcost = basecost * 64;
+	  act(AT_YELLOW,"You hurl a tiny spinning blade of pure energy straight at $N. &W[$t]", ch, num_punct(dam), victim, TO_CHAR);
+	  act(AT_YELLOW,"$n hurls a tiny spinning blade of pure energy straight at you. &W[$t]", ch, num_punct(dam), victim, TO_VICT);
+	  act(AT_YELLOW,"$n hurls a tiny spinning blade of pure energy straight at $N. &W[$t]", ch, num_punct(dam), victim, TO_NOTVICT);
+	  if ((ch->mana - adjcost) < 0) {
+		act(AT_LBLUE,"Your energy disc fizzles into nothing!", ch, NULL, victim, TO_CHAR);
+		act(AT_LBLUE,"$n's energy disc fizzles into nothing!", ch, NULL, victim, TO_VICT);
+		act(AT_LBLUE,"$n's energy disc fizzles into nothing!", ch, NULL, victim, TO_NOTVICT);
+		global_retcode = damage(ch, victim, 0, TYPE_HIT);
+		ch->mana = 0;
+	  } else {
+		global_retcode = damage(ch, victim, dam, TYPE_HIT);
+	  }
+	}
+	else if (!str_cmp(arg, "500")) {
+	  if (ch->energy_discpower < 4) {
+		send_to_char("You lack the skill.\n\r", ch);
+		return;
+	  }
+	  if (!IS_NPC(ch)) {
+		argdam = (number_range(lowdam * 5, highdam * 5) * (kicmult + smastery));
+		dam = get_attmod(ch, victim) * (argdam * kimult);
+	  }
+	  else if (IS_NPC(ch)) {
+		argdam = number_range(lowdam * 5, highdam * 5);
+		dam = get_attmod(ch, victim) * (argdam + (get_curr_int(ch) / 40));
+	  }
+	  if (dam < 1)
+		dam = 1;
+	  adjcost = basecost * 256;
+	  act(AT_YELLOW,"You hurl a tiny spinning blade of pure energy straight at $N. &W[$t]", ch, num_punct(dam), victim, TO_CHAR);
+	  act(AT_YELLOW,"$n hurls a tiny spinning blade of pure energy straight at you. &W[$t]", ch, num_punct(dam), victim, TO_VICT);
+	  act(AT_YELLOW,"$n hurls a tiny spinning blade of pure energy straight at $N. &W[$t]", ch, num_punct(dam), victim, TO_NOTVICT);
+	  if ((ch->mana - adjcost) < 0) {
+		act(AT_LBLUE,"Your energy disc fizzles into nothing!", ch, NULL, victim, TO_CHAR);
+		act(AT_LBLUE,"$n's energy disc fizzles into nothing!", ch, NULL, victim, TO_VICT);
+		act(AT_LBLUE,"$n's energy disc fizzles into nothing!", ch, NULL, victim, TO_NOTVICT);
+		global_retcode = damage(ch, victim, 0, TYPE_HIT);
+		ch->mana = 0;
+	  } else {
+		global_retcode = damage(ch, victim, dam, TYPE_HIT);
+	  }
+	}
+	else {
+		send_to_char("Only increments of 200-500.\n\r", ch);
+		return;
+	}
   }
-  ch->mana -= adjcost;
+  else {
+	act(AT_LBLUE, "You missed $N with your energy disc.", ch, NULL, victim, TO_CHAR);
+	act(AT_LBLUE, "$n misses you with an energy disc.", ch, NULL, victim, TO_VICT);
+	act(AT_LBLUE, "$n missed $N with an energy disc.", ch, NULL, victim, TO_NOTVICT);
+	global_retcode = damage(ch, victim, 0, TYPE_HIT);
+  }
+  if (!IS_NPC(ch) && ch->mana != 0) {
+	// train player masteries, no benefit from spamming at no ki
+	stat_train(ch, "int", 10);
+	ch->train += 10;
+	ch->masteryenergy_disc += 1;
+	ch->energymastery += 2;
+	if (ch->energymastery >= (ch->kspgain * 100)) {
+	  pager_printf_color(ch,"&CYou gained 5 Skill Points!\n\r");
+	  ch->sptotal += 5;
+	  ch->kspgain += 1;
+	}
+  }
+  if ((ch->mana - adjcost) < 0)
+	ch->mana = 0;
+  else
+	ch->mana -= adjcost;
   return;
 }
 
@@ -6014,8 +6403,14 @@ void do_forcewave(CHAR_DATA *ch, char *argument) {
   int kilimit = 0;
   int hitcheck = 0;
   int adjcost = 0;
+  int basecost = 0;
   float smastery = 0;
+  int lowdam = 0;
+  int highdam = 0;
+  char arg[MAX_INPUT_LENGTH];
 
+  argument = one_argument(argument, arg);
+  
   if (IS_NPC(ch) && is_split(ch)) {
     if (!ch->master)
       return;
@@ -6028,71 +6423,192 @@ void do_forcewave(CHAR_DATA *ch, char *argument) {
     send_to_char("You're not able to use that skill.\n\r", ch);
     return;
   }
+  if (!IS_NPC(ch)) {
+	kilimit = ch->train / 10000;
+	kimult = (float)get_curr_int(ch) / 1000 + 1;
+	kicmult = (float)kilimit / 100 + 1;
+	smastery = (float)ch->masteryforcewave / 10000;
+	if (smastery > 10)
+	  smastery = 10;
+  }
   if ((victim = who_fighting(ch)) == NULL) {
     send_to_char("You aren't fighting anyone.\n\r", ch);
     return;
   }
-  if (!IS_NPC(ch)) {
-    adjcost = 50 * (ch->forcewavepower - ch->forcewaveeffic);
-    if (adjcost < 50)
-      adjcost = 50;
-  } else {
-    adjcost = 1;
-  }
-  if (ch->mana < adjcost) {
-    send_to_char("You don't have enough energy.\n\r", ch);
-    return;
-  }
-  if (!IS_NPC(ch)) {
-    kilimit = ch->train / 10000;
-    kimult = (float)get_curr_int(ch) / 1000 + 1;
-    kicmult = (float)kilimit / 100 + 1;
-    smastery = (float)ch->masteryforcewave / 10000;
-  }
+  basecost = 50;
+  adjcost = basecost;
+  lowdam = 200;
+  highdam = 250;
   hitcheck = number_range(1, 100);
   WAIT_STATE(ch, 8);
   if (hitcheck <= 95) {
-    if (!IS_NPC(ch)) {
-      argdam = ((number_range(20, 25) + (ch->forcewavepower * 2)) * (kicmult + smastery));
-      dam = get_attmod(ch, victim) * (argdam * kimult);
-      stat_train(ch, "int", 13);
-      ch->train += 13;
-      ch->masteryforcewave += 1;
-      ch->energymastery += 4;
-      if (ch->energymastery >= (ch->kspgain * 100)) {
-        pager_printf_color(ch,
-                           "&CYou gained 5 Skill Points!\n\r");
-        ch->sptotal += 5;
-        ch->kspgain += 1;
-      }
-    }
-    if (IS_NPC(ch)) {
-      dam = get_attmod(ch, victim) * (number_range(20, 25) + (get_curr_int(ch) / 40));
-    }
-    if (ch->charge > 0)
-      dam = chargeDamMult(ch, dam);
-
-    act(AT_YELLOW,
-        "You force your palm forward, bombarding $N with unseen psionic power. &W[$t]",
-        ch, num_punct(dam), victim, TO_CHAR);
-    act(AT_YELLOW,
-        "$n forces $s palm forward, bombarding you with unseen psionic power. &W[$t]",
-        ch, num_punct(dam), victim, TO_VICT);
-    act(AT_YELLOW,
-        "$n forces $s palm forward, bombarding $N with unseen psionic power. &W[$t]",
-        ch, num_punct(dam), victim, TO_NOTVICT);
-
-    global_retcode = damage(ch, victim, dam, TYPE_HIT);
-  } else {
-    act(AT_YELLOW, "You missed $N with your forcewave.", ch,
-        NULL, victim, TO_CHAR);
-    act(AT_YELLOW, "$n misses you with an invisible wave of force.", ch, NULL,
-        victim, TO_VICT);
-    act(AT_YELLOW, "$n missed $N with an invisible wave of force.", ch, NULL,
-        victim, TO_NOTVICT);
-    global_retcode = damage(ch, victim, 0, TYPE_HIT);
+	if (arg[0] == '\0') {
+	  if (!IS_NPC(ch)) {
+		argdam = (number_range(lowdam, highdam) * (kicmult + smastery));
+		dam = get_attmod(ch, victim) * (argdam * kimult);
+	  }
+	  else if (IS_NPC(ch)) {
+		argdam = number_range(lowdam, highdam);
+		dam = get_attmod(ch, victim) * (argdam + (get_curr_int(ch) / 40));
+	  }
+	  if (dam < 1)
+		dam = 1;
+	  act(AT_YELLOW,"You force your palm forward, bombarding $N with unseen psionic power. &W[$t]", ch, num_punct(dam), victim, TO_CHAR);
+	  act(AT_YELLOW,"$n forces $s palm forward, bombarding you with unseen psionic power. &W[$t]", ch, num_punct(dam), victim, TO_VICT);
+	  act(AT_YELLOW,"$n forces $s palm forward, bombarding $N with unseen psionic power. &W[$t]", ch, num_punct(dam), victim, TO_NOTVICT);
+	  if ((ch->mana - adjcost) < 0) {
+		act(AT_LBLUE,"Your Forcewave fizzles into nothing!", ch, NULL, victim, TO_CHAR);
+		act(AT_LBLUE,"$n's Forcewave fizzles into nothing!", ch, NULL, victim, TO_VICT);
+		act(AT_LBLUE,"$n's Forcewave Meteor fizzles into nothing!", ch, NULL, victim, TO_NOTVICT);
+		global_retcode = damage(ch, victim, 0, TYPE_HIT);
+		ch->mana = 0;
+	  } else {
+		global_retcode = damage(ch, victim, dam, TYPE_HIT);
+	  }
+	}
+	else if (!str_cmp(arg, "200")) {
+	  if (ch->forcewavepower < 1) {
+		send_to_char("You lack the skill.\n\r", ch);
+		return;
+	  }
+	  if (!IS_NPC(ch)) {
+		argdam = (number_range(lowdam * 2, highdam * 2) * (kicmult + smastery));
+		dam = get_attmod(ch, victim) * (argdam * kimult);
+	  }
+	  else if (IS_NPC(ch)) {
+		argdam = number_range(lowdam * 2, highdam * 2);
+		dam = get_attmod(ch, victim) * (argdam + (get_curr_int(ch) / 40));
+	  }
+	  if (dam < 1)
+		dam = 1;
+	  adjcost = basecost * 4;
+	  act(AT_YELLOW,"You force your palm forward, bombarding $N with unseen psionic power. &W[$t]", ch, num_punct(dam), victim, TO_CHAR);
+	  act(AT_YELLOW,"$n forces $s palm forward, bombarding you with unseen psionic power. &W[$t]", ch, num_punct(dam), victim, TO_VICT);
+	  act(AT_YELLOW,"$n forces $s palm forward, bombarding $N with unseen psionic power. &W[$t]", ch, num_punct(dam), victim, TO_NOTVICT);
+	  if ((ch->mana - adjcost) < 0) {
+		act(AT_LBLUE,"Your Forcewave fizzles into nothing!", ch, NULL, victim, TO_CHAR);
+		act(AT_LBLUE,"$n's Forcewave fizzles into nothing!", ch, NULL, victim, TO_VICT);
+		act(AT_LBLUE,"$n's Forcewave Meteor fizzles into nothing!", ch, NULL, victim, TO_NOTVICT);
+		global_retcode = damage(ch, victim, 0, TYPE_HIT);
+		ch->mana = 0;
+	  } else {
+		global_retcode = damage(ch, victim, dam, TYPE_HIT);
+	  }
+	}
+	else if (!str_cmp(arg, "300")) {
+	  if (ch->forcewavepower < 2) {
+		send_to_char("You lack the skill.\n\r", ch);
+		return;
+	  }
+	  if (!IS_NPC(ch)) {
+		argdam = (number_range(lowdam * 3, highdam * 3) * (kicmult + smastery));
+		dam = get_attmod(ch, victim) * (argdam * kimult);
+	  }
+	  else if (IS_NPC(ch)) {
+		argdam = number_range(lowdam * 3, highdam * 3);
+		dam = get_attmod(ch, victim) * (argdam + (get_curr_int(ch) / 40));
+	  }
+	  if (dam < 1)
+		dam = 1;
+	  adjcost = basecost * 16;
+	  act(AT_YELLOW,"You force your palm forward, bombarding $N with unseen psionic power. &W[$t]", ch, num_punct(dam), victim, TO_CHAR);
+	  act(AT_YELLOW,"$n forces $s palm forward, bombarding you with unseen psionic power. &W[$t]", ch, num_punct(dam), victim, TO_VICT);
+	  act(AT_YELLOW,"$n forces $s palm forward, bombarding $N with unseen psionic power. &W[$t]", ch, num_punct(dam), victim, TO_NOTVICT);
+	  if ((ch->mana - adjcost) < 0) {
+		act(AT_LBLUE,"Your Forcewave fizzles into nothing!", ch, NULL, victim, TO_CHAR);
+		act(AT_LBLUE,"$n's Forcewave fizzles into nothing!", ch, NULL, victim, TO_VICT);
+		act(AT_LBLUE,"$n's Forcewave Meteor fizzles into nothing!", ch, NULL, victim, TO_NOTVICT);
+		global_retcode = damage(ch, victim, 0, TYPE_HIT);
+		ch->mana = 0;
+	  } else {
+		global_retcode = damage(ch, victim, dam, TYPE_HIT);
+	  }
+	}
+	else if (!str_cmp(arg, "400")) {
+	  if (ch->forcewavepower < 3) {
+		send_to_char("You lack the skill.\n\r", ch);
+		return;
+	  }
+	  if (!IS_NPC(ch)) {
+		argdam = (number_range(lowdam * 4, highdam * 4) * (kicmult + smastery));
+		dam = get_attmod(ch, victim) * (argdam * kimult);
+	  }
+	  else if (IS_NPC(ch)) {
+		argdam = number_range(lowdam * 4, highdam * 4);
+		dam = get_attmod(ch, victim) * (argdam + (get_curr_int(ch) / 40));
+	  }
+	  if (dam < 1)
+		dam = 1;
+	  adjcost = basecost * 64;
+	  act(AT_YELLOW,"You force your palm forward, bombarding $N with unseen psionic power. &W[$t]", ch, num_punct(dam), victim, TO_CHAR);
+	  act(AT_YELLOW,"$n forces $s palm forward, bombarding you with unseen psionic power. &W[$t]", ch, num_punct(dam), victim, TO_VICT);
+	  act(AT_YELLOW,"$n forces $s palm forward, bombarding $N with unseen psionic power. &W[$t]", ch, num_punct(dam), victim, TO_NOTVICT);
+	  if ((ch->mana - adjcost) < 0) {
+		act(AT_LBLUE,"Your Forcewave fizzles into nothing!", ch, NULL, victim, TO_CHAR);
+		act(AT_LBLUE,"$n's Forcewave fizzles into nothing!", ch, NULL, victim, TO_VICT);
+		act(AT_LBLUE,"$n's Forcewave Meteor fizzles into nothing!", ch, NULL, victim, TO_NOTVICT);
+		global_retcode = damage(ch, victim, 0, TYPE_HIT);
+		ch->mana = 0;
+	  } else {
+		global_retcode = damage(ch, victim, dam, TYPE_HIT);
+	  }
+	}
+	else if (!str_cmp(arg, "500")) {
+	  if (ch->forcewavepower < 4) {
+		send_to_char("You lack the skill.\n\r", ch);
+		return;
+	  }
+	  if (!IS_NPC(ch)) {
+		argdam = (number_range(lowdam * 5, highdam * 5) * (kicmult + smastery));
+		dam = get_attmod(ch, victim) * (argdam * kimult);
+	  }
+	  else if (IS_NPC(ch)) {
+		argdam = number_range(lowdam * 5, highdam * 5);
+		dam = get_attmod(ch, victim) * (argdam + (get_curr_int(ch) / 40));
+	  }
+	  if (dam < 1)
+		dam = 1;
+	  adjcost = basecost * 256;
+	  act(AT_YELLOW,"You force your palm forward, bombarding $N with unseen psionic power. &W[$t]", ch, num_punct(dam), victim, TO_CHAR);
+	  act(AT_YELLOW,"$n forces $s palm forward, bombarding you with unseen psionic power. &W[$t]", ch, num_punct(dam), victim, TO_VICT);
+	  act(AT_YELLOW,"$n forces $s palm forward, bombarding $N with unseen psionic power. &W[$t]", ch, num_punct(dam), victim, TO_NOTVICT);
+	  if ((ch->mana - adjcost) < 0) {
+		act(AT_LBLUE,"Your Forcewave fizzles into nothing!", ch, NULL, victim, TO_CHAR);
+		act(AT_LBLUE,"$n's Forcewave fizzles into nothing!", ch, NULL, victim, TO_VICT);
+		act(AT_LBLUE,"$n's Forcewave Meteor fizzles into nothing!", ch, NULL, victim, TO_NOTVICT);
+		global_retcode = damage(ch, victim, 0, TYPE_HIT);
+		ch->mana = 0;
+	  } else {
+		global_retcode = damage(ch, victim, dam, TYPE_HIT);
+	  }
+	}
+	else {
+		send_to_char("Only increments of 200-500.\n\r", ch);
+		return;
+	}
   }
-  ch->mana -= adjcost;
+  else {
+	act(AT_LBLUE, "You missed $N with your forcewave.", ch, NULL, victim, TO_CHAR);
+	act(AT_LBLUE, "$n misses you with an invisible wave of force.", ch, NULL, victim, TO_VICT);
+	act(AT_LBLUE, "$n missed $N with an invisible wave of force.", ch, NULL, victim, TO_NOTVICT);
+	global_retcode = damage(ch, victim, 0, TYPE_HIT);
+  }
+  if (!IS_NPC(ch) && ch->mana != 0) {
+	// train player masteries, no benefit from spamming at no ki
+	stat_train(ch, "int", 13);
+	ch->train += 13;
+	ch->masteryforcewave += 1;
+	ch->energymastery += 4;
+	if (ch->energymastery >= (ch->kspgain * 100)) {
+	  pager_printf_color(ch,"&CYou gained 5 Skill Points!\n\r");
+	  ch->sptotal += 5;
+	  ch->kspgain += 1;
+	}
+  }
+  if ((ch->mana - adjcost) < 0)
+	ch->mana = 0;
+  else
+	ch->mana -= adjcost;
   return;
 }
 
@@ -6105,8 +6621,14 @@ void do_concentrated_beam(CHAR_DATA *ch, char *argument) {
   int kilimit = 0;
   int hitcheck = 0;
   int adjcost = 0;
+  int basecost = 0;
   float smastery = 0;
+  int lowdam = 0;
+  int highdam = 0;
+  char arg[MAX_INPUT_LENGTH];
 
+  argument = one_argument(argument, arg);
+  
   if (IS_NPC(ch) && is_split(ch)) {
     if (!ch->master)
       return;
@@ -6119,71 +6641,192 @@ void do_concentrated_beam(CHAR_DATA *ch, char *argument) {
     send_to_char("You're not able to use that skill.\n\r", ch);
     return;
   }
+  if (!IS_NPC(ch)) {
+	kilimit = ch->train / 10000;
+	kimult = (float)get_curr_int(ch) / 1000 + 1;
+	kicmult = (float)kilimit / 100 + 1;
+	smastery = (float)ch->masteryconcentrated_beam / 10000;
+	if (smastery > 10)
+	  smastery = 10;
+  }
   if ((victim = who_fighting(ch)) == NULL) {
     send_to_char("You aren't fighting anyone.\n\r", ch);
     return;
   }
-  if (!IS_NPC(ch)) {
-    adjcost = 40 * (ch->concentrated_beampower - ch->concentrated_beameffic);
-    if (adjcost < 40)
-      adjcost = 40;
-  } else {
-    adjcost = 1;
-  }
-  if (ch->mana < adjcost) {
-    send_to_char("You don't have enough energy.\n\r", ch);
-    return;
-  }
-  if (!IS_NPC(ch)) {
-    kilimit = ch->train / 10000;
-    kimult = (float)get_curr_int(ch) / 1000 + 1;
-    kicmult = (float)kilimit / 100 + 1;
-    smastery = (float)ch->masteryconcentrated_beam / 10000;
-  }
+  basecost = 40;
+  adjcost = basecost;
+  lowdam = 180;
+  highdam = 240;
   hitcheck = number_range(1, 100);
   WAIT_STATE(ch, 8);
   if (hitcheck <= 95) {
-    if (!IS_NPC(ch)) {
-      argdam = ((number_range(18, 24) + (ch->concentrated_beampower * 2)) * (kicmult + smastery));
-      dam = get_attmod(ch, victim) * (argdam * kimult);
-      stat_train(ch, "int", 14);
-      ch->train += 14;
-      ch->energymastery += 3;
-      ch->masteryconcentrated_beam += 1;
-      if (ch->energymastery >= (ch->kspgain * 100)) {
-        pager_printf_color(ch,
-                           "&CYou gained 5 Skill Points!\n\r");
-        ch->sptotal += 5;
-        ch->kspgain += 1;
-      }
-    }
-    if (IS_NPC(ch)) {
-      dam = get_attmod(ch, victim) * (number_range(18, 24) + (get_curr_int(ch) / 40));
-    }
-    if (ch->charge > 0)
-      dam = chargeDamMult(ch, dam);
-
-    act(AT_YELLOW,
-        "You thrust one palm forward, firing a dangerous beam of concentrated energy at $N. &W[$t]",
-        ch, num_punct(dam), victim, TO_CHAR);
-    act(AT_YELLOW,
-        "$n thrusts one palm forward, firing a dangerous beam of concentrated energy at you. &W[$t]",
-        ch, num_punct(dam), victim, TO_VICT);
-    act(AT_YELLOW,
-        "$n thrusts one palm forward, firing a dangerous beam of concentrated energy at $N. &W[$t]",
-        ch, num_punct(dam), victim, TO_NOTVICT);
-
-    global_retcode = damage(ch, victim, dam, TYPE_HIT);
-  } else {
-    act(AT_YELLOW, "You missed $N with your concentrated beam.", ch,
-        NULL, victim, TO_CHAR);
-    act(AT_YELLOW, "$n misses you with a concentrated beam.", ch, NULL,
-        victim, TO_VICT);
-    act(AT_YELLOW, "$n missed $N with a concentrated beam.", ch, NULL,
-        victim, TO_NOTVICT);
-    global_retcode = damage(ch, victim, 0, TYPE_HIT);
+	if (arg[0] == '\0') {
+	  if (!IS_NPC(ch)) {
+		argdam = (number_range(lowdam, highdam) * (kicmult + smastery));
+		dam = get_attmod(ch, victim) * (argdam * kimult);
+	  }
+	  else if (IS_NPC(ch)) {
+		argdam = number_range(lowdam, highdam);
+		dam = get_attmod(ch, victim) * (argdam + (get_curr_int(ch) / 40));
+	  }
+	  if (dam < 1)
+		dam = 1;
+	  act(AT_YELLOW,"You thrust one palm forward, firing a dangerous beam of concentrated energy at $N. &W[$t]", ch, num_punct(dam), victim, TO_CHAR);
+	  act(AT_YELLOW,"$n thrusts one palm forward, firing a dangerous beam of concentrated energy at you. &W[$t]", ch, num_punct(dam), victim, TO_VICT);
+	  act(AT_YELLOW,"$n thrusts one palm forward, firing a dangerous beam of concentrated energy at $N. &W[$t]", ch, num_punct(dam), victim, TO_NOTVICT);
+	  if ((ch->mana - adjcost) < 0) {
+		act(AT_LBLUE,"Your concentrated beam fizzles into nothing!", ch, NULL, victim, TO_CHAR);
+		act(AT_LBLUE,"$n's concentrated beam fizzles into nothing!", ch, NULL, victim, TO_VICT);
+		act(AT_LBLUE,"$n's concentrated beam fizzles into nothing!", ch, NULL, victim, TO_NOTVICT);
+		global_retcode = damage(ch, victim, 0, TYPE_HIT);
+		ch->mana = 0;
+	  } else {
+		global_retcode = damage(ch, victim, dam, TYPE_HIT);
+	  }
+	}
+	else if (!str_cmp(arg, "200")) {
+	  if (ch->concentrated_beampower < 1) {
+		send_to_char("You lack the skill.\n\r", ch);
+		return;
+	  }
+	  if (!IS_NPC(ch)) {
+		argdam = (number_range(lowdam * 2, highdam * 2) * (kicmult + smastery));
+		dam = get_attmod(ch, victim) * (argdam * kimult);
+	  }
+	  else if (IS_NPC(ch)) {
+		argdam = number_range(lowdam * 2, highdam * 2);
+		dam = get_attmod(ch, victim) * (argdam + (get_curr_int(ch) / 40));
+	  }
+	  if (dam < 1)
+		dam = 1;
+	  adjcost = basecost * 4;
+	  act(AT_YELLOW,"You thrust one palm forward, firing a large, dangerous beam of concentrated energy at $N. &W[$t]", ch, num_punct(dam), victim, TO_CHAR);
+	  act(AT_YELLOW,"$n thrusts one palm forward, firing a large, dangerous beam of concentrated energy at you. &W[$t]", ch, num_punct(dam), victim, TO_VICT);
+	  act(AT_YELLOW,"$n thrusts one palm forward, firing a large, dangerous beam of concentrated energy at $N. &W[$t]", ch, num_punct(dam), victim, TO_NOTVICT);
+	  if ((ch->mana - adjcost) < 0) {
+		act(AT_LBLUE,"Your concentrated beam fizzles into nothing!", ch, NULL, victim, TO_CHAR);
+		act(AT_LBLUE,"$n's concentrated beam fizzles into nothing!", ch, NULL, victim, TO_VICT);
+		act(AT_LBLUE,"$n's concentrated beam fizzles into nothing!", ch, NULL, victim, TO_NOTVICT);
+		global_retcode = damage(ch, victim, 0, TYPE_HIT);
+		ch->mana = 0;
+	  } else {
+		global_retcode = damage(ch, victim, dam, TYPE_HIT);
+	  }
+	}
+	else if (!str_cmp(arg, "300")) {
+	  if (ch->concentrated_beampower < 2) {
+		send_to_char("You lack the skill.\n\r", ch);
+		return;
+	  }
+	  if (!IS_NPC(ch)) {
+		argdam = (number_range(lowdam * 3, highdam * 3) * (kicmult + smastery));
+		dam = get_attmod(ch, victim) * (argdam * kimult);
+	  }
+	  else if (IS_NPC(ch)) {
+		argdam = number_range(lowdam * 3, highdam * 3);
+		dam = get_attmod(ch, victim) * (argdam + (get_curr_int(ch) / 40));
+	  }
+	  if (dam < 1)
+		dam = 1;
+	  adjcost = basecost * 16;
+	  act(AT_YELLOW,"You thrust one palm forward, firing a huge beam of concentrated energy at $N. &W[$t]", ch, num_punct(dam), victim, TO_CHAR);
+	  act(AT_YELLOW,"$n thrusts one palm forward, firing a huge beam of concentrated energy at you. &W[$t]", ch, num_punct(dam), victim, TO_VICT);
+	  act(AT_YELLOW,"$n thrusts one palm forward, firing a huge beam of concentrated energy at $N. &W[$t]", ch, num_punct(dam), victim, TO_NOTVICT);
+	  if ((ch->mana - adjcost) < 0) {
+		act(AT_LBLUE,"Your concentrated beam fizzles into nothing!", ch, NULL, victim, TO_CHAR);
+		act(AT_LBLUE,"$n's concentrated beam fizzles into nothing!", ch, NULL, victim, TO_VICT);
+		act(AT_LBLUE,"$n's concentrated beam fizzles into nothing!", ch, NULL, victim, TO_NOTVICT);
+		global_retcode = damage(ch, victim, 0, TYPE_HIT);
+		ch->mana = 0;
+	  } else {
+		global_retcode = damage(ch, victim, dam, TYPE_HIT);
+	  }
+	}
+	else if (!str_cmp(arg, "400")) {
+	  if (ch->concentrated_beampower < 3) {
+		send_to_char("You lack the skill.\n\r", ch);
+		return;
+	  }
+	  if (!IS_NPC(ch)) {
+		argdam = (number_range(lowdam * 4, highdam * 4) * (kicmult + smastery));
+		dam = get_attmod(ch, victim) * (argdam * kimult);
+	  }
+	  else if (IS_NPC(ch)) {
+		argdam = number_range(lowdam * 4, highdam * 4);
+		dam = get_attmod(ch, victim) * (argdam + (get_curr_int(ch) / 40));
+	  }
+	  if (dam < 1)
+		dam = 1;
+	  adjcost = basecost * 64;
+	  act(AT_YELLOW,"You thrust one palm forward, firing a massive beam of concentrated energy at $N. &W[$t]", ch, num_punct(dam), victim, TO_CHAR);
+	  act(AT_YELLOW,"$n thrusts one palm forward, firing a massive beam of concentrated energy at you. &W[$t]", ch, num_punct(dam), victim, TO_VICT);
+	  act(AT_YELLOW,"$n thrusts one palm forward, firing a massive beam of concentrated energy at $N. &W[$t]", ch, num_punct(dam), victim, TO_NOTVICT);
+	  if ((ch->mana - adjcost) < 0) {
+		act(AT_LBLUE,"Your concentrated beam fizzles into nothing!", ch, NULL, victim, TO_CHAR);
+		act(AT_LBLUE,"$n's concentrated beam fizzles into nothing!", ch, NULL, victim, TO_VICT);
+		act(AT_LBLUE,"$n's concentrated beam fizzles into nothing!", ch, NULL, victim, TO_NOTVICT);
+		global_retcode = damage(ch, victim, 0, TYPE_HIT);
+		ch->mana = 0;
+	  } else {
+		global_retcode = damage(ch, victim, dam, TYPE_HIT);
+	  }
+	}
+	else if (!str_cmp(arg, "500")) {
+	  if (ch->concentrated_beampower < 4) {
+		send_to_char("You lack the skill.\n\r", ch);
+		return;
+	  }
+	  if (!IS_NPC(ch)) {
+		argdam = (number_range(lowdam * 5, highdam * 5) * (kicmult + smastery));
+		dam = get_attmod(ch, victim) * (argdam * kimult);
+	  }
+	  else if (IS_NPC(ch)) {
+		argdam = number_range(lowdam * 5, highdam * 5);
+		dam = get_attmod(ch, victim) * (argdam + (get_curr_int(ch) / 40));
+	  }
+	  if (dam < 1)
+		dam = 1;
+	  adjcost = basecost * 256;
+	  act(AT_YELLOW,"You thrust one palm forward, firing a colossal beam of concentrated energy at $N. &W[$t]", ch, num_punct(dam), victim, TO_CHAR);
+	  act(AT_YELLOW,"$n thrusts one palm forward, firing a colossal beam of concentrated energy at you. &W[$t]", ch, num_punct(dam), victim, TO_VICT);
+	  act(AT_YELLOW,"$n thrusts one palm forward, firing a colossal beam of concentrated energy at $N. &W[$t]", ch, num_punct(dam), victim, TO_NOTVICT);
+	  if ((ch->mana - adjcost) < 0) {
+		act(AT_LBLUE,"Your concentrated beam fizzles into nothing!", ch, NULL, victim, TO_CHAR);
+		act(AT_LBLUE,"$n's concentrated beam fizzles into nothing!", ch, NULL, victim, TO_VICT);
+		act(AT_LBLUE,"$n's concentrated beam fizzles into nothing!", ch, NULL, victim, TO_NOTVICT);
+		global_retcode = damage(ch, victim, 0, TYPE_HIT);
+		ch->mana = 0;
+	  } else {
+		global_retcode = damage(ch, victim, dam, TYPE_HIT);
+	  }
+	}
+	else {
+		send_to_char("Only increments of 200-500.\n\r", ch);
+		return;
+	}
   }
-  ch->mana -= adjcost;
+  else {
+	act(AT_LBLUE, "You missed $N with your concentrated beam.", ch, NULL, victim, TO_CHAR);
+	act(AT_LBLUE, "$n misses you with a concentrated beam.", ch, NULL, victim, TO_VICT);
+	act(AT_LBLUE, "$n missed $N with a concentrated beam.", ch, NULL, victim, TO_NOTVICT);
+	global_retcode = damage(ch, victim, 0, TYPE_HIT);
+  }
+  if (!IS_NPC(ch) && ch->mana != 0) {
+	// train player masteries, no benefit from spamming at no ki
+	stat_train(ch, "int", 14);
+	ch->train += 14;
+	ch->masteryconcentrated_beam += 1;
+	ch->energymastery += 3;
+	if (ch->energymastery >= (ch->kspgain * 100)) {
+	  pager_printf_color(ch,"&CYou gained 5 Skill Points!\n\r");
+	  ch->sptotal += 5;
+	  ch->kspgain += 1;
+	}
+  }
+  if ((ch->mana - adjcost) < 0)
+	ch->mana = 0;
+  else
+	ch->mana -= adjcost;
   return;
 }
 
@@ -6196,8 +6839,14 @@ void do_energybeam(CHAR_DATA *ch, char *argument) {
   int kilimit = 0;
   int hitcheck = 0;
   int adjcost = 0;
+  int basecost = 0;
   float smastery = 0;
+  int lowdam = 0;
+  int highdam = 0;
+  char arg[MAX_INPUT_LENGTH];
 
+  argument = one_argument(argument, arg);
+  
   if (IS_NPC(ch) && is_split(ch)) {
     if (!ch->master)
       return;
@@ -6210,71 +6859,192 @@ void do_energybeam(CHAR_DATA *ch, char *argument) {
     send_to_char("You're not able to use that skill.\n\r", ch);
     return;
   }
+  if (!IS_NPC(ch)) {
+	kilimit = ch->train / 10000;
+	kimult = (float)get_curr_int(ch) / 1000 + 1;
+	kicmult = (float)kilimit / 100 + 1;
+	smastery = (float)ch->masteryenergybeam / 10000;
+	if (smastery > 10)
+	  smastery = 10;
+  }
   if ((victim = who_fighting(ch)) == NULL) {
     send_to_char("You aren't fighting anyone.\n\r", ch);
     return;
   }
-  if (!IS_NPC(ch)) {
-    adjcost = 10 * (ch->energybeampower - ch->energybeameffic);
-    if (adjcost < 10)
-      adjcost = 10;
-  } else {
-    adjcost = 1;
-  }
-  if (ch->mana < adjcost) {
-    send_to_char("You don't have enough energy.\n\r", ch);
-    return;
-  }
-  if (!IS_NPC(ch)) {
-    kilimit = ch->train / 10000;
-    kimult = (float)get_curr_int(ch) / 1000 + 1;
-    kicmult = (float)kilimit / 100 + 1;
-    smastery = (float)ch->masteryenergybeam / 10000;
-  }
+  basecost = 10;
+  adjcost = basecost;
+  lowdam = 60;
+  highdam = 90;
   hitcheck = number_range(1, 100);
   WAIT_STATE(ch, 8);
   if (hitcheck <= 95) {
-    if (!IS_NPC(ch)) {
-      argdam = ((number_range(6, 9) + ch->energybeampower) * (kicmult + smastery));
-      dam = get_attmod(ch, victim) * (argdam * kimult);
-      stat_train(ch, "int", 10);
-      ch->train += 10;
-      ch->masteryenergybeam += 1;
-      ch->energymastery += 2;
-      if (ch->energymastery >= (ch->kspgain * 100)) {
-        pager_printf_color(ch,
-                           "&CYou gained 5 Skill Points!\n\r");
-        ch->sptotal += 5;
-        ch->kspgain += 1;
-      }
-    }
-    if (IS_NPC(ch)) {
-      dam = get_attmod(ch, victim) * (number_range(6, 9) + (get_curr_int(ch) / 40));
-    }
-    if (ch->charge > 0)
-      dam = chargeDamMult(ch, dam);
-
-    act(AT_YELLOW,
-        "You concentrate momentarily, then suddenly blast $N with a weak beam of energy. &W[$t]",
-        ch, num_punct(dam), victim, TO_CHAR);
-    act(AT_YELLOW,
-        "$n concentrates momentarily, then suddenly blasts you with a weak beam of energy. &W[$t]",
-        ch, num_punct(dam), victim, TO_VICT);
-    act(AT_YELLOW,
-        "$n concentrates momentarily, then suddenly blasts $N with a weak beam of energy. &W[$t]",
-        ch, num_punct(dam), victim, TO_NOTVICT);
-
-    global_retcode = damage(ch, victim, dam, TYPE_HIT);
-  } else {
-    act(AT_YELLOW, "You missed $N with your energy beam.", ch,
-        NULL, victim, TO_CHAR);
-    act(AT_YELLOW, "$n misses you with an energy beam.", ch, NULL,
-        victim, TO_VICT);
-    act(AT_YELLOW, "$n missed $N with an energy beam.", ch, NULL,
-        victim, TO_NOTVICT);
-    global_retcode = damage(ch, victim, 0, TYPE_HIT);
+	if (arg[0] == '\0') {
+	  if (!IS_NPC(ch)) {
+		argdam = (number_range(lowdam, highdam) * (kicmult + smastery));
+		dam = get_attmod(ch, victim) * (argdam * kimult);
+	  }
+	  else if (IS_NPC(ch)) {
+		argdam = number_range(lowdam, highdam);
+		dam = get_attmod(ch, victim) * (argdam + (get_curr_int(ch) / 40));
+	  }
+	  if (dam < 1)
+		dam = 1;
+	  act(AT_YELLOW,"You concentrate momentarily, then suddenly blast $N with a weak beam of energy. &W[$t]", ch, num_punct(dam), victim, TO_CHAR);
+	  act(AT_YELLOW,"$n concentrates momentarily, then suddenly blasts you with a weak beam of energy. &W[$t]", ch, num_punct(dam), victim, TO_VICT);
+	  act(AT_YELLOW,"$n concentrates momentarily, then suddenly blasts $N with a weak beam of energy. &W[$t]", ch, num_punct(dam), victim, TO_NOTVICT);
+	  if ((ch->mana - adjcost) < 0) {
+		act(AT_LBLUE,"Your energy beam fizzles into nothing!", ch, NULL, victim, TO_CHAR);
+		act(AT_LBLUE,"$n's energy beam fizzles into nothing!", ch, NULL, victim, TO_VICT);
+		act(AT_LBLUE,"$n's energy beam fizzles into nothing!", ch, NULL, victim, TO_NOTVICT);
+		global_retcode = damage(ch, victim, 0, TYPE_HIT);
+		ch->mana = 0;
+	  } else {
+		global_retcode = damage(ch, victim, dam, TYPE_HIT);
+	  }
+	}
+	else if (!str_cmp(arg, "200")) {
+	  if (ch->energybeampower < 1) {
+		send_to_char("You lack the skill.\n\r", ch);
+		return;
+	  }
+	  if (!IS_NPC(ch)) {
+		argdam = (number_range(lowdam * 2, highdam * 2) * (kicmult + smastery));
+		dam = get_attmod(ch, victim) * (argdam * kimult);
+	  }
+	  else if (IS_NPC(ch)) {
+		argdam = number_range(lowdam * 2, highdam * 2);
+		dam = get_attmod(ch, victim) * (argdam + (get_curr_int(ch) / 40));
+	  }
+	  if (dam < 1)
+		dam = 1;
+	  adjcost = basecost * 4;
+	  act(AT_YELLOW,"You concentrate momentarily, then suddenly blast $N with a beam of energy. &W[$t]", ch, num_punct(dam), victim, TO_CHAR);
+	  act(AT_YELLOW,"$n concentrates momentarily, then suddenly blasts you with a beam of energy. &W[$t]", ch, num_punct(dam), victim, TO_VICT);
+	  act(AT_YELLOW,"$n concentrates momentarily, then suddenly blasts $N with a beam of energy. &W[$t]", ch, num_punct(dam), victim, TO_NOTVICT);
+	  if ((ch->mana - adjcost) < 0) {
+		act(AT_LBLUE,"Your energy beam fizzles into nothing!", ch, NULL, victim, TO_CHAR);
+		act(AT_LBLUE,"$n's energy beam fizzles into nothing!", ch, NULL, victim, TO_VICT);
+		act(AT_LBLUE,"$n's energy beam fizzles into nothing!", ch, NULL, victim, TO_NOTVICT);
+		global_retcode = damage(ch, victim, 0, TYPE_HIT);
+		ch->mana = 0;
+	  } else {
+		global_retcode = damage(ch, victim, dam, TYPE_HIT);
+	  }
+	}
+	else if (!str_cmp(arg, "300")) {
+	  if (ch->energybeampower < 2) {
+		send_to_char("You lack the skill.\n\r", ch);
+		return;
+	  }
+	  if (!IS_NPC(ch)) {
+		argdam = (number_range(lowdam * 3, highdam * 3) * (kicmult + smastery));
+		dam = get_attmod(ch, victim) * (argdam * kimult);
+	  }
+	  else if (IS_NPC(ch)) {
+		argdam = number_range(lowdam * 3, highdam * 3);
+		dam = get_attmod(ch, victim) * (argdam + (get_curr_int(ch) / 40));
+	  }
+	  if (dam < 1)
+		dam = 1;
+	  adjcost = basecost * 16;
+	  act(AT_YELLOW,"You concentrate momentarily, then suddenly blast $N with an impressive beam of energy. &W[$t]", ch, num_punct(dam), victim, TO_CHAR);
+	  act(AT_YELLOW,"$n concentrates momentarily, then suddenly blasts you with an impressive beam of energy. &W[$t]", ch, num_punct(dam), victim, TO_VICT);
+	  act(AT_YELLOW,"$n concentrates momentarily, then suddenly blasts $N with an impressive beam of energy. &W[$t]", ch, num_punct(dam), victim, TO_NOTVICT);
+	  if ((ch->mana - adjcost) < 0) {
+		act(AT_LBLUE,"Your energy beam fizzles into nothing!", ch, NULL, victim, TO_CHAR);
+		act(AT_LBLUE,"$n's energy beam fizzles into nothing!", ch, NULL, victim, TO_VICT);
+		act(AT_LBLUE,"$n's energy beam fizzles into nothing!", ch, NULL, victim, TO_NOTVICT);
+		global_retcode = damage(ch, victim, 0, TYPE_HIT);
+		ch->mana = 0;
+	  } else {
+		global_retcode = damage(ch, victim, dam, TYPE_HIT);
+	  }
+	}
+	else if (!str_cmp(arg, "400")) {
+	  if (ch->energybeampower < 3) {
+		send_to_char("You lack the skill.\n\r", ch);
+		return;
+	  }
+	  if (!IS_NPC(ch)) {
+		argdam = (number_range(lowdam * 4, highdam * 4) * (kicmult + smastery));
+		dam = get_attmod(ch, victim) * (argdam * kimult);
+	  }
+	  else if (IS_NPC(ch)) {
+		argdam = number_range(lowdam * 4, highdam * 4);
+		dam = get_attmod(ch, victim) * (argdam + (get_curr_int(ch) / 40));
+	  }
+	  if (dam < 1)
+		dam = 1;
+	  adjcost = basecost * 64;
+	  act(AT_YELLOW,"You concentrate momentarily, then suddenly blast $N with a huge beam of energy. &W[$t]", ch, num_punct(dam), victim, TO_CHAR);
+	  act(AT_YELLOW,"$n concentrates momentarily, then suddenly blasts you with a huge beam of energy. &W[$t]", ch, num_punct(dam), victim, TO_VICT);
+	  act(AT_YELLOW,"$n concentrates momentarily, then suddenly blasts $N with a huge beam of energy. &W[$t]", ch, num_punct(dam), victim, TO_NOTVICT);
+	  if ((ch->mana - adjcost) < 0) {
+		act(AT_LBLUE,"Your energy beam fizzles into nothing!", ch, NULL, victim, TO_CHAR);
+		act(AT_LBLUE,"$n's energy beam fizzles into nothing!", ch, NULL, victim, TO_VICT);
+		act(AT_LBLUE,"$n's energy beam fizzles into nothing!", ch, NULL, victim, TO_NOTVICT);
+		global_retcode = damage(ch, victim, 0, TYPE_HIT);
+		ch->mana = 0;
+	  } else {
+		global_retcode = damage(ch, victim, dam, TYPE_HIT);
+	  }
+	}
+	else if (!str_cmp(arg, "500")) {
+	  if (ch->energybeampower < 4) {
+		send_to_char("You lack the skill.\n\r", ch);
+		return;
+	  }
+	  if (!IS_NPC(ch)) {
+		argdam = (number_range(lowdam * 5, highdam * 5) * (kicmult + smastery));
+		dam = get_attmod(ch, victim) * (argdam * kimult);
+	  }
+	  else if (IS_NPC(ch)) {
+		argdam = number_range(lowdam * 5, highdam * 5);
+		dam = get_attmod(ch, victim) * (argdam + (get_curr_int(ch) / 40));
+	  }
+	  if (dam < 1)
+		dam = 1;
+	  adjcost = basecost * 256;
+	  act(AT_YELLOW,"You concentrate momentarily, then suddenly blast $N with a focused beam of energy. &W[$t]", ch, num_punct(dam), victim, TO_CHAR);
+	  act(AT_YELLOW,"$n concentrates momentarily, then suddenly blasts you with a focused beam of energy. &W[$t]", ch, num_punct(dam), victim, TO_VICT);
+	  act(AT_YELLOW,"$n concentrates momentarily, then suddenly blasts $N with a focused beam of energy. &W[$t]", ch, num_punct(dam), victim, TO_NOTVICT);
+	  if ((ch->mana - adjcost) < 0) {
+		act(AT_LBLUE,"Your energy beam fizzles into nothing!", ch, NULL, victim, TO_CHAR);
+		act(AT_LBLUE,"$n's energy beam fizzles into nothing!", ch, NULL, victim, TO_VICT);
+		act(AT_LBLUE,"$n's energy beam fizzles into nothing!", ch, NULL, victim, TO_NOTVICT);
+		global_retcode = damage(ch, victim, 0, TYPE_HIT);
+		ch->mana = 0;
+	  } else {
+		global_retcode = damage(ch, victim, dam, TYPE_HIT);
+	  }
+	}
+	else {
+		send_to_char("Only increments of 200-500.\n\r", ch);
+		return;
+	}
   }
-  ch->mana -= adjcost;
+  else {
+	act(AT_LBLUE, "You missed $N with your energy beam.", ch, NULL, victim, TO_CHAR);
+	act(AT_LBLUE, "$n misses you with an energy beam.", ch, NULL, victim, TO_VICT);
+	act(AT_LBLUE, "$n missed $N with an energy beam.", ch, NULL, victim, TO_NOTVICT);
+	global_retcode = damage(ch, victim, 0, TYPE_HIT);
+  }
+  if (!IS_NPC(ch) && ch->mana != 0) {
+	// train player masteries, no benefit from spamming at no ki
+	stat_train(ch, "int", 10);
+	ch->train += 10;
+	ch->masteryenergybeam += 1;
+	ch->energymastery += 2;
+	if (ch->energymastery >= (ch->kspgain * 100)) {
+	  pager_printf_color(ch,"&CYou gained 5 Skill Points!\n\r");
+	  ch->sptotal += 5;
+	  ch->kspgain += 1;
+	}
+  }
+  if ((ch->mana - adjcost) < 0)
+	ch->mana = 0;
+  else
+	ch->mana -= adjcost;
   return;
 }
 
@@ -6287,8 +7057,14 @@ void do_lariat(CHAR_DATA *ch, char *argument) {
   int kilimit = 0;
   int hitcheck = 0;
   int adjcost = 0;
+  int basecost = 0;
   float smastery = 0;
+  int lowdam = 0;
+  int highdam = 0;
+  char arg[MAX_INPUT_LENGTH];
 
+  argument = one_argument(argument, arg);
+  
   if (IS_NPC(ch) && is_split(ch)) {
     if (!ch->master)
       return;
@@ -6301,80 +7077,207 @@ void do_lariat(CHAR_DATA *ch, char *argument) {
     send_to_char("You're not able to use that skill.\n\r", ch);
     return;
   }
+  if (!IS_NPC(ch)) {
+	kilimit = ch->train / 10000;
+	physmult = (float)get_curr_str(ch) / 950 + 1;
+	kicmult = (float)kilimit / 100 + 1;
+	smastery = (float)ch->masterylariat / 10000;
+	if (smastery > 10)
+	  smastery = 10;
+  }
   if ((victim = who_fighting(ch)) == NULL) {
     send_to_char("You aren't fighting anyone.\n\r", ch);
     return;
   }
-  if (!IS_NPC(ch)) {
-    adjcost = 80 * (ch->lariatpower - ch->lariateffic);
-    if (adjcost < 80)
-      adjcost = 80;
-  } else {
-    adjcost = 1;
-  }
-  if (ch->mana < adjcost) {
-    send_to_char("You don't have enough energy.\n\r", ch);
-    return;
-  }
-  if (!IS_NPC(ch)) {
-    kilimit = ch->train / 10000;
-    physmult = (float)get_curr_str(ch) / 950 + 1;
-    kicmult = (float)kilimit / 100 + 1;
-    smastery = (float)ch->masterylariat / 10000;
-  }
+  basecost = 80;
+  adjcost = basecost;
+  lowdam = 450;
+  highdam = 500;
   hitcheck = number_range(1, 100);
   WAIT_STATE(ch, 8);
   if (hitcheck <= 95) {
-    if (!IS_NPC(ch)) {
-      argdam = ((number_range(45, 50) + (ch->lariatpower * 5)) * (kicmult + smastery));
-      dam = get_attmod(ch, victim) * (argdam * physmult);
-      stat_train(ch, "str", 16);
-      ch->train += 16;
-      ch->masterylariat += 1;
-      ch->strikemastery += 5;
-      if (ch->strikemastery >= (ch->sspgain * 100)) {
-        pager_printf_color(ch,
-                           "&CYou gained 5 Skill Points!\n\r");
-        ch->sptotal += 5;
-        ch->sspgain += 1;
-      }
-    }
-    if (IS_NPC(ch)) {
-      dam = get_attmod(ch, victim) * (number_range(45, 50) + (get_curr_str(ch) / 40));
-    }
-    if (ch->charge > 0)
-      dam = chargeDamMult(ch, dam);
-
-    act(AT_YELLOW,
-        "Through a billowing cloud of dust and debris, you tear forward at $N.",
-        ch, NULL, victim, TO_CHAR);
-    act(AT_YELLOW,
-        "Your arm hooks around $N's neck, dragging them with you directly through the terrain! &W[$t]",
-        ch, num_punct(dam), victim, TO_CHAR);
-    act(AT_YELLOW,
-        "$n tears forward at you, leaving a billowing cloud of dust and debris in $s wake.", ch,
-        NULL, victim, TO_VICT);
-    act(AT_YELLOW,
-        "$n's arm hooks around your neck, dragging you directly through the terrain! &W[$t]",
-        ch, num_punct(dam), victim, TO_VICT);
-    act(AT_YELLOW,
-        "$n tears forward at $N, leaving a billowing cloud of dust and debris in $s wake.", ch,
-        NULL, victim, TO_NOTVICT);
-    act(AT_YELLOW,
-        "$n's arm hooks around $N's neck, dragging them directly through the terrain! &W[$t]",
-        ch, num_punct(dam), victim, TO_NOTVICT);
-
-    global_retcode = damage(ch, victim, dam, TYPE_HIT);
-  } else {
-    act(AT_YELLOW, "You missed $N with your lariat.", ch,
-        NULL, victim, TO_CHAR);
-    act(AT_YELLOW, "$n misses you with a lariat.", ch, NULL,
-        victim, TO_VICT);
-    act(AT_YELLOW, "$n missed $N with a lariat.", ch, NULL,
-        victim, TO_NOTVICT);
-    global_retcode = damage(ch, victim, 0, TYPE_HIT);
+	if (arg[0] == '\0') {
+	  if (!IS_NPC(ch)) {
+		argdam = (number_range(lowdam, highdam) * (kicmult + smastery));
+		dam = get_attmod(ch, victim) * (argdam * physmult);
+	  }
+	  else if (IS_NPC(ch)) {
+		argdam = number_range(lowdam, highdam);
+		dam = get_attmod(ch, victim) * (argdam + (get_curr_str(ch) / 40));
+	  }
+	  if (dam < 1)
+		dam = 1;
+	  act(AT_YELLOW,"Through a billowing cloud of dust and debris, you tear forward at $N.", ch, NULL, victim, TO_CHAR);
+	  act(AT_YELLOW,"Your arm hooks around $N's neck, dragging them with you directly through the terrain! &W[$t]", ch, num_punct(dam), victim, TO_CHAR);
+	  act(AT_YELLOW,"$n tears forward at you, leaving a billowing cloud of dust and debris in $s wake.", ch, NULL, victim, TO_VICT);
+	  act(AT_YELLOW,"$n's arm hooks around your neck, dragging you directly through the terrain! &W[$t]", ch, num_punct(dam), victim, TO_VICT);
+	  act(AT_YELLOW,"$n tears forward at $N, leaving a billowing cloud of dust and debris in $s wake.", ch, NULL, victim, TO_NOTVICT);
+	  act(AT_YELLOW,"$n's arm hooks around $N's neck, dragging them directly through the terrain! &W[$t]", ch, num_punct(dam), victim, TO_NOTVICT);
+	  if ((ch->mana - adjcost) < 0) {
+		act(AT_LBLUE,"You collide with $N, but can't seem to generate any power!", ch, NULL, victim, TO_CHAR);
+		act(AT_LBLUE,"$n collides with you but can't seem to generate any power!", ch, NULL, victim, TO_VICT);
+		act(AT_LBLUE,"$n collides with $N but can't seem to generate any power!", ch, NULL, victim, TO_NOTVICT);
+		global_retcode = damage(ch, victim, 0, TYPE_HIT);
+		ch->mana = 0;
+	  } else {
+		global_retcode = damage(ch, victim, dam, TYPE_HIT);
+	  }
+	}
+	else if (!str_cmp(arg, "200")) {
+	  if (ch->lariatpower < 1) {
+		send_to_char("You lack the skill.\n\r", ch);
+		return;
+	  }
+	  if (!IS_NPC(ch)) {
+		argdam = (number_range(lowdam * 2, highdam * 2) * (kicmult + smastery));
+		dam = get_attmod(ch, victim) * (argdam * physmult);
+	  }
+	  else if (IS_NPC(ch)) {
+		argdam = number_range(lowdam * 2, highdam * 2);
+		dam = get_attmod(ch, victim) * (argdam + (get_curr_str(ch) / 40));
+	  }
+	  if (dam < 1)
+		dam = 1;
+	  adjcost = basecost * 4;
+	  act(AT_YELLOW,"Through a billowing cloud of dust and debris, you tear forward at $N.", ch, NULL, victim, TO_CHAR);
+	  act(AT_YELLOW,"Your arm hooks around $N's neck, dragging them with you directly through the terrain! &W[$t]", ch, num_punct(dam), victim, TO_CHAR);
+	  act(AT_YELLOW,"$n tears forward at you, leaving a billowing cloud of dust and debris in $s wake.", ch, NULL, victim, TO_VICT);
+	  act(AT_YELLOW,"$n's arm hooks around your neck, dragging you directly through the terrain! &W[$t]", ch, num_punct(dam), victim, TO_VICT);
+	  act(AT_YELLOW,"$n tears forward at $N, leaving a billowing cloud of dust and debris in $s wake.", ch, NULL, victim, TO_NOTVICT);
+	  act(AT_YELLOW,"$n's arm hooks around $N's neck, dragging them directly through the terrain! &W[$t]", ch, num_punct(dam), victim, TO_NOTVICT);
+	  if ((ch->mana - adjcost) < 0) {
+		act(AT_LBLUE,"You collide with $N, but can't seem to generate any power!", ch, NULL, victim, TO_CHAR);
+		act(AT_LBLUE,"$n collides with you but can't seem to generate any power!", ch, NULL, victim, TO_VICT);
+		act(AT_LBLUE,"$n collides with $N but can't seem to generate any power!", ch, NULL, victim, TO_NOTVICT);
+		global_retcode = damage(ch, victim, 0, TYPE_HIT);
+		ch->mana = 0;
+	  } else {
+		global_retcode = damage(ch, victim, dam, TYPE_HIT);
+	  }
+	}
+	else if (!str_cmp(arg, "300")) {
+	  if (ch->lariatpower < 2) {
+		send_to_char("You lack the skill.\n\r", ch);
+		return;
+	  }
+	  if (!IS_NPC(ch)) {
+		argdam = (number_range(lowdam * 3, highdam * 3) * (kicmult + smastery));
+		dam = get_attmod(ch, victim) * (argdam * physmult);
+	  }
+	  else if (IS_NPC(ch)) {
+		argdam = number_range(lowdam * 3, highdam * 3);
+		dam = get_attmod(ch, victim) * (argdam + (get_curr_str(ch) / 40));
+	  }
+	  if (dam < 1)
+		dam = 1;
+	  adjcost = basecost * 16;
+	  act(AT_YELLOW,"Through a billowing cloud of dust and debris, you tear forward at $N.", ch, NULL, victim, TO_CHAR);
+	  act(AT_YELLOW,"Your arm hooks around $N's neck, dragging them with you directly through the terrain! &W[$t]", ch, num_punct(dam), victim, TO_CHAR);
+	  act(AT_YELLOW,"$n tears forward at you, leaving a billowing cloud of dust and debris in $s wake.", ch, NULL, victim, TO_VICT);
+	  act(AT_YELLOW,"$n's arm hooks around your neck, dragging you directly through the terrain! &W[$t]", ch, num_punct(dam), victim, TO_VICT);
+	  act(AT_YELLOW,"$n tears forward at $N, leaving a billowing cloud of dust and debris in $s wake.", ch, NULL, victim, TO_NOTVICT);
+	  act(AT_YELLOW,"$n's arm hooks around $N's neck, dragging them directly through the terrain! &W[$t]", ch, num_punct(dam), victim, TO_NOTVICT);
+	  if ((ch->mana - adjcost) < 0) {
+		act(AT_LBLUE,"You collide with $N, but can't seem to generate any power!", ch, NULL, victim, TO_CHAR);
+		act(AT_LBLUE,"$n collides with you but can't seem to generate any power!", ch, NULL, victim, TO_VICT);
+		act(AT_LBLUE,"$n collides with $N but can't seem to generate any power!", ch, NULL, victim, TO_NOTVICT);
+		global_retcode = damage(ch, victim, 0, TYPE_HIT);
+		ch->mana = 0;
+	  } else {
+		global_retcode = damage(ch, victim, dam, TYPE_HIT);
+	  }
+	}
+	else if (!str_cmp(arg, "400")) {
+	  if (ch->lariatpower < 3) {
+		send_to_char("You lack the skill.\n\r", ch);
+		return;
+	  }
+	  if (!IS_NPC(ch)) {
+		argdam = (number_range(lowdam * 4, highdam * 4) * (kicmult + smastery));
+		dam = get_attmod(ch, victim) * (argdam * physmult);
+	  }
+	  else if (IS_NPC(ch)) {
+		argdam = number_range(lowdam * 4, highdam * 4);
+		dam = get_attmod(ch, victim) * (argdam + (get_curr_str(ch) / 40));
+	  }
+	  if (dam < 1)
+		dam = 1;
+	  adjcost = basecost * 64;
+	  act(AT_YELLOW,"Through a billowing cloud of dust and debris, you tear forward at $N.", ch, NULL, victim, TO_CHAR);
+	  act(AT_YELLOW,"Your arm hooks around $N's neck, dragging them with you directly through the terrain! &W[$t]", ch, num_punct(dam), victim, TO_CHAR);
+	  act(AT_YELLOW,"$n tears forward at you, leaving a billowing cloud of dust and debris in $s wake.", ch, NULL, victim, TO_VICT);
+	  act(AT_YELLOW,"$n's arm hooks around your neck, dragging you directly through the terrain! &W[$t]", ch, num_punct(dam), victim, TO_VICT);
+	  act(AT_YELLOW,"$n tears forward at $N, leaving a billowing cloud of dust and debris in $s wake.", ch, NULL, victim, TO_NOTVICT);
+	  act(AT_YELLOW,"$n's arm hooks around $N's neck, dragging them directly through the terrain! &W[$t]", ch, num_punct(dam), victim, TO_NOTVICT);
+	  if ((ch->mana - adjcost) < 0) {
+		act(AT_LBLUE,"You collide with $N, but can't seem to generate any power!", ch, NULL, victim, TO_CHAR);
+		act(AT_LBLUE,"$n collides with you but can't seem to generate any power!", ch, NULL, victim, TO_VICT);
+		act(AT_LBLUE,"$n collides with $N but can't seem to generate any power!", ch, NULL, victim, TO_NOTVICT);
+		global_retcode = damage(ch, victim, 0, TYPE_HIT);
+		ch->mana = 0;
+	  } else {
+		global_retcode = damage(ch, victim, dam, TYPE_HIT);
+	  }
+	}
+	else if (!str_cmp(arg, "500")) {
+	  if (ch->lariatpower < 4) {
+		send_to_char("You lack the skill.\n\r", ch);
+		return;
+	  }
+	  if (!IS_NPC(ch)) {
+		argdam = (number_range(lowdam * 5, highdam * 5) * (kicmult + smastery));
+		dam = get_attmod(ch, victim) * (argdam * physmult);
+	  }
+	  else if (IS_NPC(ch)) {
+		argdam = number_range(lowdam * 5, highdam * 5);
+		dam = get_attmod(ch, victim) * (argdam + (get_curr_str(ch) / 40));
+	  }
+	  if (dam < 1)
+		dam = 1;
+	  adjcost = basecost * 256;
+	  act(AT_YELLOW,"Through a billowing cloud of dust and debris, you tear forward at $N.", ch, NULL, victim, TO_CHAR);
+	  act(AT_YELLOW,"Your arm hooks around $N's neck, dragging them with you directly through the terrain! &W[$t]", ch, num_punct(dam), victim, TO_CHAR);
+	  act(AT_YELLOW,"$n tears forward at you, leaving a billowing cloud of dust and debris in $s wake.", ch, NULL, victim, TO_VICT);
+	  act(AT_YELLOW,"$n's arm hooks around your neck, dragging you directly through the terrain! &W[$t]", ch, num_punct(dam), victim, TO_VICT);
+	  act(AT_YELLOW,"$n tears forward at $N, leaving a billowing cloud of dust and debris in $s wake.", ch, NULL, victim, TO_NOTVICT);
+	  act(AT_YELLOW,"$n's arm hooks around $N's neck, dragging them directly through the terrain! &W[$t]", ch, num_punct(dam), victim, TO_NOTVICT);
+	  if ((ch->mana - adjcost) < 0) {
+		act(AT_LBLUE,"You collide with $N, but can't seem to generate any power!", ch, NULL, victim, TO_CHAR);
+		act(AT_LBLUE,"$n collides with you but can't seem to generate any power!", ch, NULL, victim, TO_VICT);
+		act(AT_LBLUE,"$n collides with $N but can't seem to generate any power!", ch, NULL, victim, TO_NOTVICT);
+		global_retcode = damage(ch, victim, 0, TYPE_HIT);
+		ch->mana = 0;
+	  } else {
+		global_retcode = damage(ch, victim, dam, TYPE_HIT);
+	  }
+	}
+	else {
+		send_to_char("Only increments of 200-500.\n\r", ch);
+		return;
+	}
   }
-  ch->mana -= adjcost;
+  else {
+	act(AT_LBLUE, "You missed $N with a barreling collision.", ch, NULL, victim, TO_CHAR);
+	act(AT_LBLUE, "$n misses you with a barreling collision.", ch, NULL, victim, TO_VICT);
+	act(AT_LBLUE, "$n missed $N with a barreling collision.", ch, NULL, victim, TO_NOTVICT);
+	global_retcode = damage(ch, victim, 0, TYPE_HIT);
+  }
+  if (!IS_NPC(ch) && ch->mana != 0) {
+	// train player masteries, no benefit from spamming at no ki
+	stat_train(ch, "str", 16);
+	ch->train += 16;
+	ch->masterylariat += 1;
+	ch->strikemastery += 5;
+	if (ch->strikemastery >= (ch->kspgain * 100)) {
+	  pager_printf_color(ch,"&CYou gained 5 Skill Points!\n\r");
+	  ch->sptotal += 5;
+	  ch->kspgain += 1;
+	}
+  }
+  if ((ch->mana - adjcost) < 0)
+	ch->mana = 0;
+  else
+	ch->mana -= adjcost;
   return;
 }
 
@@ -6387,8 +7290,14 @@ void do_ecliptic_meteor(CHAR_DATA *ch, char *argument) {
   int kilimit = 0;
   int hitcheck = 0;
   int adjcost = 0;
+  int basecost = 0;
   float smastery = 0;
+  int lowdam = 0;
+  int highdam = 0;
+  char arg[MAX_INPUT_LENGTH];
 
+  argument = one_argument(argument, arg);
+  
   if (IS_NPC(ch) && is_split(ch)) {
     if (!ch->master)
       return;
@@ -6401,80 +7310,207 @@ void do_ecliptic_meteor(CHAR_DATA *ch, char *argument) {
     send_to_char("You're not able to use that skill.\n\r", ch);
     return;
   }
+  if (!IS_NPC(ch)) {
+	kilimit = ch->train / 10000;
+	kimult = (float)get_curr_int(ch) / 1000 + 1;
+	kicmult = (float)kilimit / 100 + 1;
+	smastery = (float)ch->masteryecliptic_meteor / 10000;
+	if (smastery > 10)
+	  smastery = 10;
+  }
   if ((victim = who_fighting(ch)) == NULL) {
     send_to_char("You aren't fighting anyone.\n\r", ch);
     return;
   }
-  if (!IS_NPC(ch)) {
-    adjcost = 1000 * (ch->ecliptic_meteorpower - ch->ecliptic_meteoreffic);
-    if (adjcost < 1000)
-      adjcost = 1000;
-  } else {
-    adjcost = 1;
-  }
-  if (ch->mana < adjcost) {
-    send_to_char("You don't have enough energy.\n\r", ch);
-    return;
-  }
-  if (!IS_NPC(ch)) {
-    kilimit = ch->train / 10000;
-    kimult = (float)get_curr_int(ch) / 1000 + 1;
-    kicmult = (float)kilimit / 100 + 1;
-    smastery = (float)ch->masteryecliptic_meteor / 10000;
-  }
+  basecost = 500;
+  adjcost = basecost;
+  lowdam = 1000;
+  highdam = 1250;
   hitcheck = number_range(1, 100);
   WAIT_STATE(ch, 8);
   if (hitcheck <= 95) {
-    if (!IS_NPC(ch)) {
-      argdam = ((number_range(100, 125) + (ch->ecliptic_meteorpower * 11)) * (kicmult + smastery));
-      dam = get_attmod(ch, victim) * (argdam * kimult);
-      stat_train(ch, "int", 20);
-      ch->train += 20;
-      ch->masteryecliptic_meteor += 1;
-      ch->energymastery += 6;
-      if (ch->energymastery >= (ch->kspgain * 100)) {
-        pager_printf_color(ch,
-                           "&CYou gained 5 Skill Points!\n\r");
-        ch->sptotal += 5;
-        ch->kspgain += 1;
-      }
-    }
-    if (IS_NPC(ch)) {
-      dam = get_attmod(ch, victim) * (number_range(100, 125) + (get_curr_int(ch) / 40));
-    }
-    if (ch->charge > 0)
-      dam = chargeDamMult(ch, dam);
-
-    act(AT_YELLOW,
-        "You lift your hand high in the sky, a massive aura of crackling energy encompassing your body.",
-        ch, NULL, victim, TO_CHAR);
-    act(AT_YELLOW,
-        "An immense ball of energy forms above you, eclipsing the sky before consuming $N! &W[$t]",
-        ch, num_punct(dam), victim, TO_CHAR);
-    act(AT_YELLOW,
-        "$n lifts $s hand high in the sky, a massive aura of crackling energy encompassing $s body.", ch,
-        NULL, victim, TO_VICT);
-    act(AT_YELLOW,
-        "An immense ball of energy forms above $n, eclipsing the sky before consuming you! &W[$t]",
-        ch, num_punct(dam), victim, TO_VICT);
-    act(AT_YELLOW,
-        "$n lifts $s hand high in the sky, a massive aura of crackling energy encompassing $s body.", ch,
-        NULL, victim, TO_NOTVICT);
-    act(AT_YELLOW,
-        "An immense ball of energy forms above $n, eclipsing the sky before consuming $N! &W[$t]",
-        ch, num_punct(dam), victim, TO_NOTVICT);
-
-    global_retcode = damage(ch, victim, dam, TYPE_HIT);
-  } else {
-    act(AT_YELLOW, "You missed $N with an Ecliptic Meteor ... somehow.", ch,
-        NULL, victim, TO_CHAR);
-    act(AT_YELLOW, "$n misses you with an Ecliptic Meteor ... somehow.", ch, NULL,
-        victim, TO_VICT);
-    act(AT_YELLOW, "$n missed $N with an Ecliptic Meteor ... somehow.", ch, NULL,
-        victim, TO_NOTVICT);
-    global_retcode = damage(ch, victim, 0, TYPE_HIT);
+	if (arg[0] == '\0') {
+	  if (!IS_NPC(ch)) {
+		argdam = (number_range(lowdam, highdam) * (kicmult + smastery));
+		dam = get_attmod(ch, victim) * (argdam * kimult);
+	  }
+	  else if (IS_NPC(ch)) {
+		argdam = number_range(lowdam, highdam);
+		dam = get_attmod(ch, victim) * (argdam + (get_curr_int(ch) / 40));
+	  }
+	  if (dam < 1)
+		dam = 1;
+	  act(AT_YELLOW,"You lift your hand high in the sky, a massive aura of crackling energy encompassing your body.", ch, NULL, victim, TO_CHAR);
+	  act(AT_YELLOW,"An immense ball of energy forms above you, eclipsing the sky before consuming $N! &W[$t]", ch, num_punct(dam), victim, TO_CHAR);
+	  act(AT_YELLOW,"$n lifts $s hand high in the sky, a massive aura of crackling energy encompassing $s body.", ch, NULL, victim, TO_VICT);
+	  act(AT_YELLOW,"An immense ball of energy forms above $n, eclipsing the sky before consuming you! &W[$t]", ch, num_punct(dam), victim, TO_VICT);
+	  act(AT_YELLOW,"$n lifts $s hand high in the sky, a massive aura of crackling energy encompassing $s body.", ch, NULL, victim, TO_NOTVICT);
+	  act(AT_YELLOW,"An immense ball of energy forms above $n, eclipsing the sky before consuming $N! &W[$t]", ch, num_punct(dam), victim, TO_NOTVICT);
+	  if ((ch->mana - adjcost) < 0) {
+		act(AT_LBLUE,"Your Ecliptic Meteor fizzles into nothing!", ch, NULL, victim, TO_CHAR);
+		act(AT_LBLUE,"$n's Ecliptic Meteor fizzles into nothing!", ch, NULL, victim, TO_VICT);
+		act(AT_LBLUE,"$n's Ecliptic Meteor fizzles into nothing!", ch, NULL, victim, TO_NOTVICT);
+		global_retcode = damage(ch, victim, 0, TYPE_HIT);
+		ch->mana = 0;
+	  } else {
+		global_retcode = damage(ch, victim, dam, TYPE_HIT);
+	  }
+	}
+	else if (!str_cmp(arg, "200")) {
+	  if (ch->ecliptic_meteorpower < 1) {
+		send_to_char("You lack the skill.\n\r", ch);
+		return;
+	  }
+	  if (!IS_NPC(ch)) {
+		argdam = (number_range(lowdam * 2, highdam * 2) * (kicmult + smastery));
+		dam = get_attmod(ch, victim) * (argdam * kimult);
+	  }
+	  else if (IS_NPC(ch)) {
+		argdam = number_range(lowdam * 2, highdam * 2);
+		dam = get_attmod(ch, victim) * (argdam + (get_curr_int(ch) / 40));
+	  }
+	  if (dam < 1)
+		dam = 1;
+	  adjcost = basecost * 4;
+	  act(AT_YELLOW,"You lift your hand high in the sky, a massive aura of crackling energy encompassing your body.", ch, NULL, victim, TO_CHAR);
+	  act(AT_YELLOW,"An immense ball of energy forms above you, eclipsing the sky before consuming $N! &W[$t]", ch, num_punct(dam), victim, TO_CHAR);
+	  act(AT_YELLOW,"$n lifts $s hand high in the sky, a massive aura of crackling energy encompassing $s body.", ch, NULL, victim, TO_VICT);
+	  act(AT_YELLOW,"An immense ball of energy forms above $n, eclipsing the sky before consuming you! &W[$t]", ch, num_punct(dam), victim, TO_VICT);
+	  act(AT_YELLOW,"$n lifts $s hand high in the sky, a massive aura of crackling energy encompassing $s body.", ch, NULL, victim, TO_NOTVICT);
+	  act(AT_YELLOW,"An immense ball of energy forms above $n, eclipsing the sky before consuming $N! &W[$t]", ch, num_punct(dam), victim, TO_NOTVICT);
+	  if ((ch->mana - adjcost) < 0) {
+		act(AT_LBLUE,"Your Ecliptic Meteor fizzles into nothing!", ch, NULL, victim, TO_CHAR);
+		act(AT_LBLUE,"$n's Ecliptic Meteor fizzles into nothing!", ch, NULL, victim, TO_VICT);
+		act(AT_LBLUE,"$n's Ecliptic Meteor fizzles into nothing!", ch, NULL, victim, TO_NOTVICT);
+		global_retcode = damage(ch, victim, 0, TYPE_HIT);
+		ch->mana = 0;
+	  } else {
+		global_retcode = damage(ch, victim, dam, TYPE_HIT);
+	  }
+	}
+	else if (!str_cmp(arg, "300")) {
+	  if (ch->ecliptic_meteorpower < 2) {
+		send_to_char("You lack the skill.\n\r", ch);
+		return;
+	  }
+	  if (!IS_NPC(ch)) {
+		argdam = (number_range(lowdam * 3, highdam * 3) * (kicmult + smastery));
+		dam = get_attmod(ch, victim) * (argdam * kimult);
+	  }
+	  else if (IS_NPC(ch)) {
+		argdam = number_range(lowdam * 3, highdam * 3);
+		dam = get_attmod(ch, victim) * (argdam + (get_curr_int(ch) / 40));
+	  }
+	  if (dam < 1)
+		dam = 1;
+	  adjcost = basecost * 16;
+	  act(AT_YELLOW,"You lift your hand high in the sky, a massive aura of crackling energy encompassing your body.", ch, NULL, victim, TO_CHAR);
+	  act(AT_YELLOW,"An immense ball of energy forms above you, eclipsing the sky before consuming $N! &W[$t]", ch, num_punct(dam), victim, TO_CHAR);
+	  act(AT_YELLOW,"$n lifts $s hand high in the sky, a massive aura of crackling energy encompassing $s body.", ch, NULL, victim, TO_VICT);
+	  act(AT_YELLOW,"An immense ball of energy forms above $n, eclipsing the sky before consuming you! &W[$t]", ch, num_punct(dam), victim, TO_VICT);
+	  act(AT_YELLOW,"$n lifts $s hand high in the sky, a massive aura of crackling energy encompassing $s body.", ch, NULL, victim, TO_NOTVICT);
+	  act(AT_YELLOW,"An immense ball of energy forms above $n, eclipsing the sky before consuming $N! &W[$t]", ch, num_punct(dam), victim, TO_NOTVICT);
+	  if ((ch->mana - adjcost) < 0) {
+		act(AT_LBLUE,"Your Ecliptic Meteor fizzles into nothing!", ch, NULL, victim, TO_CHAR);
+		act(AT_LBLUE,"$n's Ecliptic Meteor fizzles into nothing!", ch, NULL, victim, TO_VICT);
+		act(AT_LBLUE,"$n's Ecliptic Meteor fizzles into nothing!", ch, NULL, victim, TO_NOTVICT);
+		global_retcode = damage(ch, victim, 0, TYPE_HIT);
+		ch->mana = 0;
+	  } else {
+		global_retcode = damage(ch, victim, dam, TYPE_HIT);
+	  }
+	}
+	else if (!str_cmp(arg, "400")) {
+	  if (ch->ecliptic_meteorpower < 3) {
+		send_to_char("You lack the skill.\n\r", ch);
+		return;
+	  }
+	  if (!IS_NPC(ch)) {
+		argdam = (number_range(lowdam * 4, highdam * 4) * (kicmult + smastery));
+		dam = get_attmod(ch, victim) * (argdam * kimult);
+	  }
+	  else if (IS_NPC(ch)) {
+		argdam = number_range(lowdam * 4, highdam * 4);
+		dam = get_attmod(ch, victim) * (argdam + (get_curr_int(ch) / 40));
+	  }
+	  if (dam < 1)
+		dam = 1;
+	  adjcost = basecost * 64;
+	  act(AT_YELLOW,"You lift your hand high in the sky, a massive aura of crackling energy encompassing your body.", ch, NULL, victim, TO_CHAR);
+	  act(AT_YELLOW,"An immense ball of energy forms above you, eclipsing the sky before consuming $N! &W[$t]", ch, num_punct(dam), victim, TO_CHAR);
+	  act(AT_YELLOW,"$n lifts $s hand high in the sky, a massive aura of crackling energy encompassing $s body.", ch, NULL, victim, TO_VICT);
+	  act(AT_YELLOW,"An immense ball of energy forms above $n, eclipsing the sky before consuming you! &W[$t]", ch, num_punct(dam), victim, TO_VICT);
+	  act(AT_YELLOW,"$n lifts $s hand high in the sky, a massive aura of crackling energy encompassing $s body.", ch, NULL, victim, TO_NOTVICT);
+	  act(AT_YELLOW,"An immense ball of energy forms above $n, eclipsing the sky before consuming $N! &W[$t]", ch, num_punct(dam), victim, TO_NOTVICT);
+	  if ((ch->mana - adjcost) < 0) {
+		act(AT_LBLUE,"Your Ecliptic Meteor fizzles into nothing!", ch, NULL, victim, TO_CHAR);
+		act(AT_LBLUE,"$n's Ecliptic Meteor fizzles into nothing!", ch, NULL, victim, TO_VICT);
+		act(AT_LBLUE,"$n's Ecliptic Meteor fizzles into nothing!", ch, NULL, victim, TO_NOTVICT);
+		global_retcode = damage(ch, victim, 0, TYPE_HIT);
+		ch->mana = 0;
+	  } else {
+		global_retcode = damage(ch, victim, dam, TYPE_HIT);
+	  }
+	}
+	else if (!str_cmp(arg, "500")) {
+	  if (ch->ecliptic_meteorpower < 4) {
+		send_to_char("You lack the skill.\n\r", ch);
+		return;
+	  }
+	  if (!IS_NPC(ch)) {
+		argdam = (number_range(lowdam * 5, highdam * 5) * (kicmult + smastery));
+		dam = get_attmod(ch, victim) * (argdam * kimult);
+	  }
+	  else if (IS_NPC(ch)) {
+		argdam = number_range(lowdam * 5, highdam * 5);
+		dam = get_attmod(ch, victim) * (argdam + (get_curr_int(ch) / 40));
+	  }
+	  if (dam < 1)
+		dam = 1;
+	  adjcost = basecost * 256;
+	  act(AT_YELLOW,"You lift your hand high in the sky, a massive aura of crackling energy encompassing your body.", ch, NULL, victim, TO_CHAR);
+	  act(AT_YELLOW,"An immense ball of energy forms above you, eclipsing the sky before consuming $N! &W[$t]", ch, num_punct(dam), victim, TO_CHAR);
+	  act(AT_YELLOW,"$n lifts $s hand high in the sky, a massive aura of crackling energy encompassing $s body.", ch, NULL, victim, TO_VICT);
+	  act(AT_YELLOW,"An immense ball of energy forms above $n, eclipsing the sky before consuming you! &W[$t]", ch, num_punct(dam), victim, TO_VICT);
+	  act(AT_YELLOW,"$n lifts $s hand high in the sky, a massive aura of crackling energy encompassing $s body.", ch, NULL, victim, TO_NOTVICT);
+	  act(AT_YELLOW,"An immense ball of energy forms above $n, eclipsing the sky before consuming $N! &W[$t]", ch, num_punct(dam), victim, TO_NOTVICT);
+	  if ((ch->mana - adjcost) < 0) {
+		act(AT_LBLUE,"Your Ecliptic Meteor fizzles into nothing!", ch, NULL, victim, TO_CHAR);
+		act(AT_LBLUE,"$n's Ecliptic Meteor fizzles into nothing!", ch, NULL, victim, TO_VICT);
+		act(AT_LBLUE,"$n's Ecliptic Meteor fizzles into nothing!", ch, NULL, victim, TO_NOTVICT);
+		global_retcode = damage(ch, victim, 0, TYPE_HIT);
+		ch->mana = 0;
+	  } else {
+		global_retcode = damage(ch, victim, dam, TYPE_HIT);
+	  }
+	}
+	else {
+		send_to_char("Only increments of 200-500.\n\r", ch);
+		return;
+	}
   }
-  ch->mana -= adjcost;
+  else {
+	act(AT_LBLUE, "You missed $N with an Ecliptic Meteor ... somehow.", ch, NULL, victim, TO_CHAR);
+	act(AT_LBLUE, "$n misses you with $s Ecliptic Meteor ... somehow.", ch, NULL, victim, TO_VICT);
+	act(AT_LBLUE, "$n missed $N with $s Ecliptic Meteor ... somehow.", ch, NULL, victim, TO_NOTVICT);
+	global_retcode = damage(ch, victim, 0, TYPE_HIT);
+  }
+  if (!IS_NPC(ch) && ch->mana != 0) {
+	// train player masteries, no benefit from spamming at no ki
+	stat_train(ch, "int", 20);
+	ch->train += 20;
+	ch->masteryecliptic_meteor += 1;
+	ch->energymastery += 6;
+	if (ch->energymastery >= (ch->kspgain * 100)) {
+	  pager_printf_color(ch,"&CYou gained 5 Skill Points!\n\r");
+	  ch->sptotal += 5;
+	  ch->kspgain += 1;
+	}
+  }
+  if ((ch->mana - adjcost) < 0)
+	ch->mana = 0;
+  else
+	ch->mana -= adjcost;
   return;
 }
 
@@ -6487,8 +7523,14 @@ void do_gigantic_meteor(CHAR_DATA *ch, char *argument) {
   int kilimit = 0;
   int hitcheck = 0;
   int adjcost = 0;
+  int basecost = 0;
   float smastery = 0;
+  int lowdam = 0;
+  int highdam = 0;
+  char arg[MAX_INPUT_LENGTH];
 
+  argument = one_argument(argument, arg);
+  
   if (IS_NPC(ch) && is_split(ch)) {
     if (!ch->master)
       return;
@@ -6501,80 +7543,207 @@ void do_gigantic_meteor(CHAR_DATA *ch, char *argument) {
     send_to_char("You're not able to use that skill.\n\r", ch);
     return;
   }
+  if (!IS_NPC(ch)) {
+	kilimit = ch->train / 10000;
+	kimult = (float)get_curr_int(ch) / 1000 + 1;
+	kicmult = (float)kilimit / 100 + 1;
+	smastery = (float)ch->masterygigantic_meteor / 10000;
+	if (smastery > 10)
+	  smastery = 10;
+  }
   if ((victim = who_fighting(ch)) == NULL) {
     send_to_char("You aren't fighting anyone.\n\r", ch);
     return;
   }
-  if (!IS_NPC(ch)) {
-    adjcost = 250 * (ch->gigantic_meteorpower - ch->gigantic_meteoreffic);
-    if (adjcost < 250)
-      adjcost = 250;
-  } else {
-    adjcost = 1;
-  }
-  if (ch->mana < adjcost) {
-    send_to_char("You don't have enough energy.\n\r", ch);
-    return;
-  }
-  if (!IS_NPC(ch)) {
-    kilimit = ch->train / 10000;
-    kimult = (float)get_curr_int(ch) / 1000 + 1;
-    kicmult = (float)kilimit / 100 + 1;
-    smastery = (float)ch->masterygigantic_meteor / 10000;
-  }
+  basecost = 250;
+  adjcost = basecost;
+  lowdam = 700;
+  highdam = 750;
   hitcheck = number_range(1, 100);
   WAIT_STATE(ch, 8);
   if (hitcheck <= 95) {
-    if (!IS_NPC(ch)) {
-      argdam = ((number_range(70, 75) + (ch->gigantic_meteorpower * 7)) * (kicmult + smastery));
-      dam = get_attmod(ch, victim) * (argdam * kimult);
-      stat_train(ch, "int", 12);
-      ch->train += 12;
-      ch->masterygigantic_meteor += 1;
-      ch->energymastery += 5;
-      if (ch->energymastery >= (ch->kspgain * 100)) {
-        pager_printf_color(ch,
-                           "&CYou gained 5 Skill Points!\n\r");
-        ch->sptotal += 5;
-        ch->kspgain += 1;
-      }
-    }
-    if (IS_NPC(ch)) {
-      dam = get_attmod(ch, victim) * (number_range(70, 75) + (get_curr_int(ch) / 40));
-    }
-    if (ch->charge > 0)
-      dam = chargeDamMult(ch, dam);
-
-    act(AT_YELLOW,
-        "You lift your hand high in the sky, an aura of crackling energy encompassing your body.",
-        ch, NULL, victim, TO_CHAR);
-    act(AT_YELLOW,
-        "A giant ball of energy forms above you, trapping $N in a massive explosion! &W[$t]",
-        ch, num_punct(dam), victim, TO_CHAR);
-    act(AT_YELLOW,
-        "$n lifts $s hand high in the sky, an aura of crackling energy encompassing $s body.", ch,
-        NULL, victim, TO_VICT);
-    act(AT_YELLOW,
-        "A giant ball of energy forms above $n, trapping you in a massive explosion! &W[$t]",
-        ch, num_punct(dam), victim, TO_VICT);
-    act(AT_YELLOW,
-        "$n lifts $s hand high in the sky, an aura of crackling energy encompassing $s body.", ch,
-        NULL, victim, TO_NOTVICT);
-    act(AT_YELLOW,
-        "A giant ball of energy forms above $n, trapping $N in a massive explosion! &W[$t]",
-        ch, num_punct(dam), victim, TO_NOTVICT);
-
-    global_retcode = damage(ch, victim, dam, TYPE_HIT);
-  } else {
-    act(AT_YELLOW, "You missed $N with a Gigantic Meteor ... somehow.", ch,
-        NULL, victim, TO_CHAR);
-    act(AT_YELLOW, "$n misses you with a Gigantic Meteor ... somehow.", ch, NULL,
-        victim, TO_VICT);
-    act(AT_YELLOW, "$n missed $N with a Gigantic Meteor ... somehow.", ch, NULL,
-        victim, TO_NOTVICT);
-    global_retcode = damage(ch, victim, 0, TYPE_HIT);
+	if (arg[0] == '\0') {
+	  if (!IS_NPC(ch)) {
+		argdam = (number_range(lowdam, highdam) * (kicmult + smastery));
+		dam = get_attmod(ch, victim) * (argdam * kimult);
+	  }
+	  else if (IS_NPC(ch)) {
+		argdam = number_range(lowdam, highdam);
+		dam = get_attmod(ch, victim) * (argdam + (get_curr_int(ch) / 40));
+	  }
+	  if (dam < 1)
+		dam = 1;
+	  act(AT_YELLOW,"You lift your hand high in the sky, an aura of crackling energy encompassing your body.", ch, NULL, victim, TO_CHAR);
+	  act(AT_YELLOW,"A giant ball of energy forms above you, trapping $N in a massive explosion! &W[$t]", ch, num_punct(dam), victim, TO_CHAR);
+	  act(AT_YELLOW,"$n lifts $s hand high in the sky, an aura of crackling energy encompassing $s body.", ch, NULL, victim, TO_VICT);
+	  act(AT_YELLOW,"A giant ball of energy forms above $n, trapping you in a massive explosion! &W[$t]", ch, num_punct(dam), victim, TO_VICT);
+	  act(AT_YELLOW,"$n lifts $s hand high in the sky, an aura of crackling energy encompassing $s body.", ch, NULL, victim, TO_NOTVICT);
+	  act(AT_YELLOW,"A giant ball of energy forms above $n, trapping $N in a massive explosion! &W[$t]", ch, num_punct(dam), victim, TO_NOTVICT);
+	  if ((ch->mana - adjcost) < 0) {
+		act(AT_LBLUE,"Your Gigantic Meteor fizzles into nothing!", ch, NULL, victim, TO_CHAR);
+		act(AT_LBLUE,"$n's Gigantic Meteor fizzles into nothing!", ch, NULL, victim, TO_VICT);
+		act(AT_LBLUE,"$n's Gigantic Meteor fizzles into nothing!", ch, NULL, victim, TO_NOTVICT);
+		global_retcode = damage(ch, victim, 0, TYPE_HIT);
+		ch->mana = 0;
+	  } else {
+		global_retcode = damage(ch, victim, dam, TYPE_HIT);
+	  }
+	}
+	else if (!str_cmp(arg, "200")) {
+	  if (ch->gigantic_meteorpower < 1) {
+		send_to_char("You lack the skill.\n\r", ch);
+		return;
+	  }
+	  if (!IS_NPC(ch)) {
+		argdam = (number_range(lowdam * 2, highdam * 2) * (kicmult + smastery));
+		dam = get_attmod(ch, victim) * (argdam * kimult);
+	  }
+	  else if (IS_NPC(ch)) {
+		argdam = number_range(lowdam * 2, highdam * 2);
+		dam = get_attmod(ch, victim) * (argdam + (get_curr_int(ch) / 40));
+	  }
+	  if (dam < 1)
+		dam = 1;
+	  adjcost = basecost * 4;
+	  act(AT_YELLOW,"You lift your hand high in the sky, an aura of crackling energy encompassing your body.", ch, NULL, victim, TO_CHAR);
+	  act(AT_YELLOW,"A giant ball of energy forms above you, trapping $N in a massive explosion! &W[$t]", ch, num_punct(dam), victim, TO_CHAR);
+	  act(AT_YELLOW,"$n lifts $s hand high in the sky, an aura of crackling energy encompassing $s body.", ch, NULL, victim, TO_VICT);
+	  act(AT_YELLOW,"A giant ball of energy forms above $n, trapping you in a massive explosion! &W[$t]", ch, num_punct(dam), victim, TO_VICT);
+	  act(AT_YELLOW,"$n lifts $s hand high in the sky, an aura of crackling energy encompassing $s body.", ch, NULL, victim, TO_NOTVICT);
+	  act(AT_YELLOW,"A giant ball of energy forms above $n, trapping $N in a massive explosion! &W[$t]", ch, num_punct(dam), victim, TO_NOTVICT);
+	  if ((ch->mana - adjcost) < 0) {
+		act(AT_LBLUE,"Your Gigantic Meteor fizzles into nothing!", ch, NULL, victim, TO_CHAR);
+		act(AT_LBLUE,"$n's Gigantic Meteor fizzles into nothing!", ch, NULL, victim, TO_VICT);
+		act(AT_LBLUE,"$n's Gigantic Meteor fizzles into nothing!", ch, NULL, victim, TO_NOTVICT);
+		global_retcode = damage(ch, victim, 0, TYPE_HIT);
+		ch->mana = 0;
+	  } else {
+		global_retcode = damage(ch, victim, dam, TYPE_HIT);
+	  }
+	}
+	else if (!str_cmp(arg, "300")) {
+	  if (ch->gigantic_meteorpower < 2) {
+		send_to_char("You lack the skill.\n\r", ch);
+		return;
+	  }
+	  if (!IS_NPC(ch)) {
+		argdam = (number_range(lowdam * 3, highdam * 3) * (kicmult + smastery));
+		dam = get_attmod(ch, victim) * (argdam * kimult);
+	  }
+	  else if (IS_NPC(ch)) {
+		argdam = number_range(lowdam * 3, highdam * 3);
+		dam = get_attmod(ch, victim) * (argdam + (get_curr_int(ch) / 40));
+	  }
+	  if (dam < 1)
+		dam = 1;
+	  adjcost = basecost * 16;
+	  act(AT_YELLOW,"You lift your hand high in the sky, an aura of crackling energy encompassing your body.", ch, NULL, victim, TO_CHAR);
+	  act(AT_YELLOW,"A giant ball of energy forms above you, trapping $N in a massive explosion! &W[$t]", ch, num_punct(dam), victim, TO_CHAR);
+	  act(AT_YELLOW,"$n lifts $s hand high in the sky, an aura of crackling energy encompassing $s body.", ch, NULL, victim, TO_VICT);
+	  act(AT_YELLOW,"A giant ball of energy forms above $n, trapping you in a massive explosion! &W[$t]", ch, num_punct(dam), victim, TO_VICT);
+	  act(AT_YELLOW,"$n lifts $s hand high in the sky, an aura of crackling energy encompassing $s body.", ch, NULL, victim, TO_NOTVICT);
+	  act(AT_YELLOW,"A giant ball of energy forms above $n, trapping $N in a massive explosion! &W[$t]", ch, num_punct(dam), victim, TO_NOTVICT);
+	  if ((ch->mana - adjcost) < 0) {
+		act(AT_LBLUE,"Your Gigantic Meteor fizzles into nothing!", ch, NULL, victim, TO_CHAR);
+		act(AT_LBLUE,"$n's Gigantic Meteor fizzles into nothing!", ch, NULL, victim, TO_VICT);
+		act(AT_LBLUE,"$n's Gigantic Meteor fizzles into nothing!", ch, NULL, victim, TO_NOTVICT);
+		global_retcode = damage(ch, victim, 0, TYPE_HIT);
+		ch->mana = 0;
+	  } else {
+		global_retcode = damage(ch, victim, dam, TYPE_HIT);
+	  }
+	}
+	else if (!str_cmp(arg, "400")) {
+	  if (ch->gigantic_meteorpower < 3) {
+		send_to_char("You lack the skill.\n\r", ch);
+		return;
+	  }
+	  if (!IS_NPC(ch)) {
+		argdam = (number_range(lowdam * 4, highdam * 4) * (kicmult + smastery));
+		dam = get_attmod(ch, victim) * (argdam * kimult);
+	  }
+	  else if (IS_NPC(ch)) {
+		argdam = number_range(lowdam * 4, highdam * 4);
+		dam = get_attmod(ch, victim) * (argdam + (get_curr_int(ch) / 40));
+	  }
+	  if (dam < 1)
+		dam = 1;
+	  adjcost = basecost * 64;
+	  act(AT_YELLOW,"You lift your hand high in the sky, an aura of crackling energy encompassing your body.", ch, NULL, victim, TO_CHAR);
+	  act(AT_YELLOW,"A giant ball of energy forms above you, trapping $N in a massive explosion! &W[$t]", ch, num_punct(dam), victim, TO_CHAR);
+	  act(AT_YELLOW,"$n lifts $s hand high in the sky, an aura of crackling energy encompassing $s body.", ch, NULL, victim, TO_VICT);
+	  act(AT_YELLOW,"A giant ball of energy forms above $n, trapping you in a massive explosion! &W[$t]", ch, num_punct(dam), victim, TO_VICT);
+	  act(AT_YELLOW,"$n lifts $s hand high in the sky, an aura of crackling energy encompassing $s body.", ch, NULL, victim, TO_NOTVICT);
+	  act(AT_YELLOW,"A giant ball of energy forms above $n, trapping $N in a massive explosion! &W[$t]", ch, num_punct(dam), victim, TO_NOTVICT);
+	  if ((ch->mana - adjcost) < 0) {
+		act(AT_LBLUE,"Your Gigantic Meteor fizzles into nothing!", ch, NULL, victim, TO_CHAR);
+		act(AT_LBLUE,"$n's Gigantic Meteor fizzles into nothing!", ch, NULL, victim, TO_VICT);
+		act(AT_LBLUE,"$n's Gigantic Meteor fizzles into nothing!", ch, NULL, victim, TO_NOTVICT);
+		global_retcode = damage(ch, victim, 0, TYPE_HIT);
+		ch->mana = 0;
+	  } else {
+		global_retcode = damage(ch, victim, dam, TYPE_HIT);
+	  }
+	}
+	else if (!str_cmp(arg, "500")) {
+	  if (ch->gigantic_meteorpower < 4) {
+		send_to_char("You lack the skill.\n\r", ch);
+		return;
+	  }
+	  if (!IS_NPC(ch)) {
+		argdam = (number_range(lowdam * 5, highdam * 5) * (kicmult + smastery));
+		dam = get_attmod(ch, victim) * (argdam * kimult);
+	  }
+	  else if (IS_NPC(ch)) {
+		argdam = number_range(lowdam * 5, highdam * 5);
+		dam = get_attmod(ch, victim) * (argdam + (get_curr_int(ch) / 40));
+	  }
+	  if (dam < 1)
+		dam = 1;
+	  adjcost = basecost * 256;
+	  act(AT_YELLOW,"You lift your hand high in the sky, an aura of crackling energy encompassing your body.", ch, NULL, victim, TO_CHAR);
+	  act(AT_YELLOW,"A giant ball of energy forms above you, trapping $N in a massive explosion! &W[$t]", ch, num_punct(dam), victim, TO_CHAR);
+	  act(AT_YELLOW,"$n lifts $s hand high in the sky, an aura of crackling energy encompassing $s body.", ch, NULL, victim, TO_VICT);
+	  act(AT_YELLOW,"A giant ball of energy forms above $n, trapping you in a massive explosion! &W[$t]", ch, num_punct(dam), victim, TO_VICT);
+	  act(AT_YELLOW,"$n lifts $s hand high in the sky, an aura of crackling energy encompassing $s body.", ch, NULL, victim, TO_NOTVICT);
+	  act(AT_YELLOW,"A giant ball of energy forms above $n, trapping $N in a massive explosion! &W[$t]", ch, num_punct(dam), victim, TO_NOTVICT);
+	  if ((ch->mana - adjcost) < 0) {
+		act(AT_LBLUE,"Your Gigantic Meteor fizzles into nothing!", ch, NULL, victim, TO_CHAR);
+		act(AT_LBLUE,"$n's Gigantic Meteor fizzles into nothing!", ch, NULL, victim, TO_VICT);
+		act(AT_LBLUE,"$n's Gigantic Meteor fizzles into nothing!", ch, NULL, victim, TO_NOTVICT);
+		global_retcode = damage(ch, victim, 0, TYPE_HIT);
+		ch->mana = 0;
+	  } else {
+		global_retcode = damage(ch, victim, dam, TYPE_HIT);
+	  }
+	}
+	else {
+		send_to_char("Only increments of 200-500.\n\r", ch);
+		return;
+	}
   }
-  ch->mana -= adjcost;
+  else {
+	act(AT_LBLUE, "You missed $N with a Gigantic Meteor ... somehow.", ch, NULL, victim, TO_CHAR);
+	act(AT_LBLUE, "$n misses you with $s Gigantic Meteor ... somehow.", ch, NULL, victim, TO_VICT);
+	act(AT_LBLUE, "$n missed $N with $s Gigantic Meteor ... somehow.", ch, NULL, victim, TO_NOTVICT);
+	global_retcode = damage(ch, victim, 0, TYPE_HIT);
+  }
+  if (!IS_NPC(ch) && ch->mana != 0) {
+	// train player masteries, no benefit from spamming at no ki
+	stat_train(ch, "int", 12);
+	ch->train += 12;
+	ch->masterygigantic_meteor += 1;
+	ch->energymastery += 5;
+	if (ch->energymastery >= (ch->kspgain * 100)) {
+	  pager_printf_color(ch,"&CYou gained 5 Skill Points!\n\r");
+	  ch->sptotal += 5;
+	  ch->kspgain += 1;
+	}
+  }
+  if ((ch->mana - adjcost) < 0)
+	ch->mana = 0;
+  else
+	ch->mana -= adjcost;
   return;
 }
 
@@ -6587,8 +7756,14 @@ void do_meteor(CHAR_DATA *ch, char *argument) {
   int kilimit = 0;
   int hitcheck = 0;
   int adjcost = 0;
+  int basecost = 0;
   float smastery = 0;
+  int lowdam = 0;
+  int highdam = 0;
+  char arg[MAX_INPUT_LENGTH];
 
+  argument = one_argument(argument, arg);
+  
   if (IS_NPC(ch) && is_split(ch)) {
     if (!ch->master)
       return;
@@ -6601,80 +7776,207 @@ void do_meteor(CHAR_DATA *ch, char *argument) {
     send_to_char("You're not able to use that skill.\n\r", ch);
     return;
   }
+  if (!IS_NPC(ch)) {
+	kilimit = ch->train / 10000;
+	kimult = (float)get_curr_int(ch) / 1000 + 1;
+	kicmult = (float)kilimit / 100 + 1;
+	smastery = (float)ch->masterymeteor / 10000;
+	if (smastery > 10)
+	  smastery = 10;
+  }
   if ((victim = who_fighting(ch)) == NULL) {
     send_to_char("You aren't fighting anyone.\n\r", ch);
     return;
   }
-  if (!IS_NPC(ch)) {
-    adjcost = 125 * (ch->meteorpower - ch->meteoreffic);
-    if (adjcost < 125)
-      adjcost = 125;
-  } else {
-    adjcost = 1;
-  }
-  if (ch->mana < adjcost) {
-    send_to_char("You don't have enough energy.\n\r", ch);
-    return;
-  }
-  if (!IS_NPC(ch)) {
-    kilimit = ch->train / 10000;
-    kimult = (float)get_curr_int(ch) / 1000 + 1;
-    kicmult = (float)kilimit / 100 + 1;
-    smastery = (float)ch->masterymeteor / 10000;
-  }
+  basecost = 100;
+  adjcost = basecost;
+  lowdam = 300;
+  highdam = 350;
   hitcheck = number_range(1, 100);
   WAIT_STATE(ch, 8);
   if (hitcheck <= 95) {
-    if (!IS_NPC(ch)) {
-      argdam = ((number_range(30, 35) + (ch->meteorpower * 3)) * (kicmult + smastery));
-      dam = get_attmod(ch, victim) * (argdam * kimult);
-      stat_train(ch, "int", 8);
-      ch->train += 8;
-      ch->masterymeteor += 1;
-      ch->energymastery += 4;
-      if (ch->energymastery >= (ch->kspgain * 100)) {
-        pager_printf_color(ch,
-                           "&CYou gained 5 Skill Points!\n\r");
-        ch->sptotal += 5;
-        ch->kspgain += 1;
-      }
-    }
-    if (IS_NPC(ch)) {
-      dam = get_attmod(ch, victim) * (number_range(30, 35) + (get_curr_int(ch) / 40));
-    }
-    if (ch->charge > 0)
-      dam = chargeDamMult(ch, dam);
-
-    act(AT_YELLOW,
-        "You pull back an arm and focus, drawing ki into your open palm.",
-        ch, NULL, victim, TO_CHAR);
-    act(AT_YELLOW,
-        "You crash your palm into $N, detonating the blast and sending $M flying! &W[$t]",
-        ch, num_punct(dam), victim, TO_CHAR);
-    act(AT_YELLOW,
-        "$n pulls back an arm and focuses, drawing ki into $s open palm.", ch,
-        NULL, victim, TO_VICT);
-    act(AT_YELLOW,
-        "$n crashes $s palm into you, detonating the blast and sending you flying! &W[$t]",
-        ch, num_punct(dam), victim, TO_VICT);
-    act(AT_YELLOW,
-        "$n pulls back an arm and focuses, drawing ki into $s open palm.", ch,
-        NULL, victim, TO_NOTVICT);
-    act(AT_YELLOW,
-        "$n crashes $s palm into $N, detonating the blast and sending $N flying! &W[$t]",
-        ch, num_punct(dam), victim, TO_NOTVICT);
-
-    global_retcode = damage(ch, victim, dam, TYPE_HIT);
-  } else {
-    act(AT_YELLOW, "You missed $N with a meteor attack.", ch,
-        NULL, victim, TO_CHAR);
-    act(AT_YELLOW, "$n misses you with a meteor attack.", ch, NULL,
-        victim, TO_VICT);
-    act(AT_YELLOW, "$n missed $N with a meteor attack.", ch, NULL,
-        victim, TO_NOTVICT);
-    global_retcode = damage(ch, victim, 0, TYPE_HIT);
+	if (arg[0] == '\0') {
+	  if (!IS_NPC(ch)) {
+		argdam = (number_range(lowdam, highdam) * (kicmult + smastery));
+		dam = get_attmod(ch, victim) * (argdam * kimult);
+	  }
+	  else if (IS_NPC(ch)) {
+		argdam = number_range(lowdam, highdam);
+		dam = get_attmod(ch, victim) * (argdam + (get_curr_int(ch) / 40));
+	  }
+	  if (dam < 1)
+		dam = 1;
+	  act(AT_YELLOW,"You pull back an arm and focus, drawing ki into your open palm.", ch, NULL, victim, TO_CHAR);
+	  act(AT_YELLOW,"You crash your palm into $N, detonating the blast and sending $M flying! &W[$t]", ch, num_punct(dam), victim, TO_CHAR);
+	  act(AT_YELLOW,"$n pulls back an arm and focuses, drawing ki into $s open palm.", ch, NULL, victim, TO_VICT);
+	  act(AT_YELLOW,"$n crashes $s palm into you, detonating the blast and sending you flying! &W[$t]", ch, num_punct(dam), victim, TO_VICT);
+	  act(AT_YELLOW,"$n pulls back an arm and focuses, drawing ki into $s open palm.", ch, NULL, victim, TO_NOTVICT);
+	  act(AT_YELLOW,"$n crashes $s palm into $N, detonating the blast and sending $N flying! &W[$t]", ch, num_punct(dam), victim, TO_NOTVICT);
+	  if ((ch->mana - adjcost) < 0) {
+		act(AT_LBLUE,"Your mass of ki fizzles into nothing!", ch, NULL, victim, TO_CHAR);
+		act(AT_LBLUE,"$n's mass of ki fizzles into nothing!", ch, NULL, victim, TO_VICT);
+		act(AT_LBLUE,"$n's mass of ki fizzles into nothing!", ch, NULL, victim, TO_NOTVICT);
+		global_retcode = damage(ch, victim, 0, TYPE_HIT);
+		ch->mana = 0;
+	  } else {
+		global_retcode = damage(ch, victim, dam, TYPE_HIT);
+	  }
+	}
+	else if (!str_cmp(arg, "200")) {
+	  if (ch->meteorpower < 1) {
+		send_to_char("You lack the skill.\n\r", ch);
+		return;
+	  }
+	  if (!IS_NPC(ch)) {
+		argdam = (number_range(lowdam * 2, highdam * 2) * (kicmult + smastery));
+		dam = get_attmod(ch, victim) * (argdam * kimult);
+	  }
+	  else if (IS_NPC(ch)) {
+		argdam = number_range(lowdam * 2, highdam * 2);
+		dam = get_attmod(ch, victim) * (argdam + (get_curr_int(ch) / 40));
+	  }
+	  if (dam < 1)
+		dam = 1;
+	  adjcost = basecost * 4;
+	  act(AT_YELLOW,"You pull back an arm and focus, drawing ki into your open palm.", ch, NULL, victim, TO_CHAR);
+	  act(AT_YELLOW,"You crash your palm into $N, detonating the blast and sending $M flying! &W[$t]", ch, num_punct(dam), victim, TO_CHAR);
+	  act(AT_YELLOW,"$n pulls back an arm and focuses, drawing ki into $s open palm.", ch, NULL, victim, TO_VICT);
+	  act(AT_YELLOW,"$n crashes $s palm into you, detonating the blast and sending you flying! &W[$t]", ch, num_punct(dam), victim, TO_VICT);
+	  act(AT_YELLOW,"$n pulls back an arm and focuses, drawing ki into $s open palm.", ch, NULL, victim, TO_NOTVICT);
+	  act(AT_YELLOW,"$n crashes $s palm into $N, detonating the blast and sending $N flying! &W[$t]", ch, num_punct(dam), victim, TO_NOTVICT);
+	  if ((ch->mana - adjcost) < 0) {
+		act(AT_LBLUE,"Your mass of ki fizzles into nothing!", ch, NULL, victim, TO_CHAR);
+		act(AT_LBLUE,"$n's mass of ki fizzles into nothing!", ch, NULL, victim, TO_VICT);
+		act(AT_LBLUE,"$n's mass of ki fizzles into nothing!", ch, NULL, victim, TO_NOTVICT);
+		global_retcode = damage(ch, victim, 0, TYPE_HIT);
+		ch->mana = 0;
+	  } else {
+		global_retcode = damage(ch, victim, dam, TYPE_HIT);
+	  }
+	}
+	else if (!str_cmp(arg, "300")) {
+	  if (ch->meteorpower < 2) {
+		send_to_char("You lack the skill.\n\r", ch);
+		return;
+	  }
+	  if (!IS_NPC(ch)) {
+		argdam = (number_range(lowdam * 3, highdam * 3) * (kicmult + smastery));
+		dam = get_attmod(ch, victim) * (argdam * kimult);
+	  }
+	  else if (IS_NPC(ch)) {
+		argdam = number_range(lowdam * 3, highdam * 3);
+		dam = get_attmod(ch, victim) * (argdam + (get_curr_int(ch) / 40));
+	  }
+	  if (dam < 1)
+		dam = 1;
+	  adjcost = basecost * 16;
+	  act(AT_YELLOW,"You pull back an arm and focus, drawing ki into your open palm.", ch, NULL, victim, TO_CHAR);
+	  act(AT_YELLOW,"You crash your palm into $N, detonating the blast and sending $M flying! &W[$t]", ch, num_punct(dam), victim, TO_CHAR);
+	  act(AT_YELLOW,"$n pulls back an arm and focuses, drawing ki into $s open palm.", ch, NULL, victim, TO_VICT);
+	  act(AT_YELLOW,"$n crashes $s palm into you, detonating the blast and sending you flying! &W[$t]", ch, num_punct(dam), victim, TO_VICT);
+	  act(AT_YELLOW,"$n pulls back an arm and focuses, drawing ki into $s open palm.", ch, NULL, victim, TO_NOTVICT);
+	  act(AT_YELLOW,"$n crashes $s palm into $N, detonating the blast and sending $N flying! &W[$t]", ch, num_punct(dam), victim, TO_NOTVICT);
+	  if ((ch->mana - adjcost) < 0) {
+		act(AT_LBLUE,"Your mass of ki fizzles into nothing!", ch, NULL, victim, TO_CHAR);
+		act(AT_LBLUE,"$n's mass of ki fizzles into nothing!", ch, NULL, victim, TO_VICT);
+		act(AT_LBLUE,"$n's mass of ki fizzles into nothing!", ch, NULL, victim, TO_NOTVICT);
+		global_retcode = damage(ch, victim, 0, TYPE_HIT);
+		ch->mana = 0;
+	  } else {
+		global_retcode = damage(ch, victim, dam, TYPE_HIT);
+	  }
+	}
+	else if (!str_cmp(arg, "400")) {
+	  if (ch->meteorpower < 3) {
+		send_to_char("You lack the skill.\n\r", ch);
+		return;
+	  }
+	  if (!IS_NPC(ch)) {
+		argdam = (number_range(lowdam * 4, highdam * 4) * (kicmult + smastery));
+		dam = get_attmod(ch, victim) * (argdam * kimult);
+	  }
+	  else if (IS_NPC(ch)) {
+		argdam = number_range(lowdam * 4, highdam * 4);
+		dam = get_attmod(ch, victim) * (argdam + (get_curr_int(ch) / 40));
+	  }
+	  if (dam < 1)
+		dam = 1;
+	  adjcost = basecost * 64;
+	  act(AT_YELLOW,"You pull back an arm and focus, drawing ki into your open palm.", ch, NULL, victim, TO_CHAR);
+	  act(AT_YELLOW,"You crash your palm into $N, detonating the blast and sending $M flying! &W[$t]", ch, num_punct(dam), victim, TO_CHAR);
+	  act(AT_YELLOW,"$n pulls back an arm and focuses, drawing ki into $s open palm.", ch, NULL, victim, TO_VICT);
+	  act(AT_YELLOW,"$n crashes $s palm into you, detonating the blast and sending you flying! &W[$t]", ch, num_punct(dam), victim, TO_VICT);
+	  act(AT_YELLOW,"$n pulls back an arm and focuses, drawing ki into $s open palm.", ch, NULL, victim, TO_NOTVICT);
+	  act(AT_YELLOW,"$n crashes $s palm into $N, detonating the blast and sending $N flying! &W[$t]", ch, num_punct(dam), victim, TO_NOTVICT);
+	  if ((ch->mana - adjcost) < 0) {
+		act(AT_LBLUE,"Your mass of ki fizzles into nothing!", ch, NULL, victim, TO_CHAR);
+		act(AT_LBLUE,"$n's mass of ki fizzles into nothing!", ch, NULL, victim, TO_VICT);
+		act(AT_LBLUE,"$n's mass of ki fizzles into nothing!", ch, NULL, victim, TO_NOTVICT);
+		global_retcode = damage(ch, victim, 0, TYPE_HIT);
+		ch->mana = 0;
+	  } else {
+		global_retcode = damage(ch, victim, dam, TYPE_HIT);
+	  }
+	}
+	else if (!str_cmp(arg, "500")) {
+	  if (ch->meteorpower < 4) {
+		send_to_char("You lack the skill.\n\r", ch);
+		return;
+	  }
+	  if (!IS_NPC(ch)) {
+		argdam = (number_range(lowdam * 5, highdam * 5) * (kicmult + smastery));
+		dam = get_attmod(ch, victim) * (argdam * kimult);
+	  }
+	  else if (IS_NPC(ch)) {
+		argdam = number_range(lowdam * 5, highdam * 5);
+		dam = get_attmod(ch, victim) * (argdam + (get_curr_int(ch) / 40));
+	  }
+	  if (dam < 1)
+		dam = 1;
+	  adjcost = basecost * 256;
+	  act(AT_YELLOW,"You pull back an arm and focus, drawing ki into your open palm.", ch, NULL, victim, TO_CHAR);
+	  act(AT_YELLOW,"You crash your palm into $N, detonating the blast and sending $M flying! &W[$t]", ch, num_punct(dam), victim, TO_CHAR);
+	  act(AT_YELLOW,"$n pulls back an arm and focuses, drawing ki into $s open palm.", ch, NULL, victim, TO_VICT);
+	  act(AT_YELLOW,"$n crashes $s palm into you, detonating the blast and sending you flying! &W[$t]", ch, num_punct(dam), victim, TO_VICT);
+	  act(AT_YELLOW,"$n pulls back an arm and focuses, drawing ki into $s open palm.", ch, NULL, victim, TO_NOTVICT);
+	  act(AT_YELLOW,"$n crashes $s palm into $N, detonating the blast and sending $N flying! &W[$t]", ch, num_punct(dam), victim, TO_NOTVICT);
+	  if ((ch->mana - adjcost) < 0) {
+		act(AT_LBLUE,"Your mass of ki fizzles into nothing!", ch, NULL, victim, TO_CHAR);
+		act(AT_LBLUE,"$n's mass of ki fizzles into nothing!", ch, NULL, victim, TO_VICT);
+		act(AT_LBLUE,"$n's mass of ki fizzles into nothing!", ch, NULL, victim, TO_NOTVICT);
+		global_retcode = damage(ch, victim, 0, TYPE_HIT);
+		ch->mana = 0;
+	  } else {
+		global_retcode = damage(ch, victim, dam, TYPE_HIT);
+	  }
+	}
+	else {
+		send_to_char("Only increments of 200-500.\n\r", ch);
+		return;
+	}
   }
-  ch->mana -= adjcost;
+  else {
+	act(AT_LBLUE, "You missed $N with your Meteor attack.", ch, NULL, victim, TO_CHAR);
+	act(AT_LBLUE, "$n misses you with $s Meteor attack.", ch, NULL, victim, TO_VICT);
+	act(AT_LBLUE, "$n missed $N with $s Meteor attack.", ch, NULL, victim, TO_NOTVICT);
+	global_retcode = damage(ch, victim, 0, TYPE_HIT);
+  }
+  if (!IS_NPC(ch) && ch->mana != 0) {
+	// train player masteries, no benefit from spamming at no ki
+	stat_train(ch, "int", 8);
+	ch->train += 8;
+	ch->masterymeteor += 1;
+	ch->energymastery += 4;
+	if (ch->energymastery >= (ch->kspgain * 100)) {
+	  pager_printf_color(ch,"&CYou gained 5 Skill Points!\n\r");
+	  ch->sptotal += 5;
+	  ch->kspgain += 1;
+	}
+  }
+  if ((ch->mana - adjcost) < 0)
+	ch->mana = 0;
+  else
+	ch->mana -= adjcost;
   return;
 }
 
@@ -6687,8 +7989,14 @@ void do_crusherball(CHAR_DATA *ch, char *argument) {
   int kilimit = 0;
   int hitcheck = 0;
   int adjcost = 0;
+  int basecost = 0;
   float smastery = 0;
+  int lowdam = 0;
+  int highdam = 0;
+  char arg[MAX_INPUT_LENGTH];
 
+  argument = one_argument(argument, arg);
+  
   if (IS_NPC(ch) && is_split(ch)) {
     if (!ch->master)
       return;
@@ -6701,80 +8009,207 @@ void do_crusherball(CHAR_DATA *ch, char *argument) {
     send_to_char("You're not able to use that skill.\n\r", ch);
     return;
   }
+  if (!IS_NPC(ch)) {
+	kilimit = ch->train / 10000;
+	kimult = (float)get_curr_int(ch) / 1000 + 1;
+	kicmult = (float)kilimit / 100 + 1;
+	smastery = (float)ch->masterycrusherball / 10000;
+	if (smastery > 10)
+	  smastery = 10;
+  }
   if ((victim = who_fighting(ch)) == NULL) {
     send_to_char("You aren't fighting anyone.\n\r", ch);
     return;
   }
-  if (!IS_NPC(ch)) {
-    adjcost = 15 * (ch->crusherballpower - ch->crusherballeffic);
-    if (adjcost < 15)
-      adjcost = 15;
-  } else {
-    adjcost = 1;
-  }
-  if (ch->mana < adjcost) {
-    send_to_char("You don't have enough energy.\n\r", ch);
-    return;
-  }
-  if (!IS_NPC(ch)) {
-    kilimit = ch->train / 10000;
-    kimult = (float)get_curr_int(ch) / 1000 + 1;
-    kicmult = (float)kilimit / 100 + 1;
-    smastery = (float)ch->masterycrusherball / 10000;
-  }
+  basecost = 15;
+  adjcost = basecost;
+  lowdam = 120;
+  highdam = 140;
   hitcheck = number_range(1, 100);
   WAIT_STATE(ch, 8);
   if (hitcheck <= 95) {
-    if (!IS_NPC(ch)) {
-      argdam = ((number_range(12, 14) + ch->crusherballpower) * (kicmult + smastery));
-      dam = get_attmod(ch, victim) * (argdam * kimult);
-      stat_train(ch, "int", 5);
-      ch->train += 5;
-      ch->masterycrusherball += 1;
-      ch->energymastery += 2;
-      if (ch->energymastery >= (ch->kspgain * 100)) {
-        pager_printf_color(ch,
-                           "&CYou gained 5 Skill Points!\n\r");
-        ch->sptotal += 5;
-        ch->kspgain += 1;
-      }
-    }
-    if (IS_NPC(ch)) {
-      dam = get_attmod(ch, victim) * (number_range(12, 14) + (get_curr_int(ch) / 40));
-    }
-    if (ch->charge > 0)
-      dam = chargeDamMult(ch, dam);
-
-    act(AT_YELLOW,
-        "You pull back an arm and focus, drawing ki into your open palm.",
-        ch, NULL, victim, TO_CHAR);
-    act(AT_YELLOW,
-        "You hurl an oversized ball of seething energy directly into $N! &W[$t]",
-        ch, num_punct(dam), victim, TO_CHAR);
-    act(AT_YELLOW,
-        "$n pulls back an arm and focuses, drawing ki into $s open palm.", ch,
-        NULL, victim, TO_VICT);
-    act(AT_YELLOW,
-        "$n hurls an oversized ball of seething energy directly into you! &W[$t]",
-        ch, num_punct(dam), victim, TO_VICT);
-    act(AT_YELLOW,
-        "$n pulls back an arm and focuses, drawing ki into $s open palm.", ch,
-        NULL, victim, TO_NOTVICT);
-    act(AT_YELLOW,
-        "$n hurls an oversized ball of seething energy directly into $N! &W[$t]",
-        ch, num_punct(dam), victim, TO_NOTVICT);
-
-    global_retcode = damage(ch, victim, dam, TYPE_HIT);
-  } else {
-    act(AT_YELLOW, "You missed $N with your Crusher Ball.", ch,
-        NULL, victim, TO_CHAR);
-    act(AT_YELLOW, "$n misses you with a Crusher Ball.", ch, NULL,
-        victim, TO_VICT);
-    act(AT_YELLOW, "$n missed $N with a Crusher Ball.", ch, NULL,
-        victim, TO_NOTVICT);
-    global_retcode = damage(ch, victim, 0, TYPE_HIT);
+	if (arg[0] == '\0') {
+	  if (!IS_NPC(ch)) {
+		argdam = (number_range(lowdam, highdam) * (kicmult + smastery));
+		dam = get_attmod(ch, victim) * (argdam * kimult);
+	  }
+	  else if (IS_NPC(ch)) {
+		argdam = number_range(lowdam, highdam);
+		dam = get_attmod(ch, victim) * (argdam + (get_curr_int(ch) / 40));
+	  }
+	  if (dam < 1)
+		dam = 1;
+	  act(AT_YELLOW,"You pull back an arm and focus, drawing ki into your open palm.", ch, NULL, victim, TO_CHAR);
+	  act(AT_YELLOW,"You hurl an oversized ball of seething energy directly into $N! &W[$t]", ch, num_punct(dam), victim, TO_CHAR);
+	  act(AT_YELLOW,"$n pulls back an arm and focuses, drawing ki into $s open palm.", ch, NULL, victim, TO_VICT);
+	  act(AT_YELLOW,"$n hurls an oversized ball of seething energy directly into you! &W[$t]", ch, num_punct(dam), victim, TO_VICT);
+	  act(AT_YELLOW,"$n pulls back an arm and focuses, drawing ki into $s open palm.", ch, NULL, victim, TO_NOTVICT);
+	  act(AT_YELLOW,"$n hurls an oversized ball of seething energy directly into $N! &W[$t]", ch, num_punct(dam), victim, TO_NOTVICT);
+	  if ((ch->mana - adjcost) < 0) {
+		act(AT_LBLUE,"Your Crusher Ball fizzles into nothing!", ch, NULL, victim, TO_CHAR);
+		act(AT_LBLUE,"$n's Crusher Ball fizzles into nothing!", ch, NULL, victim, TO_VICT);
+		act(AT_LBLUE,"$n's Crusher Ball fizzles into nothing!", ch, NULL, victim, TO_NOTVICT);
+		global_retcode = damage(ch, victim, 0, TYPE_HIT);
+		ch->mana = 0;
+	  } else {
+		global_retcode = damage(ch, victim, dam, TYPE_HIT);
+	  }
+	}
+	else if (!str_cmp(arg, "200")) {
+	  if (ch->crusherballpower < 1) {
+		send_to_char("You lack the skill.\n\r", ch);
+		return;
+	  }
+	  if (!IS_NPC(ch)) {
+		argdam = (number_range(lowdam * 2, highdam * 2) * (kicmult + smastery));
+		dam = get_attmod(ch, victim) * (argdam * kimult);
+	  }
+	  else if (IS_NPC(ch)) {
+		argdam = number_range(lowdam * 2, highdam * 2);
+		dam = get_attmod(ch, victim) * (argdam + (get_curr_int(ch) / 40));
+	  }
+	  if (dam < 1)
+		dam = 1;
+	  adjcost = basecost * 4;
+	  act(AT_YELLOW,"You pull back an arm and focus, drawing ki into your open palm.", ch, NULL, victim, TO_CHAR);
+	  act(AT_YELLOW,"You hurl an oversized ball of seething energy directly into $N! &W[$t]", ch, num_punct(dam), victim, TO_CHAR);
+	  act(AT_YELLOW,"$n pulls back an arm and focuses, drawing ki into $s open palm.", ch, NULL, victim, TO_VICT);
+	  act(AT_YELLOW,"$n hurls an oversized ball of seething energy directly into you! &W[$t]", ch, num_punct(dam), victim, TO_VICT);
+	  act(AT_YELLOW,"$n pulls back an arm and focuses, drawing ki into $s open palm.", ch, NULL, victim, TO_NOTVICT);
+	  act(AT_YELLOW,"$n hurls an oversized ball of seething energy directly into $N! &W[$t]", ch, num_punct(dam), victim, TO_NOTVICT);
+	  if ((ch->mana - adjcost) < 0) {
+		act(AT_LBLUE,"Your Crusher Ball fizzles into nothing!", ch, NULL, victim, TO_CHAR);
+		act(AT_LBLUE,"$n's Crusher Ball fizzles into nothing!", ch, NULL, victim, TO_VICT);
+		act(AT_LBLUE,"$n's Crusher Ball fizzles into nothing!", ch, NULL, victim, TO_NOTVICT);
+		global_retcode = damage(ch, victim, 0, TYPE_HIT);
+		ch->mana = 0;
+	  } else {
+		global_retcode = damage(ch, victim, dam, TYPE_HIT);
+	  }
+	}
+	else if (!str_cmp(arg, "300")) {
+	  if (ch->crusherballpower < 2) {
+		send_to_char("You lack the skill.\n\r", ch);
+		return;
+	  }
+	  if (!IS_NPC(ch)) {
+		argdam = (number_range(lowdam * 3, highdam * 3) * (kicmult + smastery));
+		dam = get_attmod(ch, victim) * (argdam * kimult);
+	  }
+	  else if (IS_NPC(ch)) {
+		argdam = number_range(lowdam * 3, highdam * 3);
+		dam = get_attmod(ch, victim) * (argdam + (get_curr_int(ch) / 40));
+	  }
+	  if (dam < 1)
+		dam = 1;
+	  adjcost = basecost * 16;
+	  act(AT_YELLOW,"You pull back an arm and focus, drawing ki into your open palm.", ch, NULL, victim, TO_CHAR);
+	  act(AT_YELLOW,"You hurl an oversized ball of seething energy directly into $N! &W[$t]", ch, num_punct(dam), victim, TO_CHAR);
+	  act(AT_YELLOW,"$n pulls back an arm and focuses, drawing ki into $s open palm.", ch, NULL, victim, TO_VICT);
+	  act(AT_YELLOW,"$n hurls an oversized ball of seething energy directly into you! &W[$t]", ch, num_punct(dam), victim, TO_VICT);
+	  act(AT_YELLOW,"$n pulls back an arm and focuses, drawing ki into $s open palm.", ch, NULL, victim, TO_NOTVICT);
+	  act(AT_YELLOW,"$n hurls an oversized ball of seething energy directly into $N! &W[$t]", ch, num_punct(dam), victim, TO_NOTVICT);
+	  if ((ch->mana - adjcost) < 0) {
+		act(AT_LBLUE,"Your Crusher Ball fizzles into nothing!", ch, NULL, victim, TO_CHAR);
+		act(AT_LBLUE,"$n's Crusher Ball fizzles into nothing!", ch, NULL, victim, TO_VICT);
+		act(AT_LBLUE,"$n's Crusher Ball fizzles into nothing!", ch, NULL, victim, TO_NOTVICT);
+		global_retcode = damage(ch, victim, 0, TYPE_HIT);
+		ch->mana = 0;
+	  } else {
+		global_retcode = damage(ch, victim, dam, TYPE_HIT);
+	  }
+	}
+	else if (!str_cmp(arg, "400")) {
+	  if (ch->crusherballpower < 3) {
+		send_to_char("You lack the skill.\n\r", ch);
+		return;
+	  }
+	  if (!IS_NPC(ch)) {
+		argdam = (number_range(lowdam * 4, highdam * 4) * (kicmult + smastery));
+		dam = get_attmod(ch, victim) * (argdam * kimult);
+	  }
+	  else if (IS_NPC(ch)) {
+		argdam = number_range(lowdam * 4, highdam * 4);
+		dam = get_attmod(ch, victim) * (argdam + (get_curr_int(ch) / 40));
+	  }
+	  if (dam < 1)
+		dam = 1;
+	  adjcost = basecost * 64;
+	  act(AT_YELLOW,"You pull back an arm and focus, drawing ki into your open palm.", ch, NULL, victim, TO_CHAR);
+	  act(AT_YELLOW,"You hurl an oversized ball of seething energy directly into $N! &W[$t]", ch, num_punct(dam), victim, TO_CHAR);
+	  act(AT_YELLOW,"$n pulls back an arm and focuses, drawing ki into $s open palm.", ch, NULL, victim, TO_VICT);
+	  act(AT_YELLOW,"$n hurls an oversized ball of seething energy directly into you! &W[$t]", ch, num_punct(dam), victim, TO_VICT);
+	  act(AT_YELLOW,"$n pulls back an arm and focuses, drawing ki into $s open palm.", ch, NULL, victim, TO_NOTVICT);
+	  act(AT_YELLOW,"$n hurls an oversized ball of seething energy directly into $N! &W[$t]", ch, num_punct(dam), victim, TO_NOTVICT);
+	  if ((ch->mana - adjcost) < 0) {
+		act(AT_LBLUE,"Your Crusher Ball fizzles into nothing!", ch, NULL, victim, TO_CHAR);
+		act(AT_LBLUE,"$n's Crusher Ball fizzles into nothing!", ch, NULL, victim, TO_VICT);
+		act(AT_LBLUE,"$n's Crusher Ball fizzles into nothing!", ch, NULL, victim, TO_NOTVICT);
+		global_retcode = damage(ch, victim, 0, TYPE_HIT);
+		ch->mana = 0;
+	  } else {
+		global_retcode = damage(ch, victim, dam, TYPE_HIT);
+	  }
+	}
+	else if (!str_cmp(arg, "500")) {
+	  if (ch->crusherballpower < 4) {
+		send_to_char("You lack the skill.\n\r", ch);
+		return;
+	  }
+	  if (!IS_NPC(ch)) {
+		argdam = (number_range(lowdam * 5, highdam * 5) * (kicmult + smastery));
+		dam = get_attmod(ch, victim) * (argdam * kimult);
+	  }
+	  else if (IS_NPC(ch)) {
+		argdam = number_range(lowdam * 5, highdam * 5);
+		dam = get_attmod(ch, victim) * (argdam + (get_curr_int(ch) / 40));
+	  }
+	  if (dam < 1)
+		dam = 1;
+	  adjcost = basecost * 256;
+	  act(AT_YELLOW,"You pull back an arm and focus, drawing ki into your open palm.", ch, NULL, victim, TO_CHAR);
+	  act(AT_YELLOW,"You hurl an oversized ball of seething energy directly into $N! &W[$t]", ch, num_punct(dam), victim, TO_CHAR);
+	  act(AT_YELLOW,"$n pulls back an arm and focuses, drawing ki into $s open palm.", ch, NULL, victim, TO_VICT);
+	  act(AT_YELLOW,"$n hurls an oversized ball of seething energy directly into you! &W[$t]", ch, num_punct(dam), victim, TO_VICT);
+	  act(AT_YELLOW,"$n pulls back an arm and focuses, drawing ki into $s open palm.", ch, NULL, victim, TO_NOTVICT);
+	  act(AT_YELLOW,"$n hurls an oversized ball of seething energy directly into $N! &W[$t]", ch, num_punct(dam), victim, TO_NOTVICT);
+	  if ((ch->mana - adjcost) < 0) {
+		act(AT_LBLUE,"Your Crusher Ball fizzles into nothing!", ch, NULL, victim, TO_CHAR);
+		act(AT_LBLUE,"$n's Crusher Ball fizzles into nothing!", ch, NULL, victim, TO_VICT);
+		act(AT_LBLUE,"$n's Crusher Ball fizzles into nothing!", ch, NULL, victim, TO_NOTVICT);
+		global_retcode = damage(ch, victim, 0, TYPE_HIT);
+		ch->mana = 0;
+	  } else {
+		global_retcode = damage(ch, victim, dam, TYPE_HIT);
+	  }
+	}
+	else {
+		send_to_char("Only increments of 200-500.\n\r", ch);
+		return;
+	}
   }
-  ch->mana -= adjcost;
+  else {
+	act(AT_LBLUE, "You missed $N with your Crusher Ball.", ch, NULL, victim, TO_CHAR);
+	act(AT_LBLUE, "$n misses you with a Crusher Ball.", ch, NULL, victim, TO_VICT);
+	act(AT_LBLUE, "$n missed $N with a Crusher Ball.", ch, NULL, victim, TO_NOTVICT);
+	global_retcode = damage(ch, victim, 0, TYPE_HIT);
+  }
+  if (!IS_NPC(ch) && ch->mana != 0) {
+	// train player masteries, no benefit from spamming at no ki
+	stat_train(ch, "int", 5);
+	ch->train += 5;
+	ch->masterycrusherball += 1;
+	ch->energymastery += 2;
+	if (ch->energymastery >= (ch->kspgain * 100)) {
+	  pager_printf_color(ch,"&CYou gained 5 Skill Points!\n\r");
+	  ch->sptotal += 5;
+	  ch->kspgain += 1;
+	}
+  }
+  if ((ch->mana - adjcost) < 0)
+	ch->mana = 0;
+  else
+	ch->mana -= adjcost;
   return;
 }
 
@@ -6787,8 +8222,14 @@ void do_haymaker(CHAR_DATA *ch, char *argument) {
   int kilimit = 0;
   int hitcheck = 0;
   int adjcost = 0;
+  int basecost = 0;
   float smastery = 0;
+  int lowdam = 0;
+  int highdam = 0;
+  char arg[MAX_INPUT_LENGTH];
 
+  argument = one_argument(argument, arg);
+  
   if (IS_NPC(ch) && is_split(ch)) {
     if (!ch->master)
       return;
@@ -6801,81 +8242,207 @@ void do_haymaker(CHAR_DATA *ch, char *argument) {
     send_to_char("You're not able to use that skill.\n\r", ch);
     return;
   }
+  if (!IS_NPC(ch)) {
+	kilimit = ch->train / 10000;
+	physmult = (float)get_curr_str(ch) / 950 + 1;
+	kicmult = (float)kilimit / 100 + 1;
+	smastery = (float)ch->masteryhaymaker / 10000;
+	if (smastery > 10)
+	  smastery = 10;
+  }
   if ((victim = who_fighting(ch)) == NULL) {
     send_to_char("You aren't fighting anyone.\n\r", ch);
     return;
   }
-  if (!IS_NPC(ch)) {
-    adjcost = 10 * (ch->haymakerpower - ch->haymakereffic);
-    if (adjcost < 10)
-      adjcost = 10;
-  } else {
-    adjcost = 1;
-  }
-  if (ch->mana < adjcost) {
-    send_to_char("You don't have enough energy.\n\r", ch);
-    return;
-  }
-  if (!IS_NPC(ch)) {
-    kilimit = ch->train / 10000;
-    physmult = (float)get_curr_str(ch) / 950 + 1;
-    kicmult = (float)kilimit / 100 + 1;
-    smastery = (float)ch->masteryhaymaker / 10000;
-  }
+  basecost = 10;
+  adjcost = basecost;
+  lowdam = 60;
+  highdam = 90;
   hitcheck = number_range(1, 100);
-
-  WAIT_STATE(ch, 8);
+  WAIT_STATE(ch, 6);
   if (hitcheck <= 95) {
-    if (!IS_NPC(ch)) {
-      argdam = ((number_range(6, 9) + ch->haymakerpower) * (kicmult + smastery));
-      dam = get_attmod(ch, victim) * (argdam * physmult);
-      stat_train(ch, "str", 12);
-      ch->train += 12;
-      ch->masteryhaymaker += 1;
-      ch->strikemastery += 2;
-      if (ch->strikemastery >= (ch->sspgain * 100)) {
-        pager_printf_color(ch,
-                           "&CYou gained 5 Skill Points!\n\r");
-        ch->sptotal += 5;
-        ch->sspgain += 1;
-      }
-    }
-    if (IS_NPC(ch)) {
-      dam = get_attmod(ch, victim) * (number_range(6, 9) + (get_curr_str(ch) / 40));
-    }
-    if (ch->charge > 0)
-      dam = chargeDamMult(ch, dam);
-
-    act(AT_YELLOW,
-        "You rush down $N with an arm drawn back, throwing all of your weight forward.",
-        ch, NULL, victim, TO_CHAR);
-    act(AT_YELLOW,
-        "You crash your fist straight into $N with all your might, crushing $M into the dirt! &W[$t]",
-        ch, num_punct(dam), victim, TO_CHAR);
-    act(AT_YELLOW,
-        "$n rushes you down with an arm drawn back, throwing all of $s weight forward.", ch,
-        NULL, victim, TO_VICT);
-    act(AT_YELLOW,
-        "$n crashes his fist straight into you with all $s might, crushing you into the dirt! &W[$t]",
-        ch, num_punct(dam), victim, TO_VICT);
-    act(AT_YELLOW,
-        "$n rushes down $N with an arm drawn back, throwing all of $s weight forward.", ch,
-        NULL, victim, TO_NOTVICT);
-    act(AT_YELLOW,
-        "$n crashes his fist straight into $N with all $s might, crushing $M into the dirt! &W[$t]",
-        ch, num_punct(dam), victim, TO_NOTVICT);
-
-    global_retcode = damage(ch, victim, dam, TYPE_HIT);
-  } else {
-    act(AT_YELLOW, "You missed $N with a clumsily thrown haymaker.", ch,
-        NULL, victim, TO_CHAR);
-    act(AT_YELLOW, "$n misses you with a clumsily thrown haymaker.", ch, NULL,
-        victim, TO_VICT);
-    act(AT_YELLOW, "$n missed $N with a clumsily thrown haymaker.", ch, NULL,
-        victim, TO_NOTVICT);
-    global_retcode = damage(ch, victim, 0, TYPE_HIT);
+	if (arg[0] == '\0') {
+	  if (!IS_NPC(ch)) {
+		argdam = (number_range(lowdam, highdam) * (kicmult + smastery));
+		dam = get_attmod(ch, victim) * (argdam * physmult);
+	  }
+	  else if (IS_NPC(ch)) {
+		argdam = number_range(lowdam, highdam);
+		dam = get_attmod(ch, victim) * (argdam + (get_curr_str(ch) / 40));
+	  }
+	  if (dam < 1)
+		dam = 1;
+	  act(AT_YELLOW,"You rush down $N with an arm drawn back, throwing all of your weight forward.", ch, NULL, victim, TO_CHAR);
+	  act(AT_YELLOW,"You crash your fist straight into $N with all your might, crushing $M into the dirt! &W[$t]", ch, num_punct(dam), victim, TO_CHAR);
+	  act(AT_YELLOW,"$n rushes you down with an arm drawn back, throwing all of $s weight forward.", ch, NULL, victim, TO_VICT);
+	  act(AT_YELLOW,"$n crashes his fist straight into you with all $s might, crushing you into the dirt! &W[$t]", ch, num_punct(dam), victim, TO_VICT);
+	  act(AT_YELLOW,"$n rushes down $N with an arm drawn back, throwing all of $s weight forward.", ch, NULL, victim, TO_NOTVICT);
+	  act(AT_YELLOW,"$n crashes his fist straight into $N with all $s might, crushing $M into the dirt! &W[$t]", ch, num_punct(dam), victim, TO_NOTVICT);
+	  if ((ch->mana - adjcost) < 0) {
+		act(AT_LBLUE,"You can't seem to get any power out of your punch!", ch, NULL, victim, TO_CHAR);
+		act(AT_LBLUE,"$n can't seem to get any power out of $s punch!", ch, NULL, victim, TO_VICT);
+		act(AT_LBLUE,"$n can't seem to get any power out of $s punch!", ch, NULL, victim, TO_NOTVICT);
+		global_retcode = damage(ch, victim, 0, TYPE_HIT);
+		ch->mana = 0;
+	  } else {
+		global_retcode = damage(ch, victim, dam, TYPE_HIT);
+	  }
+	}
+	else if (!str_cmp(arg, "200")) {
+	  if (ch->haymakerpower < 1) {
+		send_to_char("You lack the skill.\n\r", ch);
+		return;
+	  }
+	  if (!IS_NPC(ch)) {
+		argdam = (number_range(lowdam * 2, highdam * 2) * (kicmult + smastery));
+		dam = get_attmod(ch, victim) * (argdam * physmult);
+	  }
+	  else if (IS_NPC(ch)) {
+		argdam = number_range(lowdam * 2, highdam * 2);
+		dam = get_attmod(ch, victim) * (argdam + (get_curr_str(ch) / 40));
+	  }
+	  if (dam < 1)
+		dam = 1;
+	  adjcost = basecost * 4;
+	  act(AT_YELLOW,"You rush down $N with an arm drawn back, throwing all of your weight forward.", ch, NULL, victim, TO_CHAR);
+	  act(AT_YELLOW,"You crash your fist straight into $N with all your might, crushing $M into the dirt! &W[$t]", ch, num_punct(dam), victim, TO_CHAR);
+	  act(AT_YELLOW,"$n rushes you down with an arm drawn back, throwing all of $s weight forward.", ch, NULL, victim, TO_VICT);
+	  act(AT_YELLOW,"$n crashes his fist straight into you with all $s might, crushing you into the dirt! &W[$t]", ch, num_punct(dam), victim, TO_VICT);
+	  act(AT_YELLOW,"$n rushes down $N with an arm drawn back, throwing all of $s weight forward.", ch, NULL, victim, TO_NOTVICT);
+	  act(AT_YELLOW,"$n crashes his fist straight into $N with all $s might, crushing $M into the dirt! &W[$t]", ch, num_punct(dam), victim, TO_NOTVICT);
+	  if ((ch->mana - adjcost) < 0) {
+		act(AT_LBLUE,"You can't seem to get any power out of your punch!", ch, NULL, victim, TO_CHAR);
+		act(AT_LBLUE,"$n can't seem to get any power out of $s punch!", ch, NULL, victim, TO_VICT);
+		act(AT_LBLUE,"$n can't seem to get any power out of $s punch!", ch, NULL, victim, TO_NOTVICT);
+		global_retcode = damage(ch, victim, 0, TYPE_HIT);
+		ch->mana = 0;
+	  } else {
+		global_retcode = damage(ch, victim, dam, TYPE_HIT);
+	  }
+	}
+	else if (!str_cmp(arg, "300")) {
+	  if (ch->haymakerpower < 2) {
+		send_to_char("You lack the skill.\n\r", ch);
+		return;
+	  }
+	  if (!IS_NPC(ch)) {
+		argdam = (number_range(lowdam * 3, highdam * 3) * (kicmult + smastery));
+		dam = get_attmod(ch, victim) * (argdam * physmult);
+	  }
+	  else if (IS_NPC(ch)) {
+		argdam = number_range(lowdam * 3, highdam * 3);
+		dam = get_attmod(ch, victim) * (argdam + (get_curr_str(ch) / 40));
+	  }
+	  if (dam < 1)
+		dam = 1;
+	  adjcost = basecost * 16;
+	  act(AT_YELLOW,"You rush down $N with an arm drawn back, throwing all of your weight forward.", ch, NULL, victim, TO_CHAR);
+	  act(AT_YELLOW,"You crash your fist straight into $N with all your might, crushing $M into the dirt! &W[$t]", ch, num_punct(dam), victim, TO_CHAR);
+	  act(AT_YELLOW,"$n rushes you down with an arm drawn back, throwing all of $s weight forward.", ch, NULL, victim, TO_VICT);
+	  act(AT_YELLOW,"$n crashes his fist straight into you with all $s might, crushing you into the dirt! &W[$t]", ch, num_punct(dam), victim, TO_VICT);
+	  act(AT_YELLOW,"$n rushes down $N with an arm drawn back, throwing all of $s weight forward.", ch, NULL, victim, TO_NOTVICT);
+	  act(AT_YELLOW,"$n crashes his fist straight into $N with all $s might, crushing $M into the dirt! &W[$t]", ch, num_punct(dam), victim, TO_NOTVICT);
+	  if ((ch->mana - adjcost) < 0) {
+		act(AT_LBLUE,"You can't seem to get any power out of your punch!", ch, NULL, victim, TO_CHAR);
+		act(AT_LBLUE,"$n can't seem to get any power out of $s punch!", ch, NULL, victim, TO_VICT);
+		act(AT_LBLUE,"$n can't seem to get any power out of $s punch!", ch, NULL, victim, TO_NOTVICT);
+		global_retcode = damage(ch, victim, 0, TYPE_HIT);
+		ch->mana = 0;
+	  } else {
+		global_retcode = damage(ch, victim, dam, TYPE_HIT);
+	  }
+	}
+	else if (!str_cmp(arg, "400")) {
+	  if (ch->haymakerpower < 3) {
+		send_to_char("You lack the skill.\n\r", ch);
+		return;
+	  }
+	  if (!IS_NPC(ch)) {
+		argdam = (number_range(lowdam * 4, highdam * 4) * (kicmult + smastery));
+		dam = get_attmod(ch, victim) * (argdam * physmult);
+	  }
+	  else if (IS_NPC(ch)) {
+		argdam = number_range(lowdam * 4, highdam * 4);
+		dam = get_attmod(ch, victim) * (argdam + (get_curr_str(ch) / 40));
+	  }
+	  if (dam < 1)
+		dam = 1;
+	  adjcost = basecost * 64;
+	  act(AT_YELLOW,"You rush down $N with an arm drawn back, throwing all of your weight forward.", ch, NULL, victim, TO_CHAR);
+	  act(AT_YELLOW,"You crash your fist straight into $N with all your might, crushing $M into the dirt! &W[$t]", ch, num_punct(dam), victim, TO_CHAR);
+	  act(AT_YELLOW,"$n rushes you down with an arm drawn back, throwing all of $s weight forward.", ch, NULL, victim, TO_VICT);
+	  act(AT_YELLOW,"$n crashes his fist straight into you with all $s might, crushing you into the dirt! &W[$t]", ch, num_punct(dam), victim, TO_VICT);
+	  act(AT_YELLOW,"$n rushes down $N with an arm drawn back, throwing all of $s weight forward.", ch, NULL, victim, TO_NOTVICT);
+	  act(AT_YELLOW,"$n crashes his fist straight into $N with all $s might, crushing $M into the dirt! &W[$t]", ch, num_punct(dam), victim, TO_NOTVICT);
+	  if ((ch->mana - adjcost) < 0) {
+		act(AT_LBLUE,"You can't seem to get any power out of your punch!", ch, NULL, victim, TO_CHAR);
+		act(AT_LBLUE,"$n can't seem to get any power out of $s punch!", ch, NULL, victim, TO_VICT);
+		act(AT_LBLUE,"$n can't seem to get any power out of $s punch!", ch, NULL, victim, TO_NOTVICT);
+		global_retcode = damage(ch, victim, 0, TYPE_HIT);
+		ch->mana = 0;
+	  } else {
+		global_retcode = damage(ch, victim, dam, TYPE_HIT);
+	  }
+	}
+	else if (!str_cmp(arg, "500")) {
+	  if (ch->haymakerpower < 4) {
+		send_to_char("You lack the skill.\n\r", ch);
+		return;
+	  }
+	  if (!IS_NPC(ch)) {
+		argdam = (number_range(lowdam * 5, highdam * 5) * (kicmult + smastery));
+		dam = get_attmod(ch, victim) * (argdam * physmult);
+	  }
+	  else if (IS_NPC(ch)) {
+		argdam = number_range(lowdam * 5, highdam * 5);
+		dam = get_attmod(ch, victim) * (argdam + (get_curr_str(ch) / 40));
+	  }
+	  if (dam < 1)
+		dam = 1;
+	  adjcost = basecost * 256;
+	  act(AT_YELLOW,"You rush down $N with an arm drawn back, throwing all of your weight forward.", ch, NULL, victim, TO_CHAR);
+	  act(AT_YELLOW,"You crash your fist straight into $N with all your might, crushing $M into the dirt! &W[$t]", ch, num_punct(dam), victim, TO_CHAR);
+	  act(AT_YELLOW,"$n rushes you down with an arm drawn back, throwing all of $s weight forward.", ch, NULL, victim, TO_VICT);
+	  act(AT_YELLOW,"$n crashes his fist straight into you with all $s might, crushing you into the dirt! &W[$t]", ch, num_punct(dam), victim, TO_VICT);
+	  act(AT_YELLOW,"$n rushes down $N with an arm drawn back, throwing all of $s weight forward.", ch, NULL, victim, TO_NOTVICT);
+	  act(AT_YELLOW,"$n crashes his fist straight into $N with all $s might, crushing $M into the dirt! &W[$t]", ch, num_punct(dam), victim, TO_NOTVICT);
+	  if ((ch->mana - adjcost) < 0) {
+		act(AT_LBLUE,"You can't seem to get any power out of your punch!", ch, NULL, victim, TO_CHAR);
+		act(AT_LBLUE,"$n can't seem to get any power out of $s punch!", ch, NULL, victim, TO_VICT);
+		act(AT_LBLUE,"$n can't seem to get any power out of $s punch!", ch, NULL, victim, TO_NOTVICT);
+		global_retcode = damage(ch, victim, 0, TYPE_HIT);
+		ch->mana = 0;
+	  } else {
+		global_retcode = damage(ch, victim, dam, TYPE_HIT);
+	  }
+	}
+	else {
+		send_to_char("Only increments of 200-500.\n\r", ch);
+		return;
+	}
   }
-  ch->mana -= adjcost;
+  else {
+	act(AT_LBLUE, "You missed $N with your haymaker.", ch, NULL, victim, TO_CHAR);
+	act(AT_LBLUE, "$n misses you with $s haymaker.", ch, NULL, victim, TO_VICT);
+	act(AT_LBLUE, "$n missed $N with $s haymaker.", ch, NULL, victim, TO_NOTVICT);
+	global_retcode = damage(ch, victim, 0, TYPE_HIT);
+  }
+  if (!IS_NPC(ch) && ch->mana != 0) {
+	// train player masteries, no benefit from spamming at no ki
+	stat_train(ch, "str", 12);
+	ch->train += 12;
+	ch->masteryhaymaker += 1;
+	ch->strikemastery += 2;
+	if (ch->strikemastery >= (ch->kspgain * 100)) {
+	  pager_printf_color(ch,"&CYou gained 5 Skill Points!\n\r");
+	  ch->sptotal += 5;
+	  ch->kspgain += 1;
+	}
+  }
+  if ((ch->mana - adjcost) < 0)
+	ch->mana = 0;
+  else
+	ch->mana -= adjcost;
   return;
 }
 
@@ -6888,8 +8455,14 @@ void do_collide(CHAR_DATA *ch, char *argument) {
   int kilimit = 0;
   int hitcheck = 0;
   int adjcost = 0;
+  int basecost = 0;
   float smastery = 0;
+  int lowdam = 0;
+  int highdam = 0;
+  char arg[MAX_INPUT_LENGTH];
 
+  argument = one_argument(argument, arg);
+  
   if (IS_NPC(ch) && is_split(ch)) {
     if (!ch->master)
       return;
@@ -6902,83 +8475,452 @@ void do_collide(CHAR_DATA *ch, char *argument) {
     send_to_char("You're not able to use that skill.\n\r", ch);
     return;
   }
+  if (!IS_NPC(ch)) {
+	kilimit = ch->train / 10000;
+	physmult = (float)get_curr_str(ch) / 950 + 1;
+	kicmult = (float)kilimit / 100 + 1;
+	smastery = (float)ch->masterycollide / 10000;
+	if (smastery > 10)
+	  smastery = 10;
+  }
   if ((victim = who_fighting(ch)) == NULL) {
     send_to_char("You aren't fighting anyone.\n\r", ch);
     return;
   }
-  if (!IS_NPC(ch)) {
-    adjcost = 25 * (ch->collidepower - ch->collideeffic);
-    if (adjcost < 25)
-      adjcost = 25;
-  } else {
-    adjcost = 1;
-  }
-  if (ch->mana < adjcost) {
-    send_to_char("You don't have enough energy.\n\r", ch);
-    return;
-  }
-  if (!IS_NPC(ch)) {
-    kilimit = ch->train / 10000;
-    physmult = (float)get_curr_str(ch) / 950 + 1;
-    kicmult = (float)kilimit / 100 + 1;
-    smastery = (float)ch->masterycollide / 10000;
-  }
+  basecost = 25;
+  adjcost = basecost;
+  lowdam = 180;
+  highdam = 220;
   hitcheck = number_range(1, 100);
   WAIT_STATE(ch, 8);
   if (hitcheck <= 95) {
-    if (!IS_NPC(ch)) {
-      argdam = ((number_range(18, 22) + (ch->collidepower * 2)) * (kicmult + smastery));
-      dam = get_attmod(ch, victim) * (argdam * physmult);
-      stat_train(ch, "str", 14);
-      ch->train += 14;
-      ch->masterycollide += 1;
-      ch->strikemastery += 4;
-      if (ch->strikemastery >= (ch->sspgain * 100)) {
-        pager_printf_color(ch,
-                           "&CYou gained 5 Skill Points!\n\r");
-        ch->sptotal += 5;
-        ch->sspgain += 1;
-      }
-    }
-    if (IS_NPC(ch)) {
-      dam = get_attmod(ch, victim) * (number_range(18, 22) + (get_curr_str(ch) / 40));
-    }
-    if (ch->charge > 0)
-      dam = chargeDamMult(ch, dam);
-
-    act(AT_YELLOW,
-        "Through a billowing cloud of dust and debris, you tear forward at $N.",
-        ch, NULL, victim, TO_CHAR);
-    act(AT_YELLOW,
-        "You collide your body directly with $N, sending them careening from the impact! &W[$t]",
-        ch, num_punct(dam), victim, TO_CHAR);
-    act(AT_YELLOW,
-        "$n tears forward at you, leaving a billowing cloud of dust and debris in $s wake.", ch,
-        NULL, victim, TO_VICT);
-    act(AT_YELLOW,
-        "$N's body collides directly with you, sending you careening from the impact! &W[$t]",
-        ch, num_punct(dam), victim, TO_VICT);
-    act(AT_YELLOW,
-        "$n tears forward at $N, leaving a billowing cloud of dust and debris in $s wake.", ch,
-        NULL, victim, TO_NOTVICT);
-    act(AT_YELLOW,
-        "$n's body collides directly with $N, sending them careening from the impact! &W[$t]",
-        ch, num_punct(dam), victim, TO_NOTVICT);
-
-    global_retcode = damage(ch, victim, dam, TYPE_HIT);
-  } else {
-    act(AT_YELLOW, "You missed $N with a barreling collision.", ch,
-        NULL, victim, TO_CHAR);
-    act(AT_YELLOW, "$n misses you with a barreling collision.", ch, NULL,
-        victim, TO_VICT);
-    act(AT_YELLOW, "$n missed $N with a barreling collision.", ch, NULL,
-        victim, TO_NOTVICT);
-    global_retcode = damage(ch, victim, 0, TYPE_HIT);
+	if (arg[0] == '\0') {
+	  if (!IS_NPC(ch)) {
+		argdam = (number_range(lowdam, highdam) * (kicmult + smastery));
+		dam = get_attmod(ch, victim) * (argdam * physmult);
+	  }
+	  else if (IS_NPC(ch)) {
+		argdam = number_range(lowdam, highdam);
+		dam = get_attmod(ch, victim) * (argdam + (get_curr_str(ch) / 40));
+	  }
+	  if (dam < 1)
+		dam = 1;
+	  act(AT_YELLOW,"Through a billowing cloud of dust and debris, you tear forward at $N.", ch, NULL, victim, TO_CHAR);
+	  act(AT_YELLOW,"You collide your body directly with $N, sending them careening from the impact! &W[$t]", ch, num_punct(dam), victim, TO_CHAR);
+	  act(AT_YELLOW,"$n tears forward at you, leaving a billowing cloud of dust and debris in $s wake.", ch, NULL, victim, TO_VICT);
+	  act(AT_YELLOW,"$N's body collides directly with you, sending you careening from the impact! &W[$t]", ch, num_punct(dam), victim, TO_VICT);
+	  act(AT_YELLOW,"$n tears forward at $N, leaving a billowing cloud of dust and debris in $s wake.", ch, NULL, victim, TO_NOTVICT);
+	  act(AT_YELLOW,"$n's body collides directly with $N, sending them careening from the impact! &W[$t]", ch, num_punct(dam), victim, TO_NOTVICT);
+	  if ((ch->mana - adjcost) < 0) {
+		act(AT_LBLUE,"You collide with $N, but can't seem to generate any power!", ch, NULL, victim, TO_CHAR);
+		act(AT_LBLUE,"$n collides with you but can't seem to generate any power!", ch, NULL, victim, TO_VICT);
+		act(AT_LBLUE,"$n collides with $N but can't seem to generate any power!", ch, NULL, victim, TO_NOTVICT);
+		global_retcode = damage(ch, victim, 0, TYPE_HIT);
+		ch->mana = 0;
+	  } else {
+		global_retcode = damage(ch, victim, dam, TYPE_HIT);
+	  }
+	}
+	else if (!str_cmp(arg, "200")) {
+	  if (ch->collidepower < 1) {
+		send_to_char("You lack the skill.\n\r", ch);
+		return;
+	  }
+	  if (!IS_NPC(ch)) {
+		argdam = (number_range(lowdam * 2, highdam * 2) * (kicmult + smastery));
+		dam = get_attmod(ch, victim) * (argdam * physmult);
+	  }
+	  else if (IS_NPC(ch)) {
+		argdam = number_range(lowdam * 2, highdam * 2);
+		dam = get_attmod(ch, victim) * (argdam + (get_curr_str(ch) / 40));
+	  }
+	  if (dam < 1)
+		dam = 1;
+	  adjcost = basecost * 4;
+	  act(AT_YELLOW,"Through a billowing cloud of dust and debris, you tear forward at $N.", ch, NULL, victim, TO_CHAR);
+	  act(AT_YELLOW,"You collide your body directly with $N, sending them careening from the impact! &W[$t]", ch, num_punct(dam), victim, TO_CHAR);
+	  act(AT_YELLOW,"$n tears forward at you, leaving a billowing cloud of dust and debris in $s wake.", ch, NULL, victim, TO_VICT);
+	  act(AT_YELLOW,"$N's body collides directly with you, sending you careening from the impact! &W[$t]", ch, num_punct(dam), victim, TO_VICT);
+	  act(AT_YELLOW,"$n tears forward at $N, leaving a billowing cloud of dust and debris in $s wake.", ch, NULL, victim, TO_NOTVICT);
+	  act(AT_YELLOW,"$n's body collides directly with $N, sending them careening from the impact! &W[$t]", ch, num_punct(dam), victim, TO_NOTVICT);
+	  if ((ch->mana - adjcost) < 0) {
+		act(AT_LBLUE,"You collide with $N, but can't seem to generate any power!", ch, NULL, victim, TO_CHAR);
+		act(AT_LBLUE,"$n collides with you but can't seem to generate any power!", ch, NULL, victim, TO_VICT);
+		act(AT_LBLUE,"$n collides with $N but can't seem to generate any power!", ch, NULL, victim, TO_NOTVICT);
+		global_retcode = damage(ch, victim, 0, TYPE_HIT);
+		ch->mana = 0;
+	  } else {
+		global_retcode = damage(ch, victim, dam, TYPE_HIT);
+	  }
+	}
+	else if (!str_cmp(arg, "300")) {
+	  if (ch->collidepower < 2) {
+		send_to_char("You lack the skill.\n\r", ch);
+		return;
+	  }
+	  if (!IS_NPC(ch)) {
+		argdam = (number_range(lowdam * 3, highdam * 3) * (kicmult + smastery));
+		dam = get_attmod(ch, victim) * (argdam * physmult);
+	  }
+	  else if (IS_NPC(ch)) {
+		argdam = number_range(lowdam * 3, highdam * 3);
+		dam = get_attmod(ch, victim) * (argdam + (get_curr_str(ch) / 40));
+	  }
+	  if (dam < 1)
+		dam = 1;
+	  adjcost = basecost * 16;
+	  act(AT_YELLOW,"Through a billowing cloud of dust and debris, you tear forward at $N.", ch, NULL, victim, TO_CHAR);
+	  act(AT_YELLOW,"You collide your body directly with $N, sending them careening from the impact! &W[$t]", ch, num_punct(dam), victim, TO_CHAR);
+	  act(AT_YELLOW,"$n tears forward at you, leaving a billowing cloud of dust and debris in $s wake.", ch, NULL, victim, TO_VICT);
+	  act(AT_YELLOW,"$N's body collides directly with you, sending you careening from the impact! &W[$t]", ch, num_punct(dam), victim, TO_VICT);
+	  act(AT_YELLOW,"$n tears forward at $N, leaving a billowing cloud of dust and debris in $s wake.", ch, NULL, victim, TO_NOTVICT);
+	  act(AT_YELLOW,"$n's body collides directly with $N, sending them careening from the impact! &W[$t]", ch, num_punct(dam), victim, TO_NOTVICT);
+	  if ((ch->mana - adjcost) < 0) {
+		act(AT_LBLUE,"You collide with $N, but can't seem to generate any power!", ch, NULL, victim, TO_CHAR);
+		act(AT_LBLUE,"$n collides with you but can't seem to generate any power!", ch, NULL, victim, TO_VICT);
+		act(AT_LBLUE,"$n collides with $N but can't seem to generate any power!", ch, NULL, victim, TO_NOTVICT);
+		global_retcode = damage(ch, victim, 0, TYPE_HIT);
+		ch->mana = 0;
+	  } else {
+		global_retcode = damage(ch, victim, dam, TYPE_HIT);
+	  }
+	}
+	else if (!str_cmp(arg, "400")) {
+	  if (ch->collidepower < 3) {
+		send_to_char("You lack the skill.\n\r", ch);
+		return;
+	  }
+	  if (!IS_NPC(ch)) {
+		argdam = (number_range(lowdam * 4, highdam * 4) * (kicmult + smastery));
+		dam = get_attmod(ch, victim) * (argdam * physmult);
+	  }
+	  else if (IS_NPC(ch)) {
+		argdam = number_range(lowdam * 4, highdam * 4);
+		dam = get_attmod(ch, victim) * (argdam + (get_curr_str(ch) / 40));
+	  }
+	  if (dam < 1)
+		dam = 1;
+	  adjcost = basecost * 64;
+	  act(AT_YELLOW,"Through a billowing cloud of dust and debris, you tear forward at $N.", ch, NULL, victim, TO_CHAR);
+	  act(AT_YELLOW,"You collide your body directly with $N, sending them careening from the impact! &W[$t]", ch, num_punct(dam), victim, TO_CHAR);
+	  act(AT_YELLOW,"$n tears forward at you, leaving a billowing cloud of dust and debris in $s wake.", ch, NULL, victim, TO_VICT);
+	  act(AT_YELLOW,"$N's body collides directly with you, sending you careening from the impact! &W[$t]", ch, num_punct(dam), victim, TO_VICT);
+	  act(AT_YELLOW,"$n tears forward at $N, leaving a billowing cloud of dust and debris in $s wake.", ch, NULL, victim, TO_NOTVICT);
+	  act(AT_YELLOW,"$n's body collides directly with $N, sending them careening from the impact! &W[$t]", ch, num_punct(dam), victim, TO_NOTVICT);
+	  if ((ch->mana - adjcost) < 0) {
+		act(AT_LBLUE,"You collide with $N, but can't seem to generate any power!", ch, NULL, victim, TO_CHAR);
+		act(AT_LBLUE,"$n collides with you but can't seem to generate any power!", ch, NULL, victim, TO_VICT);
+		act(AT_LBLUE,"$n collides with $N but can't seem to generate any power!", ch, NULL, victim, TO_NOTVICT);
+		global_retcode = damage(ch, victim, 0, TYPE_HIT);
+		ch->mana = 0;
+	  } else {
+		global_retcode = damage(ch, victim, dam, TYPE_HIT);
+	  }
+	}
+	else if (!str_cmp(arg, "500")) {
+	  if (ch->collidepower < 4) {
+		send_to_char("You lack the skill.\n\r", ch);
+		return;
+	  }
+	  if (!IS_NPC(ch)) {
+		argdam = (number_range(lowdam * 5, highdam * 5) * (kicmult + smastery));
+		dam = get_attmod(ch, victim) * (argdam * physmult);
+	  }
+	  else if (IS_NPC(ch)) {
+		argdam = number_range(lowdam * 5, highdam * 5);
+		dam = get_attmod(ch, victim) * (argdam + (get_curr_str(ch) / 40));
+	  }
+	  if (dam < 1)
+		dam = 1;
+	  adjcost = basecost * 256;
+	  act(AT_YELLOW,"Through a billowing cloud of dust and debris, you tear forward at $N.", ch, NULL, victim, TO_CHAR);
+	  act(AT_YELLOW,"You collide your body directly with $N, sending them careening from the impact! &W[$t]", ch, num_punct(dam), victim, TO_CHAR);
+	  act(AT_YELLOW,"$n tears forward at you, leaving a billowing cloud of dust and debris in $s wake.", ch, NULL, victim, TO_VICT);
+	  act(AT_YELLOW,"$N's body collides directly with you, sending you careening from the impact! &W[$t]", ch, num_punct(dam), victim, TO_VICT);
+	  act(AT_YELLOW,"$n tears forward at $N, leaving a billowing cloud of dust and debris in $s wake.", ch, NULL, victim, TO_NOTVICT);
+	  act(AT_YELLOW,"$n's body collides directly with $N, sending them careening from the impact! &W[$t]", ch, num_punct(dam), victim, TO_NOTVICT);
+	  if ((ch->mana - adjcost) < 0) {
+		act(AT_LBLUE,"You collide with $N, but can't seem to generate any power!", ch, NULL, victim, TO_CHAR);
+		act(AT_LBLUE,"$n collides with you but can't seem to generate any power!", ch, NULL, victim, TO_VICT);
+		act(AT_LBLUE,"$n collides with $N but can't seem to generate any power!", ch, NULL, victim, TO_NOTVICT);
+		global_retcode = damage(ch, victim, 0, TYPE_HIT);
+		ch->mana = 0;
+	  } else {
+		global_retcode = damage(ch, victim, dam, TYPE_HIT);
+	  }
+	}
+	else {
+		send_to_char("Only increments of 200-500.\n\r", ch);
+		return;
+	}
   }
-  ch->mana -= adjcost;
+  else {
+	act(AT_LBLUE, "You missed $N with a barreling collision.", ch, NULL, victim, TO_CHAR);
+	act(AT_LBLUE, "$n misses you with a barreling collision.", ch, NULL, victim, TO_VICT);
+	act(AT_LBLUE, "$n missed $N with a barreling collision.", ch, NULL, victim, TO_NOTVICT);
+	global_retcode = damage(ch, victim, 0, TYPE_HIT);
+  }
+  if (!IS_NPC(ch) && ch->mana != 0) {
+	// train player masteries, no benefit from spamming at no ki
+	stat_train(ch, "str", 14);
+	ch->train += 14;
+	ch->masterycollide += 1;
+	ch->strikemastery += 4;
+	if (ch->strikemastery >= (ch->kspgain * 100)) {
+	  pager_printf_color(ch,"&CYou gained 5 Skill Points!\n\r");
+	  ch->sptotal += 5;
+	  ch->kspgain += 1;
+	}
+  }
+  if ((ch->mana - adjcost) < 0)
+	ch->mana = 0;
+  else
+	ch->mana -= adjcost;
   return;
 }
 
+void do_kamehameha(CHAR_DATA *ch, char *argument) {
+  CHAR_DATA *victim;
+  int dam = 0;
+  int argdam = 0;
+  float kimult = 0;
+  float kicmult = 0;
+  int kilimit = 0;
+  int hitcheck = 0;
+  int adjcost = 0;
+  int basecost = 0;
+  float smastery = 0;
+  int lowdam = 0;
+  int highdam = 0;
+  char arg[MAX_INPUT_LENGTH];
+
+  argument = one_argument(argument, arg);
+  
+  if (IS_NPC(ch) && is_split(ch)) {
+    if (!ch->master)
+      return;
+  }
+  if (IS_NPC(ch) && IS_AFFECTED(ch, AFF_CHARM)) {
+    send_to_char("You can't concentrate enough for that.\n\r", ch);
+    return;
+  }
+  if (!IS_NPC(ch) && (ch->skillkamehameha < 1)) {
+    send_to_char("You're not able to use that skill.\n\r", ch);
+    return;
+  }
+  if (!IS_NPC(ch)) {
+	kilimit = ch->train / 10000;
+	kimult = (float)get_curr_int(ch) / 1000 + 1;
+	kicmult = (float)kilimit / 100 + 1;
+	smastery = (float)ch->masterykamehameha / 10000;
+	if (smastery > 10)
+	  smastery = 10;
+  }
+  if ((victim = who_fighting(ch)) == NULL) {
+    send_to_char("You aren't fighting anyone.\n\r", ch);
+    return;
+  }
+  basecost = 100;
+  adjcost = basecost;
+  lowdam = 500;
+  highdam = 600;
+  hitcheck = number_range(1, 100);
+  WAIT_STATE(ch, 8);
+  if (hitcheck <= 95) {
+	if (arg[0] == '\0') {
+	  if (!IS_NPC(ch)) {
+		argdam = (number_range(lowdam, highdam) * (kicmult + smastery));
+		dam = get_attmod(ch, victim) * (argdam * kimult);
+	  }
+	  else if (IS_NPC(ch)) {
+		argdam = number_range(lowdam, highdam);
+		dam = get_attmod(ch, victim) * (argdam + (get_curr_int(ch) / 40));
+	  }
+	  if (dam < 1)
+		dam = 1;
+	  act(AT_LBLUE,"You put your arms back and cup your hands. 'KA-ME-HA-ME-HA!!!!'	", ch, NULL, victim, TO_CHAR);
+	  act(AT_LBLUE,"You push your hands forward, throwing a blue beam at $N. &W[$t]", ch, num_punct(dam), victim, TO_CHAR);
+	  act(AT_LBLUE,"$n puts $s arms back and cups $s hands. 'KA-ME-HA-ME-HA!!!!'	", ch, NULL, victim, TO_VICT);
+	  act(AT_LBLUE,"$n pushes $s hands forward, throwing a blue beam at you. &W[$t]", ch, num_punct(dam), victim, TO_VICT);
+	  act(AT_LBLUE,"$n puts $s arms back and cups $s hands. 'KA-ME-HA-ME-HA!!!!'	", ch, NULL, victim, TO_NOTVICT);
+	  act(AT_LBLUE,"$n pushes $s hands forward, throwing a blue beam at $N. &W[$t]", ch, num_punct(dam), victim, TO_NOTVICT);
+	  if ((ch->mana - adjcost) < 0) {
+		act(AT_LBLUE,"Your Kamehameha fizzles into nothing!", ch, NULL, victim, TO_CHAR);
+		act(AT_LBLUE,"$n's Kamehameha fizzles into nothing!", ch, NULL, victim, TO_VICT);
+		act(AT_LBLUE,"$n's Kamehameha fizzles into nothing!", ch, NULL, victim, TO_NOTVICT);
+		global_retcode = damage(ch, victim, 0, TYPE_HIT);
+		ch->mana = 0;
+	  } else {
+		global_retcode = damage(ch, victim, dam, TYPE_HIT);
+	  }
+	}
+	else if (!str_cmp(arg, "200")) {
+	  if (ch->kamehamehapower < 1) {
+		send_to_char("You lack the skill.\n\r", ch);
+		return;
+	  }
+	  if (!IS_NPC(ch)) {
+		argdam = (number_range(lowdam * 2, highdam * 2) * (kicmult + smastery));
+		dam = get_attmod(ch, victim) * (argdam * kimult);
+	  }
+	  else if (IS_NPC(ch)) {
+		argdam = number_range(lowdam * 2, highdam * 2);
+		dam = get_attmod(ch, victim) * (argdam + (get_curr_int(ch) / 40));
+	  }
+	  if (dam < 1)
+		dam = 1;
+	  adjcost = basecost * 4;
+	  act(AT_LBLUE,"You put your arms back and cup your hands. 'KA-ME-HA-ME-HA!!!!'	", ch, NULL, victim, TO_CHAR);
+	  act(AT_LBLUE,"You push your hands forward, throwing a large blue beam at $N. &W[$t]", ch, num_punct(dam), victim, TO_CHAR);
+	  act(AT_LBLUE,"$n puts $s arms back and cups $s hands. 'KA-ME-HA-ME-HA!!!!'	", ch, NULL, victim, TO_VICT);
+	  act(AT_LBLUE,"$n pushes $s hands forward, throwing a large blue beam at you. &W[$t]", ch, num_punct(dam), victim, TO_VICT);
+	  act(AT_LBLUE,"$n puts $s arms back and cups $s hands. 'KA-ME-HA-ME-HA!!!!'	", ch, NULL, victim, TO_NOTVICT);
+	  act(AT_LBLUE,"$n pushes $s hands forward, throwing a large blue beam at $N. &W[$t]", ch, num_punct(dam), victim, TO_NOTVICT);
+	  if ((ch->mana - adjcost) < 0) {
+		act(AT_LBLUE,"Your Kamehameha fizzles into nothing!", ch, NULL, victim, TO_CHAR);
+		act(AT_LBLUE,"$n's Kamehameha fizzles into nothing!", ch, NULL, victim, TO_VICT);
+		act(AT_LBLUE,"$n's Kamehameha fizzles into nothing!", ch, NULL, victim, TO_NOTVICT);
+		global_retcode = damage(ch, victim, 0, TYPE_HIT);
+		ch->mana = 0;
+	  } else {
+		global_retcode = damage(ch, victim, dam, TYPE_HIT);
+	  }
+	}
+	else if (!str_cmp(arg, "300")) {
+	  if (ch->kamehamehapower < 2) {
+		send_to_char("You lack the skill.\n\r", ch);
+		return;
+	  }
+	  if (!IS_NPC(ch)) {
+		argdam = (number_range(lowdam * 3, highdam * 3) * (kicmult + smastery));
+		dam = get_attmod(ch, victim) * (argdam * kimult);
+	  }
+	  else if (IS_NPC(ch)) {
+		argdam = number_range(lowdam * 3, highdam * 3);
+		dam = get_attmod(ch, victim) * (argdam + (get_curr_int(ch) / 40));
+	  }
+	  if (dam < 1)
+		dam = 1;
+	  adjcost = basecost * 16;
+	  act(AT_LBLUE,"You put your arms back and cup your hands. 'KA-ME-HA-ME-HA!!!!'	", ch, NULL, victim, TO_CHAR);
+	  act(AT_LBLUE,"You push your hands forward, throwing a huge blue beam at $N. &W[$t]", ch, num_punct(dam), victim, TO_CHAR);
+	  act(AT_LBLUE,"$n puts $s arms back and cups $s hands. 'KA-ME-HA-ME-HA!!!!'	", ch, NULL, victim, TO_VICT);
+	  act(AT_LBLUE,"$n pushes $s hands forward, throwing a huge blue beam at you. &W[$t]", ch, num_punct(dam), victim, TO_VICT);
+	  act(AT_LBLUE,"$n puts $s arms back and cups $s hands. 'KA-ME-HA-ME-HA!!!!'	", ch, NULL, victim, TO_NOTVICT);
+	  act(AT_LBLUE,"$n pushes $s hands forward, throwing a huge blue beam at $N. &W[$t]", ch, num_punct(dam), victim, TO_NOTVICT);
+	  if ((ch->mana - adjcost) < 0) {
+		act(AT_LBLUE,"Your Kamehameha fizzles into nothing!", ch, NULL, victim, TO_CHAR);
+		act(AT_LBLUE,"$n's Kamehameha fizzles into nothing!", ch, NULL, victim, TO_VICT);
+		act(AT_LBLUE,"$n's Kamehameha fizzles into nothing!", ch, NULL, victim, TO_NOTVICT);
+		global_retcode = damage(ch, victim, 0, TYPE_HIT);
+		ch->mana = 0;
+	  } else {
+		global_retcode = damage(ch, victim, dam, TYPE_HIT);
+	  }
+	}
+	else if (!str_cmp(arg, "400")) {
+	  if (ch->kamehamehapower < 3) {
+		send_to_char("You lack the skill.\n\r", ch);
+		return;
+	  }
+	  if (!IS_NPC(ch)) {
+		argdam = (number_range(lowdam * 4, highdam * 4) * (kicmult + smastery));
+		dam = get_attmod(ch, victim) * (argdam * kimult);
+	  }
+	  else if (IS_NPC(ch)) {
+		argdam = number_range(lowdam * 4, highdam * 4);
+		dam = get_attmod(ch, victim) * (argdam + (get_curr_int(ch) / 40));
+	  }
+	  if (dam < 1)
+		dam = 1;
+	  adjcost = basecost * 64;
+	  act(AT_LBLUE,"You put your arms back and cup your hands. 'KA-ME-HA-ME-HA!!!!'	", ch, NULL, victim, TO_CHAR);
+	  act(AT_LBLUE,"You push your hands forward, throwing a massive blue beam at $N. &W[$t]", ch, num_punct(dam), victim, TO_CHAR);
+	  act(AT_LBLUE,"$n puts $s arms back and cups $s hands. 'KA-ME-HA-ME-HA!!!!'	", ch, NULL, victim, TO_VICT);
+	  act(AT_LBLUE,"$n pushes $s hands forward, throwing a massive blue beam at you. &W[$t]", ch, num_punct(dam), victim, TO_VICT);
+	  act(AT_LBLUE,"$n puts $s arms back and cups $s hands. 'KA-ME-HA-ME-HA!!!!'	", ch, NULL, victim, TO_NOTVICT);
+	  act(AT_LBLUE,"$n pushes $s hands forward, throwing a massive blue beam at $N. &W[$t]", ch, num_punct(dam), victim, TO_NOTVICT);
+	  if ((ch->mana - adjcost) < 0) {
+		act(AT_LBLUE,"Your Kamehameha fizzles into nothing!", ch, NULL, victim, TO_CHAR);
+		act(AT_LBLUE,"$n's Kamehameha fizzles into nothing!", ch, NULL, victim, TO_VICT);
+		act(AT_LBLUE,"$n's Kamehameha fizzles into nothing!", ch, NULL, victim, TO_NOTVICT);
+		global_retcode = damage(ch, victim, 0, TYPE_HIT);
+		ch->mana = 0;
+	  } else {
+		global_retcode = damage(ch, victim, dam, TYPE_HIT);
+	  }
+	}
+	else if (!str_cmp(arg, "500")) {
+	  if (ch->kamehamehapower < 4) {
+		send_to_char("You lack the skill.\n\r", ch);
+		return;
+	  }
+	  if (!IS_NPC(ch)) {
+		argdam = (number_range(lowdam * 5, highdam * 5) * (kicmult + smastery));
+		dam = get_attmod(ch, victim) * (argdam * kimult);
+	  }
+	  else if (IS_NPC(ch)) {
+		argdam = number_range(lowdam * 5, highdam * 5);
+		dam = get_attmod(ch, victim) * (argdam + (get_curr_int(ch) / 40));
+	  }
+	  if (dam < 1)
+		dam = 1;
+	  adjcost = basecost * 256;
+	  act(AT_LBLUE,"You put your arms back and cup your hands. 'KAAAA-MEEEE...'", ch, NULL, victim, TO_CHAR);
+	  act(AT_LBLUE,"Your aura explodes into a raging inferno around you, coalescing between your palms.", ch, NULL, victim, TO_CHAR);
+	  act(AT_LBLUE,"'HAAAA-MEEEE--'", ch, NULL, victim, TO_CHAR);
+	  act(AT_LBLUE,"'HAAAAAAAAAAAA!!!' You push your hands forward, unleashing a colossal beam of energy at $N! &W[$t]", ch, num_punct(dam), victim, TO_CHAR);
+	  
+	  act(AT_LBLUE,"$n puts $s arms back and cups $s hands. 'KAAAA-MEEEE...'", ch, NULL, victim, TO_VICT);
+	  act(AT_LBLUE,"$n's aura explodes into a raging inferno, coalescing between $s palms.", ch, NULL, victim, TO_VICT);
+	  act(AT_LBLUE,"'HAAAA-MEEEE--'", ch, NULL, victim, TO_VICT);
+	  act(AT_LBLUE,"'HAAAAAAAAAAAA!!!' $n pushes $s hands forward, unleashing a colossal beam of energy at you! &W[$t]", ch, num_punct(dam), victim, TO_VICT);
+	  
+	  act(AT_LBLUE,"$n puts $s arms back and cups $s hands. 'KAAAA-MEEEE...'", ch, NULL, victim, TO_NOTVICT);
+	  act(AT_LBLUE,"$n's aura explodes into a raging inferno, coalescing between $s palms.", ch, NULL, victim, TO_NOTVICT);
+	  act(AT_LBLUE,"'HAAAA-MEEEE--'", ch, NULL, victim, TO_NOTVICT);
+	  act(AT_LBLUE,"'HAAAAAAAAAAAA!!!' $n pushes $s hands forward, unleashing a colossal beam of energy at $N. &W[$t]", ch, num_punct(dam), victim, TO_NOTVICT);
+	  if ((ch->mana - adjcost) < 0) {
+		act(AT_LBLUE,"Your Super Kamehameha fizzles into nothing!", ch, NULL, victim, TO_CHAR);
+		act(AT_LBLUE,"$n's Super Kamehameha fizzles into nothing!", ch, NULL, victim, TO_VICT);
+		act(AT_LBLUE,"$n's Super Kamehameha fizzles into nothing!", ch, NULL, victim, TO_NOTVICT);
+		global_retcode = damage(ch, victim, 0, TYPE_HIT);
+		ch->mana = 0;
+	  } else {
+		global_retcode = damage(ch, victim, dam, TYPE_HIT);
+	  }
+	}
+	else {
+		send_to_char("Only increments of 200-500.\n\r", ch);
+		return;
+	}
+  }
+  else {
+	act(AT_LBLUE, "You missed $N with your Kamehameha.", ch, NULL, victim, TO_CHAR);
+	act(AT_LBLUE, "$n misses you with $s Kamehameha.", ch, NULL, victim, TO_VICT);
+	act(AT_LBLUE, "$n missed $N with a Kamehameha.", ch, NULL, victim, TO_NOTVICT);
+	global_retcode = damage(ch, victim, 0, TYPE_HIT);
+  }
+  if (!IS_NPC(ch) && ch->mana != 0) {
+	// train player masteries, no benefit from spamming at no ki
+	stat_train(ch, "int", 16);
+	ch->train += 16;
+	ch->masterykamehameha += 1;
+	ch->energymastery += 5;
+	if (ch->energymastery >= (ch->kspgain * 100)) {
+	  pager_printf_color(ch,"&CYou gained 5 Skill Points!\n\r");
+	  ch->sptotal += 5;
+	  ch->kspgain += 1;
+	}
+  }
+  if ((ch->mana - adjcost) < 0)
+	ch->mana = 0;
+  else
+	ch->mana -= adjcost;
+  return;
+}
+
+/* Old Kame for reference
 void do_kamehameha(CHAR_DATA *ch, char *argument) {
   CHAR_DATA *victim;
   int dam = 0;
@@ -7079,7 +9021,7 @@ void do_kamehameha(CHAR_DATA *ch, char *argument) {
   }
   ch->mana -= adjcost;
   return;
-}
+}*/
 
 void do_masenko(CHAR_DATA *ch, char *argument) {
   CHAR_DATA *victim;
@@ -7091,7 +9033,10 @@ void do_masenko(CHAR_DATA *ch, char *argument) {
   int hitcheck = 0;
   int adjcost = 0;
   float smastery = 0;
+  char arg[MAX_INPUT_LENGTH];
 
+  argument = one_argument(argument, arg);
+  
   if (IS_NPC(ch) && is_split(ch)) {
     if (!ch->master)
       return;
@@ -7104,78 +9049,209 @@ void do_masenko(CHAR_DATA *ch, char *argument) {
     send_to_char("You're not able to use that skill.\n\r", ch);
     return;
   }
+  if (!IS_NPC(ch)) {
+	// Player pfile mastery values for damage scaling -- change carefully
+	kilimit = ch->train / 10000;
+	kimult = (float)get_curr_int(ch) / 1000 + 1;
+	kicmult = (float)kilimit / 100 + 1;
+	smastery = (float)ch->masterymasenko / 10000;
+	if (smastery > 10)
+	  smastery = 10; // cap bonus for # times skill used
+  }
   if ((victim = who_fighting(ch)) == NULL) {
     send_to_char("You aren't fighting anyone.\n\r", ch);
     return;
   }
-  if (!IS_NPC(ch)) {
-    kilimit = ch->train / 10000;
-    kimult = (float)get_curr_int(ch) / 1000 + 1;
-    kicmult = (float)kilimit / 100 + 1;
-    smastery = (float)ch->masterymasenko / 10000;
-  }
-  if (!IS_NPC(ch)) {
-    adjcost = 60 * (ch->masenkopower - ch->masenkoeffic);
-    if (adjcost < 60)
-      adjcost = 60;
-  } else {
-    adjcost = 1;
-  }
-  if (ch->mana < adjcost) {
-    send_to_char("You don't have enough energy.\n\r", ch);
-    return;
-  }
+  adjcost = 60; //base ki cost
   hitcheck = number_range(1, 100);
   WAIT_STATE(ch, 8);
   if (hitcheck <= 95) {
-    if (!IS_NPC(ch)) {
-      argdam = ((number_range(30, 35) + (ch->masenkopower * 3)) * (kicmult + smastery));
-      dam = get_attmod(ch, victim) * (argdam * kimult);
-      stat_train(ch, "int", 14);
-      ch->train += 14;
-      ch->masterymasenko += 1;
-      ch->energymastery += 4;
-      if (ch->energymastery >= (ch->kspgain * 100)) {
-        pager_printf_color(ch,
-                           "&CYou gained 5 Skill Points!\n\r");
-        ch->sptotal += 5;
-        ch->kspgain += 1;
-      }
-    }
-    if (IS_NPC(ch))
-      dam = get_attmod(ch, victim) * (number_range(30, 35) + (get_curr_int(ch) / 45));
-    if (ch->charge > 0)
-      dam = chargeDamMult(ch, dam);
-    act(AT_YELLOW,
-        "You hold your arms high above your head, charging your ki.",
-        ch, NULL, victim, TO_CHAR);
-    act(AT_YELLOW,
-        "You throw your hands at $N sending a yellow beam at $M, hitting $M in the chest. &W[$t]",
-        ch, num_punct(dam), victim, TO_CHAR);
-    act(AT_YELLOW,
-        "$n holds $s arms high above $s head, charging $s ki.", ch,
-        NULL, victim, TO_VICT);
-    act(AT_YELLOW,
-        "$n throws $s hands at you sending a yellow beam at you, hitting you in the chest. &W[$t]",
-        ch, num_punct(dam), victim, TO_VICT);
-    act(AT_YELLOW,
-        "$n holds $s arms high above $s head, charging $s ki.", ch,
-        NULL, victim, TO_NOTVICT);
-    act(AT_YELLOW,
-        "$n throws $s hands at $N sending a yellow beam at $N, hitting $M in the chest. &W[$t]",
-        ch, num_punct(dam), victim, TO_NOTVICT);
-
-    global_retcode = damage(ch, victim, dam, TYPE_HIT);
-  } else {
-    act(AT_YELLOW, "You missed $N with your masenko blast.", ch,
-        NULL, victim, TO_CHAR);
-    act(AT_YELLOW, "$n misses you with $s masenko blast.", ch, NULL,
-        victim, TO_VICT);
-    act(AT_YELLOW, "$n missed $N with a masenko blast.", ch, NULL,
-        victim, TO_NOTVICT);
-    global_retcode = damage(ch, victim, 0, TYPE_HIT);
+	if (arg[0] == '\0') { //no argument, base skill
+	  if (!IS_NPC(ch)) {
+		argdam = (number_range(300, 350) * (kicmult + smastery)); //average base damage x - y
+		dam = get_attmod(ch, victim) * (argdam * kimult); //scale player off pfile masteries
+	  }
+	  else if (IS_NPC(ch)) {
+		argdam = number_range(300, 350);  //average base damage x - y
+		dam = get_attmod(ch, victim) * (argdam + (get_curr_int(ch) / 40)); //scale mob off raw int value
+	  }
+	  if (dam < 1)
+		dam = 1;
+	  // ACT descriptors  $n first actor(user) short desc, $N second actor(victim) short desc.
+	  // $s $S his/her/its // $m $M him/her/it // $t num_punct final damage value
+	  // act(AT_COLOR,) choose from ANSI standards
+	  // AT_COLOR strings accept 'help pcolor' styles
+	  act(AT_YELLOW,"You hold your arms high above your head, charging your ki.", ch, NULL, victim, TO_CHAR);
+	  act(AT_YELLOW,"You throw your hands at $N and send a yellow beam at $M, hitting $M in the chest. &W[$t]", ch, num_punct(dam), victim, TO_CHAR);
+	  act(AT_YELLOW,"$n holds $s arms high above $s head, charging $s ki.", ch, NULL, victim, TO_VICT);
+	  act(AT_YELLOW,"$n throws $s hands at you and fires a yellow beam, hitting you in the chest. &W[$t]", ch, num_punct(dam), victim, TO_VICT);
+	  act(AT_YELLOW,"$n holds $s arms high above $s head, charging $s ki.", ch, NULL, victim, TO_NOTVICT);
+	  act(AT_YELLOW,"$n throws $s hands at $N and sends a yellow beam shooting forward, hitting $M in the chest. &W[$t]", ch, num_punct(dam), victim, TO_NOTVICT);
+	  if ((ch->mana - adjcost) < 0) {
+		act(AT_LBLUE,"Your Masenko fizzles out!", ch, NULL, victim, TO_CHAR);
+		act(AT_LBLUE,"$n's Masenko fizzles out!", ch, NULL, victim, TO_VICT);
+		act(AT_LBLUE,"$n's Masenko fizzles out!", ch, NULL, victim, TO_NOTVICT);
+		global_retcode = damage(ch, victim, 0, TYPE_HIT); // return generic damage, failure
+		ch->mana = 0;
+	  } else {
+		global_retcode = damage(ch, victim, dam, TYPE_HIT); // return generic damage, success
+	  }
+	}
+	else if (!str_cmp(arg, "200")) {
+	  if (ch->masenkopower < 1) {
+		send_to_char("You lack the skill.\n\r", ch);
+		return;
+	  }
+	  if (!IS_NPC(ch)) {
+		argdam = (number_range(600, 700) * (kicmult + smastery));
+		dam = get_attmod(ch, victim) * (argdam * kimult);
+	  }
+	  else if (IS_NPC(ch)) {
+		argdam = number_range(600, 700);
+		dam = get_attmod(ch, victim) * (argdam + (get_curr_int(ch) / 40));
+	  }
+	  if (dam < 1)
+		dam = 1;
+	  adjcost = 240; // increase cost
+	  act(AT_YELLOW,"You hold your arms high above your head, charging your ki.", ch, NULL, victim, TO_CHAR);
+	  act(AT_YELLOW,"You throw your hands at $N and send a large yellow beam at $M, hitting $M in the chest. &W[$t]", ch, num_punct(dam), victim, TO_CHAR);
+	  act(AT_YELLOW,"$n holds $s arms high above $s head, charging $s ki.", ch, NULL, victim, TO_VICT);
+	  act(AT_YELLOW,"$n throws $s hands at you and fires a large yellow beam, hitting you in the chest. &W[$t]", ch, num_punct(dam), victim, TO_VICT);
+	  act(AT_YELLOW,"$n holds $s arms high above $s head, charging $s ki.", ch, NULL, victim, TO_NOTVICT);
+	  act(AT_YELLOW,"$n throws $s hands at $N and sends a large yellow beam shooting forward, hitting $M in the chest. &W[$t]", ch, num_punct(dam), victim, TO_NOTVICT);
+	  if ((ch->mana - adjcost) < 0) {
+		act(AT_LBLUE,"Your Masenko fizzles out!", ch, NULL, victim, TO_CHAR);
+		act(AT_LBLUE,"$n's Masenko fizzles out!", ch, NULL, victim, TO_VICT);
+		act(AT_LBLUE,"$n's Masenko fizzles out!", ch, NULL, victim, TO_NOTVICT);
+		global_retcode = damage(ch, victim, 0, TYPE_HIT);
+		ch->mana = 0;
+	  } else {
+		global_retcode = damage(ch, victim, dam, TYPE_HIT);
+	  }
+	}
+	else if (!str_cmp(arg, "300")) {
+	  if (ch->masenkopower < 2) {
+		send_to_char("You lack the skill.\n\r", ch);
+		return;
+	  }
+	  if (!IS_NPC(ch)) {
+		argdam = (number_range(900, 1050) * (kicmult + smastery));
+		dam = get_attmod(ch, victim) * (argdam * kimult);
+	  }
+	  else if (IS_NPC(ch)) {
+		argdam = number_range(900, 1050);
+		dam = get_attmod(ch, victim) * (argdam + (get_curr_int(ch) / 40));
+	  }
+	  if (dam < 1)
+		dam = 1;
+	  adjcost = 960; // increase cost
+	  act(AT_YELLOW,"You hold your arms high above your head, charging your ki.", ch, NULL, victim, TO_CHAR);
+	  act(AT_YELLOW,"You throw your hands at $N and send a huge yellow beam at $M, hitting $M in the chest. &W[$t]", ch, num_punct(dam), victim, TO_CHAR);
+	  act(AT_YELLOW,"$n holds $s arms high above $s head, charging $s ki.", ch, NULL, victim, TO_VICT);
+	  act(AT_YELLOW,"$n throws $s hands at you and fires a huge yellow beam, hitting you in the chest. &W[$t]", ch, num_punct(dam), victim, TO_VICT);
+	  act(AT_YELLOW,"$n holds $s arms high above $s head, charging $s ki.", ch, NULL, victim, TO_NOTVICT);
+	  act(AT_YELLOW,"$n throws $s hands at $N and sends a huge yellow beam shooting forward, hitting $M in the chest. &W[$t]", ch, num_punct(dam), victim, TO_NOTVICT);
+	  if ((ch->mana - adjcost) < 0) {
+		act(AT_LBLUE,"Your Masenko fizzles out!", ch, NULL, victim, TO_CHAR);
+		act(AT_LBLUE,"$n's Masenko fizzles out!", ch, NULL, victim, TO_VICT);
+		act(AT_LBLUE,"$n's Masenko fizzles out!", ch, NULL, victim, TO_NOTVICT);
+		global_retcode = damage(ch, victim, 0, TYPE_HIT);
+		ch->mana = 0;
+	  } else {
+		global_retcode = damage(ch, victim, dam, TYPE_HIT);
+	  }
+	}
+	else if (!str_cmp(arg, "400")) {
+	  if (ch->masenkopower < 3) {
+		send_to_char("You lack the skill.\n\r", ch);
+		return;
+	  }
+	  if (!IS_NPC(ch)) {
+		argdam = (number_range(1200, 1400) * (kicmult + smastery));
+		dam = get_attmod(ch, victim) * (argdam * kimult);
+	  }
+	  else if (IS_NPC(ch)) {
+		argdam = number_range(1200, 1400);
+		dam = get_attmod(ch, victim) * (argdam + (get_curr_int(ch) / 40));
+	  }
+	  if (dam < 1)
+		dam = 1;
+	  adjcost = 3840; // increase cost
+	  act(AT_YELLOW,"You hold your arms high above your head, charging your ki.", ch, NULL, victim, TO_CHAR);
+	  act(AT_YELLOW,"You throw your hands at $N and send a massive yellow beam at $M, hitting $M in the chest. &W[$t]", ch, num_punct(dam), victim, TO_CHAR);
+	  act(AT_YELLOW,"$n holds $s arms high above $s head, charging $s ki.", ch, NULL, victim, TO_VICT);
+	  act(AT_YELLOW,"$n throws $s hands at you and fires a massive yellow beam, hitting you in the chest. &W[$t]", ch, num_punct(dam), victim, TO_VICT);
+	  act(AT_YELLOW,"$n holds $s arms high above $s head, charging $s ki.", ch, NULL, victim, TO_NOTVICT);
+	  act(AT_YELLOW,"$n throws $s hands at $N and sends a massive yellow beam shooting forward, hitting $M in the chest. &W[$t]", ch, num_punct(dam), victim, TO_NOTVICT);
+	  if ((ch->mana - adjcost) < 0) {
+		act(AT_LBLUE,"Your Masenko fizzles out!", ch, NULL, victim, TO_CHAR);
+		act(AT_LBLUE,"$n's Masenko fizzles out!", ch, NULL, victim, TO_VICT);
+		act(AT_LBLUE,"$n's Masenko fizzles out!", ch, NULL, victim, TO_NOTVICT);
+		global_retcode = damage(ch, victim, 0, TYPE_HIT);
+		ch->mana = 0;
+	  } else {
+		global_retcode = damage(ch, victim, dam, TYPE_HIT);
+	  }
+	}
+	else if (!str_cmp(arg, "500")) {
+	  if (ch->masenkopower < 4) {
+		send_to_char("You lack the skill.\n\r", ch);
+		return;
+	  }
+	  if (!IS_NPC(ch)) {
+		argdam = (number_range(1500, 1750) * (kicmult + smastery));
+		dam = get_attmod(ch, victim) * (argdam * kimult);
+	  }
+	  else if (IS_NPC(ch)) {
+		argdam = number_range(1500, 1750);
+		dam = get_attmod(ch, victim) * (argdam + (get_curr_int(ch) / 40));
+	  }
+	  if (dam < 1)
+		dam = 1;
+	  adjcost = 15360; // increase cost
+	  act(AT_YELLOW,"You hold your arms high above your head, focusing an immense amount of energy.", ch, NULL, victim, TO_CHAR);
+	  act(AT_YELLOW,"You throw your hands at $N and send a devastating beam forward at $M, engulfing $M in the ensuing explosion! &W[$t]", ch, num_punct(dam), victim, TO_CHAR);
+	  act(AT_YELLOW,"$n holds $s arms high above $s head, focusing an immense amount of energy.", ch, NULL, victim, TO_VICT);
+	  act(AT_YELLOW,"$n throws $s hands at you and sends forth a devastating beam, engulfing you in the ensuing explosion! &W[$t]", ch, num_punct(dam), victim, TO_VICT);
+	  act(AT_YELLOW,"$n holds $s arms high above $s head, focusing an immense amount of energy.", ch, NULL, victim, TO_NOTVICT);
+	  act(AT_YELLOW,"$n throws $s hands at $N and sends forth a devastating beam, engulfing $M in the ensuing explosion! &W[$t]", ch, num_punct(dam), victim, TO_NOTVICT);
+	  if ((ch->mana - adjcost) < 0) {
+		act(AT_LBLUE,"Your Masenko fizzles out!", ch, NULL, victim, TO_CHAR);
+		act(AT_LBLUE,"$n's Masenko fizzles out!", ch, NULL, victim, TO_VICT);
+		act(AT_LBLUE,"$n's Masenko fizzles out!", ch, NULL, victim, TO_NOTVICT);
+		global_retcode = damage(ch, victim, 0, TYPE_HIT);
+		ch->mana = 0;
+	  } else {
+		global_retcode = damage(ch, victim, dam, TYPE_HIT);
+	  }
+	}
+	else {
+		send_to_char("Only increments of 200-500.\n\r", ch);
+		return;
+	}
   }
-  ch->mana -= adjcost;
+  else {
+	act(AT_LBLUE, "You missed $N with your Masenko.", ch, NULL, victim, TO_CHAR);
+	act(AT_LBLUE, "$n misses you with $s Masenko.", ch, NULL, victim, TO_VICT);
+	act(AT_LBLUE, "$n missed $N with a Masenko.", ch, NULL, victim, TO_NOTVICT);
+	global_retcode = damage(ch, victim, 0, TYPE_HIT);
+  }
+  if (!IS_NPC(ch) && ch->mana != 0) {
+	// train player masteries, no benefit from spamming at no ki
+	stat_train(ch, "int", 14);
+	ch->train += 14;
+	ch->masterymasenko += 1;
+	ch->energymastery += 4;
+	if (ch->energymastery >= (ch->kspgain * 100)) {
+	  pager_printf_color(ch,"&CYou gained 5 Skill Points!\n\r");
+	  ch->sptotal += 5;
+	  ch->kspgain += 1;
+	}
+  }
+  if ((ch->mana - adjcost) < 0)
+	ch->mana = 0;
+  else
+	ch->mana -= adjcost;
   return;
 }
 
@@ -7183,13 +9259,16 @@ void do_sbc(CHAR_DATA *ch, char *argument) {
   CHAR_DATA *victim;
   int dam = 0;
   int argdam = 0;
-  int kilimit = 0;
   float kimult = 0;
   float kicmult = 0;
+  int kilimit = 0;
   int hitcheck = 0;
   int adjcost = 0;
   float smastery = 0;
+  char arg[MAX_INPUT_LENGTH];
 
+  argument = one_argument(argument, arg);
+  
   if (IS_NPC(ch) && is_split(ch)) {
     if (!ch->master)
       return;
@@ -7202,82 +9281,211 @@ void do_sbc(CHAR_DATA *ch, char *argument) {
     send_to_char("You're not able to use that skill.\n\r", ch);
     return;
   }
+  if (!IS_NPC(ch)) {
+	// Player pfile mastery values for damage scaling -- change carefully
+	kilimit = ch->train / 10000;
+	kimult = (float)get_curr_int(ch) / 1000 + 1;
+	kicmult = (float)kilimit / 100 + 1;
+	smastery = (float)ch->masterysbc / 10000;
+	if (smastery > 10)
+	  smastery = 10; // cap bonus for # times skill used
+  }
   if ((victim = who_fighting(ch)) == NULL) {
     send_to_char("You aren't fighting anyone.\n\r", ch);
     return;
   }
-  if (!IS_NPC(ch)) {
-    kilimit = ch->train / 10000;
-    kimult = (float)get_curr_int(ch) / 1000 + 1;
-    kicmult = (float)kilimit / 100 + 1;
-    smastery = (float)ch->masterysbc / 10000;
-  }
-  if (!IS_NPC(ch)) {
-    adjcost = 110 * (ch->sbcpower - ch->sbceffic);
-    if (adjcost < 110)
-      adjcost = 110;
-  } else {
-    adjcost = 1;
-  }
-  if (ch->mana < adjcost) {
-    send_to_char("You don't have enough energy.\n\r", ch);
-    return;
-  }
+  adjcost = 110; //base ki cost
   hitcheck = number_range(1, 100);
   WAIT_STATE(ch, 8);
   if (hitcheck <= 95) {
-    if (!IS_NPC(ch)) {
-      argdam = ((number_range(55, 65) + (ch->sbcpower * 6)) * (kicmult + smastery));
-      dam = get_attmod(ch, victim) * (argdam * kimult);
-      stat_train(ch, "int", 18);
-      ch->train += 18;
-      ch->masterysbc += 1;
-      ch->energymastery += 5;
-      if (ch->energymastery >= (ch->kspgain * 100)) {
-        pager_printf_color(ch,
-                           "&CYou gained 5 Skill Points!\n\r");
-        ch->sptotal += 5;
-        ch->kspgain += 1;
-      }
-    }
-    if (IS_NPC(ch)) {
-      argdam = number_range(55, 65);
-      dam = get_attmod(ch, victim) * (argdam + (get_curr_int(ch) / 40));
-    }
-    if (ch->charge > 0)
-      dam = chargeDamMult(ch, dam);
-    act(AT_YELLOW,
-        "You put two fingers to your forehead, crackling energy gathering at their tips.",
-        ch, NULL, victim, TO_CHAR);
-    act(AT_YELLOW,
-        "Your thrust your fingers toward $N, sending out a corkscrew beam. &W[$t]",
-        ch, num_punct(dam), victim, TO_CHAR);
-    act(AT_YELLOW,
-        "$n puts two fingers to $s forehead as crackling energy gathers at their tips.",
-        ch, NULL, victim, TO_VICT);
-    act(AT_YELLOW,
-        "$n thrusts $s fingers toward you, sending out a corkscrew beam. &W[$t]",
-        ch, num_punct(dam), victim, TO_VICT);
-    act(AT_YELLOW,
-        "$n puts two fingers to $s forehead as crackling energy gathers at their tips.",
-        ch, NULL, victim, TO_NOTVICT);
-    act(AT_YELLOW,
-        "$n throws $s fingers toward $N, "
-        "sending out a corkscrew beam. &W[$t]",
-        ch, num_punct(dam),
-        victim, TO_NOTVICT);
-
-    global_retcode = damage(ch, victim, dam, TYPE_HIT);
-  } else {
-    act(AT_YELLOW, "You missed $N with your special beam cannon.",
-        ch, NULL, victim, TO_CHAR);
-    act(AT_YELLOW, "$n misses you with $s special beam cannon.", ch,
-        NULL, victim, TO_VICT);
-    act(AT_YELLOW, "$n missed $N with a special beam cannon.", ch,
-        NULL, victim, TO_NOTVICT);
-    global_retcode = damage(ch, victim, 0, TYPE_HIT);
+	if (arg[0] == '\0') { //no argument, base skill
+	  if (!IS_NPC(ch)) {
+		argdam = (number_range(550, 650) * (kicmult + smastery)); //average base damage x - y
+		dam = get_attmod(ch, victim) * (argdam * kimult); //scale player off pfile masteries
+	  }
+	  else if (IS_NPC(ch)) {
+		argdam = number_range(550, 650);  //average base damage x - y
+		dam = get_attmod(ch, victim) * (argdam + (get_curr_int(ch) / 40)); //scale mob off raw int value
+	  }
+	  if (dam < 1)
+		dam = 1;
+	  // ACT descriptors  $n first actor(user) short desc, $N second actor(victim) short desc.
+	  // $s $S his/her/its // $m $M him/her/it // $t num_punct final damage value
+	  // act(AT_COLOR,) choose from ANSI standards
+	  // AT_COLOR strings accept 'help pcolor' styles
+	  act(AT_YELLOW,"You put two fingers to your forehead, crackling energy gathering at their tips.", ch, NULL, victim, TO_CHAR);
+	  act(AT_YELLOW,"You thrust your fingers toward $N, sending out a corkscrew beam! &W[$t]", ch, num_punct(dam), victim, TO_CHAR);
+	  act(AT_YELLOW,"$n puts two fingers to $s forehead as crackling energy gathers at their tips.", ch, NULL, victim, TO_VICT);
+	  act(AT_YELLOW,"$n thrusts $s fingers toward you, sending out a corkscrew beam! &W[$t]", ch, num_punct(dam), victim, TO_VICT);
+	  act(AT_YELLOW,"$n puts two fingers to $s forehead as crackling energy gathers at their tips.", ch, NULL, victim, TO_NOTVICT);
+	  act(AT_YELLOW,"$n throws $s fingers toward $N, sending out a corkscrew beam! &W[$t]", ch, num_punct(dam), victim, TO_NOTVICT);
+	  if ((ch->mana - adjcost) < 0) {
+		act(AT_LBLUE,"Your Special Beam Cannon fizzles out!", ch, NULL, victim, TO_CHAR);
+		act(AT_LBLUE,"$n's Special Beam Cannon fizzles out!", ch, NULL, victim, TO_VICT);
+		act(AT_LBLUE,"$n's Special Beam Cannon fizzles out!", ch, NULL, victim, TO_NOTVICT);
+		global_retcode = damage(ch, victim, 0, TYPE_HIT); // return generic damage, failure
+		ch->mana = 0;
+	  } else {
+		global_retcode = damage(ch, victim, dam, TYPE_HIT); // return generic damage, success
+	  }
+	}
+	else if (!str_cmp(arg, "200")) {
+	  if (ch->sbcpower < 1) {
+		send_to_char("You lack the skill.\n\r", ch);
+		return;
+	  }
+	  if (!IS_NPC(ch)) {
+		argdam = (number_range(1100, 1300) * (kicmult + smastery));
+		dam = get_attmod(ch, victim) * (argdam * kimult);
+	  }
+	  else if (IS_NPC(ch)) {
+		argdam = number_range(1100, 1300);
+		dam = get_attmod(ch, victim) * (argdam + (get_curr_int(ch) / 40));
+	  }
+	  if (dam < 1)
+		dam = 1;
+	  adjcost = 240; // increase cost
+	  act(AT_YELLOW,"You put two fingers to your forehead, crackling energy gathering at their tips.", ch, NULL, victim, TO_CHAR);
+	  act(AT_YELLOW,"You thrust your fingers toward $N, sending out a corkscrew beam! &W[$t]", ch, num_punct(dam), victim, TO_CHAR);
+	  act(AT_YELLOW,"$n puts two fingers to $s forehead as crackling energy gathers at their tips.", ch, NULL, victim, TO_VICT);
+	  act(AT_YELLOW,"$n thrusts $s fingers toward you, sending out a corkscrew beam! &W[$t]", ch, num_punct(dam), victim, TO_VICT);
+	  act(AT_YELLOW,"$n puts two fingers to $s forehead as crackling energy gathers at their tips.", ch, NULL, victim, TO_NOTVICT);
+	  act(AT_YELLOW,"$n throws $s fingers toward $N, sending out a corkscrew beam! &W[$t]", ch, num_punct(dam), victim, TO_NOTVICT);
+	  if ((ch->mana - adjcost) < 0) {
+		act(AT_LBLUE,"Your Special Beam Cannon fizzles out!", ch, NULL, victim, TO_CHAR);
+		act(AT_LBLUE,"$n's Special Beam Cannon fizzles out!", ch, NULL, victim, TO_VICT);
+		act(AT_LBLUE,"$n's Special Beam Cannon fizzles out!", ch, NULL, victim, TO_NOTVICT);
+		global_retcode = damage(ch, victim, 0, TYPE_HIT);
+		ch->mana = 0;
+	  } else {
+		global_retcode = damage(ch, victim, dam, TYPE_HIT);
+	  }
+	}
+	else if (!str_cmp(arg, "300")) {
+	  if (ch->sbcpower < 2) {
+		send_to_char("You lack the skill.\n\r", ch);
+		return;
+	  }
+	  if (!IS_NPC(ch)) {
+		argdam = (number_range(1650, 1950) * (kicmult + smastery));
+		dam = get_attmod(ch, victim) * (argdam * kimult);
+	  }
+	  else if (IS_NPC(ch)) {
+		argdam = number_range(1650, 1950);
+		dam = get_attmod(ch, victim) * (argdam + (get_curr_int(ch) / 40));
+	  }
+	  if (dam < 1)
+		dam = 1;
+	  adjcost = 960; // increase cost
+	  act(AT_YELLOW,"You put two fingers to your forehead, crackling energy gathering at their tips.", ch, NULL, victim, TO_CHAR);
+	  act(AT_YELLOW,"You thrust your fingers toward $N, sending out a corkscrew beam! &W[$t]", ch, num_punct(dam), victim, TO_CHAR);
+	  act(AT_YELLOW,"$n puts two fingers to $s forehead as crackling energy gathers at their tips.", ch, NULL, victim, TO_VICT);
+	  act(AT_YELLOW,"$n thrusts $s fingers toward you, sending out a corkscrew beam! &W[$t]", ch, num_punct(dam), victim, TO_VICT);
+	  act(AT_YELLOW,"$n puts two fingers to $s forehead as crackling energy gathers at their tips.", ch, NULL, victim, TO_NOTVICT);
+	  act(AT_YELLOW,"$n throws $s fingers toward $N, sending out a corkscrew beam! &W[$t]", ch, num_punct(dam), victim, TO_NOTVICT);
+	  if ((ch->mana - adjcost) < 0) {
+		act(AT_LBLUE,"Your Special Beam Cannon fizzles out!", ch, NULL, victim, TO_CHAR);
+		act(AT_LBLUE,"$n's Special Beam Cannon fizzles out!", ch, NULL, victim, TO_VICT);
+		act(AT_LBLUE,"$n's Special Beam Cannon fizzles out!", ch, NULL, victim, TO_NOTVICT);
+		global_retcode = damage(ch, victim, 0, TYPE_HIT);
+		ch->mana = 0;
+	  } else {
+		global_retcode = damage(ch, victim, dam, TYPE_HIT);
+	  }
+	}
+	else if (!str_cmp(arg, "400")) {
+	  if (ch->sbcpower < 3) {
+		send_to_char("You lack the skill.\n\r", ch);
+		return;
+	  }
+	  if (!IS_NPC(ch)) {
+		argdam = (number_range(2200, 2600) * (kicmult + smastery));
+		dam = get_attmod(ch, victim) * (argdam * kimult);
+	  }
+	  else if (IS_NPC(ch)) {
+		argdam = number_range(2200, 2600);
+		dam = get_attmod(ch, victim) * (argdam + (get_curr_int(ch) / 40));
+	  }
+	  if (dam < 1)
+		dam = 1;
+	  adjcost = 3840; // increase cost
+	  act(AT_YELLOW,"You put two fingers to your forehead, crackling energy gathering at their tips.", ch, NULL, victim, TO_CHAR);
+	  act(AT_YELLOW,"You thrust your fingers toward $N, sending out a corkscrew beam! &W[$t]", ch, num_punct(dam), victim, TO_CHAR);
+	  act(AT_YELLOW,"$n puts two fingers to $s forehead as crackling energy gathers at their tips.", ch, NULL, victim, TO_VICT);
+	  act(AT_YELLOW,"$n thrusts $s fingers toward you, sending out a corkscrew beam! &W[$t]", ch, num_punct(dam), victim, TO_VICT);
+	  act(AT_YELLOW,"$n puts two fingers to $s forehead as crackling energy gathers at their tips.", ch, NULL, victim, TO_NOTVICT);
+	  act(AT_YELLOW,"$n throws $s fingers toward $N, sending out a corkscrew beam! &W[$t]", ch, num_punct(dam), victim, TO_NOTVICT);
+	  if ((ch->mana - adjcost) < 0) {
+		act(AT_LBLUE,"Your Special Beam Cannon fizzles out!", ch, NULL, victim, TO_CHAR);
+		act(AT_LBLUE,"$n's Special Beam Cannon fizzles out!", ch, NULL, victim, TO_VICT);
+		act(AT_LBLUE,"$n's Special Beam Cannon fizzles out!", ch, NULL, victim, TO_NOTVICT);
+		global_retcode = damage(ch, victim, 0, TYPE_HIT);
+		global_retcode = damage(ch, victim, 0, TYPE_HIT);
+		ch->mana = 0;
+	  } else {
+		global_retcode = damage(ch, victim, dam, TYPE_HIT);
+	  }
+	}
+	else if (!str_cmp(arg, "500")) {
+	  if (ch->sbcpower < 4) {
+		send_to_char("You lack the skill.\n\r", ch);
+		return;
+	  }
+	  if (!IS_NPC(ch)) {
+		argdam = (number_range(2750, 3250) * (kicmult + smastery));
+		dam = get_attmod(ch, victim) * (argdam * kimult);
+	  }
+	  else if (IS_NPC(ch)) {
+		argdam = number_range(2750, 3250);
+		dam = get_attmod(ch, victim) * (argdam + (get_curr_int(ch) / 40));
+	  }
+	  if (dam < 1)
+		dam = 1;
+	  adjcost = 15360; // increase cost
+	  act(AT_YELLOW,"You put two fingers to your forehead, crackling energy gathering at their tips.", ch, NULL, victim, TO_CHAR);
+	  act(AT_YELLOW,"It pulses and lances menacingly through the air, building to a fever pitch.", ch, NULL, victim, TO_CHAR);
+	  act(AT_YELLOW,"You thrust your fingers toward $N, sending out a deadly corkscrew beam! &W[$t]", ch, num_punct(dam), victim, TO_CHAR);
+	  act(AT_YELLOW,"$n puts two fingers to $s forehead as crackling energy gathers at their tips.", ch, NULL, victim, TO_VICT);
+	  act(AT_YELLOW,"$n thrusts $s fingers toward you, sending out a corkscrew beam! &W[$t]", ch, num_punct(dam), victim, TO_VICT);
+	  act(AT_YELLOW,"$n puts two fingers to $s forehead as crackling energy gathers at their tips.", ch, NULL, victim, TO_NOTVICT);
+	  act(AT_YELLOW,"$n throws $s fingers toward $N, sending out a corkscrew beam! &W[$t]", ch, num_punct(dam), victim, TO_NOTVICT);
+	  if ((ch->mana - adjcost) < 0) {
+		act(AT_LBLUE,"Your Special Beam Cannon fizzles out!", ch, NULL, victim, TO_CHAR);
+		act(AT_LBLUE,"$n's Special Beam Cannon fizzles out!", ch, NULL, victim, TO_VICT);
+		act(AT_LBLUE,"$n's Special Beam Cannon fizzles out!", ch, NULL, victim, TO_NOTVICT);
+		global_retcode = damage(ch, victim, 0, TYPE_HIT);
+		ch->mana = 0;
+	  } else {
+		global_retcode = damage(ch, victim, dam, TYPE_HIT);
+	  }
+	}
+	else {
+		send_to_char("Only increments of 200-500.\n\r", ch);
+		return;
+	}
   }
-  ch->mana -= adjcost;
+  else {
+	act(AT_LBLUE, "You missed $N with your Special Beam Cannon.", ch, NULL, victim, TO_CHAR);
+	act(AT_LBLUE, "$n misses you with $s Special Beam Cannon.", ch, NULL, victim, TO_VICT);
+	act(AT_LBLUE, "$n missed $N with a Special Beam Cannon.", ch, NULL, victim, TO_NOTVICT);
+	global_retcode = damage(ch, victim, 0, TYPE_HIT);
+  }
+  if (!IS_NPC(ch) && ch->mana != 0) {
+	// train player masteries, no benefit from spamming at no ki
+	stat_train(ch, "int", 18);
+	ch->train += 18;
+	ch->masterysbc += 1;
+	ch->energymastery += 5;
+	if (ch->energymastery >= (ch->kspgain * 100)) {
+	  pager_printf_color(ch,"&CYou gained 5 Skill Points!\n\r");
+	  ch->sptotal += 5;
+	  ch->kspgain += 1;
+	}
+  }
+  if ((ch->mana - adjcost) < 0)
+	ch->mana = 0;
+  else
+	ch->mana -= adjcost;
   return;
 }
 
@@ -7285,13 +9493,19 @@ void do_dd(CHAR_DATA *ch, char *argument) {
   CHAR_DATA *victim;
   int dam = 0;
   int argdam = 0;
-  int kilimit = 0;
   float kimult = 0;
   float kicmult = 0;
+  int kilimit = 0;
   int hitcheck = 0;
   int adjcost = 0;
+  int basecost = 0;
   float smastery = 0;
+  int lowdam = 0;
+  int highdam = 0;
+  char arg[MAX_INPUT_LENGTH];
 
+  argument = one_argument(argument, arg);
+  
   if (IS_NPC(ch) && is_split(ch)) {
     if (!ch->master)
       return;
@@ -7304,85 +9518,207 @@ void do_dd(CHAR_DATA *ch, char *argument) {
     send_to_char("You're not able to use that skill.\n\r", ch);
     return;
   }
+  if (!IS_NPC(ch)) {
+	kilimit = ch->train / 10000;
+	kimult = (float)get_curr_int(ch) / 1000 + 1;
+	kicmult = (float)kilimit / 100 + 1;
+	smastery = (float)ch->masterydestructo_disc / 10000;
+	if (smastery > 10)
+	  smastery = 10;
+  }
   if ((victim = who_fighting(ch)) == NULL) {
     send_to_char("You aren't fighting anyone.\n\r", ch);
     return;
   }
-  if (!IS_NPC(ch)) {
-    kilimit = ch->train / 10000;
-    kimult = (float)get_curr_int(ch) / 1000 + 1;
-    kicmult = (float)kilimit / 100 + 1;
-    smastery = (float)ch->masterydestructo_disc / 10000;
-  }
-  if (!IS_NPC(ch)) {
-    adjcost = 55 * (ch->destructo_discpower - ch->destructo_disceffic);
-    if (adjcost < 55)
-      adjcost = 55;
-  } else {
-    adjcost = 1;
-  }
-  if (ch->mana < adjcost) {
-    send_to_char("You don't have enough energy.\n\r", ch);
-    return;
-  }
+  basecost = 55;
+  adjcost = basecost;
+  lowdam = 280;
+  highdam = 280;
   hitcheck = number_range(1, 100);
   WAIT_STATE(ch, 8);
   if (hitcheck <= 95) {
-    if (!IS_NPC(ch)) {
-      argdam = ((number_range(28, 28) + (ch->destructo_discpower * 2)) * (kicmult + smastery));
-      dam = get_attmod(ch, victim) * (argdam * kimult);
-      stat_train(ch, "int", 13);
-      ch->train += 13;
-      ch->masterydestructo_disc += 1;
-      ch->energymastery += 4;
-      if (ch->energymastery >= (ch->kspgain * 100)) {
-        pager_printf_color(ch,
-                           "&CYou gained 5 Skill Points!\n\r");
-        ch->sptotal += 5;
-        ch->kspgain += 1;
-      }
-    }
-    if (IS_NPC(ch))
-      dam = get_attmod(ch, victim) * (number_range(28, 28) + (get_curr_int(ch) / 40));
-    if (ch->charge > 0)
-      dam = chargeDamMult(ch, dam);
-    act(AT_YELLOW,
-        "You hold your hand aloft and create a giant spinning ki disk above your palm.",
-        ch, NULL, victim, TO_CHAR);
-    act(AT_YELLOW,
-        "You throw the whirling disk and it quickly "
-        "slices through the air on its way to $N. &W[$t]",
-        ch,
-        num_punct(dam), victim, TO_CHAR);
-    act(AT_YELLOW,
-        "$n holds $s hand aloft and creates a giant spinning ki disk above $s palm.",
-        ch, NULL, victim, TO_VICT);
-    act(AT_YELLOW,
-        "$n the whirling disk and it quickly slices "
-        "through the air on its way to you. &W[$t]",
-        ch,
-        num_punct(dam), victim, TO_VICT);
-    act(AT_YELLOW,
-        "$n holds $s hand aloft and creates a giant spinning ki disk above $s palm.",
-        ch, NULL, victim, TO_NOTVICT);
-    act(AT_YELLOW,
-        "$n throws the whirling disk and it quickly "
-        "slices through the air on its way to $N. &W[$t]",
-        ch,
-        num_punct(dam), victim, TO_NOTVICT);
-
-    global_retcode = damage(ch, victim, dam, TYPE_HIT);
-  } else {
-    act(AT_YELLOW, "You missed $N with your destructo disk.", ch,
-        NULL, victim, TO_CHAR);
-    act(AT_YELLOW, "$n misses you with $s destructo disk.", ch,
-        NULL, victim, TO_VICT);
-    act(AT_YELLOW, "$n missed $N with a destructo disk.", ch, NULL,
-        victim, TO_NOTVICT);
-    global_retcode = damage(ch, victim, 0, TYPE_HIT);
+	if (arg[0] == '\0') {
+	  if (!IS_NPC(ch)) {
+		argdam = (number_range(lowdam, highdam) * (kicmult + smastery));
+		dam = get_attmod(ch, victim) * (argdam * kimult);
+	  }
+	  else if (IS_NPC(ch)) {
+		argdam = number_range(lowdam, highdam);
+		dam = get_attmod(ch, victim) * (argdam + (get_curr_int(ch) / 40));
+	  }
+	  if (dam < 1)
+		dam = 1;
+	  act(AT_YELLOW,"You hold a hand aloft, generating a giant, deadly spinning disc of energy.", ch, NULL, victim, TO_CHAR);
+	  act(AT_YELLOW,"With precision and a strong arm, you hurl your Destructo Disc directly at $N! &W[$t]", ch, num_punct(dam), victim, TO_CHAR);
+	  act(AT_YELLOW,"$n holds a hand aloft, generating a giant, deadly spinning disc of energy.", ch, NULL, victim, TO_VICT);
+	  act(AT_YELLOW,"With precision and a strong arm, $n hurls their Destructo Disc straight at you! &W[$t]", ch, num_punct(dam), victim, TO_VICT);
+	  act(AT_YELLOW,"$n holds a hand aloft, generating a giant, deadly spinning disc of energy.", ch, NULL, victim, TO_NOTVICT);
+	  act(AT_YELLOW,"With precision and a strong arm, $n hurls their Destructo Disc straight at $N! &W[$t]", ch, num_punct(dam), victim, TO_NOTVICT);
+	  if ((ch->mana - adjcost) < 0) {
+		act(AT_LBLUE,"Your Destructo Disc fizzles into nothing!", ch, NULL, victim, TO_CHAR);
+		act(AT_LBLUE,"$n's Destructo Disc fizzles into nothing!", ch, NULL, victim, TO_VICT);
+		act(AT_LBLUE,"$n's Destructo Disc fizzles into nothing!", ch, NULL, victim, TO_NOTVICT);
+		global_retcode = damage(ch, victim, 0, TYPE_HIT);
+		ch->mana = 0;
+	  } else {
+		global_retcode = damage(ch, victim, dam, TYPE_HIT);
+	  }
+	}
+	else if (!str_cmp(arg, "200")) {
+	  if (ch->destructo_discpower < 1) {
+		send_to_char("You lack the skill.\n\r", ch);
+		return;
+	  }
+	  if (!IS_NPC(ch)) {
+		argdam = (number_range(lowdam * 2, highdam * 2) * (kicmult + smastery));
+		dam = get_attmod(ch, victim) * (argdam * kimult);
+	  }
+	  else if (IS_NPC(ch)) {
+		argdam = number_range(lowdam * 2, highdam * 2);
+		dam = get_attmod(ch, victim) * (argdam + (get_curr_int(ch) / 40));
+	  }
+	  if (dam < 1)
+		dam = 1;
+	  adjcost = basecost * 4;
+	  act(AT_YELLOW,"You hold a hand aloft, generating two giant, deadly spinning discs of energy.", ch, NULL, victim, TO_CHAR);
+	  act(AT_YELLOW,"With precision and a strong arm, you hurl your Destructo Discs directly at $N! &W[$t]", ch, num_punct(dam), victim, TO_CHAR);
+	  act(AT_YELLOW,"$n holds a hand aloft, generating two giant, deadly spinning discs of energy.", ch, NULL, victim, TO_VICT);
+	  act(AT_YELLOW,"With precision and a strong arm, $n hurls their Destructo Discs straight at you! &W[$t]", ch, num_punct(dam), victim, TO_VICT);
+	  act(AT_YELLOW,"$n holds a hand aloft, generating two giant, deadly spinning discs of energy.", ch, NULL, victim, TO_NOTVICT);
+	  act(AT_YELLOW,"With precision and a strong arm, $n hurls their Destructo Disc straight at $N! &W[$t]", ch, num_punct(dam), victim, TO_NOTVICT);
+	  if ((ch->mana - adjcost) < 0) {
+		act(AT_LBLUE,"Your Destructo Discs fizzle into nothing!", ch, NULL, victim, TO_CHAR);
+		act(AT_LBLUE,"$n's Destructo Discs fizzle into nothing!", ch, NULL, victim, TO_VICT);
+		act(AT_LBLUE,"$n's Destructo Discs fizzle into nothing!", ch, NULL, victim, TO_NOTVICT);
+		global_retcode = damage(ch, victim, 0, TYPE_HIT);
+		ch->mana = 0;
+	  } else {
+		global_retcode = damage(ch, victim, dam, TYPE_HIT);
+	  }
+	}
+	else if (!str_cmp(arg, "300")) {
+	  if (ch->destructo_discpower < 2) {
+		send_to_char("You lack the skill.\n\r", ch);
+		return;
+	  }
+	  if (!IS_NPC(ch)) {
+		argdam = (number_range(lowdam * 3, highdam * 3) * (kicmult + smastery));
+		dam = get_attmod(ch, victim) * (argdam * kimult);
+	  }
+	  else if (IS_NPC(ch)) {
+		argdam = number_range(lowdam * 3, highdam * 3);
+		dam = get_attmod(ch, victim) * (argdam + (get_curr_int(ch) / 40));
+	  }
+	  if (dam < 1)
+		dam = 1;
+	  adjcost = basecost * 16;
+	  act(AT_YELLOW,"You hold a hand aloft, generating three giant, deadly spinning discs of energy.", ch, NULL, victim, TO_CHAR);
+	  act(AT_YELLOW,"With precision and a strong arm, you hurl your Destructo Discs directly at $N! &W[$t]", ch, num_punct(dam), victim, TO_CHAR);
+	  act(AT_YELLOW,"$n holds a hand aloft, generating three giant, deadly spinning discs of energy.", ch, NULL, victim, TO_VICT);
+	  act(AT_YELLOW,"With precision and a strong arm, $n hurls their Destructo Discs straight at you! &W[$t]", ch, num_punct(dam), victim, TO_VICT);
+	  act(AT_YELLOW,"$n holds a hand aloft, generating three giant, deadly spinning discs of energy.", ch, NULL, victim, TO_NOTVICT);
+	  act(AT_YELLOW,"With precision and a strong arm, $n hurls their Destructo Discs straight at $N! &W[$t]", ch, num_punct(dam), victim, TO_NOTVICT);
+	  if ((ch->mana - adjcost) < 0) {
+		act(AT_LBLUE,"Your Destructo Discs fizzle into nothing!", ch, NULL, victim, TO_CHAR);
+		act(AT_LBLUE,"$n's Destructo Discs fizzle into nothing!", ch, NULL, victim, TO_VICT);
+		act(AT_LBLUE,"$n's Destructo Discs fizzle into nothing!", ch, NULL, victim, TO_NOTVICT);
+		global_retcode = damage(ch, victim, 0, TYPE_HIT);
+		ch->mana = 0;
+	  } else {
+		global_retcode = damage(ch, victim, dam, TYPE_HIT);
+	  }
+	}
+	else if (!str_cmp(arg, "400")) {
+	  if (ch->destructo_discpower < 3) {
+		send_to_char("You lack the skill.\n\r", ch);
+		return;
+	  }
+	  if (!IS_NPC(ch)) {
+		argdam = (number_range(lowdam * 4, highdam * 4) * (kicmult + smastery));
+		dam = get_attmod(ch, victim) * (argdam * kimult);
+	  }
+	  else if (IS_NPC(ch)) {
+		argdam = number_range(lowdam * 4, highdam * 4);
+		dam = get_attmod(ch, victim) * (argdam + (get_curr_int(ch) / 40));
+	  }
+	  if (dam < 1)
+		dam = 1;
+	  adjcost = basecost * 64;
+	  act(AT_YELLOW,"You hold a hand aloft, generating four giant, deadly spinning discs of energy.", ch, NULL, victim, TO_CHAR);
+	  act(AT_YELLOW,"With precision and a strong arm, you hurl your Destructo Discs directly at $N! &W[$t]", ch, num_punct(dam), victim, TO_CHAR);
+	  act(AT_YELLOW,"$n holds a hand aloft, generating four giant, deadly spinning disc of energy.", ch, NULL, victim, TO_VICT);
+	  act(AT_YELLOW,"With precision and a strong arm, $n hurls their Destructo Discs straight at you! &W[$t]", ch, num_punct(dam), victim, TO_VICT);
+	  act(AT_YELLOW,"$n holds a hand aloft, generating four giant, deadly spinning disc of energy.", ch, NULL, victim, TO_NOTVICT);
+	  act(AT_YELLOW,"With precision and a strong arm, $n hurls their Destructo Discs straight at $N! &W[$t]", ch, num_punct(dam), victim, TO_NOTVICT);
+	  if ((ch->mana - adjcost) < 0) {
+		act(AT_LBLUE,"Your Destructo Discs fizzle into nothing!", ch, NULL, victim, TO_CHAR);
+		act(AT_LBLUE,"$n's Destructo Discs fizzle into nothing!", ch, NULL, victim, TO_VICT);
+		act(AT_LBLUE,"$n's Destructo Discs fizzle into nothing!", ch, NULL, victim, TO_NOTVICT);
+		global_retcode = damage(ch, victim, 0, TYPE_HIT);
+		ch->mana = 0;
+	  } else {
+		global_retcode = damage(ch, victim, dam, TYPE_HIT);
+	  }
+	}
+	else if (!str_cmp(arg, "500")) {
+	  if (ch->destructo_discpower < 4) {
+		send_to_char("You lack the skill.\n\r", ch);
+		return;
+	  }
+	  if (!IS_NPC(ch)) {
+		argdam = (number_range(lowdam * 5, highdam * 5) * (kicmult + smastery));
+		dam = get_attmod(ch, victim) * (argdam * kimult);
+	  }
+	  else if (IS_NPC(ch)) {
+		argdam = number_range(lowdam * 5, highdam * 5);
+		dam = get_attmod(ch, victim) * (argdam + (get_curr_int(ch) / 40));
+	  }
+	  if (dam < 1)
+		dam = 1;
+	  adjcost = basecost * 256;
+	  act(AT_YELLOW,"You hold a hand aloft, generating a colossal, deadly spinning disc of energy.", ch, NULL, victim, TO_CHAR);
+	  act(AT_YELLOW,"Your single destructo disc splits apart into countless smaller discs, chasing down $N! &W[$t]", ch, num_punct(dam), victim, TO_CHAR);
+	  act(AT_YELLOW,"$n holds a hand aloft, generating a colossal, deadly spinning disc of energy.", ch, NULL, victim, TO_VICT);
+	  act(AT_YELLOW,"$n's single destructo disc splits apart into countless smaller discs, chasing you down! &W[$t]", ch, num_punct(dam), victim, TO_VICT);
+	  act(AT_YELLOW,"$n holds a hand aloft, generating a colossal, deadly spinning disc of energy.", ch, NULL, victim, TO_NOTVICT);
+	  act(AT_YELLOW,"$n's single destructo disc splits apart into countless smaller discs, chasing $N down! &W[$t]", ch, num_punct(dam), victim, TO_NOTVICT);
+	  if ((ch->mana - adjcost) < 0) {
+		act(AT_LBLUE,"Your Destructo Discs fizzle into nothing!", ch, NULL, victim, TO_CHAR);
+		act(AT_LBLUE,"$n's Destructo Discs fizzle into nothing!", ch, NULL, victim, TO_VICT);
+		act(AT_LBLUE,"$n's Destructo Discs fizzle into nothing!", ch, NULL, victim, TO_NOTVICT);
+		global_retcode = damage(ch, victim, 0, TYPE_HIT);
+		ch->mana = 0;
+	  } else {
+		global_retcode = damage(ch, victim, dam, TYPE_HIT);
+	  }
+	}
+	else {
+		send_to_char("Only increments of 200-500.\n\r", ch);
+		return;
+	}
   }
-  if (!is_android_h(ch))
-    ch->mana -= adjcost;
+  else {
+	act(AT_LBLUE, "You missed $N with your Destructo Disc.", ch, NULL, victim, TO_CHAR);
+	act(AT_LBLUE, "$n misses you with $s Destructo Disc.", ch, NULL, victim, TO_VICT);
+	act(AT_LBLUE, "$n missed $N with a Destructo Disc attack.", ch, NULL, victim, TO_NOTVICT);
+	global_retcode = damage(ch, victim, 0, TYPE_HIT);
+  }
+  if (!IS_NPC(ch) && ch->mana != 0) {
+	// train player masteries, no benefit from spamming at no ki
+	stat_train(ch, "int", 13);
+	ch->train += 13;
+	ch->masterydestructo_disc += 1;
+	ch->energymastery += 4;
+	if (ch->energymastery >= (ch->kspgain * 100)) {
+	  pager_printf_color(ch,"&CYou gained 5 Skill Points!\n\r");
+	  ch->sptotal += 5;
+	  ch->kspgain += 1;
+	}
+  }
+  if ((ch->mana - adjcost) < 0)
+	ch->mana = 0;
+  else
+	ch->mana -= adjcost;
   return;
 }
 
@@ -7970,7 +10306,7 @@ void do_sense(CHAR_DATA *ch, char *argument) {
   return;
 }
 
-void do_ddd(CHAR_DATA *ch, char *argument) {
+/*void do_ddd(CHAR_DATA *ch, char *argument) {
   CHAR_DATA *victim;
   int dam = 0;
 
@@ -8035,19 +10371,25 @@ void do_ddd(CHAR_DATA *ch, char *argument) {
   }
   ch->mana -= skill_table[gsn_ddd]->min_mana;
   return;
-}
+}*/
 
 void do_death_ball(CHAR_DATA *ch, char *argument) {
   CHAR_DATA *victim;
   int dam = 0;
   int argdam = 0;
-  int kilimit = 0;
   float kimult = 0;
   float kicmult = 0;
+  int kilimit = 0;
   int hitcheck = 0;
   int adjcost = 0;
+  int basecost = 0;
   float smastery = 0;
+  int lowdam = 0;
+  int highdam = 0;
+  char arg[MAX_INPUT_LENGTH];
 
+  argument = one_argument(argument, arg);
+  
   if (IS_NPC(ch) && is_split(ch)) {
     if (!ch->master)
       return;
@@ -8060,71 +10402,237 @@ void do_death_ball(CHAR_DATA *ch, char *argument) {
     send_to_char("You're not able to use that skill.\n\r", ch);
     return;
   }
+  if (!IS_NPC(ch)) {
+	kilimit = ch->train / 10000;
+	kimult = (float)get_curr_int(ch) / 1000 + 1;
+	kicmult = (float)kilimit / 100 + 1;
+	smastery = (float)ch->masterydeath_ball / 10000;
+	if (smastery > 10)
+	  smastery = 10;
+  }
   if ((victim = who_fighting(ch)) == NULL) {
     send_to_char("You aren't fighting anyone.\n\r", ch);
     return;
   }
-  if (!IS_NPC(ch)) {
-    kilimit = ch->train / 10000;
-    kimult = (float)get_curr_int(ch) / 1000 + 1;
-    kicmult = (float)kilimit / 100 + 1;
-    smastery = (float)ch->masterydeath_ball / 10000;
-  }
-  if (!IS_NPC(ch)) {
-    adjcost = 1000 * (ch->death_ballpower - ch->death_balleffic);
-    if (adjcost < 1000)
-      adjcost = 1000;
-  } else {
-    adjcost = 1;
-  }
-  if (ch->mana < adjcost) {
-    send_to_char("You don't have enough energy.\n\r", ch);
-    return;
-  }
+  basecost = 500;
+  adjcost = basecost;
+  lowdam = 1000;
+  highdam = 1250;
   hitcheck = number_range(1, 100);
-
   WAIT_STATE(ch, 8);
   if (hitcheck <= 95) {
-    if (!IS_NPC(ch)) {
-      argdam = ((number_range(100, 125) + (ch->death_ballpower * 11)) * (kicmult + smastery));
-      dam = get_attmod(ch, victim) * (argdam * kimult);
-      stat_train(ch, "int", 20);
-      ch->train += 20;
-      ch->masterydeath_ball += 1;
-      ch->energymastery += 6;
-      if (ch->energymastery >= (ch->kspgain * 100)) {
-        pager_printf_color(ch,
-                           "&CYou gained 5 Skill Points!\n\r");
-        ch->sptotal += 5;
-        ch->kspgain += 1;
-      }
-    }
-    if (IS_NPC(ch)) {
-      dam = get_attmod(ch, victim) * (number_range(100, 125) + (get_curr_int(ch) / 40));
-    }
-    if (ch->charge > 0)
-      dam = chargeDamMult(ch, dam);
-
-    act(AT_ORANGE,
-        "You raise your arm to the heavens, palm open. A swirling vortex of hellish light gathers into a ball, hovering lifelessly above. You point effortlessly at $N, sending them to their impending demise. &W[$t]",
-        ch, num_punct(dam), victim, TO_CHAR);
-    act(AT_ORANGE,
-        "$n raises $m arm to the heavens, palm open. A swirling vortex of hellish light gathers into a ball, hovering lifelessly above. $n points effortlessly, sending you to your impending demise. &W[$t]",
-        ch, num_punct(dam), victim, TO_VICT);
-    act(AT_ORANGE,
-        "$n raises $m arm to the heavens, palm open. A swirling vortex of hellish light gathers into a ball, hovering lifelessly above. $n points effortlessly at $N, sending them to their impending demise. &W[$t]",
-        ch, num_punct(dam), victim, TO_NOTVICT);
-    global_retcode = damage(ch, victim, dam, TYPE_HIT);
-  } else {
-    act(AT_YELLOW, "You missed $N with a death ball.", ch,
-        NULL, victim, TO_CHAR);
-    act(AT_YELLOW, "$n misses you with a death ball.", ch, NULL,
-        victim, TO_VICT);
-    act(AT_YELLOW, "$n missed $N with a death ball.", ch, NULL,
-        victim, TO_NOTVICT);
-    global_retcode = damage(ch, victim, 0, TYPE_HIT);
+	if (arg[0] == '\0') {
+	  if (!IS_NPC(ch)) {
+		argdam = (number_range(lowdam, highdam) * (kicmult + smastery));
+		dam = get_attmod(ch, victim) * (argdam * kimult);
+	  }
+	  else if (IS_NPC(ch)) {
+		argdam = number_range(lowdam, highdam);
+		dam = get_attmod(ch, victim) * (argdam + (get_curr_int(ch) / 40));
+	  }
+	  if (dam < 1)
+		dam = 1;
+	  act(AT_ORANGE,"You raise your arm to the heavens, palm open. A swirling vortex of hellish light gathers into a ball, hovering lifelessly above.",
+	  ch, NULL, victim, TO_CHAR);
+	  act(AT_ORANGE,"You point effortlessly at $N, sending them to their impending demise. &W[$t]",
+	  ch, num_punct(dam), victim, TO_CHAR);
+	  act(AT_ORANGE,"$n raises $m arm to the heavens, palm open. A swirling vortex of hellish light gathers into a ball, hovering lifelessly above.",
+	  ch, NULL, victim, TO_VICT);
+	  act(AT_ORANGE,"$n points effortlessly at you, sending you to your impending demise. &W[$t]",
+	  ch, num_punct(dam), victim, TO_VICT);
+	  act(AT_ORANGE,"$n raises $m arm to the heavens, palm open. A swirling vortex of hellish light gathers into a ball, hovering lifelessly above.",
+	  ch, NULL, victim, TO_NOTVICT);
+	  act(AT_ORANGE,"$n points effortlessly at $N, sending them to their impending demise. &W[$t]",
+	  ch, num_punct(dam), victim, TO_NOTVICT);
+	  if ((ch->mana - adjcost) < 0) {
+		act(AT_LBLUE,"Your Death Ball fizzles into nothing!", ch, NULL, victim, TO_CHAR);
+		act(AT_LBLUE,"$n's Death Ball fizzles into nothing!", ch, NULL, victim, TO_VICT);
+		act(AT_LBLUE,"$n's Death Ball fizzles into nothing!", ch, NULL, victim, TO_NOTVICT);
+		global_retcode = damage(ch, victim, 0, TYPE_HIT);
+		ch->mana = 0;
+	  } else {
+		global_retcode = damage(ch, victim, dam, TYPE_HIT);
+	  }
+	}
+	else if (!str_cmp(arg, "200")) {
+	  if (ch->death_ballpower < 1) {
+		send_to_char("You lack the skill.\n\r", ch);
+		return;
+	  }
+	  if (!IS_NPC(ch)) {
+		argdam = (number_range(lowdam * 2, highdam * 2) * (kicmult + smastery));
+		dam = get_attmod(ch, victim) * (argdam * kimult);
+	  }
+	  else if (IS_NPC(ch)) {
+		argdam = number_range(lowdam * 2, highdam * 2);
+		dam = get_attmod(ch, victim) * (argdam + (get_curr_int(ch) / 40));
+	  }
+	  if (dam < 1)
+		dam = 1;
+	  adjcost = basecost * 4;
+	  act(AT_ORANGE,"You raise your arm to the heavens, palm open. A swirling vortex of hellish light gathers into a ball, hovering lifelessly above.",
+	  ch, NULL, victim, TO_CHAR);
+	  act(AT_ORANGE,"You point effortlessly at $N, sending them to their impending demise. &W[$t]",
+	  ch, num_punct(dam), victim, TO_CHAR);
+	  act(AT_ORANGE,"$n raises $m arm to the heavens, palm open. A swirling vortex of hellish light gathers into a ball, hovering lifelessly above.",
+	  ch, NULL, victim, TO_VICT);
+	  act(AT_ORANGE,"$n points effortlessly at you, sending you to your impending demise. &W[$t]",
+	  ch, num_punct(dam), victim, TO_VICT);
+	  act(AT_ORANGE,"$n raises $m arm to the heavens, palm open. A swirling vortex of hellish light gathers into a ball, hovering lifelessly above.",
+	  ch, NULL, victim, TO_NOTVICT);
+	  act(AT_ORANGE,"$n points effortlessly at $N, sending them to their impending demise. &W[$t]",
+	  ch, num_punct(dam), victim, TO_NOTVICT);
+	  if ((ch->mana - adjcost) < 0) {
+		act(AT_LBLUE,"Your Death Ball fizzles into nothing!", ch, NULL, victim, TO_CHAR);
+		act(AT_LBLUE,"$n's Death Ball fizzles into nothing!", ch, NULL, victim, TO_VICT);
+		act(AT_LBLUE,"$n's Death Ball fizzles into nothing!", ch, NULL, victim, TO_NOTVICT);
+		global_retcode = damage(ch, victim, 0, TYPE_HIT);
+		ch->mana = 0;
+	  } else {
+		global_retcode = damage(ch, victim, dam, TYPE_HIT);
+	  }
+	}
+	else if (!str_cmp(arg, "300")) {
+	  if (ch->death_ballpower < 2) {
+		send_to_char("You lack the skill.\n\r", ch);
+		return;
+	  }
+	  if (!IS_NPC(ch)) {
+		argdam = (number_range(lowdam * 3, highdam * 3) * (kicmult + smastery));
+		dam = get_attmod(ch, victim) * (argdam * kimult);
+	  }
+	  else if (IS_NPC(ch)) {
+		argdam = number_range(lowdam * 3, highdam * 3);
+		dam = get_attmod(ch, victim) * (argdam + (get_curr_int(ch) / 40));
+	  }
+	  if (dam < 1)
+		dam = 1;
+	  adjcost = basecost * 16;
+	  act(AT_ORANGE,"You raise your arm to the heavens, palm open. A swirling vortex of hellish light gathers into a ball, hovering lifelessly above.",
+	  ch, NULL, victim, TO_CHAR);
+	  act(AT_ORANGE,"You point effortlessly at $N, sending them to their impending demise. &W[$t]",
+	  ch, num_punct(dam), victim, TO_CHAR);
+	  act(AT_ORANGE,"$n raises $m arm to the heavens, palm open. A swirling vortex of hellish light gathers into a ball, hovering lifelessly above.",
+	  ch, NULL, victim, TO_VICT);
+	  act(AT_ORANGE,"$n points effortlessly at you, sending you to your impending demise. &W[$t]",
+	  ch, num_punct(dam), victim, TO_VICT);
+	  act(AT_ORANGE,"$n raises $m arm to the heavens, palm open. A swirling vortex of hellish light gathers into a ball, hovering lifelessly above.",
+	  ch, NULL, victim, TO_NOTVICT);
+	  act(AT_ORANGE,"$n points effortlessly at $N, sending them to their impending demise. &W[$t]",
+	  ch, num_punct(dam), victim, TO_NOTVICT);
+	  if ((ch->mana - adjcost) < 0) {
+		act(AT_LBLUE,"Your Death Ball fizzles into nothing!", ch, NULL, victim, TO_CHAR);
+		act(AT_LBLUE,"$n's Death Ball fizzles into nothing!", ch, NULL, victim, TO_VICT);
+		act(AT_LBLUE,"$n's Death Ball fizzles into nothing!", ch, NULL, victim, TO_NOTVICT);
+		global_retcode = damage(ch, victim, 0, TYPE_HIT);
+		ch->mana = 0;
+	  } else {
+		global_retcode = damage(ch, victim, dam, TYPE_HIT);
+	  }
+	}
+	else if (!str_cmp(arg, "400")) {
+	  if (ch->death_ballpower < 3) {
+		send_to_char("You lack the skill.\n\r", ch);
+		return;
+	  }
+	  if (!IS_NPC(ch)) {
+		argdam = (number_range(lowdam * 4, highdam * 4) * (kicmult + smastery));
+		dam = get_attmod(ch, victim) * (argdam * kimult);
+	  }
+	  else if (IS_NPC(ch)) {
+		argdam = number_range(lowdam * 4, highdam * 4);
+		dam = get_attmod(ch, victim) * (argdam + (get_curr_int(ch) / 40));
+	  }
+	  if (dam < 1)
+		dam = 1;
+	  adjcost = basecost * 64;
+	  act(AT_ORANGE,"You raise your arm to the heavens, palm open. A swirling vortex of hellish light gathers into a ball, hovering lifelessly above.",
+	  ch, NULL, victim, TO_CHAR);
+	  act(AT_ORANGE,"You point effortlessly at $N, sending them to their impending demise. &W[$t]",
+	  ch, num_punct(dam), victim, TO_CHAR);
+	  act(AT_ORANGE,"$n raises $m arm to the heavens, palm open. A swirling vortex of hellish light gathers into a ball, hovering lifelessly above.",
+	  ch, NULL, victim, TO_VICT);
+	  act(AT_ORANGE,"$n points effortlessly at you, sending you to your impending demise. &W[$t]",
+	  ch, num_punct(dam), victim, TO_VICT);
+	  act(AT_ORANGE,"$n raises $m arm to the heavens, palm open. A swirling vortex of hellish light gathers into a ball, hovering lifelessly above.",
+	  ch, NULL, victim, TO_NOTVICT);
+	  act(AT_ORANGE,"$n points effortlessly at $N, sending them to their impending demise. &W[$t]",
+	  ch, num_punct(dam), victim, TO_NOTVICT);
+	  if ((ch->mana - adjcost) < 0) {
+		act(AT_LBLUE,"Your Death Ball fizzles into nothing!", ch, NULL, victim, TO_CHAR);
+		act(AT_LBLUE,"$n's Death Ball fizzles into nothing!", ch, NULL, victim, TO_VICT);
+		act(AT_LBLUE,"$n's Death Ball fizzles into nothing!", ch, NULL, victim, TO_NOTVICT);
+		global_retcode = damage(ch, victim, 0, TYPE_HIT);
+		ch->mana = 0;
+	  } else {
+		global_retcode = damage(ch, victim, dam, TYPE_HIT);
+	  }
+	}
+	else if (!str_cmp(arg, "500")) {
+	  if (ch->death_ballpower < 4) {
+		send_to_char("You lack the skill.\n\r", ch);
+		return;
+	  }
+	  if (!IS_NPC(ch)) {
+		argdam = (number_range(lowdam * 5, highdam * 5) * (kicmult + smastery));
+		dam = get_attmod(ch, victim) * (argdam * kimult);
+	  }
+	  else if (IS_NPC(ch)) {
+		argdam = number_range(lowdam * 5, highdam * 5);
+		dam = get_attmod(ch, victim) * (argdam + (get_curr_int(ch) / 40));
+	  }
+	  if (dam < 1)
+		dam = 1;
+	  adjcost = basecost * 256;
+	  act(AT_ORANGE,"You raise your arm to the heavens, palm open. A swirling vortex of hellish light gathers into a ball, blotting out all else.",
+	  ch, NULL, victim, TO_CHAR);
+	  act(AT_ORANGE,"You point effortlessly at $N, sending them to their impending demise. &W[$t]",
+	  ch, num_punct(dam), victim, TO_CHAR);
+	  act(AT_ORANGE,"$n raises $m arm to the heavens, palm open. A swirling vortex of hellish light gathers into a ball, blotting out all else.",
+	  ch, NULL, victim, TO_VICT);
+	  act(AT_ORANGE,"$n points effortlessly at you, sending you to your impending demise. &W[$t]",
+	  ch, num_punct(dam), victim, TO_VICT);
+	  act(AT_ORANGE,"$n raises $m arm to the heavens, palm open. A swirling vortex of hellish light gathers into a ball, blotting out all else.",
+	  ch, NULL, victim, TO_NOTVICT);
+	  act(AT_ORANGE,"$n points effortlessly at $N, sending them to their impending demise. &W[$t]",
+	  ch, num_punct(dam), victim, TO_NOTVICT);
+	  if ((ch->mana - adjcost) < 0) {
+		act(AT_LBLUE,"Your Death Ball fizzles into nothing!", ch, NULL, victim, TO_CHAR);
+		act(AT_LBLUE,"$n's Death Ball fizzles into nothing!", ch, NULL, victim, TO_VICT);
+		act(AT_LBLUE,"$n's Death Ball fizzles into nothing!", ch, NULL, victim, TO_NOTVICT);
+		global_retcode = damage(ch, victim, 0, TYPE_HIT);
+		ch->mana = 0;
+	  } else {
+		global_retcode = damage(ch, victim, dam, TYPE_HIT);
+	  }
+	}
+	else {
+		send_to_char("Only increments of 200-500.\n\r", ch);
+		return;
+	}
   }
-  ch->mana -= adjcost;
+  else {
+	act(AT_LBLUE, "You missed $N with your Death Ball.", ch, NULL, victim, TO_CHAR);
+	act(AT_LBLUE, "$n misses you with $s Death Ball.", ch, NULL, victim, TO_VICT);
+	act(AT_LBLUE, "$n missed $N with $s Death Ball.", ch, NULL, victim, TO_NOTVICT);
+	global_retcode = damage(ch, victim, 0, TYPE_HIT);
+  }
+  if (!IS_NPC(ch) && ch->mana != 0) {
+	// train player masteries, no benefit from spamming at no ki
+	stat_train(ch, "int", 20);
+	ch->train += 20;
+	ch->masterydeath_ball += 1;
+	ch->energymastery += 6;
+	if (ch->energymastery >= (ch->kspgain * 100)) {
+	  pager_printf_color(ch,"&CYou gained 5 Skill Points!\n\r");
+	  ch->sptotal += 5;
+	  ch->kspgain += 1;
+	}
+  }
+  if ((ch->mana - adjcost) < 0)
+	ch->mana = 0;
+  else
+	ch->mana -= adjcost;
   return;
 }
 
@@ -8132,13 +10640,20 @@ void do_eye_beam(CHAR_DATA *ch, char *argument) {
   CHAR_DATA *victim;
   int dam = 0;
   int argdam = 0;
-  int kilimit = 0;
   float kimult = 0;
   float kicmult = 0;
+  int kilimit = 0;
   int hitcheck = 0;
   int adjcost = 0;
+  int basecost = 0;
   float smastery = 0;
+  int lowdam = 0;
+  int highdam = 0;
+  char arg[MAX_INPUT_LENGTH];
+  int AT_AURACOLOR = ch->pcdata->auraColorPowerUp;
 
+  argument = one_argument(argument, arg);
+  
   if (IS_NPC(ch) && is_split(ch)) {
     if (!ch->master)
       return;
@@ -8151,71 +10666,192 @@ void do_eye_beam(CHAR_DATA *ch, char *argument) {
     send_to_char("You're not able to use that skill.\n\r", ch);
     return;
   }
+  if (!IS_NPC(ch)) {
+	kilimit = ch->train / 10000;
+	kimult = (float)get_curr_int(ch) / 1000 + 1;
+	kicmult = (float)kilimit / 100 + 1;
+	smastery = (float)ch->masteryeye_beam / 10000;
+	if (smastery > 10)
+	  smastery = 10;
+  }
   if ((victim = who_fighting(ch)) == NULL) {
     send_to_char("You aren't fighting anyone.\n\r", ch);
     return;
   }
-  if (!IS_NPC(ch)) {
-    kilimit = ch->train / 10000;
-    kimult = (float)get_curr_int(ch) / 1000 + 1;
-    kicmult = (float)kilimit / 100 + 1;
-    smastery = (float)ch->masteryeye_beam / 10000;
-  }
-  if (!IS_NPC(ch)) {
-    adjcost = 12 * (ch->eye_beampower - ch->eye_beameffic);
-    if (adjcost < 12)
-      adjcost = 12;
-  } else {
-    adjcost = 1;
-  }
-  if (ch->mana < adjcost) {
-    send_to_char("You don't have enough energy.\n\r", ch);
-    return;
-  }
-
-  sh_int z = get_aura(ch);
+  basecost = 12;
+  adjcost = basecost;
+  lowdam = 120;
+  highdam = 140;
   hitcheck = number_range(1, 100);
   WAIT_STATE(ch, 8);
   if (hitcheck <= 95) {
-    if (!IS_NPC(ch)) {
-      argdam = ((number_range(12, 14) + ch->eye_beampower) * (kicmult + smastery));
-      dam = get_attmod(ch, victim) * (argdam * kimult);
-      stat_train(ch, "int", 10);
-      ch->train += 10;
-      ch->masteryeye_beam += 1;
-      ch->energymastery += 3;
-      if (ch->energymastery >= (ch->kspgain * 100)) {
-        pager_printf_color(ch,
-                           "&CYou gained 5 Skill Points!\n\r");
-        ch->sptotal += 5;
-        ch->kspgain += 1;
-      }
-    }
-    if (IS_NPC(ch))
-      dam = get_attmod(ch, victim) * (number_range(12, 14) + (get_curr_int(ch) / 40));
-    if (ch->charge > 0)
-      dam = chargeDamMult(ch, dam);
-    act(z,
-        "Your eyes begin to glow as two beams shoot out from them at $N. &W[$t]",
-        ch, num_punct(dam), victim, TO_CHAR);
-    act(z,
-        "$n's eyes begin to glow as two beams shoot out from them at you. &W[$t]",
-        ch, num_punct(dam), victim, TO_VICT);
-    act(z,
-        "$n's eyes begin to glow as two beams shoot out from them at $N. &W[$t]",
-        ch, num_punct(dam), victim, TO_NOTVICT);
-
-    global_retcode = damage(ch, victim, dam, TYPE_HIT);
-  } else {
-    act(z, "You missed $N with your eye beam.", ch, NULL, victim,
-        TO_CHAR);
-    act(z, "$n misses you with $s eye beam.", ch, NULL, victim,
-        TO_VICT);
-    act(z, "$n missed $N with a eye beam.", ch, NULL, victim,
-        TO_NOTVICT);
-    global_retcode = damage(ch, victim, 0, TYPE_HIT);
+	if (arg[0] == '\0') {
+	  if (!IS_NPC(ch)) {
+		argdam = (number_range(lowdam, highdam) * (kicmult + smastery));
+		dam = get_attmod(ch, victim) * (argdam * kimult);
+	  }
+	  else if (IS_NPC(ch)) {
+		argdam = number_range(lowdam, highdam);
+		dam = get_attmod(ch, victim) * (argdam + (get_curr_int(ch) / 40));
+	  }
+	  if (dam < 1)
+		dam = 1;
+	  act(AT_AURACOLOR,"Your eyes glow brightly, firing two beams directly at $N. &W[$t]", ch, num_punct(dam), victim, TO_CHAR);
+	  act(AT_AURACOLOR,"$n's eyes glow brightly, firing two beams directly at you. &W[$t]", ch, num_punct(dam), victim, TO_VICT);
+	  act(AT_AURACOLOR,"$n's eyes glow brightly, firing two beams directly at $N. &W[$t]", ch, num_punct(dam), victim, TO_NOTVICT);
+	  if ((ch->mana - adjcost) < 0) {
+		act(AT_LBLUE,"Your Eye Beams fizzle into nothing!", ch, NULL, victim, TO_CHAR);
+		act(AT_LBLUE,"$n's Eye Beams fizzle into nothing!", ch, NULL, victim, TO_VICT);
+		act(AT_LBLUE,"$n's Eye Beams fizzle into nothing!", ch, NULL, victim, TO_NOTVICT);
+		global_retcode = damage(ch, victim, 0, TYPE_HIT);
+		ch->mana = 0;
+	  } else {
+		global_retcode = damage(ch, victim, dam, TYPE_HIT);
+	  }
+	}
+	else if (!str_cmp(arg, "200")) {
+	  if (ch->eye_beampower < 1) {
+		send_to_char("You lack the skill.\n\r", ch);
+		return;
+	  }
+	  if (!IS_NPC(ch)) {
+		argdam = (number_range(lowdam * 2, highdam * 2) * (kicmult + smastery));
+		dam = get_attmod(ch, victim) * (argdam * kimult);
+	  }
+	  else if (IS_NPC(ch)) {
+		argdam = number_range(lowdam * 2, highdam * 2);
+		dam = get_attmod(ch, victim) * (argdam + (get_curr_int(ch) / 40));
+	  }
+	  if (dam < 1)
+		dam = 1;
+	  adjcost = basecost * 4;
+	  act(AT_AURACOLOR,"Your eyes glow brightly, firing a barrage of beams directly at $N. &W[$t]", ch, num_punct(dam), victim, TO_CHAR);
+	  act(AT_AURACOLOR,"$n's eyes glow brightly, firing a barrage of beams directly at you. &W[$t]", ch, num_punct(dam), victim, TO_VICT);
+	  act(AT_AURACOLOR,"$n's eyes glow brightly, firing a barrage of beams directly at $N. &W[$t]", ch, num_punct(dam), victim, TO_NOTVICT);
+	  if ((ch->mana - adjcost) < 0) {
+		act(AT_LBLUE,"Your Eye Beams fizzle into nothing!", ch, NULL, victim, TO_CHAR);
+		act(AT_LBLUE,"$n's Eye Beams fizzle into nothing!", ch, NULL, victim, TO_VICT);
+		act(AT_LBLUE,"$n's Eye Beams fizzle into nothing!", ch, NULL, victim, TO_NOTVICT);
+		global_retcode = damage(ch, victim, 0, TYPE_HIT);
+		ch->mana = 0;
+	  } else {
+		global_retcode = damage(ch, victim, dam, TYPE_HIT);
+	  }
+	}
+	else if (!str_cmp(arg, "300")) {
+	  if (ch->eye_beampower < 2) {
+		send_to_char("You lack the skill.\n\r", ch);
+		return;
+	  }
+	  if (!IS_NPC(ch)) {
+		argdam = (number_range(lowdam * 3, highdam * 3) * (kicmult + smastery));
+		dam = get_attmod(ch, victim) * (argdam * kimult);
+	  }
+	  else if (IS_NPC(ch)) {
+		argdam = number_range(lowdam * 3, highdam * 3);
+		dam = get_attmod(ch, victim) * (argdam + (get_curr_int(ch) / 40));
+	  }
+	  if (dam < 1)
+		dam = 1;
+	  adjcost = basecost * 16;
+	  act(AT_AURACOLOR,"Your eyes glow brightly, firing an unending barrage of beams directly at $N. &W[$t]", ch, num_punct(dam), victim, TO_CHAR);
+	  act(AT_AURACOLOR,"$n's eyes glow brightly, firing an unending barrage of beams directly at you. &W[$t]", ch, num_punct(dam), victim, TO_VICT);
+	  act(AT_AURACOLOR,"$n's eyes glow brightly, firing an unending barrage of beams directly at $N. &W[$t]", ch, num_punct(dam), victim, TO_NOTVICT);
+	  if ((ch->mana - adjcost) < 0) {
+		act(AT_LBLUE,"Your Eye Beams fizzle into nothing!", ch, NULL, victim, TO_CHAR);
+		act(AT_LBLUE,"$n's Eye Beams fizzle into nothing!", ch, NULL, victim, TO_VICT);
+		act(AT_LBLUE,"$n's Eye Beams fizzle into nothing!", ch, NULL, victim, TO_NOTVICT);
+		global_retcode = damage(ch, victim, 0, TYPE_HIT);
+		ch->mana = 0;
+	  } else {
+		global_retcode = damage(ch, victim, dam, TYPE_HIT);
+	  }
+	}
+	else if (!str_cmp(arg, "400")) {
+	  if (ch->eye_beampower < 3) {
+		send_to_char("You lack the skill.\n\r", ch);
+		return;
+	  }
+	  if (!IS_NPC(ch)) {
+		argdam = (number_range(lowdam * 4, highdam * 4) * (kicmult + smastery));
+		dam = get_attmod(ch, victim) * (argdam * kimult);
+	  }
+	  else if (IS_NPC(ch)) {
+		argdam = number_range(lowdam * 4, highdam * 4);
+		dam = get_attmod(ch, victim) * (argdam + (get_curr_int(ch) / 40));
+	  }
+	  if (dam < 1)
+		dam = 1;
+	  adjcost = basecost * 64;
+	  act(AT_AURACOLOR,"Your eyes glow brightly, firing an unending barrage of beams directly at $N. &W[$t]", ch, num_punct(dam), victim, TO_CHAR);
+	  act(AT_AURACOLOR,"$n's eyes glow brightly, firing an unending barrage of beams directly at you. &W[$t]", ch, num_punct(dam), victim, TO_VICT);
+	  act(AT_AURACOLOR,"$n's eyes glow brightly, firing an unending barrage of beams directly at $N. &W[$t]", ch, num_punct(dam), victim, TO_NOTVICT);
+	  if ((ch->mana - adjcost) < 0) {
+		act(AT_LBLUE,"Your Eye Beams fizzle into nothing!", ch, NULL, victim, TO_CHAR);
+		act(AT_LBLUE,"$n's Eye Beams fizzle into nothing!", ch, NULL, victim, TO_VICT);
+		act(AT_LBLUE,"$n's Eye Beams fizzle into nothing!", ch, NULL, victim, TO_NOTVICT);
+		global_retcode = damage(ch, victim, 0, TYPE_HIT);
+		ch->mana = 0;
+	  } else {
+		global_retcode = damage(ch, victim, dam, TYPE_HIT);
+	  }
+	}
+	else if (!str_cmp(arg, "500")) {
+	  if (ch->eye_beampower < 4) {
+		send_to_char("You lack the skill.\n\r", ch);
+		return;
+	  }
+	  if (!IS_NPC(ch)) {
+		argdam = (number_range(lowdam * 5, highdam * 5) * (kicmult + smastery));
+		dam = get_attmod(ch, victim) * (argdam * kimult);
+	  }
+	  else if (IS_NPC(ch)) {
+		argdam = number_range(lowdam * 5, highdam * 5);
+		dam = get_attmod(ch, victim) * (argdam + (get_curr_int(ch) / 40));
+	  }
+	  if (dam < 1)
+		dam = 1;
+	  adjcost = basecost * 256;
+	  act(AT_AURACOLOR,"Your eyes glow brightly, lighting up $N with blast after blast from your explosive gaze! &W[$t]", ch, num_punct(dam), victim, TO_CHAR);
+	  act(AT_AURACOLOR,"$n's eyes glow brightly, lighting you up with blast after blast under &s explosive gaze! &W[$t]", ch, num_punct(dam), victim, TO_VICT);
+	  act(AT_AURACOLOR,"$n's eyes glow brightly, lighting up $N with blast after blast from $s explosive gaze! &W[$t]", ch, num_punct(dam), victim, TO_NOTVICT);
+	  if ((ch->mana - adjcost) < 0) {
+		act(AT_LBLUE,"Your Eye Beams fizzle into nothing!", ch, NULL, victim, TO_CHAR);
+		act(AT_LBLUE,"$n's Eye Beams fizzle into nothing!", ch, NULL, victim, TO_VICT);
+		act(AT_LBLUE,"$n's Eye Beams fizzle into nothing!", ch, NULL, victim, TO_NOTVICT);
+		global_retcode = damage(ch, victim, 0, TYPE_HIT);
+		ch->mana = 0;
+	  } else {
+		global_retcode = damage(ch, victim, dam, TYPE_HIT);
+	  }
+	}
+	else {
+		send_to_char("Only increments of 200-500.\n\r", ch);
+		return;
+	}
   }
-  ch->mana -= adjcost;
+  else {
+	act(AT_LBLUE, "You missed $N with your Eye Beams.", ch, NULL, victim, TO_CHAR);
+	act(AT_LBLUE, "$n misses you with $s Eye Beams.", ch, NULL, victim, TO_VICT);
+	act(AT_LBLUE, "$n missed $N with $s Eye Beams.", ch, NULL, victim, TO_NOTVICT);
+	global_retcode = damage(ch, victim, 0, TYPE_HIT);
+  }
+  if (!IS_NPC(ch) && ch->mana != 0) {
+	// train player masteries, no benefit from spamming at no ki
+	stat_train(ch, "int", 10);
+	ch->train += 10;
+	ch->masteryeye_beam += 1;
+	ch->energymastery += 3;
+	if (ch->energymastery >= (ch->kspgain * 100)) {
+	  pager_printf_color(ch,"&CYou gained 5 Skill Points!\n\r");
+	  ch->sptotal += 5;
+	  ch->kspgain += 1;
+	}
+  }
+  if ((ch->mana - adjcost) < 0)
+	ch->mana = 0;
+  else
+	ch->mana -= adjcost;
   return;
 }
 
@@ -8223,13 +10859,20 @@ void do_finger_beam(CHAR_DATA *ch, char *argument) {
   CHAR_DATA *victim;
   int dam = 0;
   int argdam = 0;
-  int kilimit = 0;
   float kimult = 0;
   float kicmult = 0;
+  int kilimit = 0;
   int hitcheck = 0;
   int adjcost = 0;
+  int basecost = 0;
   float smastery = 0;
+  int lowdam = 0;
+  int highdam = 0;
+  char arg[MAX_INPUT_LENGTH];
+  int AT_AURACOLOR = ch->pcdata->auraColorPowerUp;
 
+  argument = one_argument(argument, arg);
+  
   if (IS_NPC(ch) && is_split(ch)) {
     if (!ch->master)
       return;
@@ -8242,77 +10885,196 @@ void do_finger_beam(CHAR_DATA *ch, char *argument) {
     send_to_char("You're not able to use that skill.\n\r", ch);
     return;
   }
+  if (!IS_NPC(ch)) {
+	kilimit = ch->train / 10000;
+	kimult = (float)get_curr_int(ch) / 1000 + 1;
+	kicmult = (float)kilimit / 100 + 1;
+	smastery = (float)ch->masteryfinger_beam / 10000;
+	if (smastery > 10)
+	  smastery = 10;
+  }
   if ((victim = who_fighting(ch)) == NULL) {
     send_to_char("You aren't fighting anyone.\n\r", ch);
     return;
   }
-  if (!IS_NPC(ch)) {
-    kilimit = ch->train / 10000;
-    kimult = (float)get_curr_int(ch) / 1000 + 1;
-    kicmult = (float)kilimit / 100 + 1;
-    smastery = (float)ch->masteryfinger_beam / 10000;
-  }
-  if (!IS_NPC(ch)) {
-    adjcost = 75 * (ch->finger_beampower - ch->finger_beameffic);
-    if (adjcost < 75)
-      adjcost = 75;
-  } else {
-    adjcost = 1;
-  }
-  if (ch->mana < adjcost) {
-    send_to_char("You don't have enough energy.\n\r", ch);
-    return;
-  }
-
-  sh_int z = get_aura(ch);
+  basecost = 75;
+  adjcost = basecost;
+  lowdam = 600;
+  highdam = 650;
   hitcheck = number_range(1, 100);
   WAIT_STATE(ch, 8);
   if (hitcheck <= 95) {
-    if (!IS_NPC(ch)) {
-      argdam = ((number_range(60, 65) + (ch->finger_beampower * 6)) * (kicmult + smastery));
-      dam = get_attmod(ch, victim) * (argdam * kimult);
-      stat_train(ch, "int", 16);
-      ch->train += 16;
-      ch->masteryfinger_beam += 1;
-      ch->energymastery += 5;
-      if (ch->energymastery >= (ch->kspgain * 100)) {
-        pager_printf_color(ch,
-                           "&CYou gained 5 Skill Points!\n\r");
-        ch->sptotal += 5;
-        ch->kspgain += 1;
-      }
-    }
-    if (IS_NPC(ch)) {
-      argdam = number_range(60, 65);
-      dam = get_attmod(ch, victim) * (argdam + (get_curr_int(ch) / 40));
-    }
-    if (ch->charge > 0)
-      dam = chargeDamMult(ch, dam);
-    act(z,
-        "You point your hand towards $N, firing a deadly beam of energy from the tip of your finger. &W[$t]",
-        ch, num_punct(dam), victim, TO_CHAR);
-    act(z,
-        "$n points $s hand towards you, firing a deadly beam of energy from the tip of $s finger. &W[$t]",
-        ch, num_punct(dam), victim, TO_VICT);
-    act(z,
-        "$n points $s hand towards $N, firing a deadly beam of energy from the tip of $s finger. &W[$t]",
-        ch, num_punct(dam), victim, TO_NOTVICT);
-
-    global_retcode = damage(ch, victim, dam, TYPE_HIT);
-  } else {
-    act(z, "You missed $N with your finger beam.", ch, NULL, victim,
-        TO_CHAR);
-    act(z, "$n misses you with $s finger beam.", ch, NULL, victim,
-        TO_VICT);
-    act(z, "$n missed $N with a finger beam.", ch, NULL, victim,
-        TO_NOTVICT);
-    global_retcode = damage(ch, victim, 0, TYPE_HIT);
+	if (arg[0] == '\0') {
+	  if (!IS_NPC(ch)) {
+		argdam = (number_range(lowdam, highdam) * (kicmult + smastery));
+		dam = get_attmod(ch, victim) * (argdam * kimult);
+	  }
+	  else if (IS_NPC(ch)) {
+		argdam = number_range(lowdam, highdam);
+		dam = get_attmod(ch, victim) * (argdam + (get_curr_int(ch) / 40));
+	  }
+	  if (dam < 1)
+		dam = 1;
+	  act(AT_AURACOLOR,"You point your hand toward $N, firing a deadly beam of energy from the tip of your finger. &W[$t]", ch, num_punct(dam), victim, TO_CHAR);
+	  act(AT_AURACOLOR,"$n points $s hand toward you, firing a deadly beam of energy from the tip of $s finger. &W[$t]", ch, num_punct(dam), victim, TO_VICT);
+	  act(AT_AURACOLOR,"$n points $s hand toward $N, firing a deadly beam of enery from the tip of $s finger. &W[$t]", ch, num_punct(dam), victim, TO_NOTVICT);
+	  if ((ch->mana - adjcost) < 0) {
+		act(AT_LBLUE,"Your Finger Beam fizzles into nothing!", ch, NULL, victim, TO_CHAR);
+		act(AT_LBLUE,"$n's Finger Beam fizzles into nothing!", ch, NULL, victim, TO_VICT);
+		act(AT_LBLUE,"$n's Finger Beam fizzles into nothing!", ch, NULL, victim, TO_NOTVICT);
+		global_retcode = damage(ch, victim, 0, TYPE_HIT);
+		ch->mana = 0;
+	  } else {
+		global_retcode = damage(ch, victim, dam, TYPE_HIT);
+	  }
+	}
+	else if (!str_cmp(arg, "200")) {
+	  if (ch->finger_beampower < 1) {
+		send_to_char("You lack the skill.\n\r", ch);
+		return;
+	  }
+	  if (!IS_NPC(ch)) {
+		argdam = (number_range(lowdam * 2, highdam * 2) * (kicmult + smastery));
+		dam = get_attmod(ch, victim) * (argdam * kimult);
+	  }
+	  else if (IS_NPC(ch)) {
+		argdam = number_range(lowdam * 2, highdam * 2);
+		dam = get_attmod(ch, victim) * (argdam + (get_curr_int(ch) / 40));
+	  }
+	  if (dam < 1)
+		dam = 1;
+	  adjcost = basecost * 4;
+	  act(AT_AURACOLOR,"You point your hand toward $N, firing a deadly beam of energy from the tip of your finger. &W[$t]", ch, num_punct(dam), victim, TO_CHAR);
+	  act(AT_AURACOLOR,"$n points $s hand toward you, firing a deadly beam of energy from the tip of $s finger. &W[$t]", ch, num_punct(dam), victim, TO_VICT);
+	  act(AT_AURACOLOR,"$n points $s hand toward $N, firing a deadly beam of enery from the tip of $s finger. &W[$t]", ch, num_punct(dam), victim, TO_NOTVICT);
+	  if ((ch->mana - adjcost) < 0) {
+		act(AT_LBLUE,"Your Finger Beam fizzles into nothing!", ch, NULL, victim, TO_CHAR);
+		act(AT_LBLUE,"$n's Finger Beam fizzles into nothing!", ch, NULL, victim, TO_VICT);
+		act(AT_LBLUE,"$n's Finger Beam fizzles into nothing!", ch, NULL, victim, TO_NOTVICT);
+		global_retcode = damage(ch, victim, 0, TYPE_HIT);
+		ch->mana = 0;
+	  } else {
+		global_retcode = damage(ch, victim, dam, TYPE_HIT);
+	  }
+	}
+	else if (!str_cmp(arg, "300")) {
+	  if (ch->finger_beampower < 2) {
+		send_to_char("You lack the skill.\n\r", ch);
+		return;
+	  }
+	  if (!IS_NPC(ch)) {
+		argdam = (number_range(lowdam * 3, highdam * 3) * (kicmult + smastery));
+		dam = get_attmod(ch, victim) * (argdam * kimult);
+	  }
+	  else if (IS_NPC(ch)) {
+		argdam = number_range(lowdam * 3, highdam * 3);
+		dam = get_attmod(ch, victim) * (argdam + (get_curr_int(ch) / 40));
+	  }
+	  if (dam < 1)
+		dam = 1;
+	  adjcost = basecost * 16;
+	  act(AT_AURACOLOR,"You point your hand toward $N, firing a deadly beam of energy from the tip of your finger. &W[$t]", ch, num_punct(dam), victim, TO_CHAR);
+	  act(AT_AURACOLOR,"$n points $s hand toward you, firing a deadly beam of energy from the tip of $s finger. &W[$t]", ch, num_punct(dam), victim, TO_VICT);
+	  act(AT_AURACOLOR,"$n points $s hand toward $N, firing a deadly beam of enery from the tip of $s finger. &W[$t]", ch, num_punct(dam), victim, TO_NOTVICT);
+	  if ((ch->mana - adjcost) < 0) {
+		act(AT_LBLUE,"Your Finger Beam fizzles into nothing!", ch, NULL, victim, TO_CHAR);
+		act(AT_LBLUE,"$n's Finger Beam fizzles into nothing!", ch, NULL, victim, TO_VICT);
+		act(AT_LBLUE,"$n's Finger Beam fizzles into nothing!", ch, NULL, victim, TO_NOTVICT);
+		global_retcode = damage(ch, victim, 0, TYPE_HIT);
+		ch->mana = 0;
+	  } else {
+		global_retcode = damage(ch, victim, dam, TYPE_HIT);
+	  }
+	}
+	else if (!str_cmp(arg, "400")) {
+	  if (ch->finger_beampower < 3) {
+		send_to_char("You lack the skill.\n\r", ch);
+		return;
+	  }
+	  if (!IS_NPC(ch)) {
+		argdam = (number_range(lowdam * 4, highdam * 4) * (kicmult + smastery));
+		dam = get_attmod(ch, victim) * (argdam * kimult);
+	  }
+	  else if (IS_NPC(ch)) {
+		argdam = number_range(lowdam * 4, highdam * 4);
+		dam = get_attmod(ch, victim) * (argdam + (get_curr_int(ch) / 40));
+	  }
+	  if (dam < 1)
+		dam = 1;
+	  adjcost = basecost * 64;
+	  act(AT_AURACOLOR,"You point your hand toward $N, firing a deadly beam of energy from the tip of your finger. &W[$t]", ch, num_punct(dam), victim, TO_CHAR);
+	  act(AT_AURACOLOR,"$n points $s hand toward you, firing a deadly beam of energy from the tip of $s finger. &W[$t]", ch, num_punct(dam), victim, TO_VICT);
+	  act(AT_AURACOLOR,"$n points $s hand toward $N, firing a deadly beam of enery from the tip of $s finger. &W[$t]", ch, num_punct(dam), victim, TO_NOTVICT);
+	  if ((ch->mana - adjcost) < 0) {
+		act(AT_LBLUE,"Your Finger Beam fizzles into nothing!", ch, NULL, victim, TO_CHAR);
+		act(AT_LBLUE,"$n's Finger Beam fizzles into nothing!", ch, NULL, victim, TO_VICT);
+		act(AT_LBLUE,"$n's Finger Beam fizzles into nothing!", ch, NULL, victim, TO_NOTVICT);
+		global_retcode = damage(ch, victim, 0, TYPE_HIT);
+		ch->mana = 0;
+	  } else {
+		global_retcode = damage(ch, victim, dam, TYPE_HIT);
+	  }
+	}
+	else if (!str_cmp(arg, "500")) {
+	  if (ch->finger_beampower < 4) {
+		send_to_char("You lack the skill.\n\r", ch);
+		return;
+	  }
+	  if (!IS_NPC(ch)) {
+		argdam = (number_range(lowdam * 5, highdam * 5) * (kicmult + smastery));
+		dam = get_attmod(ch, victim) * (argdam * kimult);
+	  }
+	  else if (IS_NPC(ch)) {
+		argdam = number_range(lowdam * 5, highdam * 5);
+		dam = get_attmod(ch, victim) * (argdam + (get_curr_int(ch) / 40));
+	  }
+	  if (dam < 1)
+		dam = 1;
+	  adjcost = basecost * 256;
+	  act(AT_AURACOLOR,"You point your hand effortlessly toward $N, erupting the landscape into a supermassive explosion! &W[$t]", ch, num_punct(dam), victim, TO_CHAR);
+	  act(AT_AURACOLOR,"$n points $s hand effortlessly toward you, engulfing you in a supermassive eruption! &W[$t]", ch, num_punct(dam), victim, TO_VICT);
+	  act(AT_AURACOLOR,"$n points $s hand effortlessly toward $N, erupting the landscape into a supermassive explosion! &W[$t]", ch, num_punct(dam), victim, TO_NOTVICT);
+	  if ((ch->mana - adjcost) < 0) {
+		act(AT_LBLUE,"Your explosion fizzles into nothing before causing any real damage!", ch, NULL, victim, TO_CHAR);
+		act(AT_LBLUE,"$n's explosion fizzles into nothing before causing any real damage!", ch, NULL, victim, TO_VICT);
+		act(AT_LBLUE,"$n's explosion fizzles into nothing before causing any real damage!", ch, NULL, victim, TO_NOTVICT);
+		global_retcode = damage(ch, victim, 0, TYPE_HIT);
+		ch->mana = 0;
+	  } else {
+		global_retcode = damage(ch, victim, dam, TYPE_HIT);
+	  }
+	}
+	else {
+		send_to_char("Only increments of 200-500.\n\r", ch);
+		return;
+	}
   }
-  ch->mana -= adjcost;
+  else {
+	act(AT_LBLUE, "You missed $N with your Finger Beam.", ch, NULL, victim, TO_CHAR);
+	act(AT_LBLUE, "$n misses you with $s Finger Beam.", ch, NULL, victim, TO_VICT);
+	act(AT_LBLUE, "$n missed $N with $s Finger Beam.", ch, NULL, victim, TO_NOTVICT);
+	global_retcode = damage(ch, victim, 0, TYPE_HIT);
+  }
+  if (!IS_NPC(ch) && ch->mana != 0) {
+	// train player masteries, no benefit from spamming at no ki
+	stat_train(ch, "int", 16);
+	ch->train += 16;
+	ch->masteryfinger_beam += 1;
+	ch->energymastery += 5;
+	if (ch->energymastery >= (ch->kspgain * 100)) {
+	  pager_printf_color(ch,"&CYou gained 5 Skill Points!\n\r");
+	  ch->sptotal += 5;
+	  ch->kspgain += 1;
+	}
+  }
+  if ((ch->mana - adjcost) < 0)
+	ch->mana = 0;
+  else
+	ch->mana -= adjcost;
   return;
 }
 
-void do_tribeam(CHAR_DATA *ch, char *argument) {
+/*void do_tribeam(CHAR_DATA *ch, char *argument) {
   CHAR_DATA *victim;
   int dam = 0;
 
@@ -8346,15 +11108,15 @@ void do_tribeam(CHAR_DATA *ch, char *argument) {
 
   WAIT_STATE(ch, skill_table[gsn_tribeam]->beats);
   if (can_use_skill(ch, number_percent(), gsn_tribeam)) {
-    /*
+    
                    dam = get_attmod(ch, victim) * number_range( 34, 40 );
-                 */
+                 
     dam = get_attmod(ch, victim) * (number_range(52, 56) + (get_curr_int(ch) / 20));
     if (ch->charge > 0)
       dam = chargeDamMult(ch, dam);
-    /*	act( AT_SKILL, "You form your fingers into a triangle, spotting $N in your sights before pummeling $M with a powerfull beam of inner energy. &W[$t]", ch, num_punct(dam), victim, TO_CHAR );
-     *	act( AT_SKILL, "$n forms $s fingers into a triangle, spotting you in $s sights before pummeling you with a powerfull beam of inner energy. &W[$t]", ch, num_punct(dam), victim, TO_VICT );
-     *	act( AT_SKILL, "$n forms $s fingers into a triangle, spotting $N in $s sights before pummeling $M with a powerfull beam of inner energy. &W[$t]", ch, num_punct(dam), victim, TO_NOTVICT ); */
+    	act( AT_SKILL, "You form your fingers into a triangle, spotting $N in your sights before pummeling $M with a powerfull beam of inner energy. &W[$t]", ch, num_punct(dam), victim, TO_CHAR );
+     	act( AT_SKILL, "$n forms $s fingers into a triangle, spotting you in $s sights before pummeling you with a powerfull beam of inner energy. &W[$t]", ch, num_punct(dam), victim, TO_VICT );
+     	act( AT_SKILL, "$n forms $s fingers into a triangle, spotting $N in $s sights before pummeling $M with a powerfull beam of inner energy. &W[$t]", ch, num_punct(dam), victim, TO_NOTVICT );
 
     act(AT_YELLOW,
         "You form your fingers and thumbs into a triangle, "
@@ -8402,9 +11164,9 @@ void do_tribeam(CHAR_DATA *ch, char *argument) {
   }
   ch->mana -= skill_table[gsn_tribeam]->min_mana;
   return;
-}
+}*/
 
-void do_solar_flare(CHAR_DATA *ch, char *argument) {
+/*void do_solar_flare(CHAR_DATA *ch, char *argument) {
   AFFECT_DATA af;
   CHAR_DATA *vch, *vch_next;
 
@@ -8482,9 +11244,9 @@ void do_solar_flare(CHAR_DATA *ch, char *argument) {
   }
   ch->mana -= skill_table[gsn_solar_flare]->min_mana;
   return;
-}
+}*/
 
-void do_hyper(CHAR_DATA *ch, char *argument) {
+/*void do_hyper(CHAR_DATA *ch, char *argument) {
   if (!IS_NPC(ch)) {
     send_to_char("Temporarily disabled. Try 'powerup' instead.", ch);
     return;
@@ -8577,9 +11339,9 @@ void do_hyper(CHAR_DATA *ch, char *argument) {
 
   ch->mana -= skill_table[gsn_hyper]->min_mana;
   return;
-}
+}*/
 
-void do_instant_trans(CHAR_DATA *ch, char *argument) {
+/*void do_instant_trans(CHAR_DATA *ch, char *argument) {
   CHAR_DATA *victim;
   CHAR_DATA *fch;
   CHAR_DATA *fch_next;
@@ -8688,254 +11450,7 @@ void do_instant_trans(CHAR_DATA *ch, char *argument) {
       ch->mana -= 5000;
   }
   return;
-}
-
-void chargeDrain(CHAR_DATA *ch) {
-  SKILLTYPE *skill = skill_table[ch->skillGsn];
-
-  if (!skill) {
-    bug("chargeDrain: no skill gsn. %s (sn %d)", ch->name,
-        ch->skillGsn);
-    return;
-  }
-  if (!is_android_h(ch)) {
-    ch->mana -= skill->min_mana;
-    ch->mana = URANGE(0, ch->mana, ch->max_mana);
-  }
-  ch->focus -= skill->focus / 2;
-  ch->focus = URANGE(0, ch->focus, get_curr_int(ch));
-  return;
-}
-
-void do_charge(CHAR_DATA *ch, char *argument) {
-  char arg[MAX_INPUT_LENGTH];
-  SKILLTYPE *skill = NULL;
-  int chargeGsn = 0;
-
-  if (IS_NPC(ch))
-    return;
-
-  if (ch->pcdata->learned[gsn_charge2] <= 0) {
-    send_to_char("&wYou must learn charge level 1 before you can charge attacks.\n\r",
-                 ch);
-    return;
-  }
-  if (!ch->fighting && ch->charge > 0) {
-    send_to_char("&wHmm... you seem to have lost your victim...\n\r", ch);
-    ch->substate = SUB_NONE;
-    ch->skillGsn = -1;
-    ch->charge = 0;
-    ch->timerDelay = 0;
-    ch->timerType = 0;
-    ch->timerDo_fun = NULL;
-    return;
-  }
-  if (!ch->fighting) {
-    send_to_char("&wYou aren't fighting anything.\n\r", ch);
-    ch->substate = SUB_NONE;
-    ch->skillGsn = -1;
-    ch->charge = 0;
-    ch->timerDelay = 0;
-    ch->timerType = 0;
-    ch->timerDo_fun = NULL;
-    return;
-  }
-  one_argument(argument, arg);
-
-  switch (ch->charge) {
-    case 0:
-      chargeGsn = gsn_charge2;
-      break;
-    case 1:
-      chargeGsn = gsn_charge2;
-      break;
-    case 2:
-      chargeGsn = gsn_charge3;
-      break;
-    case 3:
-      chargeGsn = gsn_charge4;
-      break;
-    case 4:
-      chargeGsn = gsn_charge5;
-      break;
-    default:
-      chargeGsn = -1;
-      break;
-  }
-
-  /* energy and focus checks for charge and the attack */
-
-  switch (ch->substate) {
-    default:
-      bug("do_charge: illegal substate");
-      return;
-
-    case SUB_NONE:
-      if (IS_NPC(ch) && IS_AFFECTED(ch, AFF_CHARM)) {
-        send_to_char("&wYou can't concentrate enough for that.\n\r",
-                     ch);
-        return;
-      }
-      if (ch->mount) {
-        send_to_char("&wYou can't do that while mounted.\n\r",
-                     ch);
-        return;
-      }
-      if (ch->position == POS_AGGRESSIVE || ch->position == POS_BERSERK) {
-        send_to_char("&wYou can't concentrate enough for that.\n\r",
-                     ch);
-        return;
-      }
-      ch->skillGsn = skill_lookup(arg);
-      if (ch->skillGsn > 0 && ((ch->pcdata && ch->pcdata->learned[ch->skillGsn] > 0))) {
-        skill = skill_table[ch->skillGsn];
-      } else {
-        send_to_char("&wYou don't know any skill like that.\n\r", ch);
-        return;
-      }
-
-      if (skill->canCharge == 0) {
-        send_to_char("&wYou can't charge that.\n\r", ch);
-        return;
-      }
-      if (ch->mana < (skill->min_mana * 2)) {
-        send_to_char("&wYou need more energy before you can charge that.\n\r",
-                     ch);
-        return;
-      }
-      if (ch->focus < (skill->focus * 1.5)) {
-        send_to_char("&wYou need to focus more before you can charge that.\n\r",
-                     ch);
-        return;
-      }
-      WAIT_STATE(ch, 10);
-      ch->charge = 0;
-      learn_from_success(ch, chargeGsn);
-      ch->substate = SUB_CMD_LOOP_TIMER;
-      ch->timerDelay = number_range(1, 2);
-      ch->timerType = 1;
-      ch->timerDo_fun = do_charge;
-      pager_printf(ch, "&wYou begin to charge your %s...\n\r",
-                   skill->name);
-      act(AT_PLAIN, "$n begins to charge up an attack...", ch, NULL,
-          NULL, TO_ROOM);
-      return;
-
-    case SUB_CMD_LOOP_TIMER:
-      skill = skill_table[ch->skillGsn];
-      if (chargeGsn != -1 && ch->pcdata->learned[chargeGsn] > 0 && can_use_skill(ch, number_percent(), chargeGsn) && ch->mana >= (skill->min_mana * 2) && ch->focus >= (skill->focus * 1.5)) {
-        pager_printf(ch,
-                     "&wYou channel more energy in to your %s.\n\r",
-                     skill_table[ch->skillGsn]->name);
-        act(AT_PLAIN, "$n continues charging up $s attack.", ch,
-            NULL, NULL, TO_ROOM);
-        learn_from_success(ch, chargeGsn);
-        /* subtract focus and energy */
-        ch->charge++;
-        chargeDrain(ch);
-        ch->timerDelay = number_range(1, 2);
-        ch->timerType = 1;
-        ch->timerDo_fun = do_charge;
-        return;
-      } else {
-        if (ch->mana < skill->min_mana)
-          pager_printf(ch,
-                       "&wYou finish channeling all your available energy in to %s, and fire it!\n\r",
-                       skill_table[ch->skillGsn]->name);
-        else if (ch->mana < skill->min_mana)
-          pager_printf(ch,
-                       "&wYou lose your focus and %s fires!\n\r",
-                       skill_table[ch->skillGsn]->name);
-        else
-          pager_printf(ch,
-                       "&wYou can't control your %s any more and it fires!\n\r",
-                       skill_table[ch->skillGsn]->name);
-        if (chargeGsn != -1)
-          learn_from_failure(ch, chargeGsn);
-        /* do attack */
-        break;
-      }
-
-    case SUB_TIMER_DO_ABORT: {
-      if (!ch->fighting) {
-        bug("skills_dbs:3749");
-        pager_printf(ch,
-                     "&wYou power down your %s since you're not fighting any more.",
-                     skill_table[ch->skillGsn]->name);
-        ch->timerDelay = 0;
-        ch->timerType = 0;
-        ch->substate = SUB_NONE;
-        ch->skillGsn = -1;
-        ch->charge = 0;
-        ch->timerDo_fun = NULL;
-        return;
-      }
-      if (!ch->fighting->who)
-        bug("skills_dbs:3759");
-      if (!ch->fighting->who->name)
-        bug("skills_dbs:3761");
-      if (!ch->skillGsn)
-        bug("skills_dbs:3763");
-      if (!skill_table[ch->skillGsn]->name)
-        bug("skills_dbs:3765");
-      /* There was a bug that people can exploit when killing mobs.
-       * They could charge, then do 'k (mob)'.  It'd break the charge,
-       * and immediately engage them in combat with the mob.  Mostly
-       * used against fighters in COU, Coolers, and the larger auto-repop
-       * mobs.
-       * My fix for this created a bug where people could use a timer
-       * to set themselves into a 'charge loop' so to speak.  Could just
-       * keep doing 'charge (skill)' in a spar, and they'd never attack
-       * their partner--very useful for letting someone spam, but also
-       * enabled them to cheat.
-       * So, if any more changes are made to this part, take this into
-       * consideration.  --Islvin
-       */
-      if (xIS_SET(ch->act, PLR_SPAR)) {
-        pager_printf(ch,
-                     "&wYou fire your charged up %s at %s!\n\r",
-                     skill_table[ch->skillGsn]->name,
-                     ch->fighting->who->name);
-        if (chargeGsn != -1)
-          learn_from_success(ch, chargeGsn);
-        break;
-      }
-      pager_printf(ch,
-                   "&wIn an effort to multitask, you fumble your charge.\n\r",
-                   skill_table[ch->skillGsn]->name);
-      ch->timerDelay = 0;
-      ch->timerType = 0;
-      ch->substate = SUB_NONE;
-      ch->skillGsn = -1;
-      ch->charge = 0;
-      ch->timerDo_fun = NULL;
-      if (chargeGsn != -1)
-        learn_from_failure(ch, chargeGsn);
-      return;
-    }
-  }
-
-  /* fire!!! */
-  ch->timerDelay = 0;
-  ch->timerType = 0;
-
-  ch->substate = SUB_NONE;
-  skill = skill_table[ch->skillGsn];
-  if (!check_skill(ch, skill_table[ch->skillGsn]->name, "") && !check_ability(ch, skill_table[ch->skillGsn]->name, "")) {
-    bug("Couldn't find called skill in do_charge. %s (sn %d)",
-        ch->name, ch->skillGsn);
-    pager_printf(ch, "&wYou forgot what you were charging...?\n\r");
-    act(AT_PLAIN, "$n forgot what $e was charging...?", ch, NULL,
-        NULL, TO_ROOM);
-    ch->skillGsn = -1;
-    ch->charge = 0;
-    return;
-  }
-  ch->skillGsn = -1;
-  ch->charge = 0;
-  ch->timerDo_fun = NULL;
-  return;
-}
+}*/
 
 ch_ret
 spell_sensu_bean(int sn, int level, CHAR_DATA *ch, void *vo) {
@@ -8977,213 +11492,7 @@ spell_paralyze(int sn, int level, CHAR_DATA *ch, void *vo) {
   return rNONE;
 }
 
-void do_multi_disk(CHAR_DATA *ch, char *arg) {
-  char buf[MAX_STRING_LENGTH];
-  char buf2[MAX_STRING_LENGTH];
-  CHAR_DATA *victim;
-  int shot = 0;
-  int shots = 0;
-  int dam = 0;
-  int dam2 = 0;
-  int energy = 0;
-
-  if (IS_NPC(ch) && is_split(ch)) {
-    if (!ch->master)
-      return;
-    if (!can_use_skill(ch->master, number_percent(), gsn_multi_disk))
-      return;
-  }
-  if (IS_NPC(ch) && IS_AFFECTED(ch, AFF_CHARM)) {
-    send_to_char("You can't concentrate enough for that.\n\r", ch);
-    return;
-  }
-  if (!IS_NPC(ch) && ch->exp < skill_table[gsn_multi_disk]->skill_level[ch->class]) {
-    send_to_char("You can't do that.\n\r", ch);
-    return;
-  }
-  if (arg[0] == '\0' || atoi(arg) <= 0) {
-    send_to_char("Syntax: multi <# of Disks>\n\r", ch);
-    return;
-  }
-  if ((victim = who_fighting(ch)) == NULL) {
-    send_to_char("You aren't fighting anyone.\n\r", ch);
-    return;
-  }
-  shot = atoi(arg);
-  if (shot > 50)
-    shot = 50;
-  if (shot < 2)
-    shot = 2;
-  energy = shot * skill_table[gsn_multi_disk]->min_mana;
-  shots = shot;
-  strcpy(buf, num_punct(shot));
-
-  if (ch->mana < energy) {
-    send_to_char("You don't have enough energy.\n\r", ch);
-    return;
-  }
-  if (ch->focus <
-      (skill_table[gsn_multi_disk]->focus * (1 + (shot / 10)))) {
-    send_to_char("You need to focus more.\n\r", ch);
-    return;
-  } else
-    ch->focus -=
-        (skill_table[gsn_multi_disk]->focus * (1 + (shot / 10)));
-
-  // WAIT_STATE(ch, (skill_table[gsn_multi_disk]->beats * (1 + (shot / 10))));
-  WAIT_STATE(ch, (skill_table[gsn_multi_disk]->beats));
-
-  if (can_use_skill(ch, number_percent(), gsn_multi_disk)) {
-    switch (number_range(1, 100)) {
-      case 100:
-        if (IS_NPC(victim) || (!IS_NPC(victim) && (!xIS_SET(ch->act, PLR_SPAR) || !xIS_SET(ch->act, PLR_SPAR)))) {
-          /*
-           * Redone so that instant death can't be
-           * abused to instant kill players over 2x
-           * their power. -- Islvin
-           */
-          if (victim->pl / ch->pl >= 2) {
-            act(AT_YELLOW,
-                "You raise your hand above your head, forming a disc of pure energy, and throw it at $N.",
-                ch, NULL, victim, TO_CHAR);
-            act(AT_YELLOW,
-                "The disc flies straight toward $N, breaking apart into smaller pieces... but they're all absorbed by $s aura.",
-                ch, NULL, victim, TO_CHAR);
-            act(AT_YELLOW,
-                "$N raises $s hand above $s head, forming a disc of pure energy, and throws it at you.",
-                ch, NULL, victim, TO_VICT);
-            act(AT_YELLOW,
-                "The disc flies straight toward you, breaking apart into smaller pieces... but they're all absorbed by your aura.",
-                ch, NULL, victim, TO_VICT);
-            act(AT_YELLOW,
-                "$n raises $s hand above $s head, forming a disc of pure energy, and throws it at $N.",
-                ch, NULL, victim, TO_NOTVICT);
-            act(AT_YELLOW,
-                "The disc flies straight toward $N, breaking apart into smaller pieces... but they're all absorbed by $s aura.",
-                ch, NULL, victim, TO_NOTVICT);
-            dam = 0;
-            break;
-          }
-          dam = 999999999;
-          act(AT_YELLOW,
-              "You raise your hand above your head, forming a disc of pure energy, and throw it at $N.",
-              ch, NULL, victim, TO_CHAR);
-          act(AT_RED,
-              "The disc flies straight toward $N, breaking apart into smaller pieces which cut through $m, killing $m instantly!!",
-              ch, NULL, victim, TO_CHAR);
-          act(AT_YELLOW,
-              "$N raises $s hand above $s head, forming a disc of pure energy, and throws it at you.",
-              ch, NULL, victim, TO_VICT);
-          act(AT_RED,
-              "The disc flies straight toward you, breaking apart into smaller pieces which cut through you, killing you instantly!!",
-              ch, NULL, victim, TO_VICT);
-          act(AT_YELLOW,
-              "$n raises $s hand above $s head, forming a disc of pure energy, and throws it at $N.",
-              ch, NULL, victim, TO_NOTVICT);
-          act(AT_RED,
-              "The disc flies straight toward $N, breaking apart into smaller pieces which cut through $m, killing $m instantly!!",
-              ch, NULL, victim, TO_NOTVICT);
-
-          learn_from_success(ch, gsn_multi_disk);
-          global_retcode =
-              damage(ch, victim, dam, TYPE_HIT);
-          break;
-        }
-      default:
-        while (shots > 0) {
-          /* Changed to increase damage -- Islvin
-   switch (number_range( 1, 4))
-   {
-   default:
-   case 1:
-   break;
-   case 2:
-   case 3:
-   dam += number_range( 0, 1 );
-   break;
-   case 4:
-   dam += number_range( 0, 2 );
-   break;
-   }
-*/
-          switch (number_range(1, 3)) {
-            default:
-            case 1:
-              break;
-            case 2:
-              dam += number_range(0, 1);
-              break;
-            case 3:
-              dam += number_range(0, 2);
-              break;
-          }
-
-          shots--;
-        }
-        dam2 = number_range(2, 5);
-        // was 5 - 7 in the damage call
-        strcpy(buf2,
-               num_punct(get_attmod(ch, victim) * dam * dam2));
-
-        act(AT_YELLOW,
-            "You raise your hand above your head, palm up, and bring a crackling disk of",
-            ch, NULL, victim, TO_CHAR);
-        act(AT_YELLOW,
-            "energy forth.  The disk hums as you eye $N and send it spinning $S way.",
-            ch, NULL, victim, TO_CHAR);
-        act2(AT_YELLOW,
-             "Mid-flight the disk breaks into $t smaller disks, each spinning madly",
-             ch, buf, victim, TO_CHAR, NULL);
-        act2(AT_YELLOW, "as they home in on $N. &W[$t]", ch,
-             buf2, victim, TO_CHAR, NULL);
-        act(AT_YELLOW,
-            "$n raises $s hand above $s head, palm up, and brings a crackling disk of",
-            ch, NULL, victim, TO_VICT);
-        act(AT_YELLOW,
-            "energy forth.  The disk hums as $e eyes you and sends it spinning your way.",
-            ch, NULL, victim, TO_VICT);
-        act2(AT_YELLOW,
-             "Mid-flight the disk breaks into $t smaller disks, each spinning madly",
-             ch, buf, victim, TO_VICT, NULL);
-        act2(AT_YELLOW, "as they home in on you. &W[$t]", ch,
-             buf2, victim, TO_VICT, NULL);
-        act(AT_YELLOW,
-            "$n raises $s hand above $s head, palm up, and brings a crackling disk of",
-            ch, NULL, victim, TO_NOTVICT);
-        act(AT_YELLOW,
-            "energy forth.  The disk hums as $e eyes $N and sends it spinning $N's way.",
-            ch, NULL, victim, TO_NOTVICT);
-        act2(AT_YELLOW,
-             "Mid-flight the disk breaks into $t smaller disks, each spinning madly",
-             ch, buf, victim, TO_NOTVICT, NULL);
-        act2(AT_YELLOW, "as they home in on $N. &W[$t]", ch,
-             buf2, victim, TO_NOTVICT, NULL);
-
-        learn_from_success(ch, gsn_multi_disk);
-        global_retcode =
-            damage(ch, victim,
-                   (get_attmod(ch, victim) * dam * dam2),
-                   TYPE_HIT);
-        break;
-    }
-  } else {
-    act(AT_YELLOW,
-        "You launch a crackling disk of energy toward $N but it breaks up halfway there.",
-        ch, NULL, victim, TO_CHAR);
-    act(AT_YELLOW,
-        "$n launches a crackling disk of energy toward $N but it breaks up halfway there.",
-        ch, NULL, victim, TO_VICT);
-    act(AT_YELLOW,
-        "$n launches a crackling disk of energy toward $N but it breaks up halfway there.",
-        ch, NULL, victim, TO_NOTVICT);
-    learn_from_failure(ch, gsn_multi_disk);
-    global_retcode = damage(ch, victim, 0, TYPE_HIT);
-  }
-  ch->mana -= energy;
-  return;
-}
-
-void do_ki_heal(CHAR_DATA *ch, char *argument) {
+/*void do_ki_heal(CHAR_DATA *ch, char *argument) {
   CHAR_DATA *victim;
   char arg[MAX_STRING_LENGTH];
   int healTo = 100;
@@ -9286,9 +11595,9 @@ void do_ki_heal(CHAR_DATA *ch, char *argument) {
     learn_from_failure(ch, gsn_ki_heal);
     ch->mana -= (healTo * skill_table[gsn_ki_heal]->min_mana) / 2;
   }
-}
+}*/
 
-void do_growth(CHAR_DATA *ch, char *argument) {
+/*void do_growth(CHAR_DATA *ch, char *argument) {
   int strMod = 10;
   int conMod = 5;
   int intMod = 5;
@@ -9360,9 +11669,9 @@ void do_growth(CHAR_DATA *ch, char *argument) {
     learn_from_failure(ch, gsn_growth);
   }
   ch->mana -= skill_table[gsn_growth]->min_mana;
-}
+}*/
 
-void do_giant_size(CHAR_DATA *ch, char *argument) {
+/*void do_giant_size(CHAR_DATA *ch, char *argument) {
   int strMod = 25;
   int conMod = 15;
   int intMod = 10;
@@ -9436,7 +11745,7 @@ void do_giant_size(CHAR_DATA *ch, char *argument) {
     learn_from_failure(ch, gsn_giant);
     ch->mana -= skill_table[gsn_giant]->min_mana;
   }
-}
+}*/
 
 void do_split_form(CHAR_DATA *ch, char *argument) {
   CHAR_DATA *victim;
@@ -10057,13 +12366,20 @@ void do_destructive_wave(CHAR_DATA *ch, char *argument) {
   CHAR_DATA *victim;
   int dam = 0;
   int argdam = 0;
-  int kilimit = 0;
   float kimult = 0;
   float kicmult = 0;
+  int kilimit = 0;
   int hitcheck = 0;
   int adjcost = 0;
+  int basecost = 0;
   float smastery = 0;
+  int lowdam = 0;
+  int highdam = 0;
+  char arg[MAX_INPUT_LENGTH];
+  int AT_AURACOLOR = ch->pcdata->auraColorPowerUp;
 
+  argument = one_argument(argument, arg);
+  
   if (IS_NPC(ch) && is_split(ch)) {
     if (!ch->master)
       return;
@@ -10076,87 +12392,196 @@ void do_destructive_wave(CHAR_DATA *ch, char *argument) {
     send_to_char("You're not able to use that skill.\n\r", ch);
     return;
   }
+  if (!IS_NPC(ch)) {
+	kilimit = ch->train / 10000;
+	kimult = (float)get_curr_int(ch) / 1000 + 1;
+	kicmult = (float)kilimit / 100 + 1;
+	smastery = (float)ch->masterydestructive_wave / 10000;
+	if (smastery > 10)
+	  smastery = 10;
+  }
   if ((victim = who_fighting(ch)) == NULL) {
     send_to_char("You aren't fighting anyone.\n\r", ch);
     return;
   }
-  if (!IS_NPC(ch)) {
-    kilimit = ch->train / 10000;
-    kimult = (float)get_curr_int(ch) / 1000 + 1;
-    kicmult = (float)kilimit / 100 + 1;
-    smastery = (float)ch->masterydestructive_wave / 10000;
-  }
-  if (!IS_NPC(ch)) {
-    adjcost = 60 * (ch->destructive_wavepower - ch->destructive_waveeffic);
-    if (adjcost < 60)
-      adjcost = 60;
-  } else {
-    adjcost = 1;
-  }
-  if (ch->mana < adjcost) {
-    send_to_char("You don't have enough energy.\n\r", ch);
-    return;
-  }
-
-  sh_int z = get_aura(ch);
+  basecost = 60;
+  adjcost = basecost;
+  lowdam = 260;
+  highdam = 280;
   hitcheck = number_range(1, 100);
   WAIT_STATE(ch, 8);
   if (hitcheck <= 95) {
-    if (!IS_NPC(ch)) {
-      argdam = ((number_range(26, 28) + (ch->destructive_wavepower * 2)) * (kicmult + smastery));
-      dam = get_attmod(ch, victim) * (argdam * kimult);
-      stat_train(ch, "int", 10);
-      ch->train += 5;
-      ch->masterydestructive_wave += 1;
-      ch->energymastery += 4;
-      if (ch->energymastery >= (ch->kspgain * 100)) {
-        pager_printf_color(ch,
-                           "&CYou gained 5 Skill Points!\n\r");
-        ch->sptotal += 5;
-        ch->kspgain += 1;
-      }
-    }
-    if (IS_NPC(ch)) {
-      argdam = number_range(26, 28);
-      dam = get_attmod(ch, victim) * (argdam + (get_curr_int(ch) / 45));
-    }
-    if (ch->charge > 0)
-      dam = chargeDamMult(ch, dam);
-
-    act(z,
-        "You hold one arm straight, palm facing $N, your free hand grasping your forearm to steady your aim.",
-        ch, NULL, victim, TO_CHAR);
-    act(z,
-        "A wave of energy forms in front of your palm, blasting out towards $N. &W[$t]",
-        ch, num_punct(dam), victim, TO_CHAR);
-    act(z,
-        "$n holds one arm straight, palm facing you, $s free hand grasping $s forearm to steady $s aim.",
-        ch, NULL, victim, TO_VICT);
-    act(z,
-        "A wave of energy forms in front of $n's palm, blasting out towards you. &W[$t]",
-        ch, num_punct(dam), victim, TO_VICT);
-    act(z,
-        "$n holds one arm straight, palm facing $N, $s free hand grasping $s forearm to steady $s aim.",
-        ch, NULL, victim, TO_NOTVICT);
-    act(z,
-        "A wave of energy forms in front of $n's palm, blasting out towards $N. &W[$t]",
-        ch, num_punct(dam), victim, TO_NOTVICT);
-
-    global_retcode = damage(ch, victim, dam, TYPE_HIT);
-  } else {
-    act(z, "You missed $N with your destructive wave attack.", ch,
-        NULL, victim, TO_CHAR);
-    act(z, "$n misses you with $s destructive wave attack.", ch,
-        NULL, victim, TO_VICT);
-    act(z, "$n missed $N with a destructive wave attack.", ch, NULL,
-        victim, TO_NOTVICT);
-    global_retcode = damage(ch, victim, 0, TYPE_HIT);
+	if (arg[0] == '\0') {
+	  if (!IS_NPC(ch)) {
+		argdam = (number_range(lowdam, highdam) * (kicmult + smastery));
+		dam = get_attmod(ch, victim) * (argdam * kimult);
+	  }
+	  else if (IS_NPC(ch)) {
+		argdam = number_range(lowdam, highdam);
+		dam = get_attmod(ch, victim) * (argdam + (get_curr_int(ch) / 40));
+	  }
+	  if (dam < 1)
+		dam = 1;
+	  act(AT_AURACOLOR,"You steady an arm with your free hand, bracing as you unleash a wave of potent energy at $N. &W[$t]", ch, num_punct(dam), victim, TO_CHAR);
+	  act(AT_AURACOLOR,"$n steadies an arm with $s free hand, bracing as they unleash a wave of potent energy at you. &W[$t]", ch, num_punct(dam), victim, TO_VICT);
+	  act(AT_AURACOLOR,"$n steadies an arm with $s free hand, bracing as they unleash a wave of potent energy at $N. &W[$t]", ch, num_punct(dam), victim, TO_NOTVICT);
+	  if ((ch->mana - adjcost) < 0) {
+		act(AT_LBLUE,"Your Destructive Wave fizzles into nothing!", ch, NULL, victim, TO_CHAR);
+		act(AT_LBLUE,"$n's Destructive Wave fizzles into nothing!", ch, NULL, victim, TO_VICT);
+		act(AT_LBLUE,"$n's Destructive Wave fizzles into nothing!", ch, NULL, victim, TO_NOTVICT);
+		global_retcode = damage(ch, victim, 0, TYPE_HIT);
+		ch->mana = 0;
+	  } else {
+		global_retcode = damage(ch, victim, dam, TYPE_HIT);
+	  }
+	}
+	else if (!str_cmp(arg, "200")) {
+	  if (ch->destructive_wavepower < 1) {
+		send_to_char("You lack the skill.\n\r", ch);
+		return;
+	  }
+	  if (!IS_NPC(ch)) {
+		argdam = (number_range(lowdam * 2, highdam * 2) * (kicmult + smastery));
+		dam = get_attmod(ch, victim) * (argdam * kimult);
+	  }
+	  else if (IS_NPC(ch)) {
+		argdam = number_range(lowdam * 2, highdam * 2);
+		dam = get_attmod(ch, victim) * (argdam + (get_curr_int(ch) / 40));
+	  }
+	  if (dam < 1)
+		dam = 1;
+	  adjcost = basecost * 4;
+	  act(AT_AURACOLOR,"You steady an arm with your free hand, bracing as you unleash a wave of potent energy at $N. &W[$t]", ch, num_punct(dam), victim, TO_CHAR);
+	  act(AT_AURACOLOR,"$n steadies an arm with $s free hand, bracing as they unleash a wave of potent energy at you. &W[$t]", ch, num_punct(dam), victim, TO_VICT);
+	  act(AT_AURACOLOR,"$n steadies an arm with $s free hand, bracing as they unleash a wave of potent energy at $N. &W[$t]", ch, num_punct(dam), victim, TO_NOTVICT);
+	  if ((ch->mana - adjcost) < 0) {
+		act(AT_LBLUE,"Your Destructive Wave fizzles into nothing!", ch, NULL, victim, TO_CHAR);
+		act(AT_LBLUE,"$n's Destructive Wave fizzles into nothing!", ch, NULL, victim, TO_VICT);
+		act(AT_LBLUE,"$n's Destructive Wave fizzles into nothing!", ch, NULL, victim, TO_NOTVICT);
+		global_retcode = damage(ch, victim, 0, TYPE_HIT);
+		ch->mana = 0;
+	  } else {
+		global_retcode = damage(ch, victim, dam, TYPE_HIT);
+	  }
+	}
+	else if (!str_cmp(arg, "300")) {
+	  if (ch->destructive_wavepower < 2) {
+		send_to_char("You lack the skill.\n\r", ch);
+		return;
+	  }
+	  if (!IS_NPC(ch)) {
+		argdam = (number_range(lowdam * 3, highdam * 3) * (kicmult + smastery));
+		dam = get_attmod(ch, victim) * (argdam * kimult);
+	  }
+	  else if (IS_NPC(ch)) {
+		argdam = number_range(lowdam * 3, highdam * 3);
+		dam = get_attmod(ch, victim) * (argdam + (get_curr_int(ch) / 40));
+	  }
+	  if (dam < 1)
+		dam = 1;
+	  adjcost = basecost * 16;
+	  act(AT_AURACOLOR,"You steady an arm with your free hand, bracing as you unleash a wave of potent energy at $N. &W[$t]", ch, num_punct(dam), victim, TO_CHAR);
+	  act(AT_AURACOLOR,"$n steadies an arm with $s free hand, bracing as they unleash a wave of potent energy at you. &W[$t]", ch, num_punct(dam), victim, TO_VICT);
+	  act(AT_AURACOLOR,"$n steadies an arm with $s free hand, bracing as they unleash a wave of potent energy at $N. &W[$t]", ch, num_punct(dam), victim, TO_NOTVICT);
+	  if ((ch->mana - adjcost) < 0) {
+		act(AT_LBLUE,"Your Destructive Wave fizzles into nothing!", ch, NULL, victim, TO_CHAR);
+		act(AT_LBLUE,"$n's Destructive Wave fizzles into nothing!", ch, NULL, victim, TO_VICT);
+		act(AT_LBLUE,"$n's Destructive Wave fizzles into nothing!", ch, NULL, victim, TO_NOTVICT);
+		global_retcode = damage(ch, victim, 0, TYPE_HIT);
+		ch->mana = 0;
+	  } else {
+		global_retcode = damage(ch, victim, dam, TYPE_HIT);
+	  }
+	}
+	else if (!str_cmp(arg, "400")) {
+	  if (ch->destructive_wavepower < 3) {
+		send_to_char("You lack the skill.\n\r", ch);
+		return;
+	  }
+	  if (!IS_NPC(ch)) {
+		argdam = (number_range(lowdam * 4, highdam * 4) * (kicmult + smastery));
+		dam = get_attmod(ch, victim) * (argdam * kimult);
+	  }
+	  else if (IS_NPC(ch)) {
+		argdam = number_range(lowdam * 4, highdam * 4);
+		dam = get_attmod(ch, victim) * (argdam + (get_curr_int(ch) / 40));
+	  }
+	  if (dam < 1)
+		dam = 1;
+	  adjcost = basecost * 64;
+	  act(AT_AURACOLOR,"You steady an arm with your free hand, bracing as you unleash a wave of potent energy at $N. &W[$t]", ch, num_punct(dam), victim, TO_CHAR);
+	  act(AT_AURACOLOR,"$n steadies an arm with $s free hand, bracing as they unleash a wave of potent energy at you. &W[$t]", ch, num_punct(dam), victim, TO_VICT);
+	  act(AT_AURACOLOR,"$n steadies an arm with $s free hand, bracing as they unleash a wave of potent energy at $N. &W[$t]", ch, num_punct(dam), victim, TO_NOTVICT);
+	  if ((ch->mana - adjcost) < 0) {
+		act(AT_LBLUE,"Your Destructive Wave fizzles into nothing!", ch, NULL, victim, TO_CHAR);
+		act(AT_LBLUE,"$n's Destructive Wave fizzles into nothing!", ch, NULL, victim, TO_VICT);
+		act(AT_LBLUE,"$n's Destructive Wave fizzles into nothing!", ch, NULL, victim, TO_NOTVICT);
+		global_retcode = damage(ch, victim, 0, TYPE_HIT);
+		ch->mana = 0;
+	  } else {
+		global_retcode = damage(ch, victim, dam, TYPE_HIT);
+	  }
+	}
+	else if (!str_cmp(arg, "500")) {
+	  if (ch->destructive_wavepower < 4) {
+		send_to_char("You lack the skill.\n\r", ch);
+		return;
+	  }
+	  if (!IS_NPC(ch)) {
+		argdam = (number_range(lowdam * 5, highdam * 5) * (kicmult + smastery));
+		dam = get_attmod(ch, victim) * (argdam * kimult);
+	  }
+	  else if (IS_NPC(ch)) {
+		argdam = number_range(lowdam * 5, highdam * 5);
+		dam = get_attmod(ch, victim) * (argdam + (get_curr_int(ch) / 40));
+	  }
+	  if (dam < 1)
+		dam = 1;
+	  adjcost = basecost * 256;
+	  act(AT_AURACOLOR,"You steady an arm with your free hand, unleashing a wall of enormous energy at $N! &W[$t]", ch, num_punct(dam), victim, TO_CHAR);
+	  act(AT_AURACOLOR,"$n steadies an arm with $s free hand, unleashing a wall of enormous energy at you! &W[$t]", ch, num_punct(dam), victim, TO_VICT);
+	  act(AT_AURACOLOR,"$n steadies an arm with $s free hand, unleashing a wall of enormous energy at $N! &W[$t]", ch, num_punct(dam), victim, TO_NOTVICT);
+	  if ((ch->mana - adjcost) < 0) {
+		act(AT_LBLUE,"Your Destructive Wave fizzles into nothing!", ch, NULL, victim, TO_CHAR);
+		act(AT_LBLUE,"$n's Destructive Wave fizzles into nothing!", ch, NULL, victim, TO_VICT);
+		act(AT_LBLUE,"$n's Destructive Wave fizzles into nothing!", ch, NULL, victim, TO_NOTVICT);
+		global_retcode = damage(ch, victim, 0, TYPE_HIT);
+		ch->mana = 0;
+	  } else {
+		global_retcode = damage(ch, victim, dam, TYPE_HIT);
+	  }
+	}
+	else {
+		send_to_char("Only increments of 200-500.\n\r", ch);
+		return;
+	}
   }
-  ch->mana -= adjcost;
+  else {
+	act(AT_LBLUE, "You missed $N with your Destructive Wave.", ch, NULL, victim, TO_CHAR);
+	act(AT_LBLUE, "$n misses you with $s Destructive Wave.", ch, NULL, victim, TO_VICT);
+	act(AT_LBLUE, "$n missed $N with $s Destructive Wave.", ch, NULL, victim, TO_NOTVICT);
+	global_retcode = damage(ch, victim, 0, TYPE_HIT);
+  }
+  if (!IS_NPC(ch) && ch->mana != 0) {
+	// train player masteries, no benefit from spamming at no ki
+	stat_train(ch, "int", 10);
+	ch->train += 10;
+	ch->masterydestructive_wave += 1;
+	ch->energymastery += 4;
+	if (ch->energymastery >= (ch->kspgain * 100)) {
+	  pager_printf_color(ch,"&CYou gained 5 Skill Points!\n\r");
+	  ch->sptotal += 5;
+	  ch->kspgain += 1;
+	}
+  }
+  if ((ch->mana - adjcost) < 0)
+	ch->mana = 0;
+  else
+	ch->mana -= adjcost;
   return;
 }
 
-void do_dodon_ray(CHAR_DATA *ch, char *argument) {
+/*void do_dodon_ray(CHAR_DATA *ch, char *argument) {
   CHAR_DATA *victim;
   int dam = 0;
 
@@ -10233,9 +12658,9 @@ void do_dodon_ray(CHAR_DATA *ch, char *argument) {
   }
   ch->mana -= skill_table[gsn_dodon_ray]->min_mana;
   return;
-}
+}*/
 
-void do_spirit_ball(CHAR_DATA *ch, char *argument) {
+/*void do_spirit_ball(CHAR_DATA *ch, char *argument) {
   CHAR_DATA *victim;
   int dam = 0;
 
@@ -10310,19 +12735,26 @@ void do_spirit_ball(CHAR_DATA *ch, char *argument) {
   }
   ch->mana -= skill_table[gsn_spirit_ball]->min_mana;
   return;
-}
+}*/
 
 void do_shockwave(CHAR_DATA *ch, char *argument) {
   CHAR_DATA *victim;
   int dam = 0;
   int argdam = 0;
-  int kilimit = 0;
   float kimult = 0;
   float kicmult = 0;
+  int kilimit = 0;
   int hitcheck = 0;
   int adjcost = 0;
+  int basecost = 0;
   float smastery = 0;
+  int lowdam = 0;
+  int highdam = 0;
+  char arg[MAX_INPUT_LENGTH];
+  int AT_AURACOLOR = ch->pcdata->auraColorPowerUp;
 
+  argument = one_argument(argument, arg);
+  
   if (IS_NPC(ch) && is_split(ch)) {
     if (!ch->master)
       return;
@@ -10335,309 +12767,207 @@ void do_shockwave(CHAR_DATA *ch, char *argument) {
     send_to_char("You're not able to use that skill.\n\r", ch);
     return;
   }
+  if (!IS_NPC(ch)) {
+	kilimit = ch->train / 10000;
+	kimult = (float)get_curr_int(ch) / 1000 + 1;
+	kicmult = (float)kilimit / 100 + 1;
+	smastery = (float)ch->masteryshockwave / 10000;
+	if (smastery > 10)
+	  smastery = 10;
+  }
   if ((victim = who_fighting(ch)) == NULL) {
     send_to_char("You aren't fighting anyone.\n\r", ch);
     return;
   }
-  if (!IS_NPC(ch)) {
-    kilimit = ch->train / 10000;
-    kimult = (float)get_curr_int(ch) / 1000 + 1;
-    kicmult = (float)kilimit / 100 + 1;
-    smastery = (float)ch->masteryshockwave / 10000;
-  }
-  if (!IS_NPC(ch)) {
-    adjcost = 70 * (ch->shockwavepower - ch->shockwaveeffic);
-    if (adjcost < 70)
-      adjcost = 70;
-  } else {
-    adjcost = 1;
-  }
-  if (ch->mana < adjcost) {
-    send_to_char("You don't have enough energy.\n\r", ch);
-    return;
-  }
-
-  sh_int z = get_aura(ch);
+  basecost = 70;
+  adjcost = basecost;
+  lowdam = 450;
+  highdam = 650;
   hitcheck = number_range(1, 100);
   WAIT_STATE(ch, 8);
   if (hitcheck <= 95) {
-    if (!IS_NPC(ch)) {
-      argdam = ((number_range(45, 65) + (ch->shockwavepower * 5)) * (kicmult + smastery));
-      dam = get_attmod(ch, victim) * (argdam * kimult);
-      stat_train(ch, "int", 17);
-      ch->train += 17;
-      ch->masteryshockwave += 1;
-      ch->energymastery += 5;
-      if (ch->energymastery >= (ch->kspgain * 100)) {
-        pager_printf_color(ch,
-                           "&CYou gained 5 Skill Points!\n\r");
-        ch->sptotal += 5;
-        ch->kspgain += 1;
-      }
-    }
-    if (IS_NPC(ch)) {
-      argdam = number_range(45, 65);
-      dam = get_attmod(ch, victim) * (argdam + (get_curr_int(ch) / 40));
-    }
-    if (ch->charge > 0)
-      dam = chargeDamMult(ch, dam);
-    act(z,
-        "You clench your fists and deeply concentrate on focusing your physical and mental powers.",
-        ch, NULL, victim, TO_CHAR);
-    act(z,
-        "You scream out as you throw one arm forward, firing a shockwave of invisible energy at $N. &W[$t]",
-        ch, num_punct(dam), victim, TO_CHAR);
-    act(z,
-        "$n clenches $s fists and deeply concentrates on focusing $s physical and mental powers.",
-        ch, NULL, victim, TO_VICT);
-    act(z,
-        "$n screams out as $e throws one arm foward, firing a shockwave of invisible energy at you. &W[$t]",
-        ch, num_punct(dam), victim, TO_VICT);
-    act(z,
-        "$n clenches $s fists and deeply concentrates on focusing $s physical and mental powers.",
-        ch, NULL, victim, TO_NOTVICT);
-    act(z,
-        "$n screams out as $e throws one arm foward, firing a shockwave of invisible energy at $N. &W[$t]",
-        ch, num_punct(dam), victim, TO_NOTVICT);
-
-    global_retcode = damage(ch, victim, dam, TYPE_HIT);
-  } else {
-    act(z, "You missed $N with your shockwave.", ch, NULL, victim,
-        TO_CHAR);
-    act(z, "$n misses you with $s shockwave.", ch, NULL, victim,
-        TO_VICT);
-    act(z, "$n missed $N with a shockwave.", ch, NULL, victim,
-        TO_NOTVICT);
-    global_retcode = damage(ch, victim, 0, TYPE_HIT);
+	if (arg[0] == '\0') {
+	  if (!IS_NPC(ch)) {
+		argdam = (number_range(lowdam, highdam) * (kicmult + smastery));
+		dam = get_attmod(ch, victim) * (argdam * kimult);
+	  }
+	  else if (IS_NPC(ch)) {
+		argdam = number_range(lowdam, highdam);
+		dam = get_attmod(ch, victim) * (argdam + (get_curr_int(ch) / 40));
+	  }
+	  if (dam < 1)
+		dam = 1;
+	  act(AT_AURACOLOR,"You clench your fists and deeply concentrate on focusing your physical and mental powers.", ch, NULL, victim, TO_CHAR);
+	  act(AT_AURACOLOR,"You scream out as you throw one arm forward, firing a shockwave of invisible energy at $N. &W[$t]", ch, num_punct(dam), victim, TO_CHAR);
+	  act(AT_AURACOLOR,"$n clenches $s fists and deeply concentrates on focusing $s physical and mental powers.", ch, NULL, victim, TO_VICT);
+	  act(AT_AURACOLOR,"$n screams out as $e throws one arm foward, firing a shockwave of invisible energy at you. &W[$t]", ch, num_punct(dam), victim, TO_VICT);
+	  act(AT_AURACOLOR,"$n clenches $s fists and deeply concentrates on focusing $s physical and mental powers.", ch, NULL, victim, TO_NOTVICT);
+	  act(AT_AURACOLOR,"$n screams out as $e throws one arm foward, firing a shockwave of invisible energy at $N. &W[$t]", ch, num_punct(dam), victim, TO_NOTVICT);
+	  if ((ch->mana - adjcost) < 0) {
+		act(AT_LBLUE,"Your Shockwave fizzles into nothing!", ch, NULL, victim, TO_CHAR);
+		act(AT_LBLUE,"$n's Shockwave fizzles into nothing!", ch, NULL, victim, TO_VICT);
+		act(AT_LBLUE,"$n's Shockwave fizzles into nothing!", ch, NULL, victim, TO_NOTVICT);
+		global_retcode = damage(ch, victim, 0, TYPE_HIT);
+		ch->mana = 0;
+	  } else {
+		global_retcode = damage(ch, victim, dam, TYPE_HIT);
+	  }
+	}
+	else if (!str_cmp(arg, "200")) {
+	  if (ch->shockwavepower < 1) {
+		send_to_char("You lack the skill.\n\r", ch);
+		return;
+	  }
+	  if (!IS_NPC(ch)) {
+		argdam = (number_range(lowdam * 2, highdam * 2) * (kicmult + smastery));
+		dam = get_attmod(ch, victim) * (argdam * kimult);
+	  }
+	  else if (IS_NPC(ch)) {
+		argdam = number_range(lowdam * 2, highdam * 2);
+		dam = get_attmod(ch, victim) * (argdam + (get_curr_int(ch) / 40));
+	  }
+	  if (dam < 1)
+		dam = 1;
+	  adjcost = basecost * 4;
+	  act(AT_AURACOLOR,"You clench your fists and deeply concentrate on focusing your physical and mental powers.", ch, NULL, victim, TO_CHAR);
+	  act(AT_AURACOLOR,"You scream out as you throw one arm forward, firing a shockwave of invisible energy at $N. &W[$t]", ch, num_punct(dam), victim, TO_CHAR);
+	  act(AT_AURACOLOR,"$n clenches $s fists and deeply concentrates on focusing $s physical and mental powers.", ch, NULL, victim, TO_VICT);
+	  act(AT_AURACOLOR,"$n screams out as $e throws one arm foward, firing a shockwave of invisible energy at you. &W[$t]", ch, num_punct(dam), victim, TO_VICT);
+	  act(AT_AURACOLOR,"$n clenches $s fists and deeply concentrates on focusing $s physical and mental powers.", ch, NULL, victim, TO_NOTVICT);
+	  act(AT_AURACOLOR,"$n screams out as $e throws one arm foward, firing a shockwave of invisible energy at $N. &W[$t]", ch, num_punct(dam), victim, TO_NOTVICT);
+	  if ((ch->mana - adjcost) < 0) {
+		act(AT_LBLUE,"Your Shockwave fizzles into nothing!", ch, NULL, victim, TO_CHAR);
+		act(AT_LBLUE,"$n's Shockwave fizzles into nothing!", ch, NULL, victim, TO_VICT);
+		act(AT_LBLUE,"$n's Shockwave fizzles into nothing!", ch, NULL, victim, TO_NOTVICT);
+		global_retcode = damage(ch, victim, 0, TYPE_HIT);
+		ch->mana = 0;
+	  } else {
+		global_retcode = damage(ch, victim, dam, TYPE_HIT);
+	  }
+	}
+	else if (!str_cmp(arg, "300")) {
+	  if (ch->shockwavepower < 2) {
+		send_to_char("You lack the skill.\n\r", ch);
+		return;
+	  }
+	  if (!IS_NPC(ch)) {
+		argdam = (number_range(lowdam * 3, highdam * 3) * (kicmult + smastery));
+		dam = get_attmod(ch, victim) * (argdam * kimult);
+	  }
+	  else if (IS_NPC(ch)) {
+		argdam = number_range(lowdam * 3, highdam * 3);
+		dam = get_attmod(ch, victim) * (argdam + (get_curr_int(ch) / 40));
+	  }
+	  if (dam < 1)
+		dam = 1;
+	  adjcost = basecost * 16;
+	  act(AT_AURACOLOR,"You clench your fists and deeply concentrate on focusing your physical and mental powers.", ch, NULL, victim, TO_CHAR);
+	  act(AT_AURACOLOR,"You scream out as you throw one arm forward, firing a shockwave of invisible energy at $N. &W[$t]", ch, num_punct(dam), victim, TO_CHAR);
+	  act(AT_AURACOLOR,"$n clenches $s fists and deeply concentrates on focusing $s physical and mental powers.", ch, NULL, victim, TO_VICT);
+	  act(AT_AURACOLOR,"$n screams out as $e throws one arm foward, firing a shockwave of invisible energy at you. &W[$t]", ch, num_punct(dam), victim, TO_VICT);
+	  act(AT_AURACOLOR,"$n clenches $s fists and deeply concentrates on focusing $s physical and mental powers.", ch, NULL, victim, TO_NOTVICT);
+	  act(AT_AURACOLOR,"$n screams out as $e throws one arm foward, firing a shockwave of invisible energy at $N. &W[$t]", ch, num_punct(dam), victim, TO_NOTVICT);
+	  if ((ch->mana - adjcost) < 0) {
+		act(AT_LBLUE,"Your Shockwave fizzles into nothing!", ch, NULL, victim, TO_CHAR);
+		act(AT_LBLUE,"$n's Shockwave fizzles into nothing!", ch, NULL, victim, TO_VICT);
+		act(AT_LBLUE,"$n's Shockwave fizzles into nothing!", ch, NULL, victim, TO_NOTVICT);
+		global_retcode = damage(ch, victim, 0, TYPE_HIT);
+		ch->mana = 0;
+	  } else {
+		global_retcode = damage(ch, victim, dam, TYPE_HIT);
+	  }
+	}
+	else if (!str_cmp(arg, "400")) {
+	  if (ch->shockwavepower < 3) {
+		send_to_char("You lack the skill.\n\r", ch);
+		return;
+	  }
+	  if (!IS_NPC(ch)) {
+		argdam = (number_range(lowdam * 4, highdam * 4) * (kicmult + smastery));
+		dam = get_attmod(ch, victim) * (argdam * kimult);
+	  }
+	  else if (IS_NPC(ch)) {
+		argdam = number_range(lowdam * 4, highdam * 4);
+		dam = get_attmod(ch, victim) * (argdam + (get_curr_int(ch) / 40));
+	  }
+	  if (dam < 1)
+		dam = 1;
+	  adjcost = basecost * 64;
+	  act(AT_AURACOLOR,"You clench your fists and deeply concentrate on focusing your physical and mental powers.", ch, NULL, victim, TO_CHAR);
+	  act(AT_AURACOLOR,"You scream out as you throw one arm forward, firing a shockwave of invisible energy at $N. &W[$t]", ch, num_punct(dam), victim, TO_CHAR);
+	  act(AT_AURACOLOR,"$n clenches $s fists and deeply concentrates on focusing $s physical and mental powers.", ch, NULL, victim, TO_VICT);
+	  act(AT_AURACOLOR,"$n screams out as $e throws one arm foward, firing a shockwave of invisible energy at you. &W[$t]", ch, num_punct(dam), victim, TO_VICT);
+	  act(AT_AURACOLOR,"$n clenches $s fists and deeply concentrates on focusing $s physical and mental powers.", ch, NULL, victim, TO_NOTVICT);
+	  act(AT_AURACOLOR,"$n screams out as $e throws one arm foward, firing a shockwave of invisible energy at $N. &W[$t]", ch, num_punct(dam), victim, TO_NOTVICT);
+	  if ((ch->mana - adjcost) < 0) {
+		act(AT_LBLUE,"Your Shockwave fizzles into nothing!", ch, NULL, victim, TO_CHAR);
+		act(AT_LBLUE,"$n's Shockwave fizzles into nothing!", ch, NULL, victim, TO_VICT);
+		act(AT_LBLUE,"$n's Shockwave fizzles into nothing!", ch, NULL, victim, TO_NOTVICT);
+		global_retcode = damage(ch, victim, 0, TYPE_HIT);
+		ch->mana = 0;
+	  } else {
+		global_retcode = damage(ch, victim, dam, TYPE_HIT);
+	  }
+	}
+	else if (!str_cmp(arg, "500")) {
+	  if (ch->shockwavepower < 4) {
+		send_to_char("You lack the skill.\n\r", ch);
+		return;
+	  }
+	  if (!IS_NPC(ch)) {
+		argdam = (number_range(lowdam * 5, highdam * 5) * (kicmult + smastery));
+		dam = get_attmod(ch, victim) * (argdam * kimult);
+	  }
+	  else if (IS_NPC(ch)) {
+		argdam = number_range(lowdam * 5, highdam * 5);
+		dam = get_attmod(ch, victim) * (argdam + (get_curr_int(ch) / 40));
+	  }
+	  if (dam < 1)
+		dam = 1;
+	  adjcost = basecost * 256;
+	  act(AT_AURACOLOR,"You clench your fists and deeply concentrate on focusing your physical and mental powers.", ch, NULL, victim, TO_CHAR);
+	  act(AT_AURACOLOR,"You scream out as you throw both arms forward, collapsing the atmosphere around $N. &W[$t]", ch, num_punct(dam), victim, TO_CHAR);
+	  act(AT_AURACOLOR,"$n clenches $s fists and deeply concentrates on focusing $s physical and mental powers.", ch, NULL, victim, TO_VICT);
+	  act(AT_AURACOLOR,"$n screams out as $e throws both arms foward, collapsing the atmosphere around you. &W[$t]", ch, num_punct(dam), victim, TO_VICT);
+	  act(AT_AURACOLOR,"$n clenches $s fists and deeply concentrates on focusing $s physical and mental powers.", ch, NULL, victim, TO_NOTVICT);
+	  act(AT_AURACOLOR,"$n screams out as $e throws both arms foward, collapsing the atmosphere around $N. &W[$t]", ch, num_punct(dam), victim, TO_NOTVICT);
+	  if ((ch->mana - adjcost) < 0) {
+		act(AT_LBLUE,"Your Shockwave fizzles into nothing!", ch, NULL, victim, TO_CHAR);
+		act(AT_LBLUE,"$n's Shockwave fizzles into nothing!", ch, NULL, victim, TO_VICT);
+		act(AT_LBLUE,"$n's Shockwave fizzles into nothing!", ch, NULL, victim, TO_NOTVICT);
+		global_retcode = damage(ch, victim, 0, TYPE_HIT);
+		ch->mana = 0;
+	  } else {
+		global_retcode = damage(ch, victim, dam, TYPE_HIT);
+	  }
+	}
+	else {
+		send_to_char("Only increments of 200-500.\n\r", ch);
+		return;
+	}
   }
-  ch->mana -= adjcost;
-  return;
-}
-
-void do_psiblast(CHAR_DATA *ch, char *argument) {
-  CHAR_DATA *victim;
-  int dam = 0;
-
-  if (IS_NPC(ch) && is_split(ch)) {
-    if (!ch->master)
-      return;
-    if (!can_use_skill(ch->master, number_percent(), gsn_psiblast))
-      return;
+  else {
+	act(AT_LBLUE, "You missed $N with your Shockwave.", ch, NULL, victim, TO_CHAR);
+	act(AT_LBLUE, "$n misses you with $s Shockwave.", ch, NULL, victim, TO_VICT);
+	act(AT_LBLUE, "$n missed $N with $s Shockwave.", ch, NULL, victim, TO_NOTVICT);
+	global_retcode = damage(ch, victim, 0, TYPE_HIT);
   }
-  if (IS_NPC(ch) && IS_AFFECTED(ch, AFF_CHARM)) {
-    send_to_char("You can't concentrate enough for that.\n\r", ch);
-    return;
+  if (!IS_NPC(ch) && ch->mana != 0) {
+	// train player masteries, no benefit from spamming at no ki
+	stat_train(ch, "int", 17);
+	ch->train += 17;
+	ch->masteryshockwave += 1;
+	ch->energymastery += 5;
+	if (ch->energymastery >= (ch->kspgain * 100)) {
+	  pager_printf_color(ch,"&CYou gained 5 Skill Points!\n\r");
+	  ch->sptotal += 5;
+	  ch->kspgain += 1;
+	}
   }
-  if (!IS_NPC(ch) && ch->exp < skill_table[gsn_psiblast]->skill_level[ch->class]) {
-    send_to_char("You can't do that.\n\r", ch);
-    return;
-  }
-  if ((victim = who_fighting(ch)) == NULL) {
-    send_to_char("You aren't fighting anyone.\n\r", ch);
-    return;
-  }
-  if (ch->mana < skill_table[gsn_psiblast]->min_mana) {
-    send_to_char("You don't have enough energy.\n\r", ch);
-    return;
-  }
-  if (ch->focus < skill_table[gsn_psiblast]->focus) {
-    send_to_char("You need to focus more.\n\r", ch);
-    return;
-  } else
-    ch->focus -= skill_table[gsn_psiblast]->focus;
-
-  sh_int z = get_aura(ch);
-
-  WAIT_STATE(ch, skill_table[gsn_psiblast]->beats);
-  if (can_use_skill(ch, number_percent(), gsn_psiblast)) {
-    dam = get_attmod(ch, victim) * (number_range(33, 40) + (get_curr_int(ch) / 30));
-    if (ch->charge > 0)
-      dam = chargeDamMult(ch, dam);
-
-    act(z,
-        "You heavily concentrate the bulk of your mental powers all at once. Your eyes suddenly flash as you transfer a raging blast of psionic energy into $N's body. &W[$t]",
-        ch, num_punct(dam), victim, TO_CHAR);
-    act(z,
-        "$n heavily concentrates the bulk of $s mental powers all at once. $s eyes suddenly flash as $e transfers a raging blast of psionic energy into your body. &W[$t]",
-        ch, num_punct(dam), victim, TO_VICT);
-    act(z,
-        "$n heavily concentrates the bulk of $s mental powers all at once. $s eyes suddenly flash as $e transfers a raging blast of psionic energy into $N's body. &W[$t]",
-        ch, num_punct(dam), victim, TO_NOTVICT);
-
-    dam = ki_absorb(victim, ch, dam, gsn_psiblast);
-    learn_from_success(ch, gsn_psiblast);
-    global_retcode = damage(ch, victim, dam, TYPE_HIT);
-    if (!IS_NPC(ch)) {
-      stat_train(ch, "int", 10);
-      ch->train += 2;
-    }
-  } else {
-    act(z, "You missed $N with your psionic blast.", ch, NULL,
-        victim, TO_CHAR);
-    act(z, "$n misses you with $s psionic blast.", ch, NULL, victim,
-        TO_VICT);
-    act(z, "$n missed $N with a psionic blast.", ch, NULL, victim,
-        TO_NOTVICT);
-    learn_from_failure(ch, gsn_psiblast);
-    global_retcode = damage(ch, victim, 0, TYPE_HIT);
-  }
-  ch->mana -= skill_table[gsn_psiblast]->min_mana;
-  return;
-}
-
-void do_divinewrath(CHAR_DATA *ch, char *argument) {
-  CHAR_DATA *victim;
-  int dam = 0;
-
-  if (IS_NPC(ch) && is_split(ch)) {
-    if (!ch->master)
-      return;
-    if (!can_use_skill(ch->master, number_percent(), gsn_divine))
-      return;
-  }
-  if (IS_NPC(ch) && IS_AFFECTED(ch, AFF_CHARM)) {
-    send_to_char("You can't concentrate enough for that.\n\r", ch);
-    return;
-  }
-  if (!IS_NPC(ch) && ch->exp < skill_table[gsn_divine]->skill_level[ch->class]) {
-    send_to_char("You can't do that.\n\r", ch);
-    return;
-  }
-  if ((victim = who_fighting(ch)) == NULL) {
-    send_to_char("You aren't fighting anyone.\n\r", ch);
-    return;
-  }
-  if (ch->mana < skill_table[gsn_divine]->min_mana) {
-    send_to_char("You don't have enough energy.\n\r", ch);
-    return;
-  }
-  if (ch->focus < skill_table[gsn_divine]->focus) {
-    send_to_char("You need to focus more.\n\r", ch);
-    return;
-  } else
-    ch->focus -= skill_table[gsn_divine]->focus;
-
-  WAIT_STATE(ch, skill_table[gsn_divine]->beats);
-  if (can_use_skill(ch, number_percent(), gsn_divine)) {
-    dam = get_attmod(ch, victim) * (number_range(56, 62) + (get_curr_int(ch) / 20));
-    if (ch->charge > 0)
-      dam = chargeDamMult(ch, dam);
-
-    act(AT_RED,
-        "You appear directly infront of $N, clasping your wrists together in a single motion. Your power surges outward as you create a sphere of red energy that starts to push $N back.",
-        ch, NULL, victim, TO_CHAR);
-    act(AT_RED,
-        "Your energy sphere swells with power, increasing to a massive size, trapping $N inside a torrent of searing energy. After a few intense moments, your attack shrinks back down and vanishes altogether. &W[$t]",
-        ch, num_punct(dam), victim, TO_CHAR);
-    act(AT_RED,
-        "$n appears directly infront of you, clasping $s wrists together in a single motion. $n's power surges as $e creates a sphere of red energy that starts to push you back.",
-        ch, NULL, victim, TO_VICT);
-    act(AT_RED,
-        "The energy sphere swells with power, increasing to a massive size, and trapping you inside a torrent of searing energy. After a few intense moments, $s attack shrinks back down and vanishes altogether. &W[$t]",
-        ch, num_punct(dam), victim, TO_VICT);
-    act(AT_RED,
-        "$n appears directly infront of $N, clasping $s wrists together in a single motion. $n's power surges as $e creates a sphere of red energy that starts to push $N back.",
-        ch, NULL, victim, TO_NOTVICT);
-    act(AT_RED,
-        "The energy sphere swells with power, increasing to a massive size, and trapping $N inside a torrent of searing energy. After a few intense moments, $n's attack shrinks back down and vanishes altogether. &W[$t]",
-        ch, num_punct(dam), victim, TO_NOTVICT);
-
-    dam = ki_absorb(victim, ch, dam, gsn_divine);
-    learn_from_success(ch, gsn_divine);
-    global_retcode = damage(ch, victim, dam, TYPE_HIT);
-    if (!IS_NPC(ch)) {
-      stat_train(ch, "int", 12);
-      ch->train += 3;
-    }
-  } else {
-    act(AT_RED, "You missed $N with your divine wrath.", ch, NULL,
-        victim, TO_CHAR);
-    act(AT_RED, "$n misses you with $s divine wrath.", ch, NULL,
-        victim, TO_VICT);
-    act(AT_RED, "$n missed $N with a divine wrath.", ch, NULL,
-        victim, TO_NOTVICT);
-    learn_from_failure(ch, gsn_divine);
-    global_retcode = damage(ch, victim, 0, TYPE_HIT);
-  }
-  ch->mana -= skill_table[gsn_divine]->min_mana;
-  return;
-}
-
-void do_big_bang(CHAR_DATA *ch, char *argument) {
-  CHAR_DATA *victim;
-  int dam = 0;
-
-  if (IS_NPC(ch) && is_split(ch)) {
-    if (!ch->master)
-      return;
-    if (!can_use_skill(ch->master, number_percent(), gsn_big_bang))
-      return;
-  }
-  if (IS_NPC(ch) && IS_AFFECTED(ch, AFF_CHARM)) {
-    send_to_char("You can't concentrate enough for that.\n\r", ch);
-    return;
-  }
-  if (!IS_NPC(ch) && ch->exp < skill_table[gsn_big_bang]->skill_level[ch->class]) {
-    send_to_char("You can't do that.\n\r", ch);
-    return;
-  }
-  if ((victim = who_fighting(ch)) == NULL) {
-    send_to_char("You aren't fighting anyone.\n\r", ch);
-    return;
-  }
-  if (ch->mana < skill_table[gsn_big_bang]->min_mana) {
-    send_to_char("You don't have enough energy.\n\r", ch);
-    return;
-  }
-  if (ch->focus < skill_table[gsn_big_bang]->focus) {
-    send_to_char("You need to focus more.\n\r", ch);
-    return;
-  } else
-    ch->focus -= skill_table[gsn_big_bang]->focus;
-
-  WAIT_STATE(ch, skill_table[gsn_big_bang]->beats);
-  if (can_use_skill(ch, number_percent(), gsn_big_bang)) {
-    dam = get_attmod(ch, victim) * (number_range(33, 40) + (get_curr_int(ch) / 30));
-    if (ch->charge > 0)
-      dam = chargeDamMult(ch, dam);
-
-    act(AT_BLUE,
-        "Turning one side of your body towards $N, you raise your hand, palm facing $M.  A huge ball of blue energy begins to form.",
-        ch, NULL, victim, TO_CHAR);
-    act(AT_BLUE,
-        "You shout, 'BIG BANG!' as the ball of ki fires from your palm, leaving a trail of energy behind as it rockets towards $N. &W[$t]",
-        ch, num_punct(dam), victim, TO_CHAR);
-    act(AT_BLUE,
-        "Turning one side of $n's body towards you, $e raise $s hand, palm facing you.  A huge ball of blue energy begins to form.",
-        ch, NULL, victim, TO_VICT);
-    act(AT_BLUE,
-        "$n shouts, 'BIG BANG!' as the ball of ki fires from $s palm, leaving a trail of energy behind as it rockets towards you. &W[$t]",
-        ch, num_punct(dam), victim, TO_VICT);
-    act(AT_BLUE,
-        "Turning one side of $n's body towards you, $e raises $s hand, palm facing $N.  A huge ball of blue energy begins to form.",
-        ch, NULL, victim, TO_NOTVICT);
-    act(AT_BLUE,
-        "$n shouts, 'BIG BANG!' as the ball of ki fires from $s palm, leaving a trail of energy behind as it rockets towards $N. &W[$t]",
-        ch, num_punct(dam), victim, TO_NOTVICT);
-
-    dam = ki_absorb(victim, ch, dam, gsn_big_bang);
-    learn_from_success(ch, gsn_big_bang);
-    global_retcode = damage(ch, victim, dam, TYPE_HIT);
-    if (!IS_NPC(ch)) {
-      stat_train(ch, "int", 10);
-      ch->train += 2;
-    }
-  } else {
-    act(AT_BLUE, "You missed $N with your big bang attack.", ch,
-        NULL, victim, TO_CHAR);
-    act(AT_BLUE, "$n misses you with $s big bang attack.", ch, NULL,
-        victim, TO_VICT);
-    act(AT_BLUE, "$n missed $N with a big bang attack.", ch, NULL,
-        victim, TO_NOTVICT);
-    learn_from_failure(ch, gsn_big_bang);
-    global_retcode = damage(ch, victim, 0, TYPE_HIT);
-  }
-  ch->mana -= skill_table[gsn_big_bang]->min_mana;
+  if ((ch->mana - adjcost) < 0)
+	ch->mana = 0;
+  else
+	ch->mana -= adjcost;
   return;
 }
 
@@ -10650,8 +12980,14 @@ void do_gallic_gun(CHAR_DATA *ch, char *argument) {
   int kilimit = 0;
   int hitcheck = 0;
   int adjcost = 0;
+  int basecost = 0;
   float smastery = 0;
+  int lowdam = 0;
+  int highdam = 0;
+  char arg[MAX_INPUT_LENGTH];
 
+  argument = one_argument(argument, arg);
+  
   if (IS_NPC(ch) && is_split(ch)) {
     if (!ch->master)
       return;
@@ -10665,451 +13001,206 @@ void do_gallic_gun(CHAR_DATA *ch, char *argument) {
     return;
   }
   if (!IS_NPC(ch)) {
-    kilimit = ch->train / 10000;
-    kimult = (float)get_curr_int(ch) / 1000 + 1;
-    kicmult = (float)kilimit / 100 + 1;
-    smastery = (float)ch->masterygallic_gun / 10000;
+	kilimit = ch->train / 10000;
+	kimult = (float)get_curr_int(ch) / 1000 + 1;
+	kicmult = (float)kilimit / 100 + 1;
+	smastery = (float)ch->masterygallic_gun / 10000;
+	if (smastery > 10)
+	  smastery = 10;
   }
   if ((victim = who_fighting(ch)) == NULL) {
     send_to_char("You aren't fighting anyone.\n\r", ch);
     return;
   }
-  if (!IS_NPC(ch)) {
-    adjcost = 125 * (ch->gallic_gunpower - ch->gallic_guneffic);
-    if (adjcost < 125)
-      adjcost = 125;
-  } else {
-    adjcost = 1;
-  }
-  if (ch->mana < adjcost) {
-    send_to_char("You don't have enough energy.\n\r", ch);
-    return;
-  }
+  basecost = 125;
+  adjcost = basecost;
+  lowdam = 700;
+  highdam = 750;
   hitcheck = number_range(1, 100);
   WAIT_STATE(ch, 8);
   if (hitcheck <= 95) {
-    if (!IS_NPC(ch)) {
-      argdam = ((number_range(70, 75) + (ch->gallic_gunpower * 7)) * (kicmult + smastery));
-      dam = get_attmod(ch, victim) * (argdam * kimult);
-      stat_train(ch, "int", 16);
-      ch->train += 16;
-      ch->masterygallic_gun += 1;
-      ch->energymastery += 5;
-      if (ch->energymastery >= (ch->kspgain * 100)) {
-        pager_printf_color(ch,
-                           "&CYou gained 5 Skill Points!\n\r");
-        ch->sptotal += 5;
-        ch->kspgain += 1;
-      }
-    }
-    if (IS_NPC(ch)) {
-      argdam = number_range(70, 75);
-      dam = get_attmod(ch, victim) * (argdam + (get_curr_int(ch) / 40));
-    }
-    if (dam < 1)
-      dam = 1;
-    if (ch->charge > 0)
-      dam = chargeDamMult(ch, dam);
-    act(AT_PURPLE,
-        "You pull your hands to one side of your body, a dark purple sphere of energy flaring up suddenly around you.",
-        ch, NULL, victim, TO_CHAR);
-    act(AT_PURPLE,
-        "You thrust both hands towards $N, a beam of ki blasting from your purple aura, screaming, 'Gallic Gun...FIRE!' &W[$t]",
-        ch, num_punct(dam), victim, TO_CHAR);
-    act(AT_PURPLE,
-        "$n pulls $s hands to one side of $s body, a dark purple sphere of energy flaring up suddenly around $m.",
-        ch, NULL, victim, TO_VICT);
-    act(AT_PURPLE,
-        "$n thrusts both hands towards you, a beam of ki blasting from $s purple aura, screaming, 'Gallic Gun...FIRE!' &W[$t]",
-        ch, num_punct(dam), victim, TO_VICT);
-    act(AT_PURPLE,
-        "$n pulls $s hands to one side of $s body, a dark purple sphere of energy flaring up suddenly around $m.",
-        ch, NULL, victim, TO_NOTVICT);
-    act(AT_PURPLE,
-        "$n thrusts both hands towards $N, a beam of ki blasting from $s purple aura, screaming, 'Gallic Gun...FIRE! &W[$t]",
-        ch, num_punct(dam), victim, TO_NOTVICT);
-
-    global_retcode = damage(ch, victim, dam, TYPE_HIT);
-  } else {
-    act(AT_LBLUE, "You missed $N with your Gallic Gun.", ch, NULL,
-        victim, TO_CHAR);
-    act(AT_LBLUE, "$n misses you with $s Gallic Gun.", ch, NULL,
-        victim, TO_VICT);
-    act(AT_LBLUE, "$n missed $N with a Gallic Gun.", ch, NULL,
-        victim, TO_NOTVICT);
-    global_retcode = damage(ch, victim, 0, TYPE_HIT);
+	if (arg[0] == '\0') {
+	  if (!IS_NPC(ch)) {
+		argdam = (number_range(lowdam, highdam) * (kicmult + smastery));
+		dam = get_attmod(ch, victim) * (argdam * kimult);
+	  }
+	  else if (IS_NPC(ch)) {
+		argdam = number_range(lowdam, highdam);
+		dam = get_attmod(ch, victim) * (argdam + (get_curr_int(ch) / 40));
+	  }
+	  if (dam < 1)
+		dam = 1;
+	  act(AT_PURPLE,"You pull your hands to one side of your body, a dark purple sphere of energy flaring up suddenly around you.", ch, NULL, victim, TO_CHAR);
+	  act(AT_PURPLE,"You thrust both hands towards $N, a beam of ki blasting from your purple aura, screaming, 'Gallic Gun ... FIRE!' &W[$t]", ch, num_punct(dam), victim, TO_CHAR);
+	  act(AT_PURPLE,"$n pulls $s hands to one side of $s body, a dark purple sphere of energy flaring up suddenly around $m.", ch, NULL, victim, TO_VICT);
+	  act(AT_PURPLE,"$n thrusts both hands towards you, a beam of ki blasting from $s purple aura, screaming, 'Gallic Gun ... FIRE!' &W[$t]", ch, num_punct(dam), victim, TO_VICT);
+	  act(AT_PURPLE,"$n pulls $s hands to one side of $s body, a dark purple sphere of energy flaring up suddenly around $m.", ch, NULL, victim, TO_NOTVICT);
+	  act(AT_PURPLE,"$n thrusts both hands towards $N, a beam of ki blasting from $s purple aura, screaming, 'Gallic Gun ... FIRE! &W[$t]", ch, num_punct(dam), victim, TO_NOTVICT);
+	  if ((ch->mana - adjcost) < 0) {
+		act(AT_LBLUE,"Your Gallic Gun fizzles into nothing!", ch, NULL, victim, TO_CHAR);
+		act(AT_LBLUE,"$n's Gallic Gun fizzles into nothing!", ch, NULL, victim, TO_VICT);
+		act(AT_LBLUE,"$n's Gallic Gun fizzles into nothing!", ch, NULL, victim, TO_NOTVICT);
+		global_retcode = damage(ch, victim, 0, TYPE_HIT);
+		ch->mana = 0;
+	  } else {
+		global_retcode = damage(ch, victim, dam, TYPE_HIT);
+	  }
+	}
+	else if (!str_cmp(arg, "200")) {
+	  if (ch->gallic_gunpower < 1) {
+		send_to_char("You lack the skill.\n\r", ch);
+		return;
+	  }
+	  if (!IS_NPC(ch)) {
+		argdam = (number_range(lowdam * 2, highdam * 2) * (kicmult + smastery));
+		dam = get_attmod(ch, victim) * (argdam * kimult);
+	  }
+	  else if (IS_NPC(ch)) {
+		argdam = number_range(lowdam * 2, highdam * 2);
+		dam = get_attmod(ch, victim) * (argdam + (get_curr_int(ch) / 40));
+	  }
+	  if (dam < 1)
+		dam = 1;
+	  adjcost = basecost * 4;
+	  act(AT_PURPLE,"You pull your hands to one side of your body, a dark purple sphere of energy flaring up suddenly around you.", ch, NULL, victim, TO_CHAR);
+	  act(AT_PURPLE,"You thrust both hands towards $N, a large beam of ki blasting from your purple aura, screaming, 'Gallic Gun ... FIRE!' &W[$t]", ch, num_punct(dam), victim, TO_CHAR);
+	  act(AT_PURPLE,"$n pulls $s hands to one side of $s body, a dark purple sphere of energy flaring up suddenly around $m.", ch, NULL, victim, TO_VICT);
+	  act(AT_PURPLE,"$n thrusts both hands towards you, a large beam of ki blasting from $s purple aura, screaming, 'Gallic Gun ... FIRE!' &W[$t]", ch, num_punct(dam), victim, TO_VICT);
+	  act(AT_PURPLE,"$n pulls $s hands to one side of $s body, a dark purple sphere of energy flaring up suddenly around $m.", ch, NULL, victim, TO_NOTVICT);
+	  act(AT_PURPLE,"$n thrusts both hands towards $N, a large beam of ki blasting from $s purple aura, screaming, 'Gallic Gun ... FIRE! &W[$t]", ch, num_punct(dam), victim, TO_NOTVICT);
+	  if ((ch->mana - adjcost) < 0) {
+		act(AT_LBLUE,"Your Gallic Gun fizzles into nothing!", ch, NULL, victim, TO_CHAR);
+		act(AT_LBLUE,"$n's Gallic Gun fizzles into nothing!", ch, NULL, victim, TO_VICT);
+		act(AT_LBLUE,"$n's Gallic Gun fizzles into nothing!", ch, NULL, victim, TO_NOTVICT);
+		global_retcode = damage(ch, victim, 0, TYPE_HIT);
+		ch->mana = 0;
+	  } else {
+		global_retcode = damage(ch, victim, dam, TYPE_HIT);
+	  }
+	}
+	else if (!str_cmp(arg, "300")) {
+	  if (ch->gallic_gunpower < 2) {
+		send_to_char("You lack the skill.\n\r", ch);
+		return;
+	  }
+	  if (!IS_NPC(ch)) {
+		argdam = (number_range(lowdam * 3, highdam * 3) * (kicmult + smastery));
+		dam = get_attmod(ch, victim) * (argdam * kimult);
+	  }
+	  else if (IS_NPC(ch)) {
+		argdam = number_range(lowdam * 3, highdam * 3);
+		dam = get_attmod(ch, victim) * (argdam + (get_curr_int(ch) / 40));
+	  }
+	  if (dam < 1)
+		dam = 1;
+	  adjcost = basecost * 16;
+	  act(AT_PURPLE,"You pull your hands to one side of your body, a dark purple sphere of energy flaring up suddenly around you.", ch, NULL, victim, TO_CHAR);
+	  act(AT_PURPLE,"You thrust both hands towards $N, a huge beam of ki blasting from your purple aura, screaming, 'Gallic Gun ... FIRE!' &W[$t]", ch, num_punct(dam), victim, TO_CHAR);
+	  act(AT_PURPLE,"$n pulls $s hands to one side of $s body, a dark purple sphere of energy flaring up suddenly around $m.", ch, NULL, victim, TO_VICT);
+	  act(AT_PURPLE,"$n thrusts both hands towards you, a huge beam of ki blasting from $s purple aura, screaming, 'Gallic Gun ... FIRE!' &W[$t]", ch, num_punct(dam), victim, TO_VICT);
+	  act(AT_PURPLE,"$n pulls $s hands to one side of $s body, a dark purple sphere of energy flaring up suddenly around $m.", ch, NULL, victim, TO_NOTVICT);
+	  act(AT_PURPLE,"$n thrusts both hands towards $N, a huge beam of ki blasting from $s purple aura, screaming, 'Gallic Gun ... FIRE! &W[$t]", ch, num_punct(dam), victim, TO_NOTVICT);
+	  if ((ch->mana - adjcost) < 0) {
+		act(AT_LBLUE,"Your Gallic Gun fizzles into nothing!", ch, NULL, victim, TO_CHAR);
+		act(AT_LBLUE,"$n's Gallic Gun fizzles into nothing!", ch, NULL, victim, TO_VICT);
+		act(AT_LBLUE,"$n's Gallic Gun fizzles into nothing!", ch, NULL, victim, TO_NOTVICT);
+		global_retcode = damage(ch, victim, 0, TYPE_HIT);
+		ch->mana = 0;
+	  } else {
+		global_retcode = damage(ch, victim, dam, TYPE_HIT);
+	  }
+	}
+	else if (!str_cmp(arg, "400")) {
+	  if (ch->gallic_gunpower < 3) {
+		send_to_char("You lack the skill.\n\r", ch);
+		return;
+	  }
+	  if (!IS_NPC(ch)) {
+		argdam = (number_range(lowdam * 4, highdam * 4) * (kicmult + smastery));
+		dam = get_attmod(ch, victim) * (argdam * kimult);
+	  }
+	  else if (IS_NPC(ch)) {
+		argdam = number_range(lowdam * 4, highdam * 4);
+		dam = get_attmod(ch, victim) * (argdam + (get_curr_int(ch) / 40));
+	  }
+	  if (dam < 1)
+		dam = 1;
+	  adjcost = basecost * 64;
+	  act(AT_PURPLE,"You pull your hands to one side of your body, a dark purple sphere of energy flaring up suddenly around you.", ch, NULL, victim, TO_CHAR);
+	  act(AT_PURPLE,"You thrust both hands towards $N, a massive beam of ki blasting from your purple aura, screaming, 'Gallic Gun ... FIRE!' &W[$t]", ch, num_punct(dam), victim, TO_CHAR);
+	  act(AT_PURPLE,"$n pulls $s hands to one side of $s body, a dark purple sphere of energy flaring up suddenly around $m.", ch, NULL, victim, TO_VICT);
+	  act(AT_PURPLE,"$n thrusts both hands towards you, a massive beam of ki blasting from $s purple aura, screaming, 'Gallic Gun ... FIRE!' &W[$t]", ch, num_punct(dam), victim, TO_VICT);
+	  act(AT_PURPLE,"$n pulls $s hands to one side of $s body, a dark purple sphere of energy flaring up suddenly around $m.", ch, NULL, victim, TO_NOTVICT);
+	  act(AT_PURPLE,"$n thrusts both hands towards $N, a massive beam of ki blasting from $s purple aura, screaming, 'Gallic Gun ... FIRE! &W[$t]", ch, num_punct(dam), victim, TO_NOTVICT);
+	  if ((ch->mana - adjcost) < 0) {
+		act(AT_LBLUE,"Your Gallic Gun fizzles into nothing!", ch, NULL, victim, TO_CHAR);
+		act(AT_LBLUE,"$n's Gallic Gun fizzles into nothing!", ch, NULL, victim, TO_VICT);
+		act(AT_LBLUE,"$n's Gallic Gun fizzles into nothing!", ch, NULL, victim, TO_NOTVICT);
+		global_retcode = damage(ch, victim, 0, TYPE_HIT);
+		ch->mana = 0;
+	  } else {
+		global_retcode = damage(ch, victim, dam, TYPE_HIT);
+	  }
+	}
+	else if (!str_cmp(arg, "500")) {
+	  if (ch->gallic_gunpower < 4) {
+		send_to_char("You lack the skill.\n\r", ch);
+		return;
+	  }
+	  if (!IS_NPC(ch)) {
+		argdam = (number_range(lowdam * 5, highdam * 5) * (kicmult + smastery));
+		dam = get_attmod(ch, victim) * (argdam * kimult);
+	  }
+	  else if (IS_NPC(ch)) {
+		argdam = number_range(lowdam * 5, highdam * 5);
+		dam = get_attmod(ch, victim) * (argdam + (get_curr_int(ch) / 40));
+	  }
+	  if (dam < 1)
+		dam = 1;
+	  adjcost = basecost * 256;
+	  act(AT_PURPLE,"You pull your hands to one side of your body, muscles bulging as your aura flares into a swirling rage.", ch, NULL, victim, TO_CHAR);
+	  act(AT_PURPLE,"You thrust both hands towards $N, a colossal beam of ki blasting from your purple aura, screaming, 'Gallic Gun ... FIRE!' &W[$t]", ch, num_punct(dam), victim, TO_CHAR);
+	  act(AT_PURPLE,"$n pulls $s hands to one side of $s body, a dark purple sphere of energy flaring up suddenly around $m.", ch, NULL, victim, TO_VICT);
+	  act(AT_PURPLE,"$n thrusts both hands towards you, a colossal beam of ki blasting from $s purple aura, screaming, 'Gallic Gun ... FIRE!' &W[$t]", ch, num_punct(dam), victim, TO_VICT);
+	  act(AT_PURPLE,"$n pulls $s hands to one side of $s body, a dark purple sphere of energy flaring up suddenly around $m.", ch, NULL, victim, TO_NOTVICT);
+	  act(AT_PURPLE,"$n thrusts both hands towards $N, a colossal beam of ki blasting from $s purple aura, screaming, 'Gallic Gun ... FIRE! &W[$t]", ch, num_punct(dam), victim, TO_NOTVICT);
+	  if ((ch->mana - adjcost) < 0) {
+		act(AT_LBLUE,"Your Gallic Gun fizzles into nothing!", ch, NULL, victim, TO_CHAR);
+		act(AT_LBLUE,"$n's Gallic Gun fizzles into nothing!", ch, NULL, victim, TO_VICT);
+		act(AT_LBLUE,"$n's Gallic Gun fizzles into nothing!", ch, NULL, victim, TO_NOTVICT);
+		global_retcode = damage(ch, victim, 0, TYPE_HIT);
+		ch->mana = 0;
+	  } else {
+		global_retcode = damage(ch, victim, dam, TYPE_HIT);
+	  }
+	}
+	else {
+		send_to_char("Only increments of 200-500.\n\r", ch);
+		return;
+	}
   }
-  ch->mana -= adjcost;
-  return;
-}
-
-void do_burning_attack(CHAR_DATA *ch, char *argument) {
-  CHAR_DATA *victim;
-  int dam = 0;
-
-  if (IS_NPC(ch) && is_split(ch)) {
-    if (!ch->master)
-      return;
-    if (!can_use_skill(ch->master, number_percent(), gsn_burning_attack))
-      return;
+  else {
+	act(AT_LBLUE, "You missed $N with your Gallic Gun.", ch, NULL, victim, TO_CHAR);
+	act(AT_LBLUE, "$n misses you with $s Gallic Gun.", ch, NULL, victim, TO_VICT);
+	act(AT_LBLUE, "$n missed $N with $s Gallic Gun.", ch, NULL, victim, TO_NOTVICT);
+	global_retcode = damage(ch, victim, 0, TYPE_HIT);
   }
-  if (IS_NPC(ch) && IS_AFFECTED(ch, AFF_CHARM)) {
-    send_to_char("You can't concentrate enough for that.\n\r", ch);
-    return;
+  if (!IS_NPC(ch) && ch->mana != 0) {
+	// train player masteries, no benefit from spamming at no ki
+	stat_train(ch, "int", 16);
+	ch->train += 16;
+	ch->masterygallic_gun += 1;
+	ch->energymastery += 5;
+	if (ch->energymastery >= (ch->kspgain * 100)) {
+	  pager_printf_color(ch,"&CYou gained 5 Skill Points!\n\r");
+	  ch->sptotal += 5;
+	  ch->kspgain += 1;
+	}
   }
-  if (!IS_NPC(ch) && ch->exp <
-                         skill_table[gsn_burning_attack]->skill_level[ch->class]) {
-    send_to_char("You can't do that.\n\r", ch);
-    return;
-  }
-  if ((victim = who_fighting(ch)) == NULL) {
-    send_to_char("You aren't fighting anyone.\n\r", ch);
-    return;
-  }
-  if (ch->mana < skill_table[gsn_burning_attack]->min_mana) {
-    send_to_char("You don't have enough energy.\n\r", ch);
-    return;
-  }
-  if (ch->focus < skill_table[gsn_burning_attack]->focus) {
-    send_to_char("You need to focus more.\n\r", ch);
-    return;
-  } else
-    ch->focus -= skill_table[gsn_burning_attack]->focus;
-
-  WAIT_STATE(ch, skill_table[gsn_burning_attack]->beats);
-  if (can_use_skill(ch, number_percent(), gsn_burning_attack)) {
-    dam = get_attmod(ch, victim) * (number_range(24, 28) + (get_curr_int(ch) / 35));
-    if (ch->charge > 0)
-      dam = chargeDamMult(ch, dam);
-
-    act(AT_YELLOW,
-        "You hold your hands in front of you, fingers splayed around a diamond shape formed by thumbs and fingers.",
-        ch, NULL, victim, TO_CHAR);
-    act(AT_YELLOW,
-        "Suddenly you begin to gesture wildly, hands blurring through the air in a flurry of movement.  You freeze, hands forming the same diamond shape, a pulsing ball of light appearing and launching towards $N with surprising speed. &W[$t]",
-        ch, num_punct(dam), victim, TO_CHAR);
-    act(AT_YELLOW,
-        "$n holds $s hands in front of $mself, fingers splayed around a diamond shape formed by thumbs and fingers.",
-        ch, NULL, victim, TO_VICT);
-    act(AT_YELLOW,
-        "Suddenly $n begins to gesture wildly, hands blurring through the air in a flurry of movement.  $n freezes, hands forming the same diamond shape, a pulsing ball of light appearing and launching towards you with surprising speed. &W[$t]",
-        ch, num_punct(dam), victim, TO_VICT);
-    act(AT_YELLOW,
-        "$n holds $s hands in front of $mself, fingers splayed around a diamond shape formed by thumbs and fingers.",
-        ch, NULL, victim, TO_NOTVICT);
-    act(AT_YELLOW,
-        "Suddenly $n begins to gesture wildly, hands blurring through the air in a flurry of movement.  $n freezes, hands forming the same diamond shape, a pulsing ball of light appearing and launching towards $N with surprising speed. &W[$t]",
-        ch, num_punct(dam), victim, TO_NOTVICT);
-
-    learn_from_success(ch, gsn_burning_attack);
-    global_retcode = damage(ch, victim, dam, TYPE_HIT);
-    if (!IS_NPC(ch)) {
-      stat_train(ch, "int", 8);
-      ch->train += 2;
-    }
-  } else {
-    act(AT_YELLOW, "You missed $N with your burning attack.", ch,
-        NULL, victim, TO_CHAR);
-    act(AT_YELLOW, "$n misses you with $s burning attack.", ch,
-        NULL, victim, TO_VICT);
-    act(AT_YELLOW, "$n missed $N with a burning attack.", ch, NULL,
-        victim, TO_NOTVICT);
-    learn_from_failure(ch, gsn_burning_attack);
-    global_retcode = damage(ch, victim, 0, TYPE_HIT);
-  }
-  ch->mana -= skill_table[gsn_burning_attack]->min_mana;
-  return;
-}
-
-void do_finishing_buster(CHAR_DATA *ch, char *argument) {
-  CHAR_DATA *victim;
-  int dam = 0;
-
-  if (IS_NPC(ch) && is_split(ch)) {
-    if (!ch->master)
-      return;
-    if (!can_use_skill(ch->master, number_percent(), gsn_finishing_buster))
-      return;
-  }
-  if (IS_NPC(ch) && IS_AFFECTED(ch, AFF_CHARM)) {
-    send_to_char("You can't concentrate enough for that.\n\r", ch);
-    return;
-  }
-  if (!IS_NPC(ch) && ch->exp <
-                         skill_table[gsn_finishing_buster]->skill_level[ch->class]) {
-    send_to_char("You can't do that.\n\r", ch);
-    return;
-  }
-  if ((victim = who_fighting(ch)) == NULL) {
-    send_to_char("You aren't fighting anyone.\n\r", ch);
-    return;
-  }
-  if (ch->mana < skill_table[gsn_finishing_buster]->min_mana) {
-    send_to_char("You don't have enough energy.\n\r", ch);
-    return;
-  }
-  if (ch->focus < skill_table[gsn_finishing_buster]->focus) {
-    send_to_char("You need to focus more.\n\r", ch);
-    return;
-  } else
-    ch->focus -= skill_table[gsn_finishing_buster]->focus;
-
-  WAIT_STATE(ch, skill_table[gsn_finishing_buster]->beats);
-  if (can_use_skill(ch, number_percent(), gsn_finishing_buster)) {
-    dam = get_attmod(ch, victim) * (number_range(58, 64) + (get_curr_int(ch) / 20));
-    if (ch->charge > 0)
-      dam = chargeDamMult(ch, dam);
-
-    act(AT_BLUE,
-        "You raise both hands over your head, gathering your energy.  A large, blue ball of ki gathers above your head, crackling with electricity.",
-        ch, NULL, victim, TO_CHAR);
-    act(AT_BLUE,
-        "You fling the ball of energy towards $N, putting your whole body into the motion.  'Finishing Buster!'  The sphere flies quickly, smashing soundly into $N. &W[$t]",
-        ch, num_punct(dam), victim, TO_CHAR);
-    act(AT_BLUE,
-        "$n raises both hands over $s head, gathering $s energy.  A large, blue ball of ki gathers above $s head, crackling with electricity.",
-        ch, NULL, victim, TO_VICT);
-    act(AT_BLUE,
-        "$n flings the ball of energy towards you, putting $s whole body into the motion.  'Finishing Buster!'  The sphere flies quickly, smashing soundly into you. &W[$t]",
-        ch, num_punct(dam), victim, TO_VICT);
-    act(AT_BLUE,
-        "$n raises both hands over $s head, gathering $s energy.  A large, blue ball of ki gathers above $s head, crackling with electricity.",
-        ch, NULL, victim, TO_NOTVICT);
-    act(AT_BLUE,
-        "$n flings the ball of energy towards $N, putting $s whole body into the motion.  'Finishing Buster!'  The sphere flies quickly, smashing soundly into $N. &W[$t]",
-        ch, num_punct(dam), victim, TO_NOTVICT);
-
-    learn_from_success(ch, gsn_finishing_buster);
-    global_retcode = damage(ch, victim, dam, TYPE_HIT);
-    if (!IS_NPC(ch)) {
-      stat_train(ch, "int", 12);
-      ch->train += 2;
-    }
-  } else {
-    act(AT_BLUE, "You missed $N with your finishing buster attack.",
-        ch, NULL, victim, TO_CHAR);
-    act(AT_BLUE, "$n misses you with $s finishing buster attack.",
-        ch, NULL, victim, TO_VICT);
-    act(AT_BLUE, "$n missed $N with a finishing buster attack.", ch,
-        NULL, victim, TO_NOTVICT);
-    learn_from_failure(ch, gsn_finishing_buster);
-    global_retcode = damage(ch, victim, 0, TYPE_HIT);
-  }
-  ch->mana -= skill_table[gsn_finishing_buster]->min_mana;
-  return;
-}
-
-void do_heaven_splitter_cannon(CHAR_DATA *ch, char *argument) {
-  CHAR_DATA *victim;
-  int dam = 0;
-
-  if (IS_NPC(ch) && is_split(ch)) {
-    if (!ch->master)
-      return;
-    if (!can_use_skill(ch->master, number_percent(), gsn_heaven_splitter_cannon))
-      return;
-  }
-  if (IS_NPC(ch) && IS_AFFECTED(ch, AFF_CHARM)) {
-    send_to_char("You can't concentrate enough for that.\n\r", ch);
-    return;
-  }
-  if (!IS_NPC(ch) && ch->exp <
-                         skill_table[gsn_heaven_splitter_cannon]->skill_level[ch->class]) {
-    send_to_char("You can't do that.\n\r", ch);
-    return;
-  }
-  if ((victim = who_fighting(ch)) == NULL) {
-    send_to_char("You aren't fighting anyone.\n\r", ch);
-    return;
-  }
-  if (ch->mana < skill_table[gsn_heaven_splitter_cannon]->min_mana) {
-    send_to_char("You don't have enough energy.\n\r", ch);
-    return;
-  }
-  if (ch->focus < skill_table[gsn_heaven_splitter_cannon]->focus) {
-    send_to_char("You need to focus more.\n\r", ch);
-    return;
-  } else
-    ch->focus -= skill_table[gsn_heaven_splitter_cannon]->focus;
-
-  WAIT_STATE(ch, skill_table[gsn_heaven_splitter_cannon]->beats);
-  if (can_use_skill(ch, number_percent(), gsn_heaven_splitter_cannon)) {
-    dam = get_attmod(ch, victim) * (number_range(60, 66) + (get_curr_int(ch) / 20));
-    if (ch->charge > 0)
-      dam = chargeDamMult(ch, dam);
-
-    act(AT_YELLOW,
-        "You cup both hands, holding them close together, right in front of your stomach.  A blindingly bright ball of energy begins forming, growing ever larger.",
-        ch, NULL, victim, TO_CHAR);
-    act(AT_YELLOW,
-        "With a howl, you thrust both hands forward, flinging the huge ball of energy into $N and creating an enourmous explosion. &W[$t]",
-        ch, num_punct(dam), victim, TO_CHAR);
-    act(AT_YELLOW,
-        "$n cups both hands, holding them close together, right in front of $s stomach.  A blindingly bright ball of energy begins forming, growing ever larger.",
-        ch, NULL, victim, TO_VICT);
-    act(AT_YELLOW,
-        "With a howl, $n thrusts both hands forward, flinging the huge ball of energy into you and creating an enourmous explosion. &W[$t]",
-        ch, num_punct(dam), victim, TO_VICT);
-    act(AT_YELLOW,
-        "$n cups both hands, holding them close together, right in front of $s stomach.  A blindingly bright ball of energy begins forming, growing ever larger.",
-        ch, NULL, victim, TO_NOTVICT);
-    act(AT_YELLOW,
-        "With a howl, $n thrusts both hands forward, flinging the huge ball of energy into $N and creating an enourmous explosion. &W[$t]",
-        ch, num_punct(dam), victim, TO_NOTVICT);
-
-    learn_from_success(ch, gsn_heaven_splitter_cannon);
-    global_retcode = damage(ch, victim, dam, TYPE_HIT);
-    if (!IS_NPC(ch)) {
-      stat_train(ch, "int", 12);
-      ch->train += 3;
-    }
-  } else {
-    act(AT_YELLOW,
-        "You missed $N with your heaven-splitter cannon attack.",
-        ch, NULL, victim, TO_CHAR);
-    act(AT_YELLOW,
-        "$n misses you with $s heaven-splitter cannon attack.", ch,
-        NULL, victim, TO_VICT);
-    act(AT_YELLOW,
-        "$n missed $N with a heaven-splitter cannon attack.", ch,
-        NULL, victim, TO_NOTVICT);
-    learn_from_failure(ch, gsn_heaven_splitter_cannon);
-    global_retcode = damage(ch, victim, 0, TYPE_HIT);
-  }
-  ch->mana -= skill_table[gsn_heaven_splitter_cannon]->min_mana;
-  return;
-}
-
-void do_hellzone_grenade(CHAR_DATA *ch, char *arg) {
-  char buf[MAX_STRING_LENGTH];
-  char buf2[MAX_STRING_LENGTH];
-  CHAR_DATA *victim;
-  int shot = 0;
-  int shots = 0;
-  int dam = 0;
-  int energy = 0;
-  int damPerShot = 0;
-
-  if (IS_NPC(ch) && is_split(ch)) {
-    if (!ch->master)
-      return;
-    if (!can_use_skill(ch->master, number_percent(), gsn_hellzone_grenade))
-      return;
-  }
-  if (IS_NPC(ch) && IS_AFFECTED(ch, AFF_CHARM)) {
-    send_to_char("You can't concentrate enough for that.\n\r", ch);
-    return;
-  }
-  if (!IS_NPC(ch) && ch->exp <
-                         skill_table[gsn_hellzone_grenade]->skill_level[ch->class]) {
-    send_to_char("You can't do that.\n\r", ch);
-    return;
-  }
-  if (arg[0] == '\0' || atoi(arg) <= 0) {
-    send_to_char("Syntax: 'hellzone grenade' <# of Shots>\n\r", ch);
-    return;
-  }
-  if ((victim = who_fighting(ch)) == NULL) {
-    send_to_char("You aren't fighting anyone.\n\r", ch);
-    return;
-  }
-  shot = atoi(arg);
-  if (shot > 50)
-    shot = 50;
-  energy = shot * skill_table[gsn_hellzone_grenade]->min_mana;
-  shots = shot;
-  strcpy(buf, num_punct(shot));
-
-  if (ch->mana < energy) {
-    send_to_char("You don't have enough energy.\n\r", ch);
-    return;
-  }
-  // if (ch->focus < (skill_table[gsn_hellzone_grenade]->focus * (1 + (shot / 10))))
-  // Replaced this with something better.- Karma.
-  int focus = shots;
-
-  if (focus < 12)
-    focus = 12;
-  // Minimum focus
-  if (ch->focus < focus) {
-    send_to_char("You need to focus more.\n\r", ch);
-    return;
-  } else
-    ch->focus -= focus;
-  // ch->focus -= (skill_table[gsn_hellzone_grenade]->focus * (1 + (shot / 10)));
-
-  int wait = (focus / 12);
-
-  if (wait < 2)
-    wait = 2;
-  WAIT_STATE(ch, (skill_table[gsn_hellzone_grenade]->beats * wait));
-  // WAIT_STATE(ch, (skill_table[gsn_hellzone_grenade]->beats * (1 + (shot / 10))));
-  if (can_use_skill(ch, number_percent(), gsn_hellzone_grenade)) {
-    while (shots > 0) {
-      switch (number_range(1, 4)) {
-        default:
-        case 1:
-          break;
-        case 2:
-          dam += number_range(0, 1);
-          break;
-        case 3:
-          dam += 1;
-          break;
-        case 4:
-          dam += number_range(1, 2);
-          break;
-      }
-      shots--;
-    }
-    damPerShot = number_range(1, 3);
-    strcpy(buf2,
-           num_punct(get_attmod(ch, victim) * dam * damPerShot));
-
-    act(AT_YELLOW,
-        "You power up, launching $t energy balls that all seem to miss $N by a huge margin.",
-        ch, buf, victim, TO_CHAR);
-    act(AT_YELLOW,
-        "Suddenly, the balls freeze in midair, trapping $N in a deadly pattern.  The energy balls converge on $N, making $m the center of a gigantic explosion. &W[$t]",
-        ch, buf2, victim, TO_CHAR);
-    act(AT_YELLOW,
-        "$n powers up, launching $t energy balls that all seem to miss you by a huge margin.",
-        ch, buf, victim, TO_VICT);
-    act(AT_YELLOW,
-        "Suddenly, the balls freeze in midair, trapping you in a deadly pattern.  The energy balls converge on you, making you the center of a gigantic explosion. &W[$t]",
-        ch, buf2, victim, TO_VICT);
-    act(AT_YELLOW,
-        "$n powers up, launching $t energy balls that all seem to miss $N by a huge margin.",
-        ch, buf, victim, TO_VICT);
-    act(AT_YELLOW,
-        "Suddenly, the balls freeze in midair, trapping $N in a deadly pattern.  The energy balls converge on $N, making you the center of a gigantic explosion. &W[$t]",
-        ch, buf2, victim, TO_VICT);
-    act(AT_YELLOW,
-        "$n powers up, launching $t energy balls that all seem to miss $N by a huge margin.",
-        ch, num_punct(dam), victim, TO_NOTVICT);
-    act(AT_YELLOW,
-        "Suddenly, the balls freeze in midair, trapping $N in a deadly pattern.  The energy balls converge on $N, making $M the center of a gigantic explosion. &W[$t]",
-        ch, buf2, victim, TO_NOTVICT);
-
-    learn_from_success(ch, gsn_hellzone_grenade);
-    global_retcode =
-        damage(ch, victim,
-               (get_attmod(ch, victim) * dam * damPerShot),
-               TYPE_HIT);
-  } else {
-    act(AT_YELLOW,
-        "You launch a barrage of $t energy balls towards $N but $E is to fast to hit.",
-        ch, buf, victim, TO_CHAR);
-    act(AT_YELLOW,
-        "$n launches a barrage of $t energy balls towards $N but you are to fast to hit.",
-        ch, buf, victim, TO_VICT);
-    act(AT_YELLOW,
-        "$n launches a barrage of $t energy balls towards $N but $E is to fast to hit.",
-        ch, buf, victim, TO_NOTVICT);
-    learn_from_failure(ch, gsn_hellzone_grenade);
-    global_retcode = damage(ch, victim, 0, TYPE_HIT);
-  }
-  ch->mana -= energy;
+  if ((ch->mana - adjcost) < 0)
+	ch->mana = 0;
+  else
+	ch->mana -= adjcost;
   return;
 }
 
@@ -11122,8 +13213,14 @@ void do_makosen(CHAR_DATA *ch, char *argument) {
   int kilimit = 0;
   int hitcheck = 0;
   int adjcost = 0;
+  int basecost = 0;
   float smastery = 0;
+  int lowdam = 0;
+  int highdam = 0;
+  char arg[MAX_INPUT_LENGTH];
 
+  argument = one_argument(argument, arg);
+  
   if (IS_NPC(ch) && is_split(ch)) {
     if (!ch->master)
       return;
@@ -11136,538 +13233,211 @@ void do_makosen(CHAR_DATA *ch, char *argument) {
     send_to_char("You're not able to use that skill.\n\r", ch);
     return;
   }
+  if (!IS_NPC(ch)) {
+	kilimit = ch->train / 10000;
+	kimult = (float)get_curr_int(ch) / 1000 + 1;
+	kicmult = (float)kilimit / 100 + 1;
+	smastery = (float)ch->masterymakosen / 10000;
+	if (smastery > 10)
+	  smastery = 10;
+  }
   if ((victim = who_fighting(ch)) == NULL) {
     send_to_char("You aren't fighting anyone.\n\r", ch);
     return;
   }
-  if (!IS_NPC(ch)) {
-    kilimit = ch->train / 10000;
-    kimult = (float)get_curr_int(ch) / 1000 + 1;
-    kicmult = (float)kilimit / 100 + 1;
-    smastery = (float)ch->masterymakosen / 10000;
-  }
-  if (!IS_NPC(ch)) {
-    adjcost = 60 * (ch->makosenpower - ch->makoseneffic);
-    if (adjcost < 60)
-      adjcost = 60;
-  } else {
-    adjcost = 1;
-  }
-  if (ch->mana < adjcost) {
-    send_to_char("You don't have enough energy.\n\r", ch);
-    return;
-  }
+  basecost = 60;
+  adjcost = basecost;
+  lowdam = 400;
+  highdam = 420;
   hitcheck = number_range(1, 100);
   WAIT_STATE(ch, 8);
   if (hitcheck <= 95) {
-    if (!IS_NPC(ch)) {
-      argdam = ((number_range(40, 42) + (ch->makosenpower * 4)) * (kicmult + smastery));
-      dam = get_attmod(ch, victim) * (argdam * kimult);
-      stat_train(ch, "int", 15);
-      ch->train += 15;
-      ch->masterymakosen += 1;
-      ch->energymastery += 4;
-      if (ch->energymastery >= (ch->kspgain * 100)) {
-        pager_printf_color(ch,
-                           "&CYou gained 5 Skill Points!\n\r");
-        ch->sptotal += 5;
-        ch->kspgain += 1;
-      }
-    }
-    if (IS_NPC(ch))
-      dam = get_attmod(ch, victim) * (number_range(35, 40) + (get_curr_int(ch) / 40));
-    if (ch->charge > 0)
-      dam = chargeDamMult(ch, dam);
-    act(AT_YELLOW,
-        "You pull both hands to one side of your body, cupping them as a ball of ki begins forming.",
-        ch, NULL, victim, TO_CHAR);
-    act(AT_YELLOW,
-        "'Makosen!'  You thrust your hands in front of you, firing a thin beam of energy towards $N. &W[$t]",
-        ch, num_punct(dam), victim, TO_CHAR);
-    act(AT_YELLOW,
-        "$n pulls both hands to one side of $s body, cupping them as a ball of ki begins forming.",
-        ch, NULL, victim, TO_VICT);
-    act(AT_YELLOW,
-        "'Makosen!'  $n thrusts $s hands in front of $m, firing a thin beam of energy towards you. &W[$t]",
-        ch, num_punct(dam), victim, TO_VICT);
-    act(AT_YELLOW,
-        "$n pulls both hands to one side of $s body, cupping them as a ball of ki begins forming.",
-        ch, NULL, victim, TO_NOTVICT);
-    act(AT_YELLOW,
-        "'Makosen!'  $n thrusts $s hands in front of $m, firing a thin beam of energy towards $N. &W[$t]",
-        ch, num_punct(dam), victim, TO_NOTVICT);
-
-    global_retcode = damage(ch, victim, dam, TYPE_HIT);
-  } else {
-    act(AT_YELLOW, "You missed $N with your makosen blast.", ch,
-        NULL, victim, TO_CHAR);
-    act(AT_YELLOW, "$n misses you with $s makosen blast.", ch, NULL,
-        victim, TO_VICT);
-    act(AT_YELLOW, "$n missed $N with a makosen blast.", ch, NULL,
-        victim, TO_NOTVICT);
-    global_retcode = damage(ch, victim, 0, TYPE_HIT);
+	if (arg[0] == '\0') {
+	  if (!IS_NPC(ch)) {
+		argdam = (number_range(lowdam, highdam) * (kicmult + smastery));
+		dam = get_attmod(ch, victim) * (argdam * kimult);
+	  }
+	  else if (IS_NPC(ch)) {
+		argdam = number_range(lowdam, highdam);
+		dam = get_attmod(ch, victim) * (argdam + (get_curr_int(ch) / 40));
+	  }
+	  if (dam < 1)
+		dam = 1;
+	  act(AT_YELLOW,"You pull both hands to one side of your body, cupping them as a ball of ki begins forming.", ch, NULL, victim, TO_CHAR);
+	  act(AT_YELLOW,"'Makosen!'  You thrust your hands in front of you, firing a thin beam of energy towards $N. &W[$t]", ch, num_punct(dam), victim, TO_CHAR);
+	  act(AT_YELLOW,"$n pulls both hands to one side of $s body, cupping them as a ball of ki begins forming.", ch, NULL, victim, TO_VICT);
+	  act(AT_YELLOW,"'Makosen!'  $n thrusts $s hands in front of $m, firing a thin beam of energy towards you. &W[$t]", ch, num_punct(dam), victim, TO_VICT);
+	  act(AT_YELLOW,"$n pulls both hands to one side of $s body, cupping them as a ball of ki begins forming.", ch, NULL, victim, TO_NOTVICT);
+	  act(AT_YELLOW,"'Makosen!'  $n thrusts $s hands in front of $m, firing a thin beam of energy towards $N. &W[$t]", ch, num_punct(dam), victim, TO_NOTVICT);
+	  if ((ch->mana - adjcost) < 0) {
+		act(AT_LBLUE,"Your Makosen fizzles into nothing!", ch, NULL, victim, TO_CHAR);
+		act(AT_LBLUE,"$n's Makosen fizzles into nothing!", ch, NULL, victim, TO_VICT);
+		act(AT_LBLUE,"$n's Makosen fizzles into nothing!", ch, NULL, victim, TO_NOTVICT);
+		global_retcode = damage(ch, victim, 0, TYPE_HIT);
+		ch->mana = 0;
+	  } else {
+		global_retcode = damage(ch, victim, dam, TYPE_HIT);
+	  }
+	}
+	else if (!str_cmp(arg, "200")) {
+	  if (ch->makosenpower < 1) {
+		send_to_char("You lack the skill.\n\r", ch);
+		return;
+	  }
+	  if (!IS_NPC(ch)) {
+		argdam = (number_range(lowdam * 2, highdam * 2) * (kicmult + smastery));
+		dam = get_attmod(ch, victim) * (argdam * kimult);
+	  }
+	  else if (IS_NPC(ch)) {
+		argdam = number_range(lowdam * 2, highdam * 2);
+		dam = get_attmod(ch, victim) * (argdam + (get_curr_int(ch) / 40));
+	  }
+	  if (dam < 1)
+		dam = 1;
+	  adjcost = basecost * 4;
+	  act(AT_YELLOW,"You pull both hands to one side of your body, cupping them as a ball of ki begins forming.", ch, NULL, victim, TO_CHAR);
+	  act(AT_YELLOW,"'Makosen!'  You thrust your hands in front of you, firing a thin beam of energy towards $N. &W[$t]", ch, num_punct(dam), victim, TO_CHAR);
+	  act(AT_YELLOW,"$n pulls both hands to one side of $s body, cupping them as a ball of ki begins forming.", ch, NULL, victim, TO_VICT);
+	  act(AT_YELLOW,"'Makosen!'  $n thrusts $s hands in front of $m, firing a thin beam of energy towards you. &W[$t]", ch, num_punct(dam), victim, TO_VICT);
+	  act(AT_YELLOW,"$n pulls both hands to one side of $s body, cupping them as a ball of ki begins forming.", ch, NULL, victim, TO_NOTVICT);
+	  act(AT_YELLOW,"'Makosen!'  $n thrusts $s hands in front of $m, firing a thin beam of energy towards $N. &W[$t]", ch, num_punct(dam), victim, TO_NOTVICT);
+	  if ((ch->mana - adjcost) < 0) {
+		act(AT_LBLUE,"Your Makosen fizzles into nothing!", ch, NULL, victim, TO_CHAR);
+		act(AT_LBLUE,"$n's Makosen fizzles into nothing!", ch, NULL, victim, TO_VICT);
+		act(AT_LBLUE,"$n's Makosen fizzles into nothing!", ch, NULL, victim, TO_NOTVICT);
+		global_retcode = damage(ch, victim, 0, TYPE_HIT);
+		ch->mana = 0;
+	  } else {
+		global_retcode = damage(ch, victim, dam, TYPE_HIT);
+	  }
+	}
+	else if (!str_cmp(arg, "300")) {
+	  if (ch->makosenpower < 2) {
+		send_to_char("You lack the skill.\n\r", ch);
+		return;
+	  }
+	  if (!IS_NPC(ch)) {
+		argdam = (number_range(lowdam * 3, highdam * 3) * (kicmult + smastery));
+		dam = get_attmod(ch, victim) * (argdam * kimult);
+	  }
+	  else if (IS_NPC(ch)) {
+		argdam = number_range(lowdam * 3, highdam * 3);
+		dam = get_attmod(ch, victim) * (argdam + (get_curr_int(ch) / 40));
+	  }
+	  if (dam < 1)
+		dam = 1;
+	  adjcost = basecost * 16;
+	  act(AT_YELLOW,"You pull both hands to one side of your body, cupping them as a ball of ki begins forming.", ch, NULL, victim, TO_CHAR);
+	  act(AT_YELLOW,"'Makosen!'  You thrust your hands in front of you, firing a thin beam of energy towards $N. &W[$t]", ch, num_punct(dam), victim, TO_CHAR);
+	  act(AT_YELLOW,"$n pulls both hands to one side of $s body, cupping them as a ball of ki begins forming.", ch, NULL, victim, TO_VICT);
+	  act(AT_YELLOW,"'Makosen!'  $n thrusts $s hands in front of $m, firing a thin beam of energy towards you. &W[$t]", ch, num_punct(dam), victim, TO_VICT);
+	  act(AT_YELLOW,"$n pulls both hands to one side of $s body, cupping them as a ball of ki begins forming.", ch, NULL, victim, TO_NOTVICT);
+	  act(AT_YELLOW,"'Makosen!'  $n thrusts $s hands in front of $m, firing a thin beam of energy towards $N. &W[$t]", ch, num_punct(dam), victim, TO_NOTVICT);
+	  if ((ch->mana - adjcost) < 0) {
+		act(AT_LBLUE,"Your Makosen fizzles into nothing!", ch, NULL, victim, TO_CHAR);
+		act(AT_LBLUE,"$n's Makosen fizzles into nothing!", ch, NULL, victim, TO_VICT);
+		act(AT_LBLUE,"$n's Makosen fizzles into nothing!", ch, NULL, victim, TO_NOTVICT);
+		global_retcode = damage(ch, victim, 0, TYPE_HIT);
+		ch->mana = 0;
+	  } else {
+		global_retcode = damage(ch, victim, dam, TYPE_HIT);
+	  }
+	}
+	else if (!str_cmp(arg, "400")) {
+	  if (ch->makosenpower < 3) {
+		send_to_char("You lack the skill.\n\r", ch);
+		return;
+	  }
+	  if (!IS_NPC(ch)) {
+		argdam = (number_range(lowdam * 4, highdam * 4) * (kicmult + smastery));
+		dam = get_attmod(ch, victim) * (argdam * kimult);
+	  }
+	  else if (IS_NPC(ch)) {
+		argdam = number_range(lowdam * 4, highdam * 4);
+		dam = get_attmod(ch, victim) * (argdam + (get_curr_int(ch) / 40));
+	  }
+	  if (dam < 1)
+		dam = 1;
+	  adjcost = basecost * 64;
+	  act(AT_YELLOW,"You pull both hands to one side of your body, cupping them as a ball of ki begins forming.", ch, NULL, victim, TO_CHAR);
+	  act(AT_YELLOW,"'Makosen!'  You thrust your hands in front of you, firing a thin beam of energy towards $N. &W[$t]", ch, num_punct(dam), victim, TO_CHAR);
+	  act(AT_YELLOW,"$n pulls both hands to one side of $s body, cupping them as a ball of ki begins forming.", ch, NULL, victim, TO_VICT);
+	  act(AT_YELLOW,"'Makosen!'  $n thrusts $s hands in front of $m, firing a thin beam of energy towards you. &W[$t]", ch, num_punct(dam), victim, TO_VICT);
+	  act(AT_YELLOW,"$n pulls both hands to one side of $s body, cupping them as a ball of ki begins forming.", ch, NULL, victim, TO_NOTVICT);
+	  act(AT_YELLOW,"'Makosen!'  $n thrusts $s hands in front of $m, firing a thin beam of energy towards $N. &W[$t]", ch, num_punct(dam), victim, TO_NOTVICT);
+	  if ((ch->mana - adjcost) < 0) {
+		act(AT_LBLUE,"Your Makosen fizzles into nothing!", ch, NULL, victim, TO_CHAR);
+		act(AT_LBLUE,"$n's Makosen fizzles into nothing!", ch, NULL, victim, TO_VICT);
+		act(AT_LBLUE,"$n's Makosen fizzles into nothing!", ch, NULL, victim, TO_NOTVICT);
+		global_retcode = damage(ch, victim, 0, TYPE_HIT);
+		ch->mana = 0;
+	  } else {
+		global_retcode = damage(ch, victim, dam, TYPE_HIT);
+	  }
+	}
+	else if (!str_cmp(arg, "500")) {
+	  if (ch->makosenpower < 4) {
+		send_to_char("You lack the skill.\n\r", ch);
+		return;
+	  }
+	  if (!IS_NPC(ch)) {
+		argdam = (number_range(lowdam * 5, highdam * 5) * (kicmult + smastery));
+		dam = get_attmod(ch, victim) * (argdam * kimult);
+	  }
+	  else if (IS_NPC(ch)) {
+		argdam = number_range(lowdam * 5, highdam * 5);
+		dam = get_attmod(ch, victim) * (argdam + (get_curr_int(ch) / 40));
+	  }
+	  if (dam < 1)
+		dam = 1;
+	  adjcost = basecost * 256;
+	  act(AT_YELLOW,"You pull both hands to one side of your body, cupping them as a ball of ki begins forming.", ch, NULL, victim, TO_CHAR);
+	  act(AT_YELLOW,"'Makosen!'  You thrust your hands in front of you, firing a thin, spiraling beam of energy towards $N. &W[$t]", ch, num_punct(dam), victim, TO_CHAR);
+	  act(AT_YELLOW,"$n pulls both hands to one side of $s body, cupping them as a ball of ki begins forming.", ch, NULL, victim, TO_VICT);
+	  act(AT_YELLOW,"'Makosen!'  $n thrusts $s hands in front of $m, firing a thin, spiraling beam of energy towards you. &W[$t]", ch, num_punct(dam), victim, TO_VICT);
+	  act(AT_YELLOW,"$n pulls both hands to one side of $s body, cupping them as a ball of ki begins forming.", ch, NULL, victim, TO_NOTVICT);
+	  act(AT_YELLOW,"'Makosen!'  $n thrusts $s hands in front of $m, firing a thin, spiraling beam of energy towards $N. &W[$t]", ch, num_punct(dam), victim, TO_NOTVICT);
+	  if ((ch->mana - adjcost) < 0) {
+		act(AT_LBLUE,"Your Makosen fizzles into nothing!", ch, NULL, victim, TO_CHAR);
+		act(AT_LBLUE,"$n's Makosen fizzles into nothing!", ch, NULL, victim, TO_VICT);
+		act(AT_LBLUE,"$n's Makosen fizzles into nothing!", ch, NULL, victim, TO_NOTVICT);
+		global_retcode = damage(ch, victim, 0, TYPE_HIT);
+		ch->mana = 0;
+	  } else {
+		global_retcode = damage(ch, victim, dam, TYPE_HIT);
+	  }
+	}
+	else {
+		send_to_char("Only increments of 200-500.\n\r", ch);
+		return;
+	}
   }
-  ch->mana -= adjcost;
-  return;
-}
-
-void do_trap_ball(CHAR_DATA *ch, char *argument) {
-  CHAR_DATA *victim;
-  int dam = 0;
-
-  if (IS_NPC(ch) && is_split(ch)) {
-    if (!ch->master)
-      return;
-    if (!can_use_skill(ch->master, number_percent(), gsn_trap_ball))
-      return;
+  else {
+	act(AT_LBLUE, "You missed $N with your Makosen.", ch, NULL, victim, TO_CHAR);
+	act(AT_LBLUE, "$n misses you with $s Makosen.", ch, NULL, victim, TO_VICT);
+	act(AT_LBLUE, "$n missed $N with $s Makosen.", ch, NULL, victim, TO_NOTVICT);
+	global_retcode = damage(ch, victim, 0, TYPE_HIT);
   }
-  if (IS_NPC(ch) && IS_AFFECTED(ch, AFF_CHARM)) {
-    send_to_char("You can't concentrate enough for that.\n\r", ch);
-    return;
+  if (!IS_NPC(ch) && ch->mana != 0) {
+	// train player masteries, no benefit from spamming at no ki
+	stat_train(ch, "int", 15);
+	ch->train += 15;
+	ch->masterymakosen += 1;
+	ch->energymastery += 4;
+	if (ch->energymastery >= (ch->kspgain * 100)) {
+	  pager_printf_color(ch,"&CYou gained 5 Skill Points!\n\r");
+	  ch->sptotal += 5;
+	  ch->kspgain += 1;
+	}
   }
-  if (!IS_NPC(ch) && ch->exp < skill_table[gsn_trap_ball]->skill_level[ch->class]) {
-    send_to_char("You can't do that.\n\r", ch);
-    return;
-  }
-  if ((victim = who_fighting(ch)) == NULL) {
-    send_to_char("You aren't fighting anyone.\n\r", ch);
-    return;
-  }
-  if (ch->mana < skill_table[gsn_trap_ball]->min_mana) {
-    send_to_char("You don't have enough energy.\n\r", ch);
-    return;
-  }
-  if (ch->focus < skill_table[gsn_trap_ball]->focus) {
-    send_to_char("You need to focus more.\n\r", ch);
-    return;
-  } else
-    ch->focus -= skill_table[gsn_trap_ball]->focus;
-
-  WAIT_STATE(ch, skill_table[gsn_trap_ball]->beats);
-  if (can_use_skill(ch, number_percent(), gsn_trap_ball)) {
-    dam = get_attmod(ch, victim) * (number_range(32, 36) + (get_curr_int(ch) / 35));
-    if (ch->charge > 0)
-      dam = chargeDamMult(ch, dam);
-
-    act(AT_YELLOW,
-        "You form an energy ball, tossing it at $N.  As it impacts $M, the ball expands, trapping $M within it.",
-        ch, NULL, victim, TO_CHAR);
-    act(AT_YELLOW,
-        "You bat and toss the giant cage around, leaving $N trapped inside of the deadly cage.",
-        ch, NULL, victim, TO_CHAR);
-    act(AT_YELLOW,
-        "The energy ball trapping $N bumps into a piece of scenery, suddenly exploding and freeing $M. &W[$t]",
-        ch, num_punct(dam), victim, TO_CHAR);
-    act(AT_YELLOW,
-        "$n forms an energy ball, tossing it at you.  As it impacts you, the ball expands, trapping you within it.",
-        ch, NULL, victim, TO_VICT);
-    act(AT_YELLOW,
-        "$n bats and tosses the giant cage around, leaving you trapped inside of the deadly cage.",
-        ch, NULL, victim, TO_VICT);
-    act(AT_YELLOW,
-        "The energy ball trapping you bumps into a piece of scenery, suddenly exploding and freeing you. &W[$t]",
-        ch, num_punct(dam), victim, TO_VICT);
-    act(AT_YELLOW,
-        "$n forms an energy ball, tossing it at $N.  As it impacts $M, the ball expands, trapping $N within it.",
-        ch, NULL, victim, TO_NOTVICT);
-    act(AT_YELLOW,
-        "$n bats and tosses the giant cage around, leaving $N trapped inside of the deadly cage.",
-        ch, NULL, victim, TO_NOTVICT);
-    act(AT_YELLOW,
-        "The energy ball trapping $N bumps into a piece of scenery, suddenly exploding and freeing $N. &W[$t]",
-        ch, num_punct(dam), victim, TO_NOTVICT);
-
-    learn_from_success(ch, gsn_trap_ball);
-    global_retcode = damage(ch, victim, dam, TYPE_HIT);
-    if (!IS_NPC(ch)) {
-      stat_train(ch, "int", 10);
-      ch->train += 2;
-    }
-  } else {
-    act(AT_YELLOW, "You missed $N with your trap ball attack.", ch,
-        NULL, victim, TO_CHAR);
-    act(AT_YELLOW, "$n misses you with $s trap ball attack.", ch,
-        NULL, victim, TO_VICT);
-    act(AT_YELLOW, "$n missed $N with a trap ball attack.", ch,
-        NULL, victim, TO_NOTVICT);
-    learn_from_failure(ch, gsn_trap_ball);
-    global_retcode = damage(ch, victim, 0, TYPE_HIT);
-  }
-  ch->mana -= skill_table[gsn_trap_ball]->min_mana;
-  return;
-}
-
-void do_scattered_finger_beam(CHAR_DATA *ch, char *arg) {
-  char buf[MAX_STRING_LENGTH];
-  char buf2[MAX_STRING_LENGTH];
-  CHAR_DATA *victim;
-  int shot = 0;
-  int shots = 0;
-  int dam = 0;
-  int dam2 = 0;
-  int energy = 0;
-
-  if (IS_NPC(ch) && is_split(ch)) {
-    if (!ch->master)
-      return;
-    if (!can_use_skill(ch->master, number_percent(), gsn_scattered_finger_beam))
-      return;
-  }
-  if (IS_NPC(ch) && IS_AFFECTED(ch, AFF_CHARM)) {
-    send_to_char("You can't concentrate enough for that.\n\r", ch);
-    return;
-  }
-  if (!IS_NPC(ch) && ch->exp <
-                         skill_table[gsn_scattered_finger_beam]->skill_level[ch->class]) {
-    send_to_char("You can't do that.\n\r", ch);
-    return;
-  }
-  if (arg[0] == '\0' || atoi(arg) <= 0) {
-    send_to_char("Syntax: 'scattered finger beam' <# of beams>\n\r",
-                 ch);
-    return;
-  }
-  if ((victim = who_fighting(ch)) == NULL) {
-    send_to_char("You aren't fighting anyone.\n\r", ch);
-    return;
-  }
-  shot = atoi(arg);
-  if (shot > 50)
-    shot = 50;
-  if (shot < 2)
-    shot = 2;
-  energy = shot * skill_table[gsn_scattered_finger_beam]->min_mana;
-  shots = shot;
-  strcpy(buf, num_punct(shot));
-
-  if (ch->mana < energy) {
-    send_to_char("You don't have enough energy.\n\r", ch);
-    return;
-  }
-  if (ch->focus <
-      (skill_table[gsn_scattered_finger_beam]->focus *
-       (1 + (shot / 10)))) {
-    send_to_char("You need to focus more.\n\r", ch);
-    return;
-  } else
-    ch->focus -=
-        (skill_table[gsn_scattered_finger_beam]->focus *
-         (1 + (shot / 10)));
-
-  WAIT_STATE(ch, (skill_table[gsn_scattered_finger_beam]->beats));
-
-  if (can_use_skill(ch, number_percent(), gsn_scattered_finger_beam)) {
-    while (shots > 0) {
-      switch (number_range(1, 3)) {
-        default:
-        case 1:
-          break;
-        case 2:
-          dam += number_range(0, 1);
-          break;
-        case 3:
-          dam += number_range(0, 2);
-          break;
-      }
-      shots--;
-    }
-    dam2 = number_range(2, 5);
-    // was 5 - 7
-    strcpy(buf2, num_punct(get_attmod(ch, victim) * dam * dam2));
-
-    act(AT_PINK,
-        "You point one finger from each hand at $N, repeatedly jabbing them at $M.",
-        ch, NULL, victim, TO_CHAR);
-    act2(AT_PINK,
-         "$N is staggered as $t tiny beams of energy are fired at $S from your stabbing fingers. &W[$T]",
-         ch, buf, victim, TO_CHAR, buf2);
-    act(AT_PINK,
-        "$n points one finger from each hand at you, repeatedly jabbing them at you.",
-        ch, NULL, victim, TO_VICT);
-    act2(AT_PINK,
-         "You stagger as $t tiny beams of energy are fired at you from $n's stabbing fingers. &W[$T]",
-         ch, buf, victim, TO_VICT, buf2);
-    act(AT_PINK,
-        "$n points one finger from each hand at $N, repeatedly jabbing them at $M.",
-        ch, NULL, victim, TO_NOTVICT);
-    act2(AT_PINK,
-         "$N staggers as $t tiny beams of energy are fired at $M from $n's stabbing fingers. &W[$T]",
-         ch, buf, victim, TO_NOTVICT, buf2);
-
-    learn_from_success(ch, gsn_scattered_finger_beam);
-    global_retcode =
-        damage(ch, victim, (get_attmod(ch, victim) * dam * dam2),
-               TYPE_HIT);
-  } else {
-    act(AT_PINK,
-        "$t beams of energy fly from your finger towards $N but $E is too fast to hit.",
-        ch, buf, victim, TO_CHAR);
-    act(AT_PINK,
-        "$t beams of energy fly from $n's finger towards you but you dodge them.",
-        ch, buf, victim, TO_VICT);
-    act(AT_PINK,
-        "$t beams of energy fly from $n's finger towards $N but $E is too fast to hit.",
-        ch, buf, victim, TO_NOTVICT);
-    learn_from_failure(ch, gsn_scattered_finger_beam);
-    global_retcode = damage(ch, victim, 0, TYPE_HIT);
-  }
-  ch->mana -= energy;
-  return;
-}
-
-void do_evilboost(CHAR_DATA *ch, char *argument) {
-  if (IS_NPC(ch) && is_split(ch)) {
-    if (!ch->master)
-      return;
-    if (!can_use_skill(ch->master, number_percent(), gsn_evilboost))
-      return;
-  }
-  if (wearing_chip(ch)) {
-    ch_printf(ch, "You can't while you have a chip installed.\n\r");
-    return;
-  }
-  double pl_mult = 0;
-  int arg;
-
-  arg = atoi(argument);
-
-  if (xIS_SET((ch)->affected_by, AFF_EVILBOOST) && (arg == 0)) {
-    send_to_char("You power down and return to normal.\n\r", ch);
-    xREMOVE_BIT((ch)->affected_by, AFF_EVILBOOST);
-    transStatRemove(ch);
-    if (xIS_SET((ch)->affected_by, AFF_MAKEOSTAR))
-      ch->pl = ch->exp * 10;
-    else
-      ch->pl = ch->exp;
-    ch->evilmod = 0;
-    return;
-  } else if (!xIS_SET((ch)->affected_by, AFF_EVILBOOST) && arg == 0) {
-    ch_printf(ch, "You're not in that form, though!\n\r");
-    return;
-  }
-  pl_mult = 6;
-
-  if (arg > pl_mult)
-    pl_mult = (int)pl_mult;
-  else if (arg < 3)
-    pl_mult = 3;
+  if ((ch->mana - adjcost) < 0)
+	ch->mana = 0;
   else
-    pl_mult = arg;
-
-  if (ch->mana < skill_table[gsn_evilboost]->min_mana * pl_mult) {
-    send_to_char("You don't have enough energy.\n\r", ch);
-    return;
-  }
-  WAIT_STATE(ch, skill_table[gsn_evilboost]->beats);
-  if (can_use_skill(ch, number_percent(), gsn_evilboost)) {
-    act(AT_RED,
-        "You focus your thoughts on all that is evil, vile, and wicked. Yelling out, your body size suddenly increases as your muscles bulge with evil energy.",
-        ch, NULL, NULL, TO_CHAR);
-    act(AT_RED,
-        "$n focuses $s thoughts on all that is evil, vile, and wicked. $*e yells out, $s body size suddenly increasing as $s muscles bulge with evil energy.",
-        ch, NULL, NULL, TO_NOTVICT);
-
-    xSET_BIT((ch)->affected_by, AFF_EVILBOOST);
-
-    if (xIS_SET((ch)->affected_by, AFF_EVILOVERLOAD))
-      xREMOVE_BIT((ch)->affected_by, AFF_EVILOVERLOAD);
-
-    if (xIS_SET((ch)->affected_by, AFF_EVILSURGE))
-      xREMOVE_BIT((ch)->affected_by, AFF_EVILSURGE);
-
-    if (xIS_SET((ch)->affected_by, AFF_MAKEOSTAR))
-      ch->pl = ch->exp * (pl_mult + 10);
-    else
-      ch->pl = ch->exp * pl_mult;
-
-    ch->evilmod = pl_mult;
-
-    transStatApply(ch, pl_mult, pl_mult / 2, pl_mult / 2, pl_mult);
-
-    learn_from_success(ch, gsn_evilboost);
-  } else {
-    act(AT_SKILL,
-        "You can't draw out enough evil power to transform.", ch,
-        NULL, NULL, TO_CHAR);
-    act(AT_SKILL,
-        "$n can't draw out enough evil power to transform.", ch,
-        NULL, NULL, TO_NOTVICT);
-    learn_from_failure(ch, gsn_evilboost);
-  }
-
-  ch->mana -= skill_table[gsn_evilboost]->min_mana * pl_mult;
+	ch->mana -= adjcost;
   return;
 }
 
-void do_evilsurge(CHAR_DATA *ch, char *argument) {
-  if (wearing_chip(ch)) {
-    ch_printf(ch, "You can't while you have a chip installed.\n\r");
-    return;
-  }
-  if (IS_NPC(ch) && is_split(ch)) {
-    if (!ch->master)
-      return;
-    if (!can_use_skill(ch->master, number_percent(), gsn_evilsurge))
-      return;
-  }
-  double pl_mult = 0;
-  int arg;
-
-  arg = atoi(argument);
-
-  if (xIS_SET((ch)->affected_by, AFF_EVILSURGE) && (arg == 0)) {
-    send_to_char("You power down and return to normal.\n\r", ch);
-    xREMOVE_BIT((ch)->affected_by, AFF_EVILSURGE);
-    transStatRemove(ch);
-    if (xIS_SET((ch)->affected_by, AFF_MAKEOSTAR))
-      ch->pl = ch->exp * 10;
-    else
-      ch->pl = ch->exp;
-    ch->evilmod = 0;
-    return;
-  } else if (!xIS_SET((ch)->affected_by, AFF_EVILSURGE) && arg == 0) {
-    ch_printf(ch, "You're not in that form, though!\n\r");
-    return;
-  }
-  pl_mult = 14;
-
-  if (arg > pl_mult)
-    pl_mult = (int)pl_mult;
-  else if (arg < 8)
-    pl_mult = 8;
-  else
-    pl_mult = arg;
-
-  if (ch->mana < skill_table[gsn_evilsurge]->min_mana * pl_mult) {
-    send_to_char("You don't have enough energy.\n\r", ch);
-    return;
-  }
-  WAIT_STATE(ch, skill_table[gsn_evilsurge]->beats);
-  if (can_use_skill(ch, number_percent(), gsn_evilsurge)) {
-    act(AT_RED,
-        "You flood your mind with images of unspeakable horrors and atrocities. Screaming out, the ground beneath you trembles and cracks as your body grows larger, your muscles surging with tremendous, evil power.",
-        ch, NULL, NULL, TO_CHAR);
-    act(AT_RED,
-        "$n floods $s mind with images of unspeakable horrors and atrocities. Screaming out, the ground beneath $m trembles and cracks as $s body grows larger, $s muscles surging with tremendous, evil power.",
-        ch, NULL, NULL, TO_NOTVICT);
-
-    xSET_BIT((ch)->affected_by, AFF_EVILSURGE);
-
-    if (xIS_SET((ch)->affected_by, AFF_EVILBOOST))
-      xREMOVE_BIT((ch)->affected_by, AFF_EVILBOOST);
-
-    if (xIS_SET((ch)->affected_by, AFF_EVILOVERLOAD))
-      xREMOVE_BIT((ch)->affected_by, AFF_EVILOVERLOAD);
-
-    if (xIS_SET((ch)->affected_by, AFF_MAKEOSTAR))
-      ch->pl = ch->exp * (pl_mult + 10);
-    else
-      ch->pl = ch->exp * pl_mult;
-
-    ch->evilmod = pl_mult;
-
-    transStatApply(ch, pl_mult, pl_mult / 2, pl_mult / 2, pl_mult);
-
-    learn_from_success(ch, gsn_evilsurge);
-  } else {
-    act(AT_SKILL,
-        "You can't draw out enough evil power to transform.", ch,
-        NULL, NULL, TO_CHAR);
-    act(AT_SKILL,
-        "$n can't draw out enough evil power to transform.", ch,
-        NULL, NULL, TO_NOTVICT);
-    learn_from_failure(ch, gsn_evilsurge);
-  }
-
-  ch->mana -= skill_table[gsn_evilsurge]->min_mana * pl_mult;
-  return;
-}
-
-void do_eviloverload(CHAR_DATA *ch, char *argument) {
-  if (IS_NPC(ch) && is_split(ch)) {
-    if (!ch->master)
-      return;
-    if (!can_use_skill(ch->master, number_percent(), gsn_eviloverload))
-      return;
-  }
-  if (wearing_chip(ch)) {
-    ch_printf(ch, "You can't while you have a chip installed.\n\r");
-    return;
-  }
-  double pl_mult = 0;
-  int arg;
-
-  arg = atoi(argument);
-
-  if (xIS_SET((ch)->affected_by, AFF_EVILOVERLOAD) && (arg == 0)) {
-    send_to_char("You power down and return to normal.\n\r", ch);
-    xREMOVE_BIT((ch)->affected_by, AFF_EVILOVERLOAD);
-    transStatRemove(ch);
-    if (xIS_SET((ch)->affected_by, AFF_MAKEOSTAR))
-      ch->pl = ch->exp * 10;
-    else
-      ch->pl = ch->exp;
-    ch->evilmod = 0;
-    return;
-  } else if (!xIS_SET((ch)->affected_by, AFF_EVILOVERLOAD) && arg == 0) {
-    ch_printf(ch, "You're not in that form, though!\n\r");
-    return;
-  }
-  pl_mult = 24;
-
-  if (arg > pl_mult)
-    pl_mult = (int)pl_mult;
-  else if (arg < 18)
-    pl_mult = 18;
-  else
-    pl_mult = arg;
-
-  if (ch->mana < skill_table[gsn_eviloverload]->min_mana * pl_mult) {
-    send_to_char("You don't have enough energy.\n\r", ch);
-    return;
-  }
-  WAIT_STATE(ch, skill_table[gsn_eviloverload]->beats);
-  if (can_use_skill(ch, number_percent(), gsn_eviloverload)) {
-    act(AT_RED,
-        "As you overload your mind with countless images of pure evil, your body begins to buckle under the strain of an incredible spike in powerlevel. The very air all around begins to wave under the intensity. Then all at once, your body explodes upward to a size of almost 20 feet; every corner of your being flowing with unspeakably evil power.",
-        ch, NULL, NULL, TO_CHAR);
-    act(AT_RED,
-        "As $n overloads $s mind with countless images of pure evil, $s body begins to buckle under the strain of an incredible spike in powerlevel. The very air all around $n to wave under the intensity. Then all at once, $n's body explodes upward to a size of almost 20 feet; every corner of $s being flowing with unspeakably evil power.",
-        ch, NULL, NULL, TO_NOTVICT);
-
-    xSET_BIT((ch)->affected_by, AFF_EVILOVERLOAD);
-
-    if (xIS_SET((ch)->affected_by, AFF_EVILBOOST))
-      xREMOVE_BIT((ch)->affected_by, AFF_EVILBOOST);
-
-    if (xIS_SET((ch)->affected_by, AFF_EVILSURGE))
-      xREMOVE_BIT((ch)->affected_by, AFF_EVILSURGE);
-
-    if (xIS_SET((ch)->affected_by, AFF_MAKEOSTAR))
-      ch->pl = ch->exp * (pl_mult + 10);
-    else
-      ch->pl = ch->exp * pl_mult;
-
-    ch->evilmod = pl_mult;
-
-    transStatApply(ch, pl_mult, pl_mult / 2, pl_mult / 2, pl_mult);
-
-    learn_from_success(ch, gsn_eviloverload);
-  } else {
-    act(AT_SKILL,
-        "You can't draw out enough evil power to transform.", ch,
-        NULL, NULL, TO_CHAR);
-    act(AT_SKILL,
-        "$n can't draw out enough evil power to transform.", ch,
-        NULL, NULL, TO_NOTVICT);
-    learn_from_failure(ch, gsn_eviloverload);
-  }
-
-  ch->mana -= skill_table[gsn_eviloverload]->min_mana * pl_mult;
-  return;
-}
-
-void do_demonweapon(CHAR_DATA *ch, char *argument) {
+/*void do_demonweapon(CHAR_DATA *ch, char *argument) {
   OBJ_DATA *o;
   OBJ_INDEX_DATA *pObjIndex;
 
@@ -11782,937 +13552,9 @@ void do_demonweapon(CHAR_DATA *ch, char *argument) {
   }
   ch->mana = 0;
   return;
-}
+}*/
 
-void do_wss(CHAR_DATA *ch, char *argument) {
-  CHAR_DATA *victim;
-  OBJ_DATA *obj;
-  int dam = 0;
-  bool scimitar = false, sword = false, lance = false, maul = false;
-
-  if (IS_NPC(ch) && is_split(ch)) {
-    if (!ch->master)
-      return;
-    if (!can_use_skill(ch->master, number_percent(), gsn_wss))
-      return;
-  }
-  if (ch->demonrank < 1) {
-    ch_printf(ch, "Huh?\n\r");
-    return;
-  }
-  if (IS_NPC(ch) && IS_AFFECTED(ch, AFF_CHARM)) {
-    send_to_char("You can't concentrate enough for that.\n\r", ch);
-    return;
-  }
-  if (!IS_NPC(ch) && ch->exp < skill_table[gsn_wss]->skill_level[ch->class]) {
-    send_to_char("You can't do that.\n\r", ch);
-    return;
-  }
-  if ((victim = who_fighting(ch)) == NULL) {
-    send_to_char("You aren't fighting anyone.\n\r", ch);
-    return;
-  }
-  if ((obj = get_eq_char(ch, WEAR_WIELD)) == NULL) {
-    ch_printf(ch, "You must be wielding a weapon.\n\r");
-    return;
-  }
-  if (ch->mana < skill_table[gsn_wss]->min_mana) {
-    send_to_char("You don't have enough energy.\n\r", ch);
-    return;
-  }
-  if (ch->focus < skill_table[gsn_wss]->focus) {
-    send_to_char("You need to focus more.\n\r", ch);
-    return;
-  } else
-    ch->focus -= skill_table[gsn_wss]->focus;
-
-  if (obj->pIndexData->vnum == 1260)
-    scimitar = true;
-  else if (obj->pIndexData->vnum == 1264)
-    lance = true;
-  else if (obj->pIndexData->vnum == 1265)
-    maul = true;
-  else
-    sword = true;
-
-  WAIT_STATE(ch, skill_table[gsn_wss]->beats);
-  if (can_use_skill(ch, number_percent(), gsn_wss)) {
-    switch (number_range(1, 100)) {
-      case 100:
-      case 99:
-        if (IS_NPC(victim) || (!IS_NPC(victim) &&
-                               (!xIS_SET(ch->act, PLR_SPAR) || !xIS_SET(ch->act,
-                                                                        PLR_SPAR)))) {
-          if (victim->pl / ch->pl >= 2) {
-            if (scimitar)
-              wss_scimitar(ch, victim,
-                           "ikfail", 0);
-            else if (lance)
-              wss_lance(ch, victim, "ikfail",
-                        0);
-            else if (maul)
-              wss_maul(ch, victim, "ikfail",
-                       0);
-            else if (sword)
-              wss_sword(ch, victim, "ikfail",
-                        0);
-            dam = 0;
-            break;
-          }
-          dam = 999999999;
-
-          if (scimitar)
-            wss_scimitar(ch, victim, "ikwork", dam);
-          else if (lance)
-            wss_lance(ch, victim, "ikwork", dam);
-          else if (maul)
-            wss_maul(ch, victim, "ikwork", dam);
-          else if (sword)
-            wss_sword(ch, victim, "ikwork", dam);
-
-          learn_from_success(ch, gsn_wss);
-          global_retcode =
-              damage(ch, victim, dam, TYPE_HIT);
-          break;
-        }
-      default:
-        dam = get_attmod(ch, victim) * number_range(52, 56);
-        if (ch->charge > 0)
-          dam = chargeDamMult(ch, dam);
-
-        if (scimitar)
-          wss_scimitar(ch, victim, "normal", dam);
-        else if (lance)
-          wss_lance(ch, victim, "normal", dam);
-        else if (maul)
-          wss_maul(ch, victim, "normal", dam);
-        else if (sword)
-          wss_sword(ch, victim, "normal", dam);
-
-        learn_from_success(ch, gsn_wss);
-        global_retcode = damage(ch, victim, dam, TYPE_HIT);
-        break;
-    }
-  } else {
-    act(AT_RED, "You missed $N with your weapon soul seppuku.", ch,
-        NULL, victim, TO_CHAR);
-    act(AT_RED, "$n misses you with $s weapon soul seppuku.", ch,
-        NULL, victim, TO_VICT);
-    act(AT_RED, "$n missed $N with a weapon soul seppuku.", ch,
-        NULL, victim, TO_NOTVICT);
-    learn_from_failure(ch, gsn_wss);
-    global_retcode = damage(ch, victim, 0, TYPE_HIT);
-  }
-  ch->mana -= skill_table[gsn_wss]->min_mana;
-
-  obj_from_char(obj);
-  extract_obj(obj);
-
-  return;
-}
-
-void do_darkness_flare(CHAR_DATA *ch, char *argument) {
-  AFFECT_DATA af;
-  CHAR_DATA *vch, *vch_next;
-
-  if (IS_NPC(ch) && is_split(ch)) {
-    if (!ch->master)
-      return;
-    if (!can_use_skill(ch->master, number_percent(), gsn_darkness_flare))
-      return;
-  }
-  if (!IS_NPC(ch) && ch->exp <
-                         skill_table[gsn_darkness_flare]->skill_level[ch->class]) {
-    send_to_char("You can't do that.\n\r", ch);
-    return;
-  }
-  if (xIS_SET(ch->in_room->room_flags, ROOM_ARENA) || xIS_SET(ch->in_room->room_flags, ROOM_SAFE)) {
-    send_to_char("There's no need to use that here.\n\r", ch);
-    return;
-  }
-  if (who_fighting(ch) == NULL) {
-    send_to_char("You aren't fighting anyone.\n\r", ch);
-    return;
-  }
-  if (ch->mana < skill_table[gsn_darkness_flare]->min_mana) {
-    send_to_char("You don't have enough energy.\n\r", ch);
-    return;
-  }
-  if (ch->focus < skill_table[gsn_darkness_flare]->focus) {
-    send_to_char("You need to focus more.\n\r", ch);
-    return;
-  } else
-    ch->focus -= skill_table[gsn_darkness_flare]->focus;
-
-  WAIT_STATE(ch, skill_table[gsn_darkness_flare]->beats);
-
-  if (can_use_skill(ch, number_percent(), gsn_darkness_flare)) {
-    act(AT_DGREY,
-        "You put your hands to your face and yell out 'DARKNESS FLARE!' emitting a blast of unpenetrable darkness.",
-        ch, NULL, NULL, TO_CHAR);
-    act(AT_DGREY,
-        "$n puts $s hands to $s face and yells out 'DARKNESS FLARE!' blinding everyone in the room with unpenetrable darnkess!",
-        ch, NULL, NULL, TO_NOTVICT);
-
-    learn_from_success(ch, gsn_darkness_flare);
-    for (vch = ch->in_room->first_person; vch; vch = vch_next) {
-      vch_next = vch->next_in_room;
-      if (!IS_AWAKE(vch))
-        continue;
-
-      if (is_demon(vch) || is_android(vch) || is_superandroid(vch))
-        continue;
-
-      if (number_range(1, 100) < (get_curr_int(vch) / 10)) {
-        send_to_char(
-            "You manage to look away at the last moment and shield "
-            "your eyes.\n\r",
-            vch);
-        continue;
-      }
-      if (ch != vch) {
-        af.type = gsn_darkness_flare;
-        af.duration = 15;
-        af.location = APPLY_HITROLL;
-        af.modifier = -6;
-        af.bitvector = meb(AFF_BLIND);
-        affect_to_char(vch, &af);
-      }
-    }
-
-  } else {
-    act(AT_DGREY,
-        "You put your hands to your face but forget the words. Nothing happens.",
-        ch, NULL, NULL, TO_CHAR);
-    act(AT_DGREY,
-        "$n raises $s hands to $s head, gets a stupid look on $s face, then stands there.",
-        ch, NULL, NULL, TO_NOTVICT);
-    learn_from_failure(ch, gsn_darkness_flare);
-  }
-  ch->mana -= skill_table[gsn_darkness_flare]->min_mana;
-  return;
-}
-
-void do_maliceray(CHAR_DATA *ch, char *argument) {
-  CHAR_DATA *victim;
-  int dam = 0;
-
-  if (IS_NPC(ch) && is_split(ch)) {
-    if (!ch->master)
-      return;
-    if (!can_use_skill(ch->master, number_percent(), gsn_maliceray))
-      return;
-  }
-  if (IS_NPC(ch) && IS_AFFECTED(ch, AFF_CHARM)) {
-    send_to_char("You can't concentrate enough for that.\n\r", ch);
-    return;
-  }
-  if (!IS_NPC(ch) && ch->exp < skill_table[gsn_maliceray]->skill_level[ch->class]) {
-    send_to_char("You can't do that.\n\r", ch);
-    return;
-  }
-  if ((victim = who_fighting(ch)) == NULL) {
-    send_to_char("You aren't fighting anyone.\n\r", ch);
-    return;
-  }
-  if (ch->mana < skill_table[gsn_maliceray]->min_mana) {
-    send_to_char("You don't have enough energy.\n\r", ch);
-    return;
-  }
-  if (ch->focus < skill_table[gsn_maliceray]->focus) {
-    send_to_char("You need to focus more.\n\r", ch);
-    return;
-  } else
-    ch->focus -= skill_table[gsn_maliceray]->focus;
-
-  WAIT_STATE(ch, skill_table[gsn_maliceray]->beats);
-  if (can_use_skill(ch, number_percent(), gsn_maliceray)) {
-    dam = get_attmod(ch, victim) * number_range(22, 26);
-    if (ch->charge > 0)
-      dam = chargeDamMult(ch, dam);
-
-    act(AT_RED,
-        "You aim your right hand at $N, and brace it with your left, quickly charging and firing a shimmering crimson blast of energy at $M. &W[$t]",
-        ch, num_punct(dam), victim, TO_CHAR);
-    act(AT_RED,
-        "$n aims $s right hand at you, and braces it with $s left, quickly charging and firing a shimmering crimson blast of energy at you. &W[$t]",
-        ch, num_punct(dam), victim, TO_VICT);
-    act(AT_RED,
-        "$n aims $s right hand at $N, and braces it with $s left, quickly charging and firing a shimmering crimson blast of energy at $N. &W[$t]",
-        ch, num_punct(dam), victim, TO_NOTVICT);
-
-    dam = ki_absorb(victim, ch, dam, gsn_maliceray);
-    learn_from_success(ch, gsn_maliceray);
-    global_retcode = damage(ch, victim, dam, TYPE_HIT);
-  } else {
-    act(AT_RED, "You missed $N with your malice ray.", ch, NULL,
-        victim, TO_CHAR);
-    act(AT_RED, "$n misses you with $s malice ray.", ch, NULL,
-        victim, TO_VICT);
-    act(AT_RED, "$n missed $N with a malice ray.", ch, NULL, victim,
-        TO_NOTVICT);
-    learn_from_failure(ch, gsn_maliceray);
-    global_retcode = damage(ch, victim, 0, TYPE_HIT);
-  }
-  ch->mana -= skill_table[gsn_maliceray]->min_mana;
-  return;
-}
-
-void do_cleaver(CHAR_DATA *ch, char *argument) {
-  CHAR_DATA *victim;
-  int dam = 0;
-
-  if (IS_NPC(ch) && is_split(ch)) {
-    if (!ch->master)
-      return;
-    if (!can_use_skill(ch->master, number_percent(), gsn_cleaver))
-      return;
-  }
-  if (IS_NPC(ch) && IS_AFFECTED(ch, AFF_CHARM)) {
-    send_to_char("You can't concentrate enough for that.\n\r", ch);
-    return;
-  }
-  if (!IS_NPC(ch) && ch->exp < skill_table[gsn_cleaver]->skill_level[ch->class]) {
-    send_to_char("You can't do that.\n\r", ch);
-    return;
-  }
-  if ((victim = who_fighting(ch)) == NULL) {
-    send_to_char("You aren't fighting anyone.\n\r", ch);
-    return;
-  }
-  if (ch->mana < skill_table[gsn_cleaver]->min_mana) {
-    send_to_char("You don't have enough energy.\n\r", ch);
-    return;
-  }
-  if (ch->focus < skill_table[gsn_cleaver]->focus) {
-    send_to_char("You need to focus more.\n\r", ch);
-    return;
-  } else
-    ch->focus -= skill_table[gsn_cleaver]->focus;
-
-  WAIT_STATE(ch, skill_table[gsn_cleaver]->beats);
-  if (can_use_skill(ch, number_percent(), gsn_cleaver)) {
-    switch (number_range(1, 100)) {
-      case 100:
-        if (IS_NPC(victim) || (!IS_NPC(victim) &&
-                               (!xIS_SET(ch->act, PLR_SPAR) || !xIS_SET(ch->act,
-                                                                        PLR_SPAR)))) {
-          if (victim->pl / ch->pl >= 2) {
-            act(AT_DGREY,
-                "You charge a spinning energy disk above your head and hurl it towards $N.",
-                ch, NULL, victim, TO_CHAR);
-            act(AT_DGREY,
-                "It flies staight towards $N, but its damage is absorbed by $s powerful aura.",
-                ch, NULL, victim, TO_CHAR);
-            act(AT_DGREY,
-                "$n charges a spinning energy disk above $s head and hurls it towards you.",
-                ch, NULL, victim, TO_VICT);
-            act(AT_DGREY,
-                "It flies staight towards you, but its damage is absorbed by your powerful aura.",
-                ch, NULL, victim, TO_VICT);
-            act(AT_DGREY,
-                "$n charges a spinning energy disk above $s head and hurls it towards $N.",
-                ch, NULL, victim, TO_NOTVICT);
-            act(AT_DGREY,
-                "It flies staight towards $N, but its damage is absorbed by $s powerful aura.",
-                ch, NULL, victim, TO_NOTVICT);
-            dam = 0;
-            break;
-          }
-          dam = 999999999;
-          act(AT_DGREY,
-              "You charge a spinning energy disk above your head and hurl it towards $N.",
-              ch, NULL, victim, TO_CHAR);
-          act(AT_RED,
-              "IT CUTS STRAIGHT THROUGH $N!!!  Killing $M instantly.",
-              ch, NULL, victim, TO_CHAR);
-          act(AT_DGREY,
-              "$n charges a spinning energy disk above $s head and hurls it towards you.",
-              ch, NULL, victim, TO_VICT);
-          act(AT_RED,
-              "IT CUTS STRAIGHT THROUGH YOU!!!  Killing you instantly.",
-              ch, NULL, victim, TO_VICT);
-          act(AT_DGREY,
-              "$n charges a spinning energy disk above $s head and hurls it towards $N.",
-              ch, NULL, victim, TO_NOTVICT);
-          act(AT_RED,
-              "IT CUTS STRAIGHT THROUGH $N!!!  Killing $M instantly.",
-              ch, NULL, victim, TO_NOTVICT);
-
-          learn_from_success(ch, gsn_cleaver);
-          global_retcode =
-              damage(ch, victim, dam, TYPE_HIT);
-          break;
-        }
-      default:
-        dam = get_attmod(ch, victim) * number_range(24, 30);
-        if (ch->charge > 0)
-          dam = chargeDamMult(ch, dam);
-        act(AT_DGREY,
-            "You charge a spinning energy disk above your head and hurl it towards $N. &W[$t]",
-            ch, num_punct(dam), victim, TO_CHAR);
-        act(AT_DGREY,
-            "$n charges a spinning energy disk above $s head and hurls it towards you. &W[$t]",
-            ch, num_punct(dam), victim, TO_VICT);
-        act(AT_DGREY,
-            "$n charges a spinning energy disk above $s head and hurls it towards $N. &W[$t]",
-            ch, num_punct(dam), victim, TO_NOTVICT);
-
-        learn_from_success(ch, gsn_cleaver);
-        global_retcode = damage(ch, victim, dam, TYPE_HIT);
-        break;
-    }
-  } else {
-    act(AT_DGREY, "You missed $N with your cleaver.", ch, NULL,
-        victim, TO_CHAR);
-    act(AT_DGREY, "$n misses you with $s cleaver.", ch, NULL,
-        victim, TO_VICT);
-    act(AT_DGREY, "$n missed $N with a cleaver.", ch, NULL, victim,
-        TO_NOTVICT);
-    learn_from_failure(ch, gsn_cleaver);
-    global_retcode = damage(ch, victim, 0, TYPE_HIT);
-  }
-  ch->mana -= skill_table[gsn_cleaver]->min_mana;
-  return;
-}
-
-void do_demonic_eclipse(CHAR_DATA *ch, char *argument) {
-  CHAR_DATA *victim;
-  int dam = 0;
-
-  if (IS_NPC(ch) && is_split(ch)) {
-    if (!ch->master)
-      return;
-    if (!can_use_skill(ch->master, number_percent(), gsn_demonic_eclipse))
-      return;
-  }
-  if (IS_NPC(ch) && IS_AFFECTED(ch, AFF_CHARM)) {
-    send_to_char("You can't concentrate enough for that.\n\r", ch);
-    return;
-  }
-  if (!IS_NPC(ch) && ch->exp <
-                         skill_table[gsn_demonic_eclipse]->skill_level[ch->class]) {
-    send_to_char("You can't do that.\n\r", ch);
-    return;
-  }
-  if ((victim = who_fighting(ch)) == NULL) {
-    send_to_char("You aren't fighting anyone.\n\r", ch);
-    return;
-  }
-  if (ch->mana < skill_table[gsn_demonic_eclipse]->min_mana) {
-    send_to_char("You don't have enough energy.\n\r", ch);
-    return;
-  }
-  if (ch->focus < skill_table[gsn_demonic_eclipse]->focus) {
-    send_to_char("You need to focus more.\n\r", ch);
-    return;
-  } else
-    ch->focus -= skill_table[gsn_demonic_eclipse]->focus;
-
-  WAIT_STATE(ch, skill_table[gsn_demonic_eclipse]->beats);
-  if (can_use_skill(ch, number_percent(), gsn_demonic_eclipse)) {
-    dam = get_attmod(ch, victim) * number_range(56, 62);
-    if (ch->charge > 0)
-      dam = chargeDamMult(ch, dam);
-
-    act(AT_DGREY,
-        "You clasp your hands together infront of yourself and begin to concentrate an immense amount of evil energy. A mixture of red and black flames begin to radiate slowly from your entire body. After a few moments, you pull your palms away from each other slowly; the energy radiating from you suddenly flows down into the space between your palms as a small, pitch black ball of energy forms, with a corona of dark red.",
-        ch, NULL, victim, TO_CHAR);
-    act(AT_DGREY,
-        "Your eyes turn solid red as you yell out, the ground beneath you shattering and flying into the air, as you hoist the dark energy ball up over your head. 'DEMONIC ECLIPSE!!!' you shout as you throw the blast towards $N with incredible force. The attack quickly swells in size, untill it hits $N. $*E is momentarily engulfed by the energy, unspeakably tormented within a torrent of dark energies, before it explodes. &W[$t]",
-        ch, num_punct(dam), victim, TO_CHAR);
-    act(AT_DGREY,
-        "$n clasps $s hands together infront of $mself and begins to concentrate an immense amount of evil energy. A mixture of red and black flames begin to radiate slowly from $s entire body. After a few moments, $e pull $s palms away from each other slowly; the energy radiating from $n suddenly flows down into the space between $s palms as a small, pitch black ball of energy forms, with a corona of dark red.",
-        ch, NULL, victim, TO_VICT);
-    act(AT_DGREY,
-        "$n's eyes turn solid red as $e yells out, the ground beneath $m shattering and flying into the air, as $e hoists the dark energy ball up over $s head. 'DEMONIC ECLIPSE!!!' $n shouts as $e throws the blast towards you with incredible force. The attack quickly swells in size, untill it hits you. You are momentarily engulfed by the energy, unspeakably tormented within a torrent of dark energies, before it explodes. &W[$t]",
-        ch, num_punct(dam), victim, TO_VICT);
-    act(AT_DGREY,
-        "$n clasps $s hands together infront of $mself and begins to concentrate an immense amount of evil energy. A mixture of red and black flames begin to radiate slowly from $s entire body. After a few moments, $e pull $s palms away from each other slowly; the energy radiating from $n suddenly flows down into the space between $s palms as a small, pitch black ball of energy forms, with a corona of dark red.",
-        ch, NULL, victim, TO_NOTVICT);
-    act(AT_DGREY,
-        "$n's eyes turn solid red as $e yells out, the ground beneath $m shattering and flying into the air, as $e hoists the dark energy ball up over $s head. 'DEMONIC ECLIPSE!!!' $n shouts as $e throws the blast towards $N with incredible force. The attack quickly swells in size, untill it hits $N. $*E is momentarily engulfed by the energy, unspeakably tormented within a torrent of dark energies, before it explodes. &W[$t]",
-        ch, num_punct(dam), victim, TO_NOTVICT);
-
-    dam = ki_absorb(victim, ch, dam, gsn_demonic_eclipse);
-    learn_from_success(ch, gsn_demonic_eclipse);
-    global_retcode = damage(ch, victim, dam, TYPE_HIT);
-  } else {
-    act(AT_DGREY, "You missed $N with your demonic eclipse.", ch,
-        NULL, victim, TO_CHAR);
-    act(AT_DGREY, "$n misses you with $s demonic eclipse.", ch,
-        NULL, victim, TO_VICT);
-    act(AT_DGREY, "$n missed $N with a demonic eclipse.", ch, NULL,
-        victim, TO_NOTVICT);
-    learn_from_failure(ch, gsn_demonic_eclipse);
-    global_retcode = damage(ch, victim, 0, TYPE_HIT);
-  }
-  ch->mana -= skill_table[gsn_demonic_eclipse]->min_mana;
-  return;
-}
-
-void do_minion(CHAR_DATA *ch, char *argument) {
-  CHAR_DATA *victim;
-  CHAR_DATA *victim2;
-  MOB_INDEX_DATA *pMobIndex;
-
-  if (IS_NPC(ch)) {
-    send_to_char("NPC's can't do that.\n\r", ch);
-    return;
-  }
-  if (wearing_chip(ch)) {
-    ch_printf(ch, "You can't while you have a chip installed.\n\r");
-    return;
-  }
-  if (!IS_NPC(ch) && ch->demonrank < 2) {
-    send_to_char("Huh?!?\n\r", ch);
-    return;
-  }
-  if (IS_IMMORTAL(ch) && get_trust(ch) < 59) {
-    send_to_char("You can't summon minions.\n\r", ch);
-    return;
-  }
-  if (IS_NPC(ch) && ch->pIndexData->vnum == 610) {
-    send_to_char("You aren't allowed to do that.\n\r", ch);
-    return;
-  }
-  if (is_splitformed(ch) && !IS_NPC(ch)) {
-    ch_printf(ch, "You already have demons summoned!\n\r");
-    return;
-  }
-
-  if (ch->mana < 50000) {
-    pager_printf_color(ch,
-                       "You must have at least 50,000 energy to summon minions.\n\r");
-    return;
-  }
-  if ((pMobIndex = get_mob_index(610)) == NULL) {
-    bug("do_minion: mob does not exist");
-    send_to_char("Hmm... Something went wrong...\n\r", ch);
-    return;
-  }
-  victim = create_mobile(pMobIndex);
-  char_to_room(victim, ch->in_room);
-
-  victim2 = create_mobile(pMobIndex);
-  char_to_room(victim2, ch->in_room);
-
-  statsToMob(ch, victim, gsn_tri_form, false, 0, 1);
-  statsToMob(ch, victim2, gsn_tri_form, false, 0, 2);
-
-  act(AT_DGREY,
-      "Your body begins to buckle as you start to charge an incredible amount of demonic energy. An aura of black energy flames bursts to life around your body as the ground begins to tremble.",
-      ch, NULL, NULL, TO_CHAR);
-  act(AT_RED,
-      "The aura of energy flames around your body suddenly shifts in color to red. The amount of evil energy you're charging up suddenly becomes so great, that you manage to punch a hole in the fabric of space and time. A dark portal hole forms in the ground several feet infront of you; linking this dimension to the Shadow Earth realm.",
-      ch, NULL, NULL, TO_CHAR);
-  act(AT_DGREY,
-      "You yell angrily towards the opened portal 'COME FORTH MY SERVANTS!!'. 2 Demons suddenly leap out from the hole and land on this side. They instantly bow before you and say 'We are here, Master $n'. You then release your dark energies, causing the portal to close up once again.",
-      ch, NULL, NULL, TO_CHAR);
-
-  act(AT_DGREY,
-      "$n's body begins to buckle as $e starts to charge an incredible amount of demonic energy. An aura of black energy flames bursts to life around $n body as the ground begins to tremble.",
-      ch, NULL, NULL, TO_NOTVICT);
-  act(AT_RED,
-      "The aura of energy flames around $n's body suddenly shifts in color to red. The amount of evil energy $e's charging up suddenly becomes so great, that $e manages to punch a hole in the fabric of space and time. A dark portal hole forms in the ground several feet infront of $n; linking this dimension to the Shadow Earth realm.",
-      ch, NULL, NULL, TO_NOTVICT);
-  act(AT_DGREY,
-      "$n yells angrily towards the opened portal 'COME FORTH MY SERVANTS!!'. 2 Demons suddenly leap out from the hole and land on this side. They instantly bow before $n and say 'We are here, Master $n. $*e then releases $s dark energies, causing the portal to close up once again.",
-      ch, NULL, NULL, TO_NOTVICT);
-
-  ch->mana -= 50000;
-  add_follower(victim, ch);
-  add_follower(victim2, ch);
-  victim->master = ch;
-  victim->leader = ch;
-  victim2->master = ch;
-  victim2->leader = ch;
-  ch->leader = ch;
-  xSET_BIT(ch->affected_by, AFF_TRI_FORM);
-  xSET_BIT(victim->affected_by, AFF_TRI_FORM);
-  xSET_BIT(victim2->affected_by, AFF_TRI_FORM);
-
-  return;
-}
-
-void do_banish(CHAR_DATA *ch, char *argument) {
-  if (IS_NPC(ch)) {
-    send_to_char("NPC's can't do that.\n\r", ch);
-    return;
-  }
-  if (wearing_chip(ch)) {
-    ch_printf(ch, "You can't while you have a chip installed.\n\r");
-    return;
-  }
-  if (!IS_NPC(ch) && ch->demonrank < 2) {
-    send_to_char("Huh?!?\n\r", ch);
-    return;
-  }
-  if (IS_IMMORTAL(ch) && get_trust(ch) < 59) {
-    send_to_char("You can't banish minions.\n\r", ch);
-    return;
-  }
-  if (IS_NPC(ch) && ch->pIndexData->vnum == 610) {
-    send_to_char("You aren't allowed to do that.\n\r", ch);
-    return;
-  }
-  if (xIS_SET((ch)->affected_by, AFF_TRI_FORM)) {
-    reuniteSplitForms(ch);
-    return;
-  }
-  if (xIS_SET((ch)->affected_by, AFF_SPLIT_FORM) ||
-      xIS_SET((ch)->affected_by, AFF_MULTI_FORM)) {
-    reuniteSplitForms(ch);
-    return;
-  }
-  ch_printf(ch, "You have no minions summoned.\n\r");
-  return;
-}
-
-void do_mystic(CHAR_DATA *ch, char *argument) {
-  if (!IS_NPC(ch)) {
-    send_to_char("Temporarily disabled. Try 'powerup' instead.", ch);
-    return;
-  }
-  int kicontrol = 0;
-
-  kicontrol = get_curr_int(ch);
-
-  if (IS_NPC(ch) && is_split(ch)) {
-    if (!ch->master)
-      return;
-    if (!can_use_skill(ch->master, number_percent(), gsn_mystic))
-      return;
-  }
-  if (!IS_NPC(ch)) {
-    if (!IS_SET(ch->pcdata->flags, PCFLAG_KNOWSMYSTIC) &&
-        !is_kaio(ch)) {
-      ch_printf(ch,
-                "You don't know how to use this technique.\n\r");
-      return;
-    }
-  }
-  if (kicontrol < 1000) {
-    send_to_char("Your mastery over your own mind is too lacking to use this ability.\n\r", ch);
-    return;
-  }
-  if (wearing_chip(ch)) {
-    ch_printf(ch, "You can't while you have a chip installed.\n\r");
-    return;
-  }
-  if (!IS_NPC(ch)) {
-    if (IS_SET(ch->pcdata->combatFlags, CMB_NO_HEART)) {
-      send_to_char("You must first disable heart to use the Mystic technique.\n\r",
-                   ch);
-      return;
-    }
-  }
-  if (xIS_SET(ch->affected_by, AFF_KAIOKEN))
-    xREMOVE_BIT(ch->affected_by, AFF_KAIOKEN);
-
-  double pl_mult = 0;
-  int arg;
-
-  arg = atoi(argument);
-
-  if (xIS_SET((ch)->affected_by, AFF_MYSTIC) && arg == 0) {
-    send_to_char("You power down and return to normal.\n\r", ch);
-    xREMOVE_BIT((ch)->affected_by, AFF_MYSTIC);
-    transStatRemove(ch);
-    ch->pl = ch->exp;
-    return;
-  } else if (!xIS_SET((ch)->affected_by, AFF_MYSTIC) && arg == 0) {
-    ch_printf(ch, "You're not in mystic, though!\n\r");
-    return;
-  }
-  if (kicontrol > 6000)
-    pl_mult = 300;
-  else if (kicontrol > 5500)
-    pl_mult = 275;
-  else if (kicontrol > 5000)
-    pl_mult = 250;
-  else if (kicontrol > 4500)
-    pl_mult = 225;
-  else if (kicontrol > 4000)
-    pl_mult = 200;
-  else if (kicontrol > 3500)
-    pl_mult = 175;
-  else if (kicontrol > 3000)
-    pl_mult = 150;
-  else if (kicontrol > 2500)
-    pl_mult = 125;
-  else if (kicontrol > 2000)
-    pl_mult = 100;
-  else if (kicontrol > 1500)
-    pl_mult = 50;
-  else if (kicontrol > 1000)
-    pl_mult = 35;
-
-  if (arg > pl_mult)
-    pl_mult = (int)pl_mult;
-  else if (arg < 1)
-    pl_mult = 1;
-  else
-    pl_mult = arg;
-
-  if (ch->mana < skill_table[gsn_mystic]->min_mana * pl_mult) {
-    send_to_char("You don't have enough energy.\n\r", ch);
-    return;
-  }
-  WAIT_STATE(ch, skill_table[gsn_mystic]->beats);
-  if (can_use_skill(ch, number_percent(), gsn_mystic)) {
-    act(AT_WHITE,
-        "You focus your mind's eye on the full extent of your innermost recesses of power and try to draw it out all at once, setting off a shockwave that makes the ground beneath you tremble.",
-        ch, NULL, NULL, TO_CHAR);
-    act(AT_WHITE,
-        "$n focuses $s mind's eye on the full extent of $s innermost recesses of power and tries to draw it out all at once, setting off a shockwave that makes the ground beneath you tremble.",
-        ch, NULL, NULL, TO_NOTVICT);
-
-    xSET_BIT((ch)->affected_by, AFF_MYSTIC);
-
-    ch->pl = ch->exp * pl_mult;
-
-    int kistat = 0;
-    kistat = (get_curr_int(ch) / 5);
-    transStatApply(ch, kistat, kistat, kistat, kistat);
-
-    learn_from_success(ch, gsn_mystic);
-  } else {
-    act(AT_WHITE,
-        "You can't quite focus well enough to draw out your hidden powers.",
-        ch, NULL, NULL, TO_CHAR);
-    act(AT_WHITE,
-        "$n can't quite focus well enough to draw out $s hidden powers.",
-        ch, NULL, NULL, TO_NOTVICT);
-    learn_from_failure(ch, gsn_mystic);
-  }
-
-  ch->mana -= skill_table[gsn_mystic]->min_mana * pl_mult;
-  return;
-}
-
-void do_revert_mystic(CHAR_DATA *ch, char *argument) {
-  if (IS_NPC(ch))
-    return;
-
-  if (is_kaio(ch) || is_bio(ch) || is_android(ch) || is_icer(ch)) {
-    ch_printf(ch, "Huh?!?\n\r");
-    return;
-  }
-  if (wearing_chip(ch)) {
-    ch_printf(ch, "You can't while you have a chip installed.\n\r");
-    return;
-  }
-  if (!IS_SET(ch->pcdata->flags, PCFLAG_KNOWSMYSTIC)) {
-    ch_printf(ch, "You don't know mystic!\n\r");
-    return;
-  }
-  REMOVE_BIT(ch->pcdata->flags, PCFLAG_KNOWSMYSTIC);
-  ch_printf(ch, "You have lost the ability to use mystic.\n\r");
-  return;
-}
-
-void do_teachmystic(CHAR_DATA *ch, char *argument) {
-  CHAR_DATA *vch;
-
-  if (IS_NPC(ch))
-    return;
-
-  if (!is_kaio(ch)) {
-    ch_printf(ch, "Huh?!?\n\r");
-    return;
-  }
-  if (wearing_chip(ch)) {
-    ch_printf(ch, "You can't while you have a chip installed.\n\r");
-    return;
-  }
-  if (ch->exp < 2000000000ULL) {
-    ch_printf(ch, "Huh?!?\n\r");
-    return;
-  }
-  if (ch->pcdata->learned[gsn_mystic] < 95) {
-    ch_printf(ch,
-              "You can't teach mystic to others until you master it yourself.\n\r");
-    return;
-  }
-  if (ch->position != POS_STANDING) {
-    ch_printf(ch, "You have to be standing.\n\r");
-    return;
-  }
-  if (!xIS_SET(ch->in_room->room_flags, ROOM_SAFE)) {
-    ch_printf(ch, "You have to be in a SAFE room.\n\r");
-    return;
-  }
-  if ((vch = get_char_room(ch, argument)) == NULL) {
-    ch_printf(ch, "There's nobody here by that name.\n\r");
-    return;
-  }
-  if (IS_NPC(vch)) {
-    ch_printf(ch, "Not on NPC's.\n\r");
-    return;
-  }
-  if (vch->exp < 100000000000ULL) {
-    ch_printf(ch,
-              "They have to be over 100bil to learn mystic.\n\r");
-    return;
-  }
-  if (is_android(vch) || is_superandroid(vch)) {
-    ch_printf(ch, "They cannot be taught mystic.\n\r");
-    return;
-  }
-  if (vch->position != POS_STANDING) {
-    ch_printf(ch, "They have to be standing.\n\r");
-    return;
-  }
-  if (IS_SET(vch->pcdata->flags, PCFLAG_KNOWSMYSTIC) || is_kaio(vch)) {
-    ch_printf(ch, "%s already knows mystic.\n\r", vch->name);
-    return;
-  }
-  if (vch->tmystic > 0) {
-    ch_printf(ch, "%s is already being taught mystic.\n\r",
-              vch->name);
-    return;
-  }
-  ch_printf(ch, "\n\r");
-  ch_printf(vch, "\n\r");
-  act(AT_WHITE,
-      "You start dancing around in a large circle around $N, chanting random gibberish.",
-      ch, NULL, vch, TO_CHAR);
-  act(AT_WHITE,
-      "$n starts dancing in a large circle around you, chanting some strange sort of unintelligible gibberish.",
-      ch, NULL, vch, TO_VICT);
-  act(AT_WHITE,
-      "$n starts dancing in a large circle around $N, chanting some strange sort of unintelligible gibberish.",
-      ch, NULL, vch, TO_NOTVICT);
-  ch_printf(ch,
-            "&RYou have begun teaching %s how to use mystic. You must not type\n\r"
-            "a single command over the course of the next 30 mins. If you do, it\n\r"
-            "will interrupt the process and you will have to start all over\n\r"
-            "again.\n\r",
-            vch->name);
-  ch_printf(vch,
-            "&R%s has begun teaching you how to use mystic. You must not type\n\r"
-            "a single command over the course of the next 30 mins. If you do, it\n\r"
-            "will interrupt the process and you will have to start all over\n\r"
-            "again.\n\r",
-            ch->name);
-  ch->teaching = vch;
-  vch->teaching = ch;
-  ch->tmystic = 1;
-  vch->tmystic = 2;
-  vch->mysticlearn = 30;
-  return;
-}
-
-void do_skga(CHAR_DATA *ch, char *argument) {
-  CHAR_DATA *victim;
-  int dam = 0;
-  int count = 0;
-  char buf[MAX_STRING_LENGTH];
-  char buf2[MAX_STRING_LENGTH];
-
-  if (IS_NPC(ch) && is_split(ch)) {
-    if (!ch->master)
-      return;
-    if (!can_use_skill(ch->master, number_percent(), gsn_skga))
-      return;
-  }
-  if (IS_NPC(ch) && IS_AFFECTED(ch, AFF_CHARM)) {
-    send_to_char("You can't concentrate enough for that.\n\r", ch);
-    return;
-  }
-  if (!IS_NPC(ch) && ch->exp < skill_table[gsn_skga]->skill_level[ch->class]) {
-    send_to_char("You can't do that.\n\r", ch);
-    return;
-  }
-  count = atoi(argument);
-
-  if (count < 1 || count > 20) {
-    ch_printf(ch,
-              "The number of super kamikaze ghosts must be between 1 and 20.\n\r");
-    return;
-  }
-  if ((victim = who_fighting(ch)) == NULL) {
-    send_to_char("You aren't fighting anyone.\n\r", ch);
-    return;
-  }
-  if (ch->mana < skill_table[gsn_skga]->min_mana * count) {
-    send_to_char("You don't have enough energy.\n\r", ch);
-    return;
-  }
-  if (ch->focus < skill_table[gsn_skga]->focus * count) {
-    send_to_char("You need to focus more.\n\r", ch);
-    return;
-  } else
-    ch->focus -= skill_table[gsn_skga]->focus * count;
-
-  WAIT_STATE(ch, skill_table[gsn_skga]->beats);
-  if (can_use_skill(ch, number_percent(), gsn_skga)) {
-    int shots = count;
-    int dam2 = 0;
-
-    while (shots > 0) {
-      switch (number_range(1, 3)) {
-        default:
-        case 1:
-        case 2:
-          dam += number_range(1, 2);
-          break;
-        case 3:
-          dam += number_range(1, 3);
-          break;
-      }
-      shots--;
-    }
-    dam2 = number_range(2, 4);
-    dam = (get_attmod(ch, victim) * dam * dam2);
-
-    if (ch->charge > 0)
-      dam = chargeDamMult(ch, dam);
-
-    strcpy(buf, num_punct(count));
-    strcpy(buf2, num_punct(dam));
-
-    act2(AT_WHITE,
-         "You cross your arms infront of yourself and charge up an incredible amount of ki into your body; your aura flaring up brightly as you do. Your lungs and mouth suddenly fill up with this energy as it transforms into a strange, airy substance. You open your mouth and begin spitting out $t puffs of greyish energy. The puffs of energy suddenly change in shape, taking on the form of miniature ghosts of yourself.",
-         ch, buf, victim, TO_CHAR, NULL);
-    act2(AT_WHITE,
-         "You shout 'SUPER KAMIKAZE GHOST ATTACK' as you perform a series of weird poses. All $t ghosts race towards $N and slam into $M, exploding violently. &W[$T]",
-         ch, buf, victim, TO_CHAR, buf2);
-    act2(AT_WHITE,
-         "$n crosses $s arms infront of $mself and charges up an incredible amount of ki into $s body; $s aura flaring up brightly as $e does. $n's lungs and mouth suddenly fill up with this energy as it transforms into a strange, airy substance. $n opens $s mouth and begins spitting out $t puffs of greyish energy. The puffs of energy suddenly change in shape, taking on the form of miniature ghosts of $mself.",
-         ch, buf, victim, TO_VICT, NULL);
-    act2(AT_WHITE,
-         "$n shouts 'SUPER KAMIKAZE GHOST ATTACK' as $e performs a series of weird poses. All $t ghosts race towards you and slam into you, exploding violently. &W[$T]",
-         ch, buf, victim, TO_VICT, buf2);
-    act2(AT_WHITE,
-         "$n crosses $s arms infront of $mself and charges up an incredible amount of ki into $s body; $s aura flaring up brightly as $e does. $n's lungs and mouth suddenly fill up with this energy as it transforms into a strange, airy substance. $n opens $s mouth and begins spitting out $t puffs of greyish energy. The puffs of energy suddenly change in shape, taking on the form of miniature ghosts of $mself.",
-         ch, buf, victim, TO_NOTVICT, NULL);
-    act2(AT_WHITE,
-         "$n shouts 'SUPER KAMIKAZE GHOST ATTACK' as $e performs a series of weird poses. All $t ghosts race towards $N and slam into $M, exploding violently. &W[$T]",
-         ch, buf, victim, TO_NOTVICT, buf2);
-
-    dam = ki_absorb(victim, ch, dam, gsn_skga);
-    learn_from_success(ch, gsn_skga);
-    global_retcode = damage(ch, victim, dam, TYPE_HIT);
-  } else {
-    act(AT_WHITE,
-        "You missed $N with your super kamikaze ghost attack.", ch,
-        NULL, victim, TO_CHAR);
-    act(AT_WHITE,
-        "$n misses you with $s super kamikaze ghost attack.", ch,
-        NULL, victim, TO_VICT);
-    act(AT_WHITE,
-        "$n missed $N with a super kamikaze ghost attack.", ch,
-        NULL, victim, TO_NOTVICT);
-    learn_from_failure(ch, gsn_skga);
-    global_retcode = damage(ch, victim, 0, TYPE_HIT);
-  }
-  ch->mana -= skill_table[gsn_skga]->min_mana * count;
-  return;
-}
-
-void do_monkey_gun(CHAR_DATA *ch, char *argument) {
+/*void do_monkey_gun(CHAR_DATA *ch, char *argument) {
   CHAR_DATA *victim;
   int dam = 0;
 
@@ -12740,10 +13582,6 @@ void do_monkey_gun(CHAR_DATA *ch, char *argument) {
     send_to_char("You aren't fighting anyone.\n\r", ch);
     return;
   }
-  /*
-   * No mana cost for this skill as when in an Oozaru state, a
-   * saiyan/halfies energy is pretty much unlimited. -Karma
-   */
 
   int focus = (get_curr_int(ch) / 5);
 
@@ -12788,88 +13626,9 @@ void do_monkey_gun(CHAR_DATA *ch, char *argument) {
     global_retcode = damage(ch, victim, 0, TYPE_HIT);
   }
   return;
-}
+}*/
 
-void do_bbk(CHAR_DATA *ch, char *argument) {
-  CHAR_DATA *victim;
-  int dam = 0;
-
-  if (IS_NPC(ch) && is_split(ch)) {
-    if (!ch->master)
-      return;
-    if (!can_use_skill(ch->master, number_percent(), gsn_bbk))
-      return;
-  }
-  if (IS_NPC(ch) && IS_AFFECTED(ch, AFF_CHARM)) {
-    send_to_char("You can't concentrate enough for that.\n\r", ch);
-    return;
-  }
-  if (!IS_NPC(ch) && ch->exp < skill_table[gsn_bbk]->skill_level[ch->class]) {
-    send_to_char("You can't do that.\n\r", ch);
-    return;
-  }
-  if ((victim = who_fighting(ch)) == NULL) {
-    send_to_char("You aren't fighting anyone.\n\r", ch);
-    return;
-  }
-  if (ch->mana < skill_table[gsn_bbk]->min_mana) {
-    send_to_char("You don't have enough energy.\n\r", ch);
-    return;
-  }
-  if (ch->focus < skill_table[gsn_bbk]->focus) {
-    send_to_char("You need to focus more.\n\r", ch);
-    return;
-  } else
-    ch->focus -= skill_table[gsn_bbk]->focus;
-
-  WAIT_STATE(ch, skill_table[gsn_bbk]->beats);
-  if (can_use_skill(ch, number_percent(), gsn_bbk)) {
-    dam = get_attmod(ch, victim) * number_range(70, 80);
-    if (ch->charge > 0)
-      dam = chargeDamMult(ch, dam);
-    act(AT_BLUE,
-        "You hold one hand forward and create a large blue ball of ki in your palm.",
-        ch, NULL, victim, TO_CHAR);
-    act(AT_BLUE,
-        "The ball turns into a large beam, "
-        "blasting from your hand toward $N. &W[$t]",
-        ch,
-        num_punct(dam), victim, TO_CHAR);
-    act(AT_BLUE,
-        "$n holds one hand forward and creates a large blue ball of ki in $s palm.",
-        ch, NULL, victim, TO_VICT);
-    act(AT_BLUE,
-        "The ball turns into a large beam, "
-        "blasting from $n's hand toward you. &W[$t]",
-        ch,
-        num_punct(dam), victim, TO_VICT);
-    act(AT_BLUE,
-        "$n holds one hand forward and creates a large blue ball of ki in $s palm.",
-        ch, NULL, victim, TO_NOTVICT);
-    act(AT_BLUE,
-        "The ball turns into a large beam, "
-        "blasting from $n's hand toward $N. &W[$t]",
-        ch,
-        num_punct(dam), victim, TO_NOTVICT);
-
-    dam = ki_absorb(victim, ch, dam, gsn_bbk);
-    learn_from_success(ch, gsn_bbk);
-    global_retcode = damage(ch, victim, dam, TYPE_HIT);
-  } else {
-    act(AT_BLUE, "You missed $N with your big bang kamehameha.", ch,
-        NULL, victim, TO_CHAR);
-    act(AT_BLUE, "$n misses you with $s big bang kamehameha.", ch,
-        NULL, victim, TO_VICT);
-    act(AT_BLUE, "$n missed $N with a big bang kamehameha.", ch,
-        NULL, victim, TO_NOTVICT);
-    learn_from_failure(ch, gsn_bbk);
-    global_retcode = damage(ch, victim, 0, TYPE_HIT);
-  }
-  ch->mana -= skill_table[gsn_bbk]->min_mana;
-  return;
-}
-
-void do_spirit_bomb(CHAR_DATA *ch, char *arg) {
+/*void do_spirit_bomb(CHAR_DATA *ch, char *arg) {
   CHAR_DATA *victim;
   CHAR_DATA *vch;
   CHAR_DATA *gvch_prev;
@@ -13017,10 +13776,6 @@ void do_spirit_bomb(CHAR_DATA *ch, char *arg) {
       strcpy(size, "gargantuan");
     else
       strcpy(size, "colossal");
-    /*
-     * after the adjectives becase pl diffrence shouldn't affect
-     * the size of the attack -Goku
-     */
     dam = get_attmod(ch, victim) * dam;
 
     if (IS_GOOD(ch)) {
@@ -13115,197 +13870,7 @@ void do_spirit_bomb(CHAR_DATA *ch, char *arg) {
   WAIT_STATE(ch, (skill_table[gsn_spirit_bomb]->beats));
   ch->mana -= skill_table[gsn_spirit_bomb]->min_mana;
   return;
-}
-
-void do_ussj(CHAR_DATA *ch, char *argument) {
-  if (!IS_NPC(ch)) {
-    send_to_char("Temporarily disabled. Try 'powerup' instead.", ch);
-    return;
-  }
-  if (IS_NPC(ch) && is_split(ch)) {
-    if (!ch->master)
-      return;
-    if (!can_use_skill(ch->master, number_percent(), gsn_ussj))
-      return;
-  }
-  if (!IS_NPC(ch)) {
-    if (IS_SET(ch->pcdata->flags, PCFLAG_KNOWSMYSTIC)) {
-      ch_printf(ch,
-                "You are unable to call upon those powers while you know mystic.\n\r");
-      return;
-    }
-  }
-  if (get_curr_str(ch) < 750) {
-    send_to_char("Your muscles can't possibly contain that much energy.\n\r", ch);
-    return;
-  }
-  if (wearing_chip(ch)) {
-    ch_printf(ch, "You can't while you have a chip installed.\n\r");
-    return;
-  }
-  if (xIS_SET((ch)->affected_by, AFF_KAIOKEN)) {
-    send_to_char("You can't transform in to a super saiyan while using kaioken.\n\r",
-                 ch);
-    return;
-  }
-  if (xIS_SET((ch)->affected_by, AFF_SSJ) && xIS_SET((ch)->affected_by, AFF_USSJ) && !xIS_SET((ch)->affected_by, AFF_USSJ2)) {
-    send_to_char("Your bulging muscles retract as you power down.\n\r", ch);
-    xREMOVE_BIT((ch)->affected_by, AFF_USSJ);
-    transStatRemove(ch);
-    ch->pl = ch->exp * 50;
-    int kistat = 0;
-    kistat = (get_curr_int(ch) / 8);
-    transStatApply(ch, kistat, kistat, kistat, kistat);
-    return;
-  } else if (xIS_SET((ch)->affected_by, AFF_SSJ2) || xIS_SET((ch)->affected_by, AFF_SSJ3) || xIS_SET((ch)->affected_by, AFF_SSJ4)) {
-    send_to_char("You are already powered up beyond this technique.\n\r",
-                 ch);
-    return;
-  } else if (xIS_SET((ch)->affected_by, AFF_SSJ) && xIS_SET((ch)->affected_by, AFF_USSJ) && xIS_SET((ch)->affected_by, AFF_USSJ2)) {
-    send_to_char("You have to power out of USSJ2 to do this.\n\r",
-                 ch);
-    return;
-  }
-  if (!xIS_SET((ch)->affected_by, AFF_SSJ)) {
-    send_to_char("You need to be powered up to super saiyan to use this!\n\r",
-                 ch);
-    return;
-  }
-  if (xIS_SET((ch)->affected_by, AFF_OOZARU) ||
-      xIS_SET((ch)->affected_by, AFF_GOLDEN_OOZARU)) {
-    send_to_char("You can't transform while you are an Oozaru.\n\r",
-                 ch);
-    return;
-  }
-  if (ch->mana < skill_table[gsn_ussj]->min_mana) {
-    send_to_char("You don't have enough energy.\n\r", ch);
-    return;
-  }
-  WAIT_STATE(ch, skill_table[gsn_ussj]->beats);
-  if (can_use_skill(ch, number_percent(), gsn_ussj)) {
-    act(AT_YELLOW,
-        "You draw in energy, forcing it directly into your body.  Your muscles bulge as your hair "
-        "turns slightly spikier.",
-        ch, NULL, NULL, TO_CHAR);
-    act(AT_YELLOW,
-        "$n draws in energy, forcing it directly into $s body.  $n's muscles bulge as $s hair "
-        "turns slightly spikier.",
-        ch, NULL, NULL, TO_NOTVICT);
-    xSET_BIT((ch)->affected_by, AFF_USSJ);
-    ch->pl = ch->exp * 75;
-    int kistat = 0;
-    kistat = (get_curr_int(ch) / 8);
-    transStatApply(ch, kistat, kistat, kistat, kistat);
-    learn_from_success(ch, gsn_ussj);
-  } else {
-    act(AT_BLUE,
-        "You grunt in exertion and your muscles bulge for a moment.",
-        ch, NULL, NULL, TO_CHAR);
-    act(AT_BLUE,
-        "$n grunts in exertion and $s muscles bulge for a moment.",
-        ch, NULL, NULL, TO_NOTVICT);
-    learn_from_failure(ch, gsn_ussj);
-  }
-
-  ch->mana -= skill_table[gsn_ussj]->min_mana;
-  return;
-}
-
-void do_ussj2(CHAR_DATA *ch, char *argument) {
-  if (!IS_NPC(ch)) {
-    send_to_char("Temporarily disabled. Try 'powerup' instead.", ch);
-    return;
-  }
-  if (IS_NPC(ch) && is_split(ch)) {
-    if (!ch->master)
-      return;
-    if (!can_use_skill(ch->master, number_percent(), gsn_ussj2))
-      return;
-  }
-  if (!IS_NPC(ch)) {
-    if (IS_SET(ch->pcdata->flags, PCFLAG_KNOWSMYSTIC)) {
-      ch_printf(ch,
-                "You are unable to call upon those powers while you know mystic.\n\r");
-      return;
-    }
-  }
-  if (get_curr_str(ch) < 1000) {
-    send_to_char("Your muscles can't possibly contain that much energy.\n\r", ch);
-    return;
-  }
-  if (wearing_chip(ch)) {
-    ch_printf(ch, "You can't while you have a chip installed.\n\r");
-    return;
-  }
-  if (xIS_SET((ch)->affected_by, AFF_KAIOKEN)) {
-    send_to_char("You can't transform in to a super saiyan while using kaioken.\n\r",
-                 ch);
-    return;
-  }
-  if (xIS_SET((ch)->affected_by, AFF_SSJ) && xIS_SET((ch)->affected_by, AFF_USSJ) && xIS_SET((ch)->affected_by, AFF_USSJ2)) {
-    send_to_char("Your bulging muscles retract a little as you power down.\n\r",
-                 ch);
-    xREMOVE_BIT((ch)->affected_by, AFF_USSJ2);
-    transStatRemove(ch);
-    ch->pl = ch->exp * 75;
-    int kistat = 0;
-    kistat = (get_curr_int(ch) / 8);
-    transStatApply(ch, kistat, kistat, kistat, kistat);
-    return;
-  } else if (xIS_SET((ch)->affected_by, AFF_SSJ2) || xIS_SET((ch)->affected_by, AFF_SSJ3) || xIS_SET((ch)->affected_by, AFF_SSJ4)) {
-    send_to_char("You are already powered up beyond this technique.\n\r",
-                 ch);
-    return;
-  }
-  if (!xIS_SET((ch)->affected_by, AFF_SSJ) && !xIS_SET((ch)->affected_by, AFF_USSJ)) {
-    send_to_char("You need to be powered up to ultra super saiyan to use this!\n\r",
-                 ch);
-    return;
-  }
-  if (xIS_SET((ch)->affected_by, AFF_SSJ) && !xIS_SET((ch)->affected_by, AFF_USSJ)) {
-    send_to_char("You need to be powered up to ultra super saiyan to use this!\n\r",
-                 ch);
-    return;
-  }
-  if (xIS_SET((ch)->affected_by, AFF_OOZARU) ||
-      xIS_SET((ch)->affected_by, AFF_GOLDEN_OOZARU)) {
-    send_to_char("You can't transform while you are an Oozaru.\n\r",
-                 ch);
-    return;
-  }
-  if (ch->mana < skill_table[gsn_ussj2]->min_mana) {
-    send_to_char("You don't have enough energy.\n\r", ch);
-    return;
-  }
-  WAIT_STATE(ch, skill_table[gsn_ussj2]->beats);
-  if (can_use_skill(ch, number_percent(), gsn_ussj2)) {
-    act(AT_YELLOW,
-        "You draw in massive amounts of energy, forcing it directly into your body.  Your muscles "
-        "bulge to inhuman sizes, your hair becomes wildly spiked.",
-        ch, NULL, NULL, TO_CHAR);
-    act(AT_YELLOW,
-        "$n draws in massive amounts of energy, forcing it directly into $s body.  $n's muscles "
-        "bulge to inhuman sizes, $s hair becomes wildly spiked.",
-        ch, NULL, NULL, TO_NOTVICT);
-    xSET_BIT((ch)->affected_by, AFF_USSJ2);
-    ch->pl = ch->exp * 150;
-    int kistat = 0;
-    kistat = (get_curr_int(ch) / 7);
-    transStatApply(ch, kistat, kistat, kistat, kistat);
-    learn_from_success(ch, gsn_ussj2);
-  } else {
-    act(AT_BLUE,
-        "You grunt in massive exertion and your muscles bulge for a moment.",
-        ch, NULL, NULL, TO_CHAR);
-    act(AT_BLUE,
-        "$n grunts in massive exertion and $s muscles bulge for a moment.",
-        ch, NULL, NULL, TO_NOTVICT);
-    learn_from_failure(ch, gsn_ussj2);
-  }
-
-  ch->mana -= skill_table[gsn_ussj2]->min_mana;
-  return;
-}
+}*/
 
 void do_extreme(CHAR_DATA *ch, char *argument) {
   if (!IS_NPC(ch)) {

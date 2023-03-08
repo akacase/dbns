@@ -107,9 +107,6 @@ DO_FUN *skill_function(char *name) {
     case 'b':
       if (!str_cmp(name, "do_battery")) return do_battery;
       if (!str_cmp(name, "do_blast_zone")) return do_blast_zone;
-      if (!str_cmp(name, "do_banish")) return do_banish;
-      if (!str_cmp(name, "do_big_bang")) return do_big_bang;
-      if (!str_cmp(name, "do_burning_attack")) return do_burning_attack;
       if (!str_cmp(name, "do_backfinger")) return do_backfinger;
       if (!str_cmp(name, "do_backstab")) return do_backstab;
       if (!str_cmp(name, "do_balzhur")) return do_balzhur;
@@ -117,7 +114,6 @@ DO_FUN *skill_function(char *name) {
       if (!str_cmp(name, "do_bamfout")) return do_bamfout;
       if (!str_cmp(name, "do_bash")) return do_bash;
       if (!str_cmp(name, "do_bashdoor")) return do_bashdoor;
-      if (!str_cmp(name, "do_bbk")) return do_bbk;
       if (!str_cmp(name, "do_berserk")) return do_berserk;
       if (!str_cmp(name, "do_bestow")) return do_bestow;
       if (!str_cmp(name, "do_bestowarea")) return do_bestowarea;
@@ -147,7 +143,6 @@ DO_FUN *skill_function(char *name) {
       if (!str_cmp(name, "do_cast")) return do_cast;
       if (!str_cmp(name, "do_cedit")) return do_cedit;
       if (!str_cmp(name, "do_chaff")) return do_chaff;
-      if (!str_cmp(name, "do_charge")) return do_charge;
       if (!str_cmp(name, "do_channels")) return do_channels;
       if (!str_cmp(name, "do_chat")) return do_chat;
       if (!str_cmp(name, "do_check_vnums")) return do_check_vnums;
@@ -160,7 +155,6 @@ DO_FUN *skill_function(char *name) {
       if (!str_cmp(name, "do_claninfo")) return do_claninfo;
       if (!str_cmp(name, "do_clans")) return do_clans;
       if (!str_cmp(name, "do_clantalk")) return do_clantalk;
-      if (!str_cmp(name, "do_cleaver")) return do_cleaver;
       if (!str_cmp(name, "do_clear")) return do_clear;
       if (!str_cmp(name, "do_clearhiscore")) return do_clearhiscore;
       if (!str_cmp(name, "do_climate")) return do_climate;
@@ -192,17 +186,12 @@ DO_FUN *skill_function(char *name) {
       break;
     case 'd':
       if (!str_cmp(name, "do_drp")) return do_drp;
-      if (!str_cmp(name, "do_darkness_flare")) return do_darkness_flare;
       if (!str_cmp(name, "do_destructive_wave")) return do_destructive_wave;
-      if (!str_cmp(name, "do_dodon_ray")) return do_dodon_ray;
       if (!str_cmp(name, "do_dd")) return do_dd;
-      if (!str_cmp(name, "do_ddd")) return do_ddd;
       if (!str_cmp(name, "do_death_ball")) return do_death_ball;
       if (!str_cmp(name, "do_deities")) return do_deities;
       if (!str_cmp(name, "do_delay")) return do_delay;
       if (!str_cmp(name, "do_delete")) return do_delete;
-      if (!str_cmp(name, "do_demonic_eclipse")) return do_demonic_eclipse;
-      if (!str_cmp(name, "do_demonweapon")) return do_demonweapon;
       if (!str_cmp(name, "do_demon_wave")) return do_demon_wave;
       if (!str_cmp(name, "do_deny")) return do_deny;
       if (!str_cmp(name, "do_description")) return do_description;
@@ -222,7 +211,6 @@ DO_FUN *skill_function(char *name) {
       if (!str_cmp(name, "do_disconnect")) return do_disconnect;
       if (!str_cmp(name, "do_dismiss")) return do_dismiss;
       if (!str_cmp(name, "do_dismount")) return do_dismount;
-      if (!str_cmp(name, "do_divinewrath")) return do_divinewrath;
       if (!str_cmp(name, "do_divorce")) return do_divorce;
       if (!str_cmp(name, "do_dnd")) return do_dnd;
       if (!str_cmp(name, "do_dnsusers")) return do_dnsusers;
@@ -252,9 +240,6 @@ DO_FUN *skill_function(char *name) {
       if (!str_cmp(name, "do_energy_disc")) return do_energy_disc;
       if (!str_cmp(name, "do_enter")) return do_enter;
       if (!str_cmp(name, "do_equipment")) return do_equipment;
-      if (!str_cmp(name, "do_evilboost")) return do_evilboost;
-      if (!str_cmp(name, "do_evilsurge")) return do_evilsurge;
-      if (!str_cmp(name, "do_eviloverload")) return do_eviloverload;
       if (!str_cmp(name, "do_examine")) return do_examine;
       if (!str_cmp(name, "do_exits")) return do_exits;
       if (!str_cmp(name, "do_eye_beam")) return do_eye_beam;
@@ -262,7 +247,6 @@ DO_FUN *skill_function(char *name) {
       if (!str_cmp(name, "do_extreme")) return do_extreme;
       break;
     case 'f':
-      if (!str_cmp(name, "do_finishing_buster")) return do_finishing_buster;
       if (!str_cmp(name, "do_feed")) return do_feed;
       if (!str_cmp(name, "do_ff")) return do_ff;
       if (!str_cmp(name, "do_fill")) return do_fill;
@@ -297,7 +281,6 @@ DO_FUN *skill_function(char *name) {
       if (!str_cmp(name, "do_gfighting")) return do_gfighting;
       if (!str_cmp(name, "do_ghost")) return do_ghost;
       if (!str_cmp(name, "do_give")) return do_give;
-      if (!str_cmp(name, "do_giant_size")) return do_giant_size;
       if (!str_cmp(name, "do_gigantic_meteor")) return do_gigantic_meteor;
       if (!str_cmp(name, "do_glance")) return do_glance;
       if (!str_cmp(name, "do_global_boards")) return do_global_boards;
@@ -310,7 +293,6 @@ DO_FUN *skill_function(char *name) {
       if (!str_cmp(name, "do_goto")) return do_goto;
       if (!str_cmp(name, "do_gouge")) return do_gouge;
       if (!str_cmp(name, "do_grant")) return do_grant;
-      if (!str_cmp(name, "do_growth")) return do_growth;
       if (!str_cmp(name, "do_group")) return do_group;
       if (!str_cmp(name, "do_grub")) return do_grub;
       if (!str_cmp(name, "do_gtell")) return do_gtell;
@@ -320,11 +302,8 @@ DO_FUN *skill_function(char *name) {
       break;
     case 'h':
       if (!str_cmp(name, "do_haymaker")) return do_haymaker;
-      if (!str_cmp(name, "do_heaven_splitter_cannon")) return do_heaven_splitter_cannon;
-      if (!str_cmp(name, "do_hellzone_grenade")) return do_hellzone_grenade;
       if (!str_cmp(name, "do_hcchat")) return do_hcchat;
       if (!str_cmp(name, "do_hedit")) return do_hedit;
-      if (!str_cmp(name, "do_hyper")) return do_hyper;
       if (!str_cmp(name, "do_hell")) return do_hell;
       if (!str_cmp(name, "do_hells_flash")) return do_hells_flash;
       if (!str_cmp(name, "do_help")) return do_help;
@@ -344,7 +323,6 @@ DO_FUN *skill_function(char *name) {
     case 'i':
       if (!str_cmp(name, "do_icer_transform_2")) return do_icer_transform_2;
       if (!str_cmp(name, "do_icer_transform_3")) return do_icer_transform_3;
-      if (!str_cmp(name, "do_instant_trans")) return do_instant_trans;
       if (!str_cmp(name, "do_icer_transform_4")) return do_icer_transform_4;
       if (!str_cmp(name, "do_icer_transform_5")) return do_icer_transform_5;
       if (!str_cmp(name, "do_icer_transform_golden_form")) return do_icer_transform_golden_form;
@@ -374,7 +352,6 @@ DO_FUN *skill_function(char *name) {
       if (!str_cmp(name, "do_kick")) return do_kick;
       if (!str_cmp(name, "do_kill")) return do_kill;
       if (!str_cmp(name, "do_ki_burst")) return do_ki_burst;
-      if (!str_cmp(name, "do_ki_heal")) return do_ki_heal;
       break;
     case 'l':
       if (!str_cmp(name, "do_land")) return do_land;
@@ -400,12 +377,8 @@ DO_FUN *skill_function(char *name) {
       break;
     case 'm':
       if (!str_cmp(name, "do_meteor")) return do_meteor;
-      if (!str_cmp(name, "do_monkey_gun")) return do_monkey_gun;
-      if (!str_cmp(name, "do_minion")) return do_minion;
       if (!str_cmp(name, "do_makosen")) return do_makosen;
       if (!str_cmp(name, "do_mailroom")) return do_mailroom;
-      if (!str_cmp(name, "do_maliceray")) return do_maliceray;
-      if (!str_cmp(name, "do_mystic")) return do_mystic;
       if (!str_cmp(name, "do_make")) return do_make;
       if (!str_cmp(name, "do_makeboard")) return do_makeboard;
       if (!str_cmp(name, "do_makeclan")) return do_makeclan;
@@ -489,7 +462,6 @@ DO_FUN *skill_function(char *name) {
       if (!str_cmp(name, "do_mrange")) return do_mrange;
       if (!str_cmp(name, "do_mset")) return do_mset;
       if (!str_cmp(name, "do_mstat")) return do_mstat;
-      if (!str_cmp(name, "do_multi_disk")) return do_multi_disk;
       if (!str_cmp(name, "do_multi_form")) return do_multi_form;
       if (!str_cmp(name, "do_multi_eye")) return do_multi_eye;
       if (!str_cmp(name, "do_murde")) return do_murde;
@@ -572,7 +544,6 @@ DO_FUN *skill_function(char *name) {
       if (!str_cmp(name, "do_promote")) return do_promote;
       if (!str_cmp(name, "do_prompt")) return do_prompt;
       if (!str_cmp(name, "do_pset")) return do_pset;
-      if (!str_cmp(name, "do_psiblast")) return do_psiblast;
       if (!str_cmp(name, "do_pstat")) return do_pstat;
       if (!str_cmp(name, "do_pull")) return do_pull;
       if (!str_cmp(name, "do_punch")) return do_punch;
@@ -590,7 +561,6 @@ DO_FUN *skill_function(char *name) {
       break;
     case 'r':
       if (!str_cmp(name, "do_railgun")) return do_railgun;
-      if (!str_cmp(name, "do_revert_mystic")) return do_revert_mystic;
       if (!str_cmp(name, "do_roleplay")) return do_roleplay;
       if (!str_cmp(name, "do_reqbio")) return do_reqbio;
       if (!str_cmp(name, "do_research")) return do_research;
@@ -655,12 +625,7 @@ DO_FUN *skill_function(char *name) {
       if (!str_cmp(name, "do_skills")) return do_skills;
       if (!str_cmp(name, "do_summon")) return do_summon;
       if (!str_cmp(name, "do_sanctuary")) return do_sanctuary;
-      if (!str_cmp(name, "do_scattered_finger_beam")) return do_scattered_finger_beam;
       if (!str_cmp(name, "do_shockwave")) return do_shockwave;
-      if (!str_cmp(name, "do_spirit_ball")) return do_spirit_ball;
-      if (!str_cmp(name, "do_spirit_bomb")) return do_spirit_bomb;
-      if (!str_cmp(name, "do_skga")) return do_skga;
-      if (!str_cmp(name, "do_solar_flare")) return do_solar_flare;
       if (!str_cmp(name, "do_sacrifice")) return do_sacrifice;
       if (!str_cmp(name, "do_save")) return do_save;
       if (!str_cmp(name, "do_savealliances")) return do_savealliances;
@@ -762,9 +727,6 @@ DO_FUN *skill_function(char *name) {
       if (!str_cmp(name, "do_switch")) return do_switch;
       break;
     case 't':
-      if (!str_cmp(name, "do_teachmystic")) return do_teachmystic;
-      if (!str_cmp(name, "do_trap_ball")) return do_trap_ball;
-      if (!str_cmp(name, "do_tribeam")) return do_tribeam;
       if (!str_cmp(name, "do_tri_form")) return do_tri_form;
       if (!str_cmp(name, "do_tag")) return do_tag;
       if (!str_cmp(name, "do_tamp")) return do_tamp;
@@ -795,8 +757,6 @@ DO_FUN *skill_function(char *name) {
       if (!str_cmp(name, "do_uppercut")) return do_uppercut;
       if (!str_cmp(name, "do_upgrade")) return do_upgrade;
       if (!str_cmp(name, "do_users")) return do_users;
-      if (!str_cmp(name, "do_ussj")) return do_ussj;
-      if (!str_cmp(name, "do_ussj2")) return do_ussj2;
       break;
     case 'v':
       if (!str_cmp(name, "do_value")) return do_value;
@@ -823,7 +783,6 @@ DO_FUN *skill_function(char *name) {
       if (!str_cmp(name, "do_wizinfo")) return do_wizinfo;
       if (!str_cmp(name, "do_wizlist")) return do_wizlist;
       if (!str_cmp(name, "do_worth")) return do_worth;
-      if (!str_cmp(name, "do_wss")) return do_wss;
       break;
     case 'y':
       if (!str_cmp(name, "do_yell")) return do_yell;
@@ -882,35 +841,17 @@ char *skill_name(DO_FUN *skill) {
   if (skill == do_avtalk) return "do_avtalk";
   if (skill == do_battery) return "do_battery";
   if (skill == do_blast_zone) return "do_blast_zone";
-  if (skill == do_banish) return "do_banish";
-  if (skill == do_big_bang) return "do_big_bang";
-  if (skill == do_burning_attack) return "do_burning_attack";
   if (skill == do_drp) return "do_drp";
-  if (skill == do_darkness_flare) return "do_darkness_flare";
-  if (skill == do_demonic_eclipse) return "do_demonic_eclipse";
   if (skill == do_destructive_wave) return "do_destructive_wave";
-  if (skill == do_divinewrath) return "do_divinewrath";
-  if (skill == do_dodon_ray) return "do_dodon_ray";
-  if (skill == do_finishing_buster) return "do_finishing_buster";
   if (skill == do_gallic_gun) return "do_gallic_gun";
   if (skill == do_gained) return "do_gained";
   if (skill == do_grant) return "do_grant";
-  if (skill == do_heaven_splitter_cannon) return "do_heaven_splitter_cannon";
-  if (skill == do_hellzone_grenade) return "do_hellzone_grenade";
-  if (skill == do_monkey_gun) return "do_monkey_gun";
-  if (skill == do_minion) return "do_minion";
   if (skill == do_makosen) return "do_makosen";
-  if (skill == do_maliceray) return "do_maliceray";
   if (skill == do_sanctuary) return "do_sanctuary";
   if (skill == do_superandroid) return "do_superandroid";
-  if (skill == do_scattered_finger_beam) return "do_scattered_finger_beam";
   if (skill == do_shockwave) return "do_shockwave";
   if (skill == do_skills) return "do_skills";
-  if (skill == do_spirit_ball) return "do_spirit_ball";
-  if (skill == do_spirit_bomb) return "do_spirit_bomb";
   if (skill == do_summon) return "do_summon";
-  if (skill == do_teachmystic) return "do_teachmystic";
-  if (skill == do_trap_ball) return "do_trap_ball";
   if (skill == do_backfinger) return "do_backfinger";
   if (skill == do_backstab) return "do_backstab";
   if (skill == do_balzhur) return "do_balzhur";
@@ -918,7 +859,6 @@ char *skill_name(DO_FUN *skill) {
   if (skill == do_bamfout) return "do_bamfout";
   if (skill == do_bash) return "do_bash";
   if (skill == do_bashdoor) return "do_bashdoor";
-  if (skill == do_bbk) return "do_bbk";
   if (skill == do_berserk) return "do_berserk";
   if (skill == do_bestow) return "do_bestow";
   if (skill == do_bestowarea) return "do_bestowarea";
@@ -946,7 +886,6 @@ char *skill_name(DO_FUN *skill) {
   if (skill == do_cast) return "do_cast";
   if (skill == do_cedit) return "do_cedit";
   if (skill == do_chaff) return "do_chaff";
-  if (skill == do_charge) return "do_charge";
   if (skill == do_channels) return "do_channels";
   if (skill == do_chat) return "do_chat";
   if (skill == do_check_vnums) return "do_check_vnums";
@@ -959,7 +898,6 @@ char *skill_name(DO_FUN *skill) {
   if (skill == do_claninfo) return "do_claninfo";
   if (skill == do_clans) return "do_clans";
   if (skill == do_clantalk) return "do_clantalk";
-  if (skill == do_cleaver) return "do_cleaver";
   if (skill == do_clear) return "do_clear";
   if (skill == do_clearhiscore) return "do_clearhiscore";
   if (skill == do_climate) return "do_climate";
@@ -989,12 +927,10 @@ char *skill_name(DO_FUN *skill) {
   if (skill == do_crusherball) return "do_crusherball";
   if (skill == do_cset) return "do_cset";
   if (skill == do_dd) return "do_dd";
-  if (skill == do_ddd) return "do_ddd";
   if (skill == do_death_ball) return "do_death_ball";
   if (skill == do_deities) return "do_deities";
   if (skill == do_delay) return "do_delay";
   if (skill == do_delete) return "do_delete";
-  if (skill == do_demonweapon) return "do_demonweapon";
   if (skill == do_demon_wave) return "do_demon_wave";
   if (skill == do_deny) return "do_deny";
   if (skill == do_description) return "do_description";
@@ -1040,9 +976,6 @@ char *skill_name(DO_FUN *skill) {
   if (skill == do_energy_disc) return "do_energy_disc";
   if (skill == do_enter) return "do_enter";
   if (skill == do_equipment) return "do_equipment";
-  if (skill == do_evilboost) return "do_evilboost";
-  if (skill == do_evilsurge) return "do_evilsurge";
-  if (skill == do_eviloverload) return "do_eviloverload";
   if (skill == do_examine) return "do_examine";
   if (skill == do_exercise) return "do_exercise";
   if (skill == do_exits) return "do_exits";
@@ -1079,7 +1012,6 @@ char *skill_name(DO_FUN *skill) {
   if (skill == do_gfighting) return "do_gfighting";
   if (skill == do_ghost) return "do_ghost";
   if (skill == do_give) return "do_give";
-  if (skill == do_giant_size) return "do_giant_size";
   if (skill == do_gigantic_meteor) return "do_gigantic_meteor";
   if (skill == do_glance) return "do_glance";
   if (skill == do_global_boards) return "do_global_boards";
@@ -1092,7 +1024,6 @@ char *skill_name(DO_FUN *skill) {
   if (skill == do_goto) return "do_goto";
   if (skill == do_gouge) return "do_gouge";
   if (skill == do_group) return "do_group";
-  if (skill == do_growth) return "do_growth";
   if (skill == do_grub) return "do_grub";
   if (skill == do_gtell) return "do_gtell";
   if (skill == do_guilds) return "do_guilds";
@@ -1100,7 +1031,6 @@ char *skill_name(DO_FUN *skill) {
   if (skill == do_gwhere) return "do_gwhere";
   if (skill == do_haymaker) return "do_haymaker";
   if (skill == do_hcchat) return "do_hcchat";
-  if (skill == do_hyper) return "do_hyper";
   if (skill == do_hedit) return "do_hedit";
   if (skill == do_hell) return "do_hell";
   if (skill == do_hells_flash) return "do_hells_flash";
@@ -1119,7 +1049,6 @@ char *skill_name(DO_FUN *skill) {
   if (skill == do_hyperspace) return "do_hyperspace";
   if (skill == do_icer_transform_2) return "do_icer_transform_2";
   if (skill == do_icer_transform_3) return "do_icer_transform_3";
-  if (skill == do_instant_trans) return "do_instant_trans";
   if (skill == do_icer_transform_4) return "do_icer_transform_4";
   if (skill == do_icer_transform_5) return "do_icer_transform_5";
   if (skill == do_icer_transform_golden_form) return "do_icer_transform_golden_form";
@@ -1147,7 +1076,6 @@ char *skill_name(DO_FUN *skill) {
   if (skill == do_kick) return "do_kick";
   if (skill == do_kill) return "do_kill";
   if (skill == do_ki_burst) return "do_ki_burst";
-  if (skill == do_ki_heal) return "do_ki_heal";
   if (skill == do_land) return "do_land";
   if (skill == do_languages) return "do_languages";
   if (skill == do_lariat) return "do_lariat";
@@ -1168,7 +1096,6 @@ char *skill_name(DO_FUN *skill) {
   if (skill == do_lookmap) return "do_lookmap";
   if (skill == do_loop) return "do_loop";
   if (skill == do_low_purge) return "do_low_purge";
-  if (skill == do_mystic) return "do_mystic";
   if (skill == do_mailroom) return "do_mailroom";
   if (skill == do_make) return "do_make";
   if (skill == do_makeboard) return "do_makeboard";
@@ -1255,7 +1182,6 @@ char *skill_name(DO_FUN *skill) {
   if (skill == do_mrange) return "do_mrange";
   if (skill == do_mset) return "do_mset";
   if (skill == do_mstat) return "do_mstat";
-  if (skill == do_multi_disk) return "do_multi_disk";
   if (skill == do_multi_form) return "do_multi_form";
   if (skill == do_multi_eye) return "do_multi_eye";
   if (skill == do_murde) return "do_murde";
@@ -1331,7 +1257,6 @@ char *skill_name(DO_FUN *skill) {
   if (skill == do_promote) return "do_promote";
   if (skill == do_prompt) return "do_prompt";
   if (skill == do_pset) return "do_pset";
-  if (skill == do_psiblast) return "do_psiblast";
   if (skill == do_pstat) return "do_pstat";
   if (skill == do_pull) return "do_pull";
   if (skill == do_punch) return "do_punch";
@@ -1345,7 +1270,6 @@ char *skill_name(DO_FUN *skill) {
   if (skill == do_qui) return "do_qui";
   if (skill == do_quit) return "do_quit";
   if (skill == do_railgun) return "do_railgun";
-  if (skill == do_revert_mystic) return "do_revert_mystic";
   if (skill == do_roleplay) return "do_roleplay";
   if (skill == do_racetalk) return "do_racetalk";
   if (skill == do_reqbio) return "do_reqbio";
@@ -1408,8 +1332,6 @@ char *skill_name(DO_FUN *skill) {
   if (skill == do_sacrifice) return "do_sacrifice";
   if (skill == do_save) return "do_save";
   if (skill == do_savealliances) return "do_savealliances";
-  if (skill == do_solar_flare) return "do_solar_flare";
-  if (skill == do_skga) return "do_skga";
   if (skill == do_savearea) return "do_savearea";
   if (skill == do_say) return "do_say";
   if (skill == do_sbc) return "do_sbc";
@@ -1507,7 +1429,6 @@ char *skill_name(DO_FUN *skill) {
   if (skill == do_switch) return "do_switch";
   if (skill == do_tag) return "do_tag";
   if (skill == do_tamp) return "do_tamp";
-  if (skill == do_tribeam) return "do_tribeam";
   if (skill == do_tri_form) return "do_tri_form";
   if (skill == do_target) return "do_target";
   if (skill == do_tell) return "do_tell";
@@ -1534,8 +1455,6 @@ char *skill_name(DO_FUN *skill) {
   if (skill == do_uppercut) return "do_uppercut";
   if (skill == do_upgrade) return "do_upgrade";
   if (skill == do_users) return "do_users";
-  if (skill == do_ussj) return "do_ussj";
-  if (skill == do_ussj2) return "do_ussj2";
   if (skill == do_value) return "do_value";
   if (skill == do_vassign) return "do_vassign";
   if (skill == do_version) return "do_version";
@@ -1558,7 +1477,6 @@ char *skill_name(DO_FUN *skill) {
   if (skill == do_wizinfo) return "do_wizinfo";
   if (skill == do_wizlist) return "do_wizlist";
   if (skill == do_worth) return "do_worth";
-  if (skill == do_wss) return "do_wss";
   if (skill == do_yell) return "do_yell";
   if (skill == do_zap) return "do_zap";
   if (skill == do_zones) return "do_zones";

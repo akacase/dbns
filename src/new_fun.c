@@ -839,8 +839,8 @@ void find_absorb_data(CHAR_DATA *ch, CHAR_DATA *victim) {
 
 void bio_absorb(CHAR_DATA *ch, CHAR_DATA *victim) {
   char buf1[MAX_STRING_LENGTH];
-  int getbiomass;
-  int majingain;
+  int getbiomass = 0;
+  int majingain = 0;
 
   if (IS_NPC(ch))
     return;
