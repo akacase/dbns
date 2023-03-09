@@ -1126,11 +1126,17 @@ doneargs:
     if (!str_cmp(chck, "lck")) {
       return mprog_veval(get_curr_lck(chkchar), opr, atoi(rval), mob);
     }
-    if (!str_cmp(chck, "pl")) {
+    if (!str_cmp(chck, "currentpl")) {
       if (IS_NPC(chkchar))
         return mprog_vevall(chkchar->exp, opr, atoll(rval), mob);
       else
         return mprog_vevall(chkchar->pl, opr, atoll(rval), mob);
+    }
+	if (!str_cmp(chck, "pl")) {
+      if (IS_NPC(chkchar))
+        return mprog_vevall(chkchar->exp, opr, atoll(rval), mob);
+      else
+        return mprog_vevall(chkchar->exp, opr, atoll(rval), mob);
     }
   }
   if (chkobj) {
