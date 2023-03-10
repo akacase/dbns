@@ -4174,9 +4174,11 @@ void violence_update(void) {
         }
       }
     }
-    /* Kaioken drain */
+    /* Kaioken tick effects */
     if (xIS_SET((ch)->affected_by, AFF_KAIOKEN) && !IS_NPC(ch) && ch->desc) {
       kaioken_drain(ch);
+	  stat_train(ch, "con", ch->skillkaioken);
+	  ch->masterypowerup += (ch->skillkaioken / 2);
     }
     if (char_died(ch))
       continue;
