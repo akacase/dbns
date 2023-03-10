@@ -3169,288 +3169,42 @@ void do_punch(CHAR_DATA *ch, char *argument) {
 
 void do_kaioken(CHAR_DATA *ch, char *argument) {
   int arg = 1;
-  long double max = 0.0;
-  int strMod = 0, spdMod = 0, intMod = 0, conMod = 0;
   char buf[MAX_STRING_LENGTH];
-  int kicontrol = 0;
 
   arg = atoi(argument);
-
-  if (IS_NPC(ch) && is_split(ch)) {
-    if (!ch->master)
-      return;
-    if (!can_use_skill(ch->master, number_percent(), gsn_kaioken))
-      return;
+  
+  if (IS_NPC(ch))
+	return;
+  
+  if (ch->skillkaioken < 1) {
+	sprintf(buf,"You yell out KAIOKEN TIMES %d!!!", arg);
+    act(AT_FIRE, buf, ch, NULL, NULL, TO_CHAR);
+	send_to_char("... Nothing happens. You don't know the Kaioken technique.\n\r", ch);
+	return;
   }
-  if (wearing_chip(ch)) {
-    ch_printf(ch, "You can't while you have a chip installed.\n\r");
-    return;
-  }
-  if (xIS_SET((ch)->affected_by, AFF_SSJ) || xIS_SET((ch)->affected_by, AFF_SSJ2) || xIS_SET((ch)->affected_by, AFF_SSJ3) || xIS_SET((ch)->affected_by, AFF_SSJ4)) {
-    send_to_char("You can't use kaioken if you are a Super Saiyan.\n\r",
-                 ch);
-    return;
-  }
-  if (xIS_SET((ch)->affected_by, AFF_OOZARU) ||
-      xIS_SET((ch)->affected_by, AFF_GOLDEN_OOZARU)) {
-    send_to_char("You can't use kaioken while you are an Oozaru.\n\r", ch);
-    return;
-  }
-  if (xIS_SET((ch)->affected_by, AFF_EXTREME)) {
-    send_to_char("You can't use kaioken while using the 'Extreme Technique'.\n\r",
-                 ch);
-    return;
-  }
-  if (xIS_SET((ch)->affected_by, AFF_HYPER)) {
-    send_to_char("You can't use kaioken while you are using the Hyper technique.\n\r",
-                 ch);
-    return;
-  }
-  transStatRemove(ch);
-  if (xIS_SET((ch)->affected_by, AFF_KAIOKEN)) {
-    send_to_char("You power down and return to normal.\n\r", ch);
+  if (xIS_SET((ch)->affected_by, AFF_KAIOKEN) && arg <= 1) {
+    send_to_char("The bright red flames around you die down as you stop using the Kaioken technique.\n\r", ch);
     xREMOVE_BIT((ch)->affected_by, AFF_KAIOKEN);
-    if (xIS_SET((ch)->affected_by, AFF_HEART))
-      xREMOVE_BIT(ch->affected_by, AFF_HEART);
-    ch->pl = ch->exp;
-    heart_calc(ch, "");
+	ch->skillkaioken = 1;
     return;
   }
   if (arg <= 1) {
-    act(AT_SKILL,
+    act(AT_RED,
         "Isn't it kind of pointless to do Kaioken times 1?", ch,
         NULL, NULL, TO_CHAR);
     return;
   }
-
-  kicontrol = get_curr_int(ch);
-  max = (kicontrol / 50) + 4;
-
-  if (arg > max) {
-    act(AT_SKILL, "Your body can't sustain that level of Kaioken.",
-        ch, NULL, NULL, TO_CHAR);
-    return;
-  }
-  if (arg > 20 && !is_kaio(ch)) {
-    act(AT_SKILL, "More than 20x Kaioken would rip your body to pieces.", ch, NULL,
-        NULL, TO_CHAR);
-    return;
-  } else if (arg > 30 && is_kaio(ch)) {
-    act(AT_SKILL, "More than 30x Kaioken would rip your body to pieces.", ch, NULL,
+  if (arg > 20) {
+    act(AT_RED, "More than 20x Kaioken would rip your body to pieces.", ch, NULL,
         NULL, TO_CHAR);
     return;
   }
-  WAIT_STATE(ch, skill_table[gsn_kaioken]->beats);
-
-  if (can_use_skill(ch, number_percent(), gsn_kaioken)) {
-    sprintf(buf,
-            "Bright red flames erupt around you as you yell out KAIOKEN TIMES %d!!!",
-            arg);
-    act(AT_FIRE, buf, ch, NULL, NULL, TO_CHAR);
-    if (IS_NPC(ch))
-      sprintf(buf,
-              "Bright red flames erupt around %s as $e yells out KAIOKEN TIMES %d!!!",
-              ch->short_descr, arg);
-    else
-      sprintf(buf,
-              "Bright red flames erupt around %s as $e yells out KAIOKEN TIMES %d!!!",
-              ch->name, arg);
-    act(AT_FIRE, buf, ch, NULL, NULL, TO_NOTVICT);
-    xSET_BIT((ch)->affected_by, AFF_KAIOKEN);
-    if (xIS_SET((ch)->affected_by, AFF_HEART))
-      xREMOVE_BIT(ch->affected_by, AFF_HEART);
-    ch->pl = ch->exp * arg;
-    heart_calc(ch, "");
-    learn_from_success(ch, gsn_kaioken);
-    switch (arg) {
-      case 2:
-        strMod = 4;
-        spdMod = 6;
-        intMod = 0;
-        conMod = -1;
-        break;
-      case 3:
-        strMod = 6;
-        spdMod = 8;
-        intMod = 0;
-        conMod = -2;
-        break;
-      case 4:
-        strMod = 8;
-        spdMod = 11;
-        intMod = 1;
-        conMod = -3;
-        break;
-      case 5:
-        strMod = 10;
-        spdMod = 13;
-        intMod = 1;
-        conMod = -3;
-        break;
-      case 6:
-        strMod = 12;
-        spdMod = 16;
-        intMod = 2;
-        conMod = -4;
-        break;
-      case 7:
-        strMod = 14;
-        spdMod = 18;
-        intMod = 2;
-        conMod = -4;
-        break;
-      case 8:
-        strMod = 16;
-        spdMod = 20;
-        intMod = 3;
-        conMod = -5;
-        break;
-      case 9:
-        strMod = 18;
-        spdMod = 22;
-        intMod = 3;
-        conMod = -5;
-        break;
-      case 10:
-        strMod = 20;
-        spdMod = 24;
-        intMod = 4;
-        conMod = -6;
-        break;
-      case 11:
-        strMod = 22;
-        spdMod = 26;
-        intMod = 5;
-        conMod = -7;
-        break;
-      case 12:
-        strMod = 24;
-        spdMod = 28;
-        intMod = 6;
-        conMod = -8;
-        break;
-      case 13:
-        strMod = 26;
-        spdMod = 30;
-        intMod = 7;
-        conMod = -9;
-        break;
-      case 14:
-        strMod = 28;
-        spdMod = 32;
-        intMod = 8;
-        conMod = -10;
-        break;
-      case 15:
-        strMod = 28;
-        spdMod = 32;
-        intMod = 8;
-        conMod = -10;
-        break;
-      case 16:
-        strMod = 28;
-        spdMod = 32;
-        intMod = 8;
-        conMod = -10;
-        break;
-      case 17:
-        strMod = 28;
-        spdMod = 32;
-        intMod = 8;
-        conMod = -10;
-        break;
-      case 18:
-        strMod = 28;
-        spdMod = 32;
-        intMod = 8;
-        conMod = -10;
-        break;
-      case 19:
-        strMod = 28;
-        spdMod = 32;
-        intMod = 8;
-        conMod = -10;
-        break;
-      case 20:
-        strMod = 28;
-        spdMod = 32;
-        intMod = 8;
-        conMod = -10;
-        break;
-      case 21:
-        strMod = 28;
-        spdMod = 32;
-        intMod = 8;
-        conMod = -10;
-        break;
-      case 22:
-        strMod = 28;
-        spdMod = 32;
-        intMod = 8;
-        conMod = -10;
-        break;
-      case 23:
-        strMod = 28;
-        spdMod = 32;
-        intMod = 8;
-        conMod = -10;
-        break;
-      case 24:
-        strMod = 28;
-        spdMod = 32;
-        intMod = 8;
-        conMod = -10;
-        break;
-      case 25:
-        strMod = 28;
-        spdMod = 32;
-        intMod = 8;
-        conMod = -10;
-        break;
-      case 26:
-        strMod = 28;
-        spdMod = 32;
-        intMod = 8;
-        conMod = -10;
-        break;
-      case 27:
-        strMod = 28;
-        spdMod = 32;
-        intMod = 8;
-        conMod = -10;
-        break;
-      case 28:
-        strMod = 28;
-        spdMod = 32;
-        intMod = 8;
-        conMod = -10;
-        break;
-      case 29:
-        strMod = 28;
-        spdMod = 32;
-        intMod = 8;
-        conMod = -10;
-        break;
-      case 30:
-        strMod = 28;
-        spdMod = 32;
-        intMod = 8;
-        conMod = -10;
-        break;
-    }
-    transStatApply(ch, strMod, spdMod, intMod, conMod);
-  } else {
-    sprintf(buf,
-            "You yell out KAIOKEN TIMES %d!!!  Red flames flicker around your body, but quickly fade away.",
-            arg);
-    act(AT_FIRE, buf, ch, NULL, NULL, TO_CHAR);
-    sprintf(buf,
-            "%s yells out KAIOKEN TIMES %d!!!  Red flames flicker around $s body, but quickly fade away.",
-            ch->name, arg);
-    act(AT_FIRE, buf, ch, NULL, NULL, TO_NOTVICT);
-    learn_from_failure(ch, gsn_kaioken);
-  }
-
+  sprintf(buf,"Bright red flames erupt around you as you yell out KAIOKEN TIMES %d!!!", arg);
+  act(AT_FIRE, buf, ch, NULL, NULL, TO_CHAR);
+  sprintf(buf,"Bright red flames erupt around %s as $e yells out KAIOKEN TIMES %d!!!", ch->name, arg);
+  act(AT_FIRE, buf, ch, NULL, NULL, TO_NOTVICT);
+  xSET_BIT((ch)->affected_by, AFF_KAIOKEN);
+  ch->skillkaioken = arg;
   return;
 }
 

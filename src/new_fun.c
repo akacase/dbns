@@ -247,23 +247,37 @@ bool can_pk(CHAR_DATA *ch) {
   return false;
 }
 
-// Chaged this to a function for expantion later on
 int get_damroll(CHAR_DATA *ch) {
   int damroll = 0;
-
-  if (xIS_SET((ch)->affected_by, AFF_ENERGYFIST)) {
-    damroll = get_curr_int(ch) / 18;
+  
+  if (!xIS_SET((ch)->affected_by, AFF_KAIOKEN)) {
+	if (xIS_SET((ch)->affected_by, AFF_ENERGYFIST)) {
+	  damroll = get_curr_int(ch) / 18;
+	}
+	else if (xIS_SET((ch)->affected_by, AFF_HYBRIDSTYLE)) {
+	  damroll = (get_curr_str(ch) / 13) + (get_curr_int(ch) / 25);
+	}
+	else if (xIS_SET((ch)->affected_by, AFF_BRUISERSTYLE)) {
+	  damroll = get_curr_str(ch) / 9;
+	}
+	else {
+	  damroll = get_curr_str(ch) / 10;
+	}
   }
-
-  else if (xIS_SET((ch)->affected_by, AFF_HYBRIDSTYLE)) {
-    damroll = (get_curr_str(ch) / 13) + (get_curr_int(ch) / 25);
-  } else if (xIS_SET((ch)->affected_by, AFF_BRUISERSTYLE)) {
-    damroll = get_curr_str(ch) / 9;
-  } else {
-    damroll = get_curr_str(ch) / 10;
+  else if (xIS_SET((ch)->affected_by, AFF_KAIOKEN)) {
+	if (xIS_SET((ch)->affected_by, AFF_ENERGYFIST)) {
+	  damroll = (get_curr_int(ch) / 18) * ch->skillkaioken;
+	}
+	else if (xIS_SET((ch)->affected_by, AFF_HYBRIDSTYLE)) {
+	  damroll = ((get_curr_str(ch) / 13) + (get_curr_int(ch) / 25)) * ch->skillkaioken;
+	}
+	else if (xIS_SET((ch)->affected_by, AFF_BRUISERSTYLE)) {
+	  damroll = (get_curr_str(ch) / 9) * ch->skillkaioken;
+	}
+	else {
+	  damroll = (get_curr_str(ch) / 10) * ch->skillkaioken;
+	}
   }
-  if (ch->mental_state > 5 && ch->mental_state < 15)
-    damroll++;
 
   return damroll;
 }
@@ -605,28 +619,22 @@ void kaioken_drain(CHAR_DATA *ch) {
   char buf[MAX_INPUT_LENGTH];
   int drain;
   int kaioken;
-  long double los = 0;
 
   if (ch->position <= POS_SLEEPING) {
-    act(AT_RED, "The powers of the Kaioken slowly fade away as you lose conciseness.", ch, NULL, NULL, TO_CHAR);
-    act(AT_RED, "The powers of $n's Kaioken attack slowly fade as $e loses conciseness.", ch, NULL, NULL, TO_NOTVICT);
+    act(AT_RED, "The powers of the Kaioken slowly fade away as you lose consciousness.", ch, NULL, NULL, TO_CHAR);
+    act(AT_RED, "The powers of $n's Kaioken attack slowly fade as $e loses consciousness.", ch, NULL, NULL, TO_NOTVICT);
 
     xREMOVE_BIT((ch)->affected_by, AFF_KAIOKEN);
-    if (xIS_SET((ch)->affected_by, AFF_HEART))
-      xREMOVE_BIT(ch->affected_by, AFF_HEART);
-    ch->pl = ch->exp;
-    transStatRemove(ch);
-    heart_calc(ch, "");
     return;
   }
 
-  drain = number_range(6, 8);
+  drain = number_range(1, 3);
 
-  kaioken = (ch->pl / ch->exp);
-  drain *= kaioken;
+  kaioken = ch->skillkaioken;
+  drain *= ((float)kaioken * (ch->max_mana * .0025));
 
   if (!str_cmp(get_race(ch), "kaio"))
-    drain /= 3;
+    drain /= 1.5;
 
   if (ch->mana - drain < 0) {
     drain = drain - ch->mana;
@@ -643,11 +651,8 @@ void kaioken_drain(CHAR_DATA *ch) {
       if (ch->position == POS_DEAD) {
         act(AT_RED, "Your body explodes under the strain of using the Kaioken.", ch, NULL, NULL, TO_CHAR);
         act(AT_RED, "$n explodes under the strain of using the Kaioken.", ch, NULL, NULL, TO_NOTVICT);
-        sprintf(buf, "%s explodes under the strain of using the Kaioken", ch->name);
+        sprintf(buf, "%s explodes under the strain of using the Kaioken!", ch->name);
         do_info(ch, buf);
-        if (!IS_NPC(ch))
-          los = ch->exp * 0.085;
-        gain_exp(ch, 0 - los);
         raw_kill(ch, ch);
       }
     }

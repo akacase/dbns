@@ -2649,6 +2649,7 @@ void nanny(DESCRIPTOR_DATA *d, char *argument) {
         ch->skillsuppress = 0;
         ch->skillvigor = 0;
         ch->vigoreffec = 0;
+		ch->skillkaioken = 0;
         if (is_saiyan(ch) || is_hb(ch) || is_icer(ch) || is_bio(ch))
           ch->pcdata->tail = true;
         else

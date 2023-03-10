@@ -514,6 +514,10 @@ void violence_update(void) {
 		  ch->pl = (ch->exp * 30);
 	  }
 	}
+	if (!xIS_SET((ch)->affected_by, AFF_KAIOKEN) && !IS_NPC(ch)) {
+	  if (ch->skillkaioken != 0 && ch->skillkaioken > 1)
+		ch->skillkaioken = 1;
+	}
     /* Transformation Update */
 	if (!IS_NPC(ch) && xIS_SET((ch)->affected_by, AFF_THIN_TRANS)) {
       int form_mastery = 0;
@@ -4173,7 +4177,6 @@ void violence_update(void) {
     /* Kaioken drain */
     if (xIS_SET((ch)->affected_by, AFF_KAIOKEN) && !IS_NPC(ch) && ch->desc) {
       kaioken_drain(ch);
-      heart_calc(ch, "");
     }
     if (char_died(ch))
       continue;

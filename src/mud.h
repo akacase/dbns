@@ -3316,6 +3316,7 @@ struct char_data {
   long long int biomass;
   long long int gsbiomass;
   long long int releasepl;
+  int skillkaioken;
   int transformhint;
   int altssj;
   int pushpowerup;
@@ -3475,7 +3476,6 @@ struct char_data {
   sh_int skillhellzone_grenade;
   sh_int skillinstant_trans;
   sh_int skillkaio_create;
-  sh_int skillkaioken;
   sh_int skillkamehameha;
   sh_int skillki_absorb;
   sh_int skillki_heal;

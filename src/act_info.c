@@ -4412,6 +4412,16 @@ void do_develop(CHAR_DATA *ch, char *argument) {
       return;
     }
   }
+  if (!str_cmp(arg1, "kaioken") && arg2[0] == '\0') {
+    if (ch->skillkaioken < 1) {
+      send_to_char("You developed Kaioken!\n\r", ch);
+      ch->skillkaioken = 1;
+      return;
+    } else {
+      send_to_char("Regrettably, your effort seems to be wasted.\n\r", ch);
+      return;
+    }
+  }
   if (!str_cmp(arg1, "dodge") && arg2[0] == '\0') {
     if (ch->skilldodge < 1) {
       send_to_char("You developed Dodge!\n\r", ch);
@@ -6641,6 +6651,10 @@ void do_skills(CHAR_DATA *ch, char *argument) {
       pager_printf_color(ch,
                          "&Y   Ecliptic Meteor\n\r");
     }
+	if ((ch->skillkaioken >= 1)) {
+      pager_printf_color(ch,
+                         "&Y   Kaioken\n\r");
+    }
   }
   if (!str_cmp(arg, "body")) {
     pager_printf_color(ch,
@@ -7376,7 +7390,7 @@ void do_skills(CHAR_DATA *ch, char *argument) {
       argdam = (47 + (ch->lariatpower * 4)) * (kicmult + smastery);
       dam = 1 * (argdam * physmult);
       pager_printf_color(ch,
-                         " &CHooking an arm around the opponent's neck in a clotheline,\n\r");
+                         " &CHooking an arm around the opponent's neck in a clothesline,\n\r");
       pager_printf_color(ch,
                          "&Cthe two share a lovely trip directly through the terrain.\n\r");
       pager_printf_color(ch,
@@ -7393,6 +7407,29 @@ void do_skills(CHAR_DATA *ch, char *argument) {
                          "&CAverage Base Damage: &Y47\n\r");
       pager_printf_color(ch,
                          "&CYour Average Damage: &Y%d\n\r", dam);
+    } else {
+      pager_printf_color(ch,
+                         "&YYou can't view detailed skill information for a skill you don't know!\n\r");
+    }
+  }
+  if (!str_cmp(arg, "kaioken")) {
+    pager_printf_color(ch,
+                       "&B------------------&CKAIOKEN&B-------------------\n\r");
+    pager_printf_color(ch,
+                       "\n\r");
+    if (ch->skillkaioken >= 1) {
+      pager_printf_color(ch,
+                         " &CFirst developed by the Kais to harness their impressive innate energy,\n\r");
+      pager_printf_color(ch,
+                         "&Cthis technique greatly amplifies its user's strength with increasing levels\n\r");
+	  pager_printf_color(ch,
+                         "&Cof risk. A powerful, but extremely dangerous ability.\n\r");
+      pager_printf_color(ch,
+                         "\n\r");
+      pager_printf_color(ch,
+                         "\n\r");
+      pager_printf_color(ch,
+                         "&CTechnique Class: Ki Multiplication\n\r");
     } else {
       pager_printf_color(ch,
                          "&YYou can't view detailed skill information for a skill you don't know!\n\r");

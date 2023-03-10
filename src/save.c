@@ -468,6 +468,7 @@ void fwrite_char(CHAR_DATA *ch, FILE *fp) {
   fprintf(fp, "Altssj                   %d\n", ch->altssj);
   fprintf(fp, "Pushpowerup                   %d\n", ch->pushpowerup);
   fprintf(fp, "Transformhint                   %d\n", ch->transformhint);
+  fprintf(fp, "Skillkaioken                   %d\n", ch->skillkaioken);
   fprintf(fp, "Biomass                   %lld\n", ch->biomass);
   fprintf(fp, "Releasepl                   %lld\n", ch->releasepl);
   fprintf(fp, "Gsbiomass                   %lld\n", ch->gsbiomass);
@@ -1866,7 +1867,6 @@ void fread_char(CHAR_DATA *ch, FILE *fp, bool preload) {
 
       case 'K':
         KEY("Kaio_Create", ch->skillkaio_create, fread_number(fp));
-        KEY("Kaioken", ch->skillkaioken, fread_number(fp));
         KEY("Kamehameha", ch->skillkamehameha, fread_number(fp));
         KEY("Kamehamehapower", ch->kamehamehapower, fread_number(fp));
         KEY("Kamehamehaeffic", ch->kamehamehaeffic, fread_number(fp));
@@ -2178,6 +2178,7 @@ void fread_char(CHAR_DATA *ch, FILE *fp, bool preload) {
         KEY("Spirit_Bomb", ch->skillspirit_bomb, fread_number(fp));
         KEY("SkillSuppress", ch->skillsuppress, fread_number(fp));
         KEY("Skillvigor", ch->skillvigor, fread_number(fp));
+		KEY("Skillkaioken", ch->skillkaioken, fread_number(fp));
         if (!strcmp(word, "SavingThrow")) {
           ch->saving_wand = fread_number(fp);
           ch->saving_poison_death = ch->saving_wand;
