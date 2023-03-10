@@ -436,7 +436,7 @@ void fwrite_char(CHAR_DATA *ch, FILE *fp) {
   fprintf(fp, "Hellzone_Grenade           %d\n", ch->skillhellzone_grenade);
   fprintf(fp, "Instant_Transmission           %d\n", ch->skillinstant_trans);
   fprintf(fp, "Kaio_Create           %d\n", ch->skillkaio_create);
-  fprintf(fp, "Kaioken           %d\n", ch->skillkaioken);
+  fprintf(fp, "Skillkaioken           %d\n", ch->skillkaioken);
   fprintf(fp, "Kamehameha           %d\n", ch->skillkamehameha);
   fprintf(fp, "Ki_Absorb           %d\n", ch->skillki_absorb);
   fprintf(fp, "Ki_Heal           %d\n", ch->skillki_heal);
