@@ -6103,7 +6103,7 @@ damage(CHAR_DATA *ch, CHAR_DATA *victim, int dam, int dt) {
     }
     if (IS_NPC(victim)) {
 	  if ((ch->pl < victim->exp))
-		xp_gain *= 0.75;
+		xp_gain *= 0.88;
       else if ((ch->pl / victim->exp) < 2)
         xp_gain *= 0.5;
       else if ((ch->pl / victim->exp) < 3)
