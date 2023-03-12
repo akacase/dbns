@@ -1941,7 +1941,7 @@ void violence_update(void) {
         if (!xIS_SET((ch)->affected_by, AFF_ICER2) && !xIS_SET((ch)->affected_by, AFF_ICER3) && !xIS_SET((ch)->affected_by, AFF_ICER4) && !xIS_SET((ch)->affected_by, AFF_ICER5) && !xIS_SET((ch)->affected_by, AFF_GOLDENFORM)) {
           safemaximum = 1 + (ch->masterypowerup / 1000) + (ch->energymastery / 10000) + (ch->strikemastery / 10000);
           if (ch->powerup < safemaximum) {
-            ch->pl *= 1.2;
+            ch->pl *= 1.15;
             ch->powerup += 1;
             transStatApply(ch, powerupstr, powerupspd, powerupint, powerupcon);
             if (plmod >= 2) {
@@ -6102,7 +6102,9 @@ damage(CHAR_DATA *ch, CHAR_DATA *victim, int dam, int dt) {
         xp_gain = 0;
     }
     if (IS_NPC(victim)) {
-      if ((ch->pl / victim->exp) < 2)
+	  if ((ch->pl < victim->exp))
+		xp_gain *= 0.75;
+      else if ((ch->pl / victim->exp) < 2)
         xp_gain *= 0.5;
       else if ((ch->pl / victim->exp) < 3)
         xp_gain *= 0.333;

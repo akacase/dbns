@@ -2344,8 +2344,8 @@ void do_bash(CHAR_DATA *ch, char *argument) {
 	physmult = (float)get_curr_str(ch) / 950 + 1;
 	kicmult = (float)kilimit / 100 + 1;
 	smastery = (float)ch->masterybash / 10000;
-	if (smastery > 10)
-	  smastery = 10;
+	if (smastery > 1)
+	  smastery = 1;
   }
   if ((victim = who_fighting(ch)) == NULL) {
     send_to_char("You aren't fighting anyone.\n\r", ch);

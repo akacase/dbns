@@ -2968,8 +2968,8 @@ void do_punch(CHAR_DATA *ch, char *argument) {
 	physmult = (float)get_curr_str(ch) / 950 + 1;
 	kicmult = (float)kilimit / 100 + 1;
 	smastery = (float)ch->masterypunch / 10000;
-	if (smastery > 10)
-	  smastery = 10;
+	if (smastery > 1)
+	  smastery = 1;
   }
   if ((victim = who_fighting(ch)) == NULL) {
     send_to_char("You aren't fighting anyone.\n\r", ch);
@@ -5748,8 +5748,8 @@ void do_energy_ball(CHAR_DATA *ch, char *argument) {
 	kimult = (float)get_curr_int(ch) / 1000 + 1;
 	kicmult = (float)kilimit / 100 + 1;
 	smastery = (float)ch->masteryenergy_ball / 10000;
-	if (smastery > 10)
-	  smastery = 10;
+	if (smastery > 1)
+	  smastery = 1;
   }
   if ((victim = who_fighting(ch)) == NULL) {
     send_to_char("You aren't fighting anyone.\n\r", ch);
@@ -5966,8 +5966,8 @@ void do_energy_disc(CHAR_DATA *ch, char *argument) {
 	kimult = (float)get_curr_int(ch) / 1000 + 1;
 	kicmult = (float)kilimit / 100 + 1;
 	smastery = (float)ch->masteryenergy_disc / 10000;
-	if (smastery > 10)
-	  smastery = 10;
+	if (smastery > 1)
+	  smastery = 1;
   }
   if ((victim = who_fighting(ch)) == NULL) {
     send_to_char("You aren't fighting anyone.\n\r", ch);
@@ -6184,8 +6184,8 @@ void do_forcewave(CHAR_DATA *ch, char *argument) {
 	kimult = (float)get_curr_int(ch) / 1000 + 1;
 	kicmult = (float)kilimit / 100 + 1;
 	smastery = (float)ch->masteryforcewave / 10000;
-	if (smastery > 10)
-	  smastery = 10;
+	if (smastery > 1)
+	  smastery = 1;
   }
   if ((victim = who_fighting(ch)) == NULL) {
     send_to_char("You aren't fighting anyone.\n\r", ch);
@@ -6402,8 +6402,8 @@ void do_concentrated_beam(CHAR_DATA *ch, char *argument) {
 	kimult = (float)get_curr_int(ch) / 1000 + 1;
 	kicmult = (float)kilimit / 100 + 1;
 	smastery = (float)ch->masteryconcentrated_beam / 10000;
-	if (smastery > 10)
-	  smastery = 10;
+	if (smastery > 1)
+	  smastery = 1;
   }
   if ((victim = who_fighting(ch)) == NULL) {
     send_to_char("You aren't fighting anyone.\n\r", ch);
@@ -6620,8 +6620,8 @@ void do_energybeam(CHAR_DATA *ch, char *argument) {
 	kimult = (float)get_curr_int(ch) / 1000 + 1;
 	kicmult = (float)kilimit / 100 + 1;
 	smastery = (float)ch->masteryenergybeam / 10000;
-	if (smastery > 10)
-	  smastery = 10;
+	if (smastery > 1)
+	  smastery = 1;
   }
   if ((victim = who_fighting(ch)) == NULL) {
     send_to_char("You aren't fighting anyone.\n\r", ch);
@@ -6838,8 +6838,8 @@ void do_lariat(CHAR_DATA *ch, char *argument) {
 	physmult = (float)get_curr_str(ch) / 950 + 1;
 	kicmult = (float)kilimit / 100 + 1;
 	smastery = (float)ch->masterylariat / 10000;
-	if (smastery > 10)
-	  smastery = 10;
+	if (smastery > 1)
+	  smastery = 1;
   }
   if ((victim = who_fighting(ch)) == NULL) {
     send_to_char("You aren't fighting anyone.\n\r", ch);
@@ -7071,8 +7071,8 @@ void do_ecliptic_meteor(CHAR_DATA *ch, char *argument) {
 	kimult = (float)get_curr_int(ch) / 1000 + 1;
 	kicmult = (float)kilimit / 100 + 1;
 	smastery = (float)ch->masteryecliptic_meteor / 10000;
-	if (smastery > 10)
-	  smastery = 10;
+	if (smastery > 1)
+	  smastery = 1;
   }
   if ((victim = who_fighting(ch)) == NULL) {
     send_to_char("You aren't fighting anyone.\n\r", ch);
@@ -7304,8 +7304,8 @@ void do_gigantic_meteor(CHAR_DATA *ch, char *argument) {
 	kimult = (float)get_curr_int(ch) / 1000 + 1;
 	kicmult = (float)kilimit / 100 + 1;
 	smastery = (float)ch->masterygigantic_meteor / 10000;
-	if (smastery > 10)
-	  smastery = 10;
+	if (smastery > 1)
+	  smastery = 1;
   }
   if ((victim = who_fighting(ch)) == NULL) {
     send_to_char("You aren't fighting anyone.\n\r", ch);
@@ -7537,8 +7537,8 @@ void do_meteor(CHAR_DATA *ch, char *argument) {
 	kimult = (float)get_curr_int(ch) / 1000 + 1;
 	kicmult = (float)kilimit / 100 + 1;
 	smastery = (float)ch->masterymeteor / 10000;
-	if (smastery > 10)
-	  smastery = 10;
+	if (smastery > 1)
+	  smastery = 1;
   }
   if ((victim = who_fighting(ch)) == NULL) {
     send_to_char("You aren't fighting anyone.\n\r", ch);
@@ -7770,8 +7770,8 @@ void do_crusherball(CHAR_DATA *ch, char *argument) {
 	kimult = (float)get_curr_int(ch) / 1000 + 1;
 	kicmult = (float)kilimit / 100 + 1;
 	smastery = (float)ch->masterycrusherball / 10000;
-	if (smastery > 10)
-	  smastery = 10;
+	if (smastery > 1)
+	  smastery = 1;
   }
   if ((victim = who_fighting(ch)) == NULL) {
     send_to_char("You aren't fighting anyone.\n\r", ch);
@@ -8003,8 +8003,8 @@ void do_haymaker(CHAR_DATA *ch, char *argument) {
 	physmult = (float)get_curr_str(ch) / 950 + 1;
 	kicmult = (float)kilimit / 100 + 1;
 	smastery = (float)ch->masteryhaymaker / 10000;
-	if (smastery > 10)
-	  smastery = 10;
+	if (smastery > 1)
+	  smastery = 1;
   }
   if ((victim = who_fighting(ch)) == NULL) {
     send_to_char("You aren't fighting anyone.\n\r", ch);
@@ -8236,8 +8236,8 @@ void do_collide(CHAR_DATA *ch, char *argument) {
 	physmult = (float)get_curr_str(ch) / 950 + 1;
 	kicmult = (float)kilimit / 100 + 1;
 	smastery = (float)ch->masterycollide / 10000;
-	if (smastery > 10)
-	  smastery = 10;
+	if (smastery > 1)
+	  smastery = 1;
   }
   if ((victim = who_fighting(ch)) == NULL) {
     send_to_char("You aren't fighting anyone.\n\r", ch);
@@ -8469,8 +8469,8 @@ void do_kamehameha(CHAR_DATA *ch, char *argument) {
 	kimult = (float)get_curr_int(ch) / 1000 + 1;
 	kicmult = (float)kilimit / 100 + 1;
 	smastery = (float)ch->masterykamehameha / 10000;
-	if (smastery > 10)
-	  smastery = 10;
+	if (smastery > 1)
+	  smastery = 1;
   }
   if ((victim = who_fighting(ch)) == NULL) {
     send_to_char("You aren't fighting anyone.\n\r", ch);
@@ -8811,8 +8811,8 @@ void do_masenko(CHAR_DATA *ch, char *argument) {
 	kimult = (float)get_curr_int(ch) / 1000 + 1;
 	kicmult = (float)kilimit / 100 + 1;
 	smastery = (float)ch->masterymasenko / 10000;
-	if (smastery > 10)
-	  smastery = 10; // cap bonus for # times skill used
+	if (smastery > 1)
+	  smastery = 1; // cap bonus for # times skill used
   }
   if ((victim = who_fighting(ch)) == NULL) {
     send_to_char("You aren't fighting anyone.\n\r", ch);
@@ -9043,8 +9043,8 @@ void do_sbc(CHAR_DATA *ch, char *argument) {
 	kimult = (float)get_curr_int(ch) / 1000 + 1;
 	kicmult = (float)kilimit / 100 + 1;
 	smastery = (float)ch->masterysbc / 10000;
-	if (smastery > 10)
-	  smastery = 10; // cap bonus for # times skill used
+	if (smastery > 1)
+	  smastery = 1; // cap bonus for # times skill used
   }
   if ((victim = who_fighting(ch)) == NULL) {
     send_to_char("You aren't fighting anyone.\n\r", ch);
@@ -9279,8 +9279,8 @@ void do_dd(CHAR_DATA *ch, char *argument) {
 	kimult = (float)get_curr_int(ch) / 1000 + 1;
 	kicmult = (float)kilimit / 100 + 1;
 	smastery = (float)ch->masterydestructo_disc / 10000;
-	if (smastery > 10)
-	  smastery = 10;
+	if (smastery > 1)
+	  smastery = 1;
   }
   if ((victim = who_fighting(ch)) == NULL) {
     send_to_char("You aren't fighting anyone.\n\r", ch);
@@ -10163,8 +10163,8 @@ void do_death_ball(CHAR_DATA *ch, char *argument) {
 	kimult = (float)get_curr_int(ch) / 1000 + 1;
 	kicmult = (float)kilimit / 100 + 1;
 	smastery = (float)ch->masterydeath_ball / 10000;
-	if (smastery > 10)
-	  smastery = 10;
+	if (smastery > 1)
+	  smastery = 1;
   }
   if ((victim = who_fighting(ch)) == NULL) {
     send_to_char("You aren't fighting anyone.\n\r", ch);
@@ -10429,8 +10429,8 @@ void do_eye_beam(CHAR_DATA *ch, char *argument) {
 	kimult = (float)get_curr_int(ch) / 1000 + 1;
 	kicmult = (float)kilimit / 100 + 1;
 	smastery = (float)ch->masteryeye_beam / 10000;
-	if (smastery > 10)
-	  smastery = 10;
+	if (smastery > 1)
+	  smastery = 1;
   }
   if ((victim = who_fighting(ch)) == NULL) {
     send_to_char("You aren't fighting anyone.\n\r", ch);
@@ -10651,8 +10651,8 @@ void do_finger_beam(CHAR_DATA *ch, char *argument) {
 	kimult = (float)get_curr_int(ch) / 1000 + 1;
 	kicmult = (float)kilimit / 100 + 1;
 	smastery = (float)ch->masteryfinger_beam / 10000;
-	if (smastery > 10)
-	  smastery = 10;
+	if (smastery > 1)
+	  smastery = 1;
   }
   if ((victim = who_fighting(ch)) == NULL) {
     send_to_char("You aren't fighting anyone.\n\r", ch);
@@ -12161,8 +12161,8 @@ void do_destructive_wave(CHAR_DATA *ch, char *argument) {
 	kimult = (float)get_curr_int(ch) / 1000 + 1;
 	kicmult = (float)kilimit / 100 + 1;
 	smastery = (float)ch->masterydestructive_wave / 10000;
-	if (smastery > 10)
-	  smastery = 10;
+	if (smastery > 1)
+	  smastery = 1;
   }
   if ((victim = who_fighting(ch)) == NULL) {
     send_to_char("You aren't fighting anyone.\n\r", ch);
@@ -12538,8 +12538,8 @@ void do_shockwave(CHAR_DATA *ch, char *argument) {
 	kimult = (float)get_curr_int(ch) / 1000 + 1;
 	kicmult = (float)kilimit / 100 + 1;
 	smastery = (float)ch->masteryshockwave / 10000;
-	if (smastery > 10)
-	  smastery = 10;
+	if (smastery > 1)
+	  smastery = 1;
   }
   if ((victim = who_fighting(ch)) == NULL) {
     send_to_char("You aren't fighting anyone.\n\r", ch);
@@ -12771,8 +12771,8 @@ void do_gallic_gun(CHAR_DATA *ch, char *argument) {
 	kimult = (float)get_curr_int(ch) / 1000 + 1;
 	kicmult = (float)kilimit / 100 + 1;
 	smastery = (float)ch->masterygallic_gun / 10000;
-	if (smastery > 10)
-	  smastery = 10;
+	if (smastery > 1)
+	  smastery = 1;
   }
   if ((victim = who_fighting(ch)) == NULL) {
     send_to_char("You aren't fighting anyone.\n\r", ch);
@@ -13004,8 +13004,8 @@ void do_makosen(CHAR_DATA *ch, char *argument) {
 	kimult = (float)get_curr_int(ch) / 1000 + 1;
 	kicmult = (float)kilimit / 100 + 1;
 	smastery = (float)ch->masterymakosen / 10000;
-	if (smastery > 10)
-	  smastery = 10;
+	if (smastery > 1)
+	  smastery = 1;
   }
   if ((victim = who_fighting(ch)) == NULL) {
     send_to_char("You aren't fighting anyone.\n\r", ch);

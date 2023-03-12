@@ -859,7 +859,7 @@ void bio_absorb(CHAR_DATA *ch, CHAR_DATA *victim) {
 		act(AT_HIT, "$N is too weak to add more than a paltry sum to your power.", ch, NULL, victim, TO_CHAR);
     }
 	else {
-		getbiomass = victim->worth;
+		getbiomass = (victim->worth / 3);
 	}
   }
 	
