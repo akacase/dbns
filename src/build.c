@@ -5711,7 +5711,7 @@ void write_area_list() {
   }
   fprintf(fpout, "help.are\n");
   for (tarea = first_area; tarea; tarea = tarea->next)
-    fprintf(fpout, "%s\n", tarea->filename);
+    fprintf(fpout, "%s%s\n", AREA_DIR, tarea->filename);
   fprintf(fpout, "$\n");
   fclose(fpout);
 }

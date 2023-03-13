@@ -12,3 +12,4 @@ tmp/*
 result
 .DS_Store
 .direnv
+.vscode/launch.json
