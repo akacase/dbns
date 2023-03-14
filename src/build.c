@@ -5757,7 +5757,7 @@ void do_installarea(CHAR_DATA *ch, char *argument) {
       reset_area(tarea);
       tarea->nplayer = num;
       send_to_char("Renaming author's building file.\n\r", ch);
-      sprintf(buf, "%s%s.are", AREA_DIR, tarea->filename);
+      sprintf(buf, "%s%s", AREA_DIR, tarea->filename);
       sprintf(arg, "%s%s", BUILD_DIR, tarea->filename);
       rename(arg, buf);
       send_to_char("Done.\n\r", ch);
