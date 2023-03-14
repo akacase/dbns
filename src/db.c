@@ -891,11 +891,10 @@ void boot_db() {
     if (n < 0) {
       perror("scandir");
     } else {
-      while (n--) {
-        printf("%s\n", namelist[n]->d_name);
-        snprintf(strArea, sizeof(namelist[n]->d_name), "%s%s", AREA_DIR, namelist[n]->d_name);
+      for(int i = 0; i < n; i++) {
+        snprintf(strArea, sizeof(namelist[i]->d_name), "%s%s", AREA_DIR, namelist[i]->d_name);
         load_area_file(last_area, strArea);
-        free(namelist[n]);
+        free(namelist[i]);
       }
       free(namelist);
     }
