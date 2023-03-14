@@ -671,7 +671,7 @@ void boot_db() {
       lmonth = lday / 35;
       time_info.month = lmonth % 17;
       time_info.year = lmonth / 17;
-    ".are"}
+    }
     if (time_info.hour < 5)
       time_info.sunlight = SUN_DARK;
     else if (time_info.hour < 6)
