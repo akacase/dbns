@@ -24,7 +24,6 @@ extern char WATCH_DIR[128];
 extern char TMP_DIR[128];
 
 /* lists */
-extern char AREA_LIST[128];
 extern char WATCH_LIST[128];
 extern char BAN_LIST[128];
 extern char RESERVED_LIST[128];

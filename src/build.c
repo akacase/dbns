@@ -5700,21 +5700,6 @@ void do_foldarea(CHAR_DATA *ch, char *argument) {
 
 extern int top_area;
 
-void write_area_list() {
-  AREA_DATA *tarea;
-  FILE *fpout;
-
-  fpout = fopen(AREA_LIST, "w");
-  if (!fpout) {
-    bug("FATAL: cannot open area.lst for writing!\n\r", 0);
-    return;
-  }
-  for (tarea = first_area; tarea; tarea = tarea->next)
-    fprintf(fpout, "%s\n", tarea->filename);
-  fprintf(fpout, "$\n");
-  fclose(fpout);
-}
-
 /*
  * A complicated to use command as it currently exists.		-Thoric
  * Once area->author and area->name are cleaned up... it will be easier
@@ -5766,8 +5751,6 @@ void do_installarea(CHAR_DATA *ch, char *argument) {
           d->character->pcdata->m_range_hi = 0;
         }
       top_area++;
-      send_to_char("Writing area.lst...\n\r", ch);
-      write_area_list();
       send_to_char("Resetting new area.\n\r", ch);
       num = tarea->nplayer;
       tarea->nplayer = 0;
@@ -6155,7 +6138,6 @@ void do_aset(CHAR_DATA *ch, char *argument) {
   if (!str_cmp(arg2, "filename")) {
     DISPOSE(tarea->filename);
     tarea->filename = str_dup(argument);
-    write_area_list();
     send_to_char("Done.\n\r", ch);
     return;
   }

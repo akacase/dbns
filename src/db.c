@@ -29,8 +29,8 @@
 #include <syslog.h>
 #include <time.h>
 #ifndef __APPLE__
-  #include <bsd/stdlib.h>
-#endif 
+#include <bsd/stdlib.h>
+#endif
 #define strcasecmp strcmp
 #include "comm.h"
 #include "mud.h"
@@ -457,6 +457,24 @@ void mprog_read_programs args((FILE * fp, MOB_INDEX_DATA *pMobIndex));
 void oprog_read_programs args((FILE * fp, OBJ_INDEX_DATA *pObjIndex));
 void rprog_read_programs args((FILE * fp, ROOM_INDEX_DATA *pRoomIndex));
 
+/* load all files in directory */
+int parse_ext(const struct dirent *dir) {
+  if (!dir)
+    return 0;
+
+  if (dir->d_type == DT_REG) { /* only deal with regular file */
+    const char *ext = strrchr(dir->d_name, '.');
+    if ((!ext) || (ext == dir->d_name))
+      return 0;
+    else {
+      if (strcmp(ext, ".are") == 0)
+        return 1;
+    }
+  }
+
+  return 0;
+}
+
 void shutdown_mud(char *reason) {
   FILE *fp;
   char mkdir[MAX_INPUT_LENGTH];
@@ -653,7 +671,7 @@ void boot_db() {
       lmonth = lday / 35;
       time_info.month = lmonth % 17;
       time_info.year = lmonth / 17;
-    }
+    ".are"}
     if (time_info.hour < 5)
       time_info.sunlight = SUN_DARK;
     else if (time_info.hour < 6)
@@ -862,26 +880,22 @@ void boot_db() {
    * Read in all the area files.
    */
   {
-    FILE *fpList;
-    char area[MAX_STRING_LENGTH];
-
     log_string("Reading in area files...");
-    if ((fpList = fopen(AREA_LIST, "r")) == NULL) {
-      perror(AREA_LIST);
-      shutdown_mud("Unable to open area list");
-      exit(1);
-    }
-    for (;;) {
-      snprintf(area, sizeof(strArea), "%s", fread_word(fpList));
-      snprintf(strArea, sizeof(strArea), "%s%s", AREA_DIR, area);
-      if (area[0] == '$') {
-        memset(area, 0, sizeof(area));
-        break;
+    struct dirent **namelist;
+    int n;
+
+    n = scandir(AREA_DIR, &namelist, parse_ext, alphasort);
+    if (n < 0) {
+      perror("scandir");
+    } else {
+      while (n--) {
+        printf("%s\n", namelist[n]->d_name);
+        snprintf(strArea, sizeof(namelist[n]->d_name), "%s%s", AREA_DIR, namelist[n]->d_name);
+        load_area_file(last_area, strArea);
+        free(namelist[n]);
       }
-      load_area_file(last_area, strArea);
-      memset(area, 0, sizeof(area));
+      free(namelist);
     }
-    fclose(fpList);
   }
 
   /* log_string("Making sure rooms are planed..."); */
