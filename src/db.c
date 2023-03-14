@@ -18,6 +18,8 @@
  *                            case@capsulecorp.org			    *
  ****************************************************************************/
 
+#define _GNU_SOURCE
+
 #include <ctype.h>
 #include <dirent.h>
 #include <stdarg.h>
