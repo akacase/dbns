@@ -30,6 +30,7 @@
 #include <time.h>
 #ifndef __APPLE__
 #include <bsd/stdlib.h>
+#include <dirent.h>
 #endif
 #define strcasecmp strcmp
 #include "comm.h"
