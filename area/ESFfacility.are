@@ -14,7 +14,7 @@ $
 #RESETMSG &cA tiny fracture in spacetime dances before your eyes.&d~
 
 #FLAGS
-2 3
+2 2
 
 #CLIMATE 2 2 2
 
@@ -181,20 +181,17 @@ A weak ESF trainee is exercising here, preparing for another round of combat.
 ~
 ~
 3 0 0 C
-60
-1 0 50 1d20+400 2d5+0
+50
+1 0 100 1d20+50000 2d5+0
 -1 5000
 112 112 1
-40 40 40 40 20
+3000 10000 400 10 20
 0 0 0 0 0
-1 1 0 0 1 1 2
+1 1 0 0 1 1 4
 0 0 0 0 0 0 0 0
 > death_prog 100~
 mpecho &YThey collapse to the floor but quickly scramble to their feet, prepared for another round.&d
 mpmload 303904
-~
-> fight_prog 5~
-'energy ball'
 ~
 > act_prog ready~
 if isfight($i)
@@ -204,6 +201,9 @@ else
 mprestore self 30000
 nod $n
 endif
+~
+> fight_prog 30~
+conc
 ~
 |
 #303905
@@ -213,20 +213,17 @@ An ESF trainee is pumping iron here.
 ~
 ~
 3 0 0 C
-65
-1 0 50 1d20+400 2d5+0
--1 15000
+55
+1 0 100 1d20+50000 2d5+0
+-1 20000
 112 112 1
-40 40 40 40 0
+5000 20000 500 10 0
 0 0 0 0 0
-1 1 0 0 1 1 2
+1 1 0 0 1 1 4
 0 0 0 0 0 0 0 0
 > death_prog 100~
 mpecho &YThey collapse to the floor but quickly scramble to their feet, prepared for another round.&d
 mpmload 303905
-~
-> fight_prog 5~
-'energy ball'
 ~
 > act_prog ready~
 if isfight($i)
@@ -236,6 +233,9 @@ else
 mprestore self 30000
 nod $n
 endif
+~
+> fight_prog 30~
+conc
 ~
 |
 #303906
@@ -246,19 +246,16 @@ A stronger ESF trainee shadowboxes here in the arena.
 ~
 3 0 0 C
 75
-1 0 50 1d20+500 2d5+0
--1 50000
+1 0 100 1d20+100000 2d5+0
+-1 250000
 112 112 1
-100 100 100 50 0
+10000 150000 1100 10 0
 0 0 0 0 0
-1 1 0 0 1 1 3
+1 1 0 0 1 1 4
 0 0 0 0 0 0 0 0
 > death_prog 100~
 mpecho &YThey collapse to the floor but quickly scramble to their feet, prepared for another round.&d
 mpmload 303906
-~
-> fight_prog 5~
-'energy ball'
 ~
 > act_prog ready~
 if isfight($i)
@@ -268,6 +265,9 @@ else
 mprestore self 30000
 nod $n
 endif
+~
+> fight_prog 30~
+conc
 ~
 |
 #303907
@@ -277,20 +277,17 @@ An impressive ESF trainee sits here in deep meditation.
 ~
 ~
 3 0 0 C
-90
-1 0 50 1d20+2000 2d5+0
--1 150000
+80
+1 0 100 1d20+200000 2d5+0
+-1 2500000
 112 112 1
-250 250 200 300 0
+12000 200000 1250 10 0
 0 0 0 0 0
-1 1 0 0 1 1 5
+1 1 0 0 1 1 4
 0 0 0 0 0 0 0 0
 > death_prog 100~
 mpecho &YThey collapse to the floor but quickly scramble to their feet, prepared for another round.&d
 mpmload 303907
-~
-> fight_prog 5~
-kame
 ~
 > act_prog ready~
 if isfight($i)
@@ -300,6 +297,9 @@ else
 mprestore self 30000
 nod $n
 endif
+~
+> fight_prog 30~
+conc
 ~
 |
 #303908
@@ -309,20 +309,17 @@ An advanced ESF combatant stands here, ever at the ready for a new challenger.
 ~
 ~
 3 0 0 C
-100
-1 0 50 1d20+2500 2d5+0
--1 500000
+90
+1 0 100 1d20+1000000 2d5+0
+-1 25000000
 112 112 1
-400 400 250 400 0
+20000 400000 5000 10 0
 0 0 0 0 0
-1 1 0 0 1 1 5
+1 1 0 0 1 1 4
 0 0 0 0 0 0 0 0
 > death_prog 100~
 mpecho &YThey collapse to the floor but quickly scramble to their feet, prepared for another round.&d
 mpmload 303908
-~
-> fight_prog 5~
-kame
 ~
 > act_prog ready~
 if isfight($i)
@@ -332,6 +329,9 @@ else
 mprestore self 30000
 nod $n
 endif
+~
+> fight_prog 30~
+conc
 ~
 |
 #303909
@@ -341,20 +341,17 @@ An elite member of the ESF stands here with arms crossed, a promising grin sprea
 ~
 ~
 16777219 0 0 C
-110
-1 0 50 1d20+3000 2d5+0
--1 1500000
+100
+1 0 100 1d20+10000000 2d5+0
+-1 250000000
 112 112 1
-500 500 300 500 0
+30000 500000 10000 10 0
 0 0 0 0 0
-1 1 0 0 1 1 6
+1 1 0 0 1 1 4
 0 0 0 0 0 0 0 0
 > death_prog 100~
 mpecho &YThey collapse to the floor but quickly scramble to their feet, prepared for another round.&d
 mpmload 303909
-~
-> fight_prog 5~
-kame
 ~
 > act_prog ready~
 if isfight($i)
@@ -364,6 +361,9 @@ else
 mprestore self 30000
 nod $n
 endif
+~
+> fight_prog 30~
+conc
 ~
 |
 #303910
@@ -1510,29 +1510,16 @@ A Red Ribbon grunt eyes you suspiciously.
 ~
 ~
 3 0 0 C
-17
-1 0 50 1d20+150 2d5+0
+10
+1 0 100 1d20+1000 2d5+0
 -1 50
 112 112 1
-10 10 10 10 0
+200 50 50 10 0
 0 0 0 0 0
-1 1 0 0 1 1 1
+1 1 0 0 1 1 2
 0 0 0 0 0 0 0 0
-> act_prog ready~
-if isfight($i)
-slap $n
-mpechoat $n You can't do that while the mob is in combat.
-else
-mprestore self 30000
-nod $n
-endif
-~
-> greet_prog 100~
-if isfight($i)
-salute
-else
-mprestore self 30000
-endif
+> fight_prog 30~
+haymaker
 ~
 |
 #305011
@@ -1542,22 +1529,16 @@ A Red Ribbon officer stands here at attention.
 ~
 ~
 3 0 0 C
-20
-1 0 50 1d20+200 2d5+0
+11
+1 0 100 1d20+1200 2d5+0
 -1 60
 112 112 2
-10 10 10 10 0
+250 75 75 10 0
 0 0 0 0 0
 1 1 0 0 1 1 2
 0 0 0 0 0 0 0 0
-> act_prog ready~
-if isfight($i)
-slap $n
-mpechoat $n You can't do that while the mob is in combat.
-else
-mprestore self 30000
-nod $n
-endif
+> fight_prog 30~
+haymaker
 ~
 |
 #305012
@@ -1567,29 +1548,16 @@ A Red Ribbon patrol officer marches his route.
 ~
 ~
 33 0 0 C
-25
-1 0 50 1d20+200 2d5+0
+13
+1 0 100 1d20+1300 2d5+0
 -1 75
 112 112 1
-10 10 10 10 0
+300 300 75 10 0
 0 0 0 0 0
 1 1 0 0 1 1 1
 0 0 0 0 0 0 0 0
-> act_prog ready~
-if isfight($i)
-slap $n
-mpechoat $n You can't do that while the mob is in combat.
-else
-mprestore self 30000
-nod $n
-endif
-~
-> greet_prog 100~
-if isfight($i)
-salute
-else
-mprestore self 30000
-endif
+> fight_prog 30~
+haymaker
 ~
 |
 #305013
@@ -1599,29 +1567,16 @@ A mass-produced Red Ribbon android shuffles around without purpose.
 ~
 ~
 35 0 0 C
-27
-1 0 50 1d20+225 2d5+0
--1 100
+15
+1 0 100 1d20+1500 2d5+0
+-1 80
 112 112 0
-20 20 20 20 0
+400 80 80 10 0
 0 0 0 0 0
-4 4 0 0 1 1 1
+4 4 0 0 1 1 2
 0 0 0 0 0 0 0 0
-> act_prog ready~
-if isfight($i)
-slap $n
-mpechoat $n You can't do that while the mob is in combat.
-else
-mprestore self 30000
-nod $n
-endif
-~
-> greet_prog 100~
-if isfight($i)
-salute
-else
-mprestore self 300
-endif
+> fight_prog 30~
+energybeam
 ~
 |
 #305014
@@ -1631,29 +1586,16 @@ One of Commander Red's personal bodyguards cracks his knuckles.
 ~
 ~
 35 0 0 C
-30
-1 0 50 1d20+250 2d5+0
+16
+1 0 100 1d20+1500 2d5+0
 -1 100
 112 112 1
-20 20 20 20 0
+500 500 100 10 0
 0 0 0 0 0
-1 1 0 0 1 1 1
+1 1 0 0 1 1 2
 0 0 0 0 0 0 0 0
-> act_prog ready~
-if isfight($i)
-slap $n
-mpechoat $n You can't do that while the mob is in combat.
-else
-mprestore self 30000
-nod $n
-endif
-~
-> greet_prog 100~
-if isfight($i)
-salute
-else
-mprestore self 30000
-endif
+> fight_prog 30~
+bash
 ~
 |
 #305015
@@ -1664,28 +1606,21 @@ Commander Red huddles in the corner.
 ~
 3 0 0 C
 17
-1 0 50 1d20+100 2d5+0
+1 0 50 1d20+1750 2d5+0
 -1 100
 112 112 1
-10 10 10 10 0
+500 500 100 10 0
 0 0 0 0 0
-1 1 0 0 1 1 0
+1 1 0 0 1 1 1
 0 0 0 0 0 0 0 0
-> act_prog ready~
-if isfight($i)
-slap $n
-mpechoat $n You can't do that while the mob is in combat.
-else
-mprestore self 30000
-nod $n
-endif
+> fight_prog 30~
+bash
 ~
 > greet_prog 100~
-if isfight($i)
-salute
-else
-mprestore self 30000
-endif
+say You think you're real smart, waltzin' in here?!
+~
+> death_prog 5~
+mpoload 303927
 ~
 |
 #305016
@@ -1695,29 +1630,19 @@ Staff Officer Black stands here, ready to defend Commander Red.
 ~
 ~
 3 0 0 C
-50
-1 0 50 1d20+600 2d5+0
+20
+1 0 50 1d20+2500 2d5+0
 -1 150
 112 112 1
-50 50 20 50 0
+1000 1000 150 10 0
 0 0 0 0 0
 1 1 0 0 1 1 2
 0 0 0 0 0 0 0 0
-> act_prog ready~
-if isfight($i)
-slap $n
-mpechoat $n You can't do that while the mob is in combat.
-else
-mprestore self 30000
-nod $n
-endif
+> fight_prog 30~
+bash
 ~
-> greet_prog 100~
-if isfight($i)
-salute
-else
-mprestore self 30000
-endif
+> death_prog 5~
+mpoload 303929
 ~
 |
 #305017
@@ -1727,29 +1652,16 @@ A Red Ribbon Autoturret aims its sights at you!
 ~
 ~
 35 0 0 C
-30
-1 0 50 1d20+300 2d5+0
+16
+1 0 100 1d20+1400 2d5+0
 -1 125
 112 112 0
-20 20 20 20 0
+500 500 100 10 0
 0 0 0 0 0
-4 4 0 0 1 1 1
+4 4 0 0 1 1 2
 0 0 0 0 0 0 0 0
-> greet_prog 100~
-if isfight($i)
-salute
-else
-mprestore self 30000
-endif
-~
-> act_prog ready~
-if isfight($i)
-slap $n
-mpechoat $n You can't do that while the mob is in combat.
-else
-mprestore self 30000
-nod $n
-endif
+> fight_prog 30~
+energybeam
 ~
 |
 #305018
@@ -1759,29 +1671,19 @@ Colonel Violet polishes a stockpile of dubious grenades.
 ~
 ~
 3 0 0 C
-50
-1 0 50 1d20+600 2d5+0
+20
+1 0 100 1d20+2000 2d5+0
 -1 150
 112 112 2
-50 50 20 50 0
+1000 1000 150 10 0
 0 0 0 0 0
-1 1 0 0 1 1 2
+1 1 0 0 1 1 3
 0 0 0 0 0 0 0 0
-> greet_prog 100~
-if isfight($i)
-salute
-else
-mprestore self 30000
-endif
+> fight_prog 30~
+bash
 ~
-> act_prog ready~
-if isfight($i)
-slap $n
-mpechoat $n You can't do that while the mob is in combat.
-else
-mprestore self 30000
-nod $n
-endif
+> death_prog 5~
+mpoload 303924
 ~
 |
 #305019
@@ -1791,29 +1693,19 @@ General Blue stands here haughtily, ordering executions for mundane disruptions.
 ~
 ~
 3 0 0 C
-60
-1 0 50 1d20+700 2d5+0
+20
+1 0 100 1d20+2500 2d5+0
 -1 180
 112 112 1
-60 60 25 60 0
+1250 1250 180 10 0
 0 0 0 0 0
 1 1 0 0 1 1 2
 0 0 0 0 0 0 0 0
-> act_prog ready~
-if isfight($i)
-slap $n
-mpechoat $n You can't do that while the mob is in combat.
-else
-mprestore self 30000
-nod $n
-endif
+> fight_prog 30~
+collide
 ~
-> greet_prog 100~
-if isfight($i)
-salute
-else
-mprestore self 30000
-endif
+> death_prog 5~
+mpoload 303925
 ~
 |
 #305020
@@ -1823,29 +1715,16 @@ A Red Ribbon engineer is sweating bullets here.
 ~
 ~
 3 0 0 C
-30
-1 0 50 1d20+250 2d5+0
+15
+1 0 100 1d20+1500 2d5+0
 -1 100
 112 112 1
-20 20 20 20 0
+500 500 100 10 0
 0 0 0 0 0
-1 1 0 0 1 1 1
+1 1 0 0 1 1 2
 0 0 0 0 0 0 0 0
-> act_prog ready~
-if isfight($i)
-slap $n
-mpechoat $n You can't do that while the mob is in combat.
-else
-mprestore self 30000
-nod $n
-endif
-~
-> greet_prog 100~
-if isfight($i)
-salute
-else
-mprestore self 30000
-endif
+> fight_prog 30~
+bash
 ~
 |
 #305021
@@ -1855,29 +1734,19 @@ Colonel Silver sits nonchalantly on a discarded plane prop.
 ~
 ~
 3 0 0 C
-75
-1 0 50 1d20+850 2d5+0
+21
+1 0 100 1d20+2500 2d5+0
 -1 200
 112 112 1
-80 75 20 75 0
+1500 1500 200 10 0
 0 0 0 0 0
-1 1 0 0 1 1 2
+1 1 0 0 1 1 3
 0 0 0 0 0 0 0 0
-> act_prog ready~
-if isfight($i)
-slap $n
-mpechoat $n You can't do that while the mob is in combat.
-else
-mprestore self 30000
-nod $n
-endif
+> fight_prog 30~
+collide
 ~
-> greet_prog 100~
-if isfight($i)
-salute
-else
-mprestore self 30000
-endif
+> death_prog 5~
+mpoload 303926
 ~
 |
 #305022
@@ -1887,33 +1756,16 @@ An augmented Red Ribbon soldier wanders listlessly, awaiting a target.
 ~
 ~
 33 0 0 C
-35
-1 0 50 1d20+300 2d5+0
+17
+1 0 100 1d20+1500 2d5+0
 -1 125
 112 112 0
-20 20 20 20 0
+600 600 125 10 0
 0 0 0 0 0
 4 4 0 0 1 1 1
 0 0 0 0 0 0 0 0
-> act_prog ready~
-if isfight($i)
-slap $n
-mpechoat $n You can't do that while the mob is in combat.
-else
-mprestore self 30000
-nod $n
-endif
-~
-> greet_prog 100~
-if ispc($n)
-if isfight($i)
-glower
-else
-mprestore $i 30000
-mpecho An Augmented Red Ribbon Soldier attacks!
-mpkill $n
-endif
-endif
+> fight_prog 30~
+energybeam
 ~
 |
 #305023
@@ -2037,6 +1889,7 @@ say The androids I build are only as powerful as the information I'm able to obt
 mpecho &cDoctor Gero's words trail off.&d
 say With your help, I'm certain I could dramatically improve my creations. I would even overlook the security breach.
 say How about it? Do you &Ragree&C?
+mpecho &RWARNING: You must complete this quest to return! Certain death and frustration await those with less than 500 base powerlevel!&d
 ~
 |
 #305026
@@ -2046,29 +1899,16 @@ A prototype android shambles aimlessly here.
 ~
 ~
 16777217 0 0 C
-50
-1 0 50 1d20+350 2d5+0
+21
+1 0 100 1d20+3000 2d5+0
 -1 500
 112 112 0
-50 25 25 25 0
+2000 2000 500 10 0
 0 0 0 0 0
-4 4 0 0 1 1 2
+4 4 0 0 1 1 3
 0 0 0 0 0 0 0 0
-> act_prog ready~
-if isfight($i)
-slap $n
-mpechoat $n You can't do that while the mob is in combat.
-else
-mprestore self 30000
-nod $n
-endif
-~
-> greet_prog 100~
-if isfight($i)
-salute
-else
-mprestore self 30000
-endif
+> fight_prog 30~
+conc
 ~
 |
 #305027
@@ -2078,25 +1918,16 @@ A more impressive prototype android strikes an imposing figure here.
 ~
 ~
 16777217 0 0 C
-75
-1 0 50 1d20+400 2d5+0
+22
+1 0 100 1d20+5000 2d5+0
 -1 1000
 112 112 0
-50 20 20 20 0
+3000 3000 1000 10 0
 0 0 0 0 0
-4 4 0 0 1 1 2
+4 4 0 0 1 1 3
 0 0 0 0 0 0 0 0
-> greet_prog 100~
-if ispc($n)
-if isfight($i)
-glower
-else
-mprestore $i 30000
-endif
-endif
-~
-> entry_prog 100~
-mprestore $i 30000
+> fight_prog 30~
+conc
 ~
 |
 #305028
@@ -2146,28 +1977,21 @@ A cybernetic saibaman stands here menacingly--a 'Cybaman'!
 ~
 ~
 1 0 0 C
-100
-1 0 50 1d20+1000 2d5+0
+22
+1 0 100 1d20+10000 2d5+0
 -1 1500
 112 112 0
-80 30 30 60 0
+5000 5000 1500 10 0
 0 0 0 0 0
-0 0 0 0 1 1 2
+0 0 0 0 1 1 3
 0 0 0 0 0 0 0 0
-> fight_prog 10~
-energy
-~
 > death_prog 100~
 mea $n &YAs the Cybaman dies at your hand, you disappear into a roiling mist!&d
 mer $n &Y$n disappears into a roiling mist.&d
 mptransfer $n 305342
 ~
-> greet_prog 100~
-if isfight($i)
-glower
-else
-mprestore self 30000
-endif
+> fight_prog 30~
+conc
 ~
 |
 #305031
@@ -2219,27 +2043,16 @@ A tiny green saibaman chitters menacingly.
 ~
 ~
 33 0 0 C
-100
-1 0 50 1d20+300 2d5+0
+23
+1 0 100 1d20+7500 2d5+0
 -1 1250
 112 112 0
-40 20 20 20 0
+4000 4000 1250 20 0
 0 0 0 0 0
-0 0 0 0 1 1 1
+0 0 0 0 1 1 2
 0 0 0 0 0 0 0 0
-> greet_prog 100~
-if ispc($n)
-if isfight($i)
-glower
-else
-mprestore $i 30000
-mpecho &cA Green Saibaman lets out a horrible shriek!&d
-mpkill $n
-endif
-endif
-~
-> entry_prog 100~
-mprestore $i 30000
+> fight_prog 30~
+destructive
 ~
 |
 #305033
@@ -2249,27 +2062,16 @@ A tiny saibaman lurks here, its body glitching in and out of a strange mist.
 ~
 ~
 33 0 0 C
-110
-1 0 50 1d20+400 2d5+0
+23
+1 0 100 1d20+8000 2d5+0
 -1 2500
 112 112 0
-40 40 30 40 0
+5000 5000 1400 40 0
 0 0 0 0 0
-0 0 0 0 1 1 1
+0 0 0 0 1 1 2
 0 0 0 0 0 0 0 0
-> greet_prog 100~
-if ispc($n)
-if isfight($i)
-glower
-else
-mprestore $i 30000
-mpecho A Green Saibaman lets out a horrible shriek!
-mpkill $n
-endif
-endif
-~
-> entry_prog 100~
-mprestore $i 30000
+> fight_prog 30~
+destructive
 ~
 |
 #305034
@@ -2279,11 +2081,11 @@ A massive wounded man leans wearily against the rocks.
 ~
 ~
 3 0 0 C
-60
-1 0 100 1d20+100 2d5+0
+25
+1 0 100 1d20+10000 2d5+0
 -1 4000
 112 112 1
-40 40 40 40 0
+6000 6000 1500 40 0
 0 0 0 0 0
 0 0 0 0 1 1 2
 0 0 0 0 0 0 0 0
@@ -2300,6 +2102,9 @@ say Instead some &Rold man&C in a clown suit beats me into the dirt. What a joke
 say He came after my partner out of nowhere. Said he was looking for Kakarot.
 shrug
 say It doesn't matter. Neither of them are any match for Vegeta.
+~
+> fight_prog 30~
+crusherball
 ~
 |
 #305035
@@ -2320,7 +2125,7 @@ An android of striking resemblance to Doctor Gero stands here menacingly.
 > speech_prog 'help'~
 mea $n &cThe android steps forward imposingly, appraising you with flashing red eyes.&d
 mpsleep 15
-mea $n &CAndroid 20 says 'There will no 'help'. Especially not from...'
+mea $n &CAndroid 20 says 'There will be no 'help.' Especially not from...'
 mpsleep 15
 mea $n &cAndroid 20 pauses.&d
 mpsleep 15
@@ -2374,7 +2179,7 @@ Vegeta clutches his shoulder, his face contorted with rage.
 0
 1 0 100 1d20+0 2d5+0
 -1 18000
-112 112 0
+112 112 1
 10 10 10 10 10
 0 0 0 0 0
 0 0 0 0 1 1 0
@@ -2389,7 +2194,7 @@ Goku stands warily between them.
 0
 1 0 100 1d20+0 2d5+0
 -1 9001
-112 112 0
+112 112 1
 10 10 10 10 10
 0 0 0 0 0
 0 0 0 0 1 1 0
@@ -3341,7 +3146,7 @@ A proud Namekian warrior defends his home.
 3 3 0 0 1 1 4
 0 0 0 0 0 0 0 0
 > fight_prog 30~
-destructive
+conc
 ~
 > death_prog 50~
 say No... Not like this!
@@ -3544,7 +3349,7 @@ Lord Frieza hovers nonchalantly in his mobile chair, overseeing the ensuing chao
 5 5 0 0 1 1 5
 0 0 0 0 0 0 0 0
 > fight_prog 30~
-fingerbeam
+conc
 ~
 > death_prog 100~
 mpecho &Y... But Frieza emerges from the dust, unharmed!&D
@@ -3637,7 +3442,7 @@ A personal reflection of yourself, an image conjured by the pool, stands ready t
 112 112 0
 15000 250000 1500 10 0
 0 0 0 0 0
-0 0 0 0 0 0 5
+0 0 0 0 1 1 5
 0 0 0 0 0 0 0 0
 > fight_prog 30~
 gigantic
@@ -3656,7 +3461,7 @@ An overwhelmingly powerful reflection of the pool stands here.
 112 112 0
 30000 500000 3000 10 0
 0 0 0 0 0
-0 0 0 0 0 0 6
+0 0 0 0 1 1 6
 0 0 0 0 0 0 0 0
 > fight_prog 30~
 gigantic
@@ -3951,7 +3756,7 @@ mpechoat $n This thing is HEAVY! You could probably incorporate this into your t
 |
 #303924
 weighted training bracers~
-[20kg] A Weighted Training Bracer~
+[20kg] A Heavy Metal Bracer~
 An unusually heavy bracer lays here.~
 ~
 9 0 4097
@@ -3960,7 +3765,7 @@ An unusually heavy bracer lays here.~
  0
 #303925
 weighted training vest~
-[50kg] A Weighted Training Vest~
+[50kg] &WA &RRed Ribbon&W Standard-Issue Armored Vest&d~
 An unusually heavy vest lays here.~
 ~
 9 0 9
@@ -3969,7 +3774,7 @@ An unusually heavy vest lays here.~
  0
 #303926
 Weighted Training Boots~
-[50kg] Weighted Training Boots~
+[50kg] Heavy Metal Boots~
 A pair of unusually heavy boots lay here.~
 ~
 9 0 65
@@ -3978,7 +3783,7 @@ A pair of unusually heavy boots lay here.~
  0
 #303927
 weighted training anklet~
-[20kg] A Weighted Training Anklet~
+[20kg] A Heavy Metal Anklet~
 An unusually heavy anklet lays here.~
 ~
 9 0 2097153
@@ -3996,7 +3801,7 @@ An unusually heavy cape lays here.~
  0
 #303929
 weighted training belt~
-[50kg] A Weighted Training Belt~
+[50kg] A Heavy Metal Belt~
 An unusually heavy belt lays here.~
 ~
 9 0 2049
@@ -4066,6 +3871,20 @@ A massive slab of concrete lays here.~
 0 0 0 1000000 0 0
 1 1 0
  0
+#303937
+energy blade~
+&WA Blade of Raw Energy&d~
+A glowing blade of flowing energy lays here.~
+~
+5 1 8193
+0 1 10 3 0 0
+1 0 0
+ 0
+> wear_prog 100~
+mea $n &WA blade of flowing energy extends from your dominant arm.&d
+mer $n &WA blade of flowing energy extends from $n's dominant arm.&d
+~
+|
 #304721
 mki gravity accelerator~
 &YThe MK-I Gravity Accelerator&D~
@@ -4359,13 +4178,12 @@ A once beautiful, starkly white building lays in ruins.  Piles of rubble
 lay all around, with banners and chunks of concrete strewn in all
 directions.  Whatever happened here, it must have been something incredibly
 powerful. 
-
-On closer inspection, you see a tiny note dangling out of the rubble.
-
-&Y -- It was me, bitches!
-- Zerhyn
 ~
 0 4 1
+D0
+~
+~
+0 -1 303901
 D2
 ~
 ~
@@ -4527,11 +4345,11 @@ Making your way past the security checkpoint, the neon lights fade once
 more into the typical white mode of the facility, although the occasional
 yellow or red sign still pops up from time to time. 
 ~
-0 8 0
+0 12 0
 D0
 ~
 ~
-0 -1 303911
+0 -1 303924
 D2
 ~
 ~
@@ -4761,7 +4579,7 @@ D0
 D2
 ~
 ~
-0 -1 304124
+0 -1 303910
 S
 #303925
 First Floor: First Trainee Junction~
@@ -5175,7 +4993,7 @@ A Battered Doorway~
 This doorway has seen better days.  A pair of broken hinges lay
 haphazardly on the floor here, and the door itself is no where to be found.
 
-&YA sign reads: 15k+ Powerlevel&D
+&YA sign reads: 20k+ Powerlevel&d
 ~
 0 8 0
 D1
@@ -5594,7 +5412,7 @@ A Battered Doorway~
 This doorway has seen better days.  A pair of broken hinges lay
 haphazardly on the floor here, and the door itself is no where to be found.
 
-&YA sign reads: 50k+ Powerlevel&D
+&YA sign reads: 250k+ Powerlevel&d
 ~
 0 0 0
 D1
@@ -6063,7 +5881,7 @@ A Battered Doorway~
 This doorway has seen better days.  A pair of broken hinges lay
 haphazardly on the floor here, and the door itself is no where to be found.
 
-&YA sign reads: 150k+ Powerlevel&D
+&YA sign reads: 2.5m+ Powerlevel&d
 ~
 0 8 0
 D1
@@ -6540,10 +6358,6 @@ previously encountered in the building.
 &YA sign reads: Advanced Training Arenas are to the West and East.&d
 ~
 0 0 0
-D0
-~
-~
-0 -1 304056
 D1
 ~
 ~
@@ -6620,7 +6434,7 @@ appears to block off any stray energy that might escape the confines of the
 room beyond, but it allows for physical matter to pass through
 effortlessly. 
 
-&YA sign reads: 500k+ Powerlevel&D
+&YA sign reads: 25m+ Powerlevel&d
 ~
 0 0 0
 D0
@@ -6695,7 +6509,7 @@ appears to block off any stray energy that might escape the confines of the
 room beyond, but it allows for physical matter to pass through
 effortlessly.
 
-&YA sign reads: 1,500,000+ Powerlevel&D
+&YA sign reads: 250m+ Powerlevel&d
 ~
 0 0 0
 D0
@@ -23903,7 +23717,7 @@ rustic lamps adorn the doorway, welcoming you inside.
 D0
 ~
 ~
-0 -1 305082
+1 -1 305082
 D2
 ~
 ~
@@ -23928,7 +23742,7 @@ D1
 D2
 ~
 ~
-0 -1 305081
+1 -1 305081
 D3
 ~
 ~
@@ -24568,6 +24382,8 @@ D3
 S
 #305121
 A Well-Defended Hallway~
+This hallway is absolutely crawling with guards from end to end.  With
+nowhere to hide in sight, the only way forward is to plow your way through.
 ~
 0 2105344 0
 D0
@@ -24581,6 +24397,8 @@ D2
 S
 #305122
 A Well-Defended Hallway~
+This hallway is absolutely crawling with guards from end to end.  With
+nowhere to hide in sight, the only way forward is to plow your way through.
 ~
 0 2105344 0
 D0
@@ -24594,6 +24412,9 @@ D2
 S
 #305123
 Before Commander Red's Office~
+Beyond the huge doorway to the north sits a glittering control room
+serving as Commander Red's office, and To the west and east you can make
+out what appear to be two security offices. 
 ~
 0 2105344 0
 D0
@@ -24615,6 +24436,9 @@ D3
 S
 #305124
 Patrol Annex~
+This room is lined with several monitors receiving camera feeds from all
+over the mansion, several of which are apparently located just outside this
+very room. 
 ~
 0 2105344 0
 D1
@@ -24624,6 +24448,9 @@ D1
 S
 #305125
 Patrol Annex~
+This room is lined with several monitors receiving camera feeds from all
+over the mansion, several of which are apparently located just outside this
+very room.
 ~
 0 2105344 0
 D3
@@ -24633,8 +24460,11 @@ D3
 S
 #305126
 Commander Red's Office~
+This spacious office is adorned with the finest luxuries money can
+afford, with a massive desk and practically a throne fit for a king nestled
+behind it. 
 ~
-0 2105344 0
+0 2105348 0
 D2
 ~
 ~
@@ -25408,6 +25238,10 @@ D3
 S
 #305165
 Before the Air Strip~
+The half-destroyed runway opens into a less cluttered proper air strip
+here, with a multitude of hangars and aircraft towering in the distance. 
+You can vaguely make out the silhouettes of shining figures lurking in the
+blaring sun. 
 ~
 0 2105348 1
 D0
@@ -25421,6 +25255,8 @@ D1
 S
 #305166
 Air Strip Pathway~
+This path runs between a collection of service vehicles, blocking off
+most of the air strip in the distance. 
 ~
 0 2105344 1
 D0
@@ -25434,6 +25270,8 @@ D2
 S
 #305167
 Air Strip Pathway~
+This path runs between a collection of service vehicles, blocking off
+most of the air strip in the distance.
 ~
 0 2105344 1
 D0
@@ -25447,6 +25285,8 @@ D2
 S
 #305168
 Air Strip Pathway~
+This path runs between a collection of service vehicles, blocking off
+most of the air strip in the distance.
 ~
 0 2105344 1
 D0
@@ -25460,6 +25300,8 @@ D2
 S
 #305169
 Air Strip Pathway~
+This path runs between a collection of service vehicles, blocking off
+most of the air strip in the distance.
 ~
 0 2105344 1
 D0
@@ -25473,6 +25315,9 @@ D2
 S
 #305170
 Air Strip 01~
+The cement cracks under the eternally blaring sun here, the distant
+sounds of battle ringing out all around you.  Shining robotic figures lurk
+every which-way, waiting to leap out at you. 
 ~
 0 2105348 1
 D0
@@ -25490,6 +25335,9 @@ D2
 S
 #305171
 Air Strip 02~
+The cement cracks under the eternally blaring sun here, the distant
+sounds of battle ringing out all around you.  Shining robotic figures lurk
+every which-way, waiting to leap out at you.
 ~
 0 2105344 1
 D0
@@ -25507,6 +25355,9 @@ D3
 S
 #305172
 Air Strip 03~
+The cement cracks under the eternally blaring sun here, the distant
+sounds of battle ringing out all around you.  Shining robotic figures lurk
+every which-way, waiting to leap out at you.
 ~
 0 2105344 1
 D0
@@ -25524,6 +25375,9 @@ D3
 S
 #305173
 Air Strip 04~
+The cement cracks under the eternally blaring sun here, the distant
+sounds of battle ringing out all around you.  Shining robotic figures lurk
+every which-way, waiting to leap out at you.
 ~
 0 2105344 1
 D0
@@ -25541,6 +25395,9 @@ D3
 S
 #305174
 Air Strip 05~
+The cement cracks under the eternally blaring sun here, the distant
+sounds of battle ringing out all around you.  Shining robotic figures lurk
+every which-way, waiting to leap out at you.
 ~
 0 2105344 1
 D0
@@ -25558,6 +25415,9 @@ D3
 S
 #305175
 Air Strip 06~
+The cement cracks under the eternally blaring sun here, the distant
+sounds of battle ringing out all around you.  Shining robotic figures lurk
+every which-way, waiting to leap out at you.
 ~
 0 2105344 1
 D0
@@ -25571,6 +25431,9 @@ D3
 S
 #305176
 Air Strip 06~
+The cement cracks under the eternally blaring sun here, the distant
+sounds of battle ringing out all around you.  Shining robotic figures lurk
+every which-way, waiting to leap out at you.
 ~
 0 2105344 1
 D0
@@ -25588,6 +25451,9 @@ D3
 S
 #305177
 Air Strip 06~
+The cement cracks under the eternally blaring sun here, the distant
+sounds of battle ringing out all around you.  Shining robotic figures lurk
+every which-way, waiting to leap out at you.
 ~
 0 2105344 1
 D0
@@ -25605,6 +25471,9 @@ D3
 S
 #305178
 Air Strip 06~
+The cement cracks under the eternally blaring sun here, the distant
+sounds of battle ringing out all around you.  Shining robotic figures lurk
+every which-way, waiting to leap out at you.
 ~
 0 2105344 1
 D0
@@ -25622,6 +25491,9 @@ D3
 S
 #305179
 Air Strip 06~
+The cement cracks under the eternally blaring sun here, the distant
+sounds of battle ringing out all around you.  Shining robotic figures lurk
+every which-way, waiting to leap out at you.
 ~
 0 2105344 1
 D0
@@ -25639,6 +25511,9 @@ D3
 S
 #305180
 Air Strip 06~
+The cement cracks under the eternally blaring sun here, the distant
+sounds of battle ringing out all around you.  Shining robotic figures lurk
+every which-way, waiting to leap out at you.
 ~
 0 2105344 1
 D0
@@ -25656,6 +25531,9 @@ D3
 S
 #305181
 Air Strip 06~
+The cement cracks under the eternally blaring sun here, the distant
+sounds of battle ringing out all around you.  Shining robotic figures lurk
+every which-way, waiting to leap out at you.
 ~
 0 2105344 1
 D0
@@ -25673,6 +25551,9 @@ D3
 S
 #305182
 Air Strip 06~
+The cement cracks under the eternally blaring sun here, the distant
+sounds of battle ringing out all around you.  Shining robotic figures lurk
+every which-way, waiting to leap out at you.
 ~
 0 2105344 1
 D0
@@ -25690,6 +25571,9 @@ D3
 S
 #305183
 Air Strip 06~
+The cement cracks under the eternally blaring sun here, the distant
+sounds of battle ringing out all around you.  Shining robotic figures lurk
+every which-way, waiting to leap out at you.
 ~
 0 2105344 1
 D0
@@ -25707,6 +25591,9 @@ D3
 S
 #305184
 Air Strip 06~
+The cement cracks under the eternally blaring sun here, the distant
+sounds of battle ringing out all around you.  Shining robotic figures lurk
+every which-way, waiting to leap out at you.
 ~
 0 2105344 1
 D0
@@ -25723,7 +25610,10 @@ D3
 0 -1 305194
 S
 #305185
-Air Strip 06~
+Air Strip 06: Beside a Suspicious Path~
+The cement cracks under the eternally blaring sun here, the distant
+sounds of battle ringing out all around you.  Shining robotic figures lurk
+every which-way, waiting to leap out at you.
 ~
 0 2105344 1
 D1
@@ -25741,6 +25631,9 @@ D3
 S
 #305186
 Air Strip 05~
+The cement cracks under the eternally blaring sun here, the distant
+sounds of battle ringing out all around you.  Shining robotic figures lurk
+every which-way, waiting to leap out at you.
 ~
 0 2105344 1
 D0
@@ -25762,6 +25655,9 @@ D3
 S
 #305187
 Air Strip 05~
+The cement cracks under the eternally blaring sun here, the distant
+sounds of battle ringing out all around you.  Shining robotic figures lurk
+every which-way, waiting to leap out at you.
 ~
 0 2105344 1
 D0
@@ -25783,6 +25679,9 @@ D3
 S
 #305188
 Air Strip 05~
+The cement cracks under the eternally blaring sun here, the distant
+sounds of battle ringing out all around you.  Shining robotic figures lurk
+every which-way, waiting to leap out at you.
 ~
 0 2105344 1
 D0
@@ -25804,6 +25703,9 @@ D3
 S
 #305189
 Air Strip 05~
+The cement cracks under the eternally blaring sun here, the distant
+sounds of battle ringing out all around you.  Shining robotic figures lurk
+every which-way, waiting to leap out at you.
 ~
 0 2105344 1
 D0
@@ -25825,6 +25727,9 @@ D3
 S
 #305190
 Air Strip 05~
+The cement cracks under the eternally blaring sun here, the distant
+sounds of battle ringing out all around you.  Shining robotic figures lurk
+every which-way, waiting to leap out at you.
 ~
 0 2105344 1
 D0
@@ -25846,6 +25751,9 @@ D3
 S
 #305191
 Air Strip 05~
+The cement cracks under the eternally blaring sun here, the distant
+sounds of battle ringing out all around you.  Shining robotic figures lurk
+every which-way, waiting to leap out at you.
 ~
 0 2105344 1
 D0
@@ -25867,6 +25775,9 @@ D3
 S
 #305192
 Air Strip 05~
+The cement cracks under the eternally blaring sun here, the distant
+sounds of battle ringing out all around you.  Shining robotic figures lurk
+every which-way, waiting to leap out at you.
 ~
 0 2105344 1
 D0
@@ -25888,6 +25799,9 @@ D3
 S
 #305193
 Air Strip 05~
+The cement cracks under the eternally blaring sun here, the distant
+sounds of battle ringing out all around you.  Shining robotic figures lurk
+every which-way, waiting to leap out at you.
 ~
 0 2105344 1
 D0
@@ -25909,6 +25823,9 @@ D3
 S
 #305194
 Air Strip 05~
+The cement cracks under the eternally blaring sun here, the distant
+sounds of battle ringing out all around you.  Shining robotic figures lurk
+every which-way, waiting to leap out at you.
 ~
 0 2105344 1
 D0
@@ -25929,7 +25846,10 @@ D3
 0 -1 305204
 S
 #305195
-Air Strip 05~
+Air Strip 05: Hangar Access~
+The shade from the entrance to this hangar is a welcome respite from the
+blaring sun.  A large access door set within an enormous sliding door leads
+into the building to the north.
 ~
 0 2105344 1
 D0
@@ -25951,6 +25871,9 @@ D3
 S
 #305196
 Air Strip 04~
+The cement cracks under the eternally blaring sun here, the distant
+sounds of battle ringing out all around you.  Shining robotic figures lurk
+every which-way, waiting to leap out at you.
 ~
 0 2105344 1
 D0
@@ -25972,6 +25895,9 @@ D3
 S
 #305197
 Air Strip 04~
+The cement cracks under the eternally blaring sun here, the distant
+sounds of battle ringing out all around you.  Shining robotic figures lurk
+every which-way, waiting to leap out at you.
 ~
 0 2105344 1
 D0
@@ -25993,6 +25919,9 @@ D3
 S
 #305198
 Air Strip 04~
+The cement cracks under the eternally blaring sun here, the distant
+sounds of battle ringing out all around you.  Shining robotic figures lurk
+every which-way, waiting to leap out at you.
 ~
 0 2105344 1
 D0
@@ -26014,6 +25943,9 @@ D3
 S
 #305199
 Air Strip 04~
+The cement cracks under the eternally blaring sun here, the distant
+sounds of battle ringing out all around you.  Shining robotic figures lurk
+every which-way, waiting to leap out at you.
 ~
 0 2105344 1
 D0
@@ -26035,6 +25967,9 @@ D3
 S
 #305200
 Air Strip 04~
+The cement cracks under the eternally blaring sun here, the distant
+sounds of battle ringing out all around you.  Shining robotic figures lurk
+every which-way, waiting to leap out at you.
 ~
 0 2105344 1
 D0
@@ -26056,6 +25991,9 @@ D3
 S
 #305201
 Air Strip 04~
+The cement cracks under the eternally blaring sun here, the distant
+sounds of battle ringing out all around you.  Shining robotic figures lurk
+every which-way, waiting to leap out at you.
 ~
 0 2105344 1
 D0
@@ -26077,6 +26015,9 @@ D3
 S
 #305202
 Air Strip 04~
+The cement cracks under the eternally blaring sun here, the distant
+sounds of battle ringing out all around you.  Shining robotic figures lurk
+every which-way, waiting to leap out at you.
 ~
 0 2105344 1
 D0
@@ -26098,6 +26039,9 @@ D3
 S
 #305203
 Air Strip 04~
+The cement cracks under the eternally blaring sun here, the distant
+sounds of battle ringing out all around you.  Shining robotic figures lurk
+every which-way, waiting to leap out at you.
 ~
 0 2105344 1
 D0
@@ -26119,6 +26063,9 @@ D3
 S
 #305204
 Air Strip 04~
+The cement cracks under the eternally blaring sun here, the distant
+sounds of battle ringing out all around you.  Shining robotic figures lurk
+every which-way, waiting to leap out at you.
 ~
 0 2105344 1
 D0
@@ -26140,6 +26087,9 @@ D3
 S
 #305205
 Air Strip 04~
+The cement cracks under the eternally blaring sun here, the distant
+sounds of battle ringing out all around you.  Shining robotic figures lurk
+every which-way, waiting to leap out at you.
 ~
 0 2105344 1
 D1
@@ -26157,6 +26107,9 @@ D3
 S
 #305206
 Air Strip 03~
+The cement cracks under the eternally blaring sun here, the distant
+sounds of battle ringing out all around you.  Shining robotic figures lurk
+every which-way, waiting to leap out at you.
 ~
 0 2105344 1
 D0
@@ -26178,6 +26131,9 @@ D3
 S
 #305207
 Air Strip 03~
+The cement cracks under the eternally blaring sun here, the distant
+sounds of battle ringing out all around you.  Shining robotic figures lurk
+every which-way, waiting to leap out at you.
 ~
 0 2105344 1
 D0
@@ -26199,6 +26155,9 @@ D3
 S
 #305208
 Air Strip 03~
+The cement cracks under the eternally blaring sun here, the distant
+sounds of battle ringing out all around you.  Shining robotic figures lurk
+every which-way, waiting to leap out at you.
 ~
 0 2105344 1
 D0
@@ -26220,6 +26179,9 @@ D3
 S
 #305209
 Air Strip 03~
+The cement cracks under the eternally blaring sun here, the distant
+sounds of battle ringing out all around you.  Shining robotic figures lurk
+every which-way, waiting to leap out at you.
 ~
 0 2105344 1
 D0
@@ -26241,6 +26203,9 @@ D3
 S
 #305210
 Air Strip 03~
+The cement cracks under the eternally blaring sun here, the distant
+sounds of battle ringing out all around you.  Shining robotic figures lurk
+every which-way, waiting to leap out at you.
 ~
 0 2105344 1
 D0
@@ -26262,6 +26227,9 @@ D3
 S
 #305211
 Air Strip 03~
+The cement cracks under the eternally blaring sun here, the distant
+sounds of battle ringing out all around you.  Shining robotic figures lurk
+every which-way, waiting to leap out at you.
 ~
 0 2105344 1
 D0
@@ -26283,6 +26251,9 @@ D3
 S
 #305212
 Air Strip 03~
+The cement cracks under the eternally blaring sun here, the distant
+sounds of battle ringing out all around you.  Shining robotic figures lurk
+every which-way, waiting to leap out at you.
 ~
 0 2105344 1
 D0
@@ -26304,6 +26275,9 @@ D3
 S
 #305213
 Air Strip 03~
+The cement cracks under the eternally blaring sun here, the distant
+sounds of battle ringing out all around you.  Shining robotic figures lurk
+every which-way, waiting to leap out at you.
 ~
 0 2105344 1
 D0
@@ -26325,6 +26299,9 @@ D3
 S
 #305214
 Air Strip 03~
+The cement cracks under the eternally blaring sun here, the distant
+sounds of battle ringing out all around you.  Shining robotic figures lurk
+every which-way, waiting to leap out at you.
 ~
 0 2105344 1
 D0
@@ -26346,6 +26323,9 @@ D3
 S
 #305215
 Air Strip 03~
+The cement cracks under the eternally blaring sun here, the distant
+sounds of battle ringing out all around you.  Shining robotic figures lurk
+every which-way, waiting to leap out at you.
 ~
 0 2105344 1
 D1
@@ -26363,6 +26343,9 @@ D3
 S
 #305216
 Air Strip 02~
+The cement cracks under the eternally blaring sun here, the distant
+sounds of battle ringing out all around you.  Shining robotic figures lurk
+every which-way, waiting to leap out at you.
 ~
 0 2105344 1
 D0
@@ -26384,6 +26367,9 @@ D3
 S
 #305217
 Air Strip 02~
+The cement cracks under the eternally blaring sun here, the distant
+sounds of battle ringing out all around you.  Shining robotic figures lurk
+every which-way, waiting to leap out at you.
 ~
 0 2105344 1
 D0
@@ -26405,6 +26391,9 @@ D3
 S
 #305218
 Air Strip 02~
+The cement cracks under the eternally blaring sun here, the distant
+sounds of battle ringing out all around you.  Shining robotic figures lurk
+every which-way, waiting to leap out at you.
 ~
 0 2105344 1
 D0
@@ -26426,6 +26415,9 @@ D3
 S
 #305219
 Air Strip 02~
+The cement cracks under the eternally blaring sun here, the distant
+sounds of battle ringing out all around you.  Shining robotic figures lurk
+every which-way, waiting to leap out at you.
 ~
 0 2105344 1
 D0
@@ -26447,6 +26439,9 @@ D3
 S
 #305220
 Air Strip 02~
+The cement cracks under the eternally blaring sun here, the distant
+sounds of battle ringing out all around you.  Shining robotic figures lurk
+every which-way, waiting to leap out at you.
 ~
 0 2105344 1
 D0
@@ -26468,6 +26463,9 @@ D3
 S
 #305221
 Air Strip 02~
+The cement cracks under the eternally blaring sun here, the distant
+sounds of battle ringing out all around you.  Shining robotic figures lurk
+every which-way, waiting to leap out at you.
 ~
 0 2105344 1
 D0
@@ -26489,6 +26487,9 @@ D3
 S
 #305222
 Air Strip 02~
+The cement cracks under the eternally blaring sun here, the distant
+sounds of battle ringing out all around you.  Shining robotic figures lurk
+every which-way, waiting to leap out at you.
 ~
 0 2105344 1
 D0
@@ -26510,6 +26511,9 @@ D3
 S
 #305223
 Air Strip 02~
+The cement cracks under the eternally blaring sun here, the distant
+sounds of battle ringing out all around you.  Shining robotic figures lurk
+every which-way, waiting to leap out at you.
 ~
 0 2105344 1
 D0
@@ -26531,6 +26535,9 @@ D3
 S
 #305224
 Air Strip 02~
+The cement cracks under the eternally blaring sun here, the distant
+sounds of battle ringing out all around you.  Shining robotic figures lurk
+every which-way, waiting to leap out at you.
 ~
 0 2105344 1
 D0
@@ -26551,7 +26558,10 @@ D3
 0 -1 305234
 S
 #305225
-Air Strip 02~
+Air Strip 02: Hangar Access~
+The shade from the entrance to this hangar is a welcome respite from the
+blaring sun.  A large access door set within an enormous sliding door leads
+into the building to the north. 
 ~
 0 2105344 1
 D0
@@ -26573,6 +26583,9 @@ D3
 S
 #305226
 Air Strip 01~
+The cement cracks under the eternally blaring sun here, the distant
+sounds of battle ringing out all around you.  Shining robotic figures lurk
+every which-way, waiting to leap out at you. 
 ~
 0 2105344 1
 D0
@@ -26590,6 +26603,9 @@ D2
 S
 #305227
 Air Strip 01~
+The cement cracks under the eternally blaring sun here, the distant
+sounds of battle ringing out all around you.  Shining robotic figures lurk
+every which-way, waiting to leap out at you. 
 ~
 0 2105344 1
 D0
@@ -26607,6 +26623,9 @@ D2
 S
 #305228
 Air Strip 01~
+The cement cracks under the eternally blaring sun here, the distant
+sounds of battle ringing out all around you.  Shining robotic figures lurk
+every which-way, waiting to leap out at you.
 ~
 0 2105344 1
 D0
@@ -26624,6 +26643,9 @@ D2
 S
 #305229
 Air Strip 01~
+The cement cracks under the eternally blaring sun here, the distant
+sounds of battle ringing out all around you.  Shining robotic figures lurk
+every which-way, waiting to leap out at you.
 ~
 0 2105344 1
 D0
@@ -26641,6 +26663,9 @@ D2
 S
 #305230
 Air Strip 01~
+The cement cracks under the eternally blaring sun here, the distant
+sounds of battle ringing out all around you.  Shining robotic figures lurk
+every which-way, waiting to leap out at you.
 ~
 0 2105344 1
 D0
@@ -26658,6 +26683,9 @@ D2
 S
 #305231
 Air Strip 01~
+The cement cracks under the eternally blaring sun here, the distant
+sounds of battle ringing out all around you.  Shining robotic figures lurk
+every which-way, waiting to leap out at you.
 ~
 0 2105344 1
 D0
@@ -26675,6 +26703,9 @@ D2
 S
 #305232
 Air Strip 01~
+The cement cracks under the eternally blaring sun here, the distant
+sounds of battle ringing out all around you.  Shining robotic figures lurk
+every which-way, waiting to leap out at you.
 ~
 0 2105344 1
 D0
@@ -26692,6 +26723,9 @@ D2
 S
 #305233
 Air Strip 01~
+The cement cracks under the eternally blaring sun here, the distant
+sounds of battle ringing out all around you.  Shining robotic figures lurk
+every which-way, waiting to leap out at you.
 ~
 0 2105344 1
 D0
@@ -26709,6 +26743,9 @@ D2
 S
 #305234
 Air Strip 01~
+The cement cracks under the eternally blaring sun here, the distant
+sounds of battle ringing out all around you.  Shining robotic figures lurk
+every which-way, waiting to leap out at you.
 ~
 0 2105344 1
 D0
@@ -26726,6 +26763,9 @@ D2
 S
 #305235
 Air Strip 01~
+The cement cracks under the eternally blaring sun here, the distant
+sounds of battle ringing out all around you.  Shining robotic figures lurk
+every which-way, waiting to leap out at you.
 ~
 0 2105344 1
 D1
@@ -26739,6 +26779,10 @@ D2
 S
 #305236
 Hangar 01 Entrance~
+All around you giant '01' symbols are etched into the hangar walls, the
+sounds of machinery whirring and soldiers shouting filling the air. Despite
+the intense heat outside and the machine exhaust, this place feels cool and
+relaxing, if not for the enemies about. 
 ~
 0 2105348 1
 D0
@@ -26752,6 +26796,10 @@ D2
 S
 #305237
 Hangar 02 Entrance~
+All around you giant '02' symbols are etched into the hangar walls, the
+sounds of machinery whirring and soldiers shouting filling the air. Despite
+the intense heat outside and the machine exhaust, this place feels cool and
+relaxing, if not for the enemies about. 
 ~
 0 2105348 0
 D0
@@ -26765,6 +26813,10 @@ D2
 S
 #305238
 Hangar 02~
+All around you giant '02' symbols are etched into the hangar walls, the
+sounds of machinery whirring and soldiers shouting filling the air. Despite
+the intense heat outside and the machine exhaust, this place feels cool and
+relaxing, if not for the enemies about. 
 ~
 0 2105348 0
 D0
@@ -26786,6 +26838,10 @@ D3
 S
 #305239
 Delicate Machinery~
+All around you giant '02' symbols are etched into the hangar walls, the
+sounds of machinery whirring and soldiers shouting filling the air. Despite
+the intense heat outside and the machine exhaust, this place feels cool and
+relaxing, if not for the enemies about. 
 ~
 0 2105348 0
 D0
@@ -26799,6 +26855,10 @@ D1
 S
 #305240
 Delicate Machinery~
+All around you giant '02' symbols are etched into the hangar walls, the
+sounds of machinery whirring and soldiers shouting filling the air. Despite
+the intense heat outside and the machine exhaust, this place feels cool and
+relaxing, if not for the enemies about. 
 ~
 0 2105348 0
 D0
@@ -26816,6 +26876,10 @@ D2
 S
 #305241
 Delicate Machinery~
+All around you giant '02' symbols are etched into the hangar walls, the
+sounds of machinery whirring and soldiers shouting filling the air. Despite
+the intense heat outside and the machine exhaust, this place feels cool and
+relaxing, if not for the enemies about. 
 ~
 0 2105348 0
 D0
@@ -26833,6 +26897,10 @@ D2
 S
 #305242
 Delicate Machinery~
+All around you giant '02' symbols are etched into the hangar walls, the
+sounds of machinery whirring and soldiers shouting filling the air. Despite
+the intense heat outside and the machine exhaust, this place feels cool and
+relaxing, if not for the enemies about. 
 ~
 0 2105348 0
 D0
@@ -26850,6 +26918,10 @@ D2
 S
 #305243
 Delicate Machinery~
+All around you giant '02' symbols are etched into the hangar walls, the
+sounds of machinery whirring and soldiers shouting filling the air. Despite
+the intense heat outside and the machine exhaust, this place feels cool and
+relaxing, if not for the enemies about. 
 ~
 0 2105348 0
 D0
@@ -26867,6 +26939,10 @@ D2
 S
 #305244
 Delicate Machinery~
+All around you giant '02' symbols are etched into the hangar walls, the
+sounds of machinery whirring and soldiers shouting filling the air. Despite
+the intense heat outside and the machine exhaust, this place feels cool and
+relaxing, if not for the enemies about. 
 ~
 0 2105348 0
 D0
@@ -26884,6 +26960,10 @@ D2
 S
 #305245
 Delicate Machinery~
+All around you giant '02' symbols are etched into the hangar walls, the
+sounds of machinery whirring and soldiers shouting filling the air. Despite
+the intense heat outside and the machine exhaust, this place feels cool and
+relaxing, if not for the enemies about. 
 ~
 0 2105348 0
 D1
@@ -26897,6 +26977,9 @@ D2
 S
 #305246
 Posh Alcove~
+This section of the hangar has been decorated with lavish adornments and
+expensive furniture, practically laughing in the face of the men toiling
+around it. 
 ~
 0 2105348 0
 D1
@@ -26914,6 +26997,10 @@ D3
 S
 #305247
 Hangar 02~
+All around you giant '02' symbols are etched into the hangar walls, the
+sounds of machinery whirring and soldiers shouting filling the air. Despite
+the intense heat outside and the machine exhaust, this place feels cool and
+relaxing, if not for the enemies about. 
 ~
 0 2105348 0
 D0
@@ -26935,6 +27022,10 @@ D3
 S
 #305248
 Hangar 02~
+All around you giant '02' symbols are etched into the hangar walls, the
+sounds of machinery whirring and soldiers shouting filling the air. Despite
+the intense heat outside and the machine exhaust, this place feels cool and
+relaxing, if not for the enemies about. 
 ~
 0 2105348 0
 D0
@@ -26956,6 +27047,10 @@ D3
 S
 #305249
 Hangar 02~
+All around you giant '02' symbols are etched into the hangar walls, the
+sounds of machinery whirring and soldiers shouting filling the air. Despite
+the intense heat outside and the machine exhaust, this place feels cool and
+relaxing, if not for the enemies about. 
 ~
 0 2105348 0
 D0
@@ -26977,6 +27072,10 @@ D3
 S
 #305250
 Hangar 02~
+All around you giant '02' symbols are etched into the hangar walls, the
+sounds of machinery whirring and soldiers shouting filling the air. Despite
+the intense heat outside and the machine exhaust, this place feels cool and
+relaxing, if not for the enemies about. 
 ~
 0 2105348 0
 D0
@@ -26998,6 +27097,10 @@ D3
 S
 #305251
 Hangar 02~
+All around you giant '02' symbols are etched into the hangar walls, the
+sounds of machinery whirring and soldiers shouting filling the air. Despite
+the intense heat outside and the machine exhaust, this place feels cool and
+relaxing, if not for the enemies about. 
 ~
 0 2105348 0
 D0
@@ -27019,6 +27122,10 @@ D3
 S
 #305252
 Delicate Machinery~
+All around you giant '02' symbols are etched into the hangar walls, the
+sounds of machinery whirring and soldiers shouting filling the air. Despite
+the intense heat outside and the machine exhaust, this place feels cool and
+relaxing, if not for the enemies about. 
 ~
 0 2105348 0
 D0
@@ -27032,6 +27139,10 @@ D3
 S
 #305253
 Delicate Machinery~
+All around you giant '02' symbols are etched into the hangar walls, the
+sounds of machinery whirring and soldiers shouting filling the air. Despite
+the intense heat outside and the machine exhaust, this place feels cool and
+relaxing, if not for the enemies about. 
 ~
 0 2105348 0
 D0
@@ -27049,6 +27160,10 @@ D3
 S
 #305254
 Delicate Machinery~
+All around you giant '02' symbols are etched into the hangar walls, the
+sounds of machinery whirring and soldiers shouting filling the air. Despite
+the intense heat outside and the machine exhaust, this place feels cool and
+relaxing, if not for the enemies about. 
 ~
 0 2105348 0
 D0
@@ -27066,6 +27181,10 @@ D3
 S
 #305255
 Delicate Machinery~
+All around you giant '02' symbols are etched into the hangar walls, the
+sounds of machinery whirring and soldiers shouting filling the air. Despite
+the intense heat outside and the machine exhaust, this place feels cool and
+relaxing, if not for the enemies about. 
 ~
 0 2105348 0
 D0
@@ -27083,6 +27202,10 @@ D3
 S
 #305256
 Delicate Machinery~
+All around you giant '02' symbols are etched into the hangar walls, the
+sounds of machinery whirring and soldiers shouting filling the air. Despite
+the intense heat outside and the machine exhaust, this place feels cool and
+relaxing, if not for the enemies about. 
 ~
 0 2105348 0
 D0
@@ -27100,6 +27223,10 @@ D3
 S
 #305257
 Delicate Machinery~
+All around you giant '02' symbols are etched into the hangar walls, the
+sounds of machinery whirring and soldiers shouting filling the air. Despite
+the intense heat outside and the machine exhaust, this place feels cool and
+relaxing, if not for the enemies about. 
 ~
 0 2105348 0
 D0
@@ -27117,6 +27244,10 @@ D3
 S
 #305258
 Delicate Machinery~
+All around you giant '02' symbols are etched into the hangar walls, the
+sounds of machinery whirring and soldiers shouting filling the air. Despite
+the intense heat outside and the machine exhaust, this place feels cool and
+relaxing, if not for the enemies about. 
 ~
 0 2105348 0
 D2
@@ -27130,6 +27261,10 @@ D3
 S
 #305259
 Hangar 01~
+All around you giant '01' symbols are etched into the hangar walls, the
+sounds of machinery whirring and soldiers shouting filling the air. Despite
+the intense heat outside and the machine exhaust, this place feels cool and
+relaxing, if not for the enemies about. 
 ~
 0 2105348 1
 D0
@@ -27151,6 +27286,9 @@ D3
 S
 #305260
 Dismantled Aircraft~
+An enormous dismantled airplane sits at the center of the hangar here,
+its parts being repurposed into other machines, hauled off one by one by
+the engineers working the building. 
 ~
 0 2105348 1
 D0
@@ -27172,6 +27310,10 @@ D3
 S
 #305261
 Hangar 01~
+All around you giant '01' symbols are etched into the hangar walls, the
+sounds of machinery whirring and soldiers shouting filling the air. Despite
+the intense heat outside and the machine exhaust, this place feels cool and
+relaxing, if not for the enemies about. 
 ~
 0 2105348 1
 D0
@@ -27193,6 +27335,10 @@ D3
 S
 #305262
 Hangar 01~
+All around you giant '01' symbols are etched into the hangar walls, the
+sounds of machinery whirring and soldiers shouting filling the air. Despite
+the intense heat outside and the machine exhaust, this place feels cool and
+relaxing, if not for the enemies about. 
 ~
 0 2105348 1
 D0
@@ -27214,6 +27360,10 @@ D3
 S
 #305263
 Hangar 01~
+All around you giant '01' symbols are etched into the hangar walls, the
+sounds of machinery whirring and soldiers shouting filling the air. Despite
+the intense heat outside and the machine exhaust, this place feels cool and
+relaxing, if not for the enemies about. 
 ~
 0 2105348 1
 D0
@@ -27235,6 +27385,10 @@ D3
 S
 #305264
 Hangar 01~
+All around you giant '01' symbols are etched into the hangar walls, the
+sounds of machinery whirring and soldiers shouting filling the air. Despite
+the intense heat outside and the machine exhaust, this place feels cool and
+relaxing, if not for the enemies about. 
 ~
 0 2105348 1
 D0
@@ -27256,6 +27410,10 @@ D3
 S
 #305265
 Hangar 01~
+All around you giant '01' symbols are etched into the hangar walls, the
+sounds of machinery whirring and soldiers shouting filling the air. Despite
+the intense heat outside and the machine exhaust, this place feels cool and
+relaxing, if not for the enemies about. 
 ~
 0 2105348 1
 D1
@@ -27273,6 +27431,10 @@ D3
 S
 #305266
 Hangar 01~
+All around you giant '01' symbols are etched into the hangar walls, the
+sounds of machinery whirring and soldiers shouting filling the air. Despite
+the intense heat outside and the machine exhaust, this place feels cool and
+relaxing, if not for the enemies about. 
 ~
 0 2105348 1
 D2
@@ -27286,6 +27448,10 @@ D3
 S
 #305267
 Hangar 01~
+All around you giant '01' symbols are etched into the hangar walls, the
+sounds of machinery whirring and soldiers shouting filling the air. Despite
+the intense heat outside and the machine exhaust, this place feels cool and
+relaxing, if not for the enemies about. 
 ~
 0 2105348 1
 D0
@@ -27303,6 +27469,10 @@ D3
 S
 #305268
 Hangar 01~
+All around you giant '01' symbols are etched into the hangar walls, the
+sounds of machinery whirring and soldiers shouting filling the air. Despite
+the intense heat outside and the machine exhaust, this place feels cool and
+relaxing, if not for the enemies about. 
 ~
 0 2105348 1
 D0
@@ -27320,6 +27490,10 @@ D3
 S
 #305269
 Hangar 01~
+All around you giant '01' symbols are etched into the hangar walls, the
+sounds of machinery whirring and soldiers shouting filling the air. Despite
+the intense heat outside and the machine exhaust, this place feels cool and
+relaxing, if not for the enemies about. 
 ~
 0 2105348 1
 D0
@@ -27337,6 +27511,10 @@ D3
 S
 #305270
 Hangar 01~
+All around you giant '01' symbols are etched into the hangar walls, the
+sounds of machinery whirring and soldiers shouting filling the air. Despite
+the intense heat outside and the machine exhaust, this place feels cool and
+relaxing, if not for the enemies about. 
 ~
 0 2105348 1
 D0
@@ -27354,6 +27532,10 @@ D3
 S
 #305271
 Hangar 01~
+All around you giant '01' symbols are etched into the hangar walls, the
+sounds of machinery whirring and soldiers shouting filling the air. Despite
+the intense heat outside and the machine exhaust, this place feels cool and
+relaxing, if not for the enemies about. 
 ~
 0 2105348 1
 D0
@@ -27371,6 +27553,10 @@ D3
 S
 #305272
 Hangar 01~
+All around you giant '01' symbols are etched into the hangar walls, the
+sounds of machinery whirring and soldiers shouting filling the air. Despite
+the intense heat outside and the machine exhaust, this place feels cool and
+relaxing, if not for the enemies about. 
 ~
 0 2105348 1
 D0
@@ -27384,6 +27570,10 @@ D3
 S
 #305273
 Hangar 01~
+All around you giant '01' symbols are etched into the hangar walls, the
+sounds of machinery whirring and soldiers shouting filling the air. Despite
+the intense heat outside and the machine exhaust, this place feels cool and
+relaxing, if not for the enemies about. 
 ~
 0 2105348 1
 D0
@@ -27397,6 +27587,10 @@ D1
 S
 #305274
 Hangar 01~
+All around you giant '01' symbols are etched into the hangar walls, the
+sounds of machinery whirring and soldiers shouting filling the air. Despite
+the intense heat outside and the machine exhaust, this place feels cool and
+relaxing, if not for the enemies about. 
 ~
 0 2105348 1
 D0
@@ -27414,6 +27608,10 @@ D2
 S
 #305275
 Hangar 01~
+All around you giant '01' symbols are etched into the hangar walls, the
+sounds of machinery whirring and soldiers shouting filling the air. Despite
+the intense heat outside and the machine exhaust, this place feels cool and
+relaxing, if not for the enemies about. 
 ~
 0 2105348 1
 D0
@@ -27431,6 +27629,10 @@ D2
 S
 #305276
 Hangar 01~
+All around you giant '01' symbols are etched into the hangar walls, the
+sounds of machinery whirring and soldiers shouting filling the air. Despite
+the intense heat outside and the machine exhaust, this place feels cool and
+relaxing, if not for the enemies about. 
 ~
 0 2105348 1
 D0
@@ -27448,6 +27650,10 @@ D2
 S
 #305277
 Hangar 01~
+All around you giant '01' symbols are etched into the hangar walls, the
+sounds of machinery whirring and soldiers shouting filling the air. Despite
+the intense heat outside and the machine exhaust, this place feels cool and
+relaxing, if not for the enemies about. 
 ~
 0 2105348 1
 D0
@@ -27465,6 +27671,10 @@ D2
 S
 #305278
 Hangar 01~
+All around you giant '01' symbols are etched into the hangar walls, the
+sounds of machinery whirring and soldiers shouting filling the air. Despite
+the intense heat outside and the machine exhaust, this place feels cool and
+relaxing, if not for the enemies about. 
 ~
 0 2105348 1
 D0
@@ -27482,6 +27692,10 @@ D2
 S
 #305279
 Hangar 01~
+All around you giant '01' symbols are etched into the hangar walls, the
+sounds of machinery whirring and soldiers shouting filling the air. Despite
+the intense heat outside and the machine exhaust, this place feels cool and
+relaxing, if not for the enemies about. 
 ~
 0 2105348 1
 D1
@@ -27495,6 +27709,8 @@ D2
 S
 #305280
 Suspicious Path~
+A very well hidden path leads off from the side of Hangar 02 here,
+winding through bushes and piles of scrap looming overhead. 
 ~
 0 2105348 1
 D1
@@ -27508,6 +27724,8 @@ D3
 S
 #305281
 Suspicious Path~
+A very well hidden path leads off from the side of Hangar 02 here,
+winding through bushes and piles of scrap looming overhead.
 ~
 0 2105348 1
 D1
@@ -27521,6 +27739,8 @@ D3
 S
 #305282
 Suspicious Path~
+A very well hidden path leads off from the side of Hangar 02 here,
+winding through bushes and piles of scrap looming overhead.
 ~
 0 2105348 1
 D1
@@ -27534,6 +27754,8 @@ D3
 S
 #305283
 Suspicious Path~
+A very well hidden path leads off from the side of Hangar 02 here,
+winding through bushes and piles of scrap looming overhead.
 ~
 0 2105348 1
 D1
@@ -27547,6 +27769,8 @@ D3
 S
 #305284
 Suspicious Path~
+A very well hidden path leads off from the side of Hangar 02 here,
+winding through bushes and piles of scrap looming overhead.
 ~
 0 2105348 1
 D1
@@ -27560,6 +27784,8 @@ D3
 S
 #305285
 Suspicious Path~
+A very well hidden path leads off from the side of Hangar 02 here,
+winding through bushes and piles of scrap looming overhead.
 ~
 0 2105348 1
 D0
@@ -27573,6 +27799,8 @@ D3
 S
 #305286
 A bend in the path~
+A very well hidden path leads off from the side of Hangar 02 here,
+winding through bushes and piles of scrap looming overhead.
 ~
 0 2105348 1
 D0
@@ -27586,6 +27814,8 @@ D2
 S
 #305287
 Suspicious Path~
+A very well hidden path leads off from the side of Hangar 02 here,
+winding through bushes and piles of scrap looming overhead.
 ~
 0 2105348 1
 D0
@@ -27599,6 +27829,8 @@ D2
 S
 #305288
 Suspicious Path~
+A very well hidden path leads off from the side of Hangar 02 here,
+winding through bushes and piles of scrap looming overhead.
 ~
 0 2105348 1
 D0
@@ -27612,6 +27844,9 @@ D2
 S
 #305289
 Before an Ominous Building~
+The suspicious path ends in front of a huge building, not dissimilar
+from the hangars to the west.  However, a strange sense of foreboding
+emanates from within, as well as a mysterious power. 
 ~
 0 2105348 1
 D1
@@ -27625,6 +27860,8 @@ D2
 S
 #305290
 Gero Research Facility~
+Doctor Gero's personal facility opens before you, a set of double doors
+welcoming you inside of their own accord. 
 ~
 0 2105348 0
 D1
@@ -27638,6 +27875,8 @@ D3
 S
 #305291
 A Sanitized Hallway~
+The hall here is perfectly white and clinical, an eerie silence
+permeating this place. 
 ~
 0 2105348 0
 D1
@@ -27651,6 +27890,8 @@ D3
 S
 #305292
 Before a Plastisteel Observation Room~
+The hall ends in front of an observation room, the sort one might find
+in a surgeon's theater. 
 ~
 0 2105348 0
 D1
@@ -27664,6 +27905,8 @@ D3
 S
 #305293
 Observation Room 01~
+This room is equipped with a frightening-looking apparatus, mechanical
+and menacing as it whirs to life around the 'good doctor' in front of it. 
 ~
 0 2105348 0
 D3
@@ -27681,6 +27924,9 @@ mpat 305294 mpforce $n look
 S
 #305294
 Observation Room 02~
+This room is far from as clean as the previous observation room.  The
+walls are stained black and brown, with dried...  Something splattered here
+and there. 
 ~
 0 2105348 0
 D0
@@ -27694,6 +27940,10 @@ mea $n &cThe door seals shut behind you, becoming indistinguishable from the res
 S
 #305295
 A Sanitized Hallway~
+The door to the south is sealed, and it appears this room is far cleaner
+than the second observation area, if only because tiny robots skitter here
+and there, scrubbing and sanitizing the remnants of whatever tests have
+been conducted. 
 ~
 0 2105348 0
 D0
@@ -27715,6 +27965,9 @@ mea $n &cThe door seals shut behind you, becoming indistinguishable from the res
 S
 #305296
 Subject Living Quarters~
+This room is equipped for test subjects to rest from a hard day of
+who-knows-what.  A bed sits in the corner, and a not quite private toilet
+and shower is across from it. 
 ~
 0 538976260 0
 D1
@@ -27724,6 +27977,8 @@ D1
 S
 #305297
 Data 'Acquisition' Center~
+Computer monitors line the walls, alight with information that appears
+to be collected live from your very person. 
 ~
 0 2105348 0
 D1
@@ -27737,6 +27992,8 @@ D3
 S
 #305298
 Data 'Acquisition' Center~
+Computer monitors line the walls, alight with information that appears
+to be collected live from your very person. 
 ~
 0 2105348 0
 D1
@@ -27750,6 +28007,9 @@ D3
 S
 #305299
 A Mass of Wires~
+No longer under the pretense of a laboratory or clinic, the walls here
+are made of masses of wires and odd machinery, consistently moving and
+producing androids from the results of Doctor Gero's testing. 
 ~
 0 2105344 0
 D0
@@ -27767,6 +28027,9 @@ D3
 S
 #305300
 A Mass of Wires~
+No longer under the pretense of a laboratory or clinic, the walls here
+are made of masses of wires and odd machinery, consistently moving and
+producing androids from the results of Doctor Gero's testing. 
 ~
 0 2105344 0
 D0
@@ -27784,6 +28047,9 @@ D2
 S
 #305301
 A Mass of Wires~
+No longer under the pretense of a laboratory or clinic, the walls here
+are made of masses of wires and odd machinery, consistently moving and
+producing androids from the results of Doctor Gero's testing. 
 ~
 0 2105344 0
 D0
@@ -27801,6 +28067,9 @@ D2
 S
 #305302
 A Mass of Wires~
+No longer under the pretense of a laboratory or clinic, the walls here
+are made of masses of wires and odd machinery, consistently moving and
+producing androids from the results of Doctor Gero's testing. 
 ~
 0 2105344 0
 D1
@@ -27814,6 +28083,9 @@ D2
 S
 #305303
 A Mass of Wires~
+No longer under the pretense of a laboratory or clinic, the walls here
+are made of masses of wires and odd machinery, consistently moving and
+producing androids from the results of Doctor Gero's testing. 
 ~
 0 2105344 0
 D1
@@ -27831,6 +28103,9 @@ D3
 S
 #305304
 A Mass of Wires~
+No longer under the pretense of a laboratory or clinic, the walls here
+are made of masses of wires and odd machinery, consistently moving and
+producing androids from the results of Doctor Gero's testing. 
 ~
 0 2105344 0
 D1
@@ -27848,6 +28123,9 @@ D3
 S
 #305305
 A Mass of Wires~
+No longer under the pretense of a laboratory or clinic, the walls here
+are made of masses of wires and odd machinery, consistently moving and
+producing androids from the results of Doctor Gero's testing. 
 ~
 0 2105344 0
 D2
@@ -27861,6 +28139,9 @@ D3
 S
 #305306
 A Mass of Wires~
+No longer under the pretense of a laboratory or clinic, the walls here
+are made of masses of wires and odd machinery, consistently moving and
+producing androids from the results of Doctor Gero's testing. 
 ~
 0 2105344 0
 D0
@@ -27878,6 +28159,9 @@ D3
 S
 #305307
 A Mass of Wires~
+No longer under the pretense of a laboratory or clinic, the walls here
+are made of masses of wires and odd machinery, consistently moving and
+producing androids from the results of Doctor Gero's testing. 
 ~
 0 2105344 0
 D0
@@ -27899,6 +28183,9 @@ D3
 S
 #305308
 A Mass of Wires~
+No longer under the pretense of a laboratory or clinic, the walls here
+are made of masses of wires and odd machinery, consistently moving and
+producing androids from the results of Doctor Gero's testing. 
 ~
 0 2105344 0
 D0
@@ -27920,6 +28207,9 @@ D3
 S
 #305309
 A Mass of Wires~
+No longer under the pretense of a laboratory or clinic, the walls here
+are made of masses of wires and odd machinery, consistently moving and
+producing androids from the results of Doctor Gero's testing. 
 ~
 0 2105344 0
 D0
@@ -27941,6 +28231,9 @@ D3
 S
 #305310
 A Mass of Wires~
+No longer under the pretense of a laboratory or clinic, the walls here
+are made of masses of wires and odd machinery, consistently moving and
+producing androids from the results of Doctor Gero's testing. 
 ~
 0 2105344 0
 D0
@@ -27962,6 +28255,9 @@ D3
 S
 #305311
 A Mass of Wires~
+No longer under the pretense of a laboratory or clinic, the walls here
+are made of masses of wires and odd machinery, consistently moving and
+producing androids from the results of Doctor Gero's testing. 
 ~
 0 2105344 0
 D0
@@ -27979,6 +28275,9 @@ D3
 S
 #305312
 A Mass of Wires~
+No longer under the pretense of a laboratory or clinic, the walls here
+are made of masses of wires and odd machinery, consistently moving and
+producing androids from the results of Doctor Gero's testing. 
 ~
 0 2105344 0
 D0
@@ -27996,6 +28295,9 @@ D3
 S
 #305313
 A Mass of Wires~
+No longer under the pretense of a laboratory or clinic, the walls here
+are made of masses of wires and odd machinery, consistently moving and
+producing androids from the results of Doctor Gero's testing. 
 ~
 0 2105344 0
 D0
@@ -28013,6 +28315,9 @@ D3
 S
 #305314
 A Mass of Wires~
+No longer under the pretense of a laboratory or clinic, the walls here
+are made of masses of wires and odd machinery, consistently moving and
+producing androids from the results of Doctor Gero's testing. 
 ~
 0 2105344 0
 D0
@@ -28030,6 +28335,8 @@ D3
 S
 #305315
 Data 'Acquisition' Center~
+Computer monitors line the walls, alight with information that appears
+to be collected live from your very person. 
 ~
 0 2105348 0
 D1
@@ -28043,6 +28350,8 @@ D3
 S
 #305316
 Stairwell~
+The hall leads back to the west here, as well as further down into the
+relative darkness of the facility below. 
 ~
 0 2105348 0
 D3
@@ -28056,6 +28365,8 @@ D5
 S
 #305317
 Stairwell~
+Loud mechanical noises fill this space further into the facility, and
+the sounds of destruction as other subjects are reaped and disposed of. 
 ~
 0 2105348 0
 D0
@@ -28069,6 +28380,9 @@ D4
 S
 #305318
 Access Hallway~
+This hallway runs between several 'data acquisition' rooms, but the
+sounds and smells coming from each hint that the science being performed
+here is far from being on the level. 
 ~
 0 2105348 1
 D0
@@ -28090,6 +28404,9 @@ D3
 S
 #305319
 A half-destroyed room~
+This room is littered with refuse and broken parts, as well as the
+biological material of failed test subjects, half-crushed beneath crumbling
+walls of wires. 
 ~
 0 2105344 0
 D1
@@ -28107,6 +28424,9 @@ D3
 S
 #305320
 A half-destroyed room~
+This room is littered with refuse and broken parts, as well as the
+biological material of failed test subjects, half-crushed beneath crumbling
+walls of wires. 
 ~
 0 2105344 0
 D1
@@ -28124,6 +28444,9 @@ D3
 S
 #305321
 A half-destroyed room~
+This room is littered with refuse and broken parts, as well as the
+biological material of failed test subjects, half-crushed beneath crumbling
+walls of wires. 
 ~
 0 2105344 0
 D0
@@ -28141,6 +28464,9 @@ D2
 S
 #305322
 A half-destroyed room~
+This room is littered with refuse and broken parts, as well as the
+biological material of failed test subjects, half-crushed beneath crumbling
+walls of wires. 
 ~
 0 2105344 0
 D0
@@ -28154,6 +28480,9 @@ D1
 S
 #305323
 A half-destroyed room~
+This room is littered with refuse and broken parts, as well as the
+biological material of failed test subjects, half-crushed beneath crumbling
+walls of wires. 
 ~
 0 2105344 0
 D0
@@ -28171,6 +28500,9 @@ D3
 S
 #305324
 A half-destroyed room~
+This room is littered with refuse and broken parts, as well as the
+biological material of failed test subjects, half-crushed beneath crumbling
+walls of wires. 
 ~
 0 2105344 0
 D0
@@ -28192,6 +28524,9 @@ D3
 S
 #305325
 A half-destroyed room~
+This room is littered with refuse and broken parts, as well as the
+biological material of failed test subjects, half-crushed beneath crumbling
+walls of wires. 
 ~
 0 2105344 0
 D1
@@ -28209,6 +28544,9 @@ D3
 S
 #305326
 A half-destroyed room~
+This room is littered with refuse and broken parts, as well as the
+biological material of failed test subjects, half-crushed beneath crumbling
+walls of wires. 
 ~
 0 2105344 0
 D2
@@ -28222,6 +28560,9 @@ D3
 S
 #305327
 A half-destroyed room~
+This room is littered with refuse and broken parts, as well as the
+biological material of failed test subjects, half-crushed beneath crumbling
+walls of wires. 
 ~
 0 2105344 0
 D0
@@ -28239,6 +28580,9 @@ D3
 S
 #305328
 A half-destroyed room~
+This room is littered with refuse and broken parts, as well as the
+biological material of failed test subjects, half-crushed beneath crumbling
+walls of wires. 
 ~
 0 2105344 0
 D0
@@ -28252,6 +28596,9 @@ D3
 S
 #305329
 A half-destroyed room~
+This room is littered with refuse and broken parts, as well as the
+biological material of failed test subjects, half-crushed beneath crumbling
+walls of wires. 
 ~
 0 2105344 0
 D0
@@ -28269,6 +28616,9 @@ D3
 S
 #305330
 A half-destroyed room~
+This room is littered with refuse and broken parts, as well as the
+biological material of failed test subjects, half-crushed beneath crumbling
+walls of wires. 
 ~
 0 2105344 0
 D0
@@ -28282,6 +28632,9 @@ D3
 S
 #305331
 A half-destroyed room~
+This room is littered with refuse and broken parts, as well as the
+biological material of failed test subjects, half-crushed beneath crumbling
+walls of wires. 
 ~
 0 2105344 0
 D0
@@ -28299,6 +28652,9 @@ D3
 S
 #305332
 A half-destroyed room~
+This room is littered with refuse and broken parts, as well as the
+biological material of failed test subjects, half-crushed beneath crumbling
+walls of wires. 
 ~
 0 2105344 0
 D0
@@ -28320,6 +28676,9 @@ D3
 S
 #305333
 A half-destroyed room~
+This room is littered with refuse and broken parts, as well as the
+biological material of failed test subjects, half-crushed beneath crumbling
+walls of wires. 
 ~
 0 2105344 0
 D1
@@ -28337,6 +28696,9 @@ D3
 S
 #305334
 A half-destroyed room~
+This room is littered with refuse and broken parts, as well as the
+biological material of failed test subjects, half-crushed beneath crumbling
+walls of wires. 
 ~
 0 2105344 0
 D1
@@ -28350,6 +28712,9 @@ D2
 S
 #305335
 A half-destroyed room~
+This room is littered with refuse and broken parts, as well as the
+biological material of failed test subjects, half-crushed beneath crumbling
+walls of wires. 
 ~
 0 2105344 0
 D0
@@ -28367,6 +28732,9 @@ D2
 S
 #305336
 A half-destroyed room~
+This room is littered with refuse and broken parts, as well as the
+biological material of failed test subjects, half-crushed beneath crumbling
+walls of wires. 
 ~
 0 2105344 0
 D0
@@ -28380,6 +28748,9 @@ D1
 S
 #305337
 Access Hallway~
+This hallway runs between several 'data acquisition' rooms, but the
+sounds and smells coming from each hint that the science being performed
+here is far from being on the level. 
 ~
 0 2105348 0
 D0
@@ -28393,6 +28764,9 @@ D2
 S
 #305338
 Access Hallway~
+This hallway runs between several 'data acquisition' rooms, but the
+sounds and smells coming from each hint that the science being performed
+here is far from being on the level. 
 ~
 0 2105348 0
 D0
@@ -28406,6 +28780,8 @@ D2
 S
 #305339
 Before an elevator~
+The access hallway opens into an elevator here, strangely untouched by
+the chaos around it. 
 ~
 0 2105348 0
 D2
@@ -28423,6 +28799,9 @@ mpat 305340 mpforce $n look
 S
 #305340
 A Gooey Mess~
+The floor here is dark and sticky with some sort of substance, but on
+closer inspection so too are the walls and ceiling, a membrane of sort sort
+leaking disgusting, viscous fluid. 
 ~
 0 2105348 1
 D0
@@ -28432,6 +28811,9 @@ D0
 S
 #305341
 Glowing Pods~
+Innumerous pods of glowing green liquid line the walls, secreting
+disgusting substances over the floor.  Is this the culmination of Doctor
+Gero's research?  
 ~
 0 2105348 1
 D2
@@ -28752,6 +29134,10 @@ Floating in a void~
 S
 #305400
 Deep in the mountains~
+For as far as the eye can see, this place is littered with towering
+mountain ranges and craggy rocks with barely a shrub between them.  There
+isn't much of a path to walk on, but it makes little difference to an
+acrobatic warrior. 
 ~
 0 2105348 1
 D0
@@ -28765,6 +29151,9 @@ D2
 S
 #305401
 A rocky crag~
+A pile of rubble crumbles down from the edges of the nearby mountains
+here, nearly burying a path down into the relative darkness of the gorge
+below. 
 ~
 0 2105348 1
 D2
@@ -28778,6 +29167,8 @@ D5
 S
 #305402
 Inside a rocky crag~
+The air inside this crag is hazy and difficult to see through, as if a
+strange mist were blowing in from the north. 
 ~
 0 2105348 1
 D0
@@ -28791,6 +29182,9 @@ D4
 S
 #305403
 A hazy mist~
+The tentative threads holding together this time and space are visible
+here, much like the fractured time during your visit to the Red Ribbon
+base.  A familiar feeling to be sure. 
 ~
 0 2105348 1
 D0
@@ -28814,6 +29208,8 @@ mea $n &cSomehow you feel she's not entirely sincere.&d
 S
 #305404
 A rocky wasteland~
+Deep wounds travel the length of the "path" here, the air abuzz with the
+remnants of whatever energy created them. 
 ~
 0 2105348 1
 D0
@@ -28827,6 +29223,8 @@ D2
 S
 #305405
 A rocky wasteland~
+Deep wounds travel the length of the "path" here, the air abuzz with the
+remnants of whatever energy created them. 
 ~
 0 2105348 1
 D2
@@ -28840,6 +29238,8 @@ D5
 S
 #305406
 A rocky wasteland~
+Deep wounds travel the length of the "path" here, the air abuzz with the
+remnants of whatever energy created them. 
 ~
 0 2105348 1
 D0
@@ -28853,6 +29253,8 @@ D4
 S
 #305407
 A rocky wasteland~
+Deep wounds travel the length of the "path" here, the air abuzz with the
+remnants of whatever energy created them. 
 ~
 0 2105348 1
 D2
@@ -28866,6 +29268,8 @@ D3
 S
 #305408
 A rocky wasteland~
+Deep wounds travel the length of the "path" here, the air abuzz with the
+remnants of whatever energy created them. 
 ~
 0 2105348 1
 D0
@@ -28879,6 +29283,10 @@ D1
 S
 #305409
 An ominous crater~
+The signs of battle are far more apparent here, what with this entire
+place being nothing but an immense, smoldering crater.  Individual cracks
+from the upheaved earth create their own paths in most directions, but
+where they lead is ambiguous at best. 
 ~
 0 2105348 1
 D0
@@ -28900,6 +29308,9 @@ D3
 S
 #305410
 Path between craters~
+Chattering noises surround you as you walk through this crumbling space
+between the blasted land.  Someone--or something--is lurking in wait behind
+every shadow. 
 ~
 0 2105344 1
 D1
@@ -28913,6 +29324,9 @@ D3
 S
 #305411
 Battle-scarred ditch~
+Tiny green creatures lurk in the pocked and shattered earth, emerging
+from the smoldering remains of plateau recently destroyed.  There seems to
+be nothing here but more destruction. 
 ~
 0 2105344 1
 D0
@@ -28930,6 +29344,9 @@ D3
 S
 #305412
 Battle-scarred ditch~
+Tiny green creatures lurk in the pocked and shattered earth, emerging
+from the smoldering remains of plateau recently destroyed.  There seems to
+be nothing here but more destruction. 
 ~
 0 2105344 1
 D0
@@ -28943,6 +29360,9 @@ D1
 S
 #305413
 Battle-scarred ditch~
+Tiny green creatures lurk in the pocked and shattered earth, emerging
+from the smoldering remains of plateau recently destroyed.  There seems to
+be nothing here but more destruction. 
 ~
 0 2105344 1
 D1
@@ -28956,6 +29376,9 @@ D2
 S
 #305414
 Battle-scarred ditch~
+Tiny green creatures lurk in the pocked and shattered earth, emerging
+from the smoldering remains of plateau recently destroyed.  There seems to
+be nothing here but more destruction. 
 ~
 0 2105344 1
 D2
@@ -28969,6 +29392,9 @@ D3
 S
 #305415
 Path between craters~
+Chattering noises surround you as you walk through this crumbling space
+between the blasted land.  Someone--or something--is lurking in wait behind
+every shadow. 
 ~
 0 2105344 1
 D1
@@ -28982,6 +29408,9 @@ D3
 S
 #305416
 Battle-scarred ditch~
+Tiny green creatures lurk in the pocked and shattered earth, emerging
+from the smoldering remains of plateau recently destroyed.  There seems to
+be nothing here but more destruction. 
 ~
 0 2105344 1
 D0
@@ -28999,6 +29428,9 @@ D3
 S
 #305417
 Battle-scarred ditch~
+Tiny green creatures lurk in the pocked and shattered earth, emerging
+from the smoldering remains of plateau recently destroyed.  There seems to
+be nothing here but more destruction. 
 ~
 0 2105344 1
 D0
@@ -29012,6 +29444,9 @@ D3
 S
 #305418
 Battle-scarred ditch~
+Tiny green creatures lurk in the pocked and shattered earth, emerging
+from the smoldering remains of plateau recently destroyed.  There seems to
+be nothing here but more destruction. 
 ~
 0 2105344 1
 D1
@@ -29025,6 +29460,9 @@ D2
 S
 #305419
 Battle-scarred ditch~
+Tiny green creatures lurk in the pocked and shattered earth, emerging
+from the smoldering remains of plateau recently destroyed.  There seems to
+be nothing here but more destruction. 
 ~
 0 2105344 1
 D2
@@ -29038,6 +29476,9 @@ D3
 S
 #305420
 Among many craters~
+The land is easier to walk here, if only due to some massive blast carving its way through.
+Smaller individual craters litter the landscape, and the devastation continues further
+to the north.
 ~
 0 2105344 1
 D0
@@ -29051,6 +29492,9 @@ D2
 S
 #305421
 Among many craters~
+The land is easier to walk here, if only due to some massive blast carving its way through.
+Smaller individual craters litter the landscape, and the devastation continues further
+to the north.
 ~
 0 2105344 1
 D0
@@ -29064,6 +29508,9 @@ D2
 S
 #305422
 Among many craters~
+The land is easier to walk here, if only due to some massive blast carving its way through.
+Smaller individual craters litter the landscape, and the devastation continues further
+to the north.
 ~
 0 2105344 1
 D0
@@ -29077,6 +29524,9 @@ D2
 S
 #305423
 Among many craters~
+The land is easier to walk here, if only due to some massive blast carving its way through.
+Smaller individual craters litter the landscape, and the devastation continues further
+to the west.
 ~
 0 2105344 1
 D2
@@ -29090,6 +29540,9 @@ D3
 S
 #305424
 Among many craters~
+The land is easier to walk here, if only due to some massive blast carving its way through.
+Smaller individual craters litter the landscape, and the devastation continues further
+to the west.
 ~
 0 2105344 1
 D1
@@ -29103,6 +29556,8 @@ D3
 S
 #305425
 A sharp incline~
+The land sharply inclines here at the edge of a shattered plateau, where
+the walls have broken down just enough to climb up without much effort. 
 ~
 0 2105344 1
 D0
@@ -29116,6 +29571,10 @@ D1
 S
 #305426
 Atop a Sandy Plateau~
+High above the craters littering the south, this plateau is relatively
+untouched by whatever battle had occurred here, though that means little
+for the sense of danger that permeates it.  An unsettling presence lies
+further to the north. 
 ~
 0 2105348 1
 D0
@@ -29134,6 +29593,9 @@ mea $n &CDoctor Emalia says 'Watch yourself, $n. The readings are out of control
 S
 #305427
 Sandy Plateau~
+The top of this plateau shimmers and sways in the light, solid underfoot
+but seemingly glitching in and out of existence as time and space distort
+eerily around you. 
 ~
 0 2105344 1
 D0
@@ -29155,6 +29617,9 @@ D3
 S
 #305428
 Sandy Plateau~
+The top of this plateau shimmers and sways in the light, solid underfoot
+but seemingly glitching in and out of existence as time and space distort
+eerily around you. 
 ~
 0 2105344 1
 D0
@@ -29176,6 +29641,9 @@ D3
 S
 #305429
 Sandy Plateau~
+The top of this plateau shimmers and sways in the light, solid underfoot
+but seemingly glitching in and out of existence as time and space distort
+eerily around you. 
 ~
 0 2105344 1
 D0
@@ -29197,6 +29665,9 @@ D3
 S
 #305430
 Sandy Plateau~
+The top of this plateau shimmers and sways in the light, solid underfoot
+but seemingly glitching in and out of existence as time and space distort
+eerily around you. 
 ~
 0 2105344 1
 D0
@@ -29217,7 +29688,10 @@ D3
 0 -1 305448
 S
 #305431
-Sandy Plateau~
+Westward-Running Groove~
+The top of this plateau shimmers and sways in the light, solid underfoot
+but seemingly glitching in and out of existence as time and space distort
+eerily around you. 
 ~
 0 2105344 1
 D0
@@ -29239,6 +29713,9 @@ D3
 S
 #305432
 Sandy Plateau~
+The top of this plateau shimmers and sways in the light, solid underfoot
+but seemingly glitching in and out of existence as time and space distort
+eerily around you.
 ~
 0 2105344 1
 D0
@@ -29260,6 +29737,9 @@ D3
 S
 #305433
 Sandy Plateau~
+The top of this plateau shimmers and sways in the light, solid underfoot
+but seemingly glitching in and out of existence as time and space distort
+eerily around you. 
 ~
 0 2105344 1
 D0
@@ -29281,6 +29761,9 @@ D3
 S
 #305434
 Sandy Plateau~
+The top of this plateau shimmers and sways in the light, solid underfoot
+but seemingly glitching in and out of existence as time and space distort
+eerily around you. 
 ~
 0 2105344 1
 D0
@@ -29302,6 +29785,9 @@ D3
 S
 #305435
 Sandy Plateau~
+The top of this plateau shimmers and sways in the light, solid underfoot
+but seemingly glitching in and out of existence as time and space distort
+eerily around you. 
 ~
 0 2105344 1
 D1
@@ -29319,6 +29805,9 @@ D3
 S
 #305436
 Sandy Plateau~
+The top of this plateau shimmers and sways in the light, solid underfoot
+but seemingly glitching in and out of existence as time and space distort
+eerily around you. 
 ~
 0 2105344 1
 D2
@@ -29332,6 +29821,9 @@ D3
 S
 #305437
 Sandy Plateau~
+The top of this plateau shimmers and sways in the light, solid underfoot
+but seemingly glitching in and out of existence as time and space distort
+eerily around you. 
 ~
 0 2105344 1
 D0
@@ -29349,6 +29841,9 @@ D3
 S
 #305438
 Sandy Plateau~
+The top of this plateau shimmers and sways in the light, solid underfoot
+but seemingly glitching in and out of existence as time and space distort
+eerily around you. 
 ~
 0 2105344 1
 D0
@@ -29366,6 +29861,9 @@ D3
 S
 #305439
 Sandy Plateau~
+The top of this plateau shimmers and sways in the light, solid underfoot
+but seemingly glitching in and out of existence as time and space distort
+eerily around you. 
 ~
 0 2105344 1
 D0
@@ -29382,7 +29880,10 @@ D3
 0 -1 305432
 S
 #305440
-Sandy Plateau~
+Westward-Running Groove~
+The top of this plateau shimmers and sways in the light, solid underfoot
+but seemingly glitching in and out of existence as time and space distort
+eerily around you. 
 ~
 0 2105344 1
 D0
@@ -29400,6 +29901,9 @@ D3
 S
 #305441
 Sandy Plateau~
+The top of this plateau shimmers and sways in the light, solid underfoot
+but seemingly glitching in and out of existence as time and space distort
+eerily around you. 
 ~
 0 2105344 1
 D0
@@ -29417,6 +29921,9 @@ D3
 S
 #305442
 Sandy Plateau~
+The top of this plateau shimmers and sways in the light, solid underfoot
+but seemingly glitching in and out of existence as time and space distort
+eerily around you. 
 ~
 0 2105344 1
 D0
@@ -29434,6 +29941,9 @@ D3
 S
 #305443
 Sandy Plateau~
+The top of this plateau shimmers and sways in the light, solid underfoot
+but seemingly glitching in and out of existence as time and space distort
+eerily around you. 
 ~
 0 2105344 1
 D0
@@ -29451,6 +29961,9 @@ D3
 S
 #305444
 Sandy Plateau~
+The top of this plateau shimmers and sways in the light, solid underfoot
+but seemingly glitching in and out of existence as time and space distort
+eerily around you. 
 ~
 0 2105344 1
 D0
@@ -29464,6 +29977,9 @@ D3
 S
 #305445
 Sandy Plateau~
+The top of this plateau shimmers and sways in the light, solid underfoot
+but seemingly glitching in and out of existence as time and space distort
+eerily around you. 
 ~
 0 2105344 1
 D0
@@ -29477,6 +29993,9 @@ D1
 S
 #305446
 Sandy Plateau~
+The top of this plateau shimmers and sways in the light, solid underfoot
+but seemingly glitching in and out of existence as time and space distort
+eerily around you. 
 ~
 0 2105344 1
 D0
@@ -29494,6 +30013,9 @@ D2
 S
 #305447
 Sandy Plateau~
+The top of this plateau shimmers and sways in the light, solid underfoot
+but seemingly glitching in and out of existence as time and space distort
+eerily around you. 
 ~
 0 2105344 1
 D0
@@ -29511,6 +30033,9 @@ D2
 S
 #305448
 Sandy Plateau~
+The top of this plateau shimmers and sways in the light, solid underfoot
+but seemingly glitching in and out of existence as time and space distort
+eerily around you. 
 ~
 0 2105344 1
 D0
@@ -29527,7 +30052,10 @@ D2
 0 -1 305447
 S
 #305449
-Sandy Plateau~
+Westward-Running Groove~
+The top of this plateau shimmers and sways in the light, solid underfoot
+but seemingly glitching in and out of existence as time and space distort
+eerily around you. 
 ~
 0 2105344 1
 D0
@@ -29549,6 +30077,9 @@ D3
 S
 #305450
 Sandy Plateau~
+The top of this plateau shimmers and sways in the light, solid underfoot
+but seemingly glitching in and out of existence as time and space distort
+eerily around you. 
 ~
 0 2105344 1
 D0
@@ -29566,6 +30097,9 @@ D2
 S
 #305451
 Sandy Plateau~
+The top of this plateau shimmers and sways in the light, solid underfoot
+but seemingly glitching in and out of existence as time and space distort
+eerily around you. 
 ~
 0 2105344 1
 D0
@@ -29583,6 +30117,9 @@ D2
 S
 #305452
 Sandy Plateau~
+The top of this plateau shimmers and sways in the light, solid underfoot
+but seemingly glitching in and out of existence as time and space distort
+eerily around you. 
 ~
 0 2105344 1
 D0
@@ -29600,6 +30137,9 @@ D2
 S
 #305453
 Sandy Plateau~
+The top of this plateau shimmers and sways in the light, solid underfoot
+but seemingly glitching in and out of existence as time and space distort
+eerily around you. 
 ~
 0 2105344 1
 D1
@@ -29613,6 +30153,9 @@ D2
 S
 #305454
 Teetering rocks~
+A precarious set of rocks create a bridge between two plateaus here, but
+for how long, who knows?  They look as though they could crumble away at
+the slightest touch. 
 ~
 0 2105348 1
 D1
@@ -29626,6 +30169,9 @@ D3
 S
 #305455
 Western Plateau~
+The top of this plateau shimmers and sways in the light, solid underfoot
+but seemingly glitching in and out of existence as time and space distort
+eerily around you. 
 ~
 0 2105344 1
 D0
@@ -29647,6 +30193,9 @@ D3
 S
 #305456
 Western Plateau~
+The top of this plateau shimmers and sways in the light, solid underfoot
+but seemingly glitching in and out of existence as time and space distort
+eerily around you. 
 ~
 0 2105344 1
 D0
@@ -29668,6 +30217,9 @@ D3
 S
 #305457
 Western Plateau~
+The top of this plateau shimmers and sways in the light, solid underfoot
+but seemingly glitching in and out of existence as time and space distort
+eerily around you. 
 ~
 0 2105344 1
 D0
@@ -29689,6 +30241,9 @@ D3
 S
 #305458
 Western Plateau~
+The top of this plateau shimmers and sways in the light, solid underfoot
+but seemingly glitching in and out of existence as time and space distort
+eerily around you. 
 ~
 0 2105344 1
 D0
@@ -29710,6 +30265,9 @@ D3
 S
 #305459
 Western Plateau~
+The top of this plateau shimmers and sways in the light, solid underfoot
+but seemingly glitching in and out of existence as time and space distort
+eerily around you. 
 ~
 0 2105344 1
 D2
@@ -29723,6 +30281,9 @@ D3
 S
 #305460
 Western Plateau~
+The top of this plateau shimmers and sways in the light, solid underfoot
+but seemingly glitching in and out of existence as time and space distort
+eerily around you. 
 ~
 0 2105344 1
 D1
@@ -29740,6 +30301,9 @@ D3
 S
 #305461
 Western Plateau~
+The top of this plateau shimmers and sways in the light, solid underfoot
+but seemingly glitching in and out of existence as time and space distort
+eerily around you. 
 ~
 0 2105344 1
 D1
@@ -29757,6 +30321,9 @@ D3
 S
 #305462
 Western Plateau~
+The top of this plateau shimmers and sways in the light, solid underfoot
+but seemingly glitching in and out of existence as time and space distort
+eerily around you. 
 ~
 0 2105344 1
 D1
@@ -29770,6 +30337,9 @@ D2
 S
 #305463
 Western Plateau~
+The top of this plateau shimmers and sways in the light, solid underfoot
+but seemingly glitching in and out of existence as time and space distort
+eerily around you. 
 ~
 0 2105344 1
 D0
@@ -29783,6 +30353,9 @@ D3
 S
 #305464
 Western Plateau~
+The top of this plateau shimmers and sways in the light, solid underfoot
+but seemingly glitching in and out of existence as time and space distort
+eerily around you. 
 ~
 0 2105344 1
 D0
@@ -29800,6 +30373,9 @@ D3
 S
 #305465
 Western Plateau~
+The top of this plateau shimmers and sways in the light, solid underfoot
+but seemingly glitching in and out of existence as time and space distort
+eerily around you. 
 ~
 0 2105344 1
 D0
@@ -29817,6 +30393,9 @@ D3
 S
 #305466
 Western Plateau~
+The top of this plateau shimmers and sways in the light, solid underfoot
+but seemingly glitching in and out of existence as time and space distort
+eerily around you. 
 ~
 0 2105344 1
 D0
@@ -29830,6 +30409,8 @@ D1
 S
 #305467
 Plateau Descent~
+The face of the plateau is crumbled here, allowing an easy journey down
+a relatively gentle slope. 
 ~
 0 2105348 1
 D1
@@ -29843,6 +30424,8 @@ D5
 S
 #305468
 Plateau Descent~
+The sloping side of the plateau makes for an easy climb, or an even
+easier ride down. 
 ~
 0 2105348 1
 D4
@@ -29856,6 +30439,8 @@ D5
 S
 #305469
 Plateau Descent~
+The rocks here are scored black from some sort of explosion, one
+certainly large enough to have created the slope used to arrive down here. 
 ~
 0 2105348 1
 D0
@@ -29869,6 +30454,9 @@ D4
 S
 #305470
 Battle-Scarred Wasteland~
+All around you the sounds of a battle are apparent, now incredibly
+close.  Just a few more steps over the next hill wil see you straight in
+the action. 
 ~
 0 2105348 1
 D0
@@ -29882,6 +30470,9 @@ D2
 S
 #305471
 Battle-Scarred Wasteland~
+All around you the sounds of a battle are apparent, now incredibly
+close. Just a few more steps over the next hill wil see you straight in
+the action. 
 ~
 0 2105348 1
 D0
@@ -29895,6 +30486,8 @@ D2
 S
 #305472
 Overlooking a Massive Crater~
+The "hill" was really the lip of a massive crater, so enormous it
+appeared to be part of the natural landscape. 
 ~
 0 2105348 1
 D2
@@ -29908,6 +30501,8 @@ D5
 S
 #305473
 Crater Floor~
+The sides of this crater are perfectly smooth, as if hand-carved out of
+the earth by a set of specialized tools. 
 ~
 0 2105348 1
 > entry_prog 100~
@@ -29921,6 +30516,7 @@ mea $n &CGoku says 'I don't know who you are, but if you're not here to &Rhelp&C
 S
 #305474
 Timespace Pocket~
+No time to waste! The only way forward... is forward!
 ~
 0 2105348 1
 D0
@@ -51592,10 +52188,6 @@ S
 Hyperbolic Time Chamber: Endless White~
 ~
 0 67108868&64 1
-D0
-~
-~
-0 -1 308500
 D1
 ~
 ~
