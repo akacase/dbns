@@ -26,8 +26,8 @@
 #include <sys/types.h>
 #include <time.h>
 
-#include "mud.h"
 #include "comm.h"
+#include "mud.h"
 #include "sha256.h"
 
 extern int top_affect;
@@ -5709,9 +5709,8 @@ void write_area_list() {
     bug("FATAL: cannot open area.lst for writing!\n\r", 0);
     return;
   }
-  fprintf(fpout, "help.are\n");
   for (tarea = first_area; tarea; tarea = tarea->next)
-    fprintf(fpout, "%s%s\n", AREA_DIR, tarea->filename);
+    fprintf(fpout, "%s\n", tarea->filename);
   fprintf(fpout, "$\n");
   fclose(fpout);
 }
