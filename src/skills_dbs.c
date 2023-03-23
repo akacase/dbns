@@ -3010,7 +3010,7 @@ void do_punch(CHAR_DATA *ch, char *argument) {
 	  }
 	}
 	else if (!str_cmp(arg, "200")) {
-	  if (ch->punchpower < 1) {
+	  if (ch->punchpower < 3) {
 		send_to_char("You lack the skill.\n\r", ch);
 		return;
 	  }
@@ -3042,7 +3042,7 @@ void do_punch(CHAR_DATA *ch, char *argument) {
 	  }
 	}
 	else if (!str_cmp(arg, "300")) {
-	  if (ch->punchpower < 2) {
+	  if (ch->punchpower < 5) {
 		send_to_char("You lack the skill.\n\r", ch);
 		return;
 	  }
@@ -3074,7 +3074,7 @@ void do_punch(CHAR_DATA *ch, char *argument) {
 	  }
 	}
 	else if (!str_cmp(arg, "400")) {
-	  if (ch->punchpower < 3) {
+	  if (ch->punchpower < 7) {
 		send_to_char("You lack the skill.\n\r", ch);
 		return;
 	  }
@@ -3106,7 +3106,7 @@ void do_punch(CHAR_DATA *ch, char *argument) {
 	  }
 	}
 	else if (!str_cmp(arg, "500")) {
-	  if (ch->punchpower < 4) {
+	  if (ch->punchpower < 10) {
 		send_to_char("You lack the skill.\n\r", ch);
 		return;
 	  }
@@ -4823,7 +4823,7 @@ void do_research(CHAR_DATA *ch, char *argument) {
     send_to_char("syntax: research <skill> <field>\n\r", ch);
     send_to_char("\n\r", ch);
     send_to_char("Field being one of:\n\r", ch);
-    send_to_char("   power   efficiency\n\r", ch);
+    send_to_char("   power\n\r", ch);
     return;
   }
   if (arg2[0] == '\0') {
@@ -4831,8 +4831,12 @@ void do_research(CHAR_DATA *ch, char *argument) {
     send_to_char("syntax: research <skill> <field>\n\r", ch);
     send_to_char("\n\r", ch);
     send_to_char("Field being one of:\n\r", ch);
-    send_to_char("   power   efficiency\n\r", ch);
+    send_to_char("   power\n\r", ch);
     return;
+  }
+  if (!str_cmp(arg2, "efficiency")) {
+	send_to_char("Not anymore you don't!\n\r", ch);
+	return;
   }
   if (!str_cmp(arg1, "vigor")) {
     if (ch->skillenergy_ball < 1) {
@@ -5787,7 +5791,7 @@ void do_energy_ball(CHAR_DATA *ch, char *argument) {
 	  }
 	}
 	else if (!str_cmp(arg, "200")) {
-	  if (ch->energy_ballpower < 1) {
+	  if (ch->energy_ballpower < 3) {
 		send_to_char("You lack the skill.\n\r", ch);
 		return;
 	  }
@@ -5816,7 +5820,7 @@ void do_energy_ball(CHAR_DATA *ch, char *argument) {
 	  }
 	}
 	else if (!str_cmp(arg, "300")) {
-	  if (ch->energy_ballpower < 2) {
+	  if (ch->energy_ballpower < 5) {
 		send_to_char("You lack the skill.\n\r", ch);
 		return;
 	  }
@@ -5845,7 +5849,7 @@ void do_energy_ball(CHAR_DATA *ch, char *argument) {
 	  }
 	}
 	else if (!str_cmp(arg, "400")) {
-	  if (ch->energy_ballpower < 3) {
+	  if (ch->energy_ballpower < 7) {
 		send_to_char("You lack the skill.\n\r", ch);
 		return;
 	  }
@@ -5874,7 +5878,7 @@ void do_energy_ball(CHAR_DATA *ch, char *argument) {
 	  }
 	}
 	else if (!str_cmp(arg, "500")) {
-	  if (ch->energy_ballpower < 4) {
+	  if (ch->energy_ballpower < 10) {
 		send_to_char("You lack the skill.\n\r", ch);
 		return;
 	  }
@@ -6005,7 +6009,7 @@ void do_energy_disc(CHAR_DATA *ch, char *argument) {
 	  }
 	}
 	else if (!str_cmp(arg, "200")) {
-	  if (ch->energy_discpower < 1) {
+	  if (ch->energy_discpower < 3) {
 		send_to_char("You lack the skill.\n\r", ch);
 		return;
 	  }
@@ -6034,7 +6038,7 @@ void do_energy_disc(CHAR_DATA *ch, char *argument) {
 	  }
 	}
 	else if (!str_cmp(arg, "300")) {
-	  if (ch->energy_discpower < 2) {
+	  if (ch->energy_discpower < 5) {
 		send_to_char("You lack the skill.\n\r", ch);
 		return;
 	  }
@@ -6063,7 +6067,7 @@ void do_energy_disc(CHAR_DATA *ch, char *argument) {
 	  }
 	}
 	else if (!str_cmp(arg, "400")) {
-	  if (ch->energy_discpower < 3) {
+	  if (ch->energy_discpower < 7) {
 		send_to_char("You lack the skill.\n\r", ch);
 		return;
 	  }
@@ -6092,7 +6096,7 @@ void do_energy_disc(CHAR_DATA *ch, char *argument) {
 	  }
 	}
 	else if (!str_cmp(arg, "500")) {
-	  if (ch->energy_discpower < 4) {
+	  if (ch->energy_discpower < 10) {
 		send_to_char("You lack the skill.\n\r", ch);
 		return;
 	  }
@@ -6223,7 +6227,7 @@ void do_forcewave(CHAR_DATA *ch, char *argument) {
 	  }
 	}
 	else if (!str_cmp(arg, "200")) {
-	  if (ch->forcewavepower < 1) {
+	  if (ch->forcewavepower < 3) {
 		send_to_char("You lack the skill.\n\r", ch);
 		return;
 	  }
@@ -6252,7 +6256,7 @@ void do_forcewave(CHAR_DATA *ch, char *argument) {
 	  }
 	}
 	else if (!str_cmp(arg, "300")) {
-	  if (ch->forcewavepower < 2) {
+	  if (ch->forcewavepower < 5) {
 		send_to_char("You lack the skill.\n\r", ch);
 		return;
 	  }
@@ -6281,7 +6285,7 @@ void do_forcewave(CHAR_DATA *ch, char *argument) {
 	  }
 	}
 	else if (!str_cmp(arg, "400")) {
-	  if (ch->forcewavepower < 3) {
+	  if (ch->forcewavepower < 7) {
 		send_to_char("You lack the skill.\n\r", ch);
 		return;
 	  }
@@ -6310,7 +6314,7 @@ void do_forcewave(CHAR_DATA *ch, char *argument) {
 	  }
 	}
 	else if (!str_cmp(arg, "500")) {
-	  if (ch->forcewavepower < 4) {
+	  if (ch->forcewavepower < 10) {
 		send_to_char("You lack the skill.\n\r", ch);
 		return;
 	  }
@@ -6441,7 +6445,7 @@ void do_concentrated_beam(CHAR_DATA *ch, char *argument) {
 	  }
 	}
 	else if (!str_cmp(arg, "200")) {
-	  if (ch->concentrated_beampower < 1) {
+	  if (ch->concentrated_beampower < 3) {
 		send_to_char("You lack the skill.\n\r", ch);
 		return;
 	  }
@@ -6470,7 +6474,7 @@ void do_concentrated_beam(CHAR_DATA *ch, char *argument) {
 	  }
 	}
 	else if (!str_cmp(arg, "300")) {
-	  if (ch->concentrated_beampower < 2) {
+	  if (ch->concentrated_beampower < 5) {
 		send_to_char("You lack the skill.\n\r", ch);
 		return;
 	  }
@@ -6499,7 +6503,7 @@ void do_concentrated_beam(CHAR_DATA *ch, char *argument) {
 	  }
 	}
 	else if (!str_cmp(arg, "400")) {
-	  if (ch->concentrated_beampower < 3) {
+	  if (ch->concentrated_beampower < 7) {
 		send_to_char("You lack the skill.\n\r", ch);
 		return;
 	  }
@@ -6528,7 +6532,7 @@ void do_concentrated_beam(CHAR_DATA *ch, char *argument) {
 	  }
 	}
 	else if (!str_cmp(arg, "500")) {
-	  if (ch->concentrated_beampower < 4) {
+	  if (ch->concentrated_beampower < 10) {
 		send_to_char("You lack the skill.\n\r", ch);
 		return;
 	  }
@@ -6659,7 +6663,7 @@ void do_energybeam(CHAR_DATA *ch, char *argument) {
 	  }
 	}
 	else if (!str_cmp(arg, "200")) {
-	  if (ch->energybeampower < 1) {
+	  if (ch->energybeampower < 3) {
 		send_to_char("You lack the skill.\n\r", ch);
 		return;
 	  }
@@ -6688,7 +6692,7 @@ void do_energybeam(CHAR_DATA *ch, char *argument) {
 	  }
 	}
 	else if (!str_cmp(arg, "300")) {
-	  if (ch->energybeampower < 2) {
+	  if (ch->energybeampower < 5) {
 		send_to_char("You lack the skill.\n\r", ch);
 		return;
 	  }
@@ -6717,7 +6721,7 @@ void do_energybeam(CHAR_DATA *ch, char *argument) {
 	  }
 	}
 	else if (!str_cmp(arg, "400")) {
-	  if (ch->energybeampower < 3) {
+	  if (ch->energybeampower < 7) {
 		send_to_char("You lack the skill.\n\r", ch);
 		return;
 	  }
@@ -6746,7 +6750,7 @@ void do_energybeam(CHAR_DATA *ch, char *argument) {
 	  }
 	}
 	else if (!str_cmp(arg, "500")) {
-	  if (ch->energybeampower < 4) {
+	  if (ch->energybeampower < 10) {
 		send_to_char("You lack the skill.\n\r", ch);
 		return;
 	  }
@@ -6880,7 +6884,7 @@ void do_lariat(CHAR_DATA *ch, char *argument) {
 	  }
 	}
 	else if (!str_cmp(arg, "200")) {
-	  if (ch->lariatpower < 1) {
+	  if (ch->lariatpower < 3) {
 		send_to_char("You lack the skill.\n\r", ch);
 		return;
 	  }
@@ -6912,7 +6916,7 @@ void do_lariat(CHAR_DATA *ch, char *argument) {
 	  }
 	}
 	else if (!str_cmp(arg, "300")) {
-	  if (ch->lariatpower < 2) {
+	  if (ch->lariatpower < 5) {
 		send_to_char("You lack the skill.\n\r", ch);
 		return;
 	  }
@@ -6944,7 +6948,7 @@ void do_lariat(CHAR_DATA *ch, char *argument) {
 	  }
 	}
 	else if (!str_cmp(arg, "400")) {
-	  if (ch->lariatpower < 3) {
+	  if (ch->lariatpower < 7) {
 		send_to_char("You lack the skill.\n\r", ch);
 		return;
 	  }
@@ -6976,7 +6980,7 @@ void do_lariat(CHAR_DATA *ch, char *argument) {
 	  }
 	}
 	else if (!str_cmp(arg, "500")) {
-	  if (ch->lariatpower < 4) {
+	  if (ch->lariatpower < 10) {
 		send_to_char("You lack the skill.\n\r", ch);
 		return;
 	  }
@@ -7113,7 +7117,7 @@ void do_ecliptic_meteor(CHAR_DATA *ch, char *argument) {
 	  }
 	}
 	else if (!str_cmp(arg, "200")) {
-	  if (ch->ecliptic_meteorpower < 1) {
+	  if (ch->ecliptic_meteorpower < 3) {
 		send_to_char("You lack the skill.\n\r", ch);
 		return;
 	  }
@@ -7145,7 +7149,7 @@ void do_ecliptic_meteor(CHAR_DATA *ch, char *argument) {
 	  }
 	}
 	else if (!str_cmp(arg, "300")) {
-	  if (ch->ecliptic_meteorpower < 2) {
+	  if (ch->ecliptic_meteorpower < 5) {
 		send_to_char("You lack the skill.\n\r", ch);
 		return;
 	  }
@@ -7177,7 +7181,7 @@ void do_ecliptic_meteor(CHAR_DATA *ch, char *argument) {
 	  }
 	}
 	else if (!str_cmp(arg, "400")) {
-	  if (ch->ecliptic_meteorpower < 3) {
+	  if (ch->ecliptic_meteorpower < 7) {
 		send_to_char("You lack the skill.\n\r", ch);
 		return;
 	  }
@@ -7209,7 +7213,7 @@ void do_ecliptic_meteor(CHAR_DATA *ch, char *argument) {
 	  }
 	}
 	else if (!str_cmp(arg, "500")) {
-	  if (ch->ecliptic_meteorpower < 4) {
+	  if (ch->ecliptic_meteorpower < 10) {
 		send_to_char("You lack the skill.\n\r", ch);
 		return;
 	  }
@@ -7346,7 +7350,7 @@ void do_gigantic_meteor(CHAR_DATA *ch, char *argument) {
 	  }
 	}
 	else if (!str_cmp(arg, "200")) {
-	  if (ch->gigantic_meteorpower < 1) {
+	  if (ch->gigantic_meteorpower < 3) {
 		send_to_char("You lack the skill.\n\r", ch);
 		return;
 	  }
@@ -7378,7 +7382,7 @@ void do_gigantic_meteor(CHAR_DATA *ch, char *argument) {
 	  }
 	}
 	else if (!str_cmp(arg, "300")) {
-	  if (ch->gigantic_meteorpower < 2) {
+	  if (ch->gigantic_meteorpower < 5) {
 		send_to_char("You lack the skill.\n\r", ch);
 		return;
 	  }
@@ -7410,7 +7414,7 @@ void do_gigantic_meteor(CHAR_DATA *ch, char *argument) {
 	  }
 	}
 	else if (!str_cmp(arg, "400")) {
-	  if (ch->gigantic_meteorpower < 3) {
+	  if (ch->gigantic_meteorpower < 7) {
 		send_to_char("You lack the skill.\n\r", ch);
 		return;
 	  }
@@ -7442,7 +7446,7 @@ void do_gigantic_meteor(CHAR_DATA *ch, char *argument) {
 	  }
 	}
 	else if (!str_cmp(arg, "500")) {
-	  if (ch->gigantic_meteorpower < 4) {
+	  if (ch->gigantic_meteorpower < 10) {
 		send_to_char("You lack the skill.\n\r", ch);
 		return;
 	  }
@@ -7579,7 +7583,7 @@ void do_meteor(CHAR_DATA *ch, char *argument) {
 	  }
 	}
 	else if (!str_cmp(arg, "200")) {
-	  if (ch->meteorpower < 1) {
+	  if (ch->meteorpower < 3) {
 		send_to_char("You lack the skill.\n\r", ch);
 		return;
 	  }
@@ -7611,7 +7615,7 @@ void do_meteor(CHAR_DATA *ch, char *argument) {
 	  }
 	}
 	else if (!str_cmp(arg, "300")) {
-	  if (ch->meteorpower < 2) {
+	  if (ch->meteorpower < 5) {
 		send_to_char("You lack the skill.\n\r", ch);
 		return;
 	  }
@@ -7643,7 +7647,7 @@ void do_meteor(CHAR_DATA *ch, char *argument) {
 	  }
 	}
 	else if (!str_cmp(arg, "400")) {
-	  if (ch->meteorpower < 3) {
+	  if (ch->meteorpower < 7) {
 		send_to_char("You lack the skill.\n\r", ch);
 		return;
 	  }
@@ -7675,7 +7679,7 @@ void do_meteor(CHAR_DATA *ch, char *argument) {
 	  }
 	}
 	else if (!str_cmp(arg, "500")) {
-	  if (ch->meteorpower < 4) {
+	  if (ch->meteorpower < 10) {
 		send_to_char("You lack the skill.\n\r", ch);
 		return;
 	  }
@@ -7812,7 +7816,7 @@ void do_crusherball(CHAR_DATA *ch, char *argument) {
 	  }
 	}
 	else if (!str_cmp(arg, "200")) {
-	  if (ch->crusherballpower < 1) {
+	  if (ch->crusherballpower < 3) {
 		send_to_char("You lack the skill.\n\r", ch);
 		return;
 	  }
@@ -7844,7 +7848,7 @@ void do_crusherball(CHAR_DATA *ch, char *argument) {
 	  }
 	}
 	else if (!str_cmp(arg, "300")) {
-	  if (ch->crusherballpower < 2) {
+	  if (ch->crusherballpower < 5) {
 		send_to_char("You lack the skill.\n\r", ch);
 		return;
 	  }
@@ -7876,7 +7880,7 @@ void do_crusherball(CHAR_DATA *ch, char *argument) {
 	  }
 	}
 	else if (!str_cmp(arg, "400")) {
-	  if (ch->crusherballpower < 3) {
+	  if (ch->crusherballpower < 7) {
 		send_to_char("You lack the skill.\n\r", ch);
 		return;
 	  }
@@ -7908,7 +7912,7 @@ void do_crusherball(CHAR_DATA *ch, char *argument) {
 	  }
 	}
 	else if (!str_cmp(arg, "500")) {
-	  if (ch->crusherballpower < 4) {
+	  if (ch->crusherballpower < 10) {
 		send_to_char("You lack the skill.\n\r", ch);
 		return;
 	  }
@@ -8045,7 +8049,7 @@ void do_haymaker(CHAR_DATA *ch, char *argument) {
 	  }
 	}
 	else if (!str_cmp(arg, "200")) {
-	  if (ch->haymakerpower < 1) {
+	  if (ch->haymakerpower < 3) {
 		send_to_char("You lack the skill.\n\r", ch);
 		return;
 	  }
@@ -8077,7 +8081,7 @@ void do_haymaker(CHAR_DATA *ch, char *argument) {
 	  }
 	}
 	else if (!str_cmp(arg, "300")) {
-	  if (ch->haymakerpower < 2) {
+	  if (ch->haymakerpower < 5) {
 		send_to_char("You lack the skill.\n\r", ch);
 		return;
 	  }
@@ -8109,7 +8113,7 @@ void do_haymaker(CHAR_DATA *ch, char *argument) {
 	  }
 	}
 	else if (!str_cmp(arg, "400")) {
-	  if (ch->haymakerpower < 3) {
+	  if (ch->haymakerpower < 7) {
 		send_to_char("You lack the skill.\n\r", ch);
 		return;
 	  }
@@ -8141,7 +8145,7 @@ void do_haymaker(CHAR_DATA *ch, char *argument) {
 	  }
 	}
 	else if (!str_cmp(arg, "500")) {
-	  if (ch->haymakerpower < 4) {
+	  if (ch->haymakerpower < 10) {
 		send_to_char("You lack the skill.\n\r", ch);
 		return;
 	  }
@@ -8278,7 +8282,7 @@ void do_collide(CHAR_DATA *ch, char *argument) {
 	  }
 	}
 	else if (!str_cmp(arg, "200")) {
-	  if (ch->collidepower < 1) {
+	  if (ch->collidepower < 3) {
 		send_to_char("You lack the skill.\n\r", ch);
 		return;
 	  }
@@ -8310,7 +8314,7 @@ void do_collide(CHAR_DATA *ch, char *argument) {
 	  }
 	}
 	else if (!str_cmp(arg, "300")) {
-	  if (ch->collidepower < 2) {
+	  if (ch->collidepower < 5) {
 		send_to_char("You lack the skill.\n\r", ch);
 		return;
 	  }
@@ -8342,7 +8346,7 @@ void do_collide(CHAR_DATA *ch, char *argument) {
 	  }
 	}
 	else if (!str_cmp(arg, "400")) {
-	  if (ch->collidepower < 3) {
+	  if (ch->collidepower < 7) {
 		send_to_char("You lack the skill.\n\r", ch);
 		return;
 	  }
@@ -8374,7 +8378,7 @@ void do_collide(CHAR_DATA *ch, char *argument) {
 	  }
 	}
 	else if (!str_cmp(arg, "500")) {
-	  if (ch->collidepower < 4) {
+	  if (ch->collidepower < 10) {
 		send_to_char("You lack the skill.\n\r", ch);
 		return;
 	  }
@@ -8511,7 +8515,7 @@ void do_kamehameha(CHAR_DATA *ch, char *argument) {
 	  }
 	}
 	else if (!str_cmp(arg, "200")) {
-	  if (ch->kamehamehapower < 1) {
+	  if (ch->kamehamehapower < 3) {
 		send_to_char("You lack the skill.\n\r", ch);
 		return;
 	  }
@@ -8543,7 +8547,7 @@ void do_kamehameha(CHAR_DATA *ch, char *argument) {
 	  }
 	}
 	else if (!str_cmp(arg, "300")) {
-	  if (ch->kamehamehapower < 2) {
+	  if (ch->kamehamehapower < 5) {
 		send_to_char("You lack the skill.\n\r", ch);
 		return;
 	  }
@@ -8575,7 +8579,7 @@ void do_kamehameha(CHAR_DATA *ch, char *argument) {
 	  }
 	}
 	else if (!str_cmp(arg, "400")) {
-	  if (ch->kamehamehapower < 3) {
+	  if (ch->kamehamehapower < 7) {
 		send_to_char("You lack the skill.\n\r", ch);
 		return;
 	  }
@@ -8607,7 +8611,7 @@ void do_kamehameha(CHAR_DATA *ch, char *argument) {
 	  }
 	}
 	else if (!str_cmp(arg, "500")) {
-	  if (ch->kamehamehapower < 4) {
+	  if (ch->kamehamehapower < 10) {
 		send_to_char("You lack the skill.\n\r", ch);
 		return;
 	  }
@@ -8854,7 +8858,7 @@ void do_masenko(CHAR_DATA *ch, char *argument) {
 	  }
 	}
 	else if (!str_cmp(arg, "200")) {
-	  if (ch->masenkopower < 1) {
+	  if (ch->masenkopower < 3) {
 		send_to_char("You lack the skill.\n\r", ch);
 		return;
 	  }
@@ -8886,7 +8890,7 @@ void do_masenko(CHAR_DATA *ch, char *argument) {
 	  }
 	}
 	else if (!str_cmp(arg, "300")) {
-	  if (ch->masenkopower < 2) {
+	  if (ch->masenkopower < 5) {
 		send_to_char("You lack the skill.\n\r", ch);
 		return;
 	  }
@@ -8918,7 +8922,7 @@ void do_masenko(CHAR_DATA *ch, char *argument) {
 	  }
 	}
 	else if (!str_cmp(arg, "400")) {
-	  if (ch->masenkopower < 3) {
+	  if (ch->masenkopower < 7) {
 		send_to_char("You lack the skill.\n\r", ch);
 		return;
 	  }
@@ -8950,7 +8954,7 @@ void do_masenko(CHAR_DATA *ch, char *argument) {
 	  }
 	}
 	else if (!str_cmp(arg, "500")) {
-	  if (ch->masenkopower < 4) {
+	  if (ch->masenkopower < 10) {
 		send_to_char("You lack the skill.\n\r", ch);
 		return;
 	  }
@@ -9086,7 +9090,7 @@ void do_sbc(CHAR_DATA *ch, char *argument) {
 	  }
 	}
 	else if (!str_cmp(arg, "200")) {
-	  if (ch->sbcpower < 1) {
+	  if (ch->sbcpower < 3) {
 		send_to_char("You lack the skill.\n\r", ch);
 		return;
 	  }
@@ -9118,7 +9122,7 @@ void do_sbc(CHAR_DATA *ch, char *argument) {
 	  }
 	}
 	else if (!str_cmp(arg, "300")) {
-	  if (ch->sbcpower < 2) {
+	  if (ch->sbcpower < 5) {
 		send_to_char("You lack the skill.\n\r", ch);
 		return;
 	  }
@@ -9150,7 +9154,7 @@ void do_sbc(CHAR_DATA *ch, char *argument) {
 	  }
 	}
 	else if (!str_cmp(arg, "400")) {
-	  if (ch->sbcpower < 3) {
+	  if (ch->sbcpower < 7) {
 		send_to_char("You lack the skill.\n\r", ch);
 		return;
 	  }
@@ -9183,7 +9187,7 @@ void do_sbc(CHAR_DATA *ch, char *argument) {
 	  }
 	}
 	else if (!str_cmp(arg, "500")) {
-	  if (ch->sbcpower < 4) {
+	  if (ch->sbcpower < 10) {
 		send_to_char("You lack the skill.\n\r", ch);
 		return;
 	  }
@@ -9321,7 +9325,7 @@ void do_dd(CHAR_DATA *ch, char *argument) {
 	  }
 	}
 	else if (!str_cmp(arg, "200")) {
-	  if (ch->destructo_discpower < 1) {
+	  if (ch->destructo_discpower < 3) {
 		send_to_char("You lack the skill.\n\r", ch);
 		return;
 	  }
@@ -9353,7 +9357,7 @@ void do_dd(CHAR_DATA *ch, char *argument) {
 	  }
 	}
 	else if (!str_cmp(arg, "300")) {
-	  if (ch->destructo_discpower < 2) {
+	  if (ch->destructo_discpower < 5) {
 		send_to_char("You lack the skill.\n\r", ch);
 		return;
 	  }
@@ -9385,7 +9389,7 @@ void do_dd(CHAR_DATA *ch, char *argument) {
 	  }
 	}
 	else if (!str_cmp(arg, "400")) {
-	  if (ch->destructo_discpower < 3) {
+	  if (ch->destructo_discpower < 7) {
 		send_to_char("You lack the skill.\n\r", ch);
 		return;
 	  }
@@ -9417,7 +9421,7 @@ void do_dd(CHAR_DATA *ch, char *argument) {
 	  }
 	}
 	else if (!str_cmp(arg, "500")) {
-	  if (ch->destructo_discpower < 4) {
+	  if (ch->destructo_discpower < 10) {
 		send_to_char("You lack the skill.\n\r", ch);
 		return;
 	  }
@@ -10211,7 +10215,7 @@ void do_death_ball(CHAR_DATA *ch, char *argument) {
 	  }
 	}
 	else if (!str_cmp(arg, "200")) {
-	  if (ch->death_ballpower < 1) {
+	  if (ch->death_ballpower < 3) {
 		send_to_char("You lack the skill.\n\r", ch);
 		return;
 	  }
@@ -10249,7 +10253,7 @@ void do_death_ball(CHAR_DATA *ch, char *argument) {
 	  }
 	}
 	else if (!str_cmp(arg, "300")) {
-	  if (ch->death_ballpower < 2) {
+	  if (ch->death_ballpower < 5) {
 		send_to_char("You lack the skill.\n\r", ch);
 		return;
 	  }
@@ -10287,7 +10291,7 @@ void do_death_ball(CHAR_DATA *ch, char *argument) {
 	  }
 	}
 	else if (!str_cmp(arg, "400")) {
-	  if (ch->death_ballpower < 3) {
+	  if (ch->death_ballpower < 7) {
 		send_to_char("You lack the skill.\n\r", ch);
 		return;
 	  }
@@ -10325,7 +10329,7 @@ void do_death_ball(CHAR_DATA *ch, char *argument) {
 	  }
 	}
 	else if (!str_cmp(arg, "500")) {
-	  if (ch->death_ballpower < 4) {
+	  if (ch->death_ballpower < 10) {
 		send_to_char("You lack the skill.\n\r", ch);
 		return;
 	  }
@@ -10468,7 +10472,7 @@ void do_eye_beam(CHAR_DATA *ch, char *argument) {
 	  }
 	}
 	else if (!str_cmp(arg, "200")) {
-	  if (ch->eye_beampower < 1) {
+	  if (ch->eye_beampower < 3) {
 		send_to_char("You lack the skill.\n\r", ch);
 		return;
 	  }
@@ -10497,7 +10501,7 @@ void do_eye_beam(CHAR_DATA *ch, char *argument) {
 	  }
 	}
 	else if (!str_cmp(arg, "300")) {
-	  if (ch->eye_beampower < 2) {
+	  if (ch->eye_beampower < 5) {
 		send_to_char("You lack the skill.\n\r", ch);
 		return;
 	  }
@@ -10526,7 +10530,7 @@ void do_eye_beam(CHAR_DATA *ch, char *argument) {
 	  }
 	}
 	else if (!str_cmp(arg, "400")) {
-	  if (ch->eye_beampower < 3) {
+	  if (ch->eye_beampower < 7) {
 		send_to_char("You lack the skill.\n\r", ch);
 		return;
 	  }
@@ -10555,7 +10559,7 @@ void do_eye_beam(CHAR_DATA *ch, char *argument) {
 	  }
 	}
 	else if (!str_cmp(arg, "500")) {
-	  if (ch->eye_beampower < 4) {
+	  if (ch->eye_beampower < 10) {
 		send_to_char("You lack the skill.\n\r", ch);
 		return;
 	  }
@@ -10690,7 +10694,7 @@ void do_finger_beam(CHAR_DATA *ch, char *argument) {
 	  }
 	}
 	else if (!str_cmp(arg, "200")) {
-	  if (ch->finger_beampower < 1) {
+	  if (ch->finger_beampower < 3) {
 		send_to_char("You lack the skill.\n\r", ch);
 		return;
 	  }
@@ -10719,7 +10723,7 @@ void do_finger_beam(CHAR_DATA *ch, char *argument) {
 	  }
 	}
 	else if (!str_cmp(arg, "300")) {
-	  if (ch->finger_beampower < 2) {
+	  if (ch->finger_beampower < 5) {
 		send_to_char("You lack the skill.\n\r", ch);
 		return;
 	  }
@@ -10748,7 +10752,7 @@ void do_finger_beam(CHAR_DATA *ch, char *argument) {
 	  }
 	}
 	else if (!str_cmp(arg, "400")) {
-	  if (ch->finger_beampower < 3) {
+	  if (ch->finger_beampower < 7) {
 		send_to_char("You lack the skill.\n\r", ch);
 		return;
 	  }
@@ -10777,7 +10781,7 @@ void do_finger_beam(CHAR_DATA *ch, char *argument) {
 	  }
 	}
 	else if (!str_cmp(arg, "500")) {
-	  if (ch->finger_beampower < 4) {
+	  if (ch->finger_beampower < 10) {
 		send_to_char("You lack the skill.\n\r", ch);
 		return;
 	  }
@@ -12200,7 +12204,7 @@ void do_destructive_wave(CHAR_DATA *ch, char *argument) {
 	  }
 	}
 	else if (!str_cmp(arg, "200")) {
-	  if (ch->destructive_wavepower < 1) {
+	  if (ch->destructive_wavepower < 3) {
 		send_to_char("You lack the skill.\n\r", ch);
 		return;
 	  }
@@ -12229,7 +12233,7 @@ void do_destructive_wave(CHAR_DATA *ch, char *argument) {
 	  }
 	}
 	else if (!str_cmp(arg, "300")) {
-	  if (ch->destructive_wavepower < 2) {
+	  if (ch->destructive_wavepower < 5) {
 		send_to_char("You lack the skill.\n\r", ch);
 		return;
 	  }
@@ -12258,7 +12262,7 @@ void do_destructive_wave(CHAR_DATA *ch, char *argument) {
 	  }
 	}
 	else if (!str_cmp(arg, "400")) {
-	  if (ch->destructive_wavepower < 3) {
+	  if (ch->destructive_wavepower < 7) {
 		send_to_char("You lack the skill.\n\r", ch);
 		return;
 	  }
@@ -12287,7 +12291,7 @@ void do_destructive_wave(CHAR_DATA *ch, char *argument) {
 	  }
 	}
 	else if (!str_cmp(arg, "500")) {
-	  if (ch->destructive_wavepower < 4) {
+	  if (ch->destructive_wavepower < 10) {
 		send_to_char("You lack the skill.\n\r", ch);
 		return;
 	  }
@@ -12580,7 +12584,7 @@ void do_shockwave(CHAR_DATA *ch, char *argument) {
 	  }
 	}
 	else if (!str_cmp(arg, "200")) {
-	  if (ch->shockwavepower < 1) {
+	  if (ch->shockwavepower < 3) {
 		send_to_char("You lack the skill.\n\r", ch);
 		return;
 	  }
@@ -12612,7 +12616,7 @@ void do_shockwave(CHAR_DATA *ch, char *argument) {
 	  }
 	}
 	else if (!str_cmp(arg, "300")) {
-	  if (ch->shockwavepower < 2) {
+	  if (ch->shockwavepower < 5) {
 		send_to_char("You lack the skill.\n\r", ch);
 		return;
 	  }
@@ -12644,7 +12648,7 @@ void do_shockwave(CHAR_DATA *ch, char *argument) {
 	  }
 	}
 	else if (!str_cmp(arg, "400")) {
-	  if (ch->shockwavepower < 3) {
+	  if (ch->shockwavepower < 7) {
 		send_to_char("You lack the skill.\n\r", ch);
 		return;
 	  }
@@ -12676,7 +12680,7 @@ void do_shockwave(CHAR_DATA *ch, char *argument) {
 	  }
 	}
 	else if (!str_cmp(arg, "500")) {
-	  if (ch->shockwavepower < 4) {
+	  if (ch->shockwavepower < 10) {
 		send_to_char("You lack the skill.\n\r", ch);
 		return;
 	  }
@@ -12813,7 +12817,7 @@ void do_gallic_gun(CHAR_DATA *ch, char *argument) {
 	  }
 	}
 	else if (!str_cmp(arg, "200")) {
-	  if (ch->gallic_gunpower < 1) {
+	  if (ch->gallic_gunpower < 3) {
 		send_to_char("You lack the skill.\n\r", ch);
 		return;
 	  }
@@ -12845,7 +12849,7 @@ void do_gallic_gun(CHAR_DATA *ch, char *argument) {
 	  }
 	}
 	else if (!str_cmp(arg, "300")) {
-	  if (ch->gallic_gunpower < 2) {
+	  if (ch->gallic_gunpower < 5) {
 		send_to_char("You lack the skill.\n\r", ch);
 		return;
 	  }
@@ -12877,7 +12881,7 @@ void do_gallic_gun(CHAR_DATA *ch, char *argument) {
 	  }
 	}
 	else if (!str_cmp(arg, "400")) {
-	  if (ch->gallic_gunpower < 3) {
+	  if (ch->gallic_gunpower < 7) {
 		send_to_char("You lack the skill.\n\r", ch);
 		return;
 	  }
@@ -12909,7 +12913,7 @@ void do_gallic_gun(CHAR_DATA *ch, char *argument) {
 	  }
 	}
 	else if (!str_cmp(arg, "500")) {
-	  if (ch->gallic_gunpower < 4) {
+	  if (ch->gallic_gunpower < 10) {
 		send_to_char("You lack the skill.\n\r", ch);
 		return;
 	  }
@@ -13046,7 +13050,7 @@ void do_makosen(CHAR_DATA *ch, char *argument) {
 	  }
 	}
 	else if (!str_cmp(arg, "200")) {
-	  if (ch->makosenpower < 1) {
+	  if (ch->makosenpower < 3) {
 		send_to_char("You lack the skill.\n\r", ch);
 		return;
 	  }
@@ -13078,7 +13082,7 @@ void do_makosen(CHAR_DATA *ch, char *argument) {
 	  }
 	}
 	else if (!str_cmp(arg, "300")) {
-	  if (ch->makosenpower < 2) {
+	  if (ch->makosenpower < 5) {
 		send_to_char("You lack the skill.\n\r", ch);
 		return;
 	  }
@@ -13110,7 +13114,7 @@ void do_makosen(CHAR_DATA *ch, char *argument) {
 	  }
 	}
 	else if (!str_cmp(arg, "400")) {
-	  if (ch->makosenpower < 3) {
+	  if (ch->makosenpower < 7) {
 		send_to_char("You lack the skill.\n\r", ch);
 		return;
 	  }
@@ -13142,7 +13146,7 @@ void do_makosen(CHAR_DATA *ch, char *argument) {
 	  }
 	}
 	else if (!str_cmp(arg, "500")) {
-	  if (ch->makosenpower < 4) {
+	  if (ch->makosenpower < 10) {
 		send_to_char("You lack the skill.\n\r", ch);
 		return;
 	  }

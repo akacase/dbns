@@ -5567,16 +5567,16 @@ void exercise_train(CHAR_DATA *ch, char *stat, int modifier) {
         ch->pl += 1;
       }
     }
-    if (strcmp(stat, "str")) {
+    if (!strcmp(stat, "str")) {
       send_to_char("&CYou feel your strength improving!&D\n\r", ch);
     }
-    if (strcmp(stat, "spd")) {
+    if (!strcmp(stat, "spd")) {
       send_to_char("&CYou feel your speed improving!&D\n\r", ch);
     }
-    if (strcmp(stat, "int")) {
+    if (!strcmp(stat, "int")) {
       send_to_char("&CYou feel your intelligence improving!&D\n\r", ch);
     }
-    if (strcmp(stat, "con")) {
+    if (!strcmp(stat, "con")) {
       send_to_char("&CYou feel your constitution improving!&D\n\r", ch);
     }
   } else if (*permTstat >= 2000000000 && *tAbility >= 999) {
@@ -6069,18 +6069,18 @@ damage(CHAR_DATA *ch, CHAR_DATA *victim, int dam, int dt) {
     xp_mod = 1;
     if (!IS_NPC(victim))
       xp_gain =
-          (long double)dam / 50000 * pow(victim->worth, xp_mod);
+          (long double)dam / 500000 * pow(victim->worth, xp_mod);
     if (IS_NPC(victim))
       xp_gain =
-          (long double)dam / 50000 * pow(victim->worth, xp_mod);
+          (long double)dam / 500000 * pow(victim->worth, xp_mod);
     /* Sparing and deadly combat pl gain's */
     if (!IS_NPC(ch) && !IS_NPC(victim) && !xIS_SET(ch->act, PLR_SPAR) && !xIS_SET(victim->act, PLR_SPAR)) {
       xp_gain =
-          (long double)dam / 2500 * pow(victim->worth, xp_mod);
+          (long double)dam / 25000 * pow(victim->worth, xp_mod);
     }
     if (!IS_NPC(ch) && !IS_NPC(victim) && xIS_SET(ch->act, PLR_SPAR) && xIS_SET(victim->act, PLR_SPAR)) {
       xp_gain =
-          (long double)dam / 37500 * pow(victim->worth, xp_mod);
+          (long double)dam / 375000 * pow(victim->worth, xp_mod);
     }
     /* PL Gains cut if player is stronger than opontants */
     if (!IS_NPC(victim)) {
@@ -6184,7 +6184,7 @@ damage(CHAR_DATA *ch, CHAR_DATA *victim, int dam, int dt) {
 
         act(AT_HIT, buf1, ch, NULL, victim, TO_CHAR);
       } else if (xp_gain_post >= 1) {
-        sprintf(buf1, "Your pl increases by %s points.",
+        sprintf(buf1, "Your pl increases by %s point(s).",
                 num_punct_ld(xp_gain_post));
         act(AT_HIT, buf1, ch, NULL, victim, TO_CHAR);
       }

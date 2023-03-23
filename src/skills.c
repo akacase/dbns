@@ -2383,7 +2383,7 @@ void do_bash(CHAR_DATA *ch, char *argument) {
 	  }
 	}
 	else if (!str_cmp(arg, "200")) {
-	  if (ch->bashpower < 1) {
+	  if (ch->bashpower < 3) {
 		send_to_char("You lack the skill.\n\r", ch);
 		return;
 	  }
@@ -2412,7 +2412,7 @@ void do_bash(CHAR_DATA *ch, char *argument) {
 	  }
 	}
 	else if (!str_cmp(arg, "300")) {
-	  if (ch->bashpower < 2) {
+	  if (ch->bashpower < 5) {
 		send_to_char("You lack the skill.\n\r", ch);
 		return;
 	  }
@@ -2441,7 +2441,7 @@ void do_bash(CHAR_DATA *ch, char *argument) {
 	  }
 	}
 	else if (!str_cmp(arg, "400")) {
-	  if (ch->bashpower < 3) {
+	  if (ch->bashpower < 7) {
 		send_to_char("You lack the skill.\n\r", ch);
 		return;
 	  }
@@ -2470,7 +2470,7 @@ void do_bash(CHAR_DATA *ch, char *argument) {
 	  }
 	}
 	else if (!str_cmp(arg, "500")) {
-	  if (ch->bashpower < 4) {
+	  if (ch->bashpower < 10) {
 		send_to_char("You lack the skill.\n\r", ch);
 		return;
 	  }

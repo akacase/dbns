@@ -252,31 +252,34 @@ int get_damroll(CHAR_DATA *ch) {
   
   if (!xIS_SET((ch)->affected_by, AFF_KAIOKEN)) {
 	if (xIS_SET((ch)->affected_by, AFF_ENERGYFIST)) {
-	  damroll = get_curr_int(ch) / 18;
+	  damroll = get_curr_int(ch) / 1.8;
 	}
 	else if (xIS_SET((ch)->affected_by, AFF_HYBRIDSTYLE)) {
-	  damroll = (get_curr_str(ch) / 13) + (get_curr_int(ch) / 25);
+	  damroll = (get_curr_str(ch) / 1.3) + (get_curr_int(ch) / 2.5);
 	}
 	else if (xIS_SET((ch)->affected_by, AFF_BRUISERSTYLE)) {
-	  damroll = get_curr_str(ch) / 9;
+	  damroll = get_curr_str(ch) / 0.9;
 	}
 	else {
-	  damroll = get_curr_str(ch) / 10;
+	  damroll = get_curr_str(ch) / 1;
 	}
   }
   else if (xIS_SET((ch)->affected_by, AFF_KAIOKEN)) {
 	if (xIS_SET((ch)->affected_by, AFF_ENERGYFIST)) {
-	  damroll = (get_curr_int(ch) / 18) * ch->skillkaioken;
+	  damroll = (get_curr_int(ch) / 1.8) * ch->skillkaioken;
 	}
 	else if (xIS_SET((ch)->affected_by, AFF_HYBRIDSTYLE)) {
-	  damroll = ((get_curr_str(ch) / 13) + (get_curr_int(ch) / 25)) * ch->skillkaioken;
+	  damroll = ((get_curr_str(ch) / 1.3) + (get_curr_int(ch) / 2.5)) * ch->skillkaioken;
 	}
 	else if (xIS_SET((ch)->affected_by, AFF_BRUISERSTYLE)) {
-	  damroll = (get_curr_str(ch) / 9) * ch->skillkaioken;
+	  damroll = (get_curr_str(ch) / 0.9) * ch->skillkaioken;
 	}
 	else {
-	  damroll = (get_curr_str(ch) / 10) * ch->skillkaioken;
+	  damroll = (get_curr_str(ch) / 1) * ch->skillkaioken;
 	}
+  }
+  if (IS_NPC(ch)){
+	damroll = (get_curr_str(ch) / 10);
   }
 
   return damroll;
@@ -645,7 +648,7 @@ void kaioken_drain(CHAR_DATA *ch) {
   if (drain != 0 && ch->mana == 0) {
     if (ch->hit - drain > 0)
       ch->hit -= drain;
-    else if (ch->hit - drain < 0) {
+    else if (ch->hit - drain <= 0) {
       ch->hit -= drain;
       update_pos(ch);
       if (ch->position == POS_DEAD) {
