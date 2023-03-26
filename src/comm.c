@@ -2453,13 +2453,15 @@ void nanny(DESCRIPTOR_DATA *d, char *argument) {
 
         ch->level = 1;
         ch->exp = 5;
-        ch->pl = 5;
+        ch->pl = 1;
+		ch->truepl = 5;
         ch->gravAcc = 1;
         ch->gravSetting = 1;
         ch->exintensity = 0;
 		ch->releasepl = 0;
 		ch->pushpowerup = 0;
 		ch->transformhint = 0;
+		ch->notransform = 0;
 		ch->altssj = 0;
 		ch->biomass = 0;
 		ch->gsbiomass= 0;
@@ -3565,16 +3567,16 @@ char *default_fprompt(CHAR_DATA *ch) {
         } else {
           strcpy(buf, "&D<Life(&c%h&w) Ki(&c%m&w) ");
           if (ch->exp < ch->pl)
-            strcat(buf, "PL(%x/&Y%P&w)>");
+            strcat(buf, "PL(&Y%P&w)>");
           else if (ch->exp > ch->pl)
-            strcat(buf, "PL(%x/&B%P&w)>");
+            strcat(buf, "PL(&Y%P&w)>");
           else
-            strcat(buf, "PL(%x/&W%P&w)>");
+            strcat(buf, "PL(&Y%P&w)>");
 
           if (IS_NPC(ch) || IS_IMMORTAL(ch))
             strcat(buf, " %i%R");
         }
-        strcat(buf, "\n\r<Enemy(&R%y&w) Focus(&C%f&w) Armor(&c%z&w)> ");
+        strcat(buf, "\n\r<Enemy(&R%y&w)>");
         break;
       case 1:
         if (is_android(ch)) {
@@ -3591,16 +3593,16 @@ char *default_fprompt(CHAR_DATA *ch) {
         } else {
           strcpy(buf, "&D<Life(&c%h&w) Ki(&c%m&w) ");
           if (ch->exp < ch->pl)
-            strcat(buf, "PL(%x/&Y%P&w)>");
+            strcat(buf, "PL(Y%P&w)>");
           else if (ch->exp > ch->pl)
-            strcat(buf, "PL(%x/&B%P&w)>");
+            strcat(buf, "PL(&Y%P&w)>");
           else
-            strcat(buf, "PL(%x/&W%P&w)>");
+            strcat(buf, "PL(&Y%P&w)>");
 
           if (IS_NPC(ch) || IS_IMMORTAL(ch))
             strcat(buf, " %i%R");
         }
-        strcat(buf, "\n\r<Enemy(&R%y&w) Focus(&C%f&w)> ");
+        strcat(buf, "\n\r<Enemy(&R%y&w)>");
         break;
       case 2:
         if (is_android(ch)) {
@@ -3619,14 +3621,14 @@ char *default_fprompt(CHAR_DATA *ch) {
           if (ch->exp < ch->pl)
             strcat(buf, "PL(&Y%p&w)>");
           else if (ch->exp > ch->pl)
-            strcat(buf, "PL(&B%p&w)>");
+            strcat(buf, "PL(&Y%p&w)>");
           else
-            strcat(buf, "PL(&W%p&w)>");
+            strcat(buf, "PL(&Y%p&w)>");
 
           if (IS_NPC(ch) || IS_IMMORTAL(ch))
             strcat(buf, " %i%R");
         }
-        strcat(buf, "\n\r<Enemy(&R%y&w) Focus(&C%f&w) Armor(&c%z&w)> ");
+        strcat(buf, "\n\r<Enemy(&R%y&w)>");
         break;
       case 3:
         if (is_android(ch)) {
@@ -3645,14 +3647,14 @@ char *default_fprompt(CHAR_DATA *ch) {
           if (ch->exp < ch->pl)
             strcat(buf, "PL(&Y%p&w)>");
           else if (ch->exp > ch->pl)
-            strcat(buf, "PL(&B%p&w)>");
+            strcat(buf, "PL(&Y%p&w)>");
           else
-            strcat(buf, "PL(&W%p&w)>");
+            strcat(buf, "PL(&Y%p&w)>");
 
           if (IS_NPC(ch) || IS_IMMORTAL(ch))
             strcat(buf, " %i%R");
         }
-        strcat(buf, "\n\r<Enemy(&R%y&w) Focus(&C%f&w)> ");
+        strcat(buf, "\n\r<Enemy(&R%y&w)> ");
         break;
     }
   } else {
@@ -3670,16 +3672,16 @@ char *default_fprompt(CHAR_DATA *ch) {
     } else {
       strcpy(buf, "&D<Life(&c%h&w) Ki(&c%m&w) ");
       if (ch->exp < ch->pl)
-        strcat(buf, "PL(%x/&Y%P&w)>");
+        strcat(buf, "PL(&Y%P&w)>");
       else if (ch->exp > ch->pl)
-        strcat(buf, "PL(%x/&B%P&w)>");
+        strcat(buf, "PL(&Y%P&w)>");
       else
-        strcat(buf, "PL(%x/&W%P&w)>");
+        strcat(buf, "PL(&Y%P&w)>");
 
       if (IS_NPC(ch) || IS_IMMORTAL(ch))
         strcat(buf, " %i%R");
     }
-    strcat(buf, "\n\r<Enemy(&R%y&w) Focus(&C%f&w) Armor(&c%z&w)> ");
+    strcat(buf, "\n\r<Enemy(&R%y&w)> ");
   }
 
   return buf;
@@ -3719,11 +3721,11 @@ char *default_prompt(CHAR_DATA *ch) {
         } else {
           strcpy(buf, "&D<Life(&c%h&w) Ki(&c%m&w) ");
           if (ch->exp < ch->pl)
-            strcat(buf, "PL(%x/&Y%P&w)>");
+            strcat(buf, "PL(&Y%P&w)>");
           else if (ch->exp > ch->pl)
-            strcat(buf, "PL(%x/&B%P&w)>");
+            strcat(buf, "PL(&Y%P&w)>");
           else
-            strcat(buf, "PL(%x/&W%P&w)>");
+            strcat(buf, "PL(&Y%P&w)>");
 
           if (IS_NPC(ch) || IS_IMMORTAL(ch))
             strcat(buf, " %i%R");
@@ -3750,9 +3752,9 @@ char *default_prompt(CHAR_DATA *ch) {
           if (ch->exp < ch->pl)
             strcat(buf, "PL(&Y%p&w)>");
           else if (ch->exp > ch->pl)
-            strcat(buf, "PL(&B%p&w)>");
+            strcat(buf, "PL(&Y%p&w)>");
           else
-            strcat(buf, "PL(&W%p&w)>");
+            strcat(buf, "PL(&Y%p&w)>");
 
           if (IS_NPC(ch) || IS_IMMORTAL(ch))
             strcat(buf, " %i%R");
@@ -3776,11 +3778,11 @@ char *default_prompt(CHAR_DATA *ch) {
     } else {
       strcpy(buf, "&D<Life(&c%h&w) Ki(&c%m&w) ");
       if (ch->exp < ch->pl)
-        strcat(buf, "PL(%x/&Y%P&w)>");
+        strcat(buf, "PL(&Y%P&w)>");
       else if (ch->exp > ch->pl)
-        strcat(buf, "PL(%x/&B%P&w)>");
+        strcat(buf, "PL(&Y%P&w)>");
       else
-        strcat(buf, "PL(%x/&W%P&w)>");
+        strcat(buf, "PL(&Y%P&w)>");
 
       if (IS_NPC(ch) || IS_IMMORTAL(ch))
         strcat(buf, " %i%R");
@@ -4074,11 +4076,11 @@ void display_prompt(DESCRIPTOR_DATA *d) {
             if (xIS_SET(och->act, PLR_ROOMVNUM))
               sprintf(pbuf, "<#%d> ", ch->in_room->vnum);
             break;
-          case 'x':
+          /*case 'x':
             stat_ld = ch->exp;
             break;
           case 'X':
-            stat = exp_level(ch, ch->level + 1) - ch->exp;
+            stat = exp_level(ch, ch->level + 1) - ch->exp;*/
           case 'y':
             if (!ch->fighting || (victim = ch->fighting->who) == NULL)
               strcpy(pbuf, "N/A");

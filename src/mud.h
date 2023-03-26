@@ -3301,6 +3301,7 @@ struct char_data {
   time_t save_time;
   sh_int timer;
   sh_int wait;
+  int notransform;
   int hit;
   int max_hit;
   long long int worth;
@@ -3506,6 +3507,7 @@ struct char_data {
   int gold;
   long double exp;
   long double pl;
+  long double truepl;
   long double heart_pl;
   int rage;
   EXT_BV act;

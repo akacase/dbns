@@ -38,17 +38,6 @@ char *tiny_affect_loc_name(int location);
 void do_gained(CHAR_DATA *ch, char *argument) {
   if (IS_NPC(ch))
     return;
-  long double pltrack = 0;
-
-  pltrack = ch->exp - ch->logon_start;
-  if (pltrack < 0)
-    pltrack = 0;
-  if (is_android(ch) || is_superandroid(ch))
-    pager_printf(ch, "\n\r&GGAINED TL SINCE LOGON: %-16s&C\n\r",
-                 num_punct_ld(pltrack));
-  else
-    pager_printf(ch, "\n\r&GGAINED PL SINCE LOGON: %-16s&C\n\r",
-                 num_punct_ld(pltrack));
   return;
 }
 
@@ -422,36 +411,14 @@ void do_score(CHAR_DATA *ch, char *argument) {
   }
 
   if (is_android(ch) || is_superandroid(ch)) {
-    pager_printf(ch, "BASE TECHLEVEL: %-16s\n\r", num_punct_ld(ch->exp));
-
-    if (ch->pl != ch->exp) {
       pager_printf(ch, "&YCURR TECHLEVEL: %-16s&C\n\r", num_punct_ld(ch->pl));
-    } else
-      pager_printf(ch, "CURR TECHLEVEL: %-16s\n\r", num_punct_ld(ch->pl));
   } else {
-    pager_printf(ch, "BASE POWERLEVEL: %-16s\n\r", num_punct_ld(ch->exp));
-
-    if (ch->pl != ch->exp) {
-      pager_printf(ch, "&YCURR POWERLEVEL: %-16s&C\n\r", num_punct_ld(ch->pl));
-    } else {
-      pager_printf(ch, "CURR POWERLEVEL: %-16s\n\r", num_punct_ld(ch->pl));
-    }
-    int acc = 0;
-    acc = ((ch->gravExp / 1000) + 1);
-    pager_printf_color(ch, "&GKI CONTROL: &Y%-3d\n\r", ch->train);
-    pager_printf_color(ch, "&GFORM MASTERY LEVEL: &Y%-3d\n\r", form_mastery);
+	  pager_printf(ch, "&YCURR POWERLEVEL: %-16s&C\n\r", num_punct_ld(ch->pl));
+	  int acc = 0;
+	  acc = ((ch->gravExp / 1000) + 1);
+	  pager_printf_color(ch, "&GKI CONTROL: &Y%-3d\n\r", ch->train);
+	  pager_printf_color(ch, "&GFORM MASTERY LEVEL: &Y%-3d\n\r", form_mastery);
   }
-  long double pltrack = 0;
-
-  pltrack = ch->exp - ch->logon_start;
-  if (pltrack < 0)
-    pltrack = 0;
-  if (is_android(ch) || is_superandroid(ch))
-    pager_printf(ch, "&GGAINED TL SINCE LOGON: %-16s&C\n\r",
-                 num_punct_ld(pltrack));
-  else
-    pager_printf(ch, "&GGAINED PL SINCE LOGON: %-16s&C\n\r",
-                 num_punct_ld(pltrack));
 
   pager_printf(ch, "                          PKills: [&R%5.5d&C] PDeaths: [&R%5.5d&C] SparWins: [&R%5.5d&C]\n\r",
                ch->pcdata->pkills, ch->pcdata->pdeaths, ch->pcdata->spar_wins);

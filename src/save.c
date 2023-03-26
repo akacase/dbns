@@ -466,6 +466,7 @@ void fwrite_char(CHAR_DATA *ch, FILE *fp) {
   fprintf(fp, "Gravityrankup           %d\n", ch->gravityrankup);
   fprintf(fp, "Gravityexp                   %lld\n", ch->gravExp);
   fprintf(fp, "Altssj                   %d\n", ch->altssj);
+  fprintf(fp, "Notransform                   %d\n", ch->notransform);
   fprintf(fp, "Pushpowerup                   %d\n", ch->pushpowerup);
   fprintf(fp, "Transformhint                   %d\n", ch->transformhint);
   fprintf(fp, "Skillkaioken                   %d\n", ch->skillkaioken);
@@ -484,6 +485,7 @@ void fwrite_char(CHAR_DATA *ch, FILE *fp) {
   fprintf(fp, "Zeni           %d\n", ch->gold);
   fprintf(fp, "Exp            %.0Lf\n", ch->exp);
   fprintf(fp, "PL             %.0Lf\n", ch->pl);
+  fprintf(fp, "Truepl         %.0Lf\n", ch->truepl);
   if (ch->race == 1)
     fprintf(fp, "HeartPL        %.0Lf\n", ch->heart_pl);
   if (((is_saiyan(ch) || is_hb(ch)) && ch->exp > 8000000) || (is_bio(ch) && ch->exp > 7500000))
@@ -2000,6 +2002,7 @@ void fread_char(CHAR_DATA *ch, FILE *fp, bool preload) {
         KEY("NoImmune", ch->no_immune, fread_number(fp));
         KEY("NoResistant", ch->no_resistant, fread_number(fp));
         KEY("NoSusceptible", ch->no_susceptible, fread_number(fp));
+		KEY("Notransform", ch->notransform, fread_number(fp));
         if (!strcmp("Nuisance", word)) {
           fMatch = true;
           CREATE(ch->pcdata->nuisance, NUISANCE_DATA, 1);
@@ -2413,6 +2416,7 @@ void fread_char(CHAR_DATA *ch, FILE *fp, bool preload) {
           break;
         }
         KEY("Train", ch->train, fread_number(fp));
+		KEY("Truepl", ch->truepl, fread_number_ld(fp));
 		KEY("Transformhint", ch->transformhint, fread_number(fp));
         KEY("Trust", ch->trust, fread_number(fp));
         /* Let no character be trusted higher than one below maxlevel -- Narn */

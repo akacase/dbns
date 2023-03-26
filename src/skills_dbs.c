@@ -1696,7 +1696,7 @@ void do_powerdown(CHAR_DATA *ch, char *argument) {
   if (xIS_SET((ch)->affected_by, AFF_HEART))
     xREMOVE_BIT(ch->affected_by, AFF_HEART);
   transStatRemove(ch);
-  ch->pl = ch->exp;
+  ch->pl = 1;
   ch->releasepl = ch->exp;
   ch->pcdata->suppress = ch->exp;
   heart_calc(ch, "");
@@ -1753,7 +1753,7 @@ void do_powerup(CHAR_DATA *ch, char *argument) {
   one_argument(argument, arg);
   form_mastery = (ch->train / 90000);
   safemaximum = form_mastery;
-  plmod = (ch->pl / ch->exp);
+  plmod = ((double)ch->pl / ch->truepl);
 
   if (IS_NPC(ch))
     return;
@@ -1873,17 +1873,19 @@ void do_powerup(CHAR_DATA *ch, char *argument) {
     sevencon = ch->perm_con * 1.25;
   }
   if (arg[0] == '\0') {
-    if (ch->pl >= ch->exp) {
-      send_to_char("Powerup how? Commands are: 'begin', 'push', 'stop', 'train', and 'release'.\n\r", ch);
-      send_to_char("'powerup push' is dangerous and can only be used after first powering up to maximum.\n\r", ch);
-      return;
-    }
-    if (ch->pl < ch->exp) {
-      ch->pl = ch->exp;
-      act(AT_WHITE, "You unsuppress your power.", ch, NULL, NULL, TO_CHAR);
-      act(AT_WHITE, "$n unsuppresses $s power.", ch, NULL, NULL, TO_NOTVICT);
-      return;
-    }
+	send_to_char("Powerup how? Commands are: 'begin', 'push', 'stop', 'train', 'notransform' and 'release'.\n\r", ch);
+	send_to_char("'powerup push' is dangerous and can only be used after first powering up to maximum.\n\r", ch);
+	return;
+  }
+  if (!str_cmp(arg, "notransform") && ch->notransform == 0) {
+	send_to_char("Toggling 'off' auto-transformation on powerup.\n\r", ch);
+	ch->notransform = 1;
+	return;
+  }
+  if (!str_cmp(arg, "notransform") && ch->notransform == 1) {
+	send_to_char("Toggling 'on' auto-transformation on powerup.\n\r", ch);
+	ch->notransform = 0;
+	return;
   }
   if (!str_cmp(arg, "train") && !xIS_SET((ch)->affected_by, AFF_POWERUPTRAIN) && !xIS_SET((ch)->affected_by, AFF_POWERCHANNEL) && !xIS_SET((ch)->affected_by, AFF_OVERCHANNEL)) {
     xSET_BIT((ch)->affected_by, AFF_POWERUPTRAIN);
@@ -1911,7 +1913,7 @@ void do_powerup(CHAR_DATA *ch, char *argument) {
       act(AT_YELLOW, "Your eyes turn blue, your hair flashes blonde and a fiery golden aura erupts around you!", ch, NULL, NULL, TO_CHAR);
       act(AT_YELLOW, "$n's hair suddenly flashes blonde, transcending beyond $s normal limits in a fiery display of golden ki!", ch, NULL, NULL, TO_NOTVICT);
       ch->powerup = 0;
-      ch->pl = ch->exp * 50;
+      ch->pl = ch->truepl * 50;
       transStatApply(ch, onestr, onespd, oneint, onecon);
       if (!IS_NPC(ch)) {
         ch->pcdata->eyes = 0;
@@ -1946,7 +1948,7 @@ void do_powerup(CHAR_DATA *ch, char *argument) {
       act(AT_YELLOW, "$n is enveloped in a storm golden ki. Wreathed in crackling, pure energy, $e truly ascends to the next level.", ch, NULL, NULL, TO_NOTVICT);
       act(AT_YELLOW, "$n stares straight ahead with absolute confidence.", ch, NULL, NULL, TO_NOTVICT);
       ch->powerup = 29;
-      ch->pl = ch->exp * 225;
+      ch->pl = ch->truepl * 225;
       transStatApply(ch, fourstr, fourspd, fourint, fourcon);
       if (!IS_NPC(ch)) {
         ch->pcdata->eyes = 0;
@@ -1979,7 +1981,7 @@ void do_powerup(CHAR_DATA *ch, char *argument) {
       act(AT_YELLOW, "The world feel as though it could pull apart as $n's aura expands! $s eyebrows disappear slowly and $s hair lengthens, flowing down $s back.", ch, NULL, NULL, TO_NOTVICT);
       act(AT_YELLOW, "When the bright light fades, $n stands within a wreath of countless bolts of energy, unleashing the primal rage of the Saiyan race.", ch, NULL, NULL, TO_NOTVICT);
       ch->powerup = 39;
-      ch->pl = ch->exp * 350;
+      ch->pl = ch->truepl * 350;
       transStatApply(ch, fivestr, fivespd, fiveint, fivecon);
       if (!IS_NPC(ch)) {
         ch->pcdata->eyes = 0;
@@ -2013,7 +2015,7 @@ void do_powerup(CHAR_DATA *ch, char *argument) {
       act(AT_RED, "$n's hair and eyes return to normal. However, in the next instant something feels very different.", ch, NULL, NULL, TO_NOTVICT);
       act(AT_RED, "$n is encompassed in a massive aura of crimson and gold, $s hair and eyes shifting red with a subtle violet tint.", ch, NULL, NULL, TO_NOTVICT);
       ch->powerup = 48;
-      ch->pl = ch->exp * 500;
+      ch->pl = ch->truepl * 500;
       transStatApply(ch, sixstr, sixspd, sixint, sixcon);
       if (!IS_NPC(ch)) {
         ch->pcdata->eyes = 0;
@@ -2049,7 +2051,7 @@ void do_powerup(CHAR_DATA *ch, char *argument) {
       act(AT_PURPLE, "In an explosion of ki your body fades away, emerging from the dust in a new form!", ch, NULL, NULL, TO_CHAR);
       act(AT_PURPLE, "Your chitinous body is replaced with smooth skin and patches as reflective as glass.", ch, NULL, NULL, TO_CHAR);
       act(AT_PURPLE, "$n emerges from an explosion of ki, $s body transformed into a sleek, smooth form.", ch, NULL, NULL, TO_NOTVICT);
-      ch->pl = ch->exp * 50;
+      ch->pl = ch->truepl * 50;
       ch->powerup = 11;
       transStatApply(ch, threestr, threespd, threeint, threecon);
       return;
@@ -2086,7 +2088,7 @@ void do_powerup(CHAR_DATA *ch, char *argument) {
         xREMOVE_BIT((ch)->affected_by, AFF_POWERCHANNEL);
       act(AT_PURPLE, "Your muscles expand massively in size, swelling with incredible energy!", ch, NULL, NULL, TO_CHAR);
       act(AT_PURPLE, "$n's muscles expand massively in size, swelling with incredible energy!", ch, NULL, NULL, TO_NOTVICT);
-      ch->pl = ch->exp * 150;
+      ch->pl = ch->truepl * 150;
       transStatApply(ch, fourstr, fourspd, fourint, fourcon);
       ch->powerup = 45;
       return;
@@ -2112,28 +2114,28 @@ void do_powerup(CHAR_DATA *ch, char *argument) {
         act(auraColor, "In a violent flash of energy, the deepest reaches of your potential explodes to the surface.", ch, NULL, NULL, TO_CHAR);
         act(auraColor, "In a violent flash of energy, the deepest reaches of $n's potential explodes to the surface.", ch, NULL, NULL, TO_NOTVICT);
         transStatApply(ch, sixstr, sixspd, sixint, sixcon);
-        ch->pl = ch->exp * 346.708;
+        ch->pl = ch->truepl * 346.708;
         ch->powerup = 47;
         return;
       } else if (ch->masterymystic >= 4230000) {
         act(auraColor, "Hundreds of bolts of pure, white energy crackle across the surface of your body as you access your true potential.", ch, NULL, NULL, TO_CHAR);
         act(auraColor, "Hundreds of bolts of pure, white energy crackle across the surface of $n's body as they access their true potential.", ch, NULL, NULL, TO_NOTVICT);
         transStatApply(ch, fivestr, fivespd, fiveint, fivecon);
-        ch->pl = ch->exp * 246.399;
+        ch->pl = ch->truepl * 246.399;
         ch->powerup = 40;
         return;
       } else if (ch->masterymystic >= 3600000) {
         act(auraColor, "A massive amount of energy floods through your body as you access your latent potential.", ch, NULL, NULL, TO_CHAR);
         act(auraColor, "A massive amount of energy floods through $n's body as they access their latent potential.", ch, NULL, NULL, TO_NOTVICT);
         transStatApply(ch, fourstr, fourspd, fourint, fourcon);
-        ch->pl = ch->exp * 151.267;
+        ch->pl = ch->truepl * 151.267;
         ch->powerup = 30;
         return;
       } else if (ch->masterymystic >= 2520000) {
         act(auraColor, "A massive amount of energy floods through your body as you access your latent potential.", ch, NULL, NULL, TO_CHAR);
         act(auraColor, "A massive amount of energy floods through $n's body as they access their latent potential.", ch, NULL, NULL, TO_NOTVICT);
         transStatApply(ch, onestr, onespd, oneint, onecon);
-        ch->pl = ch->exp * 51.710;
+        ch->pl = ch->truepl * 51.710;
         ch->powerup = 8;
         return;
       }
@@ -2159,7 +2161,7 @@ void do_powerup(CHAR_DATA *ch, char *argument) {
         act(auraColor, "The heavens shake and the earth trembles at your feet as you unleash your ancestral might.", ch, NULL, NULL, TO_CHAR);
         act(auraColor, "The heavens shake and the earth trembles at $n's feet as they unleash their ancestral might.", ch, NULL, NULL, TO_NOTVICT);
         transStatApply(ch, fivestr, fivespd, fiveint, fivecon);
-        ch->pl = ch->exp * 346.708;
+        ch->pl = ch->truepl * 346.708;
         ch->powerup = 47;
         return;
       }
@@ -2167,7 +2169,7 @@ void do_powerup(CHAR_DATA *ch, char *argument) {
         act(auraColor, "A blinding white aura suffuses your body, sending crackling energy scattering in all directions.", ch, NULL, NULL, TO_CHAR);
         act(auraColor, "A blinding white aura suffuses $n's body, sending crackling energy scattering in all directions.", ch, NULL, NULL, TO_NOTVICT);
         transStatApply(ch, fourstr, fourspd, fourint, fourcon);
-        ch->pl = ch->exp * 246.399;
+        ch->pl = ch->truepl * 246.399;
         ch->powerup = 40;
         return;
       }
@@ -2175,7 +2177,7 @@ void do_powerup(CHAR_DATA *ch, char *argument) {
         act(auraColor, "Giant beams of light erupt from the surface of your body as you unleash ancient secrets.", ch, NULL, NULL, TO_CHAR);
         act(auraColor, "Giant beams of light erupt from the surface of $n's body as they unleash ancient secrets.", ch, NULL, NULL, TO_NOTVICT);
         transStatApply(ch, threestr, threespd, threeint, threecon);
-        ch->pl = ch->exp * 151.267;
+        ch->pl = ch->truepl * 151.267;
         ch->powerup = 30;
         return;
       }
@@ -2183,19 +2185,39 @@ void do_powerup(CHAR_DATA *ch, char *argument) {
         act(auraColor, "A brilliant white light emerges from within, flooding the room with a sense of spiritual calm.", ch, NULL, NULL, TO_CHAR);
         act(auraColor, "A brilliant white light emerges from within $n, flooding the room with a sense of spiritual calm.", ch, NULL, NULL, TO_NOTVICT);
         transStatApply(ch, onestr, onespd, oneint, onecon);
-        ch->pl = ch->exp * 50;
+        ch->pl = ch->truepl * 50;
         ch->powerup = 0;
         return;
       }
     }
   } else if (!str_cmp(arg, "release")) {
-    if ((ch->pl - (ch->pl * 0.03)) > ch->exp) {
+    if ((ch->pl - (ch->pl * 0.03)) > 1) {
       ch->pl -= (ch->pl * 0.03);
       act(AT_WHITE, "You take a deep breath, releasing some of your pent-up energy.", ch, NULL, NULL, TO_CHAR);
       act(AT_WHITE, "$n takes a deep breath, releasing some pent-up energy.", ch, NULL, NULL, TO_NOTVICT);
       return;
-    } else if ((ch->pl - (ch->pl * 0.03)) <= ch->exp) {
-      send_to_char("It might be a better idea to 'powerdown'.\n\r", ch);
+    } else if ((ch->pl - (ch->pl * 0.03)) <= 1) {
+      send_to_char("Are you trying to play dead?\n\r", ch);
+      return;
+    }
+  } else if (!str_cmp(arg, "release2")) {
+    if ((ch->pl - (ch->pl * 0.06)) > 1) {
+      ch->pl -= (ch->pl * 0.06);
+      act(AT_WHITE, "You take a deep breath, releasing some of your pent-up energy.", ch, NULL, NULL, TO_CHAR);
+      act(AT_WHITE, "$n takes a deep breath, releasing some pent-up energy.", ch, NULL, NULL, TO_NOTVICT);
+      return;
+    } else if ((ch->pl - (ch->pl * 0.06)) <= 1) {
+      send_to_char("Are you trying to play dead?\n\r", ch);
+      return;
+    }
+  } else if (!str_cmp(arg, "release3")) {
+    if ((ch->pl - (ch->pl * 0.09)) > 1) {
+      ch->pl -= (ch->pl * 0.09);
+      act(AT_WHITE, "You take a deep breath, releasing some of your pent-up energy.", ch, NULL, NULL, TO_CHAR);
+      act(AT_WHITE, "$n takes a deep breath, releasing some pent-up energy.", ch, NULL, NULL, TO_NOTVICT);
+      return;
+    } else if ((ch->pl - (ch->pl * 0.09)) <= 1) {
+      send_to_char("Are you trying to play dead?\n\r", ch);
       return;
     }
   } else if (!str_cmp(arg, "begin")) {
@@ -2249,7 +2271,7 @@ void do_powerup(CHAR_DATA *ch, char *argument) {
       return;
     }
   } else {
-    send_to_char("Powerup how? Commands are: 'begin', 'push', and 'stop'.\n\r", ch);
+    send_to_char("Powerup how? Commands are: 'begin', 'push', 'notransform' and 'stop'.\n\r", ch);
     send_to_char("'powerup push' is dangerous and can only be used after first powering up to maximum.\n\r", ch);
     return;
   }
@@ -2964,7 +2986,7 @@ void do_punch(CHAR_DATA *ch, char *argument) {
     return;
   }
   if (!IS_NPC(ch)) {
-	kilimit = ch->train / 10000;
+	kilimit = (float)ch->train / 10000;
 	physmult = (float)get_curr_str(ch) / 950 + 1;
 	kicmult = (float)kilimit / 100 + 1;
 	smastery = (float)ch->masterypunch / 10000;
@@ -5748,7 +5770,7 @@ void do_energy_ball(CHAR_DATA *ch, char *argument) {
   }
   if (!IS_NPC(ch)) {
 	AT_AURACOLOR = ch->pcdata->auraColorPowerUp;
-	kilimit = ch->train / 10000;
+	kilimit = (float)ch->train / 10000;
 	kimult = (float)get_curr_int(ch) / 1000 + 1;
 	kicmult = (float)kilimit / 100 + 1;
 	smastery = (float)ch->masteryenergy_ball / 10000;
@@ -5966,7 +5988,7 @@ void do_energy_disc(CHAR_DATA *ch, char *argument) {
     return;
   }
   if (!IS_NPC(ch)) {
-	kilimit = ch->train / 10000;
+	kilimit = (float)ch->train / 10000;
 	kimult = (float)get_curr_int(ch) / 1000 + 1;
 	kicmult = (float)kilimit / 100 + 1;
 	smastery = (float)ch->masteryenergy_disc / 10000;
@@ -6184,7 +6206,7 @@ void do_forcewave(CHAR_DATA *ch, char *argument) {
     return;
   }
   if (!IS_NPC(ch)) {
-	kilimit = ch->train / 10000;
+	kilimit = (float)ch->train / 10000;
 	kimult = (float)get_curr_int(ch) / 1000 + 1;
 	kicmult = (float)kilimit / 100 + 1;
 	smastery = (float)ch->masteryforcewave / 10000;
@@ -6402,7 +6424,7 @@ void do_concentrated_beam(CHAR_DATA *ch, char *argument) {
     return;
   }
   if (!IS_NPC(ch)) {
-	kilimit = ch->train / 10000;
+	kilimit = (float)ch->train / 10000;
 	kimult = (float)get_curr_int(ch) / 1000 + 1;
 	kicmult = (float)kilimit / 100 + 1;
 	smastery = (float)ch->masteryconcentrated_beam / 10000;
@@ -6620,7 +6642,7 @@ void do_energybeam(CHAR_DATA *ch, char *argument) {
     return;
   }
   if (!IS_NPC(ch)) {
-	kilimit = ch->train / 10000;
+	kilimit = (float)ch->train / 10000;
 	kimult = (float)get_curr_int(ch) / 1000 + 1;
 	kicmult = (float)kilimit / 100 + 1;
 	smastery = (float)ch->masteryenergybeam / 10000;
@@ -6838,7 +6860,7 @@ void do_lariat(CHAR_DATA *ch, char *argument) {
     return;
   }
   if (!IS_NPC(ch)) {
-	kilimit = ch->train / 10000;
+	kilimit = (float)ch->train / 10000;
 	physmult = (float)get_curr_str(ch) / 950 + 1;
 	kicmult = (float)kilimit / 100 + 1;
 	smastery = (float)ch->masterylariat / 10000;
@@ -7071,7 +7093,7 @@ void do_ecliptic_meteor(CHAR_DATA *ch, char *argument) {
     return;
   }
   if (!IS_NPC(ch)) {
-	kilimit = ch->train / 10000;
+	kilimit = (float)ch->train / 10000;
 	kimult = (float)get_curr_int(ch) / 1000 + 1;
 	kicmult = (float)kilimit / 100 + 1;
 	smastery = (float)ch->masteryecliptic_meteor / 10000;
@@ -7304,7 +7326,7 @@ void do_gigantic_meteor(CHAR_DATA *ch, char *argument) {
     return;
   }
   if (!IS_NPC(ch)) {
-	kilimit = ch->train / 10000;
+	kilimit = (float)ch->train / 10000;
 	kimult = (float)get_curr_int(ch) / 1000 + 1;
 	kicmult = (float)kilimit / 100 + 1;
 	smastery = (float)ch->masterygigantic_meteor / 10000;
@@ -7537,7 +7559,7 @@ void do_meteor(CHAR_DATA *ch, char *argument) {
     return;
   }
   if (!IS_NPC(ch)) {
-	kilimit = ch->train / 10000;
+	kilimit = (float)ch->train / 10000;
 	kimult = (float)get_curr_int(ch) / 1000 + 1;
 	kicmult = (float)kilimit / 100 + 1;
 	smastery = (float)ch->masterymeteor / 10000;
@@ -7770,7 +7792,7 @@ void do_crusherball(CHAR_DATA *ch, char *argument) {
     return;
   }
   if (!IS_NPC(ch)) {
-	kilimit = ch->train / 10000;
+	kilimit = (float)ch->train / 10000;
 	kimult = (float)get_curr_int(ch) / 1000 + 1;
 	kicmult = (float)kilimit / 100 + 1;
 	smastery = (float)ch->masterycrusherball / 10000;
@@ -8003,7 +8025,7 @@ void do_haymaker(CHAR_DATA *ch, char *argument) {
     return;
   }
   if (!IS_NPC(ch)) {
-	kilimit = ch->train / 10000;
+	kilimit = (float)ch->train / 10000;
 	physmult = (float)get_curr_str(ch) / 950 + 1;
 	kicmult = (float)kilimit / 100 + 1;
 	smastery = (float)ch->masteryhaymaker / 10000;
@@ -8236,7 +8258,7 @@ void do_collide(CHAR_DATA *ch, char *argument) {
     return;
   }
   if (!IS_NPC(ch)) {
-	kilimit = ch->train / 10000;
+	kilimit = (float)ch->train / 10000;
 	physmult = (float)get_curr_str(ch) / 950 + 1;
 	kicmult = (float)kilimit / 100 + 1;
 	smastery = (float)ch->masterycollide / 10000;
@@ -8469,7 +8491,7 @@ void do_kamehameha(CHAR_DATA *ch, char *argument) {
     return;
   }
   if (!IS_NPC(ch)) {
-	kilimit = ch->train / 10000;
+	kilimit = (float)ch->train / 10000;
 	kimult = (float)get_curr_int(ch) / 1000 + 1;
 	kicmult = (float)kilimit / 100 + 1;
 	smastery = (float)ch->masterykamehameha / 10000;
@@ -8705,7 +8727,7 @@ void do_kamehameha(CHAR_DATA *ch, char *argument) {
     return;
   }
   if (!IS_NPC(ch)) {
-    kilimit = ch->train / 10000;
+    kilimit = (float)ch->train / 10000;
     kimult = (float)get_curr_int(ch) / 1000 + 1;
     kicmult = (float)kilimit / 100 + 1;
     smastery = (float)ch->masterykamehameha / 10000;
@@ -8811,7 +8833,7 @@ void do_masenko(CHAR_DATA *ch, char *argument) {
   }
   if (!IS_NPC(ch)) {
 	// Player pfile mastery values for damage scaling -- change carefully
-	kilimit = ch->train / 10000;
+	kilimit = (float)ch->train / 10000;
 	kimult = (float)get_curr_int(ch) / 1000 + 1;
 	kicmult = (float)kilimit / 100 + 1;
 	smastery = (float)ch->masterymasenko / 10000;
@@ -9043,7 +9065,7 @@ void do_sbc(CHAR_DATA *ch, char *argument) {
   }
   if (!IS_NPC(ch)) {
 	// Player pfile mastery values for damage scaling -- change carefully
-	kilimit = ch->train / 10000;
+	kilimit = (float)ch->train / 10000;
 	kimult = (float)get_curr_int(ch) / 1000 + 1;
 	kicmult = (float)kilimit / 100 + 1;
 	smastery = (float)ch->masterysbc / 10000;
@@ -9279,7 +9301,7 @@ void do_dd(CHAR_DATA *ch, char *argument) {
     return;
   }
   if (!IS_NPC(ch)) {
-	kilimit = ch->train / 10000;
+	kilimit = (float)ch->train / 10000;
 	kimult = (float)get_curr_int(ch) / 1000 + 1;
 	kicmult = (float)kilimit / 100 + 1;
 	smastery = (float)ch->masterydestructo_disc / 10000;
@@ -9567,6 +9589,10 @@ void do_suppress(CHAR_DATA *ch, char *argument) {
     send_to_char("huh?\n\r", ch);
     return;
   }
+  if (!is_transformed(ch)) {
+	send_to_char("You need to be transformed to suppress a transformation!\n\r", ch);
+    return;
+  }
 
   if (argument[0] != '\0') {
     arg = is_number(argument) ? atof(argument) : -1;
@@ -9578,12 +9604,12 @@ void do_suppress(CHAR_DATA *ch, char *argument) {
                    ch);
       return;
     }
-    if (arg > ch->exp && arg >= ch->releasepl) {
+    if (arg > ch->truepl && arg >= ch->releasepl) {
       send_to_char("Nice try!  You can't pull power from nowhere!\n\r",
                    ch);
       return;
     }
-	if (arg > ch->exp && arg < ch->releasepl) {
+	if (arg > ch->truepl && arg < ch->releasepl) {
 	  ch->pcdata->suppress = arg;
       send_to_char("Okay.  Suppress level set!\n\r",
                    ch);
@@ -9610,7 +9636,7 @@ void do_suppress(CHAR_DATA *ch, char *argument) {
     }
     if (!IS_NPC(ch)) {
       if (ch->pcdata->suppress < 1)
-        ch->pcdata->suppress = ch->exp;
+        ch->pcdata->suppress = 1;
 
       ch->pl = ch->pcdata->suppress;
     } else {
@@ -9751,13 +9777,13 @@ void do_meditate(CHAR_DATA *ch, char *argument) {
           stat_train(ch, "int", weightstat);
           statComb = ((get_curr_str(ch) + get_curr_dex(ch) + get_curr_int(ch) + get_curr_con(ch)) - 39);
           increase = number_range(1, 3);
-          xp_gain = (long double)increase / 75000 * statComb;
+          xp_gain = (long double)increase / 750000 * statComb;
           gain_exp(ch, xp_gain);
           ch->mana += (float)right / 19 * ch->max_mana;
           ch->mana += 10;
           ch->train += weighttrain;
           if (is_namek(ch) || is_kaio(ch))
-            ch->energymastery += 8;
+            ch->energymastery += 3;
           if (ch->energymastery >= (ch->kspgain * 100)) {
             pager_printf_color(ch,
                                "&CYou gained 5 Skill Points!\n\r");
@@ -9803,7 +9829,7 @@ void do_meditate(CHAR_DATA *ch, char *argument) {
           stat_train(ch, "int", weightstat);
           statComb = ((get_curr_str(ch) + get_curr_dex(ch) + get_curr_int(ch) + get_curr_con(ch)) - 39);
           increase = number_range(1, 3);
-          xp_gain = (long double)increase / 75000 * statComb;
+          xp_gain = (long double)increase / 750000 * statComb;
 		  if (!is_bio(ch)) {
             gain_exp(ch, xp_gain);
 		  }
@@ -10163,7 +10189,7 @@ void do_death_ball(CHAR_DATA *ch, char *argument) {
     return;
   }
   if (!IS_NPC(ch)) {
-	kilimit = ch->train / 10000;
+	kilimit = (float)ch->train / 10000;
 	kimult = (float)get_curr_int(ch) / 1000 + 1;
 	kicmult = (float)kilimit / 100 + 1;
 	smastery = (float)ch->masterydeath_ball / 10000;
@@ -10429,7 +10455,7 @@ void do_eye_beam(CHAR_DATA *ch, char *argument) {
   }
   if (!IS_NPC(ch)) {
 	AT_AURACOLOR = ch->pcdata->auraColorPowerUp;
-	kilimit = ch->train / 10000;
+	kilimit = (float)ch->train / 10000;
 	kimult = (float)get_curr_int(ch) / 1000 + 1;
 	kicmult = (float)kilimit / 100 + 1;
 	smastery = (float)ch->masteryeye_beam / 10000;
@@ -10651,7 +10677,7 @@ void do_finger_beam(CHAR_DATA *ch, char *argument) {
   }
   if (!IS_NPC(ch)) {
 	AT_AURACOLOR = ch->pcdata->auraColorPowerUp;
-	kilimit = ch->train / 10000;
+	kilimit = (float)ch->train / 10000;
 	kimult = (float)get_curr_int(ch) / 1000 + 1;
 	kicmult = (float)kilimit / 100 + 1;
 	smastery = (float)ch->masteryfinger_beam / 10000;
@@ -12161,7 +12187,7 @@ void do_destructive_wave(CHAR_DATA *ch, char *argument) {
   }
   if (!IS_NPC(ch)) {
 	AT_AURACOLOR = ch->pcdata->auraColorPowerUp;
-	kilimit = ch->train / 10000;
+	kilimit = (float)ch->train / 10000;
 	kimult = (float)get_curr_int(ch) / 1000 + 1;
 	kicmult = (float)kilimit / 100 + 1;
 	smastery = (float)ch->masterydestructive_wave / 10000;
@@ -12538,7 +12564,7 @@ void do_shockwave(CHAR_DATA *ch, char *argument) {
   }
   if (!IS_NPC(ch)) {
 	AT_AURACOLOR = ch->pcdata->auraColorPowerUp;
-	kilimit = ch->train / 10000;
+	kilimit = (float)ch->train / 10000;
 	kimult = (float)get_curr_int(ch) / 1000 + 1;
 	kicmult = (float)kilimit / 100 + 1;
 	smastery = (float)ch->masteryshockwave / 10000;
@@ -12771,7 +12797,7 @@ void do_gallic_gun(CHAR_DATA *ch, char *argument) {
     return;
   }
   if (!IS_NPC(ch)) {
-	kilimit = ch->train / 10000;
+	kilimit = (float)ch->train / 10000;
 	kimult = (float)get_curr_int(ch) / 1000 + 1;
 	kicmult = (float)kilimit / 100 + 1;
 	smastery = (float)ch->masterygallic_gun / 10000;
@@ -13004,7 +13030,7 @@ void do_makosen(CHAR_DATA *ch, char *argument) {
     return;
   }
   if (!IS_NPC(ch)) {
-	kilimit = ch->train / 10000;
+	kilimit = (float)ch->train / 10000;
 	kimult = (float)get_curr_int(ch) / 1000 + 1;
 	kicmult = (float)kilimit / 100 + 1;
 	smastery = (float)ch->masterymakosen / 10000;

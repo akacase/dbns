@@ -2340,7 +2340,7 @@ void do_bash(CHAR_DATA *ch, char *argument) {
     return;
   }
   if (!IS_NPC(ch)) {
-	kilimit = ch->train / 10000;
+	kilimit = (float)ch->train / 10000;
 	physmult = (float)get_curr_str(ch) / 950 + 1;
 	kicmult = (float)kilimit / 100 + 1;
 	smastery = (float)ch->masterybash / 10000;

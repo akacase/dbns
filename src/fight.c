@@ -490,29 +490,24 @@ void violence_update(void) {
     }
 	/*Make sure 'powerup push' doesn't run unchecked and kill people, and make sure you can't suppress to more than you could power up to*/
 	if (!xIS_SET((ch)->affected_by, AFF_SAFEMAX) && !IS_NPC(ch)) {
-	  ch->releasepl = ch->exp;
+	  ch->releasepl = ch->truepl;
 	  ch->pushpowerup = 0;
 	}
 	if (xIS_SET((ch)->affected_by, AFF_SAFEMAX) && !IS_NPC(ch)) {
 	  ch->releasepl = ch->pl;
 	}
-	if (!is_transformed(ch) && !IS_NPC(ch)) {
-	  double plmod;
-	  plmod = (ch->pl / ch->exp);
-	  if (!xIS_SET((ch)->affected_by, AFF_SAFEMAX)) {
-	    if (plmod > 30 && is_saiyan(ch))
-		  ch->pl = (ch->exp * 30);
-	    else if (plmod > 30 && is_hb(ch))
-		  ch->pl = (ch->exp * 30);
-	    else if (plmod > 40 && is_namek(ch))
-		  ch->pl = (ch->exp * 40);
-	    else if (plmod > 30 && is_kaio(ch))
-		  ch->pl = (ch->exp * 30);
-	    else if (plmod > 30 && is_human(ch))
-		  ch->pl = (ch->exp * 30);
-		else if (plmod > 30 && is_genie(ch))
-		  ch->pl = (ch->exp * 30);
-	  }
+	if (!IS_NPC(ch)) {
+	  long double skillfloat = 0.00000;
+	  long double powerupfloat = 0.00000;
+	  long double biomassfloat = 0.00000;
+	  
+	  skillfloat = ((float)(ch->energymastery + ch->strikemastery) / 10000);
+	  powerupfloat = ((float)ch->masterypowerup / 1000);
+	  biomassfloat = ((float)ch->biomass / 10000);
+	  if (!is_bio(ch))
+		ch->truepl = (long double)(ch->exp * (1 + (powerupfloat + skillfloat)));
+	  else
+		ch->truepl = (long double)(ch->exp * (1 + (biomassfloat + skillfloat)));
 	}
 	if (!xIS_SET((ch)->affected_by, AFF_KAIOKEN) && !IS_NPC(ch)) {
 	  if (ch->skillkaioken != 0 && ch->skillkaioken > 1)
@@ -537,7 +532,7 @@ void violence_update(void) {
           xREMOVE_BIT((ch)->affected_by, AFF_OVERCHANNEL);
         if (xIS_SET((ch)->affected_by, AFF_SAFEMAX))
           xREMOVE_BIT((ch)->affected_by, AFF_SAFEMAX);
-        ch->pl = ch->exp;
+        ch->pl = ch->truepl;
         ch->powerup = 0;
         transStatRemove(ch);
         act(AT_PURPLE, "You lose control of your ki and return to normal!", ch, NULL, NULL, TO_CHAR);
@@ -566,7 +561,7 @@ void violence_update(void) {
           xREMOVE_BIT((ch)->affected_by, AFF_OVERCHANNEL);
         if (xIS_SET((ch)->affected_by, AFF_SAFEMAX))
           xREMOVE_BIT((ch)->affected_by, AFF_SAFEMAX);
-        ch->pl = ch->exp;
+        ch->pl = ch->truepl;
         ch->powerup = 0;
         transStatRemove(ch);
         act(AT_PURPLE, "You lose control of your ki and return to normal!", ch, NULL, NULL, TO_CHAR);
@@ -592,7 +587,7 @@ void violence_update(void) {
           xREMOVE_BIT((ch)->affected_by, AFF_OVERCHANNEL);
         if (xIS_SET((ch)->affected_by, AFF_SAFEMAX))
           xREMOVE_BIT((ch)->affected_by, AFF_SAFEMAX);
-        ch->pl = ch->exp;
+        ch->pl = ch->truepl;
         ch->powerup = 0;
         transStatRemove(ch);
         act(AT_PURPLE, "You lose control of your ki and return to normal!", ch, NULL, NULL, TO_CHAR);
@@ -621,7 +616,7 @@ void violence_update(void) {
           xREMOVE_BIT((ch)->affected_by, AFF_OVERCHANNEL);
         if (xIS_SET((ch)->affected_by, AFF_SAFEMAX))
           xREMOVE_BIT((ch)->affected_by, AFF_SAFEMAX);
-        ch->pl = ch->exp;
+        ch->pl = ch->truepl;
         ch->powerup = 0;
         transStatRemove(ch);
         act(AT_PURPLE, "You lose control of your ki and return to normal!", ch, NULL, NULL, TO_CHAR);
@@ -650,7 +645,7 @@ void violence_update(void) {
           xREMOVE_BIT((ch)->affected_by, AFF_OVERCHANNEL);
         if (xIS_SET((ch)->affected_by, AFF_SAFEMAX))
           xREMOVE_BIT((ch)->affected_by, AFF_SAFEMAX);
-        ch->pl = ch->exp;
+        ch->pl = ch->truepl;
         ch->powerup = 0;
         transStatRemove(ch);
         act(AT_PURPLE, "You lose control of your ki and return to normal!", ch, NULL, NULL, TO_CHAR);
@@ -676,7 +671,7 @@ void violence_update(void) {
           xREMOVE_BIT((ch)->affected_by, AFF_OVERCHANNEL);
         if (xIS_SET((ch)->affected_by, AFF_SAFEMAX))
           xREMOVE_BIT((ch)->affected_by, AFF_SAFEMAX);
-        ch->pl = ch->exp;
+        ch->pl = ch->truepl;
         ch->powerup = 0;
         transStatRemove(ch);
         act(AT_PURPLE, "You lose control of your ki and return to normal!", ch, NULL, NULL, TO_CHAR);
@@ -702,7 +697,7 @@ void violence_update(void) {
           xREMOVE_BIT((ch)->affected_by, AFF_OVERCHANNEL);
         if (xIS_SET((ch)->affected_by, AFF_SAFEMAX))
           xREMOVE_BIT((ch)->affected_by, AFF_SAFEMAX);
-        ch->pl = ch->exp;
+        ch->pl = ch->truepl;
         ch->powerup = 0;
         ch->mana = 0;
         transStatRemove(ch);
@@ -751,7 +746,7 @@ void violence_update(void) {
           xREMOVE_BIT((ch)->affected_by, AFF_OVERCHANNEL);
         if (xIS_SET((ch)->affected_by, AFF_SAFEMAX))
           xREMOVE_BIT((ch)->affected_by, AFF_SAFEMAX);
-        ch->pl = ch->exp;
+        ch->pl = ch->truepl;
         ch->powerup = 0;
         transStatRemove(ch);
         act(AT_WHITE, "You lose control of your ki and return to normal!", ch, NULL, NULL, TO_CHAR);
@@ -802,7 +797,7 @@ void violence_update(void) {
           xREMOVE_BIT((ch)->affected_by, AFF_OVERCHANNEL);
         if (xIS_SET((ch)->affected_by, AFF_SAFEMAX))
           xREMOVE_BIT((ch)->affected_by, AFF_SAFEMAX);
-        ch->pl = ch->exp;
+        ch->pl = ch->truepl;
         ch->powerup = 0;
         transStatRemove(ch);
         act(AT_PURPLE, "You lose control of your ki and return to normal!", ch, NULL, NULL, TO_CHAR);
@@ -849,7 +844,7 @@ void violence_update(void) {
           xREMOVE_BIT((ch)->affected_by, AFF_OVERCHANNEL);
         if (xIS_SET((ch)->affected_by, AFF_SAFEMAX))
           xREMOVE_BIT((ch)->affected_by, AFF_SAFEMAX);
-        ch->pl = ch->exp;
+        ch->pl = ch->truepl;
         ch->powerup = 0;
         transStatRemove(ch);
         act(AT_PURPLE, "You lose control of your ki and return to normal!", ch, NULL, NULL, TO_CHAR);
@@ -893,7 +888,7 @@ void violence_update(void) {
           xREMOVE_BIT((ch)->affected_by, AFF_OVERCHANNEL);
         if (xIS_SET((ch)->affected_by, AFF_SAFEMAX))
           xREMOVE_BIT((ch)->affected_by, AFF_SAFEMAX);
-        ch->pl = ch->exp;
+        ch->pl = ch->truepl;
         ch->powerup = 0;
         transStatRemove(ch);
         act(AT_PURPLE, "You lose control of your ki and return to normal!", ch, NULL, NULL, TO_CHAR);
@@ -918,7 +913,7 @@ void violence_update(void) {
           xREMOVE_BIT((ch)->affected_by, AFF_OVERCHANNEL);
         if (xIS_SET((ch)->affected_by, AFF_SAFEMAX))
           xREMOVE_BIT((ch)->affected_by, AFF_SAFEMAX);
-        ch->pl = ch->exp;
+        ch->pl = ch->truepl;
         ch->powerup = 0;
         transStatRemove(ch);
         act(AT_PURPLE, "You lose control of your ki and return to normal!", ch, NULL, NULL, TO_CHAR);
@@ -949,7 +944,7 @@ void violence_update(void) {
           xREMOVE_BIT((ch)->affected_by, AFF_OVERCHANNEL);
         if (xIS_SET((ch)->affected_by, AFF_SAFEMAX))
           xREMOVE_BIT((ch)->affected_by, AFF_SAFEMAX);
-        ch->pl = ch->exp;
+        ch->pl = ch->truepl;
         ch->powerup = 0;
         transStatRemove(ch);
         act(AT_PURPLE, "You lose control of your ki and return to normal!", ch, NULL, NULL, TO_CHAR);
@@ -980,7 +975,7 @@ void violence_update(void) {
           xREMOVE_BIT((ch)->affected_by, AFF_OVERCHANNEL);
         if (xIS_SET((ch)->affected_by, AFF_SAFEMAX))
           xREMOVE_BIT((ch)->affected_by, AFF_SAFEMAX);
-        ch->pl = ch->exp;
+        ch->pl = ch->truepl;
         ch->powerup = 0;
         transStatRemove(ch);
         ch->pcdata->haircolor = ch->pcdata->orignalhaircolor;
@@ -1014,7 +1009,7 @@ void violence_update(void) {
           xREMOVE_BIT((ch)->affected_by, AFF_OVERCHANNEL);
         if (xIS_SET((ch)->affected_by, AFF_SAFEMAX))
           xREMOVE_BIT((ch)->affected_by, AFF_SAFEMAX);
-        ch->pl = ch->exp;
+        ch->pl = ch->truepl;
         ch->powerup = 0;
         transStatRemove(ch);
         ch->pcdata->haircolor = ch->pcdata->orignalhaircolor;
@@ -1049,7 +1044,7 @@ void violence_update(void) {
           xREMOVE_BIT((ch)->affected_by, AFF_OVERCHANNEL);
         if (xIS_SET((ch)->affected_by, AFF_SAFEMAX))
           xREMOVE_BIT((ch)->affected_by, AFF_SAFEMAX);
-        ch->pl = ch->exp;
+        ch->pl = ch->truepl;
         ch->powerup = 0;
         transStatRemove(ch);
         ch->pcdata->haircolor = ch->pcdata->orignalhaircolor;
@@ -1085,7 +1080,7 @@ void violence_update(void) {
           xREMOVE_BIT((ch)->affected_by, AFF_OVERCHANNEL);
         if (xIS_SET((ch)->affected_by, AFF_SAFEMAX))
           xREMOVE_BIT((ch)->affected_by, AFF_SAFEMAX);
-        ch->pl = ch->exp;
+        ch->pl = ch->truepl;
         ch->powerup = 0;
         transStatRemove(ch);
         ch->pcdata->haircolor = ch->pcdata->orignalhaircolor;
@@ -1122,7 +1117,7 @@ void violence_update(void) {
           xREMOVE_BIT((ch)->affected_by, AFF_OVERCHANNEL);
         if (xIS_SET((ch)->affected_by, AFF_SAFEMAX))
           xREMOVE_BIT((ch)->affected_by, AFF_SAFEMAX);
-        ch->pl = ch->exp;
+        ch->pl = ch->truepl;
         ch->powerup = 0;
         transStatRemove(ch);
         ch->pcdata->haircolor = ch->pcdata->orignalhaircolor;
@@ -1160,7 +1155,7 @@ void violence_update(void) {
           xREMOVE_BIT((ch)->affected_by, AFF_OVERCHANNEL);
         if (xIS_SET((ch)->affected_by, AFF_SAFEMAX))
           xREMOVE_BIT((ch)->affected_by, AFF_SAFEMAX);
-        ch->pl = ch->exp;
+        ch->pl = ch->truepl;
         ch->powerup = 0;
         transStatRemove(ch);
         ch->pcdata->haircolor = ch->pcdata->orignalhaircolor;
@@ -1199,7 +1194,7 @@ void violence_update(void) {
           xREMOVE_BIT((ch)->affected_by, AFF_OVERCHANNEL);
         if (xIS_SET((ch)->affected_by, AFF_SAFEMAX))
           xREMOVE_BIT((ch)->affected_by, AFF_SAFEMAX);
-        ch->pl = ch->exp;
+        ch->pl = ch->truepl;
         ch->powerup = 0;
         transStatRemove(ch);
         ch->pcdata->haircolor = ch->pcdata->orignalhaircolor;
@@ -1240,7 +1235,7 @@ void violence_update(void) {
       powerupspd = ch->perm_dex * 0.05;
       powerupint = ch->perm_int * 0.05;
       powerupcon = ch->perm_con * 0.05;
-
+	  
       safemaximum = ((get_curr_int(ch) * 0.03) + 1);
       if (is_saiyan(ch) || is_hb(ch))
         form_mastery = (ch->masteryssj / 90000);
@@ -1254,7 +1249,7 @@ void violence_update(void) {
 		form_mastery = (ch->masterybio / 90000);
 	  if (is_genie(ch))
 		form_mastery = (ch->masterymajin / 90000);
-	  plmod = (ch->pl / ch->exp);
+	  plmod = ((float)ch->pl / ch->truepl);
       if (!IS_NPC(ch) && ch->pcdata->auraColorPowerUp > 0)
         auraColor = ch->pcdata->auraColorPowerUp;
       if (form_mastery < 1)
@@ -1332,11 +1327,19 @@ void violence_update(void) {
 
           safemaximum = 1 + (ch->masterypowerup / 1000) + (ch->energymastery / 10000) + (ch->strikemastery / 10000);
           saiyanTotal = ((ch->strikemastery) + (ch->energymastery) + (ch->masterypowerup));
-          if (ch->powerup < safemaximum) {
-            ch->pl *= (long double)((long double)1.01 + ((long double)ch->masterypowerup / 200000));
+          if (ch->powerup < 10) {
+			  if ((ch->pl + (long double)((float)ch->truepl / 10)) < ch->truepl) {
+				ch->pl += (long double)((float)ch->truepl / 10);
+				act(auraColor, "Your inner potential explodes into a display of roaring ki.", ch, NULL, NULL, TO_CHAR);
+				act(auraColor, "$n's inner potential explodes into a display of roaring ki.", ch, NULL, NULL, TO_NOTVICT);
+			  }
+			  else {
+				ch->pl = ch->truepl;
+				ch->powerup = 10;
+			  }
             ch->powerup += 1;
             transStatApply(ch, powerupstr, powerupspd, powerupint, powerupcon);
-            if (plmod >= 30 && saiyanTotal >= 1000000) {
+            if (saiyanTotal >= 1000000 && ch->powerup >= 9 && ch->notransform == 0) {
               xSET_BIT((ch)->affected_by, AFF_SSJ);
               xREMOVE_BIT((ch)->affected_by, AFF_POWERCHANNEL);
 			  if (ch->perm_str >= (ch->perm_int * 4)) {
@@ -1356,41 +1359,30 @@ void violence_update(void) {
                 act(AT_YELLOW, "$n's hair suddenly flashes blonde, transcending beyond $s normal limits in a fiery display of golden ki!", ch, NULL, NULL, TO_NOTVICT);
 			  }
               ch->powerup = 0;
-              ch->pl = ch->exp * 50;
+              ch->pl = ch->truepl * 50;
               transStatApply(ch, onestr, onespd, oneint, onecon);
               if (!IS_NPC(ch)) {
                 ch->pcdata->eyes = 0;
                 ch->pcdata->haircolor = 3;
               }
             }
-            if ((plmod >= 27) && (saiyanTotal < 1000000)) {
-              ch->pl = (ch->exp * 30);
-              act(auraColor, "The raging torrent of ki fades but your power remains.", ch, NULL, NULL, TO_CHAR);
-              act(auraColor, "$n's raging torrent of ki fades away but $s power remains.", ch, NULL, NULL, TO_NOTVICT);
-              xREMOVE_BIT((ch)->affected_by, AFF_POWERCHANNEL);
-              ch->powerup = safemaximum;
-              xSET_BIT((ch)->affected_by, AFF_SAFEMAX);
-            }
-            if (plmod >= 20 && plmod < 27) {
+            /*if (plmod >= 20 && plmod < 27) {
               act(auraColor, "Your body is barely visible amidst your vortex of ki.", ch, NULL, NULL, TO_CHAR);
               act(auraColor, "$n's body is barely visible amidst $s vortex of ki!", ch, NULL, NULL, TO_NOTVICT);
             }
             if (plmod >= 15 && plmod < 20) {
               act(auraColor, "Your aura spirals upward, nearly licking the clouds.", ch, NULL, NULL, TO_CHAR);
               act(auraColor, "$n's aura spirals upward, nearly licking the clouds.", ch, NULL, NULL, TO_NOTVICT);
-            }
-            if (plmod >= 10 && plmod < 15) {
-              act(auraColor, "Your inner potential explodes into a display of roaring ki.", ch, NULL, NULL, TO_CHAR);
-              act(auraColor, "$n's inner potential explodes into a display of roaring ki.", ch, NULL, NULL, TO_NOTVICT);
-            }
-            if (plmod >= 5 && plmod < 10) {
+            }*/
+            /*if (plmod >= 5 && plmod < 10) {
               act(auraColor, "Your aura flickers around you, only faintly visible.", ch, NULL, NULL, TO_CHAR);
               act(auraColor, "$n's aura flickers around $m, only faintly visible.", ch, NULL, NULL, TO_NOTVICT);
             }
             if (plmod > 1 && plmod < 5) {
               act(auraColor, "Your body glows faintly.", ch, NULL, NULL, TO_CHAR);
               act(auraColor, "$n's body glows faintly.", ch, NULL, NULL, TO_NOTVICT);
-            }/*
+            }*/
+			/*
             if ((plmod >= 27) && (saiyanTotal < 4000)) {
               ch->pl = (ch->exp * 30);
               act(auraColor, "The raging torrent of ki fades, but your power remains.", ch, NULL, NULL, TO_CHAR);
@@ -1399,13 +1391,20 @@ void violence_update(void) {
               xSET_BIT((ch)->affected_by, AFF_SAFEMAX);
             }*/
           }
-          if ((ch->powerup >= 15) || (ch->powerup >= safemaximum)) {
-            ch->powerup = safemaximum;
+          if (ch->powerup >= 10 && saiyanTotal < 1000000) {
+            ch->powerup = 10;
             xREMOVE_BIT((ch)->affected_by, AFF_POWERCHANNEL);
             xSET_BIT((ch)->affected_by, AFF_SAFEMAX);
             act(auraColor, "Having reached your limit, you stop powering up. Going any further would be dangerous.", ch, NULL, NULL, TO_CHAR);
             act(auraColor, "$n reaches $s limit and stops powering up.", ch, NULL, NULL, TO_NOTVICT);
           }
+		  else if (ch->powerup >= 10 && ch->notransform == 1) {
+			ch->powerup = 10;
+            xREMOVE_BIT((ch)->affected_by, AFF_POWERCHANNEL);
+            xSET_BIT((ch)->affected_by, AFF_SAFEMAX);
+            act(auraColor, "Having reached your limit, you stop powering up. Going any further would be dangerous.", ch, NULL, NULL, TO_CHAR);
+            act(auraColor, "$n reaches $s limit and stops powering up.", ch, NULL, NULL, TO_NOTVICT);
+		  }
         }
         if (xIS_SET((ch)->affected_by, AFF_SSJ) && !xIS_SET((ch)->affected_by, AFF_USSJ) && !xIS_SET((ch)->affected_by, AFF_USSJ2) && !xIS_SET((ch)->affected_by, AFF_SSJ2) && !xIS_SET((ch)->affected_by, AFF_SSJ3) && !xIS_SET((ch)->affected_by, AFF_SSJ4) && !xIS_SET((ch)->affected_by, AFF_SGOD)) {
           safemaximum = form_mastery;
@@ -1421,7 +1420,7 @@ void violence_update(void) {
               xREMOVE_BIT((ch)->affected_by, AFF_POWERCHANNEL);
               act(AT_YELLOW, "Your muscles bulge, and with a sudden burst of power you ascend beyond the reaches of any mere Super Saiyan.", ch, NULL, NULL, TO_CHAR);
               act(AT_YELLOW, "$n's muscles bulge, drawing on a power beyond that of any mere Super Saiyan.", ch, NULL, NULL, TO_NOTVICT);
-              ch->pl = ch->exp * 75;
+              ch->pl = ch->truepl * 75;
               transStatApply(ch, twostr, twospd, twoint, twocon);
             }
           }
@@ -1447,7 +1446,7 @@ void violence_update(void) {
               xREMOVE_BIT((ch)->affected_by, AFF_POWERCHANNEL);
               act(AT_YELLOW, "Your muscles expand to inhuman sizes, engorging yourself with energy!", ch, NULL, NULL, TO_CHAR);
               act(AT_YELLOW, "$n's muscles expand to inhuman sizes, engorging $mself with energy!", ch, NULL, NULL, TO_NOTVICT);
-              ch->pl = ch->exp * 150;
+              ch->pl = ch->truepl * 150;
               transStatApply(ch, threestr, threespd, threeint, threecon);
             }
           }
@@ -1475,7 +1474,7 @@ void violence_update(void) {
               act(AT_YELLOW, "Your hair stands further on end as you ascend to the true next level.", ch, NULL, NULL, TO_CHAR);
               act(AT_YELLOW, "$n's muscles shrink amidst a storm of golden ki. In a sea of crackling, pure energy, $e truly ascends to the next level.", ch, NULL, NULL, TO_NOTVICT);
               act(AT_YELLOW, "$n stares straight ahead with absolute confidence.", ch, NULL, NULL, TO_NOTVICT);
-              ch->pl = ch->exp * 225;
+              ch->pl = ch->truepl * 225;
               transStatApply(ch, fourstr, fourspd, fourint, fourcon);
             }
           }
@@ -1503,7 +1502,7 @@ void violence_update(void) {
               act(AT_YELLOW, "Only the stench of ozone accompanies the countless bolts of energy wreathing your body.", ch, NULL, NULL, TO_CHAR);
               act(AT_YELLOW, "The world feel as though it could pull apart as $n's aura expands! $s eyebrows disappear slowly and $s hair lengthens, flowing down $s back.", ch, NULL, NULL, TO_NOTVICT);
               act(AT_YELLOW, "When the bright light fades, $n stands within a wreath of countless bolts of energy, unleashing the primal rage of the Saiyan race.", ch, NULL, NULL, TO_NOTVICT);
-              ch->pl = ch->exp * 350;
+              ch->pl = ch->truepl * 350;
               transStatApply(ch, fivestr, fivespd, fiveint, fivecon);
             }
           }
@@ -1532,7 +1531,7 @@ void violence_update(void) {
               act(AT_RED, "Your hair and eyes flash red, tinted subtly with violet as you ascend beyond your mortal restrictions.", ch, NULL, NULL, TO_CHAR);
               act(AT_RED, "$n's hair and eyes return to normal. However, in the next instant something feels very different.", ch, NULL, NULL, TO_NOTVICT);
               act(AT_RED, "$n is encompassed in a massive aura of crimson and gold, $s hair and eyes shifting red with a subtle violet tint.", ch, NULL, NULL, TO_NOTVICT);
-              ch->pl = ch->exp * 500;
+              ch->pl = ch->truepl * 500;
               transStatApply(ch, sixstr, sixspd, sixint, sixcon);
             }
           }
@@ -1560,7 +1559,7 @@ void violence_update(void) {
               act(AT_LBLUE, "Your hair and eyes flash blue, and a brilliant cyan aura erupts around you!", ch, NULL, NULL, TO_CHAR);
               act(AT_LBLUE, "$n's body is swallowed in an intense blue light. What emerges is no mere Super Saiyan.", ch, NULL, NULL, TO_NOTVICT);
               act(AT_LBLUE, "$n's hair and eyes shimmer a deep cyan hue, merging fully with a power beyond mortal ki.", ch, NULL, NULL, TO_NOTVICT);
-              ch->pl = ch->exp * 625;
+              ch->pl = ch->truepl * 625;
               transStatApply(ch, sevenstr, sevenspd, sevenint, sevencon);
             }
           }
@@ -1629,15 +1628,19 @@ void violence_update(void) {
         if (!xIS_SET((ch)->affected_by, AFF_SEMIPERFECT) && !xIS_SET((ch)->affected_by, AFF_PERFECT) && !xIS_SET((ch)->affected_by, AFF_ULTRAPERFECT)) {
           safemaximum = 1 + (ch->gsbiomass);
           biototal = ((ch->strikemastery) + (ch->energymastery) + (ch->biomass));
-          if (ch->powerup < safemaximum) {
-            ch->pl *= 1.25;
+          if (ch->powerup < 10) {
+            if ((ch->pl + (long double)((float)ch->truepl / 10)) < ch->truepl) {
+				ch->pl += (long double)((float)ch->truepl / 10);
+				act(auraColor, "The essence of your harvested victims churns the air around you!", ch, NULL, NULL, TO_CHAR);
+				act(auraColor, "The essence of $n's harvested victims churns the air around $s aura!", ch, NULL, NULL, TO_NOTVICT);
+			}
+			  else {
+				ch->pl = ch->truepl;
+				ch->powerup = 10;
+			  }
             ch->powerup += 1;
             transStatApply(ch, powerupstr, powerupspd, powerupint, powerupcon);
-			if (plmod > 1) {
-              act(auraColor, "The essence of your harvested victims churns the air around you!", ch, NULL, NULL, TO_CHAR);
-              act(auraColor, "The essence of $n's harvested victims churns the air around $s aura!", ch, NULL, NULL, TO_NOTVICT);
-            }
-            if (plmod >= 40 && ch->gsbiomass >= 17) {
+            if (ch->powerup >= 9 && ch->gsbiomass >= 17) {
               xSET_BIT((ch)->affected_by, AFF_SEMIPERFECT);
               xREMOVE_BIT((ch)->affected_by, AFF_POWERCHANNEL);
               act(AT_GREEN, "Your body expands in size, shifting to a larger, more humanoid form!", ch, NULL, NULL, TO_CHAR);
@@ -1647,11 +1650,11 @@ void violence_update(void) {
 			  act(AT_GREEN, "$n's wings and tail compress, shrinking along $s upper back.", ch, NULL, NULL, TO_NOTVICT);
 			  act(AT_GREEN, "A hideous display.", ch, NULL, NULL, TO_NOTVICT);
               ch->powerup = 0;
-              ch->pl = ch->exp * 60;
+              ch->pl = ch->truepl * 60;
               transStatApply(ch, onestr, onespd, oneint, onecon);
             }
           }
-          if (ch->powerup >= safemaximum) {
+          if (ch->powerup >= 10 && ch->gsbiomass < 17) {
             ch->powerup = safemaximum;
             xREMOVE_BIT((ch)->affected_by, AFF_POWERCHANNEL);
             xSET_BIT((ch)->affected_by, AFF_SAFEMAX);
@@ -1679,7 +1682,7 @@ void violence_update(void) {
               act(AT_GREEN, "$n erupts into a blinding white light, emerging from the chaos in a more", ch, NULL, NULL, TO_NOTVICT);
 			  act(AT_GREEN, "compressed, agile form. Their features are decidedly more humanoid,", ch, NULL, NULL, TO_NOTVICT);
 			  act(AT_GREEN, "exuding confidence and an unsettling inner strength.", ch, NULL, NULL, TO_NOTVICT);
-              ch->pl = ch->exp * 125;
+              ch->pl = ch->truepl * 125;
               transStatApply(ch, twostr, twospd, twoint, twocon);
             }
           }
@@ -1708,10 +1711,10 @@ void violence_update(void) {
               act(AT_GREEN, "You ascend beyond mere perfection, attaining a level of strength previously unknown.", ch, NULL, NULL, TO_CHAR);
 			  act(AT_GREEN, "Absolute perfection.", ch, NULL, NULL, TO_CHAR);
               act(AT_GREEN, "$n ascends beyond mere perfection, sending crackling bolts of energy arcing throughout $s massive aura!", ch, NULL, NULL, TO_NOTVICT);
-              ch->pl = ch->exp * 225;
+              ch->pl = ch->truepl * 225;
               transStatApply(ch, threestr, threespd, threeint, threecon);
             } else if ((plmod >= 150) && (ch->gsbiomass = 18)) {
-              ch->pl = (ch->exp * 150);
+              ch->pl = (ch->truepl * 150);
               act(AT_YELLOW, "Reaching the limits of perfection, your golden aura reduces dramatically in size.", ch, NULL, NULL, TO_CHAR);
               act(AT_YELLOW, "$n reaches the limits of perfection, unable to force out any more power.", ch, NULL, NULL, TO_NOTVICT);
               xREMOVE_BIT((ch)->affected_by, AFF_POWERCHANNEL);
@@ -1783,15 +1786,19 @@ void violence_update(void) {
         if (!xIS_SET((ch)->affected_by, AFF_THIN_TRANS) && !xIS_SET((ch)->affected_by, AFF_SUPER_TRANS) && !xIS_SET((ch)->affected_by, AFF_KID_TRANS)) {
           safemaximum = 1 + (ch->masterypowerup / 1000) + (ch->energymastery / 10000) + (ch->strikemastery / 10000);
           majintotal = ((ch->strikemastery) + (ch->energymastery) + (ch->masterypowerup));
-          if (ch->powerup < safemaximum) {
-            ch->pl *= (long double)((long double)1.01 + ((long double)ch->masterypowerup / 200000));
+          if (ch->powerup < 10) {
+            if ((ch->pl + (long double)((float)ch->truepl / 10)) < ch->truepl) {
+				ch->pl += (long double)((float)ch->truepl / 10);
+				act(auraColor, "Your power increases, sending gouts of superheated steam into the air around you!", ch, NULL, NULL, TO_CHAR);
+				act(auraColor, "$n's power increases, sending gouts of superheated steam into the air around $s!", ch, NULL, NULL, TO_NOTVICT);
+			}
+			else {
+				ch->pl = ch->truepl;
+				ch->powerup = 10;
+			}
             ch->powerup += 1;
             transStatApply(ch, powerupstr, powerupspd, powerupint, powerupcon);
-			if (plmod > 1) {
-              act(auraColor, "Your power increases, sending gouts of superheated steam into the air around you!", ch, NULL, NULL, TO_CHAR);
-              act(auraColor, "$n's power increases, sending gouts of superheated steam into the air around $s!", ch, NULL, NULL, TO_NOTVICT);
-            }
-            if (plmod >= 30 && majintotal >= 1000000) {
+            if (ch->powerup >= 9 && majintotal >= 1000000) {
               xSET_BIT((ch)->affected_by, AFF_THIN_TRANS);
               xREMOVE_BIT((ch)->affected_by, AFF_POWERCHANNEL);
               act(auraColor, "You disappear into the sea of superheated steam around you.", ch, NULL, NULL, TO_CHAR);
@@ -1799,18 +1806,12 @@ void violence_update(void) {
               act(auraColor, "$n disappears into a sea of superheated steam.", ch, NULL, NULL, TO_NOTVICT);
 			  act(auraColor, "When $n emerges, $s fat stores have been converted entirely into energy!", ch, NULL, NULL, TO_NOTVICT);
               ch->powerup = 0;
-              ch->pl = ch->exp * 60;
+              ch->pl = ch->truepl * 60;
               transStatApply(ch, onestr, onespd, oneint, onecon);
             }
-			else if ((plmod >= 30) && (majintotal < 1000000)) {
-              ch->pl = (ch->exp * 30);
-              xREMOVE_BIT((ch)->affected_by, AFF_POWERCHANNEL);
-              ch->powerup = safemaximum;
-              xSET_BIT((ch)->affected_by, AFF_SAFEMAX);
-            }
           }
-          if (ch->powerup >= safemaximum) {
-            ch->powerup = safemaximum;
+          if (ch->powerup >= 10 && majintotal < 1000000) {
+            ch->powerup = 10;
             xREMOVE_BIT((ch)->affected_by, AFF_POWERCHANNEL);
             xSET_BIT((ch)->affected_by, AFF_SAFEMAX);
             act(auraColor, "You reach your limit, the gouts of superheated air pouring out of your body halting suddenly. Guess you've run out of steam.", ch, NULL, NULL, TO_CHAR);
@@ -1834,7 +1835,7 @@ void violence_update(void) {
               act(auraColor, "Your excess energy converts into even greater muscle mass, rippling with intensity!", ch, NULL, NULL, TO_CHAR);
               act(auraColor, "$n's body tenses, an incredible power welling up from deep within.", ch, NULL, NULL, TO_NOTVICT);
 			  act(auraColor, "$n's excess energy converts into even greater muscle mass, rippling with intensity!", ch, NULL, NULL, TO_NOTVICT);
-              ch->pl = ch->exp * 125;
+              ch->pl = ch->truepl * 125;
               transStatApply(ch, twostr, twospd, twoint, twocon);
             }
           }
@@ -1864,7 +1865,7 @@ void violence_update(void) {
 			  act(auraColor, "but obtaining a level of power beyond your wildest imagining!", ch, NULL, NULL, TO_CHAR);
               act(auraColor, "$n's body shrinks suddenly, taking an almost child-like appearance.", ch, NULL, NULL, TO_NOTVICT);
 			  act(auraColor, "They'd be difficult to take seriously, if not for the tremendous power radiating from within!", ch, NULL, NULL, TO_NOTVICT);
-              ch->pl = ch->exp * 225;
+              ch->pl = ch->truepl * 225;
               transStatApply(ch, threestr, threespd, threeint, threecon);
           }
           if (ch->powerup >= safemaximum) {
@@ -1940,26 +1941,30 @@ void violence_update(void) {
         fivecon = ch->perm_con * 1.40;
         if (!xIS_SET((ch)->affected_by, AFF_ICER2) && !xIS_SET((ch)->affected_by, AFF_ICER3) && !xIS_SET((ch)->affected_by, AFF_ICER4) && !xIS_SET((ch)->affected_by, AFF_ICER5) && !xIS_SET((ch)->affected_by, AFF_GOLDENFORM)) {
           safemaximum = 1 + (ch->masterypowerup / 1000) + (ch->energymastery / 10000) + (ch->strikemastery / 10000);
-          if (ch->powerup < safemaximum) {
-            ch->pl *= 1.15;
+          if (ch->powerup < 10) {
+            if ((ch->pl + (long double)((float)ch->truepl / 10)) < ch->truepl) {
+				ch->pl += (long double)((float)ch->truepl / 10);
+				act(auraColor, "You glow brightly, hairline fractures appearing across your body.", ch, NULL, NULL, TO_CHAR);
+				act(auraColor, "$n glows brightly, hairline fractures appearing across $s body.", ch, NULL, NULL, TO_NOTVICT);
+			}
+			else {
+				ch->pl = ch->truepl;
+				ch->powerup = 10;
+			}
             ch->powerup += 1;
             transStatApply(ch, powerupstr, powerupspd, powerupint, powerupcon);
-            if (plmod >= 2) {
+            if (ch->masterypowerup >= 1000 && ch->powerup >= 9) {
               xSET_BIT((ch)->affected_by, AFF_ICER2);
               xREMOVE_BIT((ch)->affected_by, AFF_POWERCHANNEL);
               act(AT_PURPLE, "Your entire body expands monstrously in size, wicked horns sprouting from your head!", ch, NULL, NULL, TO_CHAR);
               act(AT_PURPLE, "$n's entire body expands monstrously in size, wicked horns sprouting from $s head!", ch, NULL, NULL, TO_NOTVICT);
               ch->powerup = 0;
-              ch->pl = ch->exp * 4;
+              ch->pl = ch->truepl * 2;
               transStatApply(ch, onestr, onespd, oneint, onecon);
             }
-            if (plmod > 1 && plmod < 2) {
-              act(auraColor, "You glow brightly, hairline fractures appearing across your body.", ch, NULL, NULL, TO_CHAR);
-              act(auraColor, "$n glows brightly, hairline fractures appearing across $s body.", ch, NULL, NULL, TO_NOTVICT);
-            }
           }
-          if ((ch->powerup >= 15) || (ch->powerup >= safemaximum)) {
-            ch->powerup = safemaximum;
+          if (ch->powerup >= 10 && ch->masterypowerup < 1000) {
+            ch->powerup = 10;
             xREMOVE_BIT((ch)->affected_by, AFF_POWERCHANNEL);
             xSET_BIT((ch)->affected_by, AFF_SAFEMAX);
             act(auraColor, "The tiny fractures in your body seal as you stop powering up. Going any further would be dangerous.", ch, NULL, NULL, TO_CHAR);
@@ -1969,20 +1974,20 @@ void violence_update(void) {
         if (xIS_SET((ch)->affected_by, AFF_ICER2)) {
           safemaximum = form_mastery;
           if (ch->powerup < safemaximum) {
-            ch->pl *= 1.15;
+            ch->pl *= 1.03;
             ch->powerup += 1;
-            if (plmod > 4.8) {
+            if (plmod > 2.06) {
               act(AT_PURPLE, "Your giant body glows brilliantly, debris scattering in all directions.", ch, NULL, NULL, TO_CHAR);
               act(AT_PURPLE, "$n's giant body glows brilliantly, debris flying past you.", ch, NULL, NULL, TO_NOTVICT);
             }
-            if (plmod >= 8) {
+            if (plmod >= 2.38) {
               xREMOVE_BIT((ch)->affected_by, AFF_ICER2);
               xSET_BIT((ch)->affected_by, AFF_ICER3);
               xREMOVE_BIT((ch)->affected_by, AFF_POWERCHANNEL);
               act(AT_PURPLE, "You double forward, chitinous chunks stripping away.", ch, NULL, NULL, TO_CHAR);
               act(AT_PURPLE, "Spikes protrude from your back and shoulders as your head elongates, transforming you into a deformed monstrosity!", ch, NULL, NULL, TO_CHAR);
               act(AT_PURPLE, "$n doubles forward, chitinous chunks stripping away from $m as $e transforms into a deformed monstrosity!", ch, NULL, NULL, TO_NOTVICT);
-              ch->pl = ch->exp * 12;
+              ch->pl = ch->truepl * 3;
               transStatApply(ch, twostr, twospd, twoint, twocon);
             }
           }
@@ -1998,27 +2003,21 @@ void violence_update(void) {
 		  icertotal = ((ch->strikemastery) + (ch->energymastery) + (ch->masterypowerup));
           safemaximum = form_mastery;
           if (ch->powerup < safemaximum) {
-            ch->pl *= 1.15;
+            ch->pl *= 1.03;
             ch->powerup += 1;
-            if (plmod > 14) {
+            if (plmod > 3.09) {
               act(AT_PURPLE, "Your chitinous body creaks ominously beneath your raging aura.", ch, NULL, NULL, TO_CHAR);
               act(AT_PURPLE, "$n's chitinous body creaks ominously beneath $s raging aura.", ch, NULL, NULL, TO_NOTVICT);
             }
-            if (plmod >= 35 && icertotal > 1000000) {
+            if (ch->powerup >= 17 && icertotal > 1000000) {
               xREMOVE_BIT((ch)->affected_by, AFF_ICER3);
               xSET_BIT((ch)->affected_by, AFF_ICER4);
               xREMOVE_BIT((ch)->affected_by, AFF_POWERCHANNEL);
               act(AT_PURPLE, "In an explosion of ki your body fades away, emerging from the dust in a new form!", ch, NULL, NULL, TO_CHAR);
               act(AT_PURPLE, "Your body shrinks to normal size, wicked spikes replaced with smooth skin and patches as reflective as glass.", ch, NULL, NULL, TO_CHAR);
               act(AT_PURPLE, "$n emerges from an explosion of ki, $s body shrinking into a sleek, smooth form.", ch, NULL, NULL, TO_NOTVICT);
-              ch->pl = ch->exp * 50;
+              ch->pl = ch->truepl * 50;
               transStatApply(ch, threestr, threespd, threeint, threecon);
-            } else if (plmod >= 38 && icertotal < 1000000) {
-              ch->pl = (ch->exp * 38);
-              act(auraColor, "Unable to contain any more power, your chitinous body's swelling reduces.", ch, NULL, NULL, TO_CHAR);
-              act(auraColor, "$n's chitinous body's swelling reduces, unable to contain any more power.", ch, NULL, NULL, TO_NOTVICT);
-              xREMOVE_BIT((ch)->affected_by, AFF_POWERCHANNEL);
-              xSET_BIT((ch)->affected_by, AFF_SAFEMAX);
             }
           }
           if (ch->powerup >= safemaximum) {
@@ -2035,7 +2034,7 @@ void violence_update(void) {
             ch->pl *= 1.03;
             ch->powerup += 1;
             if (plmod > 52) {
-              act(AT_PURPLE, "Your arms extend at your sides, a vicious purple aura courses around you.", ch, NULL, NULL, TO_CHAR);
+              act(AT_PURPLE, "Your arms extend at your sides, a vicious purple aura coursing around you.", ch, NULL, NULL, TO_CHAR);
               act(AT_PURPLE, "$n extends $s arms to the side, a vicious purple aura coursing around $m.", ch, NULL, NULL, TO_NOTVICT);
             }
             if (plmod >= 100) {
@@ -2044,7 +2043,7 @@ void violence_update(void) {
               xREMOVE_BIT((ch)->affected_by, AFF_POWERCHANNEL);
               act(AT_PURPLE, "Your muscles expand massively in size, swelling with incredible energy!", ch, NULL, NULL, TO_CHAR);
               act(AT_PURPLE, "$n's muscles expand massively in size, swelling with incredible energy!", ch, NULL, NULL, TO_NOTVICT);
-              ch->pl = ch->exp * 150;
+              ch->pl = ch->truepl * 150;
               transStatApply(ch, fourstr, fourspd, fourint, fourcon);
             }
           }
@@ -2073,7 +2072,7 @@ void violence_update(void) {
               act(AT_YELLOW, "Your skin takes on a reflective golden sheen as you ascend into the realm of God Ki.", ch, NULL, NULL, TO_CHAR);
               act(AT_YELLOW, "A brilliant golden light overtakes $n, traveling up the length of $s body.", ch, NULL, NULL, TO_NOTVICT);
               act(AT_YELLOW, "$s skin takes on a reflective golden sheen as $e ascends into the realm of God Ki!", ch, NULL, NULL, TO_NOTVICT);
-              ch->pl = ch->exp * 380;
+              ch->pl = ch->truepl * 380;
               transStatApply(ch, fivestr, fivespd, fiveint, fivecon);
             }
           }
@@ -2171,50 +2170,30 @@ void violence_update(void) {
 
           mysticTotal = ((ch->strikemastery) + (ch->energymastery) + (ch->masterypowerup));
           safemaximum = 1 + (ch->masterypowerup / 1000) + (ch->energymastery / 10000) + (ch->strikemastery / 10000);
-          if (ch->powerup < safemaximum) {
-            ch->pl *= (long double)((long double)1.01 + ((long double)ch->masterypowerup / 200000));
+          if (ch->powerup < 10) {
+            if ((ch->pl + (long double)((float)ch->truepl / 10)) < ch->truepl) {
+				ch->pl += (long double)((float)ch->truepl / 10);
+				act(auraColor, "Your gentle aura explodes into a display of roaring ki.", ch, NULL, NULL, TO_CHAR);
+				act(auraColor, "$n's gentle aura explodes into a display of roaring ki.", ch, NULL, NULL, TO_NOTVICT);
+			}
+			else {
+				ch->pl = ch->truepl;
+				ch->powerup = 10;
+			}
             ch->powerup += 1;
             transStatApply(ch, powerupstr, powerupspd, powerupint, powerupcon);
-            if (plmod >= 30 && mysticTotal >= 1000000) {
+            if (ch->powerup >= 9 && mysticTotal >= 1000000) {
               xSET_BIT((ch)->affected_by, AFF_MYSTIC);
               xREMOVE_BIT((ch)->affected_by, AFF_POWERCHANNEL);
               act(auraColor, "You cry out as your aura expands, pushing beyond your latent potential!", ch, NULL, NULL, TO_CHAR);
               act(auraColor, "$n cries out, $s inner potential exploding to the surface!", ch, NULL, NULL, TO_NOTVICT);
               ch->powerup = 0;
-              ch->pl = ch->exp * 35;
+              ch->pl = ch->truepl * 35;
               transStatApply(ch, onestr, onespd, oneint, onecon);
             }
-            if (plmod >= 30 && mysticTotal < 1000000) {
-              ch->pl = (ch->exp * 30);
-              act(auraColor, "Having reached your limit, you stop powering up. Going any further would be dangerous.", ch, NULL, NULL, TO_CHAR);
-              act(auraColor, "$n reaches $s limit and stops powering up.", ch, NULL, NULL, TO_NOTVICT);
-              xREMOVE_BIT((ch)->affected_by, AFF_POWERCHANNEL);
-              ch->powerup = safemaximum;
-              xSET_BIT((ch)->affected_by, AFF_SAFEMAX);
-            }
-            if (plmod >= 20 && plmod < 27) {
-              act(auraColor, "Your body is barely visible amidst your vortex of ki.", ch, NULL, NULL, TO_CHAR);
-              act(auraColor, "$n's body is barely visible amidst $s vortex of ki!", ch, NULL, NULL, TO_NOTVICT);
-            }
-            if (plmod >= 15 && plmod < 20) {
-              act(auraColor, "Your aura spirals upward, nearly licking the clouds.", ch, NULL, NULL, TO_CHAR);
-              act(auraColor, "$n's aura spirals upward, nearly licking the clouds.", ch, NULL, NULL, TO_NOTVICT);
-            }
-            if (plmod >= 10 && plmod < 15) {
-              act(auraColor, "Your gentle aura explodes into a display of roaring ki.", ch, NULL, NULL, TO_CHAR);
-              act(auraColor, "$n's gentle aura explodes into a display of roaring ki.", ch, NULL, NULL, TO_NOTVICT);
-            }
-            if (plmod >= 5 && plmod < 10) {
-              act(auraColor, "Your aura flickers around you, only faintly visible.", ch, NULL, NULL, TO_CHAR);
-              act(auraColor, "$n's aura flickers around $m, only faintly visible.", ch, NULL, NULL, TO_NOTVICT);
-            }
-            if (plmod > 1 && plmod < 5) {
-              act(auraColor, "Your body glows faintly.", ch, NULL, NULL, TO_CHAR);
-              act(auraColor, "$n's body glows faintly.", ch, NULL, NULL, TO_NOTVICT);
-            }
           }
-          if ((ch->powerup >= 15) || (ch->powerup >= safemaximum)) {
-            ch->powerup = safemaximum;
+          if (ch->powerup >= 10 && mysticTotal < 1000000) {
+            ch->powerup = 10;
             xREMOVE_BIT((ch)->affected_by, AFF_POWERCHANNEL);
             xSET_BIT((ch)->affected_by, AFF_SAFEMAX);
             act(auraColor, "Having reached your limit, you stop powering up. Going any further would be dangerous.", ch, NULL, NULL, TO_CHAR);
@@ -2334,48 +2313,29 @@ void violence_update(void) {
 
           namekTotal = ((ch->strikemastery) + (ch->energymastery) + (ch->masterypowerup));
           safemaximum = 1 + (ch->masterypowerup / 1000) + (ch->energymastery / 10000) + (ch->strikemastery / 10000);
-          if (ch->powerup < safemaximum) {
-            ch->pl *= (long double)((long double)1.01 + ((long double)ch->masterypowerup / 200000));
+          if (ch->powerup < 10) {
+            if ((ch->pl + (long double)((float)ch->truepl / 10)) < ch->truepl) {
+				ch->pl += (long double)((float)ch->truepl / 10);
+				act(auraColor, "Your gentle aura explodes into a display of roaring ki.", ch, NULL, NULL, TO_CHAR);
+				act(auraColor, "$n's gentle aura explodes into a display of roaring ki.", ch, NULL, NULL, TO_NOTVICT);
+			}
+			  else {
+				ch->pl = ch->truepl;
+				ch->powerup = 10;
+			  }
             ch->powerup += 1;
             transStatApply(ch, powerupstr, powerupspd, powerupint, powerupcon);
-            if (plmod >= 35 && namekTotal >= 1000000) {
+            if (ch->powerup >= 9 && namekTotal >= 1000000) {
               xSET_BIT((ch)->affected_by, AFF_SNAMEK);
               xREMOVE_BIT((ch)->affected_by, AFF_POWERCHANNEL);
               act(AT_WHITE, "Your mind opens to the secrets of the ancient Namekians, flooding you with incredible power.", ch, NULL, NULL, TO_CHAR);
               act(AT_WHITE, "$n's mind opens to the secrets of the ancient Namekians, flooding $m with incredible power.'", ch, NULL, NULL, TO_NOTVICT);
               ch->powerup = 0;
-              ch->pl = ch->exp * 50;
+              ch->pl = ch->truepl * 50;
               transStatApply(ch, onestr, onespd, oneint, onecon);
-            } else if (plmod >= 35 && namekTotal < 1000000) {
-              ch->pl = (ch->exp * 40);
-              act(auraColor, "You stop abruptly, unable to concentrate any further.", ch, NULL, NULL, TO_CHAR);
-              act(auraColor, "$n stops abruptly, unable to concentrate any further.", ch, NULL, NULL, TO_NOTVICT);
-              xREMOVE_BIT((ch)->affected_by, AFF_POWERCHANNEL);
-              ch->powerup = safemaximum;
-              xSET_BIT((ch)->affected_by, AFF_SAFEMAX);
-            }
-            if (plmod >= 20 && plmod < 27) {
-              act(auraColor, "Your body is barely visible amidst your vortex of ki.", ch, NULL, NULL, TO_CHAR);
-              act(auraColor, "$n's body is barely visible amidst $s vortex of ki!", ch, NULL, NULL, TO_NOTVICT);
-            }
-            if (plmod >= 15 && plmod < 20) {
-              act(auraColor, "Your aura spirals upward, nearly licking the clouds.", ch, NULL, NULL, TO_CHAR);
-              act(auraColor, "$n's aura spirals upward, nearly licking the clouds.", ch, NULL, NULL, TO_NOTVICT);
-            }
-            if (plmod >= 10 && plmod < 15) {
-              act(auraColor, "Your gentle aura explodes into a display of roaring ki.", ch, NULL, NULL, TO_CHAR);
-              act(auraColor, "$n's gentle aura explodes into a display of roaring ki.", ch, NULL, NULL, TO_NOTVICT);
-            }
-            if (plmod >= 5 && plmod < 10) {
-              act(auraColor, "Your aura flickers around you, only faintly visible.", ch, NULL, NULL, TO_CHAR);
-              act(auraColor, "$n's aura flickers around $m, only faintly visible.", ch, NULL, NULL, TO_NOTVICT);
-            }
-            if (plmod > 1 && plmod < 5) {
-              act(auraColor, "Your body glows faintly.", ch, NULL, NULL, TO_CHAR);
-              act(auraColor, "$n's body glows faintly.", ch, NULL, NULL, TO_NOTVICT);
             }
           }
-          if ((ch->powerup >= 15) || (ch->powerup >= safemaximum)) {
+          if (ch->powerup >= 10 && namekTotal < 1000000) {
             ch->powerup = safemaximum;
             xREMOVE_BIT((ch)->affected_by, AFF_POWERCHANNEL);
             xSET_BIT((ch)->affected_by, AFF_SAFEMAX);
@@ -2665,13 +2625,11 @@ void violence_update(void) {
         }
       }
       if (ch->position == POS_FIGHTING || ch->position == POS_AGGRESSIVE || ch->position == POS_BERSERK || ch->position == POS_DEFENSIVE || ch->position == POS_EVASIVE) {
-        if (xIS_SET((ch)->affected_by, AFF_SAFEMAX)) {
           int poweruprand = 0;
 
           poweruprand = number_range(1, 3);
           if (poweruprand == 3)
             ch->masterypowerup += 2;
-        }
         stat_train(ch, "str", weightstat);
         stat_train(ch, "spd", weightconspd);
         stat_train(ch, "con", weightconspd);
@@ -2737,7 +2695,7 @@ void violence_update(void) {
       breakbonus = statbonus * 2;
 
       if (trainmessage < 65) {
-        base_xp = (long double)increase / 600 * totalgrav;
+        base_xp = (long double)increase / 6000 * totalgrav;
         xp_gain = (long double)base_xp;
         gain_exp(ch, xp_gain);
         if (xp_gain > 1) {
@@ -2775,7 +2733,7 @@ void violence_update(void) {
         }
       }
       if (trainmessage >= 65 && trainmessage < 99) {
-        base_xp = (long double)increase / 600 * totalgrav;
+        base_xp = (long double)increase / 6000 * totalgrav;
         xp_gain = (long double)base_xp;
         gain_exp(ch, xp_gain);
         pager_printf(ch, "&GYou perform a push-up, your strength steadily building.\n\r");
@@ -2814,7 +2772,7 @@ void violence_update(void) {
         }
       }
       if (trainmessage >= 99) {
-        base_xp = (long double)increase / 600 * totalgrav;
+        base_xp = (long double)increase / 6000 * totalgrav;
         xp_gain = (long double)base_xp;
         gain_exp(ch, xp_gain);
         pager_printf(ch, "&GPushing past your normal limits, you perform a series of one-armed push-ups!\n\r");
@@ -2884,7 +2842,7 @@ void violence_update(void) {
       breakbonus = statbonus * 2;
 
       if (trainmessage < 65) {
-        base_xp = (long double)increase / 300 * totalgrav;
+        base_xp = (long double)increase / 3000 * totalgrav;
         xp_gain = (long double)base_xp;
         gain_exp(ch, xp_gain);
         if (xp_gain > 1) {
@@ -2922,7 +2880,7 @@ void violence_update(void) {
         }
       }
       if (trainmessage >= 65 && trainmessage < 99) {
-        base_xp = (long double)increase / 300 * totalgrav;
+        base_xp = (long double)increase / 3000 * totalgrav;
         xp_gain = (long double)base_xp;
         gain_exp(ch, xp_gain);
         pager_printf(ch, "&GYou perform a push-up, your strength steadily building.\n\r");
@@ -2961,7 +2919,7 @@ void violence_update(void) {
         }
       }
       if (trainmessage >= 99) {
-        base_xp = (long double)increase / 300 * totalgrav;
+        base_xp = (long double)increase / 3000 * totalgrav;
         xp_gain = (long double)base_xp;
         gain_exp(ch, xp_gain);
         pager_printf(ch, "&GPushing past your normal limits, you perform a series of one-armed push-ups!\n\r");
@@ -3027,7 +2985,7 @@ void violence_update(void) {
       breakbonus = statbonus * 2;
 
       if (trainmessage < 65) {
-        base_xp = (long double)increase / 600 * totalgrav;
+        base_xp = (long double)increase / 6000 * totalgrav;
         xp_gain = (long double)base_xp;
         gain_exp(ch, xp_gain);
         if (xp_gain > 1) {
@@ -3065,7 +3023,7 @@ void violence_update(void) {
         }
       }
       if (trainmessage >= 65 && trainmessage < 99) {
-        base_xp = (long double)increase / 600 * totalgrav;
+        base_xp = (long double)increase / 6000 * totalgrav;
         xp_gain = (long double)base_xp;
         gain_exp(ch, xp_gain);
         pager_printf(ch, "&GYou jab repeatedly at the air, dancing from foot to foot.\n\r");
@@ -3104,7 +3062,7 @@ void violence_update(void) {
         }
       }
       if (trainmessage >= 99) {
-        base_xp = (long double)increase / 600 * totalgrav;
+        base_xp = (long double)increase / 6000 * totalgrav;
         xp_gain = (long double)base_xp;
         gain_exp(ch, xp_gain);
         pager_printf(ch, "&GYou explode into an elaborate combo, firing punch after punch through a rush of insight!\n\r");
@@ -3174,7 +3132,7 @@ void violence_update(void) {
       breakbonus = statbonus * 2;
 
       if (trainmessage < 65) {
-        base_xp = (long double)increase / 300 * totalgrav;
+        base_xp = (long double)increase / 3000 * totalgrav;
         xp_gain = (long double)base_xp;
         gain_exp(ch, xp_gain);
         if (xp_gain > 1) {
@@ -3212,7 +3170,7 @@ void violence_update(void) {
         }
       }
       if (trainmessage >= 65 && trainmessage < 99) {
-        base_xp = (long double)increase / 300 * totalgrav;
+        base_xp = (long double)increase / 3000 * totalgrav;
         xp_gain = (long double)base_xp;
         gain_exp(ch, xp_gain);
         pager_printf(ch, "&GYou jab repeatedly at the air, dancing from foot to foot.\n\r");
@@ -3251,7 +3209,7 @@ void violence_update(void) {
         }
       }
       if (trainmessage >= 99) {
-        base_xp = (long double)increase / 300 * totalgrav;
+        base_xp = (long double)increase / 3000 * totalgrav;
         xp_gain = (long double)base_xp;
         gain_exp(ch, xp_gain);
         pager_printf(ch, "&GYou explode into an elaborate combo, firing punch after punch through a rush of insight!\n\r");
@@ -3317,7 +3275,7 @@ void violence_update(void) {
       breakbonus = statbonus * 2;
 
       if (trainmessage < 65) {
-        base_xp = (long double)increase / 600 * totalgrav;
+        base_xp = (long double)increase / 6000 * totalgrav;
         xp_gain = (long double)base_xp;
         gain_exp(ch, xp_gain);
         if (xp_gain > 1) {
@@ -3355,7 +3313,7 @@ void violence_update(void) {
         }
       }
       if (trainmessage >= 65 && trainmessage < 99) {
-        base_xp = (long double)increase / 600 * totalgrav;
+        base_xp = (long double)increase / 6000 * totalgrav;
         xp_gain = (long double)base_xp;
         gain_exp(ch, xp_gain);
         pager_printf(ch, "&GYou feel heavy, struggling to carry your own weight without ki regulation.\n\r");
@@ -3394,7 +3352,7 @@ void violence_update(void) {
         }
       }
       if (trainmessage >= 99) {
-        base_xp = (long double)increase / 600 * totalgrav;
+        base_xp = (long double)increase / 6000 * totalgrav;
         xp_gain = (long double)base_xp;
         gain_exp(ch, xp_gain);
         pager_printf(ch, "&GYou push through exhaustion, barely carrying on.\n\r");
@@ -3464,7 +3422,7 @@ void violence_update(void) {
       breakbonus = statbonus * 2;
 
       if (trainmessage < 65) {
-        base_xp = (long double)increase / 300 * totalgrav;
+        base_xp = (long double)increase / 3000 * totalgrav;
         xp_gain = (long double)base_xp;
         gain_exp(ch, xp_gain);
         if (xp_gain > 1) {
@@ -3502,7 +3460,7 @@ void violence_update(void) {
         }
       }
       if (trainmessage >= 65 && trainmessage < 99) {
-        base_xp = (long double)increase / 300 * totalgrav;
+        base_xp = (long double)increase / 3000 * totalgrav;
         xp_gain = (long double)base_xp;
         gain_exp(ch, xp_gain);
         pager_printf(ch, "&GYou feel heavy, struggling to carry your own weight without ki regulation.\n\r");
@@ -3541,7 +3499,7 @@ void violence_update(void) {
         }
       }
       if (trainmessage >= 99) {
-        base_xp = (long double)increase / 300 * totalgrav;
+        base_xp = (long double)increase / 3000 * totalgrav;
         xp_gain = (long double)base_xp;
         gain_exp(ch, xp_gain);
         pager_printf(ch, "&GYou push through exhaustion, barely carrying on.\n\r");
@@ -3642,7 +3600,7 @@ void violence_update(void) {
       overacc_bonus = 0.1 * safediff;
 
       if (trainmessage < 65) {
-        base_xp = (long double)increase / 24 * gravLevel;
+        base_xp = (long double)increase / 240 * gravLevel;
         xp_bonus = (long double)base_xp * overacc_bonus;
         xp_gain = (long double)base_xp + xp_bonus;
         gain_exp(ch, xp_gain);
@@ -3675,7 +3633,7 @@ void violence_update(void) {
         }
       }
       if (trainmessage >= 65 && trainmessage < 99) {
-        base_xp = (long double)increase / 24 * gravLevel;
+        base_xp = (long double)increase / 240 * gravLevel;
         xp_bonus = (long double)base_xp * overacc_bonus;
         xp_gain = (long double)base_xp + xp_bonus;
         gain_exp(ch, xp_gain);
@@ -3709,7 +3667,7 @@ void violence_update(void) {
         }
       }
       if (trainmessage >= 99) {
-        base_xp = (long double)increase / 12 * gravLevel;
+        base_xp = (long double)increase / 120 * gravLevel;
         xp_bonus = (long double)base_xp * overacc_bonus;
         xp_gain = (long double)base_xp + xp_bonus;
         gain_exp(ch, xp_gain);
@@ -3787,7 +3745,7 @@ void violence_update(void) {
       overacc_bonus = 0.1 * safediff;
 
       if (trainmessage < 65) {
-        base_xp = (long double)increase / 24 * gravLevel;
+        base_xp = (long double)increase / 240 * gravLevel;
         xp_bonus = (long double)base_xp * overacc_bonus;
         xp_gain = (long double)base_xp + xp_bonus;
         gain_exp(ch, xp_gain);
@@ -3820,7 +3778,7 @@ void violence_update(void) {
         }
       }
       if (trainmessage >= 65 && trainmessage < 99) {
-        base_xp = (long double)increase / 24 * gravLevel;
+        base_xp = (long double)increase / 240 * gravLevel;
         xp_bonus = (long double)base_xp * overacc_bonus;
         xp_gain = (long double)base_xp + xp_bonus;
         gain_exp(ch, xp_gain);
@@ -3854,7 +3812,7 @@ void violence_update(void) {
         }
       }
       if (trainmessage >= 99) {
-        base_xp = (long double)increase / 12 * gravLevel;
+        base_xp = (long double)increase / 120 * gravLevel;
         xp_bonus = (long double)base_xp * overacc_bonus;
         xp_gain = (long double)base_xp + xp_bonus;
         gain_exp(ch, xp_gain);
@@ -3932,7 +3890,7 @@ void violence_update(void) {
       overacc_bonus = 0.1 * safediff;
 
       if (trainmessage < 65) {
-        base_xp = (long double)increase / 24 * gravLevel;
+        base_xp = (long double)increase / 240 * gravLevel;
         xp_bonus = (long double)base_xp * overacc_bonus;
         xp_gain = (long double)base_xp + xp_bonus;
         gain_exp(ch, xp_gain);
@@ -3965,7 +3923,7 @@ void violence_update(void) {
         }
       }
       if (trainmessage >= 65 && trainmessage < 99) {
-        base_xp = (long double)increase / 24 * gravLevel;
+        base_xp = (long double)increase / 240 * gravLevel;
         xp_bonus = (long double)base_xp * overacc_bonus;
         xp_gain = (long double)base_xp + xp_bonus;
         gain_exp(ch, xp_gain);
@@ -3999,7 +3957,7 @@ void violence_update(void) {
         }
       }
       if (trainmessage >= 99) {
-        base_xp = (long double)increase / 12 * gravLevel;
+        base_xp = (long double)increase / 120 * gravLevel;
         xp_bonus = (long double)base_xp * overacc_bonus;
         xp_gain = (long double)base_xp + xp_bonus;
         gain_exp(ch, xp_gain);
@@ -4077,7 +4035,7 @@ void violence_update(void) {
       overacc_bonus = 0.1 * safediff;
 
       if (trainmessage < 65) {
-        base_xp = (long double)increase / 24 * gravLevel;
+        base_xp = (long double)increase / 240 * gravLevel;
         xp_bonus = (long double)base_xp * overacc_bonus;
         xp_gain = (long double)base_xp + xp_bonus;
         gain_exp(ch, xp_gain);
@@ -4110,7 +4068,7 @@ void violence_update(void) {
         }
       }
       if (trainmessage >= 65 && trainmessage < 99) {
-        base_xp = (long double)increase / 24 * gravLevel;
+        base_xp = (long double)increase / 240 * gravLevel;
         xp_bonus = (long double)base_xp * overacc_bonus;
         xp_gain = (long double)base_xp + xp_bonus;
         gain_exp(ch, xp_gain);
@@ -4144,7 +4102,7 @@ void violence_update(void) {
         }
       }
       if (trainmessage >= 99) {
-        base_xp = (long double)increase / 12 * gravLevel;
+        base_xp = (long double)increase / 120 * gravLevel;
         xp_bonus = (long double)base_xp * overacc_bonus;
         xp_gain = (long double)base_xp + xp_bonus;
         gain_exp(ch, xp_gain);
@@ -6295,15 +6253,6 @@ damage(CHAR_DATA *ch, CHAR_DATA *victim, int dam, int dt) {
         NULL, victim, TO_VICT);
     act(AT_WHITE, "$n stops fighting and spares $N's life.", ch,
         NULL, victim, TO_NOTVICT);
-    long double cspar = 0;
-    long double vspar = 0;
-
-    cspar = ch->exp - ch->spar_start;
-    vspar = victim->exp - victim->spar_start;
-    ch_printf(ch, "&cTotal pl gained this spar: &C%s\n\r",
-              num_punct_ld(cspar));
-    ch_printf(victim, "&cTotal pl gained this spar: &C%s\n\r",
-              num_punct_ld(vspar));
   }
   update_pos(victim);
 
@@ -6880,19 +6829,6 @@ damage(CHAR_DATA *ch, CHAR_DATA *victim, int dam, int dt) {
       if (xIS_SET(ch->act, PLR_AUTOSAC))
         do_sacrifice(ch, "corpse");
     }
-    long double cfight = 0;
-
-    cfight = ch->exp - ch->fight_start;
-    if (cfight == ch->exp)
-      cfight = 0;
-    if (is_android(ch) || is_superandroid(ch))
-      ch_printf(ch, "&cTotal tl gained this fight: &C%s\n\r",
-                num_punct_ld(cfight));
-    else
-      ch_printf(ch, "&cTotal pl gained this fight: &C%s\n\r",
-                num_punct_ld(cfight));
-
-    ch->fight_start = 0;
 
     if (IS_SET(sysdata.save_flags, SV_KILL))
       save_char_obj(ch);
@@ -8521,18 +8457,6 @@ void do_stopspar(CHAR_DATA *ch, char *argument) {
     tms->tm_mday += 1;
     victim->pcdata->nextspartime = mktime(tms);
   }
-  long double cspar = 0;
-  long double vspar = 0;
-
-  cspar = ch->exp - ch->spar_start;
-  vspar = victim->exp - victim->spar_start;
-  ch_printf(ch, "&cTotal pl gained this spar: &C%s\n\r",
-            num_punct_ld(cspar));
-  ch_printf(victim, "&cTotal pl gained this spar: &C%s\n\r",
-            num_punct_ld(vspar));
-
-  ch->spar_start = 0;
-  victim->spar_start = 0;
 
   return;
 }
