@@ -1511,7 +1511,7 @@ void do_powerdown(CHAR_DATA *ch, char *argument) {
     xREMOVE_BIT((ch)->affected_by, AFF_OVERCHANNEL);
   if (xIS_SET((ch)->affected_by, AFF_SAFEMAX))
     xREMOVE_BIT((ch)->affected_by, AFF_SAFEMAX);
-  if (ch->pl <= ch->exp) {
+  if (ch->pl <= 1) {
     send_to_char("You are already powered down.\n\r", ch);
     ch->powerup = 0;
     if (xIS_SET((ch)->affected_by, AFF_SSJ)) {

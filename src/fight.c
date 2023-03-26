@@ -5917,6 +5917,7 @@ damage(CHAR_DATA *ch, CHAR_DATA *victim, int dam, int dt) {
             // train speed stat on dodge success
             if (!IS_NPC(victim)) {
               stat_train(victim, "spd", 8);
+			  stat_train(victim, "con", 4);
             }
           }
         }
@@ -5940,6 +5941,7 @@ damage(CHAR_DATA *ch, CHAR_DATA *victim, int dam, int dt) {
             // train con stat on block success
             if (!IS_NPC(victim)) {
               stat_train(victim, "con", 8);
+			  stat_train(victim, "spd", 4);
             }
           }
         }
@@ -5963,7 +5965,7 @@ damage(CHAR_DATA *ch, CHAR_DATA *victim, int dam, int dt) {
   else
     victim->hit -= dam;
 
-  if (!is_android_h(victim))
+  if (!is_android_h(victim) && !IS_NPC(victim))
     victim->mana -=
         URANGE(0, ((double)dam / 7500 * 0.01 * victim->mana),
                victim->max_mana);
@@ -6040,7 +6042,7 @@ damage(CHAR_DATA *ch, CHAR_DATA *victim, int dam, int dt) {
       xp_gain =
           (long double)dam / 375000 * pow(victim->worth, xp_mod);
     }
-    /* PL Gains cut if player is stronger than opontants */
+    /* PL Gains cut if player is stronger than opponent */
     if (!IS_NPC(victim)) {
       if ((ch->pl / victim->pl) < 4)
         xp_gain *= 0.7;
@@ -6074,7 +6076,6 @@ damage(CHAR_DATA *ch, CHAR_DATA *victim, int dam, int dt) {
         xp_gain = 0;
     }
 
-    /* a little help to get newbies started */
     if (xp_gain < 0)
       xp_gain = 0;
 

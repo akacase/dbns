@@ -3247,6 +3247,48 @@ void do_who(CHAR_DATA *ch, char *argument) {
       case MAX_LEVEL - 15:
         class = " &WAvatar        ";
         break;
+	  case MAX_LEVEL - 51:
+        class = " &GWarrior       ";
+        break;
+	  case MAX_LEVEL - 52:
+        class = " &GWarrior       ";
+        break;
+	  case MAX_LEVEL - 53:
+        class = " &GWarrior       ";
+        break;
+	  case MAX_LEVEL - 54:
+        class = " &GWarrior       ";
+        break;
+	  case MAX_LEVEL - 55:
+        class = " &GWarrior       ";
+        break;
+	  case MAX_LEVEL - 56:
+        class = " &GWarrior       ";
+        break;
+	  case MAX_LEVEL - 57:
+        class = " &GWarrior       ";
+        break;
+	  case MAX_LEVEL - 58:
+        class = " &GWarrior       ";
+        break;
+	  case MAX_LEVEL - 59:
+        class = " &GWarrior       ";
+        break;
+	  case MAX_LEVEL - 60:
+        class = " &GWarrior       ";
+        break;
+	  case MAX_LEVEL - 61:
+        class = " &GWarrior       ";
+        break;
+	  case MAX_LEVEL - 62:
+        class = " &GWarrior       ";
+        break;
+	  case MAX_LEVEL - 63:
+        class = " &GWarrior       ";
+        break;
+	  case MAX_LEVEL - 64:
+        class = " &GNewbie        ";
+        break;
     }
 
     if (wch->level >= LEVEL_IMMORTAL && wch->pcdata->pretitle && wch->pcdata->pretitle[0] != '\0') {

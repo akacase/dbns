@@ -411,33 +411,33 @@ int get_true_rank(CHAR_DATA *ch) {
 
   if (ch->exp < 250)
     return 1;
-  else if (ch->exp < 100000)
+  else if (ch->truepl < 100000)
     return 2;
-  else if (ch->exp < 1000000)
+  else if (ch->truepl < 1000000)
     return 3;
-  else if (ch->exp < 10000000)
+  else if (ch->truepl < 10000000)
     return 4;
-  else if (ch->exp < 100000000)
+  else if (ch->truepl < 100000000)
     return 5;
-  else if (ch->exp < 1000000000)
+  else if (ch->truepl < 1000000000)
     return 6;
-  else if (ch->exp < 10000000000ULL)
+  else if (ch->truepl < 10000000000ULL)
     return 7;
-  else if (ch->exp < 50000000000ULL)
+  else if (ch->truepl < 50000000000ULL)
     return 8;
-  else if (ch->exp < 100000000000ULL)
+  else if (ch->truepl < 100000000000ULL)
     return 9;
-  else if (ch->exp < 300000000000ULL)
+  else if (ch->truepl < 300000000000ULL)
     return 10;
-  else if (ch->exp < 600000000000ULL)
+  else if (ch->truepl < 600000000000ULL)
     return 11;
-  else if (ch->exp < 1000000000000ULL)
+  else if (ch->truepl < 1000000000000ULL)
     return 12;
-  else if (ch->exp < 10000000000000ULL)
+  else if (ch->truepl < 10000000000000ULL)
     return 13;
-  else if (ch->exp < 50000000000000ULL)
+  else if (ch->truepl < 50000000000000ULL)
     return 14;
-  else if (ch->exp < 100000000000000ULL)
+  else if (ch->truepl < 100000000000000ULL)
     return 15;
   else
     return 16;
@@ -448,7 +448,7 @@ int get_rank_number(CHAR_DATA *ch) {
   if (IS_NPC(ch))
     return -1;
 
-  if (ch->exp < 250)
+  if (ch->truepl < 250)
     return 1;
   else
     return 2;
@@ -459,7 +459,7 @@ char *get_rank(CHAR_DATA *ch) {
   if (IS_NPC(ch))
     return ("NPC");
 
-  if (ch->exp < 250)
+  if (ch->truepl < 250)
     return ("Fighter in Training");
   else
     return ("Deadly Fighter");
@@ -471,7 +471,7 @@ char *get_rank_color(CHAR_DATA *ch) {
 
   if (IS_HC(ch))
     return ("&rUnknown");
-  else if (ch->exp < 250)
+  else if (ch->truepl < 250)
     return ("&PFighter in Training");
   else
     return ("&cDeadly Fighter");

@@ -9772,6 +9772,7 @@ void do_godstat(CHAR_DATA *ch, char *argument) {
                      num_punct(victim->gold), xIS_SET(victim->act, PLR_AUTOSAC) ? 'X' : ' ');
 
   pager_printf(ch, "BASE POWERLEVEL: %-16s\n\r", num_punct_ld(victim->exp));
+  pager_printf(ch, "TRUE POWERLEVEL: %-16s\n\r", num_punct_ld(victim->truepl));
 
   if (victim->pl != victim->exp) {
     set_pager_color(AT_YELLOW, ch);
