@@ -1763,12 +1763,6 @@ void do_powerup(CHAR_DATA *ch, char *argument) {
     send_to_char("You must be standing to do that.\n\r", ch);
     return;
   }
-  if (ch->powerup == 10 && ch->pl < ch->truepl && xIS_SET((ch)->affected_by, AFF_SAFEMAX) && !is_transformed(ch)) {
-	  act(AT_WHITE, "You incorporate your newfound power in a blinding flash of energy.", ch, NULL, NULL, TO_CHAR);
-      act(AT_WHITE, "$n incorporates $s newfound power in a blinding flash of energy.", ch, NULL, NULL, TO_NOTVICT);
-	  ch->pl = ch->truepl;
-	  return;
-  }
   if (is_saiyan(ch) || is_hb(ch)) {
     onestr = ch->perm_str * 0.20;
     twostr = ch->perm_str * 0.30;
@@ -1886,6 +1880,12 @@ void do_powerup(CHAR_DATA *ch, char *argument) {
   if (!str_cmp(arg, "notransform") && ch->notransform == 0) {
 	send_to_char("Toggling 'off' auto-transformation on powerup.\n\r", ch);
 	ch->notransform = 1;
+	return;
+  }
+  if (!str_cmp(arg, "max") && ch->powerup == 10 && ch->pl < ch->truepl && xIS_SET((ch)->affected_by, AFF_SAFEMAX) && !is_transformed(ch)) {
+	act(AT_WHITE, "You incorporate your newfound power in a blinding flash of energy.", ch, NULL, NULL, TO_CHAR);
+	act(AT_WHITE, "$n incorporates $s newfound power in a blinding flash of energy.", ch, NULL, NULL, TO_NOTVICT);
+	ch->pl = ch->truepl;
 	return;
   }
   if (!str_cmp(arg, "notransform") && ch->notransform == 1) {
