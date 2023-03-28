@@ -503,7 +503,7 @@ void violence_update(void) {
 	  
 	  skillfloat = ((float)(ch->energymastery + ch->strikemastery) / 10000);
 	  powerupfloat = ((float)ch->masterypowerup / 1000);
-	  biomassfloat = ((float)ch->biomass / 10000);
+	  biomassfloat = ((float)ch->biomass / 2000);
 	  if (!is_bio(ch))
 		ch->truepl = (long double)(ch->exp * (1 + (powerupfloat + skillfloat)));
 	  else
