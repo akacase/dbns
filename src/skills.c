@@ -2361,6 +2361,7 @@ void do_bash(CHAR_DATA *ch, char *argument) {
 	if (arg[0] == '\0') {
 	  if (!IS_NPC(ch)) {
 		argdam = (number_range(lowdam, highdam) * (kicmult + smastery));
+		argdam += get_damroll(ch);
 		dam = get_attmod(ch, victim) * (argdam * physmult);
 	  }
 	  else if (IS_NPC(ch)) {
@@ -2389,6 +2390,7 @@ void do_bash(CHAR_DATA *ch, char *argument) {
 	  }
 	  if (!IS_NPC(ch)) {
 		argdam = (number_range(lowdam * 2, highdam * 2) * (kicmult + smastery));
+		argdam += get_damroll(ch);
 		dam = get_attmod(ch, victim) * (argdam * physmult);
 	  }
 	  else if (IS_NPC(ch)) {
@@ -2418,6 +2420,7 @@ void do_bash(CHAR_DATA *ch, char *argument) {
 	  }
 	  if (!IS_NPC(ch)) {
 		argdam = (number_range(lowdam * 3, highdam * 3) * (kicmult + smastery));
+		argdam += get_damroll(ch);
 		dam = get_attmod(ch, victim) * (argdam * physmult);
 	  }
 	  else if (IS_NPC(ch)) {
@@ -2447,6 +2450,7 @@ void do_bash(CHAR_DATA *ch, char *argument) {
 	  }
 	  if (!IS_NPC(ch)) {
 		argdam = (number_range(lowdam * 4, highdam * 4) * (kicmult + smastery));
+		argdam += get_damroll(ch);
 		dam = get_attmod(ch, victim) * (argdam * physmult);
 	  }
 	  else if (IS_NPC(ch)) {
@@ -2476,6 +2480,7 @@ void do_bash(CHAR_DATA *ch, char *argument) {
 	  }
 	  if (!IS_NPC(ch)) {
 		argdam = (number_range(lowdam * 5, highdam * 5) * (kicmult + smastery));
+		argdam += get_damroll(ch);
 		dam = get_attmod(ch, victim) * (argdam * physmult);
 	  }
 	  else if (IS_NPC(ch)) {
