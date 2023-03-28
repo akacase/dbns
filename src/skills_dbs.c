@@ -4930,9 +4930,9 @@ void do_research(CHAR_DATA *ch, char *argument) {
       return;
     }
     if (!str_cmp(arg2, "power")) {
-      spcostpow = (ch->crusherballpower * 100);
-      if (spcostpow < 100)
-        spcostpow = 100;
+      spcostpow = (ch->crusherballpower * 15);
+      if (spcostpow < 15)
+        spcostpow = 15;
       if (spremaining < spcostpow) {
         send_to_char("You don't have enough SP to do that.\n\r", ch);
         return;
@@ -5202,9 +5202,9 @@ void do_research(CHAR_DATA *ch, char *argument) {
       return;
     }
     if (!str_cmp(arg2, "power")) {
-      spcostpow = (ch->haymakerpower * 100);
-      if (spcostpow < 100)
-        spcostpow = 100;
+      spcostpow = (ch->haymakerpower * 15);
+      if (spcostpow < 15)
+        spcostpow = 15;
       if (spremaining < spcostpow) {
         send_to_char("You don't have enough SP to do that.\n\r", ch);
         return;
@@ -5236,9 +5236,9 @@ void do_research(CHAR_DATA *ch, char *argument) {
       return;
     }
     if (!str_cmp(arg2, "power")) {
-      spcostpow = (ch->bashpower * 100);
-      if (spcostpow < 100)
-        spcostpow = 100;
+      spcostpow = (ch->bashpower * 15);
+      if (spcostpow < 15)
+        spcostpow = 15;
       if (spremaining < spcostpow) {
         send_to_char("You don't have enough SP to do that.\n\r", ch);
         return;
@@ -5338,9 +5338,9 @@ void do_research(CHAR_DATA *ch, char *argument) {
       return;
     }
     if (!str_cmp(arg2, "power")) {
-      spcostpow = (ch->eye_beampower * 100);
-      if (spcostpow < 100)
-        spcostpow = 100;
+      spcostpow = (ch->eye_beampower * 15);
+      if (spcostpow < 15)
+        spcostpow = 15;
       if (spremaining < spcostpow) {
         send_to_char("You don't have enough SP to do that.\n\r", ch);
         return;
@@ -5372,9 +5372,9 @@ void do_research(CHAR_DATA *ch, char *argument) {
       return;
     }
     if (!str_cmp(arg2, "power")) {
-      spcostpow = (ch->energy_discpower * 100);
-      if (spcostpow < 100)
-        spcostpow = 100;
+      spcostpow = (ch->energy_discpower * 15);
+      if (spcostpow < 15)
+        spcostpow = 15;
       if (spremaining < spcostpow) {
         send_to_char("You don't have enough SP to do that.\n\r", ch);
         return;
