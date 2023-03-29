@@ -4894,7 +4894,7 @@ one_hit(CHAR_DATA *ch, CHAR_DATA *victim, int dt) {
     dam = .85 * dam;
     learn_from_success(victim, gsn_style_defensive);
   } else if (victim->position == POS_EVASIVE) {
-    dam = .8 * dam;
+    dam = .25 * dam;
     learn_from_success(victim, gsn_style_evasive);
   }
   /*
@@ -4909,7 +4909,7 @@ one_hit(CHAR_DATA *ch, CHAR_DATA *victim, int dt) {
   } else if (ch->position == POS_DEFENSIVE)
     dam = .85 * dam;
   else if (ch->position == POS_EVASIVE)
-    dam = .8 * dam;
+    dam = .05 * dam;
 
   if (!IS_NPC(ch) && ch->pcdata->learned[gsn_enhanced_damage] > 0) {
     dam += (int)(dam * LEARNED(ch, gsn_enhanced_damage) / 120);

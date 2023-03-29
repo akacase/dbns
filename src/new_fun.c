@@ -409,7 +409,7 @@ int get_true_rank(CHAR_DATA *ch) {
   if (IS_NPC(ch))
     return 0;
 
-  if (ch->exp < 250)
+  if (ch->truepl < 250)
     return 1;
   else if (ch->truepl < 100000)
     return 2;
