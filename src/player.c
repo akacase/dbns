@@ -2518,7 +2518,7 @@ void do_pk(CHAR_DATA *ch, char *argument) {
     send_to_char("You're HARD CORE you don't even need to bother with that lame flag.", ch);
     return;
   }
-  if (ch->exp < 5000) {
+  if (ch->truepl < 250) {
     send_to_char("You can't turn on your PK flag until you are out of training.", ch);
     if (xIS_SET(ch->act, PLR_PK1))
       xREMOVE_BIT(ch->act, PLR_PK1);

@@ -7739,7 +7739,7 @@ void raw_kill(CHAR_DATA *ch, CHAR_DATA *victim) {
   while (victim->first_affect)
     affect_remove(victim, victim->first_affect);
   victim->affected_by = race_table[victim->race]->affected;
-  victim->pl = victim->exp;
+  victim->pl = 1;
   victim->position = POS_RESTING;
   victim->hit = 1;
   victim->mana = 1;
