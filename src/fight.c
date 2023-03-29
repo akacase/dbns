@@ -54,12 +54,12 @@ bool pkill_ok(CHAR_DATA *ch, CHAR_DATA *victim) {
   if (IS_NPC(ch) || IS_NPC(victim))
     return true;
 
-  if (ch->exp <= 250) {
+  if (ch->truepl <= 250) {
     send_to_char("You can not fight other players until you're out of training'.\n\r",
                  ch);
     return false;
   }
-  if (victim->exp <= 250) {
+  if (victim->truepl <= 250) {
     send_to_char("You can not fight other players until they're out of training.\n\r",
                  ch);
     return false;
@@ -688,7 +688,7 @@ void violence_update(void) {
       double plmod = 0;
 
       form_mastery = (ch->masterynamek / 90000);
-      plmod = (ch->pl / ch->exp);
+      plmod = (ch->pl / ch->truepl);
       if (ch->mana <= 0) {
         xREMOVE_BIT((ch)->affected_by, AFF_SNAMEK);
         if (xIS_SET((ch)->affected_by, AFF_POWERCHANNEL))
@@ -1655,7 +1655,7 @@ void violence_update(void) {
             }
           }
           if (ch->powerup >= 10 && ch->gsbiomass < 17) {
-            ch->powerup = safemaximum;
+            ch->powerup = 10;
             xREMOVE_BIT((ch)->affected_by, AFF_POWERCHANNEL);
             xSET_BIT((ch)->affected_by, AFF_SAFEMAX);
             act(auraColor, "The howling anguish of your victims ceases as you reach your limit. Going any further would be dangerous.", ch, NULL, NULL, TO_CHAR);
@@ -4580,6 +4580,7 @@ multi_hit(CHAR_DATA *ch, CHAR_DATA *victim, int dt) {
     }
     return retcode;
   }
+  /* PC Number of Attacks*/
   chance = 95 / 1.5;
   if (number_percent() < chance) {
     retcode = one_hit(ch, victim, dt);
