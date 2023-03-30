@@ -3005,15 +3005,14 @@ void do_punch(CHAR_DATA *ch, char *argument) {
   }
   basecost = 1;
   adjcost = basecost;
-  lowdam = 20;
-  highdam = 40;
+  lowdam = 20 * (((long double)get_damroll(ch) / 100) + 1);
+  highdam = 40 * (((long double)get_damroll(ch) / 100) + 1);
   hitcheck = number_range(1, 100);
   WAIT_STATE(ch, 6);
   if (hitcheck <= 95) {
 	if (arg[0] == '\0') {
 	  if (!IS_NPC(ch)) {
 		argdam = (number_range(lowdam, highdam) * (kicmult + smastery));
-		argdam += get_damroll(ch);
 		dam = get_attmod(ch, victim) * (argdam * physmult);
 	  }
 	  else if (IS_NPC(ch)) {
@@ -3045,7 +3044,6 @@ void do_punch(CHAR_DATA *ch, char *argument) {
 	  }
 	  if (!IS_NPC(ch)) {
 		argdam = (number_range(lowdam * 2, highdam * 2) * (kicmult + smastery));
-		argdam += get_damroll(ch);
 		dam = get_attmod(ch, victim) * (argdam * physmult);
 	  }
 	  else if (IS_NPC(ch)) {
@@ -3078,7 +3076,6 @@ void do_punch(CHAR_DATA *ch, char *argument) {
 	  }
 	  if (!IS_NPC(ch)) {
 		argdam = (number_range(lowdam * 3, highdam * 3) * (kicmult + smastery));
-		argdam += get_damroll(ch);
 		dam = get_attmod(ch, victim) * (argdam * physmult);
 	  }
 	  else if (IS_NPC(ch)) {
@@ -3111,7 +3108,6 @@ void do_punch(CHAR_DATA *ch, char *argument) {
 	  }
 	  if (!IS_NPC(ch)) {
 		argdam = (number_range(lowdam * 4, highdam * 4) * (kicmult + smastery));
-		argdam += get_damroll(ch);
 		dam = get_attmod(ch, victim) * (argdam * physmult);
 	  }
 	  else if (IS_NPC(ch)) {
@@ -3144,7 +3140,6 @@ void do_punch(CHAR_DATA *ch, char *argument) {
 	  }
 	  if (!IS_NPC(ch)) {
 		argdam = (number_range(lowdam * 5, highdam * 5) * (kicmult + smastery));
-		argdam += get_damroll(ch);
 		dam = get_attmod(ch, victim) * (argdam * physmult);
 	  }
 	  else if (IS_NPC(ch)) {
@@ -5794,15 +5789,14 @@ void do_energy_ball(CHAR_DATA *ch, char *argument) {
   }
   basecost = 1;
   adjcost = basecost;
-  lowdam = 20;
-  highdam = 40;
+  lowdam = 20 * (((long double)get_damroll(ch) / 100) + 1);
+  highdam = 40 * (((long double)get_damroll(ch) / 100) + 1);
   hitcheck = number_range(1, 100);
   WAIT_STATE(ch, 8);
   if (hitcheck <= 95) {
 	if (arg[0] == '\0') {
 	  if (!IS_NPC(ch)) {
 		argdam = (number_range(lowdam, highdam) * (kicmult + smastery));
-		argdam += get_damroll(ch);
 		dam = get_attmod(ch, victim) * (argdam * kimult);
 	  }
 	  else if (IS_NPC(ch)) {
@@ -5831,7 +5825,6 @@ void do_energy_ball(CHAR_DATA *ch, char *argument) {
 	  }
 	  if (!IS_NPC(ch)) {
 		argdam = (number_range(lowdam * 2, highdam * 2) * (kicmult + smastery));
-		argdam += get_damroll(ch);
 		dam = get_attmod(ch, victim) * (argdam * kimult);
 	  }
 	  else if (IS_NPC(ch)) {
@@ -5861,7 +5854,6 @@ void do_energy_ball(CHAR_DATA *ch, char *argument) {
 	  }
 	  if (!IS_NPC(ch)) {
 		argdam = (number_range(lowdam * 3, highdam * 3) * (kicmult + smastery));
-		argdam += get_damroll(ch);
 		dam = get_attmod(ch, victim) * (argdam * kimult);
 	  }
 	  else if (IS_NPC(ch)) {
@@ -5891,7 +5883,6 @@ void do_energy_ball(CHAR_DATA *ch, char *argument) {
 	  }
 	  if (!IS_NPC(ch)) {
 		argdam = (number_range(lowdam * 4, highdam * 4) * (kicmult + smastery));
-		argdam += get_damroll(ch);
 		dam = get_attmod(ch, victim) * (argdam * kimult);
 	  }
 	  else if (IS_NPC(ch)) {
@@ -5921,7 +5912,6 @@ void do_energy_ball(CHAR_DATA *ch, char *argument) {
 	  }
 	  if (!IS_NPC(ch)) {
 		argdam = (number_range(lowdam * 5, highdam * 5) * (kicmult + smastery));
-		argdam += get_damroll(ch);
 		dam = get_attmod(ch, victim) * (argdam * kimult);
 	  }
 	  else if (IS_NPC(ch)) {
@@ -6017,15 +6007,14 @@ void do_energy_disc(CHAR_DATA *ch, char *argument) {
   }
   basecost = 15;
   adjcost = basecost;
-  lowdam = 120;
-  highdam = 140;
+  lowdam = 120 * (((long double)get_damroll(ch) / 100) + 1);
+  highdam = 140 * (((long double)get_damroll(ch) / 100) + 1);
   hitcheck = number_range(1, 100);
   WAIT_STATE(ch, 8);
   if (hitcheck <= 95) {
 	if (arg[0] == '\0') {
 	  if (!IS_NPC(ch)) {
 		argdam = (number_range(lowdam, highdam) * (kicmult + smastery));
-		argdam += get_damroll(ch);
 		dam = get_attmod(ch, victim) * (argdam * kimult);
 	  }
 	  else if (IS_NPC(ch)) {
@@ -6054,7 +6043,6 @@ void do_energy_disc(CHAR_DATA *ch, char *argument) {
 	  }
 	  if (!IS_NPC(ch)) {
 		argdam = (number_range(lowdam * 2, highdam * 2) * (kicmult + smastery));
-		argdam += get_damroll(ch);
 		dam = get_attmod(ch, victim) * (argdam * kimult);
 	  }
 	  else if (IS_NPC(ch)) {
@@ -6084,7 +6072,6 @@ void do_energy_disc(CHAR_DATA *ch, char *argument) {
 	  }
 	  if (!IS_NPC(ch)) {
 		argdam = (number_range(lowdam * 3, highdam * 3) * (kicmult + smastery));
-		argdam += get_damroll(ch);
 		dam = get_attmod(ch, victim) * (argdam * kimult);
 	  }
 	  else if (IS_NPC(ch)) {
@@ -6114,7 +6101,6 @@ void do_energy_disc(CHAR_DATA *ch, char *argument) {
 	  }
 	  if (!IS_NPC(ch)) {
 		argdam = (number_range(lowdam * 4, highdam * 4) * (kicmult + smastery));
-		argdam += get_damroll(ch);
 		dam = get_attmod(ch, victim) * (argdam * kimult);
 	  }
 	  else if (IS_NPC(ch)) {
@@ -6144,7 +6130,6 @@ void do_energy_disc(CHAR_DATA *ch, char *argument) {
 	  }
 	  if (!IS_NPC(ch)) {
 		argdam = (number_range(lowdam * 5, highdam * 5) * (kicmult + smastery));
-		argdam += get_damroll(ch);
 		dam = get_attmod(ch, victim) * (argdam * kimult);
 	  }
 	  else if (IS_NPC(ch)) {
@@ -6240,15 +6225,14 @@ void do_forcewave(CHAR_DATA *ch, char *argument) {
   }
   basecost = 50;
   adjcost = basecost;
-  lowdam = 200;
-  highdam = 250;
+  lowdam = 200 * (((long double)get_damroll(ch) / 100) + 1);
+  highdam = 250 * (((long double)get_damroll(ch) / 100) + 1);
   hitcheck = number_range(1, 100);
   WAIT_STATE(ch, 8);
   if (hitcheck <= 95) {
 	if (arg[0] == '\0') {
 	  if (!IS_NPC(ch)) {
 		argdam = (number_range(lowdam, highdam) * (kicmult + smastery));
-		argdam += get_damroll(ch);
 		dam = get_attmod(ch, victim) * (argdam * kimult);
 	  }
 	  else if (IS_NPC(ch)) {
@@ -6277,7 +6261,6 @@ void do_forcewave(CHAR_DATA *ch, char *argument) {
 	  }
 	  if (!IS_NPC(ch)) {
 		argdam = (number_range(lowdam * 2, highdam * 2) * (kicmult + smastery));
-		argdam += get_damroll(ch);
 		dam = get_attmod(ch, victim) * (argdam * kimult);
 	  }
 	  else if (IS_NPC(ch)) {
@@ -6307,7 +6290,6 @@ void do_forcewave(CHAR_DATA *ch, char *argument) {
 	  }
 	  if (!IS_NPC(ch)) {
 		argdam = (number_range(lowdam * 3, highdam * 3) * (kicmult + smastery));
-		argdam += get_damroll(ch);
 		dam = get_attmod(ch, victim) * (argdam * kimult);
 	  }
 	  else if (IS_NPC(ch)) {
@@ -6337,7 +6319,6 @@ void do_forcewave(CHAR_DATA *ch, char *argument) {
 	  }
 	  if (!IS_NPC(ch)) {
 		argdam = (number_range(lowdam * 4, highdam * 4) * (kicmult + smastery));
-		argdam += get_damroll(ch);
 		dam = get_attmod(ch, victim) * (argdam * kimult);
 	  }
 	  else if (IS_NPC(ch)) {
@@ -6367,7 +6348,6 @@ void do_forcewave(CHAR_DATA *ch, char *argument) {
 	  }
 	  if (!IS_NPC(ch)) {
 		argdam = (number_range(lowdam * 5, highdam * 5) * (kicmult + smastery));
-		argdam += get_damroll(ch);
 		dam = get_attmod(ch, victim) * (argdam * kimult);
 	  }
 	  else if (IS_NPC(ch)) {
@@ -6463,15 +6443,14 @@ void do_concentrated_beam(CHAR_DATA *ch, char *argument) {
   }
   basecost = 40;
   adjcost = basecost;
-  lowdam = 180;
-  highdam = 240;
+  lowdam = 180 * (((long double)get_damroll(ch) / 100) + 1);
+  highdam = 240 * (((long double)get_damroll(ch) / 100) + 1);
   hitcheck = number_range(1, 100);
   WAIT_STATE(ch, 8);
   if (hitcheck <= 95) {
 	if (arg[0] == '\0') {
 	  if (!IS_NPC(ch)) {
 		argdam = (number_range(lowdam, highdam) * (kicmult + smastery));
-		argdam += get_damroll(ch);
 		dam = get_attmod(ch, victim) * (argdam * kimult);
 	  }
 	  else if (IS_NPC(ch)) {
@@ -6500,7 +6479,6 @@ void do_concentrated_beam(CHAR_DATA *ch, char *argument) {
 	  }
 	  if (!IS_NPC(ch)) {
 		argdam = (number_range(lowdam * 2, highdam * 2) * (kicmult + smastery));
-		argdam += get_damroll(ch);
 		dam = get_attmod(ch, victim) * (argdam * kimult);
 	  }
 	  else if (IS_NPC(ch)) {
@@ -6530,7 +6508,6 @@ void do_concentrated_beam(CHAR_DATA *ch, char *argument) {
 	  }
 	  if (!IS_NPC(ch)) {
 		argdam = (number_range(lowdam * 3, highdam * 3) * (kicmult + smastery));
-		argdam += get_damroll(ch);
 		dam = get_attmod(ch, victim) * (argdam * kimult);
 	  }
 	  else if (IS_NPC(ch)) {
@@ -6560,7 +6537,6 @@ void do_concentrated_beam(CHAR_DATA *ch, char *argument) {
 	  }
 	  if (!IS_NPC(ch)) {
 		argdam = (number_range(lowdam * 4, highdam * 4) * (kicmult + smastery));
-		argdam += get_damroll(ch);
 		dam = get_attmod(ch, victim) * (argdam * kimult);
 	  }
 	  else if (IS_NPC(ch)) {
@@ -6590,7 +6566,6 @@ void do_concentrated_beam(CHAR_DATA *ch, char *argument) {
 	  }
 	  if (!IS_NPC(ch)) {
 		argdam = (number_range(lowdam * 5, highdam * 5) * (kicmult + smastery));
-		argdam += get_damroll(ch);
 		dam = get_attmod(ch, victim) * (argdam * kimult);
 	  }
 	  else if (IS_NPC(ch)) {
@@ -6686,15 +6661,14 @@ void do_energybeam(CHAR_DATA *ch, char *argument) {
   }
   basecost = 10;
   adjcost = basecost;
-  lowdam = 60;
-  highdam = 90;
+  lowdam = 60 * (((long double)get_damroll(ch) / 100) + 1);
+  highdam = 90 * (((long double)get_damroll(ch) / 100) + 1);
   hitcheck = number_range(1, 100);
   WAIT_STATE(ch, 8);
   if (hitcheck <= 95) {
 	if (arg[0] == '\0') {
 	  if (!IS_NPC(ch)) {
 		argdam = (number_range(lowdam, highdam) * (kicmult + smastery));
-		argdam += get_damroll(ch);
 		dam = get_attmod(ch, victim) * (argdam * kimult);
 	  }
 	  else if (IS_NPC(ch)) {
@@ -6723,7 +6697,6 @@ void do_energybeam(CHAR_DATA *ch, char *argument) {
 	  }
 	  if (!IS_NPC(ch)) {
 		argdam = (number_range(lowdam * 2, highdam * 2) * (kicmult + smastery));
-		argdam += get_damroll(ch);
 		dam = get_attmod(ch, victim) * (argdam * kimult);
 	  }
 	  else if (IS_NPC(ch)) {
@@ -6753,7 +6726,6 @@ void do_energybeam(CHAR_DATA *ch, char *argument) {
 	  }
 	  if (!IS_NPC(ch)) {
 		argdam = (number_range(lowdam * 3, highdam * 3) * (kicmult + smastery));
-		argdam += get_damroll(ch);
 		dam = get_attmod(ch, victim) * (argdam * kimult);
 	  }
 	  else if (IS_NPC(ch)) {
@@ -6783,7 +6755,6 @@ void do_energybeam(CHAR_DATA *ch, char *argument) {
 	  }
 	  if (!IS_NPC(ch)) {
 		argdam = (number_range(lowdam * 4, highdam * 4) * (kicmult + smastery));
-		argdam += get_damroll(ch);
 		dam = get_attmod(ch, victim) * (argdam * kimult);
 	  }
 	  else if (IS_NPC(ch)) {
@@ -6813,7 +6784,6 @@ void do_energybeam(CHAR_DATA *ch, char *argument) {
 	  }
 	  if (!IS_NPC(ch)) {
 		argdam = (number_range(lowdam * 5, highdam * 5) * (kicmult + smastery));
-		argdam += get_damroll(ch);
 		dam = get_attmod(ch, victim) * (argdam * kimult);
 	  }
 	  else if (IS_NPC(ch)) {
@@ -6909,15 +6879,14 @@ void do_lariat(CHAR_DATA *ch, char *argument) {
   }
   basecost = 80;
   adjcost = basecost;
-  lowdam = 450;
-  highdam = 500;
+  lowdam = 450 * (((long double)get_damroll(ch) / 100) + 1);
+  highdam = 500 * (((long double)get_damroll(ch) / 100) + 1);
   hitcheck = number_range(1, 100);
   WAIT_STATE(ch, 8);
   if (hitcheck <= 95) {
 	if (arg[0] == '\0') {
 	  if (!IS_NPC(ch)) {
 		argdam = (number_range(lowdam, highdam) * (kicmult + smastery));
-		argdam += get_damroll(ch);
 		dam = get_attmod(ch, victim) * (argdam * physmult);
 	  }
 	  else if (IS_NPC(ch)) {
@@ -6949,7 +6918,6 @@ void do_lariat(CHAR_DATA *ch, char *argument) {
 	  }
 	  if (!IS_NPC(ch)) {
 		argdam = (number_range(lowdam * 2, highdam * 2) * (kicmult + smastery));
-		argdam += get_damroll(ch);
 		dam = get_attmod(ch, victim) * (argdam * physmult);
 	  }
 	  else if (IS_NPC(ch)) {
@@ -6982,7 +6950,6 @@ void do_lariat(CHAR_DATA *ch, char *argument) {
 	  }
 	  if (!IS_NPC(ch)) {
 		argdam = (number_range(lowdam * 3, highdam * 3) * (kicmult + smastery));
-		argdam += get_damroll(ch);
 		dam = get_attmod(ch, victim) * (argdam * physmult);
 	  }
 	  else if (IS_NPC(ch)) {
@@ -7015,7 +6982,6 @@ void do_lariat(CHAR_DATA *ch, char *argument) {
 	  }
 	  if (!IS_NPC(ch)) {
 		argdam = (number_range(lowdam * 4, highdam * 4) * (kicmult + smastery));
-		argdam += get_damroll(ch);
 		dam = get_attmod(ch, victim) * (argdam * physmult);
 	  }
 	  else if (IS_NPC(ch)) {
@@ -7048,7 +7014,6 @@ void do_lariat(CHAR_DATA *ch, char *argument) {
 	  }
 	  if (!IS_NPC(ch)) {
 		argdam = (number_range(lowdam * 5, highdam * 5) * (kicmult + smastery));
-		argdam += get_damroll(ch);
 		dam = get_attmod(ch, victim) * (argdam * physmult);
 	  }
 	  else if (IS_NPC(ch)) {
@@ -7147,15 +7112,14 @@ void do_ecliptic_meteor(CHAR_DATA *ch, char *argument) {
   }
   basecost = 500;
   adjcost = basecost;
-  lowdam = 1000;
-  highdam = 1250;
+  lowdam = 1000 * (((long double)get_damroll(ch) / 100) + 1);
+  highdam = 1250 * (((long double)get_damroll(ch) / 100) + 1);
   hitcheck = number_range(1, 100);
   WAIT_STATE(ch, 8);
   if (hitcheck <= 95) {
 	if (arg[0] == '\0') {
 	  if (!IS_NPC(ch)) {
 		argdam = (number_range(lowdam, highdam) * (kicmult + smastery));
-		argdam += get_damroll(ch);
 		dam = get_attmod(ch, victim) * (argdam * kimult);
 	  }
 	  else if (IS_NPC(ch)) {
@@ -7187,7 +7151,6 @@ void do_ecliptic_meteor(CHAR_DATA *ch, char *argument) {
 	  }
 	  if (!IS_NPC(ch)) {
 		argdam = (number_range(lowdam * 2, highdam * 2) * (kicmult + smastery));
-		argdam += get_damroll(ch);
 		dam = get_attmod(ch, victim) * (argdam * kimult);
 	  }
 	  else if (IS_NPC(ch)) {
@@ -7220,7 +7183,6 @@ void do_ecliptic_meteor(CHAR_DATA *ch, char *argument) {
 	  }
 	  if (!IS_NPC(ch)) {
 		argdam = (number_range(lowdam * 3, highdam * 3) * (kicmult + smastery));
-		argdam += get_damroll(ch);
 		dam = get_attmod(ch, victim) * (argdam * kimult);
 	  }
 	  else if (IS_NPC(ch)) {
@@ -7253,7 +7215,6 @@ void do_ecliptic_meteor(CHAR_DATA *ch, char *argument) {
 	  }
 	  if (!IS_NPC(ch)) {
 		argdam = (number_range(lowdam * 4, highdam * 4) * (kicmult + smastery));
-		argdam += get_damroll(ch);
 		dam = get_attmod(ch, victim) * (argdam * kimult);
 	  }
 	  else if (IS_NPC(ch)) {
@@ -7286,7 +7247,6 @@ void do_ecliptic_meteor(CHAR_DATA *ch, char *argument) {
 	  }
 	  if (!IS_NPC(ch)) {
 		argdam = (number_range(lowdam * 5, highdam * 5) * (kicmult + smastery));
-		argdam += get_damroll(ch);
 		dam = get_attmod(ch, victim) * (argdam * kimult);
 	  }
 	  else if (IS_NPC(ch)) {
@@ -7385,15 +7345,14 @@ void do_gigantic_meteor(CHAR_DATA *ch, char *argument) {
   }
   basecost = 250;
   adjcost = basecost;
-  lowdam = 700;
-  highdam = 750;
+  lowdam = 700 * (((long double)get_damroll(ch) / 100) + 1);
+  highdam = 750 * (((long double)get_damroll(ch) / 100) + 1);
   hitcheck = number_range(1, 100);
   WAIT_STATE(ch, 8);
   if (hitcheck <= 95) {
 	if (arg[0] == '\0') {
 	  if (!IS_NPC(ch)) {
 		argdam = (number_range(lowdam, highdam) * (kicmult + smastery));
-		argdam += get_damroll(ch);
 		dam = get_attmod(ch, victim) * (argdam * kimult);
 	  }
 	  else if (IS_NPC(ch)) {
@@ -7425,7 +7384,6 @@ void do_gigantic_meteor(CHAR_DATA *ch, char *argument) {
 	  }
 	  if (!IS_NPC(ch)) {
 		argdam = (number_range(lowdam * 2, highdam * 2) * (kicmult + smastery));
-		argdam += get_damroll(ch);
 		dam = get_attmod(ch, victim) * (argdam * kimult);
 	  }
 	  else if (IS_NPC(ch)) {
@@ -7458,7 +7416,6 @@ void do_gigantic_meteor(CHAR_DATA *ch, char *argument) {
 	  }
 	  if (!IS_NPC(ch)) {
 		argdam = (number_range(lowdam * 3, highdam * 3) * (kicmult + smastery));
-		argdam += get_damroll(ch);
 		dam = get_attmod(ch, victim) * (argdam * kimult);
 	  }
 	  else if (IS_NPC(ch)) {
@@ -7491,7 +7448,6 @@ void do_gigantic_meteor(CHAR_DATA *ch, char *argument) {
 	  }
 	  if (!IS_NPC(ch)) {
 		argdam = (number_range(lowdam * 4, highdam * 4) * (kicmult + smastery));
-		argdam += get_damroll(ch);
 		dam = get_attmod(ch, victim) * (argdam * kimult);
 	  }
 	  else if (IS_NPC(ch)) {
@@ -7524,7 +7480,6 @@ void do_gigantic_meteor(CHAR_DATA *ch, char *argument) {
 	  }
 	  if (!IS_NPC(ch)) {
 		argdam = (number_range(lowdam * 5, highdam * 5) * (kicmult + smastery));
-		argdam += get_damroll(ch);
 		dam = get_attmod(ch, victim) * (argdam * kimult);
 	  }
 	  else if (IS_NPC(ch)) {
@@ -7623,15 +7578,14 @@ void do_meteor(CHAR_DATA *ch, char *argument) {
   }
   basecost = 100;
   adjcost = basecost;
-  lowdam = 300;
-  highdam = 350;
+  lowdam = 300 * (((long double)get_damroll(ch) / 100) + 1);
+  highdam = 350 * (((long double)get_damroll(ch) / 100) + 1);
   hitcheck = number_range(1, 100);
   WAIT_STATE(ch, 8);
   if (hitcheck <= 95) {
 	if (arg[0] == '\0') {
 	  if (!IS_NPC(ch)) {
 		argdam = (number_range(lowdam, highdam) * (kicmult + smastery));
-		argdam += get_damroll(ch);
 		dam = get_attmod(ch, victim) * (argdam * kimult);
 	  }
 	  else if (IS_NPC(ch)) {
@@ -7663,7 +7617,6 @@ void do_meteor(CHAR_DATA *ch, char *argument) {
 	  }
 	  if (!IS_NPC(ch)) {
 		argdam = (number_range(lowdam * 2, highdam * 2) * (kicmult + smastery));
-		argdam += get_damroll(ch);
 		dam = get_attmod(ch, victim) * (argdam * kimult);
 	  }
 	  else if (IS_NPC(ch)) {
@@ -7696,7 +7649,6 @@ void do_meteor(CHAR_DATA *ch, char *argument) {
 	  }
 	  if (!IS_NPC(ch)) {
 		argdam = (number_range(lowdam * 3, highdam * 3) * (kicmult + smastery));
-		argdam += get_damroll(ch);
 		dam = get_attmod(ch, victim) * (argdam * kimult);
 	  }
 	  else if (IS_NPC(ch)) {
@@ -7729,7 +7681,6 @@ void do_meteor(CHAR_DATA *ch, char *argument) {
 	  }
 	  if (!IS_NPC(ch)) {
 		argdam = (number_range(lowdam * 4, highdam * 4) * (kicmult + smastery));
-		argdam += get_damroll(ch);
 		dam = get_attmod(ch, victim) * (argdam * kimult);
 	  }
 	  else if (IS_NPC(ch)) {
@@ -7762,7 +7713,6 @@ void do_meteor(CHAR_DATA *ch, char *argument) {
 	  }
 	  if (!IS_NPC(ch)) {
 		argdam = (number_range(lowdam * 5, highdam * 5) * (kicmult + smastery));
-		argdam += get_damroll(ch);
 		dam = get_attmod(ch, victim) * (argdam * kimult);
 	  }
 	  else if (IS_NPC(ch)) {
@@ -7861,15 +7811,14 @@ void do_crusherball(CHAR_DATA *ch, char *argument) {
   }
   basecost = 15;
   adjcost = basecost;
-  lowdam = 120;
-  highdam = 140;
+  lowdam = 120 * (((long double)get_damroll(ch) / 100) + 1);
+  highdam = 140 * (((long double)get_damroll(ch) / 100) + 1);
   hitcheck = number_range(1, 100);
   WAIT_STATE(ch, 8);
   if (hitcheck <= 95) {
 	if (arg[0] == '\0') {
 	  if (!IS_NPC(ch)) {
 		argdam = (number_range(lowdam, highdam) * (kicmult + smastery));
-		argdam += get_damroll(ch);
 		dam = get_attmod(ch, victim) * (argdam * kimult);
 	  }
 	  else if (IS_NPC(ch)) {
@@ -7901,7 +7850,6 @@ void do_crusherball(CHAR_DATA *ch, char *argument) {
 	  }
 	  if (!IS_NPC(ch)) {
 		argdam = (number_range(lowdam * 2, highdam * 2) * (kicmult + smastery));
-		argdam += get_damroll(ch);
 		dam = get_attmod(ch, victim) * (argdam * kimult);
 	  }
 	  else if (IS_NPC(ch)) {
@@ -7934,7 +7882,6 @@ void do_crusherball(CHAR_DATA *ch, char *argument) {
 	  }
 	  if (!IS_NPC(ch)) {
 		argdam = (number_range(lowdam * 3, highdam * 3) * (kicmult + smastery));
-		argdam += get_damroll(ch);
 		dam = get_attmod(ch, victim) * (argdam * kimult);
 	  }
 	  else if (IS_NPC(ch)) {
@@ -7967,7 +7914,6 @@ void do_crusherball(CHAR_DATA *ch, char *argument) {
 	  }
 	  if (!IS_NPC(ch)) {
 		argdam = (number_range(lowdam * 4, highdam * 4) * (kicmult + smastery));
-		argdam += get_damroll(ch);
 		dam = get_attmod(ch, victim) * (argdam * kimult);
 	  }
 	  else if (IS_NPC(ch)) {
@@ -8000,7 +7946,6 @@ void do_crusherball(CHAR_DATA *ch, char *argument) {
 	  }
 	  if (!IS_NPC(ch)) {
 		argdam = (number_range(lowdam * 5, highdam * 5) * (kicmult + smastery));
-		argdam += get_damroll(ch);
 		dam = get_attmod(ch, victim) * (argdam * kimult);
 	  }
 	  else if (IS_NPC(ch)) {
@@ -8099,15 +8044,14 @@ void do_haymaker(CHAR_DATA *ch, char *argument) {
   }
   basecost = 10;
   adjcost = basecost;
-  lowdam = 60;
-  highdam = 90;
+  lowdam = 60 * (((long double)get_damroll(ch) / 100) + 1);
+  highdam = 90 * (((long double)get_damroll(ch) / 100) + 1);
   hitcheck = number_range(1, 100);
   WAIT_STATE(ch, 6);
   if (hitcheck <= 95) {
 	if (arg[0] == '\0') {
 	  if (!IS_NPC(ch)) {
 		argdam = (number_range(lowdam, highdam) * (kicmult + smastery));
-		argdam += get_damroll(ch);
 		dam = get_attmod(ch, victim) * (argdam * physmult);
 	  }
 	  else if (IS_NPC(ch)) {
@@ -8139,7 +8083,6 @@ void do_haymaker(CHAR_DATA *ch, char *argument) {
 	  }
 	  if (!IS_NPC(ch)) {
 		argdam = (number_range(lowdam * 2, highdam * 2) * (kicmult + smastery));
-		argdam += get_damroll(ch);
 		dam = get_attmod(ch, victim) * (argdam * physmult);
 	  }
 	  else if (IS_NPC(ch)) {
@@ -8172,7 +8115,6 @@ void do_haymaker(CHAR_DATA *ch, char *argument) {
 	  }
 	  if (!IS_NPC(ch)) {
 		argdam = (number_range(lowdam * 3, highdam * 3) * (kicmult + smastery));
-		argdam += get_damroll(ch);
 		dam = get_attmod(ch, victim) * (argdam * physmult);
 	  }
 	  else if (IS_NPC(ch)) {
@@ -8205,7 +8147,6 @@ void do_haymaker(CHAR_DATA *ch, char *argument) {
 	  }
 	  if (!IS_NPC(ch)) {
 		argdam = (number_range(lowdam * 4, highdam * 4) * (kicmult + smastery));
-		argdam += get_damroll(ch);
 		dam = get_attmod(ch, victim) * (argdam * physmult);
 	  }
 	  else if (IS_NPC(ch)) {
@@ -8238,7 +8179,6 @@ void do_haymaker(CHAR_DATA *ch, char *argument) {
 	  }
 	  if (!IS_NPC(ch)) {
 		argdam = (number_range(lowdam * 5, highdam * 5) * (kicmult + smastery));
-		argdam += get_damroll(ch);
 		dam = get_attmod(ch, victim) * (argdam * physmult);
 	  }
 	  else if (IS_NPC(ch)) {
@@ -8337,15 +8277,14 @@ void do_collide(CHAR_DATA *ch, char *argument) {
   }
   basecost = 25;
   adjcost = basecost;
-  lowdam = 180;
-  highdam = 220;
+  lowdam = 180 * (((long double)get_damroll(ch) / 100) + 1);
+  highdam = 220 * (((long double)get_damroll(ch) / 100) + 1);
   hitcheck = number_range(1, 100);
   WAIT_STATE(ch, 8);
   if (hitcheck <= 95) {
 	if (arg[0] == '\0') {
 	  if (!IS_NPC(ch)) {
 		argdam = (number_range(lowdam, highdam) * (kicmult + smastery));
-		argdam += get_damroll(ch);
 		dam = get_attmod(ch, victim) * (argdam * physmult);
 	  }
 	  else if (IS_NPC(ch)) {
@@ -8377,7 +8316,6 @@ void do_collide(CHAR_DATA *ch, char *argument) {
 	  }
 	  if (!IS_NPC(ch)) {
 		argdam = (number_range(lowdam * 2, highdam * 2) * (kicmult + smastery));
-		argdam += get_damroll(ch);
 		dam = get_attmod(ch, victim) * (argdam * physmult);
 	  }
 	  else if (IS_NPC(ch)) {
@@ -8410,7 +8348,6 @@ void do_collide(CHAR_DATA *ch, char *argument) {
 	  }
 	  if (!IS_NPC(ch)) {
 		argdam = (number_range(lowdam * 3, highdam * 3) * (kicmult + smastery));
-		argdam += get_damroll(ch);
 		dam = get_attmod(ch, victim) * (argdam * physmult);
 	  }
 	  else if (IS_NPC(ch)) {
@@ -8443,7 +8380,6 @@ void do_collide(CHAR_DATA *ch, char *argument) {
 	  }
 	  if (!IS_NPC(ch)) {
 		argdam = (number_range(lowdam * 4, highdam * 4) * (kicmult + smastery));
-		argdam += get_damroll(ch);
 		dam = get_attmod(ch, victim) * (argdam * physmult);
 	  }
 	  else if (IS_NPC(ch)) {
@@ -8476,7 +8412,6 @@ void do_collide(CHAR_DATA *ch, char *argument) {
 	  }
 	  if (!IS_NPC(ch)) {
 		argdam = (number_range(lowdam * 5, highdam * 5) * (kicmult + smastery));
-		argdam += get_damroll(ch);
 		dam = get_attmod(ch, victim) * (argdam * physmult);
 	  }
 	  else if (IS_NPC(ch)) {
@@ -8575,15 +8510,14 @@ void do_kamehameha(CHAR_DATA *ch, char *argument) {
   }
   basecost = 100;
   adjcost = basecost;
-  lowdam = 500;
-  highdam = 600;
+  lowdam = 500 * (((long double)get_damroll(ch) / 100) + 1);
+  highdam = 600 * (((long double)get_damroll(ch) / 100) + 1);
   hitcheck = number_range(1, 100);
   WAIT_STATE(ch, 8);
   if (hitcheck <= 95) {
 	if (arg[0] == '\0') {
 	  if (!IS_NPC(ch)) {
 		argdam = (number_range(lowdam, highdam) * (kicmult + smastery));
-		argdam += get_damroll(ch);
 		dam = get_attmod(ch, victim) * (argdam * kimult);
 	  }
 	  else if (IS_NPC(ch)) {
@@ -8615,7 +8549,6 @@ void do_kamehameha(CHAR_DATA *ch, char *argument) {
 	  }
 	  if (!IS_NPC(ch)) {
 		argdam = (number_range(lowdam * 2, highdam * 2) * (kicmult + smastery));
-		argdam += get_damroll(ch);
 		dam = get_attmod(ch, victim) * (argdam * kimult);
 	  }
 	  else if (IS_NPC(ch)) {
@@ -8648,7 +8581,6 @@ void do_kamehameha(CHAR_DATA *ch, char *argument) {
 	  }
 	  if (!IS_NPC(ch)) {
 		argdam = (number_range(lowdam * 3, highdam * 3) * (kicmult + smastery));
-		argdam += get_damroll(ch);
 		dam = get_attmod(ch, victim) * (argdam * kimult);
 	  }
 	  else if (IS_NPC(ch)) {
@@ -8681,7 +8613,6 @@ void do_kamehameha(CHAR_DATA *ch, char *argument) {
 	  }
 	  if (!IS_NPC(ch)) {
 		argdam = (number_range(lowdam * 4, highdam * 4) * (kicmult + smastery));
-		argdam += get_damroll(ch);
 		dam = get_attmod(ch, victim) * (argdam * kimult);
 	  }
 	  else if (IS_NPC(ch)) {
@@ -8714,7 +8645,6 @@ void do_kamehameha(CHAR_DATA *ch, char *argument) {
 	  }
 	  if (!IS_NPC(ch)) {
 		argdam = (number_range(lowdam * 5, highdam * 5) * (kicmult + smastery));
-		argdam += get_damroll(ch);
 		dam = get_attmod(ch, victim) * (argdam * kimult);
 	  }
 	  else if (IS_NPC(ch)) {
@@ -8926,8 +8856,7 @@ void do_masenko(CHAR_DATA *ch, char *argument) {
   if (hitcheck <= 95) {
 	if (arg[0] == '\0') { //no argument, base skill
 	  if (!IS_NPC(ch)) {
-		argdam = (number_range(300, 350) * (kicmult + smastery)); //average base damage x - y
-		argdam += get_damroll(ch);
+		argdam = (number_range(300 * (((long double)get_damroll(ch) / 100) + 1), 350 * (((long double)get_damroll(ch) / 100) + 1)) * (kicmult + smastery)); //average base damage x - y
 		dam = get_attmod(ch, victim) * (argdam * kimult); //scale player off pfile masteries
 	  }
 	  else if (IS_NPC(ch)) {
@@ -8962,8 +8891,7 @@ void do_masenko(CHAR_DATA *ch, char *argument) {
 		return;
 	  }
 	  if (!IS_NPC(ch)) {
-		argdam = (number_range(600, 700) * (kicmult + smastery));
-		argdam += get_damroll(ch);
+		argdam = (number_range(600 * (((long double)get_damroll(ch) / 100) + 1), 700 * (((long double)get_damroll(ch) / 100) + 1)) * (kicmult + smastery));
 		dam = get_attmod(ch, victim) * (argdam * kimult);
 	  }
 	  else if (IS_NPC(ch)) {
@@ -8995,8 +8923,7 @@ void do_masenko(CHAR_DATA *ch, char *argument) {
 		return;
 	  }
 	  if (!IS_NPC(ch)) {
-		argdam = (number_range(900, 1050) * (kicmult + smastery));
-		argdam += get_damroll(ch);
+		argdam = (number_range(900 * (((long double)get_damroll(ch) / 100) + 1), 1050 * (((long double)get_damroll(ch) / 100) + 1)) * (kicmult + smastery));
 		dam = get_attmod(ch, victim) * (argdam * kimult);
 	  }
 	  else if (IS_NPC(ch)) {
@@ -9028,8 +8955,7 @@ void do_masenko(CHAR_DATA *ch, char *argument) {
 		return;
 	  }
 	  if (!IS_NPC(ch)) {
-		argdam = (number_range(1200, 1400) * (kicmult + smastery));
-		argdam += get_damroll(ch);
+		argdam = (number_range(1200 * (((long double)get_damroll(ch) / 100) + 1), 1400 * (((long double)get_damroll(ch) / 100) + 1)) * (kicmult + smastery));
 		dam = get_attmod(ch, victim) * (argdam * kimult);
 	  }
 	  else if (IS_NPC(ch)) {
@@ -9061,8 +8987,7 @@ void do_masenko(CHAR_DATA *ch, char *argument) {
 		return;
 	  }
 	  if (!IS_NPC(ch)) {
-		argdam = (number_range(1500, 1750) * (kicmult + smastery));
-		argdam += get_damroll(ch);
+		argdam = (number_range(1500 * (((long double)get_damroll(ch) / 100) + 1), 1750 * (((long double)get_damroll(ch) / 100) + 1)) * (kicmult + smastery));
 		dam = get_attmod(ch, victim) * (argdam * kimult);
 	  }
 	  else if (IS_NPC(ch)) {
@@ -9163,8 +9088,7 @@ void do_sbc(CHAR_DATA *ch, char *argument) {
   if (hitcheck <= 95) {
 	if (arg[0] == '\0') { //no argument, base skill
 	  if (!IS_NPC(ch)) {
-		argdam = (number_range(550, 650) * (kicmult + smastery)); //average base damage x - y
-		argdam += get_damroll(ch);
+		argdam = (number_range(550  * (((long double)get_damroll(ch) / 100) + 1), 650  * (((long double)get_damroll(ch) / 100) + 1)) * (kicmult + smastery)); //average base damage x - y
 		dam = get_attmod(ch, victim) * (argdam * kimult); //scale player off pfile masteries
 	  }
 	  else if (IS_NPC(ch)) {
@@ -9199,8 +9123,7 @@ void do_sbc(CHAR_DATA *ch, char *argument) {
 		return;
 	  }
 	  if (!IS_NPC(ch)) {
-		argdam = (number_range(1100, 1300) * (kicmult + smastery));
-		argdam += get_damroll(ch);
+		argdam = (number_range(1100 * (((long double)get_damroll(ch) / 100) + 1), 1300 * (((long double)get_damroll(ch) / 100) + 1)) * (kicmult + smastery));
 		dam = get_attmod(ch, victim) * (argdam * kimult);
 	  }
 	  else if (IS_NPC(ch)) {
@@ -9232,8 +9155,7 @@ void do_sbc(CHAR_DATA *ch, char *argument) {
 		return;
 	  }
 	  if (!IS_NPC(ch)) {
-		argdam = (number_range(1650, 1950) * (kicmult + smastery));
-		argdam += get_damroll(ch);
+		argdam = (number_range(1650 * (((long double)get_damroll(ch) / 100) + 1), 1950 * (((long double)get_damroll(ch) / 100) + 1)) * (kicmult + smastery));
 		dam = get_attmod(ch, victim) * (argdam * kimult);
 	  }
 	  else if (IS_NPC(ch)) {
@@ -9265,8 +9187,7 @@ void do_sbc(CHAR_DATA *ch, char *argument) {
 		return;
 	  }
 	  if (!IS_NPC(ch)) {
-		argdam = (number_range(2200, 2600) * (kicmult + smastery));
-		argdam += get_damroll(ch);
+		argdam = (number_range(2200 * (((long double)get_damroll(ch) / 100) + 1), 2600 * (((long double)get_damroll(ch) / 100) + 1)) * (kicmult + smastery));
 		dam = get_attmod(ch, victim) * (argdam * kimult);
 	  }
 	  else if (IS_NPC(ch)) {
@@ -9299,8 +9220,7 @@ void do_sbc(CHAR_DATA *ch, char *argument) {
 		return;
 	  }
 	  if (!IS_NPC(ch)) {
-		argdam = (number_range(2750, 3250) * (kicmult + smastery));
-		argdam += get_damroll(ch);
+		argdam = (number_range(2750 * (((long double)get_damroll(ch) / 100) + 1), 3250 * (((long double)get_damroll(ch) / 100) + 1)) * (kicmult + smastery));
 		dam = get_attmod(ch, victim) * (argdam * kimult);
 	  }
 	  else if (IS_NPC(ch)) {
@@ -9400,15 +9320,14 @@ void do_dd(CHAR_DATA *ch, char *argument) {
   }
   basecost = 55;
   adjcost = basecost;
-  lowdam = 280;
-  highdam = 280;
+  lowdam = 280 * (((long double)get_damroll(ch) / 100) + 1);
+  highdam = 280 * (((long double)get_damroll(ch) / 100) + 1);
   hitcheck = number_range(1, 100);
   WAIT_STATE(ch, 8);
   if (hitcheck <= 95) {
 	if (arg[0] == '\0') {
 	  if (!IS_NPC(ch)) {
 		argdam = (number_range(lowdam, highdam) * (kicmult + smastery));
-		argdam += get_damroll(ch);
 		dam = get_attmod(ch, victim) * (argdam * kimult);
 	  }
 	  else if (IS_NPC(ch)) {
@@ -9440,7 +9359,6 @@ void do_dd(CHAR_DATA *ch, char *argument) {
 	  }
 	  if (!IS_NPC(ch)) {
 		argdam = (number_range(lowdam * 2, highdam * 2) * (kicmult + smastery));
-		argdam += get_damroll(ch);
 		dam = get_attmod(ch, victim) * (argdam * kimult);
 	  }
 	  else if (IS_NPC(ch)) {
@@ -9473,7 +9391,6 @@ void do_dd(CHAR_DATA *ch, char *argument) {
 	  }
 	  if (!IS_NPC(ch)) {
 		argdam = (number_range(lowdam * 3, highdam * 3) * (kicmult + smastery));
-		argdam += get_damroll(ch);
 		dam = get_attmod(ch, victim) * (argdam * kimult);
 	  }
 	  else if (IS_NPC(ch)) {
@@ -9506,7 +9423,6 @@ void do_dd(CHAR_DATA *ch, char *argument) {
 	  }
 	  if (!IS_NPC(ch)) {
 		argdam = (number_range(lowdam * 4, highdam * 4) * (kicmult + smastery));
-		argdam += get_damroll(ch);
 		dam = get_attmod(ch, victim) * (argdam * kimult);
 	  }
 	  else if (IS_NPC(ch)) {
@@ -9539,7 +9455,6 @@ void do_dd(CHAR_DATA *ch, char *argument) {
 	  }
 	  if (!IS_NPC(ch)) {
 		argdam = (number_range(lowdam * 5, highdam * 5) * (kicmult + smastery));
-		argdam += get_damroll(ch);
 		dam = get_attmod(ch, victim) * (argdam * kimult);
 	  }
 	  else if (IS_NPC(ch)) {
@@ -10293,15 +10208,14 @@ void do_death_ball(CHAR_DATA *ch, char *argument) {
   }
   basecost = 500;
   adjcost = basecost;
-  lowdam = 1000;
-  highdam = 1250;
+  lowdam = 1000 * (((long double)get_damroll(ch) / 100) + 1);
+  highdam = 1250 * (((long double)get_damroll(ch) / 100) + 1);
   hitcheck = number_range(1, 100);
   WAIT_STATE(ch, 8);
   if (hitcheck <= 95) {
 	if (arg[0] == '\0') {
 	  if (!IS_NPC(ch)) {
 		argdam = (number_range(lowdam, highdam) * (kicmult + smastery));
-		argdam += get_damroll(ch);
 		dam = get_attmod(ch, victim) * (argdam * kimult);
 	  }
 	  else if (IS_NPC(ch)) {
@@ -10339,7 +10253,6 @@ void do_death_ball(CHAR_DATA *ch, char *argument) {
 	  }
 	  if (!IS_NPC(ch)) {
 		argdam = (number_range(lowdam * 2, highdam * 2) * (kicmult + smastery));
-		argdam += get_damroll(ch);
 		dam = get_attmod(ch, victim) * (argdam * kimult);
 	  }
 	  else if (IS_NPC(ch)) {
@@ -10378,7 +10291,6 @@ void do_death_ball(CHAR_DATA *ch, char *argument) {
 	  }
 	  if (!IS_NPC(ch)) {
 		argdam = (number_range(lowdam * 3, highdam * 3) * (kicmult + smastery));
-		argdam += get_damroll(ch);
 		dam = get_attmod(ch, victim) * (argdam * kimult);
 	  }
 	  else if (IS_NPC(ch)) {
@@ -10417,7 +10329,6 @@ void do_death_ball(CHAR_DATA *ch, char *argument) {
 	  }
 	  if (!IS_NPC(ch)) {
 		argdam = (number_range(lowdam * 4, highdam * 4) * (kicmult + smastery));
-		argdam += get_damroll(ch);
 		dam = get_attmod(ch, victim) * (argdam * kimult);
 	  }
 	  else if (IS_NPC(ch)) {
@@ -10456,7 +10367,6 @@ void do_death_ball(CHAR_DATA *ch, char *argument) {
 	  }
 	  if (!IS_NPC(ch)) {
 		argdam = (number_range(lowdam * 5, highdam * 5) * (kicmult + smastery));
-		argdam += get_damroll(ch);
 		dam = get_attmod(ch, victim) * (argdam * kimult);
 	  }
 	  else if (IS_NPC(ch)) {
@@ -10564,15 +10474,14 @@ void do_eye_beam(CHAR_DATA *ch, char *argument) {
   }
   basecost = 12;
   adjcost = basecost;
-  lowdam = 120;
-  highdam = 140;
+  lowdam = 120 * (((long double)get_damroll(ch) / 100) + 1);
+  highdam = 140 * (((long double)get_damroll(ch) / 100) + 1);
   hitcheck = number_range(1, 100);
   WAIT_STATE(ch, 8);
   if (hitcheck <= 95) {
 	if (arg[0] == '\0') {
 	  if (!IS_NPC(ch)) {
 		argdam = (number_range(lowdam, highdam) * (kicmult + smastery));
-		argdam += get_damroll(ch);
 		dam = get_attmod(ch, victim) * (argdam * kimult);
 	  }
 	  else if (IS_NPC(ch)) {
@@ -10601,7 +10510,6 @@ void do_eye_beam(CHAR_DATA *ch, char *argument) {
 	  }
 	  if (!IS_NPC(ch)) {
 		argdam = (number_range(lowdam * 2, highdam * 2) * (kicmult + smastery));
-		argdam += get_damroll(ch);
 		dam = get_attmod(ch, victim) * (argdam * kimult);
 	  }
 	  else if (IS_NPC(ch)) {
@@ -10631,7 +10539,6 @@ void do_eye_beam(CHAR_DATA *ch, char *argument) {
 	  }
 	  if (!IS_NPC(ch)) {
 		argdam = (number_range(lowdam * 3, highdam * 3) * (kicmult + smastery));
-		argdam += get_damroll(ch);
 		dam = get_attmod(ch, victim) * (argdam * kimult);
 	  }
 	  else if (IS_NPC(ch)) {
@@ -10661,7 +10568,6 @@ void do_eye_beam(CHAR_DATA *ch, char *argument) {
 	  }
 	  if (!IS_NPC(ch)) {
 		argdam = (number_range(lowdam * 4, highdam * 4) * (kicmult + smastery));
-		argdam += get_damroll(ch);
 		dam = get_attmod(ch, victim) * (argdam * kimult);
 	  }
 	  else if (IS_NPC(ch)) {
@@ -10691,7 +10597,6 @@ void do_eye_beam(CHAR_DATA *ch, char *argument) {
 	  }
 	  if (!IS_NPC(ch)) {
 		argdam = (number_range(lowdam * 5, highdam * 5) * (kicmult + smastery));
-		argdam += get_damroll(ch);
 		dam = get_attmod(ch, victim) * (argdam * kimult);
 	  }
 	  else if (IS_NPC(ch)) {
@@ -10791,15 +10696,14 @@ void do_finger_beam(CHAR_DATA *ch, char *argument) {
   }
   basecost = 75;
   adjcost = basecost;
-  lowdam = 600;
-  highdam = 650;
+  lowdam = 600 * (((long double)get_damroll(ch) / 100) + 1);
+  highdam = 650 * (((long double)get_damroll(ch) / 100) + 1);
   hitcheck = number_range(1, 100);
   WAIT_STATE(ch, 8);
   if (hitcheck <= 95) {
 	if (arg[0] == '\0') {
 	  if (!IS_NPC(ch)) {
 		argdam = (number_range(lowdam, highdam) * (kicmult + smastery));
-		argdam += get_damroll(ch);
 		dam = get_attmod(ch, victim) * (argdam * kimult);
 	  }
 	  else if (IS_NPC(ch)) {
@@ -10828,7 +10732,6 @@ void do_finger_beam(CHAR_DATA *ch, char *argument) {
 	  }
 	  if (!IS_NPC(ch)) {
 		argdam = (number_range(lowdam * 2, highdam * 2) * (kicmult + smastery));
-		argdam += get_damroll(ch);
 		dam = get_attmod(ch, victim) * (argdam * kimult);
 	  }
 	  else if (IS_NPC(ch)) {
@@ -10858,7 +10761,6 @@ void do_finger_beam(CHAR_DATA *ch, char *argument) {
 	  }
 	  if (!IS_NPC(ch)) {
 		argdam = (number_range(lowdam * 3, highdam * 3) * (kicmult + smastery));
-		argdam += get_damroll(ch);
 		dam = get_attmod(ch, victim) * (argdam * kimult);
 	  }
 	  else if (IS_NPC(ch)) {
@@ -10888,7 +10790,6 @@ void do_finger_beam(CHAR_DATA *ch, char *argument) {
 	  }
 	  if (!IS_NPC(ch)) {
 		argdam = (number_range(lowdam * 4, highdam * 4) * (kicmult + smastery));
-		argdam += get_damroll(ch);
 		dam = get_attmod(ch, victim) * (argdam * kimult);
 	  }
 	  else if (IS_NPC(ch)) {
@@ -10918,7 +10819,6 @@ void do_finger_beam(CHAR_DATA *ch, char *argument) {
 	  }
 	  if (!IS_NPC(ch)) {
 		argdam = (number_range(lowdam * 5, highdam * 5) * (kicmult + smastery));
-		argdam += get_damroll(ch);
 		dam = get_attmod(ch, victim) * (argdam * kimult);
 	  }
 	  else if (IS_NPC(ch)) {
@@ -12306,15 +12206,14 @@ void do_destructive_wave(CHAR_DATA *ch, char *argument) {
   }
   basecost = 60;
   adjcost = basecost;
-  lowdam = 260;
-  highdam = 280;
+  lowdam = 260 * (((long double)get_damroll(ch) / 100) + 1);
+  highdam = 280 * (((long double)get_damroll(ch) / 100) + 1);
   hitcheck = number_range(1, 100);
   WAIT_STATE(ch, 8);
   if (hitcheck <= 95) {
 	if (arg[0] == '\0') {
 	  if (!IS_NPC(ch)) {
 		argdam = (number_range(lowdam, highdam) * (kicmult + smastery));
-		argdam += get_damroll(ch);
 		dam = get_attmod(ch, victim) * (argdam * kimult);
 	  }
 	  else if (IS_NPC(ch)) {
@@ -12343,7 +12242,6 @@ void do_destructive_wave(CHAR_DATA *ch, char *argument) {
 	  }
 	  if (!IS_NPC(ch)) {
 		argdam = (number_range(lowdam * 2, highdam * 2) * (kicmult + smastery));
-		argdam += get_damroll(ch);
 		dam = get_attmod(ch, victim) * (argdam * kimult);
 	  }
 	  else if (IS_NPC(ch)) {
@@ -12373,7 +12271,6 @@ void do_destructive_wave(CHAR_DATA *ch, char *argument) {
 	  }
 	  if (!IS_NPC(ch)) {
 		argdam = (number_range(lowdam * 3, highdam * 3) * (kicmult + smastery));
-		argdam += get_damroll(ch);
 		dam = get_attmod(ch, victim) * (argdam * kimult);
 	  }
 	  else if (IS_NPC(ch)) {
@@ -12403,7 +12300,6 @@ void do_destructive_wave(CHAR_DATA *ch, char *argument) {
 	  }
 	  if (!IS_NPC(ch)) {
 		argdam = (number_range(lowdam * 4, highdam * 4) * (kicmult + smastery));
-		argdam += get_damroll(ch);
 		dam = get_attmod(ch, victim) * (argdam * kimult);
 	  }
 	  else if (IS_NPC(ch)) {
@@ -12433,7 +12329,6 @@ void do_destructive_wave(CHAR_DATA *ch, char *argument) {
 	  }
 	  if (!IS_NPC(ch)) {
 		argdam = (number_range(lowdam * 5, highdam * 5) * (kicmult + smastery));
-		argdam += get_damroll(ch);
 		dam = get_attmod(ch, victim) * (argdam * kimult);
 	  }
 	  else if (IS_NPC(ch)) {
@@ -12688,15 +12583,14 @@ void do_shockwave(CHAR_DATA *ch, char *argument) {
   }
   basecost = 70;
   adjcost = basecost;
-  lowdam = 450;
-  highdam = 650;
+  lowdam = 450 * (((long double)get_damroll(ch) / 100) + 1);
+  highdam = 650 * (((long double)get_damroll(ch) / 100) + 1);
   hitcheck = number_range(1, 100);
   WAIT_STATE(ch, 8);
   if (hitcheck <= 95) {
 	if (arg[0] == '\0') {
 	  if (!IS_NPC(ch)) {
 		argdam = (number_range(lowdam, highdam) * (kicmult + smastery));
-		argdam += get_damroll(ch);
 		dam = get_attmod(ch, victim) * (argdam * kimult);
 	  }
 	  else if (IS_NPC(ch)) {
@@ -12728,7 +12622,6 @@ void do_shockwave(CHAR_DATA *ch, char *argument) {
 	  }
 	  if (!IS_NPC(ch)) {
 		argdam = (number_range(lowdam * 2, highdam * 2) * (kicmult + smastery));
-		argdam += get_damroll(ch);
 		dam = get_attmod(ch, victim) * (argdam * kimult);
 	  }
 	  else if (IS_NPC(ch)) {
@@ -12761,7 +12654,6 @@ void do_shockwave(CHAR_DATA *ch, char *argument) {
 	  }
 	  if (!IS_NPC(ch)) {
 		argdam = (number_range(lowdam * 3, highdam * 3) * (kicmult + smastery));
-		argdam += get_damroll(ch);
 		dam = get_attmod(ch, victim) * (argdam * kimult);
 	  }
 	  else if (IS_NPC(ch)) {
@@ -12794,7 +12686,6 @@ void do_shockwave(CHAR_DATA *ch, char *argument) {
 	  }
 	  if (!IS_NPC(ch)) {
 		argdam = (number_range(lowdam * 4, highdam * 4) * (kicmult + smastery));
-		argdam += get_damroll(ch);
 		dam = get_attmod(ch, victim) * (argdam * kimult);
 	  }
 	  else if (IS_NPC(ch)) {
@@ -12827,7 +12718,6 @@ void do_shockwave(CHAR_DATA *ch, char *argument) {
 	  }
 	  if (!IS_NPC(ch)) {
 		argdam = (number_range(lowdam * 5, highdam * 5) * (kicmult + smastery));
-		argdam += get_damroll(ch);
 		dam = get_attmod(ch, victim) * (argdam * kimult);
 	  }
 	  else if (IS_NPC(ch)) {
@@ -12926,15 +12816,14 @@ void do_gallic_gun(CHAR_DATA *ch, char *argument) {
   }
   basecost = 125;
   adjcost = basecost;
-  lowdam = 700;
-  highdam = 750;
+  lowdam = 700 * (((long double)get_damroll(ch) / 100) + 1);
+  highdam = 750 * (((long double)get_damroll(ch) / 100) + 1);
   hitcheck = number_range(1, 100);
   WAIT_STATE(ch, 8);
   if (hitcheck <= 95) {
 	if (arg[0] == '\0') {
 	  if (!IS_NPC(ch)) {
 		argdam = (number_range(lowdam, highdam) * (kicmult + smastery));
-		argdam += get_damroll(ch);
 		dam = get_attmod(ch, victim) * (argdam * kimult);
 	  }
 	  else if (IS_NPC(ch)) {
@@ -12966,7 +12855,6 @@ void do_gallic_gun(CHAR_DATA *ch, char *argument) {
 	  }
 	  if (!IS_NPC(ch)) {
 		argdam = (number_range(lowdam * 2, highdam * 2) * (kicmult + smastery));
-		argdam += get_damroll(ch);
 		dam = get_attmod(ch, victim) * (argdam * kimult);
 	  }
 	  else if (IS_NPC(ch)) {
@@ -12999,7 +12887,6 @@ void do_gallic_gun(CHAR_DATA *ch, char *argument) {
 	  }
 	  if (!IS_NPC(ch)) {
 		argdam = (number_range(lowdam * 3, highdam * 3) * (kicmult + smastery));
-		argdam += get_damroll(ch);
 		dam = get_attmod(ch, victim) * (argdam * kimult);
 	  }
 	  else if (IS_NPC(ch)) {
@@ -13032,7 +12919,6 @@ void do_gallic_gun(CHAR_DATA *ch, char *argument) {
 	  }
 	  if (!IS_NPC(ch)) {
 		argdam = (number_range(lowdam * 4, highdam * 4) * (kicmult + smastery));
-		argdam += get_damroll(ch);
 		dam = get_attmod(ch, victim) * (argdam * kimult);
 	  }
 	  else if (IS_NPC(ch)) {
@@ -13065,7 +12951,6 @@ void do_gallic_gun(CHAR_DATA *ch, char *argument) {
 	  }
 	  if (!IS_NPC(ch)) {
 		argdam = (number_range(lowdam * 5, highdam * 5) * (kicmult + smastery));
-		argdam += get_damroll(ch);
 		dam = get_attmod(ch, victim) * (argdam * kimult);
 	  }
 	  else if (IS_NPC(ch)) {
@@ -13164,15 +13049,14 @@ void do_makosen(CHAR_DATA *ch, char *argument) {
   }
   basecost = 60;
   adjcost = basecost;
-  lowdam = 400;
-  highdam = 420;
+  lowdam = 400 * (((long double)get_damroll(ch) / 100) + 1);
+  highdam = 420 * (((long double)get_damroll(ch) / 100) + 1);
   hitcheck = number_range(1, 100);
   WAIT_STATE(ch, 8);
   if (hitcheck <= 95) {
 	if (arg[0] == '\0') {
 	  if (!IS_NPC(ch)) {
 		argdam = (number_range(lowdam, highdam) * (kicmult + smastery));
-		argdam += get_damroll(ch);
 		dam = get_attmod(ch, victim) * (argdam * kimult);
 	  }
 	  else if (IS_NPC(ch)) {
@@ -13204,7 +13088,6 @@ void do_makosen(CHAR_DATA *ch, char *argument) {
 	  }
 	  if (!IS_NPC(ch)) {
 		argdam = (number_range(lowdam * 2, highdam * 2) * (kicmult + smastery));
-		argdam += get_damroll(ch);
 		dam = get_attmod(ch, victim) * (argdam * kimult);
 	  }
 	  else if (IS_NPC(ch)) {
@@ -13237,7 +13120,6 @@ void do_makosen(CHAR_DATA *ch, char *argument) {
 	  }
 	  if (!IS_NPC(ch)) {
 		argdam = (number_range(lowdam * 3, highdam * 3) * (kicmult + smastery));
-		argdam += get_damroll(ch);
 		dam = get_attmod(ch, victim) * (argdam * kimult);
 	  }
 	  else if (IS_NPC(ch)) {
@@ -13270,7 +13152,6 @@ void do_makosen(CHAR_DATA *ch, char *argument) {
 	  }
 	  if (!IS_NPC(ch)) {
 		argdam = (number_range(lowdam * 4, highdam * 4) * (kicmult + smastery));
-		argdam += get_damroll(ch);
 		dam = get_attmod(ch, victim) * (argdam * kimult);
 	  }
 	  else if (IS_NPC(ch)) {
@@ -13303,7 +13184,6 @@ void do_makosen(CHAR_DATA *ch, char *argument) {
 	  }
 	  if (!IS_NPC(ch)) {
 		argdam = (number_range(lowdam * 5, highdam * 5) * (kicmult + smastery));
-		argdam += get_damroll(ch);
 		dam = get_attmod(ch, victim) * (argdam * kimult);
 	  }
 	  else if (IS_NPC(ch)) {
