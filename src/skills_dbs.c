@@ -5106,8 +5106,8 @@ void do_research(CHAR_DATA *ch, char *argument) {
     }
     if (!str_cmp(arg2, "power")) {
       spcostpow = (ch->energybeampower * 100);
-      if (spcostpow < 100)
-        spcostpow = 100;
+      if (spcostpow < 15)
+        spcostpow = 15;
       if (spremaining < spcostpow) {
         send_to_char("You don't have enough SP to do that.\n\r", ch);
         return;
