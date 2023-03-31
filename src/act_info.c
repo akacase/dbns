@@ -4777,12 +4777,12 @@ void do_develop(CHAR_DATA *ch, char *argument) {
       return;
     }
   }
-  if (!str_cmp(arg1, "eyebeam") && !str_cmp(arg2, "energybeam")) {
+  if (!str_cmp(arg1, "eyebeam") && !str_cmp(arg2, "concentratedbeam")) {
     if (ch->skillfinger_beam >= 1) {
       send_to_char("You already know that skill.\n\r", ch);
       return;
     }
-    if ((ch->eye_beampower + ch->energybeampower) >= 14) {
+    if (ch->eye_beampower >= 10 && ch->concentrated_beampower >= 10) {
       send_to_char("You developed Finger Beam!\n\r", ch);
       ch->skillfinger_beam = 1;
       return;
