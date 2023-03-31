@@ -4895,7 +4895,7 @@ one_hit(CHAR_DATA *ch, CHAR_DATA *victim, int dt) {
     dam = .85 * dam;
     learn_from_success(victim, gsn_style_defensive);
   } else if (victim->position == POS_EVASIVE) {
-    dam = .25 * dam;
+    dam = .75 * dam;
     learn_from_success(victim, gsn_style_evasive);
   }
   /*
