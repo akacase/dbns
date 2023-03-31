@@ -425,8 +425,8 @@ void gain_exp(CHAR_DATA *ch, long double gain) {
             get_rank_color(ch));
     do_info(ch, buf);
   }
-  if (trueRank != (newRank = get_true_rank(ch))) {
-    ch->level = newRank;
+  if (ch->truepl >= 250 && ch->level < 2) {
+    ch->level = 2;
 
     if (ch->level == 10 && !xIS_SET(ch->act, PLR_SKAI)) {
       ch->perm_str += 5;

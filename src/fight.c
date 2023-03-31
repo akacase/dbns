@@ -6046,6 +6046,9 @@ damage(CHAR_DATA *ch, CHAR_DATA *victim, int dam, int dt) {
       xp_gain =
           (long double)dam / 375000 * pow(victim->worth, xp_mod);
     }
+	/* If damage is greater than remaining target health, restrict PL gain*/
+	if (dam > victim->hit)
+	  xp_gain *= ((long double)victim->hit / dam);
     /* PL Gains cut if player is stronger than opponent */
     if (!IS_NPC(victim)) {
       if ((ch->pl / victim->pl) < 4)
