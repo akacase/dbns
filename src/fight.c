@@ -6049,6 +6049,8 @@ damage(CHAR_DATA *ch, CHAR_DATA *victim, int dam, int dt) {
 	/* If damage is greater than remaining target health, restrict PL gain*/
 	if (dam > victim->hit)
 	  xp_gain *= ((long double)victim->hit / dam);
+	if (ch->truepl >= 9001)
+	  xp_gain *= 0.1;
     /* PL Gains cut if player is stronger than opponent */
     if (!IS_NPC(victim)) {
       if ((ch->pl / victim->pl) < 4)
@@ -6150,8 +6152,9 @@ damage(CHAR_DATA *ch, CHAR_DATA *victim, int dam, int dt) {
 
         act(AT_HIT, buf1, ch, NULL, victim, TO_CHAR);
       } else if (xp_gain_post >= 1) {
-        sprintf(buf1, "Your pl increases by %s point(s).",
-                num_punct_ld(xp_gain_post));
+        sprintf(buf1,
+                "Your pl increases very slightly.",
+                NULL);
         act(AT_HIT, buf1, ch, NULL, victim, TO_CHAR);
       }
     }
