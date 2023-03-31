@@ -5100,7 +5100,7 @@ void do_research(CHAR_DATA *ch, char *argument) {
       return;
     }
     if (!str_cmp(arg2, "power")) {
-      spcostpow = (ch->energybeampower * 100);
+      spcostpow = (ch->energybeampower * 15);
       if (spcostpow < 15)
         spcostpow = 15;
       if (spremaining < spcostpow) {
