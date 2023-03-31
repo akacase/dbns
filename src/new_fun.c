@@ -862,15 +862,18 @@ void bio_absorb(CHAR_DATA *ch, CHAR_DATA *victim) {
 		act(AT_HIT, "$N is too weak to add more than a paltry sum to your power.", ch, NULL, victim, TO_CHAR);
     }
 	else {
+	  if ((victim->worth / 3) >= 3)
 		getbiomass = (victim->worth / 3);
+	  else
+		getbiomass = 3;
 	}
   }
 	
   ch->biomass += getbiomass;
-  stat_train(ch, "str", 100);
-  stat_train(ch, "spd", 100);
-  stat_train(ch, "con", 100);
-  stat_train(ch, "int", 100);
+  stat_train(ch, "str", 33);
+  stat_train(ch, "spd", 33);
+  stat_train(ch, "con", 33);
+  stat_train(ch, "int", 33);
   victim->hit = -20;
   update_pos(victim);
   evolveCheck(ch, victim, false);

@@ -3227,6 +3227,11 @@ void do_kaioken(CHAR_DATA *ch, char *argument) {
         NULL, TO_CHAR);
     return;
   }
+  if (arg > 5 && is_icer(ch)) {
+    act(AT_RED, "Better left to monkeys and their lessers, don't you think?", ch, NULL,
+        NULL, TO_CHAR);
+    return;
+  }
   sprintf(buf,"Bright red flames erupt around you as you yell out KAIOKEN TIMES %d!!!", arg);
   act(AT_FIRE, buf, ch, NULL, NULL, TO_CHAR);
   sprintf(buf,"Bright red flames erupt around %s as $e yells out KAIOKEN TIMES %d!!!", ch->name, arg);
