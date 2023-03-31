@@ -5951,10 +5951,13 @@ damage(CHAR_DATA *ch, CHAR_DATA *victim, int dam, int dt) {
       if (dam > 0) {
         if (dam < 10) {
           stat_train(victim, "con", 7);
+		  stat_train(victim, "spd", 7);
         } else if (dam < 20) {
           stat_train(victim, "con", 10);
+		  stat_train(victim, "spd", 10);
         } else if (dam > 20) {
           stat_train(victim, "con", 15);
+		  stat_train(victim, "spd", 15);
         }
       }
       ch->melee = false;
