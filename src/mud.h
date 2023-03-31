@@ -5500,6 +5500,7 @@ DECLARE_DO_FUN(do_giant_size);
 DECLARE_DO_FUN(do_give);
 DECLARE_DO_FUN(do_glance);
 DECLARE_DO_FUN(do_godset);
+DECLARE_DO_FUN(do_pretitle);
 DECLARE_DO_FUN(do_godstat);
 DECLARE_DO_FUN(do_godwho);
 DECLARE_DO_FUN(do_gold);

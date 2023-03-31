@@ -539,6 +539,7 @@ DO_FUN *skill_function(char *name) {
       if (!str_cmp(name, "do_powerdown")) return do_powerdown;
       if (!str_cmp(name, "do_powerup")) return do_powerup;
       if (!str_cmp(name, "do_practice")) return do_practice;
+	  if (!str_cmp(name, "do_pretitle")) return do_pretitle;
       if (!str_cmp(name, "do_privacy")) return do_privacy;
       if (!str_cmp(name, "do_project")) return do_project;
       if (!str_cmp(name, "do_promote")) return do_promote;
@@ -1252,6 +1253,7 @@ char *skill_name(DO_FUN *skill) {
   if (skill == do_powerdown) return "do_powerdown";
   if (skill == do_powerup) return "do_powerup";
   if (skill == do_practice) return "do_practice";
+  if (skill == do_pretitle) return "do_pretitle";
   if (skill == do_privacy) return "do_privacy";
   if (skill == do_project) return "do_project";
   if (skill == do_promote) return "do_promote";

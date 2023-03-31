@@ -3291,7 +3291,7 @@ void do_who(CHAR_DATA *ch, char *argument) {
         break;
     }
 
-    if (wch->level >= LEVEL_IMMORTAL && wch->pcdata->pretitle && wch->pcdata->pretitle[0] != '\0') {
+    if (wch->pcdata->pretitle && wch->pcdata->pretitle[0] != '\0') {
       sprintf(buf2, " &W%14s", wch->pcdata->pretitle);
       class = buf2;
     }
@@ -8411,4 +8411,14 @@ void do_analyze(CHAR_DATA *ch, char *argument) {
   for (paf = obj->first_affect; paf; paf = paf->next) {
     showaffect(ch, paf);
   }
+}
+
+void do_pretitle(CHAR_DATA *ch, char *argument) {
+  char arg1[MAX_INPUT_LENGTH];
+  argument = one_argument(argument, arg1);
+  
+  STRFREE(ch->pcdata->pretitle);
+  ch->pcdata->pretitle = STRALLOC(arg1);
+  send_to_pager_color("&wOk.\n\r", ch);
+  return;
 }
