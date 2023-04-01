@@ -9795,6 +9795,8 @@ void do_meditate(CHAR_DATA *ch, char *argument) {
           ch->train += weighttrain;
           if (is_namek(ch) || is_kaio(ch))
             ch->energymastery += 3;
+		  else
+			ch->energymastery += 1;
           if (ch->energymastery >= (ch->kspgain * 100)) {
             pager_printf_color(ch,
                                "&CYou gained 5 Skill Points!\n\r");
@@ -9841,14 +9843,14 @@ void do_meditate(CHAR_DATA *ch, char *argument) {
           statComb = ((get_curr_str(ch) + get_curr_dex(ch) + get_curr_int(ch) + get_curr_con(ch)) - 39);
           increase = number_range(1, 3);
           xp_gain = (long double)increase / 750000 * statComb;
-		  if (!is_bio(ch)) {
-            gain_exp(ch, xp_gain);
-		  }
+		  gain_exp(ch, xp_gain);
           ch->mana += (float)right / 19 * ch->max_mana;
           ch->mana += 10;
           ch->train += weighttrain;
           if (is_namek(ch) || is_kaio(ch))
-            ch->energymastery += 8;
+            ch->energymastery += 3;
+		  else
+			ch->energymastery += 1;
           if (ch->energymastery >= (ch->kspgain * 100)) {
             pager_printf_color(ch,
                                "&CYou gained 5 Skill Points!\n\r");
