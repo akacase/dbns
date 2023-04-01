@@ -5491,7 +5491,7 @@ void exercise_train(CHAR_DATA *ch, char *stat, int modifier) {
     gainMod = 5;
   }
 
-  fightIncrease = (number_range(1, 2) * gainMod);
+  fightIncrease = (number_range(2, 4) * gainMod);
 
   if (strcmp("str", stat) == 0) {
     tAbility = &ch->pcdata->tStr;
