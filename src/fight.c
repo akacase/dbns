@@ -2691,7 +2691,10 @@ void violence_update(void) {
 
       trainmessage = number_range(1, 100);
       gravdam = totalgrav * damrange;
-      statbonus = (totalgrav * 5) + 5;
+	  if (totalgrav < 20)
+		statbonus = (totalgrav * 5) + 15;
+	  else
+		statbonus = (totalgrav) + 15;
       breakbonus = statbonus * 2;
 
       if (trainmessage < 65) {
@@ -2837,7 +2840,10 @@ void violence_update(void) {
 
       trainmessage = number_range(1, 100);
       gravdam = totalgrav * damrange;
-      statbonus = (totalgrav * 5) + 5;
+      if (totalgrav < 20)
+		statbonus = (totalgrav * 5) + 5;
+	  else
+		statbonus = (totalgrav) + 15;
       statbonus = statbonus * 1.5;
       breakbonus = statbonus * 2;
 
@@ -2981,7 +2987,10 @@ void violence_update(void) {
 
       trainmessage = number_range(1, 100);
       gravdam = totalgrav * damrange;
-      statbonus = (totalgrav * 5) + 5;
+      if (totalgrav < 20)
+		statbonus = (totalgrav * 5) + 5;
+	  else
+		statbonus = (totalgrav) + 15;
       breakbonus = statbonus * 2;
 
       if (trainmessage < 65) {
@@ -3127,7 +3136,10 @@ void violence_update(void) {
 
       trainmessage = number_range(1, 100);
       gravdam = totalgrav * damrange;
-      statbonus = (totalgrav * 5) + 5;
+      if (totalgrav < 20)
+		statbonus = (totalgrav * 5) + 5;
+	  else
+		statbonus = (totalgrav) + 15;
       statbonus = statbonus * 1.5;
       breakbonus = statbonus * 2;
 
@@ -3271,7 +3283,10 @@ void violence_update(void) {
 
       trainmessage = number_range(1, 100);
       gravdam = totalgrav * damrange;
-      statbonus = (totalgrav * 5) + 5;
+      if (totalgrav < 20)
+		statbonus = (totalgrav * 5) + 5;
+	  else
+		statbonus = (totalgrav) + 15;
       breakbonus = statbonus * 2;
 
       if (trainmessage < 65) {
@@ -3417,7 +3432,10 @@ void violence_update(void) {
 
       trainmessage = number_range(1, 100);
       gravdam = totalgrav * damrange;
-      statbonus = (totalgrav * 5) + 5;
+      if (totalgrav < 20)
+		statbonus = (totalgrav * 5) + 5;
+	  else
+		statbonus = (totalgrav) + 15;
       statbonus = statbonus * 1.5;
       breakbonus = statbonus * 2;
 
@@ -5491,7 +5509,7 @@ void exercise_train(CHAR_DATA *ch, char *stat, int modifier) {
     gainMod = 5;
   }
 
-  fightIncrease = (number_range(2, 4) * gainMod);
+  fightIncrease = (number_range(1, 3) * gainMod);
 
   if (strcmp("str", stat) == 0) {
     tAbility = &ch->pcdata->tStr;
