@@ -9719,14 +9719,14 @@ void do_meditate(CHAR_DATA *ch, char *argument) {
   addedrweight = (double)weightedtraining(ch) / 100000;
   playerrweight = (double)1 + addedrweight;
   totalrgrav = (double)ch->gravSetting * playerrweight;
-  weighttrainmult = (double)((double)totalrgrav / 50) + 1;
+  weighttrainmult = (double)((double)totalrgrav / 10) + 1;
   if (is_kaio(ch) || is_namek(ch)) {
     weighttrain = 30 * weighttrainmult;
-    weightstatmult = (double)((double)totalrgrav / 200) + 1;
+    weightstatmult = (double)((double)totalrgrav / 20) + 1;
     weightstat = 60 * weightstatmult;
   } else {
     weighttrain = 26 * weighttrainmult;
-    weightstatmult = (double)((double)totalrgrav / 200) + 1;
+    weightstatmult = (double)((double)totalrgrav / 20) + 1;
     weightstat = 50 * weightstatmult;
   }
   // check for current gravity training effects
