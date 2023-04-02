@@ -9711,7 +9711,10 @@ void do_meditate(CHAR_DATA *ch, char *argument) {
 
   if (IS_NPC(ch))
     return;
-
+  if (xIS_SET((ch)->affected_by, AFF_KAIOKEN)) {
+	send_to_char("No way! Your energy is too unstable while using the Kaioken technique.\n\r", ch);
+	return;
+  }
   addedrweight = (double)weightedtraining(ch) / 100000;
   playerrweight = (double)1 + addedrweight;
   totalrgrav = (double)ch->gravSetting * playerrweight;
