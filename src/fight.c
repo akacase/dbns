@@ -2570,8 +2570,8 @@ void violence_update(void) {
       totalrgrav = (double)ch->gravSetting * playerrweight;
       weighttrainmult = (double)((double)totalrgrav / 50) + 1;
       weighttrain = 5 * weighttrainmult;
-      weightstatmult = (double)((double)totalrgrav / 50) + 1;
-      weightstat = 5 * weightstatmult;
+      weightstatmult = (double)((double)totalrgrav / 10) + 1;
+      weightstat = 10 * weightstatmult;
       weightconspd = weightstat * 2;
 
       vigormod = (ch->vigoreffec / 4) + 2;
