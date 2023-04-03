@@ -519,7 +519,6 @@ void violence_update(void) {
 		    ch->saiyanrage += 1;
 		  else
 			ch->saiyanrage = maxrage;
-		  pager_printf(ch, "&wDEBUG: saiyanrage is now %d.\n\r", ch->saiyanrage);
 		  int ragechance = number_range(1, 4);
 		  int fakeout = number_range(1, 100);
 		  if (ch->saiyanrage >= 10 && ch->saiyanrage < 20 && ragechance == 4) {
