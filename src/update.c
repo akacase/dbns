@@ -474,6 +474,8 @@ int hit_gain(CHAR_DATA *ch) {
   } else {
     if (ch->race == 3)
       gain += (get_curr_con(ch) * 10);
+	else if (ch->race == 1 && ch->humanstat == 4)
+	  gain += (get_curr_con(ch) * 10);
     else
       gain += ((get_curr_con(ch) / 1.5) * 10);
 
