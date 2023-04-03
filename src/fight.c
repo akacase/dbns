@@ -497,6 +497,7 @@ void violence_update(void) {
 	  ch->releasepl = ch->pl;
 	}
 	if (!IS_NPC(ch)) {
+	  /*truePL formula*/
 	  long double skillfloat = 0.00000;
 	  long double powerupfloat = 0.00000;
 	  long double biomassfloat = 0.00000;
@@ -508,6 +509,49 @@ void violence_update(void) {
 		ch->truepl = (long double)(ch->exp * (1 + (powerupfloat + skillfloat)));
 	  else
 		ch->truepl = (long double)(ch->exp * (1 + (biomassfloat + skillfloat)));
+	  /*Saiyan Rage racial mods*/
+	  if (is_saiyan(ch) || is_hb(ch)) {
+		double maxrage = (((double) ch->max_hit / ch->hit) * 10);
+		if (maxrage > 50)
+			maxrage = 50;
+		if (ch->position == POS_FIGHTING || ch->position == POS_AGGRESSIVE || ch->position == POS_BERSERK || ch->position == POS_DEFENSIVE || ch->position == POS_EVASIVE) {
+		  if ((ch->saiyanrage + 1) < maxrage)
+		    ch->saiyanrage += 1;
+		  else
+			ch->saiyanrage = maxrage;
+		  pager_printf(ch, "&wDEBUG: saiyanrage is now %d.\n\r", ch->saiyanrage);
+		  int ragechance = number_range(1, 4);
+		  int fakeout = number_range(1, 100);
+		  if (ch->saiyanrage >= 10 && ch->saiyanrage < 20 && ragechance == 4) {
+			act(AT_RED, "You grit your teeth, struggling to control your rage!", ch, NULL, NULL, TO_CHAR);
+			act(AT_RED, "$n grits $s teeth, struggling to control $s rage!", ch, NULL, NULL, TO_NOTVICT);
+			if (fakeout == 100) {
+			  act(AT_GREEN, "Your eyes briefly flash a light shade of green.", ch, NULL, NULL, TO_CHAR);
+			  act(AT_GREEN, "$n's eyes briefly flash a light shade of green.", ch, NULL, NULL, TO_NOTVICT);
+			}
+		  }
+		  else if (ch->saiyanrage >= 20 && ch->saiyanrage < 40 && ragechance == 4) {
+			act(AT_RED, "Your rage consumes you!", ch, NULL, NULL, TO_CHAR);
+			act(AT_RED, "$n's rage consumes $m!", ch, NULL, NULL, TO_NOTVICT);
+			if (fakeout == 100) {
+			  act(AT_LBLUE, "A bolt of lightning erupts suddenly around you!", ch, NULL, NULL, TO_CHAR);
+			  act(AT_LBLUE, "A bolt of lightning erupts suddenly around $n!", ch, NULL, NULL, TO_NOTVICT);
+			}
+		  }
+		  else if (ch->saiyanrage >= 40 && ragechance == 4) {
+			act(AT_RED, "You howl in uncontrollable rage!", ch, NULL, NULL, TO_CHAR);
+			act(AT_RED, "$n howls in uncontrollable rage!", ch, NULL, NULL, TO_NOTVICT);
+			if (fakeout == 100) {
+			  act(AT_YELLOW, "Your hair flashes golden blonde but quickly returns to normal.", ch, NULL, NULL, TO_CHAR);
+			  act(AT_YELLOW, "$n's hair flashes golden blonde but quickly returns to normal.", ch, NULL, NULL, TO_NOTVICT);
+			}
+		  }
+		}
+		else
+		  ch->saiyanrage -= 5;
+		if (ch->saiyanrage < 0)
+		  ch->saiyanrage = 0;
+	  }
 	}
 	if (!xIS_SET((ch)->affected_by, AFF_KAIOKEN) && !IS_NPC(ch)) {
 	  if (ch->skillkaioken != 0 && ch->skillkaioken > 1)
@@ -4929,6 +4973,10 @@ one_hit(CHAR_DATA *ch, CHAR_DATA *victim, int dt) {
     dam = .85 * dam;
   else if (ch->position == POS_EVASIVE)
     dam = .05 * dam;
+  if (!IS_NPC(victim)) {
+	  if (is_saiyan(victim) || is_hb(victim))
+		victim->saiyanrage += 1;
+    }
 
   if (!IS_NPC(ch) && ch->pcdata->learned[gsn_enhanced_damage] > 0) {
     dam += (int)(dam * LEARNED(ch, gsn_enhanced_damage) / 120);
@@ -6765,14 +6813,6 @@ damage(CHAR_DATA *ch, CHAR_DATA *victim, int dam, int dt) {
     else
       loot = false;
 
-    if (!IS_NPC(victim) && !IS_IMMORTAL(victim)) {
-      if ((victim->pcdata->learned[gsn_ssj] <= 0 && victim->exp >= 8000000) || (victim->pcdata->learned[gsn_ssj] > 0 && victim->pcdata->learned[gsn_ssj2] <= 0 && victim->exp >= 50000000) || (victim->pcdata->learned[gsn_ssj2] > 0 && victim->pcdata->learned[gsn_ssj3] <= 0 && victim->exp >= 500000000) || (victim->pcdata->learned[gsn_ssj3] > 0 && victim->pcdata->learned[gsn_ssj4] <= 0 && victim->exp >= 2000000000) || (victim->pcdata->learned[gsn_ssj4] > 0 && victim->pcdata->learned[gsn_sgod] <= 0 && victim->exp >= 500000000000)) {
-        if (!IS_NPC(victim) && is_saiyan(victim))
-          victim->rage += 10;
-        if (!IS_NPC(victim) && is_hb(victim))
-          victim->rage += 15;
-      }
-    }
     if (!IS_NPC(victim) && (preservation || biopres || immortal)) {
       stop_fighting(victim, true);
       make_corpse(victim, ch);

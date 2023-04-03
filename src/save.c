@@ -466,6 +466,7 @@ void fwrite_char(CHAR_DATA *ch, FILE *fp) {
   fprintf(fp, "Gravityrankup           %d\n", ch->gravityrankup);
   fprintf(fp, "Gravityexp                   %lld\n", ch->gravExp);
   fprintf(fp, "Altssj                   %d\n", ch->altssj);
+  fprintf(fp, "Saiyanrage                   %d\n", ch->saiyanrage);
   fprintf(fp, "Notransform                   %d\n", ch->notransform);
   fprintf(fp, "Pushpowerup                   %d\n", ch->pushpowerup);
   fprintf(fp, "Transformhint                   %d\n", ch->transformhint);
@@ -2146,6 +2147,7 @@ void fread_char(CHAR_DATA *ch, FILE *fp, bool preload) {
         break;
 
       case 'S':
+	    KEY("Saiyanrage", ch->saiyanrage, fread_number(fp));
         KEY("School", ch->school, fread_number(fp));
         KEY("Sptotal", ch->sptotal, fread_number(fp));
         KEY("Spgain", ch->spgain, fread_number(fp));

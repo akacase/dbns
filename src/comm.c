@@ -2462,6 +2462,7 @@ void nanny(DESCRIPTOR_DATA *d, char *argument) {
 		ch->pushpowerup = 0;
 		ch->transformhint = 0;
 		ch->notransform = 0;
+		ch->saiyanrage = 0;
 		ch->altssj = 0;
 		ch->biomass = 0;
 		ch->gsbiomass= 0;

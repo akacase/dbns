@@ -281,6 +281,11 @@ int get_damroll(CHAR_DATA *ch) {
   if (IS_NPC(ch)){
 	damroll = (get_curr_str(ch) / 10);
   }
+  if (is_saiyan(ch) || is_hb(ch)) {
+	if (ch->saiyanrage >= 1) {
+	  damroll *= ((long double)ch->saiyanrage / 100) + 1;
+	}
+  }
 
   return damroll;
 }

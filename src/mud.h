@@ -3320,6 +3320,7 @@ struct char_data {
   int skillkaioken;
   int transformhint;
   int altssj;
+  int saiyanrage;
   int pushpowerup;
   int workoutstrain;
   int gravityrankup;
