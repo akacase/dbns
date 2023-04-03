@@ -653,6 +653,7 @@ DO_FUN *skill_function(char *name) {
       if (!str_cmp(name, "do_setheight")) return do_setheight;
       if (!str_cmp(name, "do_setplanet")) return do_setplanet;
       if (!str_cmp(name, "do_setrace")) return do_setrace;
+	  if (!str_cmp(name, "do_setracial")) return do_setracial;
       if (!str_cmp(name, "do_setship")) return do_setship;
       if (!str_cmp(name, "do_setstarsystem")) return do_setstarsystem;
       if (!str_cmp(name, "do_settime")) return do_settime;
@@ -1357,6 +1358,7 @@ char *skill_name(DO_FUN *skill) {
   if (skill == do_setheight) return "do_setheight";
   if (skill == do_setplanet) return "do_setplanet";
   if (skill == do_setrace) return "do_setrace";
+  if (skill == do_setracial) return "do_setracial";
   if (skill == do_setship) return "do_setship";
   if (skill == do_setstarsystem) return "do_setstarsystem";
   if (skill == do_setrestoremessage) return "do_setrestoremessage";

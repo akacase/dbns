@@ -4413,6 +4413,55 @@ void do_practice(CHAR_DATA *ch, char *argument) {
   }
 }
 
+void do_setracial(CHAR_DATA *ch, char *argument) {
+  char arg1[MAX_INPUT_LENGTH];
+  
+  argument = one_argument(argument, arg1);
+  
+  if (IS_NPC(ch)) {
+    send_to_char("Stop that!\n\r", ch);
+    return;
+  }
+  if (!is_human(ch)) {
+	send_to_char("Only Humans right now! Sorry buddy.\n\r", ch);
+    return;
+  }
+  if (is_human(ch) && ch->humanstat > 0) {
+	send_to_char("Your choice is already set in stone!\n\r", ch);
+	return;
+  }
+  if (is_human(ch) && arg1[0] == '\0') {
+    send_to_char("Your tenacious human spirit allows you to set your favored stat. Be careful, for this choice is PERMANENT!\n\r", ch);
+    send_to_char("This bonus is significant. Enter 'setracial stat <stat>, your options being:\n\r", ch);
+    send_to_char("    STR    SPD    INT    CON    \n\r", ch);
+	return;
+  }
+  if (is_human(ch) && !str_cmp(arg1, "STR") && ch->humanstat < 1) {
+	send_to_char("So be it. Your brutish nature has been etched upon your very being.\n\r", ch);
+	ch->humanstat = 1;
+	return;
+  }
+  else if (is_human(ch) && !str_cmp(arg1, "SPD") && ch->humanstat < 1) {
+	send_to_char("So be it. Your agile nature has been etched upon your very being.\n\r", ch);
+	ch->humanstat = 2;
+	return;
+  }
+  else if (is_human(ch) && !str_cmp(arg1, "INT") && ch->humanstat < 1) {
+	send_to_char("So be it. Your inquisitive nature has been etched upon your very being.\n\r", ch);
+	ch->humanstat = 3;
+	return;
+  }
+  else if (is_human(ch) && !str_cmp(arg1, "CON") && ch->humanstat < 1) {
+	send_to_char("So be it. Your hardy nature has been etched upon your very being.\n\r", ch);
+	ch->humanstat = 4;
+	return;
+  }
+ else {
+	send_to_char("Come again?\n\r", ch);
+	return;
+ }
+}
+
 void do_develop(CHAR_DATA *ch, char *argument) {
   char arg1[MAX_INPUT_LENGTH];
   char arg2[MAX_INPUT_LENGTH];

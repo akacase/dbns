@@ -466,6 +466,7 @@ void fwrite_char(CHAR_DATA *ch, FILE *fp) {
   fprintf(fp, "Gravityrankup           %d\n", ch->gravityrankup);
   fprintf(fp, "Gravityexp                   %lld\n", ch->gravExp);
   fprintf(fp, "Altssj                   %d\n", ch->altssj);
+  fprintf(fp, "Humanstat                   %d\n", ch->humanstat);
   fprintf(fp, "Saiyanrage                   %d\n", ch->saiyanrage);
   fprintf(fp, "Notransform                   %d\n", ch->notransform);
   fprintf(fp, "Pushpowerup                   %d\n", ch->pushpowerup);
@@ -1799,6 +1800,7 @@ void fread_char(CHAR_DATA *ch, FILE *fp, bool preload) {
 
         KEY("Hitroll", ch->hitroll, fread_number(fp));
         KEY("Homepage", ch->pcdata->homepage, fread_string_nohash(fp));
+		KEY("Humanstat", ch->humanstat, fread_number(fp));
 
         if (!strcmp(word, "HpManaMove")) {
           ch->hit = fread_number(fp);

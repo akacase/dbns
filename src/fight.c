@@ -4654,6 +4654,13 @@ multi_hit(CHAR_DATA *ch, CHAR_DATA *victim, int dt) {
     if (retcode != rNONE || who_fighting(ch) != victim)
       return retcode;
   }
+  if (is_human(ch) && ch->humanstat == 2) {
+	if (number_percent() < chance) {
+      retcode = one_hit(ch, victim, dt);
+    if (retcode != rNONE || who_fighting(ch) != victim)
+      return retcode;
+    }
+  }
 }
 
 /*
@@ -5500,18 +5507,26 @@ void stat_train(CHAR_DATA *ch, char *stat, int modifier) {
     tAbility = &ch->pcdata->tStr;
     pAbility = &ch->perm_str;
     permTstat = &ch->pcdata->permTstr;
+	if (is_human(ch) && ch->humanstat == 1)
+		fightIncrease *= 1.33;
   } else if (strcmp("int", stat) == 0) {
     tAbility = &ch->pcdata->tInt;
     pAbility = &ch->perm_int;
     permTstat = &ch->pcdata->permTint;
+	if (is_human(ch) && ch->humanstat == 3)
+		fightIncrease *= 1.20;
   } else if (strcmp("spd", stat) == 0) {
     tAbility = &ch->pcdata->tSpd;
     pAbility = &ch->perm_dex;
     permTstat = &ch->pcdata->permTspd;
+	if (is_human(ch) && ch->humanstat == 2)
+		fightIncrease *= 1.20;
   } else if (strcmp("con", stat) == 0) {
     tAbility = &ch->pcdata->tCon;
     pAbility = &ch->perm_con;
     permTstat = &ch->pcdata->permTcon;
+	if (is_human(ch) && ch->humanstat == 1)
+		fightIncrease *= 1.20;
   }
 
   *tAbility += fightIncrease;
@@ -5563,18 +5578,26 @@ void exercise_train(CHAR_DATA *ch, char *stat, int modifier) {
     tAbility = &ch->pcdata->tStr;
     pAbility = &ch->perm_str;
     permTstat = &ch->pcdata->permTstr;
+	if (is_human(ch) && ch->humanstat == 1)
+		fightIncrease *= 1.33;
   } else if (strcmp("int", stat) == 0) {
     tAbility = &ch->pcdata->tInt;
     pAbility = &ch->perm_int;
     permTstat = &ch->pcdata->permTint;
+	if (is_human(ch) && ch->humanstat == 3)
+		fightIncrease *= 1.20;
   } else if (strcmp("spd", stat) == 0) {
     tAbility = &ch->pcdata->tSpd;
     pAbility = &ch->perm_dex;
     permTstat = &ch->pcdata->permTspd;
+	if (is_human(ch) && ch->humanstat == 2)
+		fightIncrease *= 1.20;
   } else if (strcmp("con", stat) == 0) {
     tAbility = &ch->pcdata->tCon;
     pAbility = &ch->perm_con;
     permTstat = &ch->pcdata->permTcon;
+	if (is_human(ch) && ch->humanstat == 4)
+		fightIncrease *= 1.20;
   }
 
   *tAbility += fightIncrease;

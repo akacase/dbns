@@ -675,7 +675,13 @@ int dam_armor_recalc(CHAR_DATA *ch, int dam) {
   if (armorValue <= 0)
     return dam;
 
-  if (armorValue > 8000) {
+  if (is_human(ch) && ch->humanstat == 4) {
+	armorValue += 500;
+	if (armorValue > 8500)
+	  armorValue = 8500;
+  }
+
+  if (armorValue > 8000 && !is_human(ch)) {
     armorValue = 8000;
   }
 

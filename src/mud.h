@@ -3320,6 +3320,7 @@ struct char_data {
   int skillkaioken;
   int transformhint;
   int altssj;
+  int humanstat;
   int saiyanrage;
   int pushpowerup;
   int workoutstrain;
@@ -5774,6 +5775,7 @@ DECLARE_DO_FUN(do_setdeity);
 DECLARE_DO_FUN(do_setheight);
 DECLARE_DO_FUN(do_setplanet);
 DECLARE_DO_FUN(do_setrace);
+DECLARE_DO_FUN(do_setracial);
 DECLARE_DO_FUN(do_setship);
 DECLARE_DO_FUN(do_setstarsystem);
 DECLARE_DO_FUN(do_setweather);

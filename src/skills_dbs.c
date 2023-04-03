@@ -9724,6 +9724,10 @@ void do_meditate(CHAR_DATA *ch, char *argument) {
     weighttrain = 30 * weighttrainmult;
     weightstatmult = (double)((double)totalrgrav / 20) + 1;
     weightstat = 60 * weightstatmult;
+  } else if (is_human(ch) && ch->humanstat == 3) {
+    weighttrain = 30 * weighttrainmult;
+    weightstatmult = (double)((double)totalrgrav / 20) + 1;
+    weightstat = 60 * weightstatmult;
   } else {
     weighttrain = 26 * weighttrainmult;
     weightstatmult = (double)((double)totalrgrav / 20) + 1;
@@ -9799,6 +9803,8 @@ void do_meditate(CHAR_DATA *ch, char *argument) {
           ch->train += weighttrain;
           if (is_namek(ch) || is_kaio(ch))
             ch->energymastery += 3;
+		  else if (is_human(ch) && ch->humanstat == 3)
+			ch->energymastery += 3;
 		  else
 			ch->energymastery += 1;
           if (ch->energymastery >= (ch->kspgain * 100)) {
@@ -9853,6 +9859,8 @@ void do_meditate(CHAR_DATA *ch, char *argument) {
           ch->train += weighttrain;
           if (is_namek(ch) || is_kaio(ch))
             ch->energymastery += 3;
+		  else if (is_human(ch) && ch->humanstat == 3)
+			ch->energymastery += 3;
 		  else
 			ch->energymastery += 1;
           if (ch->energymastery >= (ch->kspgain * 100)) {
