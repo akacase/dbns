@@ -171,7 +171,6 @@ char PLANET_DIR[128] = "/planets/";
 char WATCH_DIR[128] = "/watch/";
 char TMP_DIR[128] = "/tmp/";
 
-char AREA_LIST[128] = "/area/area.lst";           /* List of areas                */
 char WATCH_LIST[128] = "/area/watch.lst";         /* List of watches              */
 char BAN_LIST[128] = "/system/ban.lst";           /* List of bans                 */
 char RESERVED_LIST[128] = "/area/reserved.lst";   /* List of reserved names       */
@@ -225,7 +224,6 @@ char DNS_FILE[128] = "/system/dns.dat";
 char HISCORE_FILE[128] = "/tmp/hiscores.dat";
 
 void setup_lists(const char *dir) {
-  prepend(AREA_LIST, dir);
   prepend(BAN_LIST, dir);
   prepend(CLAN_LIST, dir);
   prepend(COUNCIL_LIST, dir);
