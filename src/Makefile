@@ -2,5 +2,5 @@ deploy:
 	ninja -t clean
 	ninja
 	sudo systemctl stop dbns
-	sudo cp dbnsd /home/dbns/dbns/src
+	cp dbnsd /home/dbns/dbns/src
 	sudo systemctl start dbns
