@@ -4,8 +4,6 @@ with lib;
 
 let
   cfg = config.services.dbns;
-  format = pkgs.formats.json { };
-  configFile = format.generate "dbns.conf" cfg.settings;
 in
 {
   options = {
@@ -60,7 +58,7 @@ in
         StateDirectory = "dbns";
         StateDirectoryMode = "0700";
         Type = "simple";
-        ExecStart = "${pkgs.dbns}/bin/dbns -p ${cfg.port}";
+        ExecStart = "${pkgs.dbns}/bin/dbns -p ${cfg.port} -d /srv/dbns";
         ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
         ExecStop = "${pkgs.coreutils}/bin/kill -SIGINT $MAINPID";
         Restart = "on-failure";
@@ -71,22 +69,11 @@ in
         # Hardening
         CapabilityBoundingSet = "";
         LimitNOFILE = 800000;
-        #LockPersonality = true;
-        #MemoryDenyWriteExecute = true;
         NoNewPrivileges = true;
         PrivateDevices = true;
         PrivateTmp = true;
         PrivateUsers = true;
         ProcSubset = "pid";
-        #ProtectClock = true;
-        #ProtectControlGroups = true;
-        #ProtectHome = true;
-        #ProtectHostname = true;
-        #ProtectKernelLogs = true;
-        #ProtectKernelModules = true;
-        #ProtectKernelTunables = true;
-        #ProtectProc = "invisible";
-        #ProtectSystem = "strict";
         ReadOnlyPaths = [ cfg.settingsFile ];
         ReadWritePaths = [ cfg.dataDir ];
         RestrictAddressFamilies = [ "AF_INET" "AF_INET6" ];
@@ -94,7 +81,6 @@ in
         RestrictRealtime = true;
         RestrictSUIDSGID = true;
         SystemCallFilter = [ "@system-service" "~@privileged" "~@resources" ];
-        UMask = "0077";
       };
     };
   };
