@@ -912,6 +912,7 @@ void bio_absorb(CHAR_DATA *ch, CHAR_DATA *victim) {
 	act(AT_HIT, "You whip your head toward $N and zap them with a burst of energy from your tentacle!", ch, NULL, victim, TO_CHAR);
 	act(AT_HIT, "$N transforms into a fruit parfait! No spoon required. Deee~licious!", ch, NULL, victim, TO_CHAR);
 	act(AT_HIT, "$n transforms $N into a fruit parfait and devours them!", ch, NULL, victim, TO_ROOM);
+	ch->hit += majingain;
 	if (ch->hit > ch->max_hit)
 		ch->hit = ch->max_hit;
 	ch->mana += (ch->max_mana / 20);
@@ -925,6 +926,7 @@ void bio_absorb(CHAR_DATA *ch, CHAR_DATA *victim) {
 	act(AT_HIT, "You whip your head toward $N and zap them with a burst of energy from your tentacle!", ch, NULL, victim, TO_CHAR);
 	act(AT_HIT, "$N transforms into a full-size candy bar! A slight crunch with a nougat center. Deee~licious!", ch, NULL, victim, TO_CHAR);
 	act(AT_HIT, "$n transforms $N into a full-size candy bar and devours them!", ch, NULL, victim, TO_ROOM);
+	ch->hit += majingain;
 	if (ch->hit > ch->max_hit)
 		ch->hit = ch->max_hit;
 	ch->mana += (ch->max_mana / 20);
@@ -938,6 +940,7 @@ void bio_absorb(CHAR_DATA *ch, CHAR_DATA *victim) {
 	act(AT_HIT, "You whip your head toward $N and zap them with a burst of energy from your tentacle!", ch, NULL, victim, TO_CHAR);
 	act(AT_HIT, "$N transforms into a chocolate rabbit! Is it Easter? Who cares! Deee~licious!", ch, NULL, victim, TO_CHAR);
 	act(AT_HIT, "$n transforms $N into a fruit parfait and devours them!", ch, NULL, victim, TO_ROOM);
+	ch->hit += majingain;
 	if (ch->hit > ch->max_hit)
 		ch->hit = ch->max_hit;
 	ch->mana += (ch->max_mana / 20);
@@ -951,6 +954,7 @@ void bio_absorb(CHAR_DATA *ch, CHAR_DATA *victim) {
 	act(AT_HIT, "You whip your head toward $N and zap them with a burst of energy from your tentacle!", ch, NULL, victim, TO_CHAR);
 	act(AT_HIT, "$N transforms into a jawbreaker! You swallow it whole, missing the entire point. Deee~licious!", ch, NULL, victim, TO_CHAR);
 	act(AT_HIT, "$n transforms $N into a jawbreaker and devours them!", ch, NULL, victim, TO_ROOM);
+	ch->hit += majingain;
 	if (ch->hit > ch->max_hit)
 		ch->hit = ch->max_hit;
 	ch->mana += (ch->max_mana / 20);
@@ -964,6 +968,7 @@ void bio_absorb(CHAR_DATA *ch, CHAR_DATA *victim) {
 	act(AT_HIT, "You whip your head toward $N and zap them with a burst of energy from your tentacle!", ch, NULL, victim, TO_CHAR);
 	act(AT_HIT, "$N transforms into a mass of gummy bears! Off with their heads! Deee~licious!", ch, NULL, victim, TO_CHAR);
 	act(AT_HIT, "$n transforms $N into a mass of gummy bears and devours them one by one!", ch, NULL, victim, TO_ROOM);
+	ch->hit += majingain;
 	if (ch->hit > ch->max_hit)
 		ch->hit = ch->max_hit;
 	ch->mana += (ch->max_mana / 20);
@@ -977,6 +982,7 @@ void bio_absorb(CHAR_DATA *ch, CHAR_DATA *victim) {
 	act(AT_HIT, "You whip your head toward $N and zap them with a burst of energy from your tentacle!", ch, NULL, victim, TO_CHAR);
 	act(AT_HIT, "$N transforms into a sour candy sucker! Nothin' sucky about this! Deee~licious!", ch, NULL, victim, TO_CHAR);
 	act(AT_HIT, "$n transforms $N into a sour candy sucker and devours them!", ch, NULL, victim, TO_ROOM);
+	ch->hit += majingain;
 	if (ch->hit > ch->max_hit)
 		ch->hit = ch->max_hit;
 	ch->mana += (ch->max_mana / 20);
@@ -990,6 +996,7 @@ void bio_absorb(CHAR_DATA *ch, CHAR_DATA *victim) {
 	act(AT_HIT, "You whip your head toward $N and zap them with a burst of energy from your tentacle!", ch, NULL, victim, TO_CHAR);
 	act(AT_HIT, "$N transforms into a wad of chewing gum! ABC? Gross! You eat it anyway.", ch, NULL, victim, TO_CHAR);
 	act(AT_HIT, "$n transforms $N into a wad of chewing gum and devours them!", ch, NULL, victim, TO_ROOM);
+	ch->hit += majingain;
 	if (ch->hit > ch->max_hit)
 		ch->hit = ch->max_hit;
 	ch->mana += (ch->max_mana / 20);
@@ -1003,6 +1010,7 @@ void bio_absorb(CHAR_DATA *ch, CHAR_DATA *victim) {
 	act(AT_HIT, "You whip your head toward $N and zap them with a burst of energy from your tentacle!", ch, NULL, victim, TO_CHAR);
 	act(AT_HIT, "$N transforms into a marshmallow peep! You revel in the gooey goodness. Deee~licious!", ch, NULL, victim, TO_CHAR);
 	act(AT_HIT, "$n transforms $N into a marshmallow peep and devours them!", ch, NULL, victim, TO_ROOM);
+	ch->hit += majingain;
 	if (ch->hit > ch->max_hit)
 		ch->hit = ch->max_hit;
 	ch->mana += (ch->max_mana / 20);
@@ -1016,6 +1024,7 @@ void bio_absorb(CHAR_DATA *ch, CHAR_DATA *victim) {
 	act(AT_HIT, "You whip your head toward $N and zap them with a burst of energy from your tentacle!", ch, NULL, victim, TO_CHAR);
 	act(AT_HIT, "$N transforms into a chocolate-chip cookie! Those better not be raisins. Deee~licious!", ch, NULL, victim, TO_CHAR);
 	act(AT_HIT, "$n transforms $N into a chocolate-chip cookie and devours them!", ch, NULL, victim, TO_ROOM);
+	ch->hit += majingain;
 	if (ch->hit > ch->max_hit)
 		ch->hit = ch->max_hit;
 	ch->mana += (ch->max_mana / 20);

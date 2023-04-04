@@ -4432,7 +4432,7 @@ void do_setracial(CHAR_DATA *ch, char *argument) {
   }
   if (is_human(ch) && arg1[0] == '\0') {
     send_to_char("Your tenacious human spirit allows you to set your favored stat. Be careful, for this choice is PERMANENT!\n\r", ch);
-    send_to_char("This bonus is significant. Enter 'setracial stat <stat>, your options being:\n\r", ch);
+    send_to_char("This bonus is significant. Enter 'setracial <stat>, your options being:\n\r", ch);
     send_to_char("    STR    SPD    INT    CON    \n\r", ch);
 	return;
   }
