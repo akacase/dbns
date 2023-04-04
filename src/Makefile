@@ -1,4 +1,5 @@
 deploy:
+	git pull
 	ninja -t clean
 	ninja
 	sudo systemctl stop dbns
