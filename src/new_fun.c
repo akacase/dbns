@@ -860,23 +860,33 @@ void bio_absorb(CHAR_DATA *ch, CHAR_DATA *victim) {
   char buf1[MAX_STRING_LENGTH];
   int getbiomass = 0;
   int majingain = 0;
+  long double abpl = 0;
 
   if (IS_NPC(ch))
     return;
 
   if (is_bio(ch)) {
-  act(AT_HIT, "You stab $N in the chest with your tail and suck out $S lifeforce!", ch, NULL, victim, TO_CHAR);
-  act(AT_HIT, "$n stabs $N in the chest with $s tail and sucks out $S lifeforce!", ch, NULL, victim, TO_ROOM);
+	if (ch->truepl >= 9001) {
+	  abpl = ((long double)(victim->max_hit * 0.5) / 5000000) * victim->worth;
+	}
+	else
+	  abpl = ((long double)(victim->max_hit * 0.5) / 500000) * victim->worth;
+	act(AT_HIT, "You stab $N in the chest with your tail and suck out $S lifeforce!", ch, NULL, victim, TO_CHAR);
+	act(AT_HIT, "$n stabs $N in the chest with $s tail and sucks out $S lifeforce!", ch, NULL, victim, TO_ROOM);
   if (IS_NPC(victim)) {
     if (ch->pl > (victim->exp * 5)) {
 	    getbiomass = 1;
 		act(AT_HIT, "$N is too weak to add more than a paltry sum to your power.", ch, NULL, victim, TO_CHAR);
     }
 	else {
-	  if ((victim->worth / 3) >= 3)
+	  if ((victim->worth / 3) >= 3) {
 		getbiomass = (victim->worth / 3);
-	  else
+		gain_exp(ch, abpl);
+	  }
+	  else {
 		getbiomass = 3;
+		gain_exp(ch, abpl);
+	  }
 	}
   }
 	
