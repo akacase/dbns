@@ -324,9 +324,14 @@ int get_armor(CHAR_DATA *ch) {
 
   if (!IS_NPC(ch))
     armor = ((ch->perm_con / 3) + (ch->perm_str / 6));
+  if (is_human(ch) && ch->humanstat == 4)
+	armor += 500;
 
-  if (armor > 8000)
+  if (!is_human(ch) && armor > 8000)
     armor = 8000;
+  else if (is_human(ch) && armor > 8500 && ch->humanstat == 4)
+    armor = 8500;
+	
   return armor;
 }
 
@@ -335,9 +340,13 @@ int get_maxarmor(CHAR_DATA *ch) {
 
   if (!IS_NPC(ch))
     armor = ((ch->perm_con / 3) + (ch->perm_str / 6));
+  if (is_human(ch) && ch->humanstat == 4)
+	armor += 500;
 
-  if (armor > 8000)
+  if (!is_human(ch) && armor > 8000)
     armor = 8000;
+  else if (is_human(ch) && armor > 8500 && ch->humanstat == 4)
+    armor = 8500;
 
   return armor;
 }
