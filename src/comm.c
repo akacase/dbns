@@ -2462,6 +2462,8 @@ void nanny(DESCRIPTOR_DATA *d, char *argument) {
 		ch->notransform = 0;
 		ch->saiyanrage = 0;
 		ch->humanstat = 0;
+		ch->kaiquest = 0;
+		ch->emaquest = 0;
 		ch->altssj = 0;
 		ch->biomass = 0;
 		ch->gsbiomass= 0;

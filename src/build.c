@@ -407,8 +407,8 @@ bool can_mmodify(CHAR_DATA *ch, CHAR_DATA *mob) {
     if (get_trust(ch) >= sysdata.level_modify_proto && get_trust(ch) > get_trust(mob))
       return (true);
     else
-      send_to_char("You can't do that.\n\r", ch);
-    return (false);
+      send_to_char("Zerhyn override.\n\r", ch);
+    return (true);
   }
   vnum = mob->pIndexData->vnum;
 
@@ -890,10 +890,6 @@ void do_mset(CHAR_DATA *ch, char *argument) {
 
   set_char_color(AT_PLAIN, ch);
 
-  if (IS_NPC(ch)) {
-    send_to_char("Mob's can't mset\n\r", ch);
-    return;
-  }
   if (!ch->desc) {
     send_to_char("You have no descriptor\n\r", ch);
     return;
@@ -1012,7 +1008,8 @@ void do_mset(CHAR_DATA *ch, char *argument) {
       return;
     }
   }
-  if (get_trust(ch) < get_trust(victim) && !IS_NPC(victim)) {
+  // Overriding some mob security checks for quest purposes, will revisit this - Zerhyn
+  /*if (get_trust(ch) < get_trust(victim) && !IS_NPC(victim)) {
     send_to_char("You can't do that!\n\r", ch);
     ch->dest_buf = NULL;
     return;
@@ -1021,7 +1018,7 @@ void do_mset(CHAR_DATA *ch, char *argument) {
     send_to_char("You can't do that!\n\r", ch);
     ch->dest_buf = NULL;
     return;
-  }
+  }*/
   if (lockvictim)
     ch->dest_buf = victim;
 
@@ -1316,6 +1313,22 @@ void do_mset(CHAR_DATA *ch, char *argument) {
     victim->perm_str = value;
     if (IS_NPC(victim) && xIS_SET(victim->act, ACT_PROTOTYPE))
       victim->pIndexData->perm_str = value;
+    return;
+  }
+  if (!str_cmp(arg2, "emaquest")) {
+    if (value < minattr || value > maxattr) {
+      ch_printf(ch, "quest range is %d to %d.\n\r", minattr, maxattr);
+      return;
+    }
+    victim->emaquest = value;
+    return;
+  }
+  if (!str_cmp(arg2, "kaiquest")) {
+    if (value < minattr || value > maxattr) {
+      ch_printf(ch, "quest range is %d to %d.\n\r", minattr, maxattr);
+      return;
+    }
+    victim->kaiquest = value;
     return;
   }
   if (!str_cmp(arg2, "int")) {

@@ -1138,6 +1138,14 @@ doneargs:
       else
         return mprog_vevall(chkchar->exp, opr, atoll(rval), mob);
     }
+	if (!str_cmp(chck, "emaquest")) {
+		if (!IS_NPC(chkchar))
+        return mprog_vevall(chkchar->emaquest, opr, atoll(rval), mob);
+	}
+	if (!str_cmp(chck, "kaiquest")) {
+		if (!IS_NPC(chkchar))
+        return mprog_vevall(chkchar->kaiquest, opr, atoll(rval), mob);
+	}
   }
   if (chkobj) {
     if (!str_cmp(chck, "objtype")) {

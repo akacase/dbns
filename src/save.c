@@ -466,6 +466,8 @@ void fwrite_char(CHAR_DATA *ch, FILE *fp) {
   fprintf(fp, "Gravityrankup           %d\n", ch->gravityrankup);
   fprintf(fp, "Gravityexp                   %lld\n", ch->gravExp);
   fprintf(fp, "Altssj                   %d\n", ch->altssj);
+  fprintf(fp, "Kaiquest                   %d\n", ch->kaiquest);
+  fprintf(fp, "Emaquest                   %d\n", ch->emaquest);
   fprintf(fp, "Humanstat                   %d\n", ch->humanstat);
   fprintf(fp, "Saiyanrage                   %d\n", ch->saiyanrage);
   fprintf(fp, "Notransform                   %d\n", ch->notransform);
@@ -1881,6 +1883,7 @@ void fread_char(CHAR_DATA *ch, FILE *fp, bool preload) {
         KEY("Kairank", ch->kairank, fread_number(fp));
         KEY("KaiTimer", ch->pcdata->eKTimer, fread_number(fp));
         KEY("KaiMessage", ch->pcdata->kaiRestoreMsg, fread_string_nohash(fp));
+		KEY("Kaiquest", ch->kaiquest, fread_number(fp));
         if (!strcmp(word, "Killed")) {
           fMatch = true;
           if (killcnt >= MAX_KILLTRACK)
@@ -2389,6 +2392,7 @@ void fread_char(CHAR_DATA *ch, FILE *fp, bool preload) {
         KEY("Energy_discpower", ch->energy_discpower, fread_number(fp));
         KEY("Energy_disceffic", ch->energy_disceffic, fread_number(fp));
         KEY("Exintensity", ch->exintensity, fread_number(fp));
+		KEY("Emaquest", ch->emaquest, fread_number(fp));
         break;
 
       case 'T':

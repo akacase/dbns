@@ -304,6 +304,22 @@ void do_mpmset(CHAR_DATA *ch, char *argument) {
     victim->practice = value;
     return;
   }
+  if (!str_cmp(arg2, "emaquest")) {
+    if (value < 0 || value > 100) {
+      progbug("MpMset: Invalid emalia quest range", ch);
+      return;
+    }
+    victim->emaquest = value;
+    return;
+  }
+  if (!str_cmp(arg2, "kaiquest")) {
+    if (value < 0 || value > 100) {
+      progbug("MpMset: Invalid afterlife quest range", ch);
+      return;
+    }
+    victim->kaiquest = value;
+    return;
+  }
 
   if (!str_cmp(arg2, "align")) {
     if (value < -1000 || value > 1000) {

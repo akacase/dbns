@@ -4413,6 +4413,49 @@ void do_practice(CHAR_DATA *ch, char *argument) {
   }
 }
 
+void do_updatequest(CHAR_DATA *ch, char *argument) {
+  OBJ_DATA *obj, *obj_next;
+	
+  if (IS_NPC(ch))
+	  return;
+	  
+  for (obj = ch->first_carrying; obj != NULL; obj = obj_next) {
+    obj_next = obj->next_content;
+    if (obj->wear_loc != WEAR_NONE) {
+      if (obj->pIndexData->vnum == 305010) {
+		if (ch->emaquest < 1) {
+		  send_to_char("Emalia's quest state updated.", ch);
+		  ch->emaquest = 1;
+		  return;
+		}
+		else {
+		  send_to_char("You haven't done anything important!", ch);
+		  return;
+		}
+	  }
+      else if (obj->pIndexData->vnum == 305011) {
+		if (ch->emaquest < 2) {
+		  send_to_char("Emalia's quest state updated.", ch);
+		  ch->emaquest = 2;
+		  return;
+		}
+		else {
+		  send_to_char("You haven't done anything important!", ch);
+		  return;
+		}
+	  }
+	  else {
+		send_to_char("You haven't done anything important!", ch);
+		return;
+	  }
+    }
+	else {
+	  send_to_char("You haven't done anything important!", ch);
+	  return;
+	}
+  }
+}
+
 void do_setracial(CHAR_DATA *ch, char *argument) {
   char arg1[MAX_INPUT_LENGTH];
   

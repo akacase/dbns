@@ -3320,6 +3320,8 @@ struct char_data {
   int skillkaioken;
   int transformhint;
   int altssj;
+  int kaiquest;
+  int emaquest;
   int humanstat;
   int saiyanrage;
   int pushpowerup;
@@ -5915,6 +5917,7 @@ DECLARE_DO_FUN(do_gigantic_meteor);
 DECLARE_DO_FUN(do_haymaker);
 DECLARE_DO_FUN(do_lariat);
 DECLARE_DO_FUN(do_meteor);
+DECLARE_DO_FUN(do_updatequest);
 DECLARE_DO_FUN(do_potarafuse); /* skills_dbs.c */
 
 /*//T6*/

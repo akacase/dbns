@@ -759,6 +759,7 @@ DO_FUN *skill_function(char *name) {
       if (!str_cmp(name, "do_uppercut")) return do_uppercut;
       if (!str_cmp(name, "do_upgrade")) return do_upgrade;
       if (!str_cmp(name, "do_users")) return do_users;
+	  if (!str_cmp(name, "do_updatequest")) return do_updatequest;
       break;
     case 'v':
       if (!str_cmp(name, "do_value")) return do_value;
@@ -1459,6 +1460,7 @@ char *skill_name(DO_FUN *skill) {
   if (skill == do_uppercut) return "do_uppercut";
   if (skill == do_upgrade) return "do_upgrade";
   if (skill == do_users) return "do_users";
+  if (skill == do_updatequest) return "do_updatequest";
   if (skill == do_value) return "do_value";
   if (skill == do_vassign) return "do_vassign";
   if (skill == do_version) return "do_version";
