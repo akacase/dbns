@@ -4444,6 +4444,19 @@ void do_updatequest(CHAR_DATA *ch, char *argument) {
 		  return;
 		}
 	  }
+	  else if (obj->pIndexData->vnum == 10005) {
+		if (ch->kaiquest < 1) {
+		  send_to_char("Other World quest state updated.", ch);
+		  ch->kaiquest = 1;
+		  if (ch->skillkaioken == 0)
+			ch->skillkaioken = 1;
+		  return;
+		}
+		else {
+		  send_to_char("You haven't done anything important!", ch);
+		  return;
+		}
+	  }
 	  else {
 		send_to_char("You haven't done anything important!", ch);
 		return;
