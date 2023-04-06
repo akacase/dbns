@@ -4413,7 +4413,7 @@ void do_practice(CHAR_DATA *ch, char *argument) {
   }
 }
 
-void do_updatequest(CHAR_DATA *ch, char *argument) {
+/*void do_updatequest(CHAR_DATA *ch, char *argument) {
   OBJ_DATA *obj, *obj_next;
 	
   if (IS_NPC(ch))
@@ -4451,6 +4451,101 @@ void do_updatequest(CHAR_DATA *ch, char *argument) {
 	  }
     }
   }
+}*/
+
+void do_updatequest(CHAR_DATA *ch, char *argument) {
+  OBJ_DATA *obj, *obj_next;
+  char arg[MAX_INPUT_LENGTH];
+	
+  if (IS_NPC(ch))
+	  return;
+	  
+  argument = one_argument(argument, arg);
+	  
+  if (arg[0] == '\0')
+	  return;
+  
+  if (!str_cmp(arg, "setquestbitx001983460f")) {
+	  if (ch->emaquest == 0)
+		ch->emaquest = 1;
+  }
+  if (!str_cmp(arg, "setquestbitx001983470f")) {
+	  if (ch->emaquest == 1)
+		ch->emaquest = 2;
+  }
+  if (!str_cmp(arg, "setquestbitx001983480f")) {
+	  if (ch->emaquest == 2)
+		ch->emaquest = 3;
+  }
+  if (!str_cmp(arg, "setquestbitx001983490f")) {
+	  if (ch->emaquest == 3)
+		ch->emaquest = 4;
+  }
+  if (!str_cmp(arg, "setquestbitx001983401f")) {
+	  if (ch->emaquest == 4)
+		ch->emaquest = 5;
+  }
+  if (!str_cmp(arg, "setquestbitx001983402f")) {
+	  if (ch->emaquest == 5)
+		ch->emaquest = 6;
+  }
+  if (!str_cmp(arg, "setquestbitx001983403f")) {
+	  if (ch->emaquest == 6)
+		ch->emaquest = 7;
+  }
+  if (!str_cmp(arg, "setquestbitx001983404f")) {
+	  if (ch->emaquest == 7)
+		ch->emaquest = 8;
+  }
+  if (!str_cmp(arg, "setquestbitx001983405f")) {
+	  if (ch->emaquest == 8)
+		ch->emaquest = 9;
+  }
+  if (!str_cmp(arg, "setquestbitx001983406f")) {
+	  if (ch->emaquest == 9)
+		ch->emaquest = 10;
+  }
+  if (!str_cmp(arg, "setquestbitx101983460f")) {
+	  if (ch->kaiquest == 0)
+		ch->kaiquest = 1;
+  }
+  if (!str_cmp(arg, "setquestbitx201983470f")) {
+	  if (ch->kaiquest == 1)
+		ch->kaiquest = 2;
+  }
+  if (!str_cmp(arg, "setquestbitx301983480f")) {
+	  if (ch->kaiquest == 2)
+		ch->kaiquest = 3;
+  }
+  if (!str_cmp(arg, "setquestbitx401983490f")) {
+	  if (ch->kaiquest == 3)
+		ch->kaiquest = 4;
+  }
+  if (!str_cmp(arg, "setquestbitx501983401f")) {
+	  if (ch->kaiquest == 4)
+		ch->kaiquest = 5;
+  }
+  if (!str_cmp(arg, "setquestbitx601983402f")) {
+	  if (ch->kaiquest == 5)
+		ch->kaiquest = 6;
+  }
+  if (!str_cmp(arg, "setquestbitx701983403f")) {
+	  if (ch->kaiquest == 6)
+		ch->kaiquest = 7;
+  }
+  if (!str_cmp(arg, "setquestbitx801983404f")) {
+	  if (ch->kaiquest == 7)
+		ch->kaiquest = 8;
+  }
+  if (!str_cmp(arg, "setquestbitx901983405f")) {
+	  if (ch->kaiquest == 8)
+		ch->kaiquest = 9;
+  }
+  if (!str_cmp(arg, "setquestbitx011983406f")) {
+	  if (ch->kaiquest == 9)
+		ch->kaiquest = 10;
+  }
+  return;
 }
 
 void do_setracial(CHAR_DATA *ch, char *argument) {
