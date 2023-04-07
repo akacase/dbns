@@ -2353,8 +2353,8 @@ void do_bash(CHAR_DATA *ch, char *argument) {
   }
   basecost = 25;
   adjcost = basecost;
-  lowdam = 100 * (((long double)get_damroll(ch) / 100) + 1);
-  highdam = 120 * (((long double)get_damroll(ch) / 100) + 1);
+  lowdam = 100 * (((long double)get_damroll(ch) / 200) + 1);
+  highdam = 120 * (((long double)get_damroll(ch) / 200) + 1);
   hitcheck = number_range(1, 100);
   WAIT_STATE(ch, 6);
   if (hitcheck <= 95) {

@@ -3005,8 +3005,8 @@ void do_punch(CHAR_DATA *ch, char *argument) {
   }
   basecost = 1;
   adjcost = basecost;
-  lowdam = 20 * (((long double)get_damroll(ch) / 100) + 1);
-  highdam = 40 * (((long double)get_damroll(ch) / 100) + 1);
+  lowdam = 20 * (((long double)get_damroll(ch) / 200) + 1);
+  highdam = 40 * (((long double)get_damroll(ch) / 200) + 1);
   hitcheck = number_range(1, 100);
   WAIT_STATE(ch, 6);
   if (hitcheck <= 95) {
@@ -6884,8 +6884,8 @@ void do_lariat(CHAR_DATA *ch, char *argument) {
   }
   basecost = 80;
   adjcost = basecost;
-  lowdam = 450 * (((long double)get_damroll(ch) / 100) + 1);
-  highdam = 500 * (((long double)get_damroll(ch) / 100) + 1);
+  lowdam = 450 * (((long double)get_damroll(ch) / 200) + 1);
+  highdam = 500 * (((long double)get_damroll(ch) / 200) + 1);
   hitcheck = number_range(1, 100);
   WAIT_STATE(ch, 8);
   if (hitcheck <= 95) {
@@ -8049,8 +8049,8 @@ void do_haymaker(CHAR_DATA *ch, char *argument) {
   }
   basecost = 10;
   adjcost = basecost;
-  lowdam = 60 * (((long double)get_damroll(ch) / 100) + 1);
-  highdam = 90 * (((long double)get_damroll(ch) / 100) + 1);
+  lowdam = 60 * (((long double)get_damroll(ch) / 200) + 1);
+  highdam = 90 * (((long double)get_damroll(ch) / 200) + 1);
   hitcheck = number_range(1, 100);
   WAIT_STATE(ch, 6);
   if (hitcheck <= 95) {
@@ -8282,8 +8282,8 @@ void do_collide(CHAR_DATA *ch, char *argument) {
   }
   basecost = 25;
   adjcost = basecost;
-  lowdam = 180 * (((long double)get_damroll(ch) / 100) + 1);
-  highdam = 220 * (((long double)get_damroll(ch) / 100) + 1);
+  lowdam = 180 * (((long double)get_damroll(ch) / 200) + 1);
+  highdam = 220 * (((long double)get_damroll(ch) / 200) + 1);
   hitcheck = number_range(1, 100);
   WAIT_STATE(ch, 8);
   if (hitcheck <= 95) {
