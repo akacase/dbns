@@ -4518,8 +4518,10 @@ void do_updatequest(CHAR_DATA *ch, char *argument) {
 		ch->kaiquest = 3;
   }
   if (!str_cmp(arg, "setquestbitx401983490f")) {
-	  if (ch->kaiquest == 3)
+	  if (ch->kaiquest == 3) {
 		ch->kaiquest = 4;
+		ch->skillkaioken = 1;
+	  }
   }
   if (!str_cmp(arg, "setquestbitx501983401f")) {
 	  if (ch->kaiquest == 4)
@@ -4632,16 +4634,6 @@ void do_develop(CHAR_DATA *ch, char *argument) {
     if (ch->skillvigor < 1) {
       send_to_char("You developed Vigor!\n\r", ch);
       ch->skillvigor = 1;
-      return;
-    } else {
-      send_to_char("Regrettably, your effort seems to be wasted.\n\r", ch);
-      return;
-    }
-  }
-  if (!str_cmp(arg1, "kaioken") && arg2[0] == '\0') {
-    if (ch->skillkaioken < 1) {
-      send_to_char("You developed Kaioken!\n\r", ch);
-      ch->skillkaioken = 1;
       return;
     } else {
       send_to_char("Regrettably, your effort seems to be wasted.\n\r", ch);
