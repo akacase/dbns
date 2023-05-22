@@ -268,12 +268,12 @@ void fread_pfile(FILE *fp, time_t tdiff, char *fname) {
   }
 
 timecheck:
-  if ((ch->truepl < 50 && tdiff > sysdata.newbie_purge && level < LEVEL_IMMORTAL) || (level < LEVEL_IMMORTAL && tdiff > sysdata.regular_purge)) {
+  if ((exp < 10 && tdiff > sysdata.newbie_purge && level < LEVEL_IMMORTAL) || (level < LEVEL_IMMORTAL && tdiff > sysdata.regular_purge)) {
     if (level < LEVEL_IMMORTAL) {
       if (unlink(fname) == -1)
         perror("Unlink");
       else {
-        if (ch->truepl < 50)
+        if (exp < 10)
           days = sysdata.newbie_purge;
         else
           days = sysdata.regular_purge;
