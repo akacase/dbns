@@ -4814,7 +4814,6 @@ void do_respec(CHAR_DATA *ch, char *argument) {
     ch->skillhellzone_grenade = 0;
     ch->skillinstant_trans = 0;
     ch->skillkaio_create = 0;
-    ch->skillkaioken = 0;
     ch->skillkamehameha = 0;
     ch->skillki_absorb = 0;
     ch->skillki_heal = 0;

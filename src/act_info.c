@@ -4547,6 +4547,9 @@ void do_updatequest(CHAR_DATA *ch, char *argument) {
 	  if (ch->kaiquest == 9)
 		ch->kaiquest = 10;
   }
+   if (!str_cmp(arg, "initializekaiquest")) {
+      ch->kaiquest = 0;
+  }
   return;
 }
 
