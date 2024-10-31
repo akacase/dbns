@@ -651,7 +651,7 @@ void violence_update(void) {
       if (form_mastery < 1)
         form_mastery = 1;
 
-      if (ch->mana <= 0) {
+/*      if (ch->mana <= 0) {
         xREMOVE_BIT((ch)->affected_by, AFF_SEMIPERFECT);
         if (xIS_SET((ch)->affected_by, AFF_POWERCHANNEL))
           xREMOVE_BIT((ch)->affected_by, AFF_POWERCHANNEL);
@@ -664,7 +664,7 @@ void violence_update(void) {
         transStatRemove(ch);
         act(AT_PURPLE, "You lose control of your ki and return to normal!", ch, NULL, NULL, TO_CHAR);
         act(AT_PURPLE, "$n loses control of $s ki and returns to normal!", ch, NULL, NULL, TO_NOTVICT);
-      }
+      }*/
       if (ch->desc && !ch->fighting)
         ch->masterybio += 9;
 	  if (ch->desc && ch->fighting)
@@ -680,7 +680,7 @@ void violence_update(void) {
       if (form_mastery < 1)
         form_mastery = 1;
 
-      if (ch->mana <= 0) {
+/*      if (ch->mana <= 0) {
         xREMOVE_BIT((ch)->affected_by, AFF_PERFECT);
         if (xIS_SET((ch)->affected_by, AFF_POWERCHANNEL))
           xREMOVE_BIT((ch)->affected_by, AFF_POWERCHANNEL);
@@ -693,7 +693,7 @@ void violence_update(void) {
         transStatRemove(ch);
         act(AT_PURPLE, "You lose control of your ki and return to normal!", ch, NULL, NULL, TO_CHAR);
         act(AT_PURPLE, "$n loses control of $s ki and returns to normal!", ch, NULL, NULL, TO_NOTVICT);
-      }
+      }*/
       if (ch->desc && !ch->fighting)
         ch->masterybio += 9;
 	  if (ch->desc && ch->fighting)
@@ -706,7 +706,7 @@ void violence_update(void) {
       if (form_mastery < 1)
         form_mastery = 1;
 
-      if (ch->mana <= 0) {
+/*      if (ch->mana <= 0) {
         xREMOVE_BIT((ch)->affected_by, AFF_ULTRAPERFECT);
         if (xIS_SET((ch)->affected_by, AFF_POWERCHANNEL))
           xREMOVE_BIT((ch)->affected_by, AFF_POWERCHANNEL);
@@ -719,7 +719,7 @@ void violence_update(void) {
         transStatRemove(ch);
         act(AT_PURPLE, "You lose control of your ki and return to normal!", ch, NULL, NULL, TO_CHAR);
         act(AT_PURPLE, "$n loses control of $s ki and returns to normal!", ch, NULL, NULL, TO_NOTVICT);
-      }
+      }*/
       if (ch->desc && !ch->fighting)
         ch->masterybio += 9;
 	  if (ch->desc && ch->fighting)
@@ -832,7 +832,7 @@ void violence_update(void) {
       if (form_mastery < 1)
         form_mastery = 1;
 
-      if (ch->mana <= 0) {
+/*      if (ch->mana <= 0) {
         xREMOVE_BIT((ch)->affected_by, AFF_ICER2);
         if (xIS_SET((ch)->affected_by, AFF_POWERCHANNEL))
           xREMOVE_BIT((ch)->affected_by, AFF_POWERCHANNEL);
@@ -845,7 +845,7 @@ void violence_update(void) {
         transStatRemove(ch);
         act(AT_PURPLE, "You lose control of your ki and return to normal!", ch, NULL, NULL, TO_CHAR);
         act(AT_PURPLE, "$n loses control of $s ki and returns to normal!", ch, NULL, NULL, TO_NOTVICT);
-      }
+      }*/
       if (ch->desc && !ch->fighting) {
         if (icertotal < 1000000) {
           if (form_mastery > 15) {
@@ -879,7 +879,7 @@ void violence_update(void) {
       if (form_mastery < 1)
         form_mastery = 1;
 
-      if (ch->mana <= 0) {
+/*      if (ch->mana <= 0) {
         xREMOVE_BIT((ch)->affected_by, AFF_ICER3);
         if (xIS_SET((ch)->affected_by, AFF_POWERCHANNEL))
           xREMOVE_BIT((ch)->affected_by, AFF_POWERCHANNEL);
@@ -892,7 +892,7 @@ void violence_update(void) {
         transStatRemove(ch);
         act(AT_PURPLE, "You lose control of your ki and return to normal!", ch, NULL, NULL, TO_CHAR);
         act(AT_PURPLE, "$n loses control of $s ki and returns to normal!", ch, NULL, NULL, TO_NOTVICT);
-      }
+      }*/
       if (ch->desc && !ch->fighting) {
         if (icertotal < 1000000) {
           if (form_mastery > 15) {
@@ -923,7 +923,7 @@ void violence_update(void) {
       if (form_mastery < 1)
         form_mastery = 1;
 
-      if (ch->mana <= 0) {
+/*      if (ch->mana <= 0) {
         xREMOVE_BIT((ch)->affected_by, AFF_ICER4);
         if (xIS_SET((ch)->affected_by, AFF_POWERCHANNEL))
           xREMOVE_BIT((ch)->affected_by, AFF_POWERCHANNEL);
@@ -936,7 +936,7 @@ void violence_update(void) {
         transStatRemove(ch);
         act(AT_PURPLE, "You lose control of your ki and return to normal!", ch, NULL, NULL, TO_CHAR);
         act(AT_PURPLE, "$n loses control of $s ki and returns to normal!", ch, NULL, NULL, TO_NOTVICT);
-      }
+      }*/
       if (ch->desc && !ch->fighting) {
         ch->masteryicer += 9;
       } else if (ch->desc && ch->fighting) {
@@ -948,7 +948,7 @@ void violence_update(void) {
       int form_mastery = 0;
 
       form_mastery = (ch->masteryicer / 90000);
-      if (ch->mana <= 0) {
+/*      if (ch->mana <= 0) {
         xREMOVE_BIT((ch)->affected_by, AFF_ICER5);
         if (xIS_SET((ch)->affected_by, AFF_POWERCHANNEL))
           xREMOVE_BIT((ch)->affected_by, AFF_POWERCHANNEL);
@@ -961,7 +961,7 @@ void violence_update(void) {
         transStatRemove(ch);
         act(AT_PURPLE, "You lose control of your ki and return to normal!", ch, NULL, NULL, TO_CHAR);
         act(AT_PURPLE, "$n loses control of $s ki and returns to normal!", ch, NULL, NULL, TO_NOTVICT);
-      }
+      }*/
       if (form_mastery < 1)
         form_mastery = 1;
       form_drain = (600 - (form_mastery * 6));
